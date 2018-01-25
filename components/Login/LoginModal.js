@@ -373,9 +373,9 @@ class LoginModal extends React.Component {
                       </form>
                       <br/>
                       <div className="container">
-                        {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
-                        <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
-                        <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
+                        {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} role="button" tabindex="0" aria-label="sign in with your Facebook account"></i>*/}
+                        <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} role="button" tabindex="0" aria-label="sign in with your Google account"></i>
+                        <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} role="button" tabindex="0" aria-label="sign in with your Github account"></i>
                       </div>
                       <br/>
                       <div className="ui floated right">
