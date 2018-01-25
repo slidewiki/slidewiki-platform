@@ -5,6 +5,11 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 
 class LinkToDeck extends React.Component{
+    constructor(props) {
+        super(props);
+        this.href = this.getHref();
+    }
+
     getHref(){
         let href = '/deck/' + this.props.deck;
         href += '/slide/' + this.props.slide.replace('slide-', '');
@@ -12,15 +17,26 @@ class LinkToDeck extends React.Component{
         return href;
     }
 
+    handleClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.href);
+        }
+    }
+
     render(){
-        let href = this.getHref();
+
         return (
           <div>
-            <NavLink href={href}>Back to deck</NavLink>
+            <NavLink  onClick={this.handleClick.bind(this)} href={this.href} target="_blank">Back to deck</NavLink>
           </div>
         );
 
     }
 }
+
+
+
+
 
 export default LinkToDeck;
