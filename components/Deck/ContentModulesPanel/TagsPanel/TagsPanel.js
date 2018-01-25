@@ -12,6 +12,7 @@ import RecommendedTags from './RecommendedTags';
 import showMoreTags from '../../../../actions/tags/showMoreTags';
 import showLessTags from '../../../../actions/tags/showLessTags';
 import loadRecommendedTags from '../../../../actions/tags/loadRecommendedTags';
+import { defineMessages } from 'react-intl';
 
 class TagsPanel extends React.Component {
 
@@ -20,6 +21,39 @@ class TagsPanel extends React.Component {
         this.state = {
             editMode: false
         };
+        this.messages = this.getIntlMessages();
+    }
+    getIntlMessages(){
+        return defineMessages({
+            header:{
+                id: 'TagsPanel.header',
+                defaultMessage: 'Tags'
+            },
+            edit:{
+                id: 'TagsPanel.edit',
+                defaultMessage: 'Edit'
+            },
+            save:{
+                id: 'TagsPanel.save',
+                defaultMessage: 'Save'
+            },
+            cancel:{
+                id: 'TagsPanel.cancel',
+                defaultMessage: 'Cancel'
+            },
+            ariaEdit: {
+                id: 'TagsPanel.aria.edit',
+                defaultMessage: 'Edit tags'
+            }, 
+            ariaSave: {
+                id: 'TagsPanel.aria.save',
+                defaultMessage: 'Save tags'
+            }, 
+            ariaCancel: {
+                id: 'TagsPanel.aria.cancel',
+                defaultMessage: 'Cancel tags'
+            }
+        });
     }
     onShowEditForm(e) {
         e.preventDefault();
@@ -84,15 +118,15 @@ class TagsPanel extends React.Component {
             tagPanel = tagEditPanel;
             if(editPermission){
                 actionBtn = <div>
-                    <button tabIndex="0" className="ui right floated compact primary button" aria-label="Save Tags" onClick={this.handleSave.bind(this)}><i className="check icon"></i> Save</button>
-                    <button tabIndex="0" className="ui compact button" aria-label="Cancel" onClick={this.handleCancel.bind(this)}><i className="close icon"></i> Cancel</button>
+                    <button tabIndex="0" className="ui right floated compact primary button" aria-label={this.context.intl.formatMessage(this.messages.ariaSave)} onClick={this.handleSave.bind(this)}><i className="check icon"></i> {this.context.intl.formatMessage(this.messages.save)}</button>
+                    <button tabIndex="0" className="ui compact button" aria-label={this.context.intl.formatMessage(this.messages.ariaCancel)} onClick={this.handleCancel.bind(this)}><i className="close icon"></i> {this.context.intl.formatMessage(this.messages.cancel)}</button>
                 </div>;
             }
         } else {
             tagPanel = tagViewPanel;
             if(editPermission){
-                actionBtn = <button tabIndex="0" className="ui right floated compact primary button" aria-label="Edit Tags" onClick={this.onShowEditForm.bind(this)}><i className="edit icon"></i>
- Edit</button>;
+                actionBtn = <button tabIndex="0" className="ui right floated compact primary button" aria-label={this.context.intl.formatMessage(this.messages.ariaEdit)} onClick={this.onShowEditForm.bind(this)}><i className="edit icon"></i>
+ {this.context.intl.formatMessage(this.messages.edit)}</button>;
             }
         }
 
@@ -101,7 +135,7 @@ class TagsPanel extends React.Component {
                 <div className="ui stackable grid">
                     <div className="row">
                         <div className="eight wide column">
-                            <h3 className="ui header">Tags</h3>
+                            <h3 className="ui header">{this.context.intl.formatMessage(this.messages.header)}</h3>
                         </div>
                         <div className="eight wide right aligned column">
                             {actionBtn}
@@ -124,7 +158,8 @@ class TagsPanel extends React.Component {
 }
 
 TagsPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired, 
+    intl: React.PropTypes.object.isRequired
 };
 
 TagsPanel = connectToStores(TagsPanel, [TagsStore, PermissionsStore], (context, props) => {

@@ -1,11 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
 import suggestTags from '../../../../actions/search/suggestTags';
+import { defineMessages } from 'react-intl';
 
 class TagInput extends React.Component {
     constructor(props){
         super(props);
         this.state = this.getStateFromProps(props);
+        this.messages = this.getIntlMessages();
+    }
+    getIntlMessages(){
+        return defineMessages({
+            placeholder:{
+                id: 'TagInput.placeholder',
+                defaultMessage: 'Insert new tags'
+            },
+        });
     }
     componentWillReceiveProps(newProps){
 
@@ -125,7 +135,7 @@ class TagInput extends React.Component {
         return (
             <div id="tags_input_div" className={classes}>
               <i className="dropdown icon"></i>
-              <div className="default text">Insert new tags</div>
+              <div className="default text">{this.context.intl.formatMessage(this.messages.placeholder)}</div>
               <div id="tags_menu" className="menu">
                 {initialOptions}
               </div>
@@ -135,6 +145,7 @@ class TagInput extends React.Component {
 }
 
 TagInput.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired, 
+    intl: React.PropTypes.object.isRequired
 };
 export default TagInput;

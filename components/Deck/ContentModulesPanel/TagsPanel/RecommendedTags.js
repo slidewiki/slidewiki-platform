@@ -1,10 +1,36 @@
 import React from 'react';
 import newTag from '../../../../actions/tags/newTag';
+import { defineMessages } from 'react-intl';
 
 class RecommendedTags extends React.Component {
     constructor(props){
         super(props);
         this.state = this.getStateFromProps(props);
+        this.messages = this.getIntlMessages();
+    }
+    getIntlMessages(){
+        return defineMessages({
+            header:{
+                id: 'RecommendedTags.header',
+                defaultMessage: 'Recommended Tags'
+            },
+            add: {
+                id: 'RecommendedTags.add',
+                defaultMessage: 'Add'
+            }, 
+            dismiss: {
+                id: 'RecommendedTags.dismiss',
+                defaultMessage: 'Dismiss'
+            }, 
+            ariaAdd: {
+                id: 'RecommendedTags.aria.add',
+                defaultMessage: 'Add recommended tag'
+            }, 
+            ariaDismiss: {
+                id: 'RecommendedTags.aria.dismiss',
+                defaultMessage: 'Dismiss recommended tag'
+            },
+        });
     }
     componentWillReceiveProps(newProps){
         if(this.props !== newProps){
@@ -70,8 +96,8 @@ class RecommendedTags extends React.Component {
                     </div>
                     <div className="description">
                         <div className="ui two compact buttons">
-                            <div className="ui basic green button" onClick={this.handleAdd.bind(this, t.name, index)}>Add</div>
-                            <div className="ui basic red button" onClick={this.handleDismiss.bind(this, t.name, index)}>Dismiss</div>
+                            <div className="ui basic green button" aria-label={this.context.intl.formatMessage(this.messages.ariaAdd)} onClick={this.handleAdd.bind(this, t.name, index)}>{this.context.intl.formatMessage(this.messages.add)}</div>
+                            <div className="ui basic red button" aria-label={this.context.intl.formatMessage(this.messages.ariaDismiss)} onClick={this.handleDismiss.bind(this, t.name, index)}>{this.context.intl.formatMessage(this.messages.dismiss)}</div>
                         </div>
                     </div>
                 </div>
@@ -84,7 +110,7 @@ class RecommendedTags extends React.Component {
                     <div className="sixteen wide column">
                         <div className="row">
                             <div className="sixteen wide column">
-                                <h4 className="ui header">Recommended Tags</h4>
+                                <h4 className="ui header">{this.context.intl.formatMessage(this.messages.header)}</h4>
                             </div>
                         </div>
                         <br/>
@@ -105,7 +131,7 @@ class RecommendedTags extends React.Component {
 }
 
 RecommendedTags.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    intl: React.PropTypes.object.isRequired
 };
 
 export default RecommendedTags;
