@@ -22,13 +22,15 @@ class Header extends React.Component {
     componentDidMount() {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
-        $(this.refs.languagebar).sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
+        $(this.refs.languagebar)
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
     }
 
     toggleSidebar() {
         $(this.refs.menubar)
             .sidebar('toggle');
     }
+
     toggleLanguageBar() {
         $(this.refs.languagebar)
             .sidebar('toggle');
