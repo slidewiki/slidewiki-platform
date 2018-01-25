@@ -68,20 +68,20 @@ class RecommendedTags extends React.Component {
                             {t.name}
                         </a>
                     </div>
-                </div>
-                <div className="extra content">
-                    <div className="ui two buttons">
-                        <div className="ui basic green button" onClick={this.handleAdd.bind(this, t.name, index)}>Add</div>
-                        <div className="ui basic red button" onClick={this.handleDismiss.bind(this, t.name, index)}>Dismiss</div>
+                    <div className="description">
+                        <div className="ui two compact buttons">
+                            <div className="ui basic green button" onClick={this.handleAdd.bind(this, t.name, index)}>Add</div>
+                            <div className="ui basic red button" onClick={this.handleDismiss.bind(this, t.name, index)}>Dismiss</div>
+                        </div>
                     </div>
                 </div>
             </div>;
         });
 
         return (
-            <div ref="suggestedTags">
+            <div className="row" ref="suggestedTags">
                 { (recommendedTagsList.length > 0) && 
-                    <div> 
+                    <div className="sixteen wide column">
                         <div className="row">
                             <div className="sixteen wide column">
                                 <h4 className="ui header">Recommended Tags</h4>

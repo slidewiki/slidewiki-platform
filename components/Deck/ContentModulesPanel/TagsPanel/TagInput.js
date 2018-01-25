@@ -72,21 +72,19 @@ class TagInput extends React.Component {
 
         return tags.split(',').map( (t) => {
 
-            // comes from dropdown or it is pre-selected
+            // comes from dropdown or it is a recommended tag
             if(t.startsWith('tagName:')){
-                return { tagName: t.replace(/^tagName:/, '') };
-            // comes from recommended tags
-            } else if(t.startsWith('recommended:')) {
                 let tag = {
-                    tagName: t.replace(/^recommended:/, '')
+                    tagName: t.replace(/^tagName:/, '')
                 };
 
-                // we get recommended tag's full details from state
+                // we check if this tagName comes from recommended tags
                 let recommendedTag = this.state.recommendedTags.find( (t) => {
                     return t.name === tag.tagName;
                 });
 
-                // we also want the recommended tag's link, if available
+                // if it is from recommended tags and has a link, 
+                // we also add the link
                 if(recommendedTag && recommendedTag.link){
                     tag.uri = recommendedTag.link;
                 }
@@ -100,14 +98,14 @@ class TagInput extends React.Component {
     }
     addRecommendedTag(value){
         // add the recommended tag as an option to the dropdown
-        let newOption = `<div class="item" key="recommended:${value}" data-value="recommended:${value}">${value}</div>`;
+        let newOption = `<div class="item" key="tagName:${value}" data-value="tagName:${value}">${value}</div>`;
         $('#tags_menu').append(newOption);
 
         // after this addition the dropdown needs to be initialized again
         this.initDropdown();
 
         // select the recommended tag
-        $('#tags_input_div').dropdown('set selected', `recommended:${value}`);
+        $('#tags_input_div').dropdown('set selected', `tagName:${value}`);
     }
     render(){
         let classes = classNames({
