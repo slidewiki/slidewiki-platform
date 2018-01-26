@@ -37,6 +37,8 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc + '';
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
+        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
+        this.hashTag = ['#SWORG','#D' + that.deckID.replace('-','R')];//['#javascript'];
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -66,8 +68,7 @@ class presentationBroadcast extends React.Component {
 
         that.socket = io(Microservices.webrtc.uri);
 
-        let deckID = that.iframesrc.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
-        that.socket.emit('create or join', that.room, deckID);
+        that.socket.emit('create or join', that.room, that.deckID);
         console.log('Attempt to create or join room', that.room);
 
         function setmyID() {
@@ -84,6 +85,7 @@ class presentationBroadcast extends React.Component {
                 peerCountText: 'People currently listening: '
             });
             setmyID();
+            that.socket.emit('follow hashtag', that.hashTag.join(' '), that.room, that.deckID);
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             requestStreams({
                 audio: true,
@@ -93,6 +95,14 @@ class presentationBroadcast extends React.Component {
                 //   facingMode: "user"
                 // }
             });
+        });
+
+        that.socket.on('new tweets', (tweet) => { //only initiator recieves this
+            try {
+                that.refs.chat.addTweet(tweet);
+            } catch (e) {
+                console.log('Failed adding tweet', e);
+            }
         });
 
         that.socket.on('join', (room, socketID) => { //whole room recieves this, except for the peer that tries to join

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Divider, Form, Button, Label, Popup, Message, Comment } from 'semantic-ui-react';
+import TweetEmbed from 'react-tweet-embed';
+import { Grid, Divider, Form, Button, Label, Popup, Message, Comment, Checkbox } from 'semantic-ui-react';
 
 class Chat extends React.Component {
 
@@ -19,7 +20,8 @@ class Chat extends React.Component {
         this.state = {
             commentList: {},//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
             charCount: 0,
-            TextAreaContent: ''
+            TextAreaContent: '',
+            includeTweets: true
         };
         this.textInputLength = 2000;
     }
@@ -61,6 +63,18 @@ class Chat extends React.Component {
         });
     }
 
+    addTweet(tweet) {
+        let currentTime = new Date().getTime();
+        let newPost = {};
+        newPost[currentTime] = {};
+        newPost[currentTime].peer = '';
+        newPost[currentTime].message = tweet;
+        newPost[currentTime].type = 'tweet';
+        this.setState((prevState) => {
+            return {commentList: Object.assign({}, prevState.commentList, newPost)};
+        });
+    }
+
     clearMessageList() {
         this.setState({commentList: {}});
     }
@@ -79,35 +93,43 @@ class Chat extends React.Component {
         }
     }
 
+    toggleShowTweets() {
+        this.setState({ includeTweets: (this.state.includeTweets === false) ? true : false });
+    }
+
     render() {
         let messages = [];
         for(let i in this.state.commentList) {
             let author = this.state.commentList[i].peer.toString();
             let message = this.state.commentList[i].message;
-            messages.push(
-              <Popup key={i}
-                trigger={
-                  <Message floating>
-                    <Comment.Group>
-                      <Comment>
-                        <Comment.Content>
-                          <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
-                            {message}
-                          </Comment.Text>
-                          {(this.props.isInitiator) ? (
-                            <Comment.Actions>
-                                <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
-                            </Comment.Actions>
-                          ) : ('')}
-                        </Comment.Content>
-                      </Comment>
-                    </Comment.Group>
-                  </Message>
-                }
-                content={this.props.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
-                position='bottom right'
-              />);
+            if(this.state.commentList[i].type !== 'tweet'){
+                messages.push(
+                  <Popup key={i}
+                    trigger={
+                      <Message floating warning>
+                        <Comment.Group>
+                          <Comment>
+                            <Comment.Content>
+                              <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                              <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
+                                {message}
+                              </Comment.Text>
+                              {(this.props.isInitiator) ? (
+                                <Comment.Actions>
+                                    <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
+                                </Comment.Actions>
+                              ) : ('')}
+                            </Comment.Content>
+                          </Comment>
+                        </Comment.Group>
+                      </Message>
+                    }
+                    content={this.props.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
+                    position='bottom right'
+                  />);
+            } else if(this.state.includeTweets) {
+                messages.push(<TweetEmbed id={message.id_str} key={i}/>);
+            }
         }
 
         return (
@@ -116,6 +138,7 @@ class Chat extends React.Component {
               <Grid columns={1}>
                 <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
                   <h3>Questions from Audience:</h3>
+                  <Checkbox ref="tweetCheckBox" toggle label='Inlcude Tweets' onChange={this.toggleShowTweets.bind(this)} checked={this.state.includeTweets}/>
                   {messages}
                 </Grid.Column>
                 <Grid.Column>
