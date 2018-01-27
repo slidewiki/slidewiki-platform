@@ -469,7 +469,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
             CKEDITOR.instances.inlineContent.getSelection().unlock();
         });
-        this.emitChange(); //confirm non-save on-leave
+        //this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
         this.uniqueIDAllElements();
         this.resize();
@@ -697,7 +697,7 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.hasChanges = true;
-            this.emitChange(); //confirm non-save on-leave
+            //this.emitChange(); //confirm non-save on-leave
             //fix to prevent Firefox caret from resetting
             $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
                 CKEDITOR.instances.inlineContent.getSelection().unlock();
@@ -2107,14 +2107,14 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.hasChanges = true} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                                 </HotKeys>
                             </section>
                         </div>
                     </div>
                 </div>
                 <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.hasChanges = true} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
         );
     }
