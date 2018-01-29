@@ -191,8 +191,8 @@ export default {
         } else if (resource === 'deck.translationProgress') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let args = params.params ? params.params : params;
-            rp.get({uri: Microservices.translation.uri + '/jobByNewId/' + args.id}).then((res) => {
-                callback(null, {noofslides: JSON.parse(res).progress});
+            rp.get({uri: Microservices.translation.uri + '/jobByNewId/' + args.newId}).then((res) => {
+                callback(null, {noofslides: JSON.parse(res).progress, totalslides: JSON.parse(res).data.total});
             }).catch((err) => {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
@@ -253,7 +253,7 @@ export default {
             };
             rp({
                 method: 'PUT',
-                uri: Microservices.deck.uri + '/deck/' + params.deckId + '/translate',
+                uri: Microservices.deck.uri + '/deck/' + params.oldId + '/translate',
                 json: true,
                 headers: {'----jwt----': params.jwt},
                 body: toSend

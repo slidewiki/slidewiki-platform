@@ -14,16 +14,13 @@ export default function translateDeckRevision(context, payload, done) {
     log.info(context);
     //enrich with user id
     let user = context.getStore(UserProfileStore).userid;
-    //if (!user) user = '3'; //NEED TO REMOVE THE LINE
 
     payload.user = user.toString();
     if (payload.mode === 'deck'){
-        payload.deckId = context.getStore(ContentStore).selector.id;
+        payload.oldId = context.getStore(ContentStore).selector.id;
     }else{ //subdeck
-        payload.deckId = context.getStore(ContentStore).selector.sid;
+        payload.oldId = context.getStore(ContentStore).selector.sid;
     }
-    console.log(payload.mode, payload.deckId);
-
 
     payload.jwt = context.getStore(UserProfileStore).jwt;
     context.service.create('deck.translate', payload, null, {timeout: 30 * 1000}, (err, res) => {
@@ -50,7 +47,8 @@ export default function translateDeckRevision(context, payload, done) {
             if (res.cronjob) {
                 context.dispatch('TOGGLE_CRONJOB_MODAL');
                 context.dispatch('SET_NEW_ID', {'newId': res.newId});
-                context.executeAction(updateTranslationProgressBar, {'totalSlides': res.totalSlides, 'id' : res.newId});
+                context.executeAction(updateTranslationProgressBar, {'totalSlides': res.totalSlides, 'oldId':payload.oldId, 'newId' : res.newId});
+
                 done();
             }else{
                 context.executeAction(navigateAction, {

@@ -178,7 +178,7 @@ class ContentActionsHeader extends React.Component {
                           ) : ('')
 
                         }
-                          <TranslationModal selector={selector} mode='item' isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
+                          <TranslationModal selector={selector} mode='item' isOpen={this.state.isTranslationModalOpen} handleClose={() => this.setState({isTranslationModalOpen: false})} />
 
                       </div>
                   </div>

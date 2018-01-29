@@ -27,23 +27,29 @@ export default {
                 uri: Microservices.deck.uri + '/' + 'deck' + '/' + root_id + '/translations',
             }).then((res) => {
                 result.root = res;
-                if (selector.sid && selector.stype && selector.spath){ //an item is selected
-                    item_id = parseInt(args.sid.split('-')[0]);
-                    item_type = selector.stype;
-                    rp({
-                        method: 'GET',
-                        json: true,
-                        uri: Microservices.deck.uri + '/' + item_type + '/' + item_id + '/translations',
-                    }).then((res) => {
+                if (selector){
+                    if (selector.sid && selector.stype && selector.spath){ //an item is selected
+                        item_id = parseInt(args.sid.split('-')[0]);
+                        item_type = selector.stype;
+                        rp({
+                            method: 'GET',
+                            json: true,
+                            uri: Microservices.deck.uri + '/' + item_type + '/' + item_id + '/translations',
+                        }).then((res) => {
+                            result.item = res;
+                            callback(null, result);
+                        }).catch((err) => {
+                            callback(err, {translations: [], currentLang: currentLang});
+                        });
+                    }else{ //root is selected
                         result.item = res;
                         callback(null, result);
-                    }).catch((err) => {
-                        callback(err, {translations: [], currentLang: currentLang});
-                    });
-                }else{ //root is selected
-                    result.item = res;                    
+                    }
+                }else{
+                    result.item = res;
                     callback(null, result);
                 }
+
             }).catch((err) => {
                 callback(err, {translations: [], currentLang: currentLang});
             });

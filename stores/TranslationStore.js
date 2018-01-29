@@ -34,7 +34,7 @@ class TranslationStore extends BaseStore {
         this.emitChange();
     }
     updateTranslationProgressBar(payload){
-        this.translationProgress = payload.noofslides/payload.totalSlides*100;
+        this.translationProgress = payload.noofslides/payload.totalslides*100;
         this.emitChange();
     }
     //opens a modal with the info about translation cronjob

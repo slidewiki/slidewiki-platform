@@ -1,23 +1,11 @@
 
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
+import loadTranslations from './loadTranslations';
+import resetTranslationStore from './resetTranslationStore';
 
 export default function updateTranslationProgressBar(context, payload, done) {
     log.info(context);
-    let totalSlides = payload.totalSlides;
-    // console.log(payload);
-    // //let percent = payload.percent; //TODO percent = res.percent
-    //
-    // setTimeout (() => {
-    //     context.dispatch('UPDATE_TRANSLATION_PROGRESS_BAR', payload);
-    //     if (payload.percent < 100){
-    //         payload.percent++;
-    //         updateTranslationProgressBar(context, payload, done);
-    //     }else{
-    //         done();
-    //     }
-    // },1000);
-    //payload.id = '11355';
 
     context.service.read('deck.translationProgress', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
@@ -25,16 +13,18 @@ export default function updateTranslationProgressBar(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
             // context.dispatch('LOAD_SLIDE_ALL_FAILURE', err);
         } else {
-            res.totalSlides = totalSlides;
             context.dispatch('UPDATE_TRANSLATION_PROGRESS_BAR', res);
-            if (!res.noofslides || res.noofslides < totalSlides) {
+            if (!res.noofslides || res.noofslides < res.totalslides) {
                 setTimeout(() => {
                     updateTranslationProgressBar(context, payload, done);
-                    done();
                 },1000);
 
+            }else if (res.noofslides === res.totalslides){ //translation is completed, here goes notifications and update of languages available
+                context.executeAction(loadTranslations, {
+                    params: {'id':payload.oldId}
+                }, done);
             }else{
-                done();
+                done();//
             }
             //context.dispatch('SLIDES_PROGRESS', res);
         }
