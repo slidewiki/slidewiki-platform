@@ -58,6 +58,7 @@ class Chat extends React.Component {
         else
             newPost[currentTime].peer = 'Me';
         newPost[currentTime].message = data.data;
+        newPost[currentTime].type = 'message';
         this.setState((prevState) => {
             return {commentList: Object.assign({}, prevState.commentList, newPost)};
         });
@@ -67,8 +68,7 @@ class Chat extends React.Component {
         let currentTime = new Date().getTime();
         let newPost = {};
         newPost[currentTime] = {};
-        newPost[currentTime].peer = '';
-        newPost[currentTime].message = tweet;
+        newPost[currentTime].id = tweet.id_str;
         newPost[currentTime].type = 'tweet';
         this.setState((prevState) => {
             return {commentList: Object.assign({}, prevState.commentList, newPost)};
@@ -99,10 +99,10 @@ class Chat extends React.Component {
 
     render() {
         let messages = [];
-        for(let i in this.state.commentList) {
-            let author = this.state.commentList[i].peer.toString();
-            let message = this.state.commentList[i].message;
+        for(let i in this.state.commentList) {//TODO do not recalculate the whole messages array on each render, but save in state and push only new elements
             if(this.state.commentList[i].type !== 'tweet'){
+                let author = this.state.commentList[i].peer.toString();
+                let message = this.state.commentList[i].message;
                 messages.push(
                   <Popup key={i}
                     trigger={
@@ -128,7 +128,7 @@ class Chat extends React.Component {
                     position='bottom right'
                   />);
             } else if(this.state.includeTweets) {
-                messages.push(<TweetEmbed id={message.id_str} key={i}/>);
+                messages.push(<TweetEmbed id={this.state.commentList[i].id} key={i}/>);
             }
         }
 
@@ -138,7 +138,7 @@ class Chat extends React.Component {
               <Grid columns={1}>
                 <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
                   <h3>Questions from Audience:</h3>
-                  <Checkbox ref="tweetCheckBox" toggle label='Inlcude Tweets' onChange={this.toggleShowTweets.bind(this)} checked={this.state.includeTweets}/>
+                  <Checkbox ref="tweetCheckBox" toggle label='Show Tweets' onChange={this.toggleShowTweets.bind(this)} checked={this.state.includeTweets}/>
                   {messages}
                 </Grid.Column>
                 <Grid.Column>
@@ -150,6 +150,7 @@ class Chat extends React.Component {
               <Grid columns={1}>
                 <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
                   <h3>Your Questions ({this.props.myName}):</h3>
+                  <Checkbox ref="tweetCheckBox" toggle label='Show Tweets' onChange={this.toggleShowTweets.bind(this)} checked={this.state.includeTweets}/>
                   {messages}
                 </Grid.Column>
                 <Grid.Column>

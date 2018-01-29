@@ -38,7 +38,7 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
         this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
-        this.hashTag = ['#SWORG','#D' + that.deckID.replace('-','R')];//['#javascript'];
+        this.hashTag = ['#SWORG','#D' + this.deckID.replace('-','R')];//['#javascript'];
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -100,8 +100,9 @@ class presentationBroadcast extends React.Component {
         that.socket.on('new tweets', (tweet) => { //only initiator recieves this
             try {
                 that.refs.chat.addTweet(tweet);
+                that.sendRTCMessage('new tweets', tweet);
             } catch (e) {
-                console.log('Failed adding tweet', e);
+                console.log('Failed adding/sending tweet', e);
             }
         });
 
@@ -636,6 +637,11 @@ class presentationBroadcast extends React.Component {
                     if(!that.isInitiator){
                         this.setState({subtitle: data.data.subtitle});
                         changeSlide(data.data.slide);
+                    }
+                    break;
+                case 'new tweets':
+                    if(!that.isInitiator){
+                        this.refs.chat.addTweet(data.data);
                     }
                     break;
                 default:
