@@ -47,22 +47,25 @@ class About extends React.Component {
                                 <FormattedMessage id="about.euwebsite" defaultMessage="GitHub"/>
                             </a>
                         }}
-                    defaultMessage={'SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code (and in most cases the code of the third party libraries we use) to install your own version of SlideWiki for your organisation or on your website.'}/>
+                        defaultMessage={'SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code (and in most cases the code of the third party libraries we use) to install your own version of SlideWiki for your organisation or on your website.'}/>
                 </p>
 
                 <p>
+                    <FormattedMessage id="about.p6"
+                        values={{
+                            link_2: <a href="/license">
+                                <FormattedMessage id="about.license" defaultMessage="Creative Commons CC-BY-SA license"/>
+                            </a>
+                        }}
+                        defaultMessage={'SlideWiki is an open-source platform, and all its content can be reused under {link_2}. SlideWiki development, large-scale trials'}/>
+                    
                     <FormattedMessage id="about.p4"
                         values={{
                             link_1: <a href="http://slidewiki.eu" target="_blank">
                                 <FormattedMessage id="about.euwebsite" defaultMessage="SlideWiki EU project website"/>
                             </a>
-                            link_2: <a href="/license">
-                                <FormattedMessage id="about.license" defaultMessage="Creative Commons CC-BY-SA license"/>
-                            </a>
                         }}
-                        defaultMessage={'SlideWiki is an open-source platform, and all its content can be reused under {link_2}. SlideWiki development, large-scale trials' +
-                            'and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' +
-                            'For more details, see {link_1}'}/>
+                        defaultMessage={'and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' + 'For more details, see {link_1}'}/>
                 </p>
             </div>
 
