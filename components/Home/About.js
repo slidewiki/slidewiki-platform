@@ -8,7 +8,7 @@ class About extends React.Component {
                 <div className="ui hidden divider"></div>
                 <h2 className="ui header"><FormattedMessage id="about.header" defaultMessage="About SlideWiki"/></h2>
                 <p>
-                    <FormattedMessage id="about.p1" defaultMessage="SlideWiki is an online slideshow tool that offers users the chance to create and collaborate on slides, assessments and to share content as structured open educational resources using a creative commons licence. With SlideWiki you can engage with your audience by collaborating with colleagues to co-design and co-create course materials and share your knowledge across the world."/>
+                    <FormattedMessage id="about.p1" defaultMessage="SlideWiki is an online slideshow tool that offers users the chance to create and collaborate on slides, assessments and to share content as structured open educational resources using a Creative Commons licence. With SlideWiki you can engage with your audience by collaborating with colleagues to co-design and co-create course materials and share your knowledge across the world."/>
                 </p>
                 <p>
                     <FormattedMessage id="about.p2" defaultMessage="SlideWiki empowers communities of educators to author, share and re-use sophisticated educational content in a truly collaborative way. Existing presentations can be imported and transformed into interactive courses using HTML. Slides can be supplements with comments, links to sources and materials as well as questions to help learners."/>
@@ -21,14 +21,14 @@ class About extends React.Component {
                     <FormattedMessage id="about.functionality" defaultMessage="With SlideWiki you can:"/>
                 </h3>
                 <ul>
-                    <li><FormattedMessage id="about.functionality.import" defaultMessage="mport existing slide decks from PowerPoint and OpenOffice formats."/></li>
+                    <li><FormattedMessage id="about.functionality.import" defaultMessage="Import existing slide decks from PowerPoint and OpenOffice formats."/></li>
                     <li><FormattedMessage id="about.functionality.wysiwig" defaultMessage="Use the online, collaborative WYSIWYG slide authoring tools."/></li>
                     <li><FormattedMessage id="about.functionality.collaborate" defaultMessage="Create and edit decks collaborative with colleagues."/></li>
                     <li><FormattedMessage id="about.functionality.socialNetworking" defaultMessage="Share decks  through social networking platforms."/></li>
                     <li><FormattedMessage id="about.functionality.revisioning" defaultMessage="Track the history and changes to your content."/></li>
                     <li><FormattedMessage id="about.functionality.groups" defaultMessage="Use tags and groups to collate content for a course."/></li>
-                    <li><FormattedMessage id="about.functionality.rooms" defaultMessage="<li>Set up a Presentation Room to broadcast your slideshow."/></li> 
-                    <li><FormattedMessage id="about.functionality.accessible" defaultMessage="li>Create inclusive slides and decks that will accessible to assistive technology users."/>
+                    <li><FormattedMessage id="about.functionality.rooms" defaultMessage="Set up a Presentation Room to broadcast your slideshow."/></li> 
+                    <li><FormattedMessage id="about.functionality.accessible" defaultMessage="Create inclusive slides and decks that will accessible to assistive technology users."/>
                     </li>
                 </ul>
                 <h3>
@@ -57,7 +57,7 @@ class About extends React.Component {
                                 <FormattedMessage id="about.license" defaultMessage="Creative Commons CC-BY-SA license"/>
                             </a>
                         }}
-                        defaultMessage={'SlideWiki is an open-source platform, and all its content can be reused under {link_2}. SlideWiki development, large-scale trials'}/>
+                        defaultMessage={'SlideWiki is an open-source platform, and all its content can be reused under {link_2}. '}/>
                     
                     <FormattedMessage id="about.p4"
                         values={{
@@ -65,7 +65,7 @@ class About extends React.Component {
                                 <FormattedMessage id="about.euwebsite" defaultMessage="SlideWiki EU project website"/>
                             </a>
                         }}
-                        defaultMessage={'and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' + 'For more details, see {link_1}'}/>
+                        defaultMessage={'SlideWiki development, large-scale trials and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' + 'For more details, see {link_1}'}/>
                 </p>
             </div>
 
