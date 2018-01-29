@@ -1003,7 +1003,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={13}>
                 <iframe id="slidewikiPresentation" src={this.iframesrc}
                 height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
-                <Button style={{position: 'absolute', padding: '8px', right: '5px', top: '5px'} } icon="expand" onClick={this.enlargeIframe.bind(this)}/>
+                <Button style={{position: 'absolute', padding: '8px', margin: 0, right: '5px', top: '5px'} } icon="expand" onClick={this.enlargeIframe.bind(this)} role="button" aria-label="Enlarge the presentation"/>
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
                 <Chat ref="chat" isInitiator={this.isInitiator}
@@ -1015,7 +1015,7 @@ class presentationBroadcast extends React.Component {
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
-                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
+                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} role="button" aria-label="Show QR-Code">QR-Code</Button>
               ) : ('')};
             </Grid.Row>
 
@@ -1037,15 +1037,15 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
-                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
-                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
+                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}} role="button" aria-label="Edit current deck"/></a>{/*TODO open up the right functionality*/}
+                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)} role="button" aria-label="Ask the audience to complete a task"/>) : ''}
                   {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
+                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)} role="button" aria-label="Copy URL to clipboard"/>
                   ) : (
-                    <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                    <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
                   )}
                   {(this.state.showReopenModalButton) ? (
-                    <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
+                    <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
                   ) : ''}
                 </Button.Group>
               </Grid.Column>
