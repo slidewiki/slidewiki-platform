@@ -980,6 +980,14 @@ class presentationBroadcast extends React.Component {
         .then(() => {}, () => {});
     }
 
+    enlargeIframe() {
+        let frame = document.getElementById('slidewikiPresentation').contentDocument;
+        let newEvent = new Event('keydown', {keyCode: 70});
+        newEvent.keyCode = 70;
+        newEvent.which = 70;
+        frame.dispatchEvent(newEvent);
+    }
+
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
             let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
@@ -995,6 +1003,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={13}>
                 <iframe id="slidewikiPresentation" src={this.iframesrc}
                 height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
+                <Button style={{position: 'absolute', padding: '8px', right: '5px', top: '5px'} } icon="expand" onClick={this.enlargeIframe.bind(this)}/>
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
                 <Chat ref="chat" isInitiator={this.isInitiator}
