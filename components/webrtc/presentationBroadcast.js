@@ -38,7 +38,8 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
         this.mediaRecorder = undefined;
-        this.blobs = '';
+        this.blobs = [];
+        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -47,6 +48,13 @@ class presentationBroadcast extends React.Component {
     }
 
     componentDidMount() {
+
+        window.localforage.config({
+            driver: [localforage.WEBSQL, localforage.INDEXEDDB],
+            name: 'SlideWikiRecorder',
+            size: 524288000
+        });
+        window.localforage.clear();
 
         let that = this;
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
@@ -68,8 +76,7 @@ class presentationBroadcast extends React.Component {
 
         that.socket = io(Microservices.webrtc.uri);
 
-        let deckID = that.iframesrc.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
-        that.socket.emit('create or join', that.room, deckID);
+        that.socket.emit('create or join', that.room, that.deckID);
         console.log('Attempt to create or join room', that.room);
 
         function setmyID() {
@@ -87,6 +94,11 @@ class presentationBroadcast extends React.Component {
             });
             setmyID();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
+            if(window.sessionStorage){
+                sessionStorage.setItem('deck', that.deckID);
+                sessionStorage.setItem('origin', window.location.origin);
+                recordSlideChange(true);
+            }
             requestStreams({
                 audio: true,
                 // video: {
@@ -313,15 +325,24 @@ class presentationBroadcast extends React.Component {
             that.localStream = stream;
             console.log('Initializing recorder');
             that.mediaRecorder = new MediaStreamRecorder(stream);
-            console.log('Setting Mimetype');
-            that.mediaRecorder.mimeType = 'audio/ogg';
-            console.log('starting recorder');
-            that.mediaRecorder.start(1000);
-            console.log('started recording');
+            that.mediaRecorder.stream = stream;
+            // that.mediaRecorder.disableLogs = true;
+            // that.mediaRecorder.recorderType = MediaRecorderWrapper;
+            // console.log('Setting Mimetype');
+            that.mediaRecorder.mimeType = 'audio/webm';
             that.mediaRecorder.ondataavailable = (blob) => {
-                console.log('Recorded blob');
-                that.blobs += blob;
+                console.log('New blob available');
+                window.localforage.getItem('audioblobs').then((blobArray) => {
+                    console.log(blobArray);
+                    let safeBlobArray = (blobArray === null) ? [] : blobArray;
+                    console.log(safeBlobArray);
+                    console.log(JSON.stringify(blob));
+                    window.localforage.setItem('audioblobs', safeBlobArray.concat([blob])).then((value) => console.log('Blob saved\n',value));
+                });
+                //that.blobs.push(blob);
             };
+            console.log('starting recorder');
+            that.mediaRecorder.start(5000);//NOTE 5000 is the only option that works
 
             function sendASAP() {
                 if (that.presenterID) //wait for presenterID before sending the message
@@ -347,11 +368,47 @@ class presentationBroadcast extends React.Component {
         }
 
         window.onbeforeunload = function() {
-            that.mediaRecorder.stop();
-            that.mediaRecorder.save(that.blobs, 'file.ogg');
             hangup();
-            return 'Are you sure to do this?';
         };
+
+        function saveRecording() {
+            that.mediaRecorder.pause();
+            swal({
+                titleText: 'Save your presentation as a video?',
+                text: 'If you want to save your presentation as a video, please click "yes". This will create a video file, containing your slide progress and your voice. Questions, Tasks, ... is not included into this video.',
+                type: 'question',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                that.mediaRecorder.stop();
+                recordSlideChange();
+                let timingBlob = new Blob([sessionStorage.getItem('slideTimings')], {type: 'application/json'});
+                saveBlob(timingBlob, 'timings.json');
+                localforage.getItem('audioblobs').then((blobArray) => {
+                    let safeBlobArray = (blobArray === null) ? [] : blobArray;
+                    console.log(safeBlobArray);
+                    window.ConcatenateBlobs(safeBlobArray, safeBlobArray[0].type, (concatenatedBlob) => {
+                        console.log(concatenatedBlob);
+                        saveBlob(concatenatedBlob, 'test.webm');
+                    });
+                });
+            });
+        }
+
+        function saveBlob(file, fileName) {
+            let hyperlink = document.createElement('a');
+            hyperlink.style.display = 'none';
+            hyperlink.href = URL.createObjectURL(file);
+            hyperlink.target = '_blank';
+            hyperlink.download = fileName;
+
+            hyperlink.click();
+        }
+
+        that.saveRecording = saveRecording;
 
         //******** WebRTC specific methods ********
 
@@ -734,6 +791,19 @@ class presentationBroadcast extends React.Component {
             // frame.dispatchEvent(newEvent);
         }
 
+        function recordSlideChange(first = false) {
+            if(window.sessionStorage){
+                let prev = sessionStorage.getItem('slideTimings');
+                prev = (isEmpty(prev)) ? '{}' : prev;
+                prev = JSON.parse(prev);
+                let now = new Date().getTime();
+                let newEl = {};
+                newEl[now] = ((first) ? sessionStorage.getItem('origin') : '') + that.currentSlide;
+                let toSave = Object.assign(prev, newEl);
+                sessionStorage.setItem('slideTimings', JSON.stringify(toSave));
+            }
+        }
+
         function activateIframeListeners() {
             console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
@@ -750,6 +820,7 @@ class presentationBroadcast extends React.Component {
             if (that.isInitiator) {
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    recordSlideChange();
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
                 iframe.on('paused', () => {
@@ -1047,7 +1118,7 @@ class presentationBroadcast extends React.Component {
                   <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
                   {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
+                    <Button content='Save this to video' color='yellow' labelPosition='right' icon='save' onClick={this.saveRecording.bind(this)}/>
                   ) : (
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                   )}
