@@ -1,10 +1,51 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import { NavLink } from 'fluxible-router';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class SearchResultsItem extends React.Component {
 
-
+    constructor(props){
+        super(props);
+        this.messages = this.getIntlMessages();
+    }
+    getIntlMessages(){
+        return defineMessages({
+            otherVersions: {
+                id: 'SearchResultsItem.otherVersions',
+                defaultMessage: 'Other versions'
+            }, 
+            otherDeckVersion: {
+                id: 'SearchResultsItem.otherVersions.deck', 
+                defaultMessage: 'Deck Version {index}: {title}'
+            }, 
+            otherSlideVersion: {
+                id: 'SearchResultsItem.otherVersions.slide', 
+                defaultMessage: 'Also in Deck: {title}'
+            }, 
+            inDeck: {
+                id: 'SearchResultsItem.inDeck', 
+                defaultMessage: 'in'
+            }, 
+            byUser: {
+                id: 'SearchResultsItem.byUser', 
+                defaultMessage: 'by user'
+            }, 
+            owner: {
+                id: 'SearchResultsItem.owner', 
+                defaultMessage: 'Owner'
+            }, 
+            slideLastModified: {
+                id: 'SearchResultsItem.lastModified.slide', 
+                defaultMessage: 'Slide last modified: {date}'
+            }, 
+            deckLastModified: {
+                id: 'SearchResultsItem.lastModified.deck', 
+                defaultMessage: 'Deck last modified: {date}'
+            }
+            
+        });
+    }
 
     render() {
         const result = this.props.data;
@@ -20,23 +61,54 @@ class SearchResultsItem extends React.Component {
         let expandButton = '';
         let subList = '';
         if(result.subItems && result.subItems.length > 0){
-            expandButton = <button className="ui small button">Other versions</button>;
+            expandButton = <button className="ui small button"><FormattedMessage {...this.messages.otherVersions} /></button>;
 
             subList = result.subItems.map( (item, index) => {
                 if(result.kind === 'Deck'){
-                    return <div className="row" key={item.id}><NavLink href={item.link}>Deck Version {index+1}: {item.title}</NavLink></div>;
+                    return <div className="row" key={item.id}>
+                        <NavLink href={item.link}>
+                            {
+                                this.context.intl.formatMessage(this.messages.otherDeckVersion, {
+                                    index: index+1,
+                                    title: item.title
+                                })
+                            }
+                        </NavLink>
+                    </div>;
                 }
                 else if(result.kind === 'Slide'){
-                    return <div className="row" key={item.id}><NavLink href={item.link}>Also in Deck: {item.title}</NavLink></div>;
+                    return <div className="row" key={item.id}>
+                        <NavLink href={item.link}>
+                            {
+                                this.context.intl.formatMessage(this.messages.otherSlideVersion, {
+                                    title: item.title
+                                })
+                            }
+                        </NavLink>
+                    </div>;
                 }
             });
         }
 
         // form last line of the result item containing user info
-        let userLine = (result.kind === 'Slide')
-            ?   <span>in <NavLink href={result.deck.link}>{result.deck.title}</NavLink> by user <NavLink href={result.user.link}>{result.user.username}</NavLink></span>
-            :   <span>Owner: <NavLink href={result.user.link}>{result.user.username}</NavLink></span>;
+        let userLine = '';
+        let lastModifiedLine = '';
 
+        if (result.kind === 'Slide'){
+            userLine = <span><FormattedMessage {...this.messages.inDeck} /> <NavLink href={result.deck.link}>{result.deck.title}</NavLink> <FormattedMessage {...this.messages.byUser} /> <NavLink href={result.user.link}>{result.user.username}</NavLink></span>;
+            lastModifiedLine = <span>{
+                this.context.intl.formatMessage(this.messages.slideLastModified, {
+                    date: result.lastUpdate
+                })
+            }</span>;
+        } else if (result.kind === 'Deck') {
+            userLine = <span><FormattedMessage {...this.messages.owner} />: <NavLink href={result.user.link}>{result.user.username}</NavLink></span>;
+            lastModifiedLine = <span>{
+                this.context.intl.formatMessage(this.messages.deckLastModified, {
+                    date: result.lastUpdate
+                })
+            }</span>;
+        }
 
         return (
             <div className="accordionItem">
@@ -53,7 +125,7 @@ class SearchResultsItem extends React.Component {
                                             {result.description}
                                         </div>
                                         <div className="row">
-                                            {result.kind} last modified: {result.lastUpdate}
+                                            {lastModifiedLine}
                                         </div>
                                         <div className="row">
                                             {userLine}
@@ -78,5 +150,9 @@ class SearchResultsItem extends React.Component {
         );
     }
 }
+
+SearchResultsItem.contextTypes = {
+    intl: React.PropTypes.object.isRequired,
+};
 
 export default SearchResultsItem;
