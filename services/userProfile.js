@@ -1,7 +1,12 @@
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
+import cookieParser from 'cookie';
+
 const log = require('../configs/log').log;
+
+const user_cookieName = 'user_json_storage';
+const secondsCookieShouldBeValid = 60*60*24*14 ;  //2 weeks
 
 export default {
     name: 'userProfile',
@@ -149,10 +154,11 @@ export default {
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
                     headers: { '----jwt----': params.params.jwt },
-                    json: true
+                    resolveWithFullResponse: true,
                 })
-                .then((body) => {
+                .then((response) => {
                     //console.log(body);
+                    let body = JSON.parse(response.body);
                     let converted = {
                         id: body._id,
                         uname: body.username,
@@ -168,7 +174,19 @@ export default {
                         providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : []
                     };
-                    callback(null, converted);
+                    callback(null, converted, {
+                        headers: {
+                            'Set-Cookie': cookieParser.serialize(user_cookieName, JSON.stringify({
+                                username: body.username,
+                                userid: body._id,
+                                jwt: response.headers['----jwt----'],
+                            }), {
+                                maxAge: secondsCookieShouldBeValid,
+                                sameSite: true,
+                                path: '/',
+                            }),
+                        }
+                    });
                 })
                 .catch((err) => callback(err));
             } else {
@@ -208,11 +226,12 @@ export default {
                         return {
                             title: !isEmpty(deck.title) ? deck.title : 'No Title',
                             picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                            description: deck.description,
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
                             firstSlide: deck.firstSlide,
+                            theme: deck.theme,
                             language:deck.language,
                             countRevisions:deck.countRevisions
 
@@ -234,11 +253,12 @@ export default {
                         return {
                             title: !isEmpty(deck.title) ? deck.title : 'No Title',
                             picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                            description: deck.description,
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
                             firstSlide: deck.firstSlide,
+                            theme: deck.theme,
                             language:deck.language,
                             countRevisions:deck.countRevisions
                         };
