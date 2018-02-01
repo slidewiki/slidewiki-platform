@@ -9,6 +9,10 @@ import DeckPropertiesEditor from './DeckPropertiesEditor';
 
 
 class DeckEditPanel extends React.Component {
+    componentDidUpdate() {
+        console.log('Updated DeckEditPanel.');
+    }
+
     handleAuth(selector) {
         const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
         //user is not logged in
@@ -19,17 +23,18 @@ class DeckEditPanel extends React.Component {
         }
         return (<div>Sign-in needed!</div>);
     }
+
     render() {
         //make sure user is logged-in
         this.handleAuth(this.props.selector);
 
         return (
-        <div ref="deckEditPanel" className="ui bottom attached segment">
-            <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps}
-              selector={this.props.selector}
-              userid={this.props.UserProfileStore.userid}
-              groups={this.props.UserProfileStore.user.groups}/>
-        </div>
+            <div ref="deckEditPanel" className="ui bottom attached segment">
+                <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps}
+                  selector={this.props.selector}
+                  userid={this.props.UserProfileStore.userid}
+                  groups={this.props.UserProfileStore.user.groups}/>
+            </div>
         );
     }
 }
