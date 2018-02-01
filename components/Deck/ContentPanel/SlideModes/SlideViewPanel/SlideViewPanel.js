@@ -8,7 +8,7 @@ class SlideViewPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.isLoading = true;
+        this.isLoading = this.isContentUndefined();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -18,7 +18,13 @@ class SlideViewPanel extends React.PureComponent {
         this.isLoading = undefinedContent;
 
         // Content should be updated only when new content is ready or component properties/state have changed.
-        return !undefinedContent || !samePropsState;
+        let shouldUpdate = !undefinedContent && !samePropsState;
+        return shouldUpdate;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let undefinedContent = this.isContentUndefined();
+        this.isLoading = undefinedContent;
     }
 
     componentWillUnmount() {
@@ -26,8 +32,8 @@ class SlideViewPanel extends React.PureComponent {
         this.isLoading = true;
     }
 
-    componentDidUpdate() {
-        console.log('Updated SlideViewPanel.');
+    isContentUndefined() {
+        return this.props.SlideViewStore.content === undefined || this.props.SlideViewStore.content === '';
     }
 
     render() {
