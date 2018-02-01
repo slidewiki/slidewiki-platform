@@ -9,10 +9,6 @@ import DeckPropertiesEditor from './DeckPropertiesEditor';
 
 
 class DeckEditPanel extends React.Component {
-    componentDidUpdate() {
-        console.log('Updated DeckEditPanel.');
-    }
-
     handleAuth(selector) {
         const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
         //user is not logged in

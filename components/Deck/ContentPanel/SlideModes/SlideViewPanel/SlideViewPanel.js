@@ -36,10 +36,6 @@ class SlideViewPanel extends React.PureComponent {
         return this.props.SlideViewStore.content === undefined || this.props.SlideViewStore.content === '';
     }
 
-    componentDidUpdate() {
-        console.log('Updated SlideViewPanel.');
-    }
-
     render() {
         let deckTheme = this.props.selector && this.props.selector.theme;
         if (!deckTheme) {

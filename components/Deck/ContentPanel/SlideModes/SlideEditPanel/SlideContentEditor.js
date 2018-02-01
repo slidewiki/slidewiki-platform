@@ -37,10 +37,6 @@ class SlideContentEditor extends React.Component {
         //this.redoContent = '';
     }
 
-    componentDidUpdate() {
-        console.log('Updated SlideContentEditor.');
-    }
-
     handleSlideSizechange(slideSize){
         if (slideSize !== ''){
             if($('.pptx2html').length)  //if slide is in canvas mode
