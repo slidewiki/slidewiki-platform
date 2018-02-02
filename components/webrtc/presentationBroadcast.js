@@ -1019,7 +1019,10 @@ class presentationBroadcast extends React.Component {
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
+                  <div>
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
+                  <SessionRecorder ref="sessionRecorder"/>
+                  </div>
               ) : ('')};
             </Grid.Row>
 
@@ -1044,7 +1047,7 @@ class presentationBroadcast extends React.Component {
                   <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
                   {(this.isInitiator) ? (
-                    <SessionRecorder ref="sessionRecorder"/>
+                    ''
                   ) : (
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                   )}

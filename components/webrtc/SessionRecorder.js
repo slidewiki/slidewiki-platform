@@ -15,6 +15,9 @@ class SessionRecorder extends React.Component {
         this.state = {
             recordSession: true
         };
+
+        this.createAudioTrack = this.createAudioTrack.bind(this);
+        this.saveBlobToDisk = this.saveBlobToDisk.bind(this);
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -110,8 +113,8 @@ class SessionRecorder extends React.Component {
             this.mediaRecorder.stop();
             this.recordSlideChange();
             let timingBlob = new Blob([sessionStorage.getItem('slideTimings')], {type: 'application/json'});
-            this.saveBlob(timingBlob, 'timings.json');//TODO last recording is just a time, but no slide url as this component triggers it and this.currentSlide is not available in this component
-            this.getBlobArray(this.saveAudioTrack);
+            this.saveBlobToDisk(timingBlob, 'timings.json');//TODO last recording is just a time, but no slide url as this component triggers it and this.currentSlide is not available in this component
+            this.createAudioTrack();
         }).catch((e) => {
             if(e === 'cancel'){
                 this.mediaRecorder.resume();
@@ -119,47 +122,17 @@ class SessionRecorder extends React.Component {
         });
     }
 
-    getBlobArray(callback) {
+    createAudioTrack() {
         let promises = this.blobKeys.map((key) => window.localforage.getItem(key));
-        Promise.all(promises).then((values) => {
-            callback(values);
+        Promise.all(promises).then((blobArray) => {
+            let safeBlobArray = (isEmpty(blobArray)) ? [] : blobArray;
+            console.log(safeBlobArray);
+            //let blob = new Blob(safeBlobArray, { 'type' : safeBlobArray[0].type });//NOTE only works on FF kinda correctly, chrome creates a correct file, but playback stops after 5s
+            window.ConcatenateBlobs( safeBlobArray, safeBlobArray[0].type, (concatenatedBlob) => this.saveBlobToDisk(concatenatedBlob, 'test.webm') );
         });
     }
 
-    saveAudioTrack(blobArray) {
-        let safeBlobArray = (isEmpty(blobArray)) ? [] : blobArray;
-        console.log(safeBlobArray);
-        //let blob = new Blob(safeBlobArray, { 'type' : safeBlobArray[0].type });//NOTE only works on FF kinda correctly, chrome creates a correct file, but playback stops after 5s
-        window.ConcatenateBlobs( safeBlobArray, safeBlobArray[0].type, (concatenatedBlob) => {
-            //this.saveBlob(concatenatedBlob, 'test.webm');//TODO calling saveBlob did not work because "this" is not known
-            let hyperlink = document.createElement('a');
-            hyperlink.style.display = 'none';
-            hyperlink.href = URL.createObjectURL(concatenatedBlob);
-            hyperlink.target = '_blank';
-            hyperlink.download = 'test.webm';
-
-            if (!!navigator.mozGetUserMedia) {
-                hyperlink.onclick = function() {
-                    (document.body || document.documentElement).removeChild(hyperlink);
-                };
-                (document.body || document.documentElement).appendChild(hyperlink);
-            }
-
-            let evt = new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true
-            });
-
-            hyperlink.dispatchEvent(evt);
-
-            if (!navigator.mozGetUserMedia) {
-                URL.revokeObjectURL(hyperlink.href);
-            }
-        });
-    }
-
-    saveBlob(file, fileName) {
+    saveBlobToDisk(file, fileName) {
         let hyperlink = document.createElement('a');
         hyperlink.style.display = 'none';
         hyperlink.href = URL.createObjectURL(file);
@@ -188,7 +161,7 @@ class SessionRecorder extends React.Component {
 
     render() {
         return (
-          <Button content="Save session as video" color='grey' labelPosition='right' icon={<Icon name="record" color={(this.state.recordSession) ? 'red' : ''}/>} disabled={this.state.recordSession ? false : true} style={{textAlign: 'left'}} onClick={this.saveRecording.bind(this)} aria-haspopup="true" data-tooltip={this.state.recordSession ? ' Recording...': 'Recording is disabled'} data-position="top left"/>
+          <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px', display: (this.state.recordSession) ? '': 'none'} } icon={<Icon name="record" color={(this.state.recordSession) ? 'red' : ''}/>} disabled={this.state.recordSession ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" data-tooltip={this.state.recordSession ? ' Recording...': 'Recording stopped'} data-position="bottom center"/>
         );
     }
 }
