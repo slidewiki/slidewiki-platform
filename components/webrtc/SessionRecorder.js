@@ -11,22 +11,22 @@ class SessionRecorder extends React.Component {
     constructor(props) {
         super(props);
         this.mediaRecorder = undefined;
-        this.blobKeys = [];
+        this.chunkKeys = [];
         this.state = {
             recordSession: true
         };
 
         this.createAudioTrack = this.createAudioTrack.bind(this);
-        this.saveBlobToDisk = this.saveBlobToDisk.bind(this);
+        this.saveTrackToDisk = this.saveTrackToDisk.bind(this);
     }
 
     componentWillUpdate(nextProps, nextState) {
         if(this.state.recordSession !== nextState.recordSession){
-            this.blobKeys = [];
-            window.localforage.clear();
             try {
                 this.mediaRecorder.stop();
             } catch (e) {}
+            this.chunkKeys = [];
+            window.localforage.clear();
         }
 
     }
@@ -53,16 +53,12 @@ class SessionRecorder extends React.Component {
 
     recordStream(stream) {
         if(this.state.recordSession){
-            // console.log('Initializing recorder');
-            this.mediaRecorder = new MediaStreamRecorder(stream);
-            this.mediaRecorder.stream = stream;
-            // this.mediaRecorder.disableLogs = true;
-            this.mediaRecorder.mimeType = 'audio/ogg';
-            this.mediaRecorder.ondataavailable = (blob) => {
-                console.log('New blob available');
+            this.mediaRecorder = new MediaRecorder(stream);
+            this.mediaRecorder.ondataavailable = (chunk) => {
+                console.log('New chunk available', chunk);
                 let now = new Date().getTime();
-                this.blobKeys.push(now.toString());
-                window.localforage.setItem(now.toString(), blob); //TODO implement catch for promise
+                this.chunkKeys.push({id: now.toString(), timecode: chunk.timecode});
+                window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise
             };
             console.log('starting recorder');
             this.mediaRecorder.start(5000);//NOTE 5000 is the only option that works
@@ -113,8 +109,8 @@ class SessionRecorder extends React.Component {
             this.mediaRecorder.stop();
             this.recordSlideChange();
             let timingBlob = new Blob([sessionStorage.getItem('slideTimings')], {type: 'application/json'});
-            this.saveBlobToDisk(timingBlob, 'timings.json');//TODO last recording is just a time, but no slide url as this component triggers it and this.currentSlide is not available in this component
-            this.createAudioTrack();
+            // this.saveBlobToDisk(timingBlob, 'timings.json');//TODO last recording is just a time, but no slide url as this component triggers it and this.currentSlide is not available in this component
+            setTimeout(this.createAudioTrack, 500);
         }).catch((e) => {
             if(e === 'cancel'){
                 this.mediaRecorder.resume();
@@ -123,16 +119,17 @@ class SessionRecorder extends React.Component {
     }
 
     createAudioTrack() {
-        let promises = this.blobKeys.map((key) => window.localforage.getItem(key));
+        let promises = this.chunkKeys.map((obj) => window.localforage.getItem(obj.id));
         Promise.all(promises).then((blobArray) => {
-            let safeBlobArray = (isEmpty(blobArray)) ? [] : blobArray;
-            console.log(safeBlobArray);
-            //let blob = new Blob(safeBlobArray, { 'type' : safeBlobArray[0].type });//NOTE only works on FF kinda correctly, chrome creates a correct file, but playback stops after 5s
-            window.ConcatenateBlobs( safeBlobArray, safeBlobArray[0].type, (concatenatedBlob) => this.saveBlobToDisk(concatenatedBlob, 'test.webm') );
+            let safeChunkArray = (isEmpty(blobArray)) ? [] : blobArray;//TODO implement better version
+            console.log(safeChunkArray);
+            let track = new Blob(safeChunkArray, { 'type' : 'audio/ogg; codecs=opus' });//NOTE it is currently video/webm in chrome by default, but only a audio stream
+            console.log(track);
+            this.saveTrackToDisk(track, 'test.ogg');
         });
     }
 
-    saveBlobToDisk(file, fileName) {
+    saveTrackToDisk(file, fileName) {
         let hyperlink = document.createElement('a');
         hyperlink.style.display = 'none';
         hyperlink.href = URL.createObjectURL(file);

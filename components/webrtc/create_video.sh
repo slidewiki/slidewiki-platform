@@ -13,4 +13,7 @@
 #  duration 2
 # 4.
 
-ffmpeg -f concat -safe 0 -i pics.txt -i audio.webm -vsync cfr -c:v libx265 -preset faster -c:a libvorbis output.mkv
+#sizes are wrong by defaults
+ffmpeg -i audio.ogg -c copy audio.ogg
+
+ffmpeg -f concat -safe 0 -i pics.txt -i audio.ogg -vsync cfr -c:v libx265 -preset faster -c:a libvorbis output.mkv
