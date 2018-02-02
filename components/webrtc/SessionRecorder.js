@@ -54,7 +54,7 @@ class SessionRecorder extends React.Component {
             this.mediaRecorder = new MediaStreamRecorder(stream);
             this.mediaRecorder.stream = stream;
             // this.mediaRecorder.disableLogs = true;
-            this.mediaRecorder.mimeType = 'audio/webm';
+            this.mediaRecorder.mimeType = 'audio/ogg';
             this.mediaRecorder.ondataavailable = (blob) => {
                 console.log('New blob available');
                 let now = new Date().getTime();
@@ -129,15 +129,33 @@ class SessionRecorder extends React.Component {
     saveAudioTrack(blobArray) {
         let safeBlobArray = (isEmpty(blobArray)) ? [] : blobArray;
         console.log(safeBlobArray);
+        //let blob = new Blob(safeBlobArray, { 'type' : safeBlobArray[0].type });//NOTE only works on FF kinda correctly, chrome creates a correct file, but playback stops after 5s
         window.ConcatenateBlobs( safeBlobArray, safeBlobArray[0].type, (concatenatedBlob) => {
-            //this.saveBlob(concatenatedBlob, 'test.webm');//TODO calling saveBlob did not work because "this" was not known
+            //this.saveBlob(concatenatedBlob, 'test.webm');//TODO calling saveBlob did not work because "this" is not known
             let hyperlink = document.createElement('a');
             hyperlink.style.display = 'none';
             hyperlink.href = URL.createObjectURL(concatenatedBlob);
             hyperlink.target = '_blank';
             hyperlink.download = 'test.webm';
 
-            hyperlink.click();
+            if (!!navigator.mozGetUserMedia) {
+                hyperlink.onclick = function() {
+                    (document.body || document.documentElement).removeChild(hyperlink);
+                };
+                (document.body || document.documentElement).appendChild(hyperlink);
+            }
+
+            let evt = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+
+            hyperlink.dispatchEvent(evt);
+
+            if (!navigator.mozGetUserMedia) {
+                URL.revokeObjectURL(hyperlink.href);
+            }
         });
     }
 
@@ -148,7 +166,24 @@ class SessionRecorder extends React.Component {
         hyperlink.target = '_blank';
         hyperlink.download = fileName;
 
-        hyperlink.click();
+        if (!!navigator.mozGetUserMedia) {
+            hyperlink.onclick = function() {
+                (document.body || document.documentElement).removeChild(hyperlink);
+            };
+            (document.body || document.documentElement).appendChild(hyperlink);
+        }
+
+        let evt = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        });
+
+        hyperlink.dispatchEvent(evt);
+
+        if (!navigator.mozGetUserMedia) {
+            URL.revokeObjectURL(hyperlink.href);
+        }
     }
 
     render() {
