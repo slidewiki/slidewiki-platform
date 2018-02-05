@@ -18,6 +18,7 @@ class SessionRecorder extends React.Component {
 
         this.createAudioTrack = this.createAudioTrack.bind(this);
         this.saveTrackToDisk = this.saveTrackToDisk.bind(this);
+        this.mime = '';
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -53,15 +54,17 @@ class SessionRecorder extends React.Component {
 
     recordStream(stream) {
         if(this.state.recordSession){
-            this.mediaRecorder = new MediaRecorder(stream);
+            let webm = 'audio/webm\;codecs=opus', ogg = 'audio/ogg\;codecs=opus';
+            this.mime = (MediaRecorder.isTypeSupported(ogg)) ? ogg : webm;
+            this.mediaRecorder = new MediaRecorder(stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
             this.mediaRecorder.ondataavailable = (chunk) => {
-                console.log('New chunk available', chunk);
+                // console.log('New chunk available', chunk);
                 let now = new Date().getTime();
                 this.chunkKeys.push({id: now.toString(), timecode: chunk.timecode});
                 window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise
             };
             console.log('starting recorder');
-            this.mediaRecorder.start(5000);//NOTE 5000 is the only option that works
+            this.mediaRecorder.start(2000);//NOTE 5000 is the only option that works
         }
     }
 
@@ -123,9 +126,11 @@ class SessionRecorder extends React.Component {
         Promise.all(promises).then((blobArray) => {
             let safeChunkArray = (isEmpty(blobArray)) ? [] : blobArray;//TODO implement better version
             console.log(safeChunkArray);
-            let track = new Blob(safeChunkArray, { 'type' : 'audio/ogg; codecs=opus' });//NOTE it is currently video/webm in chrome by default, but only a audio stream
+            let track = new Blob(safeChunkArray, { 'type' : this.mime });
             console.log(track);
-            this.saveTrackToDisk(track, 'test.ogg');
+            let name = 'test' + ((this.mime.contains('webm')) ? '.webm' : '.ogg');
+            console.log(name);
+            this.saveTrackToDisk(track, name);
         });
     }
 
