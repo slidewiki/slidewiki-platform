@@ -21,14 +21,17 @@ class Import extends React.Component {
             openModal: false,
             activeTrap: false,
             cancelled: false,
+            accepted: false
         };
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
 
         this.uploadButton = null;
     }
+
     componentDidUpdate(){
         if (this.props.ImportStore.file === null)
             $('#import_file_chooser').val('');
@@ -39,6 +42,13 @@ class Import extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
+    }
+    handleUpload(){
+        this.setState({
+            accepted:true
+        });
+        this.handleClose();
+
     }
 
     handleCancel(){
@@ -58,7 +68,7 @@ class Import extends React.Component {
         });
     }
     unmountTrap(){
-        if(!this.state.cancelled){
+        if(!this.state.cancelled && !accepted){
             this.context.executeAction(importCanceled, {});
             this.setState({
                 cancelled:true
@@ -167,7 +177,7 @@ class Import extends React.Component {
                                           </Button>}
                                 content='Select file' on='hover'/>;
         let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label="Upload" data-tooltip="Upload" disabled ><Icon name="upload" /> Upload</Button>:
-                                <Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label="Upload" data-tooltip="Upload" ><Icon name="upload" /> Upload</Button>;
+                                <Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label="Upload" data-tooltip="Upload" onClick={this.handleUpload} ><Icon name="upload" /> Upload</Button>;
 
         outputDIV =   <Modal trigger={importBtn}
                              //Aqui estoy
