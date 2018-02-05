@@ -38,7 +38,8 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc + '';
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
-        this.hashTag = 'SW' + this.props.currentRoute.query.presentation.replace(/[^0-9]/g,'');
+        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
+        this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -68,8 +69,7 @@ class presentationBroadcast extends React.Component {
 
         that.socket = io(Microservices.webrtc.uri);
 
-        let deckID = that.iframesrc.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
-        that.socket.emit('create or join', that.room, deckID);
+        that.socket.emit('create or join', that.room, that.deckID);
         console.log('Attempt to create or join room', that.room);
 
         function setmyID() {
@@ -983,7 +983,7 @@ class presentationBroadcast extends React.Component {
                     </h4>
                   </Grid.Column>
                   <Grid.Column width={1} style={{'padding-left': '0'}}>
-                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} hashTag={this.hashTag} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
+                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} hashTags={this.hashTags} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
                   </Grid.Column>
                 </Grid>
                 <div id="media" style={{'display': 'none'}}></div>

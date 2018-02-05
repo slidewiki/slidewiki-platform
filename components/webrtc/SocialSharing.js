@@ -8,6 +8,7 @@ class SocialSharing extends React.Component {
   Props:
     roomURL: full URL to share
     currentSlideURL: full URL to share
+    hashTags: ['#a','#b',...]
 */
     copyURLToClipboard() {
         let toCopy = document.createElement('input');
@@ -72,7 +73,7 @@ class SocialSharing extends React.Component {
         }
         let x = screen.width/2 - 700/2 + FindLeftWindowBoundry();
         let y = screen.height/2 - 450/2 + FindTopWindowBoundry();
-        window.open('https://twitter.com/intent/tweet?button_hashtag=' + this.props.hashTag , 'test', 'width=500,height=260,left='+x+',top='+y);
+        window.open('https://twitter.com/intent/tweet?button_hashtag=' + this.props.hashTags.join('%20%23').replace(/#/g, '') , 'test', 'width=500,height=260,left='+x+',top='+y);
         return false;
     }
 
@@ -134,7 +135,7 @@ class SocialSharing extends React.Component {
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <Button content={'#' + this.props.hashTag} labelPosition='left' icon='twitter' primary onClick={this.postTweet.bind(this)} style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '1%', transform: 'rotate(90deg)', transformOrigin: 'top left'}}/>
+            <Button content={this.props.hashTags.join(' ')} labelPosition='left' icon='twitter' primary onClick={this.postTweet.bind(this)} style={{position: 'fixed', padding: '5px', paddingLeft: '2.5rem !important', paddingRight: '0.8rem!important', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '0.4rem', transform: 'rotate(90deg)', transformOrigin: 'top left'}}/>
             </div>
         );
     }
