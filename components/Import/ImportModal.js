@@ -9,6 +9,7 @@ import ReactDOM  from 'react-dom';
 import classNames from 'classnames';
 import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
+import {defineMessages} from 'react-intl';
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
 
 const MAX_FILESIZE_MB = 300;
@@ -28,8 +29,43 @@ class Import extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
-
         this.uploadButton = null;
+        this.messages = defineMessages({
+            modal_header:{
+                id: 'importFileModal.modal_header',
+                defaultMessage:'Upload your presentation'
+            },
+            swal_button:{
+                id:'importFileModal.swal_button',
+                defaultMessage:'Accept'
+
+            },
+            swal_message:{
+                id:'importFileModal.swal_message',
+                defaultMessage:'This file is not supported. Please, remember than only pptx and odp files are supported.',
+            },
+            modal_selectButton:{
+                id:'importFileModal.modal_selectButton',
+                defaultMessage:'Select file',
+            },
+            modal_uploadButton:{
+                id:'importFileModal.modal_uploadButton',
+                defaultMessage:'Upload',
+            },
+            modal_explanation1:{
+                id:'importFileModal.modal_explanation1',
+                defaultMessage:'Select your presentation file and upload it to SlideWiki.'
+            },
+            modal_explanation2:{
+                id:'importFileModal.modal_explanation2',
+                defaultMessage:'Only PowerPoint (.pptx) and OpenOffice (.odp) are supported (Max size:'
+            },
+            modal_cancelButton:{
+                id:'importFileModal.modal_cancelButton',
+                defaultMessage:'Cancel'
+            }
+
+        });
     }
 
     componentDidUpdate(){
@@ -85,7 +121,7 @@ class Import extends React.Component {
         if(this.state.activeTrap){
             this.setState({
                 activeTrap:false,
-        
+
 
             });
             $('#app').attr('aria-hidden','false');
@@ -163,10 +199,10 @@ class Import extends React.Component {
         } else{
             this.setState({activeTrap:false});
             swal({
-                title: 'Upload your presentation',
-                text: 'This file is not supported. Please, remember than only pptx and odp files are supported.',
+                title: this.context.intl.formatMessage(this.messages.modal_header),
+                text:  this.context.intl.formatMessage(this.messages.swal_message),
                 type: 'error',
-                confirmButtonText: 'Accept',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
                 confirmButtonClass: 'positive ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -198,11 +234,12 @@ class Import extends React.Component {
                                                     aria-describedby="uploadDesc"
                                                     aria-hidden={this.state.modalOpen}
                                                     onClick={this.handleOpen}>
-                                          Select file
+                                           {this.context.intl.formatMessage(this.messages.modal_selectButton)}
                                           </Button>}
                                 content='Select file' on='hover'/>;
-        let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label="Upload" data-tooltip="Upload" disabled ><Icon name="upload" /> Upload</Button>:
-                                <Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label="Upload" data-tooltip="Upload" onClick={this.handleUpload} ><Icon name="upload" /> Upload</Button>;
+        let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} disabled ><Icon name="upload" /> {this.context.intl.formatMessage(this.messages.modal_uploadButton)}</Button>:
+                                <Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} onClick={this.handleUpload} ><Icon name="upload" />{this.context.intl.formatMessage(this.messages.modal_uploadButton)}
+                                </Button>;
 
         outputDIV =   <Modal trigger={importBtn}
                              //Aqui estoy
@@ -226,15 +263,15 @@ class Import extends React.Component {
                               }}
                           >
                             <Modal.Header className="ui center aligned" as="h1" id="importFileModalHeader">
-                                Upload your presentation
+                                {this.context.intl.formatMessage(this.messages.modal_header)}
                             </Modal.Header>
                             <Modal.Content>
                               <Container>
                                 <Segment color="blue" textAlign="center" padded>
                                   <Segment attached="bottom" textAlign="left">
                                       <div id="importFileModalDesc" tabIndex="0">
-                                        <p>Select your presentation file and upload it to SlideWiki.</p>
-                                        <p>Only PowerPoint (.pptx) and OpenOffice (.odp) are supported (Max size: {MAX_FILESIZE_MB}MB).</p>
+                                        <p>  {this.context.intl.formatMessage(this.messages.modal_explanation1)}</p>
+                                        <p>{this.context.intl.formatMessage(this.messages.modal_explanation2)}{MAX_FILESIZE_MB}MB).</p>
                                       </div>
                                       <div className="ui input file focus animated">
                                         <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
@@ -244,7 +281,7 @@ class Import extends React.Component {
                                   <Modal.Actions>
                                     {uploadButton}
                                     <Button color="secondary" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleCancel} >
-                                      Cancel
+                                      {this.context.intl.formatMessage(this.messages.modal_cancelButton)}
                                     </Button>
                                   </Modal.Actions>
                                 </Segment>
@@ -263,7 +300,8 @@ class Import extends React.Component {
 
 
 Import.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 Import = connectToStores(Import, [ImportStore], (context, props) => {
     return {
