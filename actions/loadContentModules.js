@@ -3,7 +3,7 @@ import async from 'async';
 // import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
 import loadDataSources from './datasource/loadDataSources';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
-//import loadQuestionsCount from './questions/loadQuestionsCount';
+import loadQuestionsCount from './questions/loadQuestionsCount';
 import loadCommentsCount from './contentdiscussion/loadCommentsCount';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
@@ -32,11 +32,10 @@ export default function loadContentModules(context, payload, done) {
         // (callback) => {
         //     context.executeAction(loadDataSourceCount, payload, callback);
         // },
-        /*
+
         (callback) => {
             context.executeAction(loadQuestionsCount, payload, callback);
         },
-        */
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
         },
