@@ -203,7 +203,7 @@ class Import extends React.Component {
                 text:  this.context.intl.formatMessage(this.messages.swal_message),
                 type: 'error',
                 confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'positive ui button',
+                confirmButtonClass: 'primary ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 buttonsStyling: false
