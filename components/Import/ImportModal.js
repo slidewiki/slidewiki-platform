@@ -85,7 +85,7 @@ class Import extends React.Component {
         if(this.state.activeTrap){
             this.setState({
                 activeTrap:false,
-                modalOpen:false,
+        
 
             });
             $('#app').attr('aria-hidden','false');
@@ -110,7 +110,7 @@ class Import extends React.Component {
         const size = file.size;
         isCorrect = ( filetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
                       filetype === 'application/vnd.oasis.opendocument.presentation' ) && ( size < MAX_FILESIZE );
-        
+
         if (isCorrect) {
             let reader = new FileReader();
 
@@ -160,6 +160,21 @@ class Import extends React.Component {
             if(this.uploadButton){ //upload button rendered
                 this.uploadButton.focus();
             }
+        } else{
+            this.setState({activeTrap:false});
+            swal({
+                title: 'Upload your presentation',
+                text: 'This file is not supported. Please, remember than only pptx and odp files are supported.',
+                type: 'error',
+                confirmButtonText: 'Accept',
+                confirmButtonClass: 'positive ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+          .then(() => {this.setState({activeTrap:true});
+          });
+
         }
 
         return false;
