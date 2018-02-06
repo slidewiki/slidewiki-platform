@@ -8,12 +8,14 @@ import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
-import {hashPassword} from '../../configs/general';
+import {hashPassword, ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 import {FormattedMessage, defineMessages} from 'react-intl';
+import SelectInstanceModal from '../User/SelectInstanceModal.js';
+import openSSOModal from '../../actions/user/openSSOModal';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -220,6 +222,14 @@ class LoginModal extends React.Component {
         win.focus();
     }
 
+    doSSO(e) {
+        e.preventDefault();
+
+        $('.ui.login.modal').modal('toggle');
+
+        this.context.executeAction(openSSOModal, {register: false});
+    }
+
     handleStorageEvent(e) {
         console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
@@ -412,6 +422,7 @@ class LoginModal extends React.Component {
                 </button>
               </div>
             </div>
+            <SelectInstanceModal />
           </div>
         );
     }
