@@ -145,6 +145,7 @@ class Import extends React.Component {
         const filetype = file.type;
         const size = file.size;
         isCorrect = ( filetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
+                      filetype === 'application/wps-office.pptx' ||
                       filetype === 'application/vnd.oasis.opendocument.presentation' ) && ( size < MAX_FILESIZE );
 
         if (isCorrect) {
