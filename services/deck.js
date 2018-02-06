@@ -220,7 +220,7 @@ export default {
 //            if (params.tags.length === 1 && params.tags[0].length === 0)
 //                params.tags = undefined;
             let toSend = {
-                description: params.description ? params.description : 'empty',
+                description: params.description,
                 language: params.language,
                 translation: {
                     status: 'original'
@@ -268,7 +268,7 @@ export default {
 
             }
             let toSend = {
-                description: params.description ? params.description : 'empty',
+                description: params.description,
                 language: params.language,
                 tags: params.tags? params.tags: [],
                 title: params.title,
@@ -304,7 +304,7 @@ export default {
 
             }
             let toSend = {
-                description: params.description ? params.description : 'empty',
+                description: params.description,
                 language: params.language,
                 tags: params.tags,
                 title: params.title,

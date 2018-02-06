@@ -32,7 +32,7 @@ import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
 import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
-
+import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
@@ -304,6 +304,29 @@ export default {
         handler: require('../components/Search/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
+        }
+    },
+    sso: {
+        path: '/SSO/:instance/:email',
+        method: 'get',
+        page: 'SSO',
+        title: 'SlideWiki -- Single Sign On',
+        handler: require('../components/User/SSO'),
+        action: (context, payload, done) => {
+            context.executeAction(prepareSSO, payload, done);
+        }
+    },
+    migrateUser: {
+        path: '/migrateUser',
+        method: 'get',
+        page: 'migrateUser',
+        title: 'SlideWiki -- Single Sign On',
+        handler: require('../components/Login/MigrateUser'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Single Sign On'
+            });
+            done();
         }
     },
 
