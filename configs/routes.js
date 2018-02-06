@@ -125,6 +125,19 @@ export default {
             done();
         }
     },
+    accessibility: {
+        path: '/about',
+        method: 'get',
+        page: 'about',
+        title: 'SlideWiki -- Accessibility',
+        handler: require('../components/Home/Accessibility'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Accessibility'
+            });
+            done();
+        }
+    },
     contactus: {
         path: '/contactus',
         method: 'get',
