@@ -212,12 +212,20 @@ class UploadMediaModal extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
+        const uploadMediaModalStyle = {
+            display: 'none'
+        };
+        /*trigger={
+                <Button className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
+                  <i className="outline upload icon large black"></i>
+                  <a style={buttonColorBlack}>Add Image</a>
+                </Button>
+               }
+        */
 
         return (
           <Modal trigger={
-                  <Button className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
-                    <i className="outline upload icon large black"></i>
-                    <a style={buttonColorBlack}>Add Image</a>
+                  <Button style={uploadMediaModalStyle} className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
                   </Button>
                  }
               open={this.state.modalOpen}

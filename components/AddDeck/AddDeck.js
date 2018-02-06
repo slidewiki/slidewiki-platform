@@ -49,14 +49,23 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.error !== null)
             this.showError();
     }
-
+    handleKeyPressUploadModal(event){
+        if(event.key === 'Enter'){
+            this.handleUploadModal(event);
+        }
+    }
     handleUploadModal(x) {
         //console.log('handleUploadModal: ', x);
 
         $('.ui.small.modal').modal('show');
     }
+    handleKeyPressAddDeck(event){
+        if(event.key === 'Enter'){
+            this.handleAddDeck(event);
+        }
+    }
     handleAddDeck(x) {
-        //console.log('handleAddDeck');
+        console.log('handleAddDeck');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -519,7 +528,7 @@ class AddDeck extends React.Component {
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
-                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
+                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
                                         <FormattedMessage
                                             id='AddDeck.form.button_select'
                                             defaultMessage='Select file' />
@@ -542,11 +551,11 @@ class AddDeck extends React.Component {
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
                                         defaultMessage='I agree to the SlideWiki ' />
-                                    <NavLink className="item" routeName="imprint">
+                                    <a className="item" href="/terms" target="_blank">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
                                             defaultMessage='terms and conditions' />
-                                    </NavLink>
+                                    </a>
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
@@ -559,13 +568,13 @@ class AddDeck extends React.Component {
                                 <label htmlFor="termsimages">
                                     <FormattedMessage
                                         id='AddDeck.form.label_termsimages'
-                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.' />
+                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
                                 </label>
                             </div>
                         </div>
 
                         <div className="ui buttons">
-                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
