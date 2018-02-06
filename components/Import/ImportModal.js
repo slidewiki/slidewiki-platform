@@ -53,10 +53,13 @@ class Import extends React.Component {
 
     handleCancel(){
         if(!this.state.cancelled){
-            this.context.executeAction(importCanceled, {});
+
             this.setState({
                 cancelled:true
             });
+            if(this.props.ImportStore.fileReadyForUpload){
+                this.context.executeAction(importCanceled, {});
+            }
         }
         this.handleClose();
     }
@@ -68,15 +71,22 @@ class Import extends React.Component {
         });
     }
     unmountTrap(){
-        if(!this.state.cancelled && !accepted){
-            this.context.executeAction(importCanceled, {});
+        console.log('unmountTrap');
+        if(!this.state.cancelled && !this.state.accepted){ //user clicks outside to cancel without pressing upload button
             this.setState({
                 cancelled:true
             });
+
+            if(this.props.ImportStore.fileReadyForUpload){
+                this.context.executeAction(importCanceled, {});
+            }
+
         }
         if(this.state.activeTrap){
             this.setState({
-                activeTrap:false
+                activeTrap:false,
+                modalOpen:false,
+
             });
             $('#app').attr('aria-hidden','false');
         }
