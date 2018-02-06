@@ -124,6 +124,5 @@ export default {
 
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
-    //
 
 };
