@@ -42,7 +42,7 @@ class Import extends React.Component {
             },
             swal_message:{
                 id:'importFileModal.swal_message',
-                defaultMessage:'This file is not supported. Please, remember than only pptx and odp files are supported.',
+                defaultMessage:'This file is not supported. Please, remember only pptx and odp files are supported.',
             },
             modal_selectButton:{
                 id:'importFileModal.modal_selectButton',
@@ -274,7 +274,7 @@ class Import extends React.Component {
                                         <p>{this.context.intl.formatMessage(this.messages.modal_explanation2)}{MAX_FILESIZE_MB}MB).</p>
                                       </div>
                                       <div className="ui input file focus animated">
-                                        <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
+                                        <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} onBlur={console.log('blur')} id="import_file_chooser" ></input>
                                       </div>
 
                                   </Segment>
