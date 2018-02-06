@@ -71,7 +71,7 @@ class Import extends React.Component {
         });
     }
     unmountTrap(){
-        console.log('unmountTrap');
+
         if(!this.state.cancelled && !this.state.accepted){ //user clicks outside to cancel without pressing upload button
             this.setState({
                 cancelled:true
@@ -92,7 +92,7 @@ class Import extends React.Component {
         }
     }
     handleFileSelect(evt){
-        console.log('handleFileSelect()');
+
 
         this.context.executeAction(importFinished, null);
 
@@ -110,23 +110,23 @@ class Import extends React.Component {
         const size = file.size;
         isCorrect = ( filetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
                       filetype === 'application/vnd.oasis.opendocument.presentation' ) && ( size < MAX_FILESIZE );
-        console.log('handleFileSelect:'+isCorrect);
+        
         if (isCorrect) {
             let reader = new FileReader();
 
             function errorHandler(evt) {
                 switch(evt.target.error.code) {
                     case evt.target.error.NOT_FOUND_ERR:
-                        console.error('File Not Found!');
+                        //console.error('File Not Found!');
                         break;
                     case evt.target.error.NOT_READABLE_ERR:
-                        console.error('File is not readable');
+                        //console.error('File is not readable');
                         break;
                     case evt.target.error.ABORT_ERR:
-                        console.info('Cancel clicked');
+                        //console.info('Cancel clicked');
                         break; // noop
                     default:
-                        console.error('An error occurred reading this file.', evt.target.error);
+                        //console.error('An error occurred reading this file.', evt.target.error);
                 };
             }
 
@@ -135,9 +135,9 @@ class Import extends React.Component {
             // Closures to capture the file information/data
             reader.onloadend = (function(theFile) {
                 return function(e) {
-                    console.log('file was read: ', file);
-                    console.log('also', theFile);
-                    console.log(e.target.result.length, 'bytes');
+                    //console.log('file was read: ', file);
+                    //console.log('also', theFile);
+                    //console.log(e.target.result.length, 'bytes');
 
                     //Save it to store
                     const payload = {
@@ -149,14 +149,14 @@ class Import extends React.Component {
             })();
             reader.onerror = errorHandler;
             reader.onabort = function(e) {
-                console.error('File read cancelled');
+              //  console.error('File read cancelled');
             };
 
             // Read in the file
             reader.readAsDataURL(file);
             //
 
-            //ReactDOM.findDOMNode(this.refs.submitbutton).focus();
+
             if(this.uploadButton){ //upload button rendered
                 this.uploadButton.focus();
             }
