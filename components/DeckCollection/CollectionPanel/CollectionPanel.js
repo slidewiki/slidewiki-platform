@@ -46,6 +46,7 @@ class CollectionPanel extends React.Component {
         });
     }
     handleSaveDeckOrder(){
+        // redirect to ?sort=order inside the action
         this.context.executeAction(updateCollectionDeckOrder, {
             id: this.props.DeckCollectionStore.collectionDetails._id,
             newOrder: this.state.decksOrder.map( (deck) => deck.deckID )
@@ -53,8 +54,6 @@ class CollectionPanel extends React.Component {
         this.setState({
             editMode: false
         });
-        // set sorting by order
-        this.dropdownSelect('order');
     }
     handleMoveUp(index){
         let newState = Object.assign({}, this.state);
