@@ -1,8 +1,37 @@
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
+import cheerio from 'cheerio';
 import ContentQuestionAnswersList from './ContentQuestionAnswersList';
 import toggleAnswers from '../../../../actions/questions/toggleAnswers';
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import TreeUtil from '../../TreePanel/util/TreeUtil';
 
 class ContentQuestionsItem extends React.Component {
+    //return the position of the node in the deck
+    getPath(question){
+        const flatTree = this.props.DeckTreeStore.flatTree;
+        let path = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('type') === question.relatedObject && flatTree.get(i).get('id').split('-')[0] === question.relatedObjectId) {
+                path = flatTree.get(i).get('path');
+                let nodeSelector = {id: this.props.selector.id, stype: question.relatedObject, sid: question.relatedObjectId, spath: path};
+                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+
+                return nodeURL;
+            }
+        }
+        return path;
+    }
+
+    handleRefClick(e) {
+        e.preventDefault();
+
+        this.context.executeAction(navigateAction, {
+            url: this.getPath(this.props.question)
+        });
+        // return false;
+    }
 
     handleToggleAnwers() {
         this.context.executeAction(toggleAnswers, {question: this.props.question});
@@ -57,6 +86,9 @@ class ContentQuestionsItem extends React.Component {
 
         let activeIfFirst = this.props.index === 0 ? 'active' : ''; // something wrong with accordion - doesn't expand
 
+        const cheerioContentName = (question.relatedObjectName) ? cheerio.load(question.relatedObjectName).text() : '';
+        const nodeRef = (question.relatedObject !== this.props.selector.stype || question.relatedObjectId !== this.props.selector.sid.split('-')[0]) ? (<span><i>{' (originally from ' + question.relatedObject + ' '}<a href={this.getPath(question)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</i></span>) : '';
+
         return (
             // <div className="item">
             // <i className={difficultyClass}></i>
@@ -76,16 +108,18 @@ class ContentQuestionsItem extends React.Component {
             // </div>
             <div>
                 <div className={activeIfFirst + ' title'}>
-                  <i className="dropdown icon" />
-                  {question.title}
-                  <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
-                      {difficultyStars(question.difficulty)}
-                  </div>
-                <div
-                  className={activeIfFirst + ' content'}
-                  data-reactid={653}>
-                  {answers}
+                    <i className="dropdown icon" />
+                    {question.title}
+                    <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
+                    {difficultyStars(question.difficulty)}
                 </div>
+
+                <div
+                    className={activeIfFirst + ' content'}
+                    data-reactid={653}>
+                    {answers}
+                </div>
+                {nodeRef}
             </div>
         );
     }
@@ -94,5 +128,9 @@ class ContentQuestionsItem extends React.Component {
 ContentQuestionsItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+ContentQuestionsItem = connectToStores(ContentQuestionsItem, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 export default ContentQuestionsItem;

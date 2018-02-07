@@ -23,8 +23,8 @@ class ContentQuestionEdit extends React.Component {
             correct4: numAnswers > 3 ? this.props.question.answers[3].correct: false,
             explanation: this.props.question.explanation,
             userId: this.props.userId,
-            relatedObjectId: this.props.selector.sid,
-            relatedObject: this.props.selector.stype,
+            relatedObjectId: this.props.question.relatedObjectId,
+            relatedObject: this.props.question.relatedObject
         };
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
