@@ -35,9 +35,7 @@ STEP 3: Verify that in STEP 2, you have correct operation mentioned. If you see 
 export default {
     Microservices: {
         'deck': {
-            // NOTE remove before merging
-            uri: 'http://slidewiki.imis.athena-innovation.gr/deckservice'
-            // uri: 'https://deckservice.experimental.slidewiki.org'
+            uri: 'https://deckservice.experimental.slidewiki.org'
         },
         'discussion': {
             uri: 'https://discussionservice.experimental.slidewiki.org'
