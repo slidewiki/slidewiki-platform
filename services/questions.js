@@ -135,7 +135,6 @@ export default {
                     explanation: args.question.explanation})
             }).then((res) => {
                 let question = JSON.parse(res);
-                console.log(question);
                 const answers = question.choices
                     .map((ans, ansIndex) => {
                         return {answer: ans.choice, correct: ans.is_correct};

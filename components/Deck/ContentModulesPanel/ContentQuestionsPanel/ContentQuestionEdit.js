@@ -18,9 +18,9 @@ class ContentQuestionEdit extends React.Component {
             answer3: numAnswers > 2 ? this.props.question.answers[2].answer: '',
             answer4: numAnswers > 3 ? this.props.question.answers[3].answer: '',
             correct1: this.props.question.answers[0].correct,
-            correct2: numAnswers > 2 ? this.props.question.answers[1].correct: '',
-            correct3: numAnswers > 3 ? this.props.question.answers[2].correct: '',
-            correct4: numAnswers > 3 ? this.props.question.answers[3].correct: '',
+            correct2: numAnswers > 1 ? this.props.question.answers[1].correct: false,
+            correct3: numAnswers > 2 ? this.props.question.answers[2].correct: false,
+            correct4: numAnswers > 3 ? this.props.question.answers[3].correct: false,
             explanation: this.props.question.explanation,
             userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
@@ -149,7 +149,7 @@ class ContentQuestionEdit extends React.Component {
     }
 
     render() {
-        const numAnswers = this.props.question.answers.length;
+        // const numAnswers = this.props.question.answers.length;
         const answerChoiceWidth = {
             width: '680px',
         };
@@ -209,26 +209,26 @@ class ContentQuestionEdit extends React.Component {
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked={numAnswers > 2 && this.state.correct2} onChange={this.updateCorrect2}/>
+                                        <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked={this.state.correct2} onChange={this.updateCorrect2}/>
                                         <label htmlFor="answer2"></label>
                                     </div>
-                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" defaultValue={numAnswers > 1 ? this.state.answer2: ''}  onChange={this.updateAnswer2}/>
+                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" defaultValue={this.state.answer2}  onChange={this.updateAnswer2}/>
                                     <label htmlFor="response2"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked={numAnswers > 2 && this.state.correct3} onChange={this.updateCorrect3}/>
+                                        <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked={this.state.correct3} onChange={this.updateCorrect3}/>
                                         <label htmlFor="answer3"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response3" id="response3" defaultValue={numAnswers > 2 ? this.state.answer3: ''} onChange={this.updateAnswer3}/>
+                                    <input type="text" style={answerChoiceWidth} name="response3" id="response3" defaultValue={this.state.answer3} onChange={this.updateAnswer3}/>
                                     <label htmlFor="response3"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked={numAnswers > 3 && this.state.correct4} onChange={this.updateCorrect4}/>
+                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked={this.state.correct4} onChange={this.updateCorrect4}/>
                                         <label htmlFor="answer4"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 3 ? this.state.answer4: ''} onChange={this.updateAnswer4}/>
+                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={this.state.answer4} onChange={this.updateAnswer4}/>
                                     <label htmlFor="response4"></label>
                                 </div>
                             </fieldset>
