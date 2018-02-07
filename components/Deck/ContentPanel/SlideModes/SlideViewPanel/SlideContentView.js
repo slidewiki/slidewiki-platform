@@ -14,7 +14,7 @@ class SlideContentView extends React.Component {
         if (nextProps.theme === this.props.theme){
 
         }
-        console.log('componentWillReceiveProps ' + this.props.loadingIndicator + nextProps.loadingIndicator);
+        //console.log('componentWillReceiveProps ' + this.props.loadingIndicator + nextProps.loadingIndicator);
         if (nextProps.loadingIndicator !== this.props.loadingIndicator)
         {
             if (nextProps.loadingIndicator === 'true')

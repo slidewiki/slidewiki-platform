@@ -117,7 +117,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'reply':
-                iconNotification = 'comments massive outline';
+                iconNotification = 'comments outline';
                 summaryNotification = (
                     <div className="summary">
                         <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
@@ -237,12 +237,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             default:
-                iconNotification = 'warning';
-                summaryNotification = (
-                    <div className="summary">
-                        Unknown type of activity - {notification.activity_type}
-                    </div>
-                );
+
         }
 
         let markAsReadButton = (notification.new) ? (<Button aria-label='Mark as read' icon='checkmark' onClick={this.handleMarkAsRead.bind(this, notification)} tabIndex='0' title='Mark as read'/>) : '';

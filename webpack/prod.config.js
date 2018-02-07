@@ -30,7 +30,7 @@ let webpackConfig = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules\/(?!identicons)/ ,
+                exclude: /node_modules(?!(\/|\\)identicons)/ , 
                 loader: 'babel-loader'
             },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
