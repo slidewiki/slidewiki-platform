@@ -138,14 +138,15 @@ class CollectionPanel extends React.Component {
     getSelectedSort(sortBy){
         switch(sortBy){
             case 'lastUpdated':
-                return <FormattedMessage {...this.messages.sortLastUpdated} />;
+                return this.context.intl.formatMessage(this.messages.sortLastUpdated);
             case 'date': 
-                return <FormattedMessage {...this.messages.sortCreationDate} />;
+                return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
-                return <FormattedMessage {...this.messages.sortTitle} />;
+                return this.context.intl.formatMessage(this.messages.sortTitle);
             case 'order': 
             default: 
-                return <FormattedMessage {...this.messages.sortDefault} />;        }
+                return this.context.intl.formatMessage(this.messages.sortDefault);
+        }
 
     }
     render() {
@@ -156,7 +157,7 @@ class CollectionPanel extends React.Component {
 
         let data = this.props.DeckCollectionStore.collectionDetails;
         let content = (!this.state.editMode) 
-        ? <CollectionDecks size={0} decks={this.state.decksOrder} sort={data.sortBy}/>
+        ? <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
         : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} />;
 
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
@@ -201,10 +202,10 @@ class CollectionPanel extends React.Component {
                                     <i className="icon exchange"/>
                                     <div className="text">{sortText}</div>
                                     <div className="menu">
-                                        <div className={(data.sortBy === 'order') ? 'item active selected' : 'item'} data-value='order'><FormattedMessage {...this.messages.sortDefault} /></div>
-                                        <div className={(data.sortBy === 'lastUpdated') ? 'item active selected' : 'item'} data-value='lastUpdated'><FormattedMessage {...this.messages.sortLastUpdated} /></div>
-                                        <div className={(data.sortBy === 'date') ? 'item active selected' : 'item'} data-value='date'><FormattedMessage {...this.messages.sortCreationDate} /></div>
-                                        <div className={(data.sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'><FormattedMessage {...this.messages.sortTitle} /></div>
+                                        <div className={(data.sortBy === 'order') ? 'item active selected' : 'item'} data-value='order'>{this.context.intl.formatMessage(this.messages.sortDefault)}</div>
+                                        <div className={(data.sortBy === 'lastUpdated') ? 'item active selected' : 'item'} data-value='lastUpdated'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
+                                        <div className={(data.sortBy === 'date') ? 'item active selected' : 'item'} data-value='date'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
+                                        <div className={(data.sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                                     </div>
                                 </div>
                             }
