@@ -5,7 +5,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from '../../../common';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
-class ColletionDecksReorder extends React.Component {
+class CollectionDecksReorder extends React.Component {
     constructor(props){
         super(props);
         this.messages = this.getIntlMessages();
@@ -19,11 +19,11 @@ class ColletionDecksReorder extends React.Component {
     getIntlMessages(){
         return defineMessages({
             moveUp: {
-                id: 'ColletionDecksReorder.moveup',
+                id: 'CollectionDecksReorder.moveup',
                 defaultMessage: 'Move Up'
             }, 
             moveDown: {
-                id: 'ColletionDecksReorder.movedown',
+                id: 'CollectionDecksReorder.movedown',
                 defaultMessage: 'Move Down'
             }
         });
@@ -72,15 +72,15 @@ class ColletionDecksReorder extends React.Component {
     }
 }
 
-ColletionDecksReorder.contextTypes = {
+CollectionDecksReorder.contextTypes = {
     executeAction: React.PropTypes.func.isRequired, 
     intl: React.PropTypes.object.isRequired
 };
 
-ColletionDecksReorder = connectToStores(ColletionDecksReorder, [UserProfileStore], (context, props) => {
+CollectionDecksReorder = connectToStores(CollectionDecksReorder, [UserProfileStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 
-export default ColletionDecksReorder;
+export default CollectionDecksReorder;

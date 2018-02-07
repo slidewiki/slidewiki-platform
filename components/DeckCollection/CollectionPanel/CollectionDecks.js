@@ -4,7 +4,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from '../../../common';
 
-class ColletionDecks extends React.Component {
+class CollectionDecks extends React.Component {
 
     render() {
         let size = 0;
@@ -39,13 +39,13 @@ class ColletionDecks extends React.Component {
     }
 }
 
-ColletionDecks.contextTypes = {
+CollectionDecks.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-ColletionDecks = connectToStores(ColletionDecks, [UserProfileStore], (context, props) => {
+CollectionDecks = connectToStores(CollectionDecks, [UserProfileStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 
-export default ColletionDecks;
+export default CollectionDecks;
