@@ -107,6 +107,7 @@ class DeckCollectionStore extends BaseStore {
                 deckID: deck._id, 
                 title: activeRevision.title, 
                 firstSlide: activeRevision.firstSlide, 
+                theme: activeRevision.theme,
                 updated: deck.lastUpdate, 
                 description: deck.description, 
                 creationDate: deck.timestamp
