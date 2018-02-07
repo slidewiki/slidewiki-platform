@@ -20,4 +20,5 @@ export default {
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     locales: ['en', 'de', 'it', 'es', 'nl', 'el', 'ca', 'sr'],
     loglevel: 'debug',
+    ssoEnabled: true
 };
