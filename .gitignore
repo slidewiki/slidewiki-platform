@@ -13,3 +13,4 @@ slidewiki
 migrate
 .idea/
 package-lock.json
+*.iml

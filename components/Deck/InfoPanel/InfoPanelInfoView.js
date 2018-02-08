@@ -8,9 +8,18 @@ import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/Contribu
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-
+import {equals} from '../../../common.js';
 
 class InfoPanelInfoView extends React.Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        let samePropsState = equals(this.props, nextProps);
+        // Content should be updated only when properties have changed.
+        return !samePropsState;
+    }
+
+    componentDidUpdate() {
+        console.log('Updated InfoPanelInfoView.');
+    }
 
     getNameofNodes(tree, selector) {
         if(!selector.get('spath')){
