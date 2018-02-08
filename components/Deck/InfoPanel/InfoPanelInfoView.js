@@ -5,9 +5,11 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 //import ActivityList from '../ActivityFeedPanel/ActivityList';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
+import ContributorsPieChart from '../ContentModulesPanel/ContributorsPanel/ContributorsPieChart';
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
+import {Tab, Header} from 'semantic-ui-react';
 
 
 class InfoPanelInfoView extends React.Component {
@@ -85,6 +87,12 @@ class InfoPanelInfoView extends React.Component {
             titlediv = '';
 
         }
+
+        const panes = [
+            { menuItem: 'List view', render: () => <Tab.Pane><ContributorsPanel /></Tab.Pane> },
+            { menuItem: 'Pie chart view', render: () => <Tab.Pane><ContributorsPieChart/></Tab.Pane> }
+        ];
+
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
@@ -93,7 +101,8 @@ class InfoPanelInfoView extends React.Component {
                     </div>}
                     {titlediv}
                 <div className="ui attached segment">
-                    <ContributorsPanel />
+                    <Header as ='h3'>Contributors</Header>
+                    <Tab panes={panes} />
                 </div>
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
