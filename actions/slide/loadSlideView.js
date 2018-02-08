@@ -2,6 +2,7 @@ import {shortTitle} from '../../configs/general';
 import slideIdTypeError from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';
 import { AllowedPattern } from '../error/util/allowedPattern';
+import DeckTreeStore from '../../stores/DeckTreeStore';
 const log = require('../log/clog');
 
 export default function loadSlideView(context, payload, done) {
@@ -23,9 +24,12 @@ export default function loadSlideView(context, payload, done) {
         } else {
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Slide View | ' + payload.params.sid;
+        let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
+        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title;
         context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
+            pageTitle: pageTitle,
+            frozen: true,
+            allowUnfreeze: true,
         });
         done();
     });

@@ -19,9 +19,11 @@ export default function loadDeckView(context, payload, done) {
         } else {
             context.dispatch('LOAD_DECK_CONTENT_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Deck View | ' + payload.params.sid;
+        let pageTitle = shortTitle + ' | ' + res.slidesData.title;
         context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
+            pageTitle: pageTitle,
+            frozen: true,
+            allowUnfreeze: true,
         });
         done();
     });
