@@ -8,12 +8,14 @@ import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
-import {hashPassword} from '../../configs/general';
+import {hashPassword, ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 import {FormattedMessage, defineMessages} from 'react-intl';
+import SelectInstanceModal from '../User/SelectInstanceModal.js';
+import openSSOModal from '../../actions/user/openSSOModal';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -220,6 +222,14 @@ class LoginModal extends React.Component {
         win.focus();
     }
 
+    doSSO(e) {
+        e.preventDefault();
+
+        $('.ui.login.modal').modal('toggle');
+
+        this.context.executeAction(openSSOModal, {register: false});
+    }
+
     handleStorageEvent(e) {
         console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
@@ -373,9 +383,15 @@ class LoginModal extends React.Component {
                       </form>
                       <br/>
                       <div className="container">
-                        {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
-                        <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
-                        <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
+                        {/*<button className="ui big circular facebook icon button" onClick={this.socialLogin.bind(this, 'facebook')} role="button" tabIndex="0" aria-label="sign in with your Facebook account">
+                          <i className="large facebook icon"/>
+                        </button>*/}
+                        <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label="sign in with your Google account">
+                          <i className="large google plus icon"/>
+                        </button>
+                        <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label="sign in with your Github account">
+                          <i className="large github icon"/>
+                        </button>
                       </div>
                       <br/>
                       <div className="ui floated right">
@@ -406,6 +422,7 @@ class LoginModal extends React.Component {
                 </button>
               </div>
             </div>
+            <SelectInstanceModal />
           </div>
         );
     }
