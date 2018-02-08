@@ -10,15 +10,14 @@ import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
-import importCanceled from '../../actions/import/importCanceled';
 import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
-import Import from '../Import/Import';
+import ImportModal from '../Import/ImportModal';
 import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
-let ReactDOM = require('react-dom');
-let classNames = require('classnames');
+import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 //TODO: update link to terms of use;
 
@@ -29,6 +28,7 @@ class AddDeck extends React.Component {
     }
     componentDidMount() {
         let that = this;
+        /* deleted by Sole
         $('.ui.small.modal').modal({
             onDeny: function(){
                 //console.log('modal cancelled');
@@ -41,6 +41,7 @@ class AddDeck extends React.Component {
                 $('.ui.small.modal').modal('hide');
             }
         });
+        */
     }
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
@@ -65,7 +66,7 @@ class AddDeck extends React.Component {
         }
     }
     handleAddDeck(x) {
-        console.log('handleAddDeck');
+        //console.log('handleAddDeck');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -145,9 +146,11 @@ class AddDeck extends React.Component {
             });
         }
     }
+    /* moved to the imporModal
     handleCancelSelectFile() {
         this.context.executeAction(importCanceled, {});
     }
+    */
     handleCancel(x) {
         //console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
@@ -528,12 +531,16 @@ class AddDeck extends React.Component {
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
+                                   {/*
                                     <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
                                         <FormattedMessage
                                             id='AddDeck.form.button_select'
                                             defaultMessage='Select file' />
                                     </div>
-                                    <Import />
+                                    */}
+                                    <ImportModal/>
+                                    {/*    <Import />*/}
+
                                 </div>
                                 <div className="column" ref="div_filename">
                                     {filename ? this.context.intl.formatMessage(form_messages.selected_message, {filename: filename}) : ''}
