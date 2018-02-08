@@ -43,7 +43,7 @@ class ContentQuestionAnswersList extends React.Component {
         );
 
         const showEditButton = () => {
-            if(userId === creatorId){
+            if(this.props.editPermission) {
                 return editButton;
             }
             return null;
