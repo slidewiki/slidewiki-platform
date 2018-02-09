@@ -38,22 +38,21 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
-        //'/',
+        '/',
             { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
             { name: 'styles', items: [ 'lineheight' ] },
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
-        //'/',
-            //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
-            { name: 'insert', items: [ 'Symbol'] },
-            //{ name: 'source', items: [ 'Mathjax'] },
+        '/',
+            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        //'/',
-            //{ name: 'document', items: [ 'Sourcedialog'] },
-            //{ name: 'document', items: [ 'CodeSnippet'] },
+        '/',
+            { name: 'document', items: [ 'Sourcedialog'] },
+            { name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        //'/',
+        '/',
     ];
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
@@ -123,7 +122,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'forms,' +
 		'horizontalrule,' +
 		'htmlwriter,' +
-        'image,' +
+        'image2,' +
 		'iframe,' +
 		'indentlist,' +
 		'indentblock,' +

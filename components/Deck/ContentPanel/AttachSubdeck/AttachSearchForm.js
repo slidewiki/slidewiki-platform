@@ -12,7 +12,9 @@ class AttachSearchForm extends React.Component{
             language : encodeURIComponent(''),
             keywords: encodeURIComponent(''),
             field:encodeURIComponent(''),
+            license:encodeURIComponent(''),
             user:encodeURIComponent(''),
+          //  sort:encodeURIComponent('')
         };
 
 
@@ -40,6 +42,8 @@ class AttachSearchForm extends React.Component{
         if(this.state.language)
             queryparams += `&language=${this.state.language}`;
 
+        if(this.state.license)
+            queryparams += `&license=${this.state.license}`;
 
         queryparams += '&kind=deck';        // always request decks here
 
@@ -80,7 +84,12 @@ class AttachSearchForm extends React.Component{
         });
 
     }
+    handleLicenceChange(value){
+        this.setState({
+            license:encodeURIComponent(value.trim())
+        });
 
+    }
     handleFieldChange(value){
         this.setState({
             field:encodeURIComponent(value.trim())
@@ -98,7 +107,6 @@ class AttachSearchForm extends React.Component{
 
         let languageOptions =[
           //{ value:'', text:'Select Language'},
-          { value: 'nl_NL', text: 'Dutch' },
           { value:'en_GB', text:'English' },
           {value:'de_DE', text: 'German' },
           { value:'el_GR', text:'Greek'},
@@ -106,6 +114,13 @@ class AttachSearchForm extends React.Component{
           {value:'pt_PT',text:'Portuguese'},
           {value:'sr_RS', text:'Serbian'},
           {value:'es_ES', text:'Spanish'}
+        ];
+
+        let licenseOptions = [
+        //  { value:'', text:'Select Licence' },
+          { value:'CC0', text:'CC0' },
+          { value:'CC BY', text:'CC BY' },
+          { value:'CC BY-SA', text:'CC BY-SA' }
         ];
 
         return (
@@ -123,15 +138,19 @@ class AttachSearchForm extends React.Component{
                                <Dropdown selection name='field' id='field' ref={(field) => {this.field = field;}}  placeholder='Select Search field' options={fieldOptions} role="listbox"  onChange={(e, {value }) => {this.handleFieldChange(value);}}/>
                               </Form.Field>
                             </Form.Group>
-                            <Form.Group>
-                              <Form.Field  width="11">
+                            <Form.Group widths="equal" >
+                              <Form.Field>
                                 <Label htmlFor="users_input_field"  className="sr-only">User</Label>
                                 <UsersInput ref='user' placeholder='Select Users'/>
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="language" className="sr-only">Language</Label>
                                <Dropdown selection  placeholder='Select Language' name='language'  id='language'  options={languageOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handleLanguageChange(value);}}/>
-                              </Form.Field>                  
+                              </Form.Field>
+                              <Form.Field>
+                                <Label htmlFor="license" className="sr-only">License</Label>
+                                <Dropdown selection placeholder='Select Licence' name='license' id='license' ref={(license) => {this.license = license;}} options={licenseOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handleLicenceChange(value);}}/>
+                              </Form.Field>
                             </Form.Group>
                             <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"
                                 data-tooltip="Search for Decks" onClick={this.handleRedirect.bind(this)}>

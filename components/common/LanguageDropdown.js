@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import {FormattedMessage, defineMessages} from 'react-intl';
 
 /**
  * Properties:
@@ -14,10 +13,6 @@ import {FormattedMessage, defineMessages} from 'react-intl';
  */
 
 class LanguageDropdown extends React.Component {
-    constructor(props){
-        super(props);
-        this.messages = this.getIntlMessages();
-    }
     componentDidMount() {
         $(this.refs.languageDropdown).dropdown({onChange: this.onChange.bind(this)});
     }
@@ -36,51 +31,6 @@ class LanguageDropdown extends React.Component {
         }
     }
 
-    getIntlMessages(){
-        return defineMessages({
-            english: {
-                id: 'LanguageDropdown.english',
-                defaultMessage: 'English'
-            }, 
-            german: {
-                id: 'LanguageDropdown.german',
-                defaultMessage: 'German'
-            }, 
-            dutch: {
-                id: 'LanguageDropdown.dutch',
-                defaultMessage: 'Dutch'
-            }, 
-            greek: {
-                id: 'LanguageDropdown.greek',
-                defaultMessage: 'Greek'
-            }, 
-            italian: {
-                id: 'LanguageDropdown.italian',
-                defaultMessage: 'Italian'
-            }, 
-            portuguese: {
-                id: 'LanguageDropdown.portuguese',
-                defaultMessage: 'Portuguese'
-            }, 
-            serbian: {
-                id: 'LanguageDropdown.serbian',
-                defaultMessage: 'Serbian'
-            },
-            spanish: {
-                id: 'LanguageDropdown.spanish',
-                defaultMessage: 'Spanish'
-            },
-            tooltip: {
-                id: 'LanguageDropdown.tooltip',
-                defaultMessage: 'There will be more in the future'
-            }, 
-            placeholder: {
-                id: 'LanguageDropdown.placeholder',
-                defaultMessage: 'Select your language'
-            }
-        });
-    }
-
     render() {
         let classes = classNames({
             'ui': true,
@@ -94,37 +44,37 @@ class LanguageDropdown extends React.Component {
         let languageOptions = <div className="menu">
 
             <div className="item" data-value="en_GB" >
-                <FormattedMessage {...this.messages.english} />
+                English
             </div>
             <div className="item" data-value="de_DE" >
-                <FormattedMessage {...this.messages.german} />
+                German
             </div>
             <div className="item" data-value="nl_NL" >
-                <FormattedMessage {...this.messages.dutch} />
+                Dutch
             </div>
             <div className="item" data-value="el_GR" >
-                <FormattedMessage {...this.messages.greek} />
+                Greek
             </div>
             <div className="item" data-value="it_IT" >
-                <FormattedMessage {...this.messages.italian} />
+                Italian
             </div>
             <div className="item" data-value="pt_PT" >
-                <FormattedMessage {...this.messages.portuguese} />
+                Portuguese
             </div>
             <div className="item" data-value="sr_RS" >
-                <FormattedMessage {...this.messages.serbian} />
+                Serbian
             </div>
             <div className="item" data-value="es_ES" >
-                <FormattedMessage {...this.messages.spanish} />
+                Spanish
             </div>
         </div>;
         let languageOptionsUI = <div className="menu">
-            <div className="item" data-value="en_EN">{this.context.intl.formatMessage(this.messages.english)}</div>
+            <div className="item" data-value="en_EN">English</div>
         </div>;
 
         let tooltip = this.props.tooltip;
         if (tooltip === undefined || tooltip === null)
-            tooltip = this.context.intl.formatMessage(this.messages.tooltip);
+            tooltip = 'There will be more in the future';
 
         return (
             <div className={classes} aria-labelledby={this.props.arialabel} data-tooltip={tooltip} data-position="top center" data-inverted="" ref="languageDropdown">
@@ -133,7 +83,7 @@ class LanguageDropdown extends React.Component {
                     :
                     <input type="hidden" value={this.props.value} name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
-                <div className="default text"><FormattedMessage {...this.messages.placeholder} /></div>
+                <div className="default text">Select your language</div>
                 {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}
             </div>
         );
@@ -141,8 +91,7 @@ class LanguageDropdown extends React.Component {
 }
 
 LanguageDropdown.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: React.PropTypes.func.isRequired
 };
 
 export default LanguageDropdown;

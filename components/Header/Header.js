@@ -22,8 +22,6 @@ class Header extends React.Component {
     componentDidMount() {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
-        $(this.refs.languagebar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
     }
 
     toggleSidebar() {
@@ -31,13 +29,8 @@ class Header extends React.Component {
             .sidebar('toggle');
     }
 
-    toggleLanguageBar() {
-        $(this.refs.languagebar)
-            .sidebar('toggle');
-    }
-
     closeSidebar(event) {
-        if(($(event.target).parentsUntil( $('div.menubar'), '.item' ).length >= 0 && $(event.target).parentsUntil( $('div.menubar'), '.search' ).length === 0))
+        if(($(event.target).hasClass('item') && !$(event.target).hasClass('search')))
             $(this.refs.menubar).sidebar('hide');
     }
 
@@ -135,25 +128,18 @@ class Header extends React.Component {
                     </NavLink>
                   </div>
                 </div>
-                <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
+                <div className="ui inverted left dimmed sidebar vertical menu" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                     <NavLink className="item" href='/'>
                         <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
                     </NavLink>
                     <NavLink className="item" routeName="addDeck">
                         <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                     </NavLink>
-                    <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
-                        <i className="caret right icon"/>
-                        <LocaleSwitcher mode="headeronly"/>
-                    </div>
                     {mobileLoginButton}
                     <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                     <div className="item search">
                         <SearchBox className="item"/>
                     </div>
-                </div>
-                <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
-                    <LocaleSwitcher mode="sidebar"/>
                 </div>
               </MediaQuery>
             </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { navigateAction } from 'fluxible-router';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
-import {FormattedMessage, defineMessages} from 'react-intl';
 
 class HeaderSearchBox extends React.Component {
     constructor(props){
@@ -10,15 +9,6 @@ class HeaderSearchBox extends React.Component {
         this.state = {
             searchstring: ''
         };
-        this.messages = this.getIntlMessages();
-    }
-    getIntlMessages(){
-        return defineMessages({
-            placeholder: {
-                id: 'HeaderSearchBox.placeholder',
-                defaultMessage: 'Search'
-            }
-        });
     }
     initAutocomplete(){
         $('#header_search_box_div').search({
@@ -90,8 +80,8 @@ class HeaderSearchBox extends React.Component {
         // "ui small icon input
 
         return (
-            <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}} aria-label={this.context.intl.formatMessage(this.messages.placeholder)} >
-                <label htmlFor="searchString" hidden><FormattedMessage {...this.messages.placeholder} /></label>
+            <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}} aria-label="Search" >
+                <label htmlFor="searchString" hidden>Search</label>
                 <input type="text" placeholder="Search..." ref="searchstring" id="searchString" value={this.state.searchstring} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt" />
                 <i className="search link icon" onClick={this.handleRedirect.bind(this)}></i>
                 <div className="results"></div>
@@ -100,8 +90,7 @@ class HeaderSearchBox extends React.Component {
     }
 }
 HeaderSearchBox.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: React.PropTypes.func.isRequired
 };
 
 export default HeaderSearchBox;

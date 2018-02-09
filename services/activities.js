@@ -20,10 +20,9 @@ export default {
             log.error({Id: req.reqId, Selector: selector, Message: 'Invalid selector values in activities service'});
             callback(null, {activities: [], selector: selector, hasMore: false});
         } else {
-            const listOfActivityTypesQuery = '?activity_type=translate&activity_type=share&activity_type=add&activity_type=edit&activity_type=move&activity_type=comment&activity_type=reply&activity_type=use&activity_type=attach&activity_type=react&activity_type=rate&activity_type=download&activity_type=fork&activity_type=delete';
             switch (resource) {
                 case 'activities.list':
-                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + listOfActivityTypesQuery + '&metaonly=false&start=0&limit=30&include_subdecks_and_slides=true' }).then((res) => {
+                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '?metaonly=false&start=0&limit=30' }).then((res) => {
                         let activities = JSON.parse(res).items;
                         callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
                     }).catch((err) => {
@@ -33,11 +32,12 @@ export default {
 
                     break;
                 case 'activities.more':
+
                     if (!params.newActivities) break;
 
-                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + listOfActivityTypesQuery + '&metaonly=false&start=' + params.newActivities.start + '&limit=' + params.newActivities.numNew + '&include_subdecks_and_slides=true' }).then((res) => {
+                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '?metaonly=false&start=' + params.newActivities.start + '&limit=' + params.newActivities.numNew }).then((res) => {
                         let activities = JSON.parse(res).items;
-                        callback(null, {activities: activities, selector: selector, hasMore: (activities.length === params.newActivities.numNew)});
+                        callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
                     }).catch((err) => {
                         console.log(err);
                         callback(null, {activities: [], selector: selector, hasMore: false});

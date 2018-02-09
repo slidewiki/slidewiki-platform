@@ -3,8 +3,6 @@ import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import UserProfileStore from '../stores/UserProfileStore';
 import serviceUnavailable from './error/serviceUnavailable';
-import loadUserCollections from './collections/loadUserCollections';
-import loadDeckCollections from './collections/loadDeckCollections';
 const log = require('./log/clog');
 
 export default function loadDeckEdit(context, payload, done) {
@@ -16,14 +14,7 @@ export default function loadDeckEdit(context, payload, done) {
         return;
     }
 
-    // load deck collections of the current user
-    context.executeAction(loadUserCollections, payload, done);
-
-    // load deck groups assigned to the current deck
-    context.executeAction(loadDeckCollections, payload, done);
-
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
-    
     context.service.read('deck.properties', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});

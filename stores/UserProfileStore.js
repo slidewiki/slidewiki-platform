@@ -121,7 +121,7 @@ class UserProfileStore extends BaseStore {
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
             saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
-            usergroupsViewStatus: this.usergroupsViewStatus, 
+            usergroupsViewStatus: this.usergroupsViewStatus
         };
     }
 
@@ -400,7 +400,7 @@ UserProfileStore.handlers = {
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
-    'SAVE_USERPROFILE_START': 'saveProfileStart',
+    'SAVE_USERPROFILE_START': 'saveProfileStart'
 };
 
 export default UserProfileStore;

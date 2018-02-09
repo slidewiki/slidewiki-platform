@@ -26,7 +26,7 @@ class ContentQuestionsList extends React.Component {
     render() {
         let list = this.props.items.map((node, index) => {
             return (
-                <ContentQuestionsItem question={node} key={index} index={index} selector={this.props.selector} editPermission={this.props.editPermission}/>
+                <ContentQuestionsItem question={node} key={index} index={index}/>
             );
         });
 
