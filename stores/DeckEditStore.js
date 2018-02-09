@@ -21,15 +21,7 @@ class DeckEditStore extends BaseStore {
             users: [],
             groups: []
         };
-        this.collectionOptions = [];
-        this.selectedCollections = [];
-
         this.showGroupModal = false;
-
-        // variables for error handling 
-        this.loadCollectionsError = false;
-        this.addCollectionError = false;
-        this.collectionsLoading = false;
     }
 
     updateProperties(payload) {
@@ -51,8 +43,6 @@ class DeckEditStore extends BaseStore {
             groups: []
         };
 
-        this.selectedCollections = [];
-
         this.emitChange();
     }
 
@@ -65,12 +55,7 @@ class DeckEditStore extends BaseStore {
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
-            showGroupModal: this.showGroupModal, 
-            collectionOptions: this.collectionOptions,
-            selectedCollections: this.selectedCollections,
-            loadCollectionsError: this.loadCollectionsError, 
-            addCollectionError: this.addCollectionError,
-            collectionsLoading: this.collectionsLoading
+            showGroupModal: this.showGroupModal
         };
     }
 
@@ -87,11 +72,6 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
-        this.collectionOptions = state.collectionOptions;
-        this.selectedCollections = state.selectedCollections;
-        this.loadCollectionsError = state.loadCollectionsError; 
-        this.addCollectionError = state.addCollectionError;
-        this.collectionsLoading = state.collectionsLoading;
     }
 
     updateAuthorizedUsers(users) {
@@ -115,55 +95,6 @@ class DeckEditStore extends BaseStore {
         this.emitChange();
         this.showGroupModal = false;
     }
-
-    loadUserCollections(payload){
-        this.collectionOptions = payload.documents;
-        this.emitChange();
-    }
-
-    loadCollections(payload){
-        this.selectedCollections = payload.map( (collection) => {
-            return collection._id;
-        });
-        this.emitChange();
-    }
-
-    loadCollectionsFail(){
-        this.loadCollectionsError = true;
-        this.emitChange();
-        this.loadCollectionsError = false;
-    }
-
-    addCollection(newCollection){        
-        this.collectionOptions.push(newCollection);
-        this.collectionOptions = [...new Set(this.collectionOptions)];
-        this.selectedCollections.push(newCollection._id);
-
-        this.emitChange();
-    }
-
-    addCollectionFailure(){
-        this.addCollectionError = true;
-        this.emitChange();
-        this.addCollectionError = false;
-    }
-
-    addSelectedCollection(groupId){
-        this.selectedCollections.push(groupId);
-        this.emitChange();
-    }
-
-    removeSelectedCollection(groupId){
-        this.selectedCollections = this.selectedCollections.filter( (e) => {
-            return e !== groupId;
-        });
-        this.emitChange();
-    }
-
-    updateCollectionsLoading(payload){
-        this.collectionsLoading = payload;
-        this.emitChange();
-    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -173,23 +104,7 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'LOAD_DECK_PROPS_FAILURE': 'resetProperties', 
-
-    // load user groups created by a specific user
-    'LOAD_USER_COLLECTIONS_SUCCESS': 'loadUserCollections', 
-    'LOAD_USER_COLLECTIONS_FAILURE': 'loadCollectionsFail', 
-
-    // load deck groups assigned to a deck
-    'LOAD_COLLECTIONS_SUCCESS': 'loadCollections', 
-    'LOAD_COLLECTIONS_FAILURE': 'loadCollectionsFail',
-    'UPDATE_COLLECTIONS_LOADING': 'updateCollectionsLoading', 
-
-    'ADD_COLLECTION_SUCCESS': 'addCollection', 
-    'ADD_COLLECTION_FAILURE': 'addCollectionFailure', 
-
-    // add/remove selected deck groups
-    'ADD_SELECTED_COLLECTION': 'addSelectedCollection',
-    'REMOVE_SELECTED_COLLECTION': 'removeSelectedCollection'
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
 };
 
 export default DeckEditStore;

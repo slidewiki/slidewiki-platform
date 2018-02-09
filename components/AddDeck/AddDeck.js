@@ -10,14 +10,15 @@ import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
+import importCanceled from '../../actions/import/importCanceled';
 import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
-import ImportModal from '../Import/ImportModal';
+import Import from '../Import/Import';
 import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+let ReactDOM = require('react-dom');
+let classNames = require('classnames');
 
 //TODO: update link to terms of use;
 
@@ -28,7 +29,6 @@ class AddDeck extends React.Component {
     }
     componentDidMount() {
         let that = this;
-        /* deleted by Sole
         $('.ui.small.modal').modal({
             onDeny: function(){
                 //console.log('modal cancelled');
@@ -41,7 +41,6 @@ class AddDeck extends React.Component {
                 $('.ui.small.modal').modal('hide');
             }
         });
-        */
     }
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
@@ -50,20 +49,11 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.error !== null)
             this.showError();
     }
-    handleKeyPressUploadModal(event){
-        if(event.key === 'Enter'){
-            this.handleUploadModal(event);
-        }
-    }
+
     handleUploadModal(x) {
         //console.log('handleUploadModal: ', x);
 
         $('.ui.small.modal').modal('show');
-    }
-    handleKeyPressAddDeck(event){
-        if(event.key === 'Enter'){
-            this.handleAddDeck(event);
-        }
     }
     handleAddDeck(x) {
         //console.log('handleAddDeck');
@@ -146,11 +136,9 @@ class AddDeck extends React.Component {
             });
         }
     }
-    /* moved to the imporModal
     handleCancelSelectFile() {
         this.context.executeAction(importCanceled, {});
     }
-    */
     handleCancel(x) {
         //console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
@@ -531,16 +519,12 @@ class AddDeck extends React.Component {
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
-                                   {/*
-                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
+                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
                                         <FormattedMessage
                                             id='AddDeck.form.button_select'
                                             defaultMessage='Select file' />
                                     </div>
-                                    */}
-                                    <ImportModal/>
-                                    {/*    <Import />*/}
-
+                                    <Import />
                                 </div>
                                 <div className="column" ref="div_filename">
                                     {filename ? this.context.intl.formatMessage(form_messages.selected_message, {filename: filename}) : ''}
@@ -581,7 +565,7 @@ class AddDeck extends React.Component {
                         </div>
 
                         <div className="ui buttons">
-                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
+                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
