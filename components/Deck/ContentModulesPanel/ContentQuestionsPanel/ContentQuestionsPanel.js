@@ -172,26 +172,27 @@ class ContentQuestionsPanel extends React.Component {
 
         let lastPageNo = parseInt(totalLength / itemsPerPage) + 1;
         let pagination = (
-          <div className="ui centered pagination menu">
-            <a className="icon item" onClick={this.handlePreviousClick}>
-              <i className="left chevron icon" />
-            </a>
-            {getItems()}
-            <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
-              <i className="right chevron icon" />
-            </a>
-          </div>
-
-    );
-
+            <div className="ui centered pagination menu">
+                <a className="icon item" onClick={this.handlePreviousClick}>
+                    <i className="left chevron icon" />
+                </a>
+                {getItems()}
+                <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
+                    <i className="right chevron icon" />
+                </a>
+            </div>
+        );
+        let questionsList = (<ContentQuestionsList items={questions} selector={selector} editPermission={editPermission}/>);
         let content = (
-      <div>
-        {buttonBar}
-        {questionsHeader}
-        <ContentQuestionsList items={questions} />
-        {/* {pagination} */}
-      </div>
-    );
+            <div>
+                {/* {buttonBar} */}
+                {questionsHeader}
+                {questions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
+                {/* {pagination} */}
+            </div>
+        );
+
+    
 
     //   if (question !== undefined && question !== null) {
     // //Question is selected -> show its data

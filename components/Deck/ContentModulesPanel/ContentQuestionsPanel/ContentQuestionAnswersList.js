@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
+import loadQuestion from '../../../../actions/questions/loadQuestion';
 
 class ContentQuestionAnswersList extends React.Component {
 
@@ -36,7 +37,7 @@ class ContentQuestionAnswersList extends React.Component {
         );
 
         const showEditButton = () => {
-            if(userId === creatorId){
+            if(this.props.editPermission) {
                 return editButton;
             }
             return null;
@@ -50,10 +51,8 @@ class ContentQuestionAnswersList extends React.Component {
 
         let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
             return (
-              <div key={index}>
-                  <a className="header">
-                      {node.answer}
-                  </a>
+              <div key={index} className="header">
+                  {node.answer}
               </div>
             );
         });

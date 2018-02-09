@@ -8,7 +8,7 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-        let selector= {'sid': args.sid, 'stype': args.stype};
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
 
         if (resource === 'questions.count') {
             let randomNumber = Math.round(Math.random() * 20);
@@ -17,8 +17,8 @@ export default {
 
         if(resource === 'questions.list') {
             rp.get({
-                uri: 'https://questionservice.experimental.slidewiki.org/questions',
-                //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
+                // uri: 'https://questionservice.experimental.slidewiki.org/questions',
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true'
             }).then((res) => {
             /* This is what we get from microservice */
             /*
@@ -29,7 +29,7 @@ export default {
             // let questions = q
                 .map((item, index) => {
                     return {
-                        id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
+                        id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id, relatedObjectName: item.related_object_name,
                         answers: item.choices
                             .map((ans, ansIndex) => {
                                 return {answer: ans.choice, correct: ans.is_correct};
@@ -38,7 +38,16 @@ export default {
                         userId: item.user_id,
                     };
                 });
-                callback(null, {questions: questions, totalLength: 2, selector: selector});
+                callback(null, {questions: questions, selector: selector});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        } else if(resource === 'questions.count') {
+            rp.get({
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true&include_subdecks_and_slides=true',
+            }).then((res) => {
+                callback(null, {count: JSON.parse(res).count});
             }).catch((err) => {
                 console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
                 console.log(err);
@@ -122,8 +131,17 @@ export default {
                     choices: args.choices,
                     question: args.question})
             }).then((res) => {
-                console.log('Question create method should be successful. Check via swagger for following oid, otype, and qid:', args.sid, args.stype, args.questionId);
-                callback(null, {});
+                let question = JSON.parse(res);
+                const answers = question.choices
+                    .map((ans, ansIndex) => {
+                        return {answer: ans.choice, correct: ans.is_correct};
+                    });
+                callback(null, {question: {
+                    id: question.id, title: question.question, difficulty: question.difficulty, relatedObject: question.related_object, relatedObjectId: question.related_object_id,
+                    answers: answers,
+                    explanation: question.explanation,
+                    userId: question.user_id
+                }});
             }).catch((err) => {
                 console.log('Question create method errored. Check via swagger for following oid and qid:', args.sid, args.questionId);
                 console.log(err);
