@@ -1,7 +1,7 @@
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
-class license extends React.Component {
+class Accessibility extends React.Component {
     render() {
         return (
             <div className="ui text container" ref="accessibility">
@@ -13,14 +13,14 @@ class license extends React.Component {
                 <p>
                     <FormattedMessage id="accessibility.1.p2"
                         values={{
-                            link_1: <a href="https://www.w3.org/TR/WCAG20/">
+                            link_1: <a href="https://www.w3.org/TR/WCAG20/" target="_blank">
                                 <FormattedMessage id="accessibility.w3c" defaultMessage="W3C Web Content Accessibility Guidelines (WCAG) 2.0"/>
                             </a>
                         }}
                         defaultMessage="To achieve this, the website has been optimised to meet the {link_1} Level AA (ISO/IEC 40500:2012) "/>
                     <FormattedMessage id="accessibility.mandate376"
                         values={{
-                            link_2: <a href="http://mandate376.standards.eu/standard/technical-requirements/#9">
+                            link_2: <a href="http://mandate376.standards.eu/standard/technical-requirements/#9" target="_blank">
                                 <FormattedMessage id="accessibility.summary" defaultMessage="EN 301 549 V1.1.2"/>
                             </a>
                         }}
@@ -55,12 +55,7 @@ class license extends React.Component {
                     <FormattedMessage id="accessibility.2.p3" defaultMessage="These browsers have been tested with the following assistive technologies: Jaws 18, NVDA 2007, VoiceOver on Mac and iOS and TalkBack on Android screen readers as well as a range of input/output devices that emulate keyboard navigation."/>
                 </p>
                 <p>
-                    values={{
-                        link_3: <a href="/contactus">
-                            <FormattedMessage id="accessibility.contact" defaultMessage="contact us"/>
-                        </a>
-                    }}
-                    <FormattedMessage id="accessibility.2.p3" defaultMessage="If you have any problems with the accessibility of the platform, please {link_3}."/></p>
+                    <FormattedMessage id="accessibility.2.p4" defaultMessage="If you have any problems with the accessibility of the platform, please "/><a href="/contactus" target="_blank"><FormattedMessage id="accessibility.contact" defaultMessage="contact us."/></a></p>
                 <p>
                     <FormattedMessage id="accessibility.date" defaultMessage="Last updated 6th February 2018"/>
                 </p>
@@ -70,4 +65,4 @@ class license extends React.Component {
     }
 }
 
-export default accessibility;
+export default Accessibility;

@@ -127,9 +127,9 @@ export default {
         }
     },
     accessibility: {
-        path: '/about',
+        path: '/accessibility',
         method: 'get',
-        page: 'about',
+        page: 'accessibility',
         title: 'SlideWiki -- Accessibility',
         handler: require('../components/Home/Accessibility'),
         action: (context, payload, done) => {
@@ -622,7 +622,7 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadCollection, payload, done);
         }
-    }, 
+    },
     /* This should be the last route in routes.js */
     notfound: {
         path: '*',
