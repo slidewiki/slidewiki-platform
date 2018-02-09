@@ -130,7 +130,7 @@ export default {
     },
 
     isEmailAddress: (email) => {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     },
 
@@ -145,7 +145,7 @@ export default {
         // they must have the exact same prototype chain, the closest we can do is
         // test there constructor.
 
-        for (var p in x) {
+        for (let p in x) {
             if (! x.hasOwnProperty(p)) continue;
             // other properties were tested using x.constructor === y.constructor
 
@@ -155,7 +155,7 @@ export default {
             if (x[p] === y[p]) continue;
             // if they have the same strict value or identity then they are equal
 
-            if (typeof(x[p]) !== "object") return false;
+            if (typeof(x[p]) !== 'object') return false;
             // Numbers, Strings, Functions, Booleans must be strictly equal
 
             if (! exports.default.equals(x[p], y[p])) return false;
