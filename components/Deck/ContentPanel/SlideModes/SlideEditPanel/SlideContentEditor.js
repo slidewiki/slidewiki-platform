@@ -17,6 +17,7 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import ContentUtil from '../../util/ContentUtil';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
 
@@ -30,7 +31,7 @@ class SlideContentEditor extends React.Component {
         //this.refs.template;
         this.menuFocus;
         this.previousCaretRange;
-        this.CKeditorMode = 'advanced toolbar';
+        //this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
         this.hasChanges = false;
         //this.oldContent = '';
@@ -40,15 +41,37 @@ class SlideContentEditor extends React.Component {
         if (slideSize !== ''){
             if($('.pptx2html').length)  //if slide is in canvas mode
             {
+                const messagesSlideSizeModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.slideSizeModalTitle',
+                        defaultMessage: 'Apply template',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.slideSizeModalText',
+                        defaultMessage: 'This action will change the size of the slide. Your current slide size is {width} by {height} (pixels), and you can reset the slide size to its original. Do you want to continue?'
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.slideSizeModalConfirmButton',
+                        defaultMessage: 'Yes, apply template',
+                    },
+                    swal_cancel:{
+                        id: 'SlideContentEditor.slideSizeModalCancelButton',
+                        defaultMessage: 'No',
+                    },
+                });
                 swal({
+                    title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
                     title: 'Apply template',
-                    text: 'This action will change the size of the slide. Your current slide size is ' + $('.pptx2html').css('width') + ' by ' + $('.pptx2html').css('height') + ' (pixels), and you can reset the slide size to its original. Do you want to continue?',
+                    text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text, {
+                        width: $('.pptx2html').css('width'),
+                        height: $('.pptx2html').css('height')
+                    }),
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, apply template',
+                    confirmButtonText: this.context.intl.formatMessage(messagesSlideSizeModal.swal_confirm),
                     confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'No',
+                    cancelButtonText: this.context.intl.formatMessage(messagesSlideSizeModal.swal_cancel),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
                     focusConfirm: true,
@@ -87,9 +110,19 @@ class SlideContentEditor extends React.Component {
                 }, 500);
             } else{
                 //no PPTX2html element available to change size
+                const messagesSlideSizeModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.slideSizeErrorModalTitle',
+                        defaultMessage: 'Slide has no canvas size to change.',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.slideSizeErrorModalText',
+                        defaultMessage: 'This action will change the size of the slide. Your current slide size is {width} by {height} (pixels), and you can reset the slide size to its original. Do you want to continue?'
+                    },
+                });
                 swal({
-                    title: 'Slide has no canvas size to change.',
-                    text: 'Your current slide is not in canvas mode, but in document (non-canvas) mode and it will automatically adjust its size based on the content you enter. If you want to set a slide size you must first set the slide to canvas-mode via the menu template option.',
+                    title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
+                    text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text),
                     type: 'error',
                     showCloseButton: false,
                     showCancelButton: false,
@@ -112,15 +145,33 @@ class SlideContentEditor extends React.Component {
         {
             //overwrite content with templates from
             //http://stable.slidewiki.org/deck/9319-3/
+            const messagestemplateModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.templateModalTitle',
+                    defaultMessage: 'Apply template',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.templateModalText',
+                    defaultMessage: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?'
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.templateModalConfirmButton',
+                    defaultMessage: 'Yes, apply template',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.templateModalCancelButton',
+                    defaultMessage: 'No',
+                },
+            });
             swal({
-                title: 'Apply template',
-                text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
+                title: this.context.intl.formatMessage(messagestemplateModal.swal_title),
+                text: this.context.intl.formatMessage(messagestemplateModal.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Yes, apply template',
+                confirmButtonText: this.context.intl.formatMessage(messagestemplateModal.swal_confirm),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: 'No',
+                cancelButtonText: this.context.intl.formatMessage(messagestemplateModal.swal_cancel),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false,
                 focusConfirm: true,
@@ -231,7 +282,6 @@ class SlideContentEditor extends React.Component {
             //       ' </div>' +
             //       '</div>';
             //
-            //     this.emitChange();
             //     break;
             case 'outitleslide':
                 this.refs.inlineContent.innerHTML =
@@ -368,10 +418,58 @@ class SlideContentEditor extends React.Component {
                 '</div>'+
                 '</div>';
                 break;
-
-
+            case 'TIBtitle':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" id="96004" style="position: relative; width: 960px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(1.03187, 1.03187); transform-origin: left top 0px;">'+
+                '<div id="51108"></div>'+
+                '<div _id="2" _idx="undefined" _name="Title 1" _type="ctrTitle" class="block content v-down context-menu-disabled" id="7861" style="position: absolute; top: 117.833px; left: 120px; width: 720px; height: 250.667px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5302; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="75057">'+
+                '<h3 id="73463"><span class="text-block" id="27668" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></h3>'+
+                '</div>'+
+                '</div>'+
+                '<div _id="3" _idx="1" _name="Subtitle 2" _type="subTitle" class="block content v-up context-menu-disabled" id="32501" style="position: absolute; top: 378.167px; left: 120px; width: 720px; height: 173.833px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5323; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="72872">'+
+                '<h4 id="68355"><span class="text-block" id="47397" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></h4>'+
+                '</div>'+
+                '</div>'+
+                '<div _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="drawing-container context-menu-disabled" id="56075" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;" tabindex="0">'+
+                '<svg _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="drawing context-menu-disabled" id="81480" style="position: absolute; top: 0px; left: 0px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;"><rect fill="none" height="78.64062992125984" id="76952" stroke="none" stroke-dasharray="0" stroke-width="1" width="514.0092388451444" x="0" y="0"></rect></svg></div>'+
+                '<div _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="block content v-up context-menu-disabled" id="78548" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="80193"><span class="text-block" id="60204" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">Formatvorlage&nbsp;des Untertitelmasters durch Klicken bearbeiten</span></div>'+
+                '</div>'+
+                '<div _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="drawing-container context-menu-disabled" id="89302" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;" tabindex="0">'+
+                '<svg _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="drawing context-menu-disabled" id="11168" style="position: absolute; top: 0px; left: 0px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;"><rect fill="none" height="162.89553805774278" id="65850" stroke="none" stroke-dasharray="0" stroke-width="1" width="514.0092388451444" x="0" y="0"></rect></svg></div>'+
+                '<div _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="block content v-down ui-draggable ui-resizable context-menu-disabled" id="37934" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="53020"><span style="font-size:36px;" id="73276"><span class="text-block" id="12823" style="color: rgb(255, 0, 0); font-family: inherit; font-weight: bold; font-style: inherit; text-decoration: initial;">Titelmasterformat&nbsp;durch Klicken bearbeiten</span></span></div>'+
+                '</div>'+
+                '<div class="block content ui-draggable ui-resizable context-menu-disabled" id="38934" style="position: absolute; top: 0px; left: 0px; width: 1007.14px; height: 713.371px; z-index: -11; cursor: auto;" tabindex="0">'+
+                '<img alt="" id="39529" src="https://fileservice.experimental.slidewiki.org/picture/81be1e5f68acd42b07b9cd2be11896be1b638cab38059152e7d0a29e4d0ed5e5.jpg" style="width: 1007.14px; height: 713.371px;">'+
+                '</div>'+
+                '<div class="block content context-menu-disabled" id="23908" style="position: absolute; top: 116.333px; left: 427px; width: 189px; height: 125.167px; z-index: 5489; cursor: auto;" tabindex="0">'+
+                '<img alt="" id="28695" src="https://fileservice.experimental.slidewiki.org/picture/5bbbb8a925773d2dadbd143c1827987ddcb7974b421eed4311a7e3f7ed1e0ad9.png" style="width: 100%; height: 100%;"></div>'+
+                '<div class="block content context-menu-disabled" id="30251" style="position: absolute; top: 159.667px; left: 102px; width: 227.667px; height: 50.6667px; z-index: 5532; cursor: auto;" tabindex="0">'+
+                '<img alt="" id="37806" src="https://fileservice.experimental.slidewiki.org/picture/68c7b9ab7feda6bc9f08202be815e4e4388e4ae6e0a15e45751a2d374f2f422b.png" style="width: 100%; height: 100%;"></div>'+
+                '<div class="block content context-menu-disabled" id="62817" style="position: absolute; top: 590.5px; left: 821.726px; width: 123.453px; height: 98.9206px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<img id="50826" src="https://fileservice.experimental.slidewiki.org/picture/007c01bd034065e1fd66f518dfac4c3d08cc0efd9b186fb914e43c442e05479e.png" style="width: 123.45px; height: 98.9206px;"></div>'+
+                '<div class="block group ui-draggable ui-resizable context-menu-disabled" id="97475" style="position: absolute; z-index: 5446; top: 27.1862px; left: 60.5469px; cursor: auto;" tabindex="0">'+
+                '<div _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing-container context-menu-disabled" id="62863" style="position: absolute; top: 54.0956px; left: 11.2865px; z-index: 5412; cursor: auto;" tabindex="0"><svg _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing context-menu-disabled" id="38242" style="position: absolute; top: 0px; left: 0px; width: 725.75px; height: 619.922px; z-index: 5412; cursor: auto;"><rect fill="rgb(255,255,255)" height="619.9218897637795" id="83399" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
+                '<div _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="block content v-mid context-menu-disabled" id="43475" style="position: absolute; top: 54.0956px; left: 11.2865px; width: 575.75px; height: 619.922px; z-index: 5412; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="88591"><span class="text-block" id="58474" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
+                '</div>'+
+                '<div _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing-container context-menu-disabled" id="9173" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;" tabindex="0"><svg _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing context-menu-disabled" id="44611" style="position: absolute; top: 0px; left: 0px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;"><rect fill="rgb(68,84,106)" height="12.09784776902887" id="16902" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
+                '<div _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="block content v-mid context-menu-disabled" id="61992" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="52795"><span class="text-block" id="12515" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
+                '</div>'+
+                '</div>'+
+                '</div>';
+                break;
         }
-        this.emitChange(); //confirm non-save on-leave
+        this.hasChanges = true;
+        //fix to prevent Firefox caret from resetting
+        $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+            CKEDITOR.instances.inlineContent.getSelection().unlock();
+        });
+        //this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
         this.uniqueIDAllElements();
         this.resize();
@@ -400,36 +498,40 @@ class SlideContentEditor extends React.Component {
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
                     this.contextMenuAndDragDivAllRemove();
-                    console.log('====ckeditor on change====');
+                    //console.log('====ckeditor on change====');
                     //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                     setTimeout(() => {
                         $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
-                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //console.log('====ckeditor save button ok==== - refresh drag and menus');
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
-                                this.emitChange();
+                                this.hasChanges = true;
                                 ////this.forceUpdate();
                             }, 500);
                         });
                     }, 500);
                 });
             }
+            //fix to prevent Firefox caret from resetting
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
-                console.log('====ckeditor image dialog onclick====');
+                //console.log('====ckeditor image dialog onclick====');
                 /*this.refs.uploadMediaModal.handleOpen();
                 evt.preventDefault();*/
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
-                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //console.log('====ckeditor image save button ok==== refresh CKeditor');
                         //this.addBorders();
                         setTimeout(() => {
                             this.refreshCKeditor();
                             this.resizeDrag();
                             //this.forceUpdate();
-                            this.emitChange();
+                            this.hasChanges = true;
                         }, 500);
                     });
                 }, 500);
@@ -594,20 +696,43 @@ class SlideContentEditor extends React.Component {
             //$('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
             $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
-            this.emitChange(); //confirm non-save on-leave
+            this.hasChanges = true;
+            //this.emitChange(); //confirm non-save on-leave
+            //fix to prevent Firefox caret from resetting
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             //this.uniqueIDAllElements();
             this.resizeDrag();
             //this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
+            const messagesCanvasModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.switchToCanvasModalTitle',
+                    defaultMessage: 'Do you want to switch to canvas style layout?',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.switchToCanvasModalText',
+                    defaultMessage: 'You can click "no" and type your text directly in the editor window, however, you can also add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?'
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.switchToCanvasModalConfirm',
+                    defaultMessage: 'Yes, switch to canvas-style with input boxes',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.switchToCanvasModalCancel',
+                    defaultMessage: 'No',
+                },
+            });
             swal({
-                title: 'Do you want to switch to canvas style layout?',
-                text: 'You can click "no" and type your text directly in the editor window, however, you can also add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
+                title: this.context.intl.formatMessage(messagesCanvasModal.swal_title),
+                text: this.context.intl.formatMessage(messagesCanvasModal.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Yes, switch to canvas-style with input boxes',
+                confirmButtonText: this.context.intl.formatMessage(messagesCanvasModal.swal_confirm),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: 'No',
+                cancelButtonText: this.context.intl.formatMessage(messagesCanvasModal.swal_cancel),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             }).then((accepted) => {
@@ -622,7 +747,7 @@ class SlideContentEditor extends React.Component {
                 //update content
                 //TODO replace with this.refs.inlineContent.innerHTML
                 //CKEDITOR.instances.inlineContent.setData(newContent);
-                this.emitChange(); //confirm non-save on-leave
+                this.hasChanges = true;
                 //this.forceUpdate();
                 this.resizeDrag();
                 this.resize();
@@ -638,6 +763,20 @@ class SlideContentEditor extends React.Component {
         return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
     componentDidMount() {
+        window.onbeforeunload = () => {
+            if (this.hasChanges === true)
+            {
+                const messagesUnsavedChangesAlert = defineMessages({
+                    alert:{
+                        id: 'SlideContentEditor.unsavedChangesAlert',
+                        defaultMessage: 'You have unsaved changes. If you do not save the slide, it will not be updated. Are you sure you want to exit this page?'
+                    }
+                });
+                return this.context.intl.formatMessage(messagesUnsavedChangesAlert.alert);
+                //return 'You have unsaved changes. If you do not save the slide, it will not be updated. ' +
+                //'Are you sure you want to exit this page?';
+            }
+        };
         //todo: do testing and if it works remove these libs from default layout
         //if(process.env.BROWSER){
             //require('../../../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
@@ -692,11 +831,15 @@ class SlideContentEditor extends React.Component {
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         }); //leave all buttons
         //this.currentcontent = this.props.content;
-        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
-            return false;
-        });
+        //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+        //    return false;
+        //});
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+
+            CKEDITOR.instances.inlineContent.on( 'key', () => {
+                this.hasChanges = true;
+            });
 
             $('.cke_iframe').attr('src', 'data:image/png;base64,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');
 
@@ -724,15 +867,15 @@ class SlideContentEditor extends React.Component {
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
                     this.contextMenuAndDragDivAllRemove();
-                    console.log('====ckeditor on change====');
+                    //console.log('====ckeditor on change====');
                     //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                     setTimeout(() => {
                         $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
-                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //console.log('====ckeditor save button ok==== - refresh drag and menus');
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
-                                this.emitChange();
+                                this.hasChanges = true;
                                 ////this.forceUpdate();
                             }, 500);
                         });
@@ -753,7 +896,7 @@ class SlideContentEditor extends React.Component {
                             this.refreshCKeditor();
                             this.resizeDrag();
                             //this.forceUpdate();
-                            this.emitChange();
+                            this.hasChanges = true;
                         }, 500);
                     });
                 }, 500);
@@ -780,7 +923,8 @@ class SlideContentEditor extends React.Component {
             }
         });
 
-        this.correctDimensionsBoxes('img');
+        this.correctDimensionsBoxesImg();
+        //('img');
     }
     correctDimensionsBoxesIframe()
     {
@@ -804,24 +948,25 @@ class SlideContentEditor extends React.Component {
             }
         });
     }
-    correctDimensionsBoxes(type){
+    correctDimensionsBoxesImg(){
+    //correctDimensionsBoxes(type){
         $('.pptx2html [style*="absolute"]').each(function () {
-            if($(this).find(type + ':first').length)
+            if($(this).find('img:first').length)
             {
-                if($(this).width() < $(this).find(type+':first').width())
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than iframe/image width/height
-                    $(this).width($(this).find(type+':first').width());
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust iframe width');
-                } else if ($(this).width() < $(this).find(type+':first').attr('width'))
+                } else if ($(this).width() < $(this).find('img:first').attr('width'))
                 {
-                    $(this).width($(this).find(type+':first').attr('width'));
+                    $(this).width($(this).find('img:first').attr('width'));
                 }
-                if($(this).height() < $(this).find(type+':first').height())
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than iframe/image width/height
-                    $(this).height($(this).find(type+':first').height());
-                } else if ($(this).height() < $(this).find(type+':first').attr('height'))
+                    $(this).height($(this).find('img:first').height());
+                } else if ($(this).height() < $(this).find('img:first').attr('height'))
                 {
-                    $(this).height($(this).find(type+':first').attr('height'));
+                    $(this).height($(this).find('img:first').attr('height'));
                 }
             }
         });
@@ -881,7 +1026,7 @@ class SlideContentEditor extends React.Component {
                             ui.position.top = newTop;
                         },
                         stop: function(event, ui) {
-                            slideEditorContext.emitChange();
+                            slideEditorContext.hasChanges = true;
                             let zIndex = $('.ui-draggable-dragging').css('z-index');
                             $('.ui-draggable-dragging').css('z-index', zIndex - 100000);
                         }
@@ -920,7 +1065,7 @@ class SlideContentEditor extends React.Component {
                         stop: function(event, ui) {
                             let zIndex = $('.ui-resizable-resizing').css('z-index');
                             $('.ui-resizable-resizing').css('z-index', zIndex - 100000);
-                            slideEditorContext.emitChange();
+                            slideEditorContext.hasChanges = true;
                         }
                     });
                 };
@@ -968,81 +1113,6 @@ class SlideContentEditor extends React.Component {
         });
         //TODO: http://chrispearce.co/exploring-hotkeys-and-focus-in-react/
 
-        /*
-        $('.pptx2html [style*="absolute"]').focusin(function(event) {
-            event.preventDefault();
-        }, function() {
-        });
-        */
-
-        //$('.pptx2html [style*="absolute"]').click(function() {
-        /*
-        $('.pptx2html [style*="absolute"]').not('.drawing').mousedown(function(event) {
-            switch (event.which) {
-                case 1:
-                    console.log('Left Mouse button pressed.');
-                    //$('.cke_menu').hide();
-                    if ($(this).attr('id') !== 'inlineContent')
-                    {
-                        slideEditorContext.menuFocus = $(this).attr('id');
-                        console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                        if (!$(this).hasClass('editMode'))
-                        { //the clicked element is not editMode
-                            console.log('hide ckeditor context menu');
-                            $('.cke_menu').hide();
-                            /*
-                            if($('.editMode').length)
-                            {   //there is one or more editMode element (earlier via doubleclick)
-                                //we disable edit mode from the(se) element(s).
-                                slideEditorContext.removeEditMode();
-                            }
-                            *//*
-                        }
-                    }
-                    break;
-                case 2:
-                    console.log('Middle Mouse button pressed.');
-                    break;
-                case 3:
-                    console.log('Right Mouse button pressed.');
-                    //event.preventDefault();
-                    if ($(this).attr('id') !== 'inlineContent')
-                    {
-                        slideEditorContext.menuFocus = $(this).attr('id');
-                        console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                        if (!$(this).hasClass('editMode'))
-                        {
-                            $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
-                            //$(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
-                            $(this).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
-                            console.log('hide ckeditor context menu');
-                            $('.cke_menu').hide();
-                            //set cursor to
-                            slideEditorContext.previousCaretRange = slideEditorContext.getMouseEventCaretRange(event);
-                            //slideEditorContext.selectRange(caretRange);
-                            //also need to get + store previous caretrange for context menu
-                            //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                            //let caretRange = this.getMouseEventCaretRange(evt);
-                            // Set a timer to allow the selection to happen and the dust settle first
-                            //window.setTimeout(function() {
-                            //CKEDITOR.instances.inlineContent.destroy();
-                            //slideEditorContext.refs.inlineContent.contentEditable = false;
-                            //CKEDITOR.instances.inlineContent.hide();
-                        }
-                        else {
-                            slideEditorContext.removeEditMode();
-                        }
-                        //$(this).focus();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-        });
-        */
-
-
         //give each input element a tab index
         //$('.pptx2html [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         //$('.pptx2html [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
@@ -1067,21 +1137,7 @@ class SlideContentEditor extends React.Component {
         });
         */
     }
-    /*
-    removeEditMode(){
-        //$(this).focus();
-        // re-apply draggable to editMode element
-        if ($('.editMode').length){
-            if(!$('.editMode').draggable( 'instance' )){$('.editMode').draggable({cursor: 'move'});}
-            $('.editMode').css('cursor', 'pointer');
-            $('.editMode').css('box-shadow','');
-            //$('.cke_menu').show();
-            $('.cke_menu').hide();
-            $('.editMode').contextMenu(true);
-            $('.editMode').removeClass('editMode');
-        }
-    }
-    */
+
     enterEditKey(evt, slideEditorContext, clickMenuFocus, previousCaret){
         console.log('editmode with event: ' + evt);
         let id = $(':focus').attr('id');
@@ -1124,77 +1180,6 @@ class SlideContentEditor extends React.Component {
             console.log('editmode canceled due to selection of inlineContent');
         }
     }
-    /*
-    setEditMode(evt, slideEditorContext, clickMenuFocus, previousCaret){
-        console.log('editmode with event: ' + evt);
-        let id = $(':focus').attr('id');
-        //let id = this.currentfocus;
-        //let id = $('.currentFocus').attr('id');
-        if (clickMenuFocus){
-            //if right-click context menu has selected an input box object
-            id = clickMenuFocus;
-            console.log('right-click context menu or dblclick has selected an input box - clickMenuFocusId: ' + id);
-            if($('#'+id).css('position') === 'absolute'){
-                console.log('position of menufocus' + $('#'+clickMenuFocus).css('position'));
-            }
-        } else if (slideEditorContext.menuFocus) {
-            id = slideEditorContext.menuFocus;
-            console.log('menufocus via shortkey and/or tabindex - clickMenuFocusId: ' + id);
-        }
-        //id on which edit mode is applied
-        console.log('seteditmode with id: ' + id);
-        if(id !== 'inlineContent')
-        {
-            $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
-            slideEditorContext.removeEditMode(); //remove existing edit mode from existing elements
-
-            if(!$('#'+id).hasClass('.editMode') &&
-               !$('#'+id).hasClass('drawing-container') &&
-                id !== 'inlineContent')
-            { //if not already in edit mode or is not SVG in drawing-container
-                $('.cke_menu').show();
-                console.log('disable extra context menu with id: ' + id );
-                $('#'+id).contextMenu(false);
-
-                if (evt)
-                {//if not already in input mode
-                    if(evt.keyCode){ //if keyboard event
-                        evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
-                        //set caret to start of text (span) in last selected div element
-                        slideEditorContext.placeCaretAtStart(id);
-                    }
-                    else {
-                        let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
-                        //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                        //let caretRange = this.getMouseEventCaretRange(evt);
-                        // Set a timer to allow the selection to happen and the dust settle first
-                        //window.setTimeout(function() {
-                        slideEditorContext.selectRange(caretRange);
-                        //this.selectRange(caretRange);
-                        //}, 10);
-                    }
-                }
-                else {
-                    //event is false = right-click context menu was used
-                    if (previousCaret){
-                        slideEditorContext.selectRange(previousCaret);
-                    } else {
-                        //set caret to start of text (span) in last selected div element
-                        slideEditorContext.placeCaretAtStart(id);
-                    }
-                }
-                if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
-                $('#' + id).css('cursor', 'auto');
-                $('#' + id).addClass('editMode');
-                // TODO:  restore draggable after pressing 'esc' key
-                $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
-                console.log('set edit mode end, with currentfocus: ' + id);
-            }
-        }
-        else {
-            console.log('editmode canceled due to selection of inlineContent');
-        }
-    }*/
     placeCaretAtStart(id) {
         console.log('placeCaretAtStart');
         let el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
@@ -1307,6 +1292,28 @@ class SlideContentEditor extends React.Component {
             //let menuID = $(this).attr('id');
             //if(!$(this).draggable( 'instance' )){
             //console.log('menu for: ' + $(this).attr('id'));
+            const messagesContextMenu = defineMessages({
+                contextMenuBringToFront:{
+                    id: 'SlideContentEditor.contextMenuBringToFront',
+                    defaultMessage: 'Bring to front (Ctrl shift +)',
+                },
+                contextMenuSendToBack:{
+                    id: 'SlideContentEditor.contextMenuSendToBack',
+                    defaultMessage: 'Send to back (Ctrl shift -)'
+                },
+                contextDuplicate:{
+                    id: 'SlideContentEditor.contextDuplicate',
+                    defaultMessage: 'Duplicate (Ctrl d)',
+                },
+                contextDelete:{
+                    id: 'SlideContentEditor.contextDelete',
+                    defaultMessage: 'Delete (ctrl Del)',
+                },
+                contextMenuClose:{
+                    id: 'SlideContentEditor.contextMenuClose',
+                    defaultMessage: 'Close menu (Esc)',
+                },
+            });
             $.contextMenu({
             //$('.pptx2html').contextMenu({
                 // define which elements trigger this menu
@@ -1349,12 +1356,12 @@ class SlideContentEditor extends React.Component {
                         items: {
                             //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
                             //'move': {name: 'Move around', icon: 'fa-arrows',},
-                            'front': {name: 'Bring to front (Ctrl shift +)', icon: 'fa-arrow-circle-up'},
-                            'back': {name: 'Send to back (Ctrl shift -)', icon: 'fa-arrow-circle-o-down'},
-                            'duplicate': {name: 'Duplicate (Ctrl d)', icon: 'copy'},
-                            'delete': {name: 'Delete (ctrl Del)', icon: 'delete'},
+                            'front': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuBringToFront), icon: 'fa-arrow-circle-up'},
+                            'back': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuSendToBack), icon: 'fa-arrow-circle-o-down'},
+                            'duplicate': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDuplicate), icon: 'copy'},
+                            'delete': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDelete), icon: 'delete'},
                             //'sep1': '---------',
-                            'quit': {name: 'Close menu (Esc)', icon: 'quit', accesskey: 'esc'}
+                            'quit': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuClose), icon: 'quit', accesskey: 'esc'}
                             //'quit': {name: 'Send to back', icon: 'quit'},
                         }
                     };
@@ -1366,14 +1373,6 @@ class SlideContentEditor extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        //console.log('new props');
-        //console.log(nextProps.SlideEditStore.addInputBox);
-        //console.log(nextProps.SlideEditStore.uploadMediaClick);
-        //console.log(nextProps.SlideEditStore.template);
-        //if (nextProps.SlideEditStore.content !== this.props.SlideEditStore.content)
-        //{
-            //this.oldContent = this.props.SlideEditStore.content;
-        //}
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
             this.handleSaveButton();
@@ -1385,15 +1384,33 @@ class SlideContentEditor extends React.Component {
             if (this.hasChanges === true)
             {
                 //console.log('there are changes!');
+                const messagesSaveChangesModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.saveChangesModalTitle',
+                        defaultMessage: 'You have unsaved changes. If you do not save the slide, it will not be updated.',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.saveChangesModalText',
+                        defaultMessage: 'Are you sure you want to exit this page?'
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.saveChangesModalConfirm',
+                        defaultMessage: 'Yes',
+                    },
+                    swal_cancel:{
+                        id: 'SlideContentEditor.saveChangesModalCancel',
+                        defaultMessage: 'No',
+                    },
+                });
                 swal({
-                    title: 'You have unsaved changes. If you do not save the slide, it will not be updated.',
-                    text: 'Are you sure you want to exit this page?',
+                    title: this.context.intl.formatMessage(messagesSaveChangesModal.swal_title),
+                    text: this.context.intl.formatMessage(messagesSaveChangesModal.swal_text),
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
-                    confirmButtonText: 'Yes',
+                    confirmButtonText: this.context.intl.formatMessage(messagesSaveChangesModal.swal_confirm),
                     confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'No',
+                    cancelButtonText: this.context.intl.formatMessage(messagesSaveChangesModal.swal_cancel),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
                     allowEnterKey: true
@@ -1436,10 +1453,10 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
-            if($('.pptx2html').length) //if slide is in canvas mode
-            {
-                this.addAbsoluteDiv();
-            }
+            //if($('.pptx2html').length) //if slide is in canvas mode
+            //{
+            this.addAbsoluteDiv();
+            //}
         }
         if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
         {
@@ -1457,7 +1474,8 @@ class SlideContentEditor extends React.Component {
                     this.refreshCKeditor();
                     //this.resize();
                     this.resizeDrag();
-                    this.emitChange();
+                    this.hasChanges = true;
+
                     //this.forceUpdate();
 
                     nextProps.MediaStore.status = '';
@@ -1485,11 +1503,25 @@ class SlideContentEditor extends React.Component {
             }
             else if (nextProps.MediaStore.status === 'error') {
                 this.refs.uploadMediaModal.handleClose();
+                const messagesimageUploadError = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.imageUploadErrorTitle',
+                        defaultMessage: 'Error',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.imageUploadErrorText',
+                        defaultMessage: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.imageUploadErrorConfirm',
+                        defaultMessage: 'Close',
+                    },
+                });
                 swal({
-                    title: 'Error',
-                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
+                    title: this.context.intl.formatMessage(messagesimageUploadError.swal_title),
+                    text: this.context.intl.formatMessage(messagesimageUploadError.swal_text),
                     type: 'error',
-                    confirmButtonText: 'Close',
+                    confirmButtonText: this.context.intl.formatMessage(messagesimageUploadError.swal_confirm),
                     confirmButtonClass: 'negative ui button',
                     allowEscapeKey: false,
                     allowOutsideClick: false,
@@ -1510,7 +1542,8 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.emitChange();
+                this.hasChanges = true;
+
             }
             //make async/callback/promise -> async/await
             CKEDITOR.instances.inlineContent.execCommand('youtube');
@@ -1519,7 +1552,7 @@ class SlideContentEditor extends React.Component {
             {
                 $('.cke_dialog_ui_button_ok').mouseup((evt) => {
                     //register event to correct Iframeboxes dimensions as soon as user clicks on "OK" button in video dialog
-                    console.log('====ckeditor save button ok====');
+                    //console.log('====ckeditor save button ok====');
                     //this.addBorders();
                     setTimeout(() => {
                         //this.correctDimensionsBoxes('iframe');
@@ -1535,10 +1568,15 @@ class SlideContentEditor extends React.Component {
             {
                 let uniqueID = this.getuniqueID();
                 $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:300px; top: 150px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                //fix to prevent Firefox caret from resetting
+                $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                    CKEDITOR.instances.inlineContent.getSelection().unlock();
+                });
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.emitChange();
+                this.hasChanges = true;
+
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
             }
@@ -1553,7 +1591,8 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.emitChange();
+                this.hasChanges = true;
+
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
             }
@@ -1568,7 +1607,8 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.emitChange();
+                this.hasChanges = true;
+
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
             }
@@ -1582,18 +1622,18 @@ class SlideContentEditor extends React.Component {
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
                     this.correctDimensionsBoxesIframe();
-                    this.emitChange();
+
                 } else { //if slide is in non-canvas mode
                     this.refs.inlineContent.innerHTML += nextProps.SlideEditStore.embedCode;
-                    this.emitChange();
                 }
+                this.hasChanges = true;
             }
             else {
                 let iframe = '<iframe src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'" height="'+nextProps.SlideEditStore.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
-                    this.emitChange();
+                    this.hasChanges = true;
                     //this.correctDimensionsBoxes('iframe');
                 } else { //if slide is in non-canvas mode
                     this.refs.inlineContent.innerHTML += iframe;
@@ -1608,7 +1648,7 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
         {
-            this.emitChange();
+            this.hasChanges = true;
             //no need for this -> title is updated on slide save.
             //this.handleSaveButton();
         }
@@ -1638,11 +1678,11 @@ class SlideContentEditor extends React.Component {
                 //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
-                        console.log('====ckeditor save button ok==== - refresh drag and menus');
+                        //console.log('====ckeditor save button ok==== - refresh drag and menus');
                         //this.addBorders();
                         setTimeout(() => {
                             this.resizeDrag();
-                            this.emitChange();
+                            this.hasChanges = true;
                             ////this.forceUpdate();
                         }, 500);
                     });
@@ -1661,7 +1701,7 @@ class SlideContentEditor extends React.Component {
     keyContextMenu(event, context){
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
-        console.log('keyContextMenu id: ' + id);
+        //console.log('keyContextMenu id: ' + id);
         if(event){event.preventDefault();}
         //$('#'+id).contextMenu(true);
         //$('.context-menu-list').trigger('contextmenu:show');
@@ -1679,7 +1719,7 @@ class SlideContentEditor extends React.Component {
             //console.log('keyup not in edit mode + preventdefault');
             if(event){event.preventDefault();}
             $('#'+id).css('top', '-=10');
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
         }
     }
     keyMoveDown(context, event){
@@ -1689,7 +1729,8 @@ class SlideContentEditor extends React.Component {
             if(event){event.preventDefault();}
             //console.log('keyup not in edit mode + preventdefault');
             $('#'+id).css('top', '+=10');
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
+
         }
     }
     keyMoveLeft(context, event){
@@ -1698,7 +1739,8 @@ class SlideContentEditor extends React.Component {
         if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
             $('#'+id).css('left', '-=10');
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
+
         }
     }
     keyMoveRight(context, event){
@@ -1707,7 +1749,7 @@ class SlideContentEditor extends React.Component {
         if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
             $('#'+id).css('left', '+=10');
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
         }
     }
     bringToFront(context, event, idContext){
@@ -1718,7 +1760,8 @@ class SlideContentEditor extends React.Component {
         if(!$('#'+id).hasClass('editMode') &&  id !== 'inlineContent'){
             if(event){event.preventDefault();}
             $('#'+id).css('zIndex', context.getHighestZIndex() + 10);
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
+
         }
     }
     sendToBack(context, event, idContext){
@@ -1729,7 +1772,8 @@ class SlideContentEditor extends React.Component {
         if(!$('#'+id).hasClass('editMode')){
             if(event){event.preventDefault();}
             $('#'+id).css('zIndex', context.getLowestZIndex() - 10);
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
+
         }
     }
     duplicateNode(context, event, idContext){
@@ -1744,7 +1788,8 @@ class SlideContentEditor extends React.Component {
             context.contextMenuAndDragDivAllRemove();
             $('#'+id).clone().appendTo('.pptx2html');
             $('#'+id).css('top', '+=50');
-            context.emitChange(); //confirm non-save on-leave
+            context.hasChanges = true;
+
             //context.uniqueIDAllElements(localContext);
             context.uniqueIDAllElements();
             context.resizeDrag();
@@ -1758,21 +1803,39 @@ class SlideContentEditor extends React.Component {
         if (!id){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length && !$('#'+id).hasClass('pptx2html') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
+            const messagesDeleteModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.deleteModalTitle',
+                    defaultMessage: 'Remove element',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.deleteModalText',
+                    defaultMessage: 'Are you sure you want to delete this element?',
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.deleteModalConfirm',
+                    defaultMessage: 'Yes',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.deleteModalCancel',
+                    defaultMessage: 'No',
+                },
+            });
             swal({
-                title: 'Remove element',
-                text: 'Are you sure you want to delete this element?',
+                title: this.context.intl.formatMessage(messagesDeleteModal.swal_title),
+                text: this.context.intl.formatMessage(messagesDeleteModal.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Yes',
+                confirmButtonText: this.context.intl.formatMessage(messagesDeleteModal.swal_confirm),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: 'No',
+                cancelButtonText: this.context.intl.formatMessage(messagesDeleteModal.swal_cancel),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             }).then((accepted) => {
                 //if (!$(this).hasClass('pptx2html')){
                 //if (!$('#'+id).hasClass('pptx2html') && id !== 'inlineContent'){
-                console.log('delete node with id:' + id);
+                //console.log('delete node with id:' + id);
                 if ($('.pptx2html [style*="absolute"]').length === 1)
                 {
                     console.log('last element');
@@ -1784,7 +1847,8 @@ class SlideContentEditor extends React.Component {
                 }
                 //$(this).remove();
                 $('#'+id).remove();
-                context.emitChange(); //confirm non-save on-leave
+                context.hasChanges = true;
+
                 //}
             }, (reason) => {
                 //done(reason);
@@ -1843,7 +1907,16 @@ class SlideContentEditor extends React.Component {
             this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
         }
+        //$('.cke_float').width( $('.pptx2html').width());
+        //$('.cke_top').css('maxwidth', $('.pptx2html').width());
+        //$('.cke_float').css('maxwidth', $('.pptx2html').width());
+        //$('.cke_toolbox').css('maxwidth', $('.pptx2html').width());
+        let twentypercent = $('#container').width() * 0.2;
+        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
+        $('.cke_float').css('width', $('#container').width() - twentypercent);
+        $('.cke_top').css('width', $('#container').width() - twentypercent);
     }
+
     componentWillUnmount() {
         // Remove the warning window.
         window.onbeforeunload = () => {};
@@ -1855,6 +1928,9 @@ class SlideContentEditor extends React.Component {
             //console.log('destroy CKEDITOR instance');
             CKEDITOR.instances.inlineSpeakerNotes.destroy();
         }
+    }
+    emitChange(context){
+        context.hasChanges = true;
     }
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
@@ -2034,14 +2110,14 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                                 </HotKeys>
                             </section>
                         </div>
                     </div>
                 </div>
                 <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
         );
     }
@@ -2054,18 +2130,11 @@ class SlideContentEditor extends React.Component {
         return false;
         // return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML;
     }*/
-
-    emitChange() {
-        this.hasChanges = true;
-        window.onbeforeunload = () => {
-            return 'You have unsaved changes. If you do not save the slide, it will not be updated. ' +
-            'Are you sure you want to exit this page?';
-        };
-    }
 }
 
 SlideContentEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
