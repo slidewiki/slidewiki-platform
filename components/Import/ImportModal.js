@@ -206,7 +206,7 @@ class Import extends React.Component {
                 text:  this.context.intl.formatMessage(this.messages.swal_message),
                 type: 'error',
                 confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'primary ui button',
+                confirmButtonClass: 'blue ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 buttonsStyling: false
@@ -244,8 +244,8 @@ class Import extends React.Component {
                                            {this.context.intl.formatMessage(this.messages.modal_selectButton)}
                                           </Button>}
                                 content='Select file' on='hover'/>;
-        let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} disabled ><Icon name="upload" /> {this.context.intl.formatMessage(this.messages.modal_uploadButton)}</Button>:
-                                <Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} onClick={this.handleUpload} ><Icon name="upload" />{this.context.intl.formatMessage(this.messages.modal_uploadButton)}
+        let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="blue" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} disabled ><Icon name="upload" /> {this.context.intl.formatMessage(this.messages.modal_uploadButton)}</Button>:
+                                <Button ref={(upload) => {this.uploadButton = upload;}} color="blue" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} onClick={this.handleUpload} ><Icon name="upload" />{this.context.intl.formatMessage(this.messages.modal_uploadButton)}
                                 </Button>;
 
         outputDIV =   <Modal trigger={importBtn}
@@ -287,7 +287,7 @@ class Import extends React.Component {
                                   </Segment>
                                   <Modal.Actions>
                                     {uploadButton}
-                                    <Button color="secondary" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleCancel} >
+                                    <Button color="grey" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleCancel} >
                                       {this.context.intl.formatMessage(this.messages.modal_cancelButton)}
                                     </Button>
                                   </Modal.Actions>
