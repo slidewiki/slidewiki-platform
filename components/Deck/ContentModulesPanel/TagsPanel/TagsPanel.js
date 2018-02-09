@@ -112,24 +112,6 @@ class TagsPanel extends React.Component {
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
 
-        let tagPanel = '';
-        let actionBtn = '';
-        if(this.state.editMode){
-            tagPanel = tagEditPanel;
-            if(editPermission){
-                actionBtn = <div>
-                    <button tabIndex="0" className="ui right floated compact primary button" aria-label={this.context.intl.formatMessage(this.messages.ariaSave)} onClick={this.handleSave.bind(this)}><i className="check icon"></i> {this.context.intl.formatMessage(this.messages.save)}</button>
-                    <button tabIndex="0" className="ui compact button" aria-label={this.context.intl.formatMessage(this.messages.ariaCancel)} onClick={this.handleCancel.bind(this)}><i className="close icon"></i> {this.context.intl.formatMessage(this.messages.cancel)}</button>
-                </div>;
-            }
-        } else {
-            tagPanel = tagViewPanel;
-            if(editPermission){
-                actionBtn = <button tabIndex="0" className="ui right floated compact primary button" aria-label={this.context.intl.formatMessage(this.messages.ariaEdit)} onClick={this.onShowEditForm.bind(this)}><i className="edit icon"></i>
- {this.context.intl.formatMessage(this.messages.edit)}</button>;
-            }
-        }
-
         return (
             <div className="ui bottom attached" ref="tagsPanel">
                 <div className="ui stackable grid">
@@ -138,14 +120,23 @@ class TagsPanel extends React.Component {
                             <h3 className="ui header">{this.context.intl.formatMessage(this.messages.header)}</h3>
                         </div>
                         <div className="eight wide right aligned column">
-                            {actionBtn}
+                            { (!this.state.editMode && editPermission) && 
+                                <button tabIndex="0" className="ui right floated compact primary button" aria-label={this.context.intl.formatMessage(this.messages.ariaEdit)} onClick={this.onShowEditForm.bind(this)}><i className="edit icon"></i>
+ {this.context.intl.formatMessage(this.messages.edit)}</button>
+                            }
                         </div>
                     </div>
                     <div className="row">
                         <div className="sixteen wide column">
-                            { tagPanel }
+                            { (this.state.editMode) ? tagEditPanel : tagViewPanel }
                          </div>
                     </div>
+                    { (this.state.editMode) && 
+                        <div>
+                            <button tabIndex="0" className="ui floated compact primary button" aria-label={this.context.intl.formatMessage(this.messages.ariaSave)} onClick={this.handleSave.bind(this)}><i className="check icon"></i> {this.context.intl.formatMessage(this.messages.save)}</button>
+                            <button tabIndex="0" className="ui compact button" aria-label={this.context.intl.formatMessage(this.messages.ariaCancel)} onClick={this.handleCancel.bind(this)}><i className="close icon"></i> {this.context.intl.formatMessage(this.messages.cancel)}</button>
+                        </div>
+                    }
                     { (this.state.editMode && editPermission && this.props.TagsStore.recommendedTags.length > 0) &&
                         <RecommendedTags recommendedTags={this.props.TagsStore.recommendedTags} selectedTags={tags} addRecommendedTag={this.addRecommendedTag.bind(this)} />
                     }
