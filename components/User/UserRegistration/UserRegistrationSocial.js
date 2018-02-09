@@ -132,8 +132,12 @@ class UserRegistrationSocial extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         // console.log('UserRegistrationSocial componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
+        if (nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
+            this.setUserdata({}, false);
+            return;
+        }
         if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'register') {
-            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) && (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
+            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
     }
@@ -143,21 +147,15 @@ class UserRegistrationSocial extends React.Component {
 
         $(ReactDOM.findDOMNode(this.refs.SocialRegistration_Modal)).modal('hide');
         let user = this.props.UserRegistrationStore.socialuserdata;
-        user.email = this.refs.email.value + '';
-        user.username = this.refs.username.value + '';
-        user.forename = this.refs.firstname.value + '';
-        user.surname = this.refs.lastname.value + '';
+        user.email = this.refs.email.value;
+        user.username = this.refs.username.value;
+        user.forename = this.refs.firstname.value;
+        user.surname = this.refs.lastname.value;
 
         let language = common.getIntlLanguage();
         user.language = language;
 
         this.context.executeAction(socialSignUp, user);
-
-        this.refs.username.value = '';
-        this.refs.email.value = '';
-        this.refs.lastname.value = '';
-        this.refs.firstname.value = '';
-
         return false;
     }
 
@@ -206,15 +204,6 @@ class UserRegistrationSocial extends React.Component {
         this.context.executeAction(navigateAction, {
             url: '/resetpassword'
         });
-    }
-
-    handleCancelClick(e) {
-        e.preventDefault();
-
-        this.refs.username.value = '';
-        this.refs.email.value = '';
-        this.refs.lastname.value = '';
-        this.refs.firstname.value = '';
     }
 
     render() {
@@ -327,7 +316,7 @@ class UserRegistrationSocial extends React.Component {
                   </a>
               </div>
               <div className="actions">
-                  <div className="ui cancel button" onClick={this.handleCancelClick.bind(this)}>
+                  <div className="ui cancel button">
                     <FormattedMessage
                       id='UserRegistrationSocial.cancel'
                       defaultMessage='Cancel'
