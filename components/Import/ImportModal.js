@@ -281,7 +281,7 @@ class Import extends React.Component {
                                         <p>{this.context.intl.formatMessage(this.messages.modal_explanation2)}{MAX_FILESIZE_MB}MB).</p>
                                       </div>
                                       <div className="ui input file focus animated">
-                                        <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} onBlur={console.log('blur')} id="import_file_chooser" ></input>
+                                        <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}  id="import_file_chooser" ></input>
                                       </div>
 
                                   </Segment>
