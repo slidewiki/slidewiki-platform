@@ -17,10 +17,6 @@ class InfoPanelInfoView extends React.Component {
         return !samePropsState;
     }
 
-    componentDidUpdate() {
-        console.log('Updated InfoPanelInfoView.');
-    }
-
     getNameofNodes(tree, selector) {
         if(!selector.get('spath')){
             return 0;

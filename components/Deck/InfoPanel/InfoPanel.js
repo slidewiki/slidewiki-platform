@@ -13,10 +13,6 @@ class InfoPanel extends React.Component {
         return !samePropsState;
     }
 
-    componentDidUpdate() {
-        console.log('Updated InfoPanel.');
-    }
-
     render() {
         const rootNodeStyles = {
             fontSize: '1.06em'
