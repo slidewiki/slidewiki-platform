@@ -45,14 +45,14 @@ class DeckCard extends React.Component {
                             )
                         ) : (
                             this.props.cardContent.title.length > 25 ? (
-                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}></NavLink>
+                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</NavLink>
                             ) : (
                                 <NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</NavLink>
                             )
                         )}
                     </h3>
                     <div className="meta">
-                        <span className="date">{timeSince((new Date(this.props.cardContent.updated)))}</span>
+                        <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
                         <div className="right floated meta">
                             <i className="thumbs up icon" aria-label="Number of likes"></i>6
                         </div>
