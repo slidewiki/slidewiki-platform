@@ -102,7 +102,7 @@ class DeckViewPanel extends React.Component {
             case 'oeg':
                 deckTheme = 'OEG';
                 break;
-            default:                
+            default:
         }
         const deckLicense = deckData.license;
         const deckTitle = currentRevision.title;
@@ -126,7 +126,6 @@ class DeckViewPanel extends React.Component {
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const thumbnailURL = Microservices.file.uri;
         const deckURL = '/deck/' + this.props.selector.id;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
@@ -138,7 +137,7 @@ class DeckViewPanel extends React.Component {
         </div> : '';
 
         return (
-        <div ref="deckViewPanel" id='deckViewPanel' className="ui container bottom attached" style={heightStyle}>
+        <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
 
                 <main role="main">
             <div className="ui segment" style={heightStyle}>
@@ -156,11 +155,13 @@ class DeckViewPanel extends React.Component {
                             </div>
                             {originInfo}
                             <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
+                            {deckDescription &&
                             <div className="meta"><strong>Description:</strong>
                                 <div className="description" tabIndex="0" aria-label="deck description">{deckDescription}</div>
+                            </div>
+                            }
                         </div>
-                    </div>
-                    </div>
+                        </div>
                     </div>
                     <div className="right aligned column">
 
@@ -170,7 +171,7 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui label" tabIndex="0">
                                     <i className="comments icon" aria-label="Language"></i>{deckLanguage}
                                 </div>
-                                
+
                                {/* <TranslationPanel/>*/}
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
@@ -200,6 +201,10 @@ class DeckViewPanel extends React.Component {
                 <div key={this.props.slideIndex} className="ui three column grid container">
                     {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                     {slidesArr.map((slide, index) => {
+                        let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
+                        if (slide.theme) {
+                            thumbnailURL += '/' + slide.theme;
+                        }
                         if (index < maxSlideThumbnails) {
                             return (<div key={index} className="column">
                                 <div className="ui fluid card">
@@ -207,7 +212,7 @@ class DeckViewPanel extends React.Component {
                                         <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
                                            tabIndex="-1">
                                             <Thumbnail key={index}
-                                                       url={thumbnailURL + '/slideThumbnail/' + slide.id + '.jpeg'}
+                                                       url={thumbnailURL}
                                                        slideId={slide.id} alt={''} abIndex={-1}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
