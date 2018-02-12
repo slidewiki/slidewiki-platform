@@ -56,14 +56,15 @@ class DeckCard extends React.Component {
                         <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
                     </div>
                 </div>
-                <div class="ui fluid large icon buttons">
-                    <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" className="ui basic lightGrey icon button" type="button" aria-label="Open deck">
-                        <i className="yellow open folder large icon"></i>
-                    </NavLink>
-
-                    <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui basic lightGrey icon button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                        <i className="circle play large icon"></i>
-                    </NavLink>     
+                <div className="extra content">
+                    <div className="ui fluid large basic buttons">
+                        <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" className="ui basic lightGrey icon button" type="button" aria-label="Open deck">
+                            <i className="yellow open folder large icon"></i>
+                        </NavLink>
+                        <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui basic lightGrey icon button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                            <i className="circle play large icon"></i>
+                        </NavLink>     
+                    </div>
                 </div>
             </div>
         );
