@@ -20,7 +20,7 @@ class DeckEditPanel extends React.Component {
         if (this.getParameterByName('interestedUser') && this.props.UserProfileStore.username === '') {
             return;
         }
-
+        console.log('DeckEditPanel handleAuth:', selector);
         const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
         //user is not logged in
         if (this.props.UserProfileStore.username === '') {

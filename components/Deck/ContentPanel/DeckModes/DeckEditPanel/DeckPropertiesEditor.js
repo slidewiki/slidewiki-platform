@@ -58,9 +58,10 @@ class DeckPropertiesEditor extends React.Component {
         if (newProps.deckProps !== this.props.deckProps) {
             this.setState(this.getStateFromProps(newProps));
         }
-
+        console.log('setted state');
         if (this.props.DeckEditStore.viewstate === 'loading') {
             if (newProps.DeckEditStore.viewstate === 'error') {
+                console.log('error');
                 swal({
                     title: 'Error',
                     text: 'Unknown error while saving.',
@@ -77,6 +78,7 @@ class DeckPropertiesEditor extends React.Component {
                     .catch();
             }
             else if (newProps.DeckEditStore.viewstate === 'success') {
+                console.log('success');
                 swal({
                     title: 'Success',
                     text: 'The deck was saved.',
@@ -92,6 +94,7 @@ class DeckPropertiesEditor extends React.Component {
                     })
                     .catch();
             }
+            else console.log('no viewstate');
         }
     }
     addCollection(event, data){
