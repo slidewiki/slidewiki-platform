@@ -1,19 +1,46 @@
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import removeUser from '../../../actions/user/userprofile/removeUser';
+import FocusTrap from 'focus-trap-react';
 
 class DeactivateAccount extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.isModalOpen = false;
+
+        this.messages = defineMessages({
+            modalHeading: {
+                id: 'DeactivateAccount.modalHeading',
+                defaultMessage: 'Deactivate SlideWiki Account'
+            },
+            modalHeader: {
+                id: 'DeactivateAccount.modalHeader',
+                defaultMessage: 'Are you sure you want to deactivate your SlideWiki Account?'
+            },
+            modalContent: {
+                id: 'DeactivateAccount.modalContent',
+                defaultMessage: 'Deactivating your account will remove your profile and account from SlideWiki. The content you have added to SlideWiki will remain. Do you wish to continue?'
+            }
+        });
+    }
+
     handleAccountDeactivate(e) {
+        this.isModalOpen = false;
         this.context.executeAction(removeUser, {});
         $(this.refs.modal1).modal('hide');
     }
 
     showConfirmDialog(e) {
         $(this.refs.modal1).modal('show');
+        this.isModalOpen = true;
     }
 
     render() {
+        let header = this.context.intl.formatMessage(this.messages.modalHeading);
+        let text1 = this.context.intl.formatMessage(this.messages.modalHeader);
+        let text2 = this.context.intl.formatMessage(this.messages.modalContent);
         return (
             <div>
               <div className="ui padded grid">
@@ -29,7 +56,7 @@ class DeactivateAccount extends React.Component {
                     />
                   </strong>
                 </p>
-                <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) }>
+                <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) } role="button" tabIndex="0">
                   <i className="icon ban"/>
                   <FormattedMessage
                     id='DeactivateAccount.button1'
@@ -38,54 +65,47 @@ class DeactivateAccount extends React.Component {
                 </button>
               </div>
 
-              <div className="ui modal" ref="modal1">
+            <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.isModalOpen}>
+              <div className="ui modal" ref="modal1" role="dialog" aria-label={header} aria-describedby={text1+' '+text2}>
                 <div className="ui red header">
-                  <FormattedMessage
-                    id='DeactivateAccount.modalHeading'
-                    defaultMessage='Deactivate SlideWiki Account'
-                  />
+                  {header}
                 </div>
                 <div className="image content">
                   <i className="ui massive warning sign icon"/>
                   <div className="description">
                     <div className="ui header">
-                      <FormattedMessage
-                        id='DeactivateAccount.modalHeader'
-                        defaultMessage='Are you sure you want to deactivate your SlideWiki Account?'
-                      />
+                      {text1}
                     </div>
                     <p>
-                      <FormattedMessage
-                        id='DeactivateAccount.modalContent'
-                        defaultMessage='Deactivating your account will remove your profile and account from SlideWiki. The content you have added to SlideWiki will remain. Do you wish to continue?'
-                      />
+                      {text2}
                     </p>
                   </div>
                 </div>
                 <div className="actions">
-                  <div className="ui green right labeled icon deny button">
-                    <i className="checkmark icon"></i>
-                    <FormattedMessage
-                      id='DeactivateAccount.modalCancel'
-                      defaultMessage=' Cancel'
-                    />
-                  </div>
-                  <div className="ui red right labeled icon button" onClick={ this.handleAccountDeactivate.bind(this) }>
-                    <i className="sign out icon"></i>
-                    <FormattedMessage
-                      id='DeactivateAccount.modalSubmit'
-                      defaultMessage=' Deactivate account'
-                    />
-                  </div>
+                    <div className="ui primary deny button" role="button" tabIndex="0">
+                      <FormattedMessage
+                        id='DeactivateAccount.modalCancel'
+                        defaultMessage=' Cancel'
+                      />
+                    </div>
+                    <div className="ui red right labeled icon button" onClick={ this.handleAccountDeactivate.bind(this) } role="button" tabIndex="0">
+                      <i className="sign out icon"></i>
+                      <FormattedMessage
+                        id='DeactivateAccount.modalSubmit'
+                        defaultMessage=' Deactivate account'
+                      />
+                    </div>
                 </div>
               </div>
+            </FocusTrap>
           </div>
         );
     }
 }
 
 DeactivateAccount.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 export default DeactivateAccount;
