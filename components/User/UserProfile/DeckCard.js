@@ -38,14 +38,14 @@ class DeckCard extends React.Component {
                 <div className="content">
                     <h3 className="header">
                         {this.props.newTab === true ? (
-                            this.props.cardContent.title.length > 28 ? (
-                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,27) + '...'}</a>
+                            this.props.cardContent.title.length > 25 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
                                 <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
                             )
                         ) : (
-                            this.props.cardContent.title.length > 28 ? (
-                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,27) + '...'}></NavLink>
+                            this.props.cardContent.title.length > 25 ? (
+                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}></NavLink>
                             ) : (
                                 <NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</NavLink>
                             )
@@ -57,20 +57,15 @@ class DeckCard extends React.Component {
                             <i className="thumbs up icon" aria-label="Number of likes"></i>6
                         </div>
                     </div>
-                    <div className="extra content">
-                        <div className="ui menu">
-                            <div className="ui fluid basic buttons">
-                                <button class="ui button">
-                                    <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" aria-label="Open deck">
-                                        <i className="yellow open folder large icon"></i>
-                                    </NavLink>
-                                </button>
-                                <button class="ui button">
-                                    <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui basic lightGrey icon button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                                        <i className="grey circle play large icon"></i>
-                                    </NavLink>
-                                </button>
-                            </div>
+                    <div className="ui menu">
+                        <div className="ui fluid basic buttons">
+                            <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
+                                <i className="yellow open folder large icon"></i>
+                            </NavLink>
+                            <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                                <i className="grey circle play large icon"></i>
+                            </NavLink>
+
                         </div>
                     </div>
                 </div>
