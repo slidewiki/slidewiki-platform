@@ -213,19 +213,13 @@ export default {
 
             let args = params.params ? params.params : params;
             rp({
-                method: 'GET',
-                uri: Microservices.deck.uri + '/deck/' + args.deckId + '/requestEditRights/' + args.userid,
+                method: 'POST',
+                uri: Microservices.deck.uri + '/deck/' + args.deckId + '/requestEditRights',
                 headers: { '----jwt----': params.params.jwt },
                 json: true
             })
             .then((response) => {
-                //Either the request was already send or deck owner id + deckname is returned for sending an email
-                if (!response.ownerid || response.deckname) {
-                    return callback(null, {});
-                }
-                else {
-                    return callback(null, {deckname: response.deckname, ownerid: response.ownerid});
-                }
+                return callback(null, response);
             })
             .catch((err) => callback(err));
         }

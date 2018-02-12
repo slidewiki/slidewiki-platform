@@ -124,7 +124,7 @@ class DeckEditPanel extends React.Component {
     }
 
     componentDidUpdate() {
-        // console.log('DeckEditPanel componentDidUpdate', this.action);
+        console.log('DeckEditPanel componentDidUpdate', this.action);
         if (this.action === 1) {
             this.action = 0;
             document.getElementsByClassName('ui primary button')[0].click();

@@ -96,7 +96,7 @@ const app = new Fluxible({
         DeckFamilyStore,
         UserReviewStore,
         MediaStore,
-        EditRightsStore
+        EditRightsStore,
         DeckCollectionStore,
         SSOStore
     ]

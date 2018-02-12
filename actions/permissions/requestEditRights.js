@@ -1,9 +1,12 @@
 const log = require('../log/clog');
+import DeckEditStore from '../../stores/DeckEditStore';
 
 export default function requestEditRights(context, payload, done) {
     log.info(context);
     payload.jwt = context.getUser().jwt;
     payload.userid = context.getUser().userid;
+
+    console.log('requestEditRights: deck data:', context.getStore(ContentStore).getState().deckProps);
 
     context.service.read('deck.requesteditrights', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
@@ -11,9 +14,9 @@ export default function requestEditRights(context, payload, done) {
             done();
         }
         else {
-            if (res.ownerid) {
-                payload.ownerid = res.ownerid;
-                payload.deckname = res.deckname;
+            if (res.isNew) {
+                payload.ownerid = context.getStore(ContentStore).getState().deckProps.ownerid;
+                payload.deckname = context.getStore(ContentStore).getState().deckProps.deckname;
 
                 context.service.update('user.sendEmail', payload, { timeout: 20 * 1000 }, (err2, res2) => {
                     if (err) {
