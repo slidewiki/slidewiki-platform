@@ -4,6 +4,7 @@ import { NavLink } from 'fluxible-router';
 import { timeSince } from '../../../common';
 import { Microservices } from '../../../configs/microservices';
 
+
 class DeckCard extends React.Component {
 
 
@@ -19,6 +20,7 @@ class DeckCard extends React.Component {
             thumbnailURL += this.props.cardContent.firstSlide + '.jpeg';
         else
             thumbnailURL = this.props.cardContent.picture;
+
 
         let description = (this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
         return (
@@ -36,24 +38,27 @@ class DeckCard extends React.Component {
                 )}
 
                 <div className="content">
-                    <div className="header">
+                    <h3 className="header">
                         {this.props.newTab === true ? (
-                            this.props.cardContent.title.length > 50 ? (
-                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,49) + '...'}</a>
+                            this.props.cardContent.title.length > 28 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,27) + '...'}</a>
                             ) : (
                                 <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
                             )
                         ) : (
-                            this.props.cardContent.title.length > 50 ? (
-                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,49) + '...'}</NavLink>
+                            this.props.cardContent.title.length > 28 ? (
+                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}></NavLink>
                             ) : (
                                 <NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</NavLink>
                             )
                         )}
-                    </div>
+                    </h3>
 
-                    <div className="meta">
-                        <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
+                    <div className="content">
+                        <span className="date">{timeSince((new Date(this.props.cardContent.updated)))}</span>
+                        <div className="right floated meta">
+                            <i className="thumbs up icon" aria-label="Number of likes"></i>6
+                        </div>
                     </div>
                 </div>
                 <div className="extra content">
