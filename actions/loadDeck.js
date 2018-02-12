@@ -5,6 +5,7 @@ import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
 import loadActivities from './activityfeed/loadActivities';
 import loadContentModules from './loadContentModules';
+import addActivity from './activityfeed/addActivity';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import deckContentPathError from './error/deckContentPathError';
@@ -192,7 +193,19 @@ export default function loadDeck(context, payload, done) {
                     username: payload.query.interestedUser
                 }
             }, done);
-        else
+        else {
+            if (payload.params.mode !== 'edit') {
+                //Create activity
+                let activity = {
+                    activity_type: 'view',
+                    user_id: String(context.getStore(UserProfileStore).userid),
+                    content_id: payload.params.sid,
+                    content_kind: payload.params.stype
+                };
+                context.executeAction(addActivity, {activity: activity});
+            }
+
             done();
+        }
     });
 }

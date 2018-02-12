@@ -30,7 +30,6 @@ import UserNotificationsStore from './stores/UserNotificationsStore';
 import UserRegistrationStore from './stores/UserRegistrationStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import SearchParamsStore from './stores/SearchParamsStore';
-import AdvancedSearchStore from './stores/AdvancedSearchStore';
 import UserProfileStore from './stores/UserProfileStore';
 import ErrorStore from './stores/ErrorStore';
 import AddDeckStore from './stores/AddDeckStore';
@@ -47,6 +46,8 @@ import DeckFamilyStore from './stores/DeckFamilyStore';
 import MediaStore from './stores/MediaStore';
 import UserReviewStore from './stores/UserReviewStore';
 import EditRightsStore from './stores/EditRightsStore';
+import DeckCollectionStore from './stores/DeckCollectionStore';
+import SSOStore from './stores/SSOStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -80,7 +81,6 @@ const app = new Fluxible({
         UserRegistrationStore,
         SearchResultsStore,
         SearchParamsStore,
-        AdvancedSearchStore,
         UserProfileStore,
         ErrorStore,
         AddDeckStore,
@@ -97,6 +97,8 @@ const app = new Fluxible({
         UserReviewStore,
         MediaStore,
         EditRightsStore
+        DeckCollectionStore,
+        SSOStore
     ]
 });
 
