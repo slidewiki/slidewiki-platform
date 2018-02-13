@@ -29,12 +29,12 @@ class DeckCard extends React.Component {
             <div className='card'>
                 {this.props.newTab === true ? (
                     <a className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
-                        <Thumbnail url={thumbnailURL} alt={""}
+                        <Thumbnail url={thumbnailURL} alt={''}
                             slideId={this.props.cardContent.deckID} />
                     </a>
                 ) : (
                     <NavLink className="ui medium centered spaced image" aria-hidden={'true'}  tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID}>
-                        <Thumbnail url={thumbnailURL} alt={""}
+                        <Thumbnail url={thumbnailURL} alt={''}
                             slideId={this.props.cardContent.deckID} />
                     </NavLink>
                 )}
