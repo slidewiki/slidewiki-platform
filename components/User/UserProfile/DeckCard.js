@@ -40,21 +40,19 @@ class DeckCard extends React.Component {
                 )}
 
                 <div className="content">
-                    <h3 className="header">
-                        {this.props.newTab === true ? (
-                            this.props.cardContent.title.length > 25 ? (
-                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</a>
-                            ) : (
-                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
-                            )
+                    {this.props.newTab === true ? (
+                        this.props.cardContent.title.length > 25 ? (
+                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
                         ) : (
-                            this.props.cardContent.title.length > 25 ? (
-                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</a>
-                            ) : (
-                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</a>
-                            )
-                        )}
-                    </h3>
+                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
+                        )
+                    ) : (
+                        this.props.cardContent.title.length > 25 ? (
+                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
+                        ) : (
+                            <a href={'/deck/' + this.props.cardContent.deckID}><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
+                        )
+                    )}
                     <div className="meta">
                         <span className="right floated meta">
                             <i className="thumbs up icon" aria-label="Number of likes"></i>6
@@ -64,11 +62,11 @@ class DeckCard extends React.Component {
                     </div>
                     <div className="ui menu">
                         <div className="ui fluid basic buttons">
-                            <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
-                                <i className="yellow open folder large icon"></i>
+                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
+                                <i className="yellow open folder large icon" tabIndex="0"></i>
                             </a>
-                            <a tabIndex="0" href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                                <i className="grey circle play large icon"></i>
+                            <a href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                                <i className="grey circle play large icon" tabIndex="0"></i>
                             </a>
 
                         </div>
