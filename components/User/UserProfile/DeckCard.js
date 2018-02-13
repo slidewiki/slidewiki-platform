@@ -56,10 +56,11 @@ class DeckCard extends React.Component {
                         )}
                     </h3>
                     <div className="meta">
-                        <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
-                        <div className="right floated meta">
+                        <span className="right floated meta">
                             <i className="thumbs up icon" aria-label="Number of likes"></i>6
-                        </div>
+                        </span>
+                        <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
+                        
                     </div>
                     <div className="ui menu">
                         <div className="ui fluid basic buttons">
