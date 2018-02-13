@@ -43,15 +43,15 @@ class DeckCard extends React.Component {
                     <h3 className="header">
                         {this.props.newTab === true ? (
                             this.props.cardContent.title.length > 25 ? (
-                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
-                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
+                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
                             )
                         ) : (
                             this.props.cardContent.title.length > 25 ? (
-                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</NavLink>
+                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
-                                <NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</NavLink>
+                                <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</a>
                             )
                         )}
                     </h3>
@@ -60,16 +60,16 @@ class DeckCard extends React.Component {
                             <i className="thumbs up icon" aria-label="Number of likes"></i>6
                         </span>
                         <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
-                        
+
                     </div>
                     <div className="ui menu">
                         <div className="ui fluid basic buttons">
-                            <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
+                            <a tabIndex="0" href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
                                 <i className="yellow open folder large icon"></i>
-                            </NavLink>
-                            <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                            </a>
+                            <a tabIndex="0" href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                 <i className="grey circle play large icon"></i>
-                            </NavLink>
+                            </a>
 
                         </div>
                     </div>
