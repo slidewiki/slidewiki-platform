@@ -1,14 +1,14 @@
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import removeUser from '../../../actions/user/userprofile/removeUser';
+import {showDeactivateAccountModal, hideDeactivateAccountModal} from '../../../actions/user/userprofile/functionsForDeactivateAccountModal';
 import FocusTrap from 'focus-trap-react';
+import {Button, Icon, Modal, Header} from 'semantic-ui-react';
 
 class DeactivateAccount extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.isModalOpen = false;
 
         this.messages = defineMessages({
             modalHeading: {
@@ -27,20 +27,27 @@ class DeactivateAccount extends React.Component {
     }
 
     handleAccountDeactivate(e) {
-        this.isModalOpen = false;
+        e.preventDefault();
+        this.context.executeAction(hideDeactivateAccountModal, {});
         this.context.executeAction(removeUser, {});
-        $(this.refs.modal1).modal('hide');
     }
 
     showConfirmDialog(e) {
-        $(this.refs.modal1).modal('show');
-        this.isModalOpen = true;
+        e.preventDefault();
+        this.context.executeAction(showDeactivateAccountModal, {});
+    }
+
+    hideModal(e) {
+        e.preventDefault();
+        this.context.executeAction(hideDeactivateAccountModal, {});
     }
 
     render() {
         let header = this.context.intl.formatMessage(this.messages.modalHeading);
         let text1 = this.context.intl.formatMessage(this.messages.modalHeader);
         let text2 = this.context.intl.formatMessage(this.messages.modalContent);
+        let showModal = this.props.showModal;
+
         return (
             <div>
               <div className="ui padded grid">
@@ -65,39 +72,35 @@ class DeactivateAccount extends React.Component {
                 </button>
               </div>
 
-            <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.isModalOpen}>
-              <div className="ui modal" ref="modal1" role="dialog" aria-label={header} aria-describedby={text1+' '+text2}>
-                <div className="ui red header">
-                  {header}
-                </div>
-                <div className="image content">
-                  <i className="ui massive warning sign icon"/>
-                  <div className="description">
-                    <div className="ui header">
-                      {text1}
-                    </div>
-                    <p>
-                      {text2}
-                    </p>
-                  </div>
-                </div>
-                <div className="actions">
-                    <div className="ui primary deny button" role="button" tabIndex="0">
-                      <FormattedMessage
-                        id='DeactivateAccount.modalCancel'
-                        defaultMessage=' Cancel'
-                      />
-                    </div>
-                    <div className="ui red right labeled icon button" onClick={ this.handleAccountDeactivate.bind(this) } role="button" tabIndex="0">
-                      <i className="sign out icon"></i>
-                      <FormattedMessage
-                        id='DeactivateAccount.modalSubmit'
-                        defaultMessage=' Deactivate account'
-                      />
-                    </div>
-                </div>
-              </div>
-            </FocusTrap>
+              <Modal dimmer='blurring' ref="modal1" role='dialog' aria-labelledby='deactivateAccountModalHeader'
+                     aria-describedby='deactivateAccountModalDesc' open={showModal} >
+                  <Header color="red" content={header} id='deactivateAccountModalHeader'/>
+                  <Modal.Content id='deactivateAccountModalDesc'>
+                      <Header>
+                        {text1}
+                      </Header>
+                      <p>
+                        {text2}
+                      </p>
+                  </Modal.Content>
+                  <Modal.Actions>
+                      <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={showModal}>
+                        <Button primary role="button" tabIndex="0" onClick={ this.hideModal.bind(this) }>
+                            <FormattedMessage
+                              id='DeactivateAccount.modalCancel'
+                              defaultMessage=' Cancel'
+                            />
+                        </Button>
+                        <Button icon labelPosition='right' onClick={ this.handleAccountDeactivate.bind(this) } role="button" tabIndex="0">
+                            <Icon name='sign out' />
+                            <FormattedMessage
+                              id='DeactivateAccount.modalSubmit'
+                              defaultMessage=' Deactivate account'
+                            />
+                        </Button>
+                      </FocusTrap>
+                  </Modal.Actions>
+              </Modal>
           </div>
         );
     }
