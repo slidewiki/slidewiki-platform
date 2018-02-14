@@ -48,13 +48,6 @@ class presentationBroadcast extends React.Component {
 
     componentDidMount() {
 
-        window.localforage.config({
-            driver: [localforage.WEBSQL, localforage.INDEXEDDB],
-            name: 'SlideWikiRecorder',
-            size: 524288000
-        });
-        window.localforage.clear();
-
         let that = this;
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
             console.log('Navigating away because of missing paramenters in URL');
@@ -87,13 +80,18 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
+            window.localforage.config({
+                driver: [localforage.WEBSQL, localforage.INDEXEDDB],
+                name: 'SlideWikiRecorder',
+                size: 524288000
+            });
+            window.localforage.clear();
             that.setState({
                 roleText: 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ',
                 peerCountText: 'People currently listening: '
             });
             setmyID();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
-            that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, that.currentSlide);
             requestStreams({
                 audio: true,
                 // video: {
@@ -320,7 +318,8 @@ class presentationBroadcast extends React.Component {
                 .then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
             }
             that.localStream = stream;
-            that.refs.sessionRecorder.recordStream(stream);
+            if(that.isInitiator)
+                that.refs.sessionRecorder.recordStream(stream);
 
             function sendASAP() {
                 if (that.presenterID) //wait for presenterID before sending the message
@@ -744,6 +743,8 @@ class presentationBroadcast extends React.Component {
             });
 
             if (that.isInitiator) {
+                that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, document.getElementById('slidewikiPresentation').contentWindow.location.href);
+                that.refs.sessionRecorder.startRecording();
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
                     that.refs.sessionRecorder.recordSlideChange(that.currentSlide);
@@ -1021,7 +1022,7 @@ class presentationBroadcast extends React.Component {
               {(this.isInitiator) ? (
                   <div>
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
-                  <SessionRecorder ref="sessionRecorder"/>
+                  <SessionRecorder ref="sessionRecorder" deckID={this.deckID.split('-')[0]} revision={this.deckID.split('-')[1]}/>
                   </div>
               ) : ('')};
             </Grid.Row>

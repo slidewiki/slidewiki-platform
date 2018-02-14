@@ -1,6 +1,7 @@
 import React from 'react';
 import { isEmpty } from '../../common';
 import { Button, Icon } from 'semantic-ui-react';
+import { Microservices } from '../../configs/microservices';
 
 class SessionRecorder extends React.Component {
 
@@ -53,10 +54,14 @@ class SessionRecorder extends React.Component {
     }
 
     recordStream(stream) {
+        this.stream = stream;
+    }
+
+    startRecording() {
         if(this.state.recordSession){
             let webm = 'audio/webm\;codecs=opus', ogg = 'audio/ogg\;codecs=opus';
             this.mime = (MediaRecorder.isTypeSupported(ogg)) ? ogg : webm;
-            this.mediaRecorder = new MediaRecorder(stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
+            this.mediaRecorder = new MediaRecorder(this.stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
             this.mediaRecorder.ondataavailable = (chunk) => {
                 // console.log('New chunk available', chunk);
                 let now = new Date().getTime();
@@ -74,12 +79,12 @@ class SessionRecorder extends React.Component {
                 sessionStorage.setItem('deck', deckID);
                 sessionStorage.setItem('origin', window.location.origin);
                 sessionStorage.setItem('slideTimings', '');//clear it
-                this.recordSlideChange(url, true);
+                this.recordSlideChange(url);
             }
         }
     }
 
-    recordSlideChange(url = '', first = false) {
+    recordSlideChange(url = '') {
         if(this.state.recordSession){
             // console.log('recording slide change', url, first);
             if(window.sessionStorage){
@@ -88,7 +93,7 @@ class SessionRecorder extends React.Component {
                 prev = JSON.parse(prev);
                 let now = new Date().getTime();
                 let newEl = {};
-                newEl[now] = ((first) ? sessionStorage.getItem('origin') : '') + url;
+                newEl[now] = url;
                 let toSave = Object.assign(prev, newEl);
                 sessionStorage.setItem('slideTimings', JSON.stringify(toSave));
             }
@@ -111,9 +116,9 @@ class SessionRecorder extends React.Component {
         }).then(() => {
             this.mediaRecorder.stop();
             this.recordSlideChange();
-            let timingBlob = new Blob([sessionStorage.getItem('slideTimings')], {type: 'application/json'});
-            // this.saveBlobToDisk(timingBlob, 'timings.json');//TODO last recording is just a time, but no slide url as this component triggers it and this.currentSlide is not available in this component
-            setTimeout(this.createAudioTrack, 500);
+            // let timingBlob = new Blob([sessionStorage.getItem('slideTimings')], {type: 'application/json'});
+            // this.saveBlobToDisk(timingBlob, 'timings.json');
+            setTimeout(this.createAudioTrack, 500);//NOTE Wait for recorder to write last chunk
         }).catch((e) => {
             if(e === 'cancel'){
                 this.mediaRecorder.resume();
@@ -128,9 +133,31 @@ class SessionRecorder extends React.Component {
             console.log(safeChunkArray);
             let track = new Blob(safeChunkArray, { 'type' : this.mime });
             console.log(track);
-            let name = 'test' + ((this.mime.contains('webm')) ? '.webm' : '.ogg');
-            console.log(name);
-            this.saveTrackToDisk(track, name);
+            let trackName = 'test' + ((this.mime.includes('webm')) ? '.webm' : '.ogg');
+            // console.log(name);
+            // this.saveTrackToDisk(track, trackName);
+            this.uploadTrack(track, trackName, sessionStorage.getItem('slideTimings'));
+        });
+    }
+
+    uploadTrack(audioTrack, audioTrackName, slideTimings) {
+        let form = new FormData();
+        form.append('slideTimings', slideTimings);
+        form.append('audioFile', audioTrack, audioTrackName);
+
+        $.ajax({
+            url: Microservices.file.uri + '/PRvideo?deckID=' + this.props.deckID +'&revision=' + (this.props.revision ? this.props.revision : 1),
+            data: form,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: ( data, textStatus, jqXHR ) => {
+                console.log(textStatus);
+            },
+            error: ( jqXHR, textStatus, errorThrown) => {
+                console.log(textStatus, errorThrown, jqXHR);
+            }
         });
     }
 
