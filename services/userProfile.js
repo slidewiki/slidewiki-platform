@@ -254,8 +254,8 @@ export default {
 
                             }).sort((a,b) => a.creationDate < b.creationDate);
                             callback(null, converted);
-                      })
-                      .catch((err) => callback(err));
+                        })
+                        .catch((err) => callback(err));
                 })
                 .catch((err) => callback(err));
             } else if(params.params.loggedInUser !== params.params.username) {
