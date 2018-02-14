@@ -63,7 +63,7 @@ class DeckCard extends React.Component {
                 </div>
                 <div className="ui menu top attached">
                     <div className="ui fluid basic buttons">
-                        <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
+                        <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
                             <i className="yellow open folder large icon" tabIndex="0"></i>
                         </a>
                         <a href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
