@@ -27,9 +27,9 @@ export default {
             
             // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
             rp({
-                method: 'GET', 
+                method: 'GET',
                 uri: uri,
-                json: true 
+                json: true
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
 
@@ -42,53 +42,65 @@ export default {
             }
 
             rp({
-                method: 'GET', 
+                method: 'GET',
                 uri: uri,
-                json: true 
+                json: true
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
 
         // get the details for a specific deck collection
         } else if (resource === 'deckgroups.get'){
             rp({
-                method: 'GET', 
+                method: 'GET',
                 uri: `${Microservices.deck.uri}/group/${args.id}`,
-                json: true 
+                json: true
             }).then( (group) => {
                 let deckPromises = [];
+                let likesPromises = [];//get the number of deck likes
 
-                // get details for the decks in the collection 
+                // get details for the decks in the collection
                 for(let deckId of group.decks){
                     deckPromises.push(
                         rp.get({
-                            uri: `${Microservices.deck.uri}/deck/${deckId}`, 
+                            uri: `${Microservices.deck.uri}/deck/${deckId}`,
                             json: true
+                        })
+                    );
+
+                    likesPromises.push(
+                        rp.get({
+                            uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
                         })
                     );
                 }
                 let deckPromise = Promise.all(deckPromises);
 
+                let likesPromise = Promise.all(likesPromises);
+
                 // get username of the deck collection owner
                 let userPromise = rp.get({
-                    uri: `${Microservices.user.uri}/user/${group.user}`, 
+                    uri: `${Microservices.user.uri}/user/${group.user}`,
                     json: true
                 }).then( (user) => {
                     return user.username;
                 });
 
-                Promise.all([deckPromise, userPromise]).then( (data) => {
+                Promise.all([deckPromise, userPromise, likesPromise]).then( (data) => {
                     group.decks = data[0];
                     group.user = {
-                        id: group.user, 
+                        id: group.user,
                         username: data[1]
                     };
+                    for (let i = 0; i < data[2].length; i++) {
+                        group.decks[i].noOfLikes = data[2][i];
+                    }
 
                     callback(null, group);
                 }).catch( (err) => callback(err));
 
             }).catch( (err) => callback(err));
         }
-    }, 
+    },
 
     create: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
@@ -96,12 +108,12 @@ export default {
         let args = params.params? params.params : params;
 
         let payload = {
-            title: args.title, 
+            title: args.title,
             description: args.description,
             decks: []
         };
 
-        // add userGroup if given 
+        // add userGroup if given
         if(args.userGroup !== ''){
             payload.userGroup = args.userGroup;
         }
@@ -133,11 +145,11 @@ export default {
             if(usergroups !== ''){
                 uri += `&usergroup=${usergroups}`;
             }
-            
+
             // get deck groups assigned to current deck
             rp({
-                method: 'GET', 
-                uri: uri, 
+                method: 'GET',
+                uri: uri,
                 json: true
             }).then( (existingDeckGroups) => {
                 let existingDeckGroupIds = existingDeckGroups.map( (e) => { return e._id; });
@@ -153,11 +165,11 @@ export default {
                         addOps.push({groupId: deckGroupId, updateOp: {op: 'add', deckId: args.deckId}});
                     }
                 });
-            
+
                 // add/remove deck id to/from the following deck groups
                 async.eachSeries(addOps.concat(removeOps), (item, done) => {
                     rp({
-                        method: 'PATCH', 
+                        method: 'PATCH',
                         uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,
                         json: true,
                         headers: {'----jwt----': args.jwt},
@@ -180,22 +192,22 @@ export default {
         // update deck collection metadata
         } else if (resource === 'deckgroups.metadata'){
             rp({
-                method: 'PUT', 
+                method: 'PUT',
                 uri: `${Microservices.deck.uri}/group/${args.id}`,
                 json: true,
                 headers: {'----jwt----': args.jwt},
                 body: {
-                    title: args.title, 
-                    description: args.description, 
+                    title: args.title,
+                    description: args.description,
                     userGroup: (args.userGroup !== '') ? args.userGroup : undefined
                 }
             }).then( (updated) => callback(null, updated))
             .catch((err) => callback(err));
-        
+
         // update the deck order of the collection's decks
         } else if (resource === 'deckgroups.deckOrder'){
             rp({
-                method: 'PUT', 
+                method: 'PUT',
                 uri: `${Microservices.deck.uri}/group/${args.id}/decks`,
                 json: true,
                 headers: {'----jwt----': args.jwt},
@@ -203,7 +215,7 @@ export default {
             }).then( (updated) => callback(null, updated))
             .catch((err) => callback(err));
         }
-    }, 
+    },
 
     delete: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
