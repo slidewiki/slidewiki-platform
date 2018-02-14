@@ -60,7 +60,8 @@ class DeckCard extends React.Component {
                         <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
 
                     </div>
-                    <div className="ui menu">
+                </div>
+                    <div className="ui menu top attached">
                         <div className="ui fluid basic buttons">
                             <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
                                 <i className="yellow open folder large icon" tabIndex="0"></i>
