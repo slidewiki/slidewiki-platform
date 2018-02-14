@@ -55,7 +55,7 @@ class DeckCard extends React.Component {
                     )}
                     <div className="meta">
                         <span className="right floated meta">
-                            <i className="thumbs up icon" aria-label="Number of likes"></i>6
+                            <i className="thumbs up icon" aria-label="Number of likes"></i>{this.props.cardContent.noOfLikes}
                         </span>
                         <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
 

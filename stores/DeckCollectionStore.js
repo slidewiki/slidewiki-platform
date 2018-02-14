@@ -28,9 +28,9 @@ class DeckCollectionStore extends BaseStore {
     }
 
     getState() {
-        return { 
+        return {
             collections: this.collections,
-            updateCollectionsError: this.updateCollectionsError, 
+            updateCollectionsError: this.updateCollectionsError,
             deleteDeckCollectionError: this.deleteDeckCollectionError,
             collectionDetails: this.collectionDetails,
             collectionDetailsError: this.collectionDetailsError,
@@ -57,7 +57,7 @@ class DeckCollectionStore extends BaseStore {
         this.loading = state.loading;
     }
 
-    updateCollections(payload){ 
+    updateCollections(payload){
         this.collections = payload;
         this.updateCollectionsError = false;
         this.loading = false;
@@ -81,7 +81,7 @@ class DeckCollectionStore extends BaseStore {
         this.collections.documents = updatedCollections;
         this.deleteDeckCollectionError = false;
         this.loading = false;
-        this.emitChange(); 
+        this.emitChange();
     }
 
     deleteCollectionFailed(){
@@ -101,16 +101,17 @@ class DeckCollectionStore extends BaseStore {
         // format the results of the service
         payload.decks = payload.decks.map( (deck) => {
 
-            // get the active revision of the deck 
+            // get the active revision of the deck
             let activeRevision = deck.revisions[deck.revisions.length-1];
             return {
-                deckID: deck._id, 
-                title: activeRevision.title, 
-                firstSlide: activeRevision.firstSlide, 
+                deckID: deck._id,
+                title: activeRevision.title,
+                firstSlide: activeRevision.firstSlide,
                 theme: activeRevision.theme,
-                updated: deck.lastUpdate, 
-                description: deck.description, 
-                creationDate: deck.timestamp
+                updated: deck.lastUpdate,
+                description: deck.description,
+                creationDate: deck.timestamp,
+                noOfLikes: deck.noOfLikes
             };
         });
 
@@ -140,12 +141,12 @@ class DeckCollectionStore extends BaseStore {
     updateCollectionMetadata(updatedCollection){
 
         // replace the collection that has just been updated
-        this.collections.documents = this.collections.documents.map( (col) => {          
+        this.collections.documents = this.collections.documents.map( (col) => {
             return (col._id === updatedCollection._id) ? updatedCollection : col;
         });
-        
+
         this.emitChange();
-    }   
+    }
 
     updateCollectionMetadataFailed(){
         this.updateCollectionMetadataError = true;
@@ -167,7 +168,7 @@ class DeckCollectionStore extends BaseStore {
     }
 
     updateCollectionDeckOrderFailed(){
-        this.updateCollectionDeckOrderError = true; 
+        this.updateCollectionDeckOrderError = true;
         this.emitChange();
         this.updateCollectionDeckOrderError = false;
         this.emitChange();
@@ -178,23 +179,23 @@ class DeckCollectionStore extends BaseStore {
 DeckCollectionStore.storeName = 'DeckCollectionStore';
 DeckCollectionStore.handlers = {
 
-    'LOAD_USER_COLLECTIONS_SUCCESS': 'updateCollections', 
-    'LOAD_USER_COLLECTIONS_FAILURE': 'updateCollectionsFailed', 
-    
-    'DELETE_COLLECTION_SUCCESS': 'deleteCollection', 
+    'LOAD_USER_COLLECTIONS_SUCCESS': 'updateCollections',
+    'LOAD_USER_COLLECTIONS_FAILURE': 'updateCollectionsFailed',
+
+    'DELETE_COLLECTION_SUCCESS': 'deleteCollection',
     'DELETE_COLLECTION_FAILURE': 'deleteCollectionFailed',
 
-    'LOAD_COLLECTION_DETAILS_SUCCESS': 'updateCollectionDetails', 
+    'LOAD_COLLECTION_DETAILS_SUCCESS': 'updateCollectionDetails',
     'LOAD_COLLECTION_DETAILS_FAILURE': 'updateCollectionDetailsFailed',
 
-    'ADD_COLLECTION_SUCCESS': 'addCollection', 
-    'ADD_COLLECTION_FAILURE': 'addCollectionFailure', 
+    'ADD_COLLECTION_SUCCESS': 'addCollection',
+    'ADD_COLLECTION_FAILURE': 'addCollectionFailure',
 
-    'UPDATE_COLLECTION_METADATA': 'updateCollectionMetadata', 
+    'UPDATE_COLLECTION_METADATA': 'updateCollectionMetadata',
     'UPDATE_COLLECTION_METADATA_ERROR': 'updateCollectionMetadataFailed',
 
-    'UPDATE_COLLECTION_DECK_ORDER_SUCCESS': 'updateCollectionDeckOrder', 
-    'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed', 
+    'UPDATE_COLLECTION_DECK_ORDER_SUCCESS': 'updateCollectionDeckOrder',
+    'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
 };
