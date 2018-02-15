@@ -1,6 +1,7 @@
 import React from 'react';
 import newTag from '../../../../actions/tags/newTag';
 import { defineMessages } from 'react-intl';
+import { navigateAction } from 'fluxible-router';
 
 class RecommendedTags extends React.Component {
     constructor(props){
@@ -86,18 +87,23 @@ class RecommendedTags extends React.Component {
         });
     }
     render() {
-        let recommendedTagsList = this.state.tagsToShow.map( (t, index) => {   
-            return <div id={index} key={index} className="ui fluid card">
+        let recommendedTagsList = this.state.tagsToShow.map( (t, index) => { 
+            return <div id={index} key={index} className="ui card">
                 <div className="content">
-                    <div className="header">
-                        <a target="_blank" href={'/deckfamily/' + t.name} key={t.name} className="ui large tag label" tabIndex="0" aria-label={t.name}>
-                            {t.name}
-                        </a>
-                    </div>
-                    <div className="description">
-                        <div className="ui two compact buttons">
-                            <div className="ui basic green button" aria-label={this.context.intl.formatMessage(this.messages.ariaAdd)} onClick={this.handleAdd.bind(this, t.name, index)}>{this.context.intl.formatMessage(this.messages.add)}</div>
-                            <div className="ui basic red button" aria-label={this.context.intl.formatMessage(this.messages.ariaDismiss)} onClick={this.handleDismiss.bind(this, t.name, index)}>{this.context.intl.formatMessage(this.messages.dismiss)}</div>
+                    <div className="content">
+                        <div className="ui stackable two column middle aligned grid">
+                            <div className="column">
+                                <a href="#" key={t.name} title={t.name} className="ui large tag label" tabIndex="0" aria-label={t.name} onClick={this.handleAdd.bind(this, t.name, index)}>
+                                    {(t.name.length > 9) ? t.name.substring(0, 9) + '...' : t.name}
+                                </a>
+                            </div>
+                            <div className="column">
+                                <div className="ui tiny basic icon buttons">
+                                    <button className="ui button" onClick={this.handleAdd.bind(this, t.name, index)}><i className="plus icon"></i></button>
+                                    <button className="ui button"><i className="unhide icon"></i></button>
+                                    <button className="ui button" onClick={this.handleDismiss.bind(this, t.name, index)}><i className="remove icon"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,7 +137,8 @@ class RecommendedTags extends React.Component {
 }
 
 RecommendedTags.contextTypes = {
-    intl: React.PropTypes.object.isRequired
+    intl: React.PropTypes.object.isRequired,
+    executeAction: React.PropTypes.func.isRequired,
 };
 
 export default RecommendedTags;
