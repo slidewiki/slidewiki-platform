@@ -14,14 +14,6 @@ class RecommendedTags extends React.Component {
             header:{
                 id: 'RecommendedTags.header',
                 defaultMessage: 'Recommended Tags'
-            },
-            add: {
-                id: 'RecommendedTags.add',
-                defaultMessage: 'Add'
-            }, 
-            dismiss: {
-                id: 'RecommendedTags.dismiss',
-                defaultMessage: 'Dismiss'
             }, 
             ariaAdd: {
                 id: 'RecommendedTags.aria.add',
@@ -29,8 +21,12 @@ class RecommendedTags extends React.Component {
             }, 
             ariaDismiss: {
                 id: 'RecommendedTags.aria.dismiss',
-                defaultMessage: 'Dismiss recommended tag'
+                defaultMessage: 'Dismiss recommendation'
             },
+            ariaViewDecksWithTag: {
+                id: 'RecommendedTags.aria.viewDecksWithTag', 
+                defaultMessage: 'View decks with this tag'
+            }
         });
     }
     componentWillReceiveProps(newProps){
@@ -90,21 +86,15 @@ class RecommendedTags extends React.Component {
         let recommendedTagsList = this.state.tagsToShow.map( (t, index) => { 
             return <div id={index} key={index} className="ui card">
                 <div className="content">
-                    <div className="content">
-                        <div className="ui stackable two column middle aligned grid">
-                            <div className="column">
-                                <a href="#" key={t.name} title={t.name} className="ui large tag label" tabIndex="0" aria-label={t.name} onClick={this.handleAdd.bind(this, t.name, index)}>
-                                    {(t.name.length > 9) ? t.name.substring(0, 9) + '...' : t.name}
-                                </a>
-                            </div>
-                            <div className="column">
-                                <div className="ui tiny basic icon buttons">
-                                    <button className="ui button" onClick={this.handleAdd.bind(this, t.name, index)}><i className="plus icon"></i></button>
-                                    <button className="ui button"><i className="unhide icon"></i></button>
-                                    <button className="ui button" onClick={this.handleDismiss.bind(this, t.name, index)}><i className="remove icon"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                    <a href="#" key={t.name} title={t.name} className="ui large tag label" tabIndex="0" aria-label={t.name} onClick={this.handleAdd.bind(this, t.name, index)}>
+                        {t.name}
+                    </a>
+                </div>
+                <div className="bottom attached menu">
+                    <div className="ui tiny basic icon fluid buttons">
+                        <button className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaAdd)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaAdd)} data-position='bottom center' onClick={this.handleAdd.bind(this, t.name, index)}><i className="plus icon"></i></button>
+                        <a href={'/deckfamily/' + t.name} target="_blank" type="button" role="button" className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaViewDecksWithTag)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaViewDecksWithTag)} data-position='bottom center'><i className="unhide icon"></i></a>
+                        <button className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaDismiss)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaDismiss)} data-position='bottom center' onClick={this.handleDismiss.bind(this, t.name, index)}><i className="remove icon"></i></button>
                     </div>
                 </div>
             </div>;
@@ -124,7 +114,7 @@ class RecommendedTags extends React.Component {
                             <div className="row">
                                 <div className="sixteen wide column">
                                     <div className="ui four stackable doubling cards">
-                                      {recommendedTagsList}
+                                        {recommendedTagsList}
                                     </div>
                                 </div>
                             </div>
