@@ -28,7 +28,7 @@ class SSO extends React.Component {
                 defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
             },
             error404: {
-                id: 'SSOSignIn.errormessage.notFound',
+                id: 'SSOSignIn.errormessage.credentialsNotFound',
                 defaultMessage: 'The credentials are unknown. Please retry with another input.'
             },
             error423: {
