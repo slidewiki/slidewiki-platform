@@ -160,8 +160,8 @@ class CollectionPanel extends React.Component {
         : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} />;
 
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
-        let hasEditRights = (this.props.UserProfileStore.userid === data.user.id
-                    || this.props.UserProfileStore.user.groups.map((group) => group._id).includes(data.userGroup));
+        let hasEditRights = (this.props.UserProfileStore.userid && this.props.UserProfileStore.userid === data.user.id
+                    || this.props.UserProfileStore.user.groups && this.props.UserProfileStore.user.groups.map((group) => group._id).includes(data.userGroup));
 
         // get sort text of the selected sortBy option
         let sortText = this.getSelectedSort(data.sortBy);
