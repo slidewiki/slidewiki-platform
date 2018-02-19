@@ -1,8 +1,39 @@
 import React from 'react';
 import classNames from 'classnames';
 import suggestTags from '../../../../actions/search/suggestTags';
+import { defineMessages } from 'react-intl';
 
 class TagInput extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = this.getStateFromProps(props);
+        this.messages = this.getIntlMessages();
+    }
+    getIntlMessages(){
+        return defineMessages({
+            placeholder:{
+                id: 'TagInput.placeholder',
+                defaultMessage: 'Insert new tags'
+            },
+        });
+    }
+    componentWillReceiveProps(newProps){
+
+        if(this.props !== newProps){
+            this.setState(this.getStateFromProps(newProps));
+
+            // initialize pre-selected tags
+            let values = this.state.initialTags.map( (tag) => `tagName:${tag.tagName}`);
+
+            $('#tags_input_div').dropdown('set selected', values);
+        }
+    }
+    getStateFromProps(props){
+        return {
+            initialTags: props.initialTags,
+            recommendedTags: props.recommendedTags
+        };
+    }
     initDropdown(){
         $('#tags_input_div').dropdown({
             fields: {
@@ -25,7 +56,7 @@ class TagInput extends React.Component {
                         response.results = response.results.map((t) => {
                             return {
                                 defaultName: t.defaultName,
-                                tagName: 'tagName:' + t.tagName
+                                tagName: `tagName:${t.tagName}`
                             };
                         });
 
@@ -42,19 +73,49 @@ class TagInput extends React.Component {
         this.initDropdown();
     }
     getSelected(){
+        // selected tags are return as string (!), so we split to ','
+        let tags = $('#tags_input_div').dropdown('get value');
 
-        let currentTags = $('#tags_input_div').dropdown('get value');
+        if(tags.trim() === ''){
+            return [];
+        }
 
-        return currentTags.filter( (t, pos) => {
-            // check for string and uniqueness
-            return (typeof t === 'string') && (currentTags.indexOf(t) === pos);
-        }).map( (t) => {
+        return tags.split(',').map( (t) => {
+
+            // comes from dropdown or it is a recommended tag
             if(t.startsWith('tagName:')){
-                return { tagName: t.replace(/^tagName:/, '') };
+                let tag = {
+                    tagName: t.replace(/^tagName:/, '')
+                };
+
+                // we check if this tagName comes from recommended tags
+                let recommendedTag = this.state.recommendedTags.find( (t) => {
+                    return t.name === tag.tagName;
+                });
+
+                // if it is from recommended tags and has a link, 
+                // we also add the link
+                if(recommendedTag && recommendedTag.link){
+                    tag.uri = recommendedTag.link;
+                }
+
+                return tag;
+            // is new and was inserted by the user
             } else {
                 return { defaultName: t };
             }
         });
+    }
+    addRecommendedTag(value){
+        // add the recommended tag as an option to the dropdown
+        let newOption = `<div class="item" key="tagName:${value}" data-value="tagName:${value}">${value}</div>`;
+        $('#tags_menu').append(newOption);
+
+        // after this addition the dropdown needs to be initialized again
+        this.initDropdown();
+
+        // select the recommended tag
+        $('#tags_input_div').dropdown('set selected', `tagName:${value}`);
     }
     render(){
         let classes = classNames({
@@ -66,32 +127,25 @@ class TagInput extends React.Component {
             'dropdown': true
         });
 
+        // selection options are concatenated pre-selected tags and recommended tags 
         let initialOptions = this.props.initialTags.map( (t) => {
-            return <option key={t.tagName} value={'tagName:' + t.tagName}>{t.defaultName || t.tagName}</option>;
+            return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName}</div>;
         });
-        let initialOptionsValues = this.props.initialTags.map( (t) => {
-            return 'tagName:' + t.tagName;
-        });
-
-        // followed the tip using timeout proposed here: https://github.com/Semantic-Org/Semantic-UI/issues/2247
-        // nothing else seems to be working in multi-select
-        $('#tags_input_div').dropdown('refresh');
-        setTimeout( () => {
-            $('#tags_input_div').dropdown('set selected', initialOptionsValues);
-        }, 1);
 
         return (
-            <div name="tag_input" id="tag_input">
-                <select multiple id="tags_input_div" name="currentTags" className="ui fluid search multiple dropdown">
-                    <option value="">Insert new tags</option>
-                    {initialOptions}
-                </select>
+            <div id="tags_input_div" className={classes}>
+              <i className="dropdown icon"></i>
+              <div className="default text">{this.context.intl.formatMessage(this.messages.placeholder)}</div>
+              <div id="tags_menu" className="menu">
+                {initialOptions}
+              </div>
             </div>
         );
     }
 }
 
 TagInput.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired, 
+    intl: React.PropTypes.object.isRequired
 };
 export default TagInput;

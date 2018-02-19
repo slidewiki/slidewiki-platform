@@ -22,6 +22,7 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
+                <link href="/custom_modules/reveal.js/plugin/accessibility/helper.css" rel="stylesheet" type="text/css" />
                 <link href="/glidejs/dist/css/glide.core.min.css" rel="stylesheet" type="text/css" />
                 <link href="/glidejs/dist/css/glide.theme.min.css" rel="stylesheet" type="text/css" />
                 { user ?
