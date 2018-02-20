@@ -31,8 +31,8 @@ import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
 import checkReviewableUser from '../actions/userReview/checkReviewableUser';
+import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
-
 import {navigateAction} from 'fluxible-router';
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
@@ -122,6 +122,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | About'
+            });
+            done();
+        }
+    },
+    accessibility: {
+        path: '/accessibility',
+        method: 'get',
+        page: 'accessibility',
+        title: 'SlideWiki -- Accessibility',
+        handler: require('../components/Home/Accessibility'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Accessibility'
             });
             done();
         }
@@ -612,6 +625,16 @@ export default {
         method: 'get',
         page: 'presentationBroadcast',
         handler: require('../components/webrtc/presentationBroadcast')
+    },
+    collection: {
+        path: '/collection/:id',
+        method: 'get',
+        page: 'collection',
+        title: 'SlideWiki -- Deck Collection',
+        handler: require('../components/DeckCollection/CollectionPanel/CollectionPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadCollection, payload, done);
+        }
     },
     /* This should be the last route in routes.js */
     notfound: {

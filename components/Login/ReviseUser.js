@@ -29,7 +29,7 @@ class ReviseUser extends React.Component {
                 defaultMessage: 'Migration is not possible with this user. Please start all over again.'
             },
             error404: {
-                id: 'SSOSignIn.errormessage.notFound',
+                id: 'SSOSignIn.errormessage.accountNotFound',
                 defaultMessage: 'This account was not prepared for migration. Please start all over again.'
             },
             error500: {
