@@ -6,7 +6,7 @@ export default function requestEditRights(context, payload, done) {
     payload.jwt = context.getUser().jwt;
     payload.userid = context.getUser().userid;
 
-    console.log('requestEditRights: deck data:', context.getStore(ContentStore).getState().deckProps);
+    // console.log('requestEditRights: deck data:', context.getStore(ContentStore).getState().deckProps);
 
     context.service.read('deck.requesteditrights', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {

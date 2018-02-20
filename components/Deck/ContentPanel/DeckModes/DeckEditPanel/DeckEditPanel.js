@@ -17,7 +17,7 @@ class DeckEditPanel extends React.Component {
     }
 
     handleAuth(selector) {
-        console.log('DeckEditPanel handleAuth:', selector);
+        // console.log('DeckEditPanel handleAuth:', selector);
         if (this.getParameterByName('interestedUser') && this.props.UserProfileStore.username === '') {
             return;
         }
@@ -31,7 +31,6 @@ class DeckEditPanel extends React.Component {
         return (<div>Sign-in needed!</div>);
     }
 
-<<<<<<< HEAD
     getParameterByName(name) {
         try {
             let param = this.props.DeckEditStore.queryParams[name];
@@ -48,7 +47,7 @@ class DeckEditPanel extends React.Component {
             $('.ui.login.modal').modal('show');
             return;
         }
-        console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
+        // console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
         if (interestedUser) {
             let users = this.props.DeckEditStore.authorizedUsers;
             if (users === undefined || users === null)
@@ -108,8 +107,8 @@ class DeckEditPanel extends React.Component {
                     cancelButtonClass: 'ui pink button',
                     buttonsStyling: false
                 }).then((a) => {
-                    console.log(a);//true
-                    console.log('Try to push user to users', users, user);
+                    // console.log(a);//true
+                    // console.log('Try to push user to users', users, user);
                     users.push({
                         username: user.uname,
                         id: parseInt(user.id),
@@ -118,7 +117,7 @@ class DeckEditPanel extends React.Component {
                         country: user.country,
                         organization: user.organization
                     });
-                    console.log('execute action');
+                    // console.log('execute action');
                     this.action = 1;
                     this.context.executeAction(updateAuthorizedUsers, users);
                 }, (b) => {console.log(b);}).catch();
@@ -127,15 +126,13 @@ class DeckEditPanel extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('DeckEditPanel componentDidUpdate', this.action);
+        // console.log('DeckEditPanel componentDidUpdate', this.action);
         if (this.action === 1) {
             this.action = 0;
             document.getElementsByClassName('ui primary button')[0].click();
         }
     }
 
-=======
->>>>>>> 01dfbf062215f0508a02965d4586b0e99e1222e0
     render() {
         //make sure user is logged-in
         this.handleAuth(this.props.selector);

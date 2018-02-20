@@ -53,15 +53,13 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log('DeckPropertiesEditor componentWillReceiveProps');
+        // console.log('DeckPropertiesEditor componentWillReceiveProps');
         //check if props have changed to reinitialize state (for handling route changes)
         if (newProps.deckProps !== this.props.deckProps) {
             this.setState(this.getStateFromProps(newProps));
         }
-        console.log('setted state');
         if (this.props.DeckEditStore.viewstate === 'loading') {
             if (newProps.DeckEditStore.viewstate === 'error') {
-                console.log('error');
                 swal({
                     title: 'Error',
                     text: 'Unknown error while saving.',
@@ -78,7 +76,6 @@ class DeckPropertiesEditor extends React.Component {
                     .catch();
             }
             else if (newProps.DeckEditStore.viewstate === 'success') {
-                console.log('success');
                 swal({
                     title: 'Success',
                     text: 'The deck was saved.',
@@ -94,7 +91,6 @@ class DeckPropertiesEditor extends React.Component {
                     })
                     .catch();
             }
-            else console.log('no viewstate');
         }
     }
     addCollection(event, data){
@@ -108,7 +104,7 @@ class DeckPropertiesEditor extends React.Component {
         this.context.executeAction(removeSelectedCollection, parseInt(removedValue));
     }
     componentDidUpdate() {
-        console.log('DeckPropertiesEditor componentDidUpdate', this.props.DeckEditStore.showGroupModal);
+        // console.log('DeckPropertiesEditor componentDidUpdate', this.props.DeckEditStore.showGroupModal);
         this.handleDropboxes();
         if (this.props.DeckEditStore.showGroupModal) {
             $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
@@ -433,7 +429,6 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
-        console.log('DeckPropertiesEditor render');
         //CSS
         let titleFieldClass = classNames({
             'required': true,
@@ -543,8 +538,9 @@ class DeckPropertiesEditor extends React.Component {
 
         let selectedCollectionsList = this.getSelectedCollections(collectionOptions, selectedCollections);
 
+        // Now parts oh JAX in variables
+
         let listOfAuthorized = this.getListOfAuthorized();
-        console.log('DeckPropertiesEditor render - after listOfAuthorized');
 
         let titleAndLanguage = <div className="two fields">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
@@ -563,7 +559,6 @@ class DeckPropertiesEditor extends React.Component {
                 <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
             </div>
         </div>;
-        console.log('DeckPropertiesEditor render - after titleAndLanguage');
 
 
         let description = <div className="field">
@@ -572,7 +567,6 @@ class DeckPropertiesEditor extends React.Component {
                 value={this.state.description}
                 onChange={this.handleChange.bind(this, 'description')}/>
         </div>;
-        console.log('DeckPropertiesEditor render - after description');
 
         let themeAndLicence = <div className="two fields">
             <div className="field">
@@ -584,7 +578,6 @@ class DeckPropertiesEditor extends React.Component {
                 {licenseOptions}
             </div>
         </div>;
-        console.log('DeckPropertiesEditor render - after themeAndLicence');
 
         let deckCollectionsHtml = <div className="field">
             <label htmlFor="deck_collections">Deck Collections</label>
@@ -609,11 +602,7 @@ class DeckPropertiesEditor extends React.Component {
             </div>
             <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />
         </div>;
-        console.log('DeckPropertiesEditor render - after deckCollectionsHtml');
 
-        //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
-        //<div className={licenseFieldClass}>
-        console.log('DeckPropertiesEditor render - before return');
         return (
             <div className="ui container">
                 <div className="ui grid">
