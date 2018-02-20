@@ -215,7 +215,7 @@ export default {
             rp({
                 method: 'POST',
                 uri: Microservices.deck.uri + '/deck/' + args.deckId + '/requestEditRights',
-                headers: { '----jwt----': params.params.jwt },
+                headers: { '----jwt----': args.jwt },
                 json: true
             })
             .then((response) => {

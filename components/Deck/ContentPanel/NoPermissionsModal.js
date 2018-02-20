@@ -98,7 +98,7 @@ class NoPermissionsModal extends React.Component {
     }
 
     handleRequestEditAccess() {
-        this.context.executeAction(requestEditRights, {deckid: this.props.PermissionsStore.deckId});
+        this.context.executeAction(requestEditRights, {deckId: this.props.PermissionsStore.deckId});
         this.loading = true;
     }
 

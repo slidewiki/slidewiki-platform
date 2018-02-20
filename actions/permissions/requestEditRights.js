@@ -6,17 +6,22 @@ export default function requestEditRights(context, payload, done) {
     payload.jwt = context.getUser().jwt;
     payload.userid = context.getUser().userid;
 
-    // console.log('requestEditRights: deck data:', context.getStore(ContentStore).getState().deckProps);
+    // console.log('requestEditRights: deck data:', context.getStore(DeckEditStore).getState().deckProps);
 
     context.service.read('deck.requesteditrights', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
+            if (err.statusCode === 422) {
+                context.dispatch('EDITRIGHTS_SUCCESS_ALREADY_REQUESTED');
+                return done();
+            }
+
             context.dispatch('EDITRIGHTS_ERROR', err);
             done();
         }
         else {
             if (res.isNew) {
-                payload.ownerid = context.getStore(ContentStore).getState().deckProps.ownerid;
-                payload.deckname = context.getStore(ContentStore).getState().deckProps.deckname;
+                payload.ownerid = context.getStore(DeckEditStore).getState().deckProps.ownerid;
+                payload.deckname = context.getStore(DeckEditStore).getState().deckProps.deckname;
 
                 context.service.update('user.sendEmail', payload, { timeout: 20 * 1000 }, (err2, res2) => {
                     if (err) {
