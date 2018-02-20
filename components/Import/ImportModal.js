@@ -22,7 +22,8 @@ class Import extends React.Component {
             openModal: false,
             activeTrap: false,
             cancelled: false,
-            accepted: false
+            accepted: false,
+            onShowError: false,
         };
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -107,24 +108,22 @@ class Import extends React.Component {
         });
     }
     unmountTrap(){
+        if(!this.state.onShowError){
+            if(!this.state.cancelled && !this.state.accepted){ //user clicks outside to cancel without pressing upload button
+                this.setState({
+                    cancelled:true
+                });
 
-        if(!this.state.cancelled && !this.state.accepted){ //user clicks outside to cancel without pressing upload button
-            this.setState({
-                cancelled:true
-            });
-
-            if(this.props.ImportStore.fileReadyForUpload){
-                this.context.executeAction(importCanceled, {});
+                if(this.props.ImportStore.fileReadyForUpload){
+                    this.context.executeAction(importCanceled, {});
+                }
             }
-
-        }
-        if(this.state.activeTrap){
-            this.setState({
-                activeTrap:false,
-
-
-            });
-            $('#app').attr('aria-hidden','false');
+            if(this.state.activeTrap){
+                this.setState({
+                    activeTrap:false,
+                });
+                $('#app').attr('aria-hidden','false');
+            }
         }
     }
     handleFileSelect(evt){
@@ -198,18 +197,25 @@ class Import extends React.Component {
                 this.uploadButton.focus();
             }
         } else{
-            this.setState({activeTrap:false});
+            this.setState({
+                onShowError : true,
+                activeTrap : false,
+            });
             swal({
                 title: this.context.intl.formatMessage(this.messages.modal_header),
                 text:  this.context.intl.formatMessage(this.messages.swal_message),
                 type: 'error',
                 confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'primary ui button',
+                confirmButtonClass: 'blue ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-          .then(() => {this.setState({activeTrap:true});
+          .then(() => {
+              this.setState({
+                  activeTrap : true,
+                  onShowError : false,
+              });
           });
 
         }
@@ -238,8 +244,8 @@ class Import extends React.Component {
                                            {this.context.intl.formatMessage(this.messages.modal_selectButton)}
                                           </Button>}
                                 content='Select file' on='hover'/>;
-        let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} disabled ><Icon name="upload" /> {this.context.intl.formatMessage(this.messages.modal_uploadButton)}</Button>:
-                                <Button ref={(upload) => {this.uploadButton = upload;}} color="primary" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} onClick={this.handleUpload} ><Icon name="upload" />{this.context.intl.formatMessage(this.messages.modal_uploadButton)}
+        let uploadButton = !this.props.ImportStore.fileReadyForUpload ?<Button ref={(upload) => {this.uploadButton = upload;}} color="blue" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} disabled ><Icon name="upload" /> {this.context.intl.formatMessage(this.messages.modal_uploadButton)}</Button>:
+                                <Button ref={(upload) => {this.uploadButton = upload;}} color="blue" tabIndex="0" icon type="button" aria-label={this.context.intl.formatMessage(this.messages.modal_uploadButton)} data-tooltip={this.context.intl.formatMessage(this.messages.modal_uploadButton)} onClick={this.handleUpload} ><Icon name="upload" />{this.context.intl.formatMessage(this.messages.modal_uploadButton)}
                                 </Button>;
 
         outputDIV =   <Modal trigger={importBtn}
@@ -275,13 +281,13 @@ class Import extends React.Component {
                                         <p>{this.context.intl.formatMessage(this.messages.modal_explanation2)}{MAX_FILESIZE_MB}MB).</p>
                                       </div>
                                       <div className="ui input file focus animated">
-                                        <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} onBlur={console.log('blur')} id="import_file_chooser" ></input>
+                                        <input  accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}  id="import_file_chooser" ></input>
                                       </div>
 
                                   </Segment>
                                   <Modal.Actions>
                                     {uploadButton}
-                                    <Button color="secondary" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleCancel} >
+                                    <Button color="grey" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleCancel} >
                                       {this.context.intl.formatMessage(this.messages.modal_cancelButton)}
                                     </Button>
                                   </Modal.Actions>
