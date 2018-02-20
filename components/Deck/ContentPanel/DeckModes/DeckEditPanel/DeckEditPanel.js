@@ -17,10 +17,10 @@ class DeckEditPanel extends React.Component {
     }
 
     handleAuth(selector) {
+        console.log('DeckEditPanel handleAuth:', selector);
         if (this.getParameterByName('interestedUser') && this.props.UserProfileStore.username === '') {
             return;
         }
-        console.log('DeckEditPanel handleAuth:', selector);
         const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
         //user is not logged in
         if (this.props.UserProfileStore.username === '') {
@@ -47,12 +47,12 @@ class DeckEditPanel extends React.Component {
             $('.ui.login.modal').modal('show');
             return;
         }
-        // console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
+        console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
         if (interestedUser) {
             let users = this.props.DeckEditStore.authorizedUsers;
             if (users === undefined || users === null)
                 users = [];
-            let user = this.props.UserProfileStore.user;
+            let user = this.props.UserProfileStore.user;//TODO get interested user?
             if (this.props.DeckEditStore.deckProps.deckOwner !== this.props.UserProfileStore.userid) {
                 swal({
                     title: 'Error',
@@ -106,7 +106,9 @@ class DeckEditPanel extends React.Component {
                     cancelButtonText: 'Deny',
                     cancelButtonClass: 'ui pink button',
                     buttonsStyling: false
-                }).then(() => {
+                }).then((a) => {
+                    console.log(a);//true
+                    console.log('Try to push user to users', users, user);
                     users.push({
                         username: user.uname,
                         id: parseInt(user.id),
@@ -115,10 +117,10 @@ class DeckEditPanel extends React.Component {
                         country: user.country,
                         organization: user.organization
                     });
-
+                    console.log('execute action');
                     this.action = 1;
                     this.context.executeAction(updateAuthorizedUsers, users);
-                }, () => {}).catch();
+                }, (b) => {console.log(b);}).catch();
             }
         }
     }
