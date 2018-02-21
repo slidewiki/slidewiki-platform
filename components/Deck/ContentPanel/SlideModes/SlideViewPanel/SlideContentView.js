@@ -184,7 +184,7 @@ class SlideContentView extends React.Component {
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent'
+                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
                                  dangerouslySetInnerHTML={{__html: this.props.content}}>
                             </div>
                         </section>
@@ -194,7 +194,7 @@ class SlideContentView extends React.Component {
             </div>
             <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                 {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
+                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  tabIndex="0"
                      dangerouslySetInnerHTML={{__html: this.props.speakernotes}}>
                 </div>
             </div>

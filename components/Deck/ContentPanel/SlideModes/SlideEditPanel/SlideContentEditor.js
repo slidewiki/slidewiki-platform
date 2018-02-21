@@ -8,7 +8,7 @@ import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import ResizeAware from 'react-resize-aware';
+//import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
@@ -917,15 +917,27 @@ class SlideContentEditor extends React.Component {
             // otherwise Cross-Origin Resource Sharing method is necessary
         }
 
-        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
+        if(process.env.BROWSER){
+            window.addEventListener('resize', this.handleResize);
+        }
+        /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
                 this.resize();
                 ////this.forceUpdate();
             }
-        });
+        });*/
 
         this.correctDimensionsBoxesImg();
         //('img');
+    }
+    handleResize = () => {
+        this.forceUpdate();
+    }
+    componentDidUpdate() {
+        // update mathjax rendering
+        // add to the mathjax rendering queue the command to type-set the inlineContent
+        //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
+        this.resize();
     }
     correctDimensionsBoxesIframe()
     {
@@ -1919,6 +1931,7 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
         // Remove the warning window.
         window.onbeforeunload = () => {};
         if (CKEDITOR.instances.inlineContent != null) {
@@ -2076,7 +2089,8 @@ class SlideContentEditor extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
-            <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+            //<ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+            <div ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
             {/*
@@ -2111,15 +2125,17 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
+                                    </div>
                                 </HotKeys>
                             </section>
                         </div>
                     </div>
                 </div>
                 <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
-            </ResizeAware>
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                </div>
+            </div>
         );
     }
 
