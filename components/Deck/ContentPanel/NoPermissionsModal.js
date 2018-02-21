@@ -18,6 +18,81 @@ class NoPermissionsModal extends React.Component {
     constructor(props) {
         super(props);
         this.loading = false;
+
+        this.messages = defineMessages({
+            loading: {
+                id: 'noPermissionModal.loading',
+                defaultMessage: 'loading'
+            },
+            error: {
+                id: 'noPermissionModal.error',
+                defaultMessage: 'Error'
+            },
+            errorMessage: {
+                id: 'noPermissionModal.errorMessage',
+                defaultMessage: 'An error occured. Please try again later.'
+            },
+            close: {
+                id: 'noPermissionModal.close',
+                defaultMessage: 'Close'
+            },
+            info: {
+                id: 'noPermissionModal.info',
+                defaultMessage: 'Info'
+            },
+            alreadyRequested: {
+                id: 'noPermissionModal.alreadyRequested',
+                defaultMessage: 'You already requested deck edit rights on this deck. Please wait until the deck owner reacts.'
+            },
+            success: {
+                id: 'noPermissionModal.success',
+                defaultMessage: 'Success'
+            },
+            requestSuccessfullySend: {
+                id: 'noPermissionModal.requestSuccessfullySend',
+                defaultMessage: 'The request was send. Please wait until the deck owner reacts.'
+            },
+            ok: {
+                id: 'noPermissionModal.ok',
+                defaultMessage: 'OK'
+            },
+            viewOnlyVersion: {
+                id: 'noPermissionModal.viewOnlyVersion',
+                defaultMessage: 'View-only version'
+            },
+            viewOnlyVersionText: {
+                id: 'noPermissionModal.viewOnlyVersionText',
+                defaultMessage: 'You are viewing an older version of this deck, which is not available for editing. You can visit the most recent version so you can edit the deck.'
+            },
+            gotoLastVersion: {
+                id: 'noPermissionModal.gotoLastVersion',
+                defaultMessage: 'Go to the latest version'
+            },
+            noEditRights: {
+                id: 'noPermissionModal.noEditRights',
+                defaultMessage: 'No Edit Rights'
+            },
+            textWithoutFork: {
+                id: 'noPermissionModal.textWithoutFork',
+                defaultMessage: 'You can only view this deck, however you have already forked it. You can either edit your version, otherwise you may ask the owner to grant you edit rights. You can also create yet another fork of the deck.'
+            },
+            textWithFork: {
+                id: 'noPermissionModal.textWithFork',
+                defaultMessage: 'You can only view this deck. To make changes, you may ask the owner to grant you edit rights or fork the deck. Forking a deck means creating your copy of the deck.'
+            },
+            requestEditAccess: {
+                id: 'noPermissionModal.requestEditAccess',
+                defaultMessage: 'Request edit access'
+            },
+            gotoYourVersion: {
+                id: 'noPermissionModal.gotoYourVersion',
+                defaultMessage: 'Go to your version'
+            },
+            forkThisDeck: {
+                id: 'noPermissionModal.forkThisDeck',
+                defaultMessage: 'Fork this deck'
+            }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,10 +101,10 @@ class NoPermissionsModal extends React.Component {
             if (nextProps.EditRightsStore.errorCode > 0) {
                 this.context.executeAction(hideNoPermissionsModal);
                 swal({
-                    title: 'Error',
-                    text: 'An error occured. Please try again later.',
+                    title: this.context.intl.formatMessage(this.messages.error),
+                    text: this.context.intl.formatMessage(this.messages.errorMessage),
                     type: 'error',
-                    confirmButtonText: 'Close',
+                    confirmButtonText: this.context.intl.formatMessage(this.messages.close),
                     confirmButtonClass: 'negative ui button',
                     buttonsStyling: false
                 }).then().catch();
@@ -39,10 +114,10 @@ class NoPermissionsModal extends React.Component {
             this.loading = false;
             this.context.executeAction(hideNoPermissionsModal);
             swal({
-                title: 'Info',
-                text: 'You already requested deck edit rights on this deck. Please wait until the deck owner reacts.',
+                title: this.context.intl.formatMessage(this.messages.info),
+                text: this.context.intl.formatMessage(this.messages.alreadyRequested),
                 type: 'info',
-                confirmButtonText: 'Close',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.close),
                 confirmButtonClass: 'negative ui button',
                 allowEscapeKey: true,
                 allowOutsideClick: true,
@@ -57,10 +132,10 @@ class NoPermissionsModal extends React.Component {
             this.loading = false;
             this.context.executeAction(hideNoPermissionsModal);
             swal({
-                title: 'Success',
-                text: 'The request was send. Please wait until the deck owner reacts.',
+                title: this.context.intl.formatMessage(this.messages.success),
+                text: this.context.intl.formatMessage(this.messages.requestSuccessfullySend),
                 type: 'info',
-                confirmButtonText: 'OK',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.ok),
                 confirmButtonClass: 'ui button',
                 allowEscapeKey: true,
                 allowOutsideClick: true,
@@ -105,24 +180,24 @@ class NoPermissionsModal extends React.Component {
     render() {
         let {isNoPermissionsModalShown, ownedForks, permissions} = this.props.PermissionsStore;
         let headerText, modalDescription, buttons;
-        let closeButton = <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>;
+        let closeButton = <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> {this.context.intl.formatMessage(this.messages.close)}</Button>;
         if (permissions.edit) {
-            headerText = 'View-only version';
-            modalDescription = 'You are viewing an older version of this deck, which is not available for editing. You can visit the most recent version so you can edit the deck.';
+            headerText = this.context.intl.formatMessage(this.messages.viewOnlyVersion);
+            modalDescription = this.context.intl.formatMessage(this.messages.viewOnlyVersionText);
 
             buttons = <div>
-                <Button as='button' onClick={this.navigateToLatestRevision.bind(this)}>Go to the latest version</Button>
+                <Button as='button' onClick={this.navigateToLatestRevision.bind(this)}>{this.context.intl.formatMessage(this.messages.gotoLastVersion)}</Button>
                 {closeButton}
             </div>;
         } else {
-            headerText = 'No Edit Rights';
+            headerText = this.context.intl.formatMessage(this.messages.noEditRights);
             modalDescription = ownedForks.length > 0 ?
-                <span>You can only view this deck, however you have already forked it. You can either edit your version, otherwise you may ask the owner to grant you edit rights. You can also create yet another fork of the deck.</span> :
-                <span>You can only view this deck. To make changes, you may ask the owner to grant you edit rights or fork the deck. Forking a deck means creating your copy of the deck.</span>;
+                <span>{this.context.intl.formatMessage(this.messages.textWithoutFork)}</span> :
+                <span>{this.context.intl.formatMessage(this.messages.textWithFork)}</span>;
             buttons = <div>
-                <Button as='button' onClick={this.handleRequestEditAccess.bind(this)}><Icon name='edit'/> Request edit access</Button>
-                {ownedForks.length > 0 ? <Button as='button' onClick={this.navigateToOwnedFork.bind(this)}>Go to your version</Button> : ''}
-                <Button as='button' onClick={this.handleFork.bind(this)}><Icon name='fork'/> Fork this deck</Button>
+                <Button as='button' onClick={this.handleRequestEditAccess.bind(this)}><Icon name='edit'/> {this.context.intl.formatMessage(this.messages.requestEditAccess)}</Button>
+                {ownedForks.length > 0 ? <Button as='button' onClick={this.navigateToOwnedFork.bind(this)}>{this.context.intl.formatMessage(this.messages.gotoYourVersion)}</Button> : ''}
+                <Button as='button' onClick={this.handleFork.bind(this)}><Icon name='fork'/> {this.context.intl.formatMessage(this.messages.forkThisDeck)}</Button>
                 {closeButton}
             </div>;
         }
@@ -136,7 +211,7 @@ class NoPermissionsModal extends React.Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={isNoPermissionsModalShown}>
-                        {(this.loading) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='Integration.loading' defaultMessage='loading'/></div></div> : ''}
+                        {(this.loading) ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
                         {buttons}
                     </FocusTrap>
                 </Modal.Actions>

@@ -94,28 +94,28 @@ class LanguageDropdown extends React.Component {
         let languageOptions = <div className="menu">
 
             <div className="item" data-value="en_GB" >
-                this.context.intl.formatMessage(this.messages.english)
+                {this.context.intl.formatMessage(this.messages.english)}
             </div>
             <div className="item" data-value="de_DE" >
-                this.context.intl.formatMessage(this.messages.german)
+                {this.context.intl.formatMessage(this.messages.german)}
             </div>
             <div className="item" data-value="nl_NL" >
-                this.context.intl.formatMessage(this.messages.dutch)
+                {this.context.intl.formatMessage(this.messages.dutch)}
             </div>
             <div className="item" data-value="el_GR" >
-                this.context.intl.formatMessage(this.messages.greek)
+                {this.context.intl.formatMessage(this.messages.greek)}
             </div>
             <div className="item" data-value="it_IT" >
-                this.context.intl.formatMessage(this.messages.italian)
+                {this.context.intl.formatMessage(this.messages.italian)}
             </div>
             <div className="item" data-value="pt_PT" >
-                this.context.intl.formatMessage(this.messages.portuguese)
+                {this.context.intl.formatMessage(this.messages.portuguese)}
             </div>
             <div className="item" data-value="sr_RS" >
-                this.context.intl.formatMessage(this.messages.serbian)
+                {this.context.intl.formatMessage(this.messages.serbian)}
             </div>
             <div className="item" data-value="es_ES" >
-                this.context.intl.formatMessage(this.messages.spanish)
+                {this.context.intl.formatMessage(this.messages.spanish)}
             </div>
         </div>;
         let languageOptionsUI = <div className="menu">
@@ -133,7 +133,7 @@ class LanguageDropdown extends React.Component {
                     :
                     <input type="hidden" value={this.props.value} name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
-                <div className="default text">this.context.intl.formatMessage(this.messages.placeholder)</div>
+                <div className="default text">{this.context.intl.formatMessage(this.messages.placeholder)}</div>
                 {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}
             </div>
         );
