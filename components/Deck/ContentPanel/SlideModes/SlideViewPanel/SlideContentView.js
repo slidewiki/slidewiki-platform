@@ -147,14 +147,16 @@ class SlideContentView extends React.Component {
         const compSpeakerStyle = {
             minHeight: 50,
             overflowY: 'auto',
-            position: 'relative'
+            position: 'relative',
+            resize: 'vertical'
         };
         const SpeakerStyle = {
             minWidth: '100%',
             minHeight: 60,
             overflowY: 'auto',
             overflowX: 'auto',
-            position: 'relative'
+            position: 'relative',
+            resize: 'vertical'
         };
         const containerMinHeight = {
 
@@ -194,8 +196,7 @@ class SlideContentView extends React.Component {
             </div>
             <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                 {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  tabIndex="0"
-                     dangerouslySetInnerHTML={{__html: this.props.speakernotes}}>
+                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
                 </div>
             </div>
         </div>
