@@ -2040,13 +2040,20 @@ class SlideContentEditor extends React.Component {
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
-        const speakernotesStyle = {
-            maxHeight: 50,
+        const compSpeakerStyle = {
             minHeight: 50,
             overflowY: 'auto',
-            position: 'relative'
+            position: 'relative',
+            resize: 'both'
         };
-
+        const speakernotesStyle = {
+            minWidth: '100%',
+            minHeight: 60,
+            overflowY: 'auto',
+            overflowX: 'auto',
+            position: 'relative',
+            resize: 'both'
+        };
         const buttonColorBlack = {
             color: 'black'
         };
@@ -2132,8 +2139,10 @@ class SlideContentEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
+                    <b>Speaker notes:</b><br />
+                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                    </div>
                 </div>
             </div>
         );
