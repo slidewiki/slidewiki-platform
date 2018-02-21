@@ -148,7 +148,7 @@ class SlideContentView extends React.Component {
             minHeight: 50,
             overflowY: 'auto',
             position: 'relative',
-            resize: 'both'
+            resize: 'vertical'
         };
         const SpeakerStyle = {
             minWidth: '100%',
@@ -156,7 +156,7 @@ class SlideContentView extends React.Component {
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
-            resize: 'both'
+            resize: 'vertical'
         };
         const containerMinHeight = {
 

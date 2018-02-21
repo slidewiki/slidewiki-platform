@@ -2044,7 +2044,7 @@ class SlideContentEditor extends React.Component {
             minHeight: 50,
             overflowY: 'auto',
             position: 'relative',
-            resize: 'both'
+            resize: 'vertical'
         };
         const speakernotesStyle = {
             minWidth: '100%',
@@ -2052,7 +2052,7 @@ class SlideContentEditor extends React.Component {
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
-            resize: 'both'
+            resize: 'vertical'
         };
         const buttonColorBlack = {
             color: 'black'
