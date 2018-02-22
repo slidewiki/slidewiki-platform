@@ -102,7 +102,7 @@ class SlideContentEditor extends React.Component {
                             break;
                         default:
                     }
-                    this.resize();
+                    this.resize(true);
                 }, (reason) => {
                     //done(reason);
                 });
@@ -473,7 +473,7 @@ class SlideContentEditor extends React.Component {
         //this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
         this.uniqueIDAllElements();
-        this.resize();
+        this.resize(true);
         $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         this.resizeDrag();
         //this.forceUpdate();
@@ -650,7 +650,7 @@ class SlideContentEditor extends React.Component {
             });
             //},500);
 
-            this.resize();
+            this.resize(true);
             //this.forceUpdate();
         }
         return false;
@@ -751,7 +751,7 @@ class SlideContentEditor extends React.Component {
                 this.hasChanges = true;
                 //this.forceUpdate();
                 this.resizeDrag();
-                this.resize();
+                this.resize(true);
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             }, (reason) => {
                 //done(reason);
@@ -850,7 +850,8 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
                 CKEDITOR.instances.inlineContent.getSelection().unlock();
             });
-            this.resize();
+            $('.pptx2html').css({'margin': 'auto'});
+            this.resize(true);
             this.uniqueIDAllElements();
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
@@ -937,7 +938,7 @@ class SlideContentEditor extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize();
+        this.resize(false);
     }
     correctDimensionsBoxesIframe()
     {
@@ -1896,30 +1897,53 @@ class SlideContentEditor extends React.Component {
         }
     }
     */
-    resize() {
+    resize(initialResize) {
         if($('.pptx2html').length)  //if slide is in canvas mode
         {
-            let containerwidth = document.getElementById('container').offsetWidth;
-            let containerheight = document.getElementById('container').offsetHeight;
-            //reset scaling of pptx2html element to get original size
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            let containerwidth = document.getElementById('slideContainer').offsetWidth;
+            let containerheight = document.getElementById('slideContainer').offsetHeight;
+            if(initialResize === true)
+            {
+                //Function to fit contents in edit and view component
+                let pptxwidth = $('.pptx2html').width();
+                let pptxheight = $('.pptx2html').height();
+
+                //this.scaleratio = containerwidth / (pptxwidth+50);
+                //this.vScaleratio = containerheight / (pptxheight+100);
+                this.scaleratio = containerwidth / (pptxwidth);
+                this.vScaleratio = containerheight / (pptxheight);
+                //console.log(containerwidth);
+                //reset scaling of pptx2html element to get original size
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                let scaleratio;
+                if (this.vScaleratio < this.scaleratio)
+                {scaleratio = this.vScaleratio;}
+                else {scaleratio = this.scaleratio;}
+                console.log('initial' + this.scaleratio + this.vScaleratio);
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                $('.pptx2html').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+            }
             //Function to fit contents in edit and view component
             let pptxwidth = $('.pptx2html').width();
             let pptxheight = $('.pptx2html').height();
-            //TODO - change to get right!
-            this.scaleratio = containerwidth / (pptxwidth+50);
-            this.vScaleratio = containerheight / (pptxheight+50);
+            this.scaleratio = containerwidth / (pptxwidth);
+            this.vScaleratio = containerheight / (pptxheight);
+            //this.scaleratio = containerwidth / (pptxwidth+50);
+            //this.vScaleratio = containerheight / (pptxheight+50);
+            //this.vScaleratio = containerheight / (pptxheight+100);
             //this.scaleratio = containerwidth / (pptxwidth+120);
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+
             //$('.pptx2html').animate({
             //    transform: 'scale(2)'
             //});
             //console.log('scale with ratio: ' + this.scaleratio);
 
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideContentView.style.height = ((pptxheight + 10 + 20) * this.vScaleratio) + 'px';
+            this.refs.slideEditPanel.style.height = ((pptxheight + 10 + 20) * this.vScaleratio) + 'px';
+            //this.refs.SlideEditPanel.style.height = ((pptxheight + 5 + 20) * this.vScaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 0) * this.vScaleratio) + 'px';
+            //this.refs.inlineContent.style.height = ((pptxheight + 0 + 0) * this.vScaleratio) + 'px';
+
         }
         //$('.cke_float').width( $('.pptx2html').width());
         //$('.cke_top').css('maxwidth', $('.pptx2html').width());
@@ -2126,15 +2150,17 @@ class SlideContentEditor extends React.Component {
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
                 */}
-                <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className={[style.reveal, 'reveal'].join(' ')}>
-                        <div className={[style.slides, 'slides'].join(' ')}>
-                            <section className="present"  style={sectionElementStyle}>
-                                <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
-                                    </div>
-                                </HotKeys>
-                            </section>
+                <div ref='slideContainer' id='slideContainer'>
+                    <div className="ui" style={compStyle} ref='slideEditPanel' name='slideEditPanel' id='slideEditPanel'>
+                        <div className={[style.reveal, 'reveal'].join(' ')}>
+                            <div className={[style.slides, 'slides'].join(' ')}>
+                                <section className="present"  style={sectionElementStyle}>
+                                    <HotKeys keyMap={keyMap} handlers={handlers}>
+                                        <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
+                                        </div>
+                                    </HotKeys>
+                                </section>
+                            </div>
                         </div>
                     </div>
                 </div>
