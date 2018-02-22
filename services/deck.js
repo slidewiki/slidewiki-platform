@@ -191,8 +191,9 @@ export default {
         } else if (resource === 'deck.translationProgress') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let args = params.params ? params.params : params;
-            rp.get({uri: Microservices.translation.uri + '/jobByNewId/' + args.newId}).then((res) => {
-                callback(null, {noofslides: JSON.parse(res).progress, totalslides: JSON.parse(res).data.total});
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.newId + '/progress'}).then((res) => {
+                let progress = JSON.parse(res);
+                callback(null, {noofslides: progress.currentSlides, totalslides: progress.totalSlides});
             }).catch((err) => {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
