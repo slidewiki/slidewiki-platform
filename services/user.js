@@ -268,10 +268,11 @@ export default {
                 body: {
                     reason: 1,
                     data: {
-                        deckid: params.deckid,
-                        deckname: params.deckid
+                        deckid: parseInt(params.deckId),
+                        deckname: params.deckname
                     }
                 },
+                headers: { '----jwt----': params.jwt },
                 json: true
             }).then((res) => {
                 callback(null, res);  //no data

@@ -109,6 +109,9 @@ class NoPermissionsModal extends React.Component {
                     buttonsStyling: false
                 }).then().catch();
             }
+            else {
+                this.forceUpdate();
+            }
         }
         if (nextProps.EditRightsStore.state !== this.props.EditRightsStore.state && nextProps.EditRightsStore.state === 'alreadyRequested') {
             this.loading = false;

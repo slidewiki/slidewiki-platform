@@ -39,6 +39,7 @@ class EditRightsStore extends BaseStore {
         this.errorCode = 0;
         this.state = 'alreadyRequested';
         this.emitChange();
+        this.state = '';
     }
 }
 
