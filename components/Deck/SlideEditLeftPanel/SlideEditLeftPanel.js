@@ -32,7 +32,7 @@ class SlideEditLeftPanel extends React.Component {
             showTemplate: false,
             showEmbed: false,
             showProperties: false,
-            showTitleChange: false,
+            showNameChange: false,
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
@@ -463,7 +463,7 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Slide title' />
+                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Slide name' />
                   </a>
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                       <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
@@ -486,19 +486,20 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleTitleBack" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
+                  <i className="error">
+                      {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
+                      <br />                      
+                  </i>
                   <label htmlFor="slideTitle">
-                    <FormattedMessage id='editpanel.slideTitle' defaultMessage='Slide title:' />
+                    <FormattedMessage id='editpanel.slideTitle' defaultMessage='Change slide name:' />
                   </label>
-                  <div className="inverted required field">
-                    <i className="error">
-                        {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='title cannot be empty' />}
-                    </i>
-                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide title" aria-required="true" required autoFocus/>
+                  <div className="ui action input">
+                    <input type="text" placeholder="Slide name" onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide name" aria-required="true" required autoFocus/>
+                    <button className="ui icon button blue" aria-describedby="handleTitleChangeClickDescription" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
+                        <i tabIndex="0" className="check icon white big"></i>
+                    </button>
                   </div>
-                  <a className="item" aria-describedby="handleTitleChangeClickDescription" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleChange' defaultMessage='Change slide title' />
-                  </a>
-                  <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" ><FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='Title is updated when saving the slide' /> <br /> <FormattedMessage id='editpanel.slideTitleChangeUpdateNote2' defaultMessage='(after clicking the separate save button).' /></label>
+                  <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" ><FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='(The slide name is updated when saving the slide by clicking the separate save button).' /></label>
                 </div>);
 
         let sizeContent = (
