@@ -33,7 +33,7 @@ class features extends React.Component {
                             </p>
                             <p>
                                 <FormattedMessage id="features.1.p2"
-                                    defaultMessage="The slideWiki editor offers many formatting tools, including being able to add images, videos, equations and code snippet."/>
+                                    defaultMessage="The SlideWiki editor offers many formatting tools, including being able to add images, videos, equations and code snippet."/>
                             </p>
                         </div>
                     </div>

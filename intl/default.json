@@ -601,7 +601,7 @@
   "features.p1": "The goal of SlideWiki is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics.",
   "features.1.header": "Create online slide decks",
   "features.1.p1": "Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML to allow you to continue to edit and add new content.",
-  "features.1.p2": "The slideWiki editor offers many formatting tools, including being able to add images, videos, equations and code snippet.",
+  "features.1.p2": "The SlideWiki editor offers many formatting tools, including being able to add images, videos, equations and code snippet.",
   "features.2.header": "Reusable educational content",
   "features.2.p1.licence": "Creative Commons licences",
   "features.2.deckCopy.header": "Creating a copy of a deck",
