@@ -2,6 +2,7 @@ import React from 'react';
 import { isEmpty } from '../../common';
 import { Button, Icon } from 'semantic-ui-react';
 import { Microservices } from '../../configs/microservices';
+import UserProfileStore from '../../stores/UserProfileStore';
 
 class SessionRecorder extends React.Component {
 
@@ -36,23 +37,27 @@ class SessionRecorder extends React.Component {
     }
 
     recordSessionModal() {
-        return swal({
-            titleText: 'Do you want to record this session?',
-            html: '<p>We provide the possibility to record this session and to create a video out of it. If you want us to record this session, please click "Yes" below. If not, please click "No".</p><p>We are only recording slide changes and your voice (nothing else). All data stays on your computer until you tell us to create a video out of it. Videos can by only created on our servers due to technological reasons. So if you change your mind and do not want upload anything to us, do not hit the "Save session as video" button in the end. Otherwise, remember to hit this button in the end. <strong>It is not possible to recover a once closed session.</strong></p>',
-            type: 'info',
-            width: '46rem',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, record this session',
-            showCancelButton: true,
-            cancelButtonText: 'No, do not record anything',
-            cancelButtonColor: '#d33',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then((result) => {
-            console.log(result);
-            if (!result.dismiss)
-                this.setState({modalAccepted: true});
-        }).catch(() => {});
+        if(isEmpty(context.getStore(UserProfileStore).username))
+            return;
+        else {
+            return swal({
+                titleText: 'Do you want to record this session?',
+                html: '<p>We provide the possibility to record this session and to create a video out of it.</p><p>We are only recording slide changes and your voice (nothing else). All data stays on your computer until you tell us to create a video out of it. Videos can by only created on our servers due to technological reasons. So if you change your mind and do not want upload anything to us, do not hit the camera button in the end. Otherwise, remember to hit this button in the end. <strong>It is not possible to recover a once closed session.</strong></p>',
+                type: 'info',
+                width: '46rem',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, record this session',
+                showCancelButton: true,
+                cancelButtonText: 'No, do not record anything',
+                cancelButtonColor: '#d33',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                console.log(result);
+                if (!result.dismiss)
+                    this.setState({modalAccepted: true});
+            }).catch(() => {});
+        }
     }
 
     recordStream(stream) {
@@ -87,18 +92,16 @@ class SessionRecorder extends React.Component {
     }
 
     recordSlideChange(url = '') {
-        if(this.state.recordSession){
-            // console.log('recording slide change', url, first);
-            if(window.sessionStorage){
-                let prev = sessionStorage.getItem('slideTimings');
-                prev = (isEmpty(prev)) ? '{}' : prev;
-                prev = JSON.parse(prev);
-                let now = new Date().getTime();
-                let newEl = {};
-                newEl[now] = url;
-                let toSave = Object.assign(prev, newEl);
-                sessionStorage.setItem('slideTimings', JSON.stringify(toSave));
-            }
+        // console.log('recording slide change', url, first);
+        if(window.sessionStorage){
+            let prev = sessionStorage.getItem('slideTimings');
+            prev = (isEmpty(prev)) ? '{}' : prev;
+            prev = JSON.parse(prev);
+            let now = new Date().getTime();
+            let newEl = {};
+            newEl[now] = url;
+            let toSave = Object.assign(prev, newEl);
+            sessionStorage.setItem('slideTimings', JSON.stringify(toSave));
         }
     }
 
@@ -119,8 +122,6 @@ class SessionRecorder extends React.Component {
         }).then(() => {
             this.mediaRecorder.stop();
             this.recordSlideChange();
-            // let timingBlob = new Blob([sessionStorage.getItem('slideTimings')], {type: 'application/json'});
-            // this.saveBlobToDisk(timingBlob, 'timings.json');
             setTimeout(this.createAudioTrack, 500);//NOTE Wait for recorder to write last chunk
         }).catch((e) => {
             if(e === 'cancel'){
@@ -152,6 +153,9 @@ class SessionRecorder extends React.Component {
         $.ajax({
             url: Microservices.file.uri + '/PRvideo?deckID=' + this.props.deckID +'&revision=' + (this.props.revision ? this.props.revision : 1),
             data: form,
+            headers: {
+                '----jwt----': context.getStore(UserProfileStore).jwt
+            },
             cache: false,
             contentType: false,
             processData: false,
@@ -163,33 +167,6 @@ class SessionRecorder extends React.Component {
                 console.log(textStatus, errorThrown, jqXHR);
             }
         });
-    }
-
-    saveTrackToDisk(file, fileName) {
-        let hyperlink = document.createElement('a');
-        hyperlink.style.display = 'none';
-        hyperlink.href = URL.createObjectURL(file);
-        hyperlink.target = '_blank';
-        hyperlink.download = fileName;
-
-        if (!!navigator.mozGetUserMedia) {
-            hyperlink.onclick = function() {
-                (document.body || document.documentElement).removeChild(hyperlink);
-            };
-            (document.body || document.documentElement).appendChild(hyperlink);
-        }
-
-        let evt = new MouseEvent('click', {
-            view: window,
-            bubbles: true,
-            cancelable: true
-        });
-
-        hyperlink.dispatchEvent(evt);
-
-        if (!navigator.mozGetUserMedia) {
-            URL.revokeObjectURL(hyperlink.href);
-        }
     }
 
     render() {
