@@ -34,7 +34,6 @@ class InfoPanel extends React.Component {
                 || this.props.ContributorsStore.contributors === [];
     }
 
-
     render() {
         return (<InfoPanelInfoView loadingIndicator={this.props.ContributorsStore.loadingIndicator}/>);
     }

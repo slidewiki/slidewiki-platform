@@ -17,12 +17,7 @@ class InfoPanelInfoView extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         let samePropsState = equals(this.props, nextProps);
-
-        console.log('InfoPanelInfoView.shouldComponentUpdate() [nextProps.loadingIndicator=' +
-                nextProps.loadingIndicator + ', this.props.loadingIndicator=' + this.props.loadingIndicator + ']');
         this.isLoading = nextProps.loadingIndicator;
-
-
         // Content should be updated only when properties have changed.
         return !samePropsState;
     }
