@@ -744,7 +744,6 @@ class presentationBroadcast extends React.Component {
 
             if (that.isInitiator) {
                 that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, document.getElementById('slidewikiPresentation').contentWindow.location.href);
-                that.refs.sessionRecorder.startRecording();
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
                     that.refs.sessionRecorder.recordSlideChange(that.currentSlide);

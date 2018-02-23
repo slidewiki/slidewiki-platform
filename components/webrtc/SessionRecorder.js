@@ -14,23 +14,25 @@ class SessionRecorder extends React.Component {
         this.mediaRecorder = undefined;
         this.chunkKeys = [];
         this.state = {
-            recordSession: true
+            recordSession: false,
+            recordingStopped: false,
+            stream: false,
+            iframeLoaded: false,
+            modalAccepted: false,
         };
 
         this.createAudioTrack = this.createAudioTrack.bind(this);
         this.saveTrackToDisk = this.saveTrackToDisk.bind(this);
         this.mime = '';
+        this.stream = null;
+        this.initialURL = '';
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if(this.state.recordSession !== nextState.recordSession){
-            try {
-                this.mediaRecorder.stop();
-            } catch (e) {}
-            this.chunkKeys = [];
-            window.localforage.clear();
+        if(this.state.stream !== nextState.stream || this.state.iframeLoaded !== nextState.iframeLoaded || this.state.modalAccepted !== nextState.modalAccepted){
+            if(nextState.modalAccepted && nextState.stream && nextState.iframeLoaded)
+                this.startRecording();
         }
-
     }
 
     recordSessionModal() {
@@ -46,41 +48,41 @@ class SessionRecorder extends React.Component {
             cancelButtonColor: '#d33',
             allowOutsideClick: false,
             allowEscapeKey: false
-        }).catch((e) => {
-            if(e === 'cancel'){
-                this.setState({recordSession: false});
-            }
-        });
+        }).then((result) => {
+            console.log(result);
+            if (!result.dismiss)
+                this.setState({modalAccepted: true});
+        }).catch(() => {});
     }
 
     recordStream(stream) {
+        this.setState({stream: true});
         this.stream = stream;
     }
 
     startRecording() {
-        if(this.state.recordSession){
-            let webm = 'audio/webm\;codecs=opus', ogg = 'audio/ogg\;codecs=opus';
-            this.mime = (MediaRecorder.isTypeSupported(ogg)) ? ogg : webm;
-            this.mediaRecorder = new MediaRecorder(this.stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
-            this.mediaRecorder.ondataavailable = (chunk) => {
-                // console.log('New chunk available', chunk);
-                let now = new Date().getTime();
-                this.chunkKeys.push({id: now.toString(), timecode: chunk.timecode});
-                window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise
-            };
-            console.log('starting recorder');
-            this.mediaRecorder.start(2000);//NOTE 5000 is the only option that works
-        }
+        this.alreadyCalledStartRecording = true;
+        let webm = 'audio/webm\;codecs=opus', ogg = 'audio/ogg\;codecs=opus';
+        this.mime = (MediaRecorder.isTypeSupported(ogg)) ? ogg : webm;
+        this.mediaRecorder = new MediaRecorder(this.stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
+        this.mediaRecorder.ondataavailable = (chunk) => {
+            let now = new Date().getTime();
+            this.chunkKeys.push({id: now.toString(), timecode: chunk.timecode});
+            window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise
+        };
+        console.log('starting recorder');
+        this.recordSlideChange(this.initialURL);
+        this.mediaRecorder.start(2000);
+        this.setState({recordSession: true});
     }
 
     StartRecordSlideChanges(deckID, url = '') {
-        if(this.state.recordSession){
-            if(window.sessionStorage) {
-                sessionStorage.setItem('deck', deckID);
-                sessionStorage.setItem('origin', window.location.origin);
-                sessionStorage.setItem('slideTimings', '');//clear it
-                this.recordSlideChange(url);
-            }
+        if(window.sessionStorage) {
+            sessionStorage.setItem('deck', deckID);
+            sessionStorage.setItem('origin', window.location.origin);
+            sessionStorage.setItem('slideTimings', '');//clear it
+            this.initialURL = url;
+            this.setState({iframeLoaded: true});
         }
     }
 
@@ -102,6 +104,7 @@ class SessionRecorder extends React.Component {
 
     saveRecording() {
         this.mediaRecorder.pause();
+        this.setState({recordingStopped: true});
         swal({
             titleText: 'Save this session as a video?',
             text: 'We will upload your speech and slide changes (nothing else) to our servers and create a video out of it. This is, due to technologcial reasons, only possible serverside. If you agree, please click "Yes". If you do not want to upload something, please click "No". We will continue to record until you either close this window or save your session as a video.',
@@ -121,6 +124,7 @@ class SessionRecorder extends React.Component {
             setTimeout(this.createAudioTrack, 500);//NOTE Wait for recorder to write last chunk
         }).catch((e) => {
             if(e === 'cancel'){
+                this.setState({recordingStopped: false});
                 this.mediaRecorder.resume();
             }
         });
@@ -190,7 +194,10 @@ class SessionRecorder extends React.Component {
 
     render() {
         return (
-          <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px', display: (this.state.recordSession) ? '': 'none'} } icon={<Icon name="record" color={(this.state.recordSession) ? 'red' : ''}/>} disabled={this.state.recordSession ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" data-tooltip={this.state.recordSession ? ' Recording...': 'Recording stopped'} data-position="bottom center"/>
+          <div>
+          {this.state.recordSession ? <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px'}} icon={<Icon name="record" color={(!this.state.recordingStopped) ? 'red' : 'grey'}/>} disabled={!this.state.recordingStopped ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" role="button" data-tooltip={!this.state.recordingStopped ? ' Recording...': 'Recording stopped'} data-position="bottom center"/> : ''}
+          </div>
+
         );
     }
 }
