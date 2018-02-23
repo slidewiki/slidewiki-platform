@@ -6,6 +6,7 @@ import InfoPanelHeader from './InfoPanelHeader';
 import InfoPanelInfoView from './InfoPanelInfoView';
 import {equals} from '../../../common.js';
 import ContributorsStore from '../../../stores/ContributorsStore';
+import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 
 class InfoPanel extends React.Component {
     constructor(props) {
@@ -26,12 +27,15 @@ class InfoPanel extends React.Component {
 
     componentWillUnmount() {
         this.props.ContributorsStore.contributors = [];
+        this.props.ActivityFeedStore.activities = [];
         this.isLoading = true;
     }
 
     isContentUndefined() {
         return this.props.ContributorsStore.contributors === undefined
-                || this.props.ContributorsStore.contributors === [];
+                || this.props.ContributorsStore.contributors === []
+                || this.props.ActivityFeedStore.activities === undefined
+                || this.props.ActivityFeedStore.activities === [];
     }
 
     render() {
@@ -42,9 +46,10 @@ class InfoPanel extends React.Component {
 InfoPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-InfoPanel = connectToStores(InfoPanel, [ContributorsStore], (context, props) => {
+InfoPanel = connectToStores(InfoPanel, [ContributorsStore, ActivityFeedStore], (context, props) => {
     return {
-        ContributorsStore: context.getStore(ContributorsStore).getState()
+        ContributorsStore: context.getStore(ContributorsStore).getState(),
+        ActivityFeedStore: context.getStore(ActivityFeedStore).getState()
     };
 });
 

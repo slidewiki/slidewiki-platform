@@ -17,6 +17,8 @@ export default function loadActivities(context, payload, done) {
         return;
     }
 
+    context.dispatch('LOAD_ACTIVITIES_LOAD', {loadingIndicator: true});
+
     context.service.read('activities.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
