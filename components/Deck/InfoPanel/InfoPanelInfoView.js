@@ -2,7 +2,6 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
-//import ActivityList from '../ActivityFeedPanel/ActivityList';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import cheerio from 'cheerio';
@@ -11,14 +10,25 @@ import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import {equals} from '../../../common.js';
 
 class InfoPanelInfoView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.isLoading = true;
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         let samePropsState = equals(this.props, nextProps);
+
+        console.log('InfoPanelInfoView.shouldComponentUpdate() [nextProps.loadingIndicator=' +
+                nextProps.loadingIndicator + ', this.props.loadingIndicator=' + this.props.loadingIndicator + ']');
+        this.isLoading = nextProps.loadingIndicator;
+
+
         // Content should be updated only when properties have changed.
         return !samePropsState;
     }
 
     getNameofNodes(tree, selector) {
-        if(!selector.get('spath')){
+        if (!selector.get('spath')) {
             return 0;
         }
         let names = [];
@@ -28,12 +38,13 @@ class InfoPanelInfoView extends React.Component {
         nodes.forEach ((node, index) => {
             position = node.split(':')[1];
             names.push(currentChildren.get(position - 1).get('title'));
-            if(currentChildren.get(position - 1).get('children')){
+            if (currentChildren.get(position - 1).get('children')) {
                 currentChildren = currentChildren.get(position - 1).get('children');
             }
         });
         return names;
     }
+
     render() {
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
@@ -76,27 +87,32 @@ class InfoPanelInfoView extends React.Component {
             });
             title = list; //use title of slide
             titlediv =
-            <div className="ui segment top attached compact">
-                <h3 className="ui small header">
-                   <i className="grey small file text icon" aria-label="Slide title"></i>
-                   {title}
-                </h3>
-            </div>;
-
+                <div className="ui segment top attached compact">
+                    <h3 className="ui small header">
+                       <i className="grey small file text icon" aria-label="Slide title"></i>
+                       {title}
+                    </h3>
+                </div>;
         }
         else {
             //title = rootNode.title;
             //title = ''; //use title of deck
             titlediv = '';
-
         }
+
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
-                {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
-                    <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
-                        Updated version available</NavLink>
-                    </div>}
-                    {titlediv}
+                {this.isLoading ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {
+                    this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
+                    <div className="ui vertical segment">
+                        <NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}>
+                            <i className='warning sign icon'></i>
+                            Updated version available
+                        </NavLink>
+                    </div>
+                }
+                {titlediv}
                 <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
@@ -130,7 +146,7 @@ InfoPanelInfoView.contextTypes = {
 InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
     };
 });
 export default InfoPanelInfoView;

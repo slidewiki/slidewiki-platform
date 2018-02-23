@@ -9,6 +9,11 @@ class ContributorsStore extends BaseStore {
         this.translators = [];
         this.listName = '';
         this.selector = {};
+        this.loadingIndicator = false;
+    }
+    loading(payload){
+        this.loadingIndicator = payload.loadingIndicator;
+        this.emitChange();
     }
     updateContributors(payload) {
         this.contributors = this.getContributors(payload.contributors);
@@ -16,6 +21,7 @@ class ContributorsStore extends BaseStore {
         this.translators = this.getTranslators(payload.contributors);
         this.listName = payload.listName;
         this.selector = payload.selector;
+        this.loadingIndicator = false;
         this.emitChange();
     }
 
@@ -24,7 +30,8 @@ class ContributorsStore extends BaseStore {
             contributors: this.contributors,
             creator: this.creator,
             translators: this.translators,
-            selector: this.selector
+            selector: this.selector,
+            loadingIndicator: this.loadingIndicator
         };
     }
     dehydrate() {
@@ -35,6 +42,7 @@ class ContributorsStore extends BaseStore {
         this.creator = state.creator;
         this.translators = state.translators;
         this.selector = state.selector;
+        this.loadingIndicator = state.loadingIndicator;
     }
 
     getBasedonRole(role, list) {
@@ -60,7 +68,8 @@ class ContributorsStore extends BaseStore {
 
 ContributorsStore.storeName = 'ContributorsStore';
 ContributorsStore.handlers = {
-    'LOAD_CONTRIBUTORS_SUCCESS': 'updateContributors'
+    'LOAD_CONTRIBUTORS_SUCCESS': 'updateContributors',
+    'LOAD_CONTRIBUTORS_LOAD': 'loading'
 };
 
 export default ContributorsStore;

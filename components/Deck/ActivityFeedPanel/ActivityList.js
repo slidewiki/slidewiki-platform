@@ -34,6 +34,8 @@ class ActivityList extends React.Component {
         // TODO: same as in the ActivityFeedStore; check if there is more elegant way to tell the component that action loadMoreActivities (in the onScroll function) was executed
         if (!nextProps.ActivityFeedStore.wasFetch) return;
         this.loading = false;
+        let activitiesCount = this.props.ActivityFeedStore.activities.length;
+        console.log('ActivityList.componentWillReceiveProps() [' + 'activitiesCount=' + activitiesCount + ']');
     }
     render() {
         return (

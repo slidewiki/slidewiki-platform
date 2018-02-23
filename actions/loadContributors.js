@@ -17,6 +17,8 @@ export default function loadContributors(context, payload, done) {
         return;
     }
 
+    context.dispatch('LOAD_CONTRIBUTORS_LOAD', {loadingIndicator: true});
+
     context.service.read('contributors.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
