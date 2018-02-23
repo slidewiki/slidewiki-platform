@@ -81,7 +81,7 @@ class presentationBroadcast extends React.Component {
             console.log('Created room ' + that.room);
             that.isInitiator = true;
             window.localforage.config({
-                driver: [localforage.WEBSQL, localforage.INDEXEDDB],
+                driver: [window.localforage.WEBSQL, window.localforage.INDEXEDDB],
                 name: 'SlideWikiRecorder',
                 size: 524288000
             });

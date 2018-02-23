@@ -37,7 +37,7 @@ class SessionRecorder extends React.Component {
     }
 
     recordSessionModal() {
-        if(isEmpty(context.getStore(UserProfileStore).username))
+        if(isEmpty(this.context.getUser().username))
             return;
         else {
             return swal({
@@ -66,14 +66,13 @@ class SessionRecorder extends React.Component {
     }
 
     startRecording() {
-        this.alreadyCalledStartRecording = true;
         let webm = 'audio/webm\;codecs=opus', ogg = 'audio/ogg\;codecs=opus';
         this.mime = (MediaRecorder.isTypeSupported(ogg)) ? ogg : webm;
         this.mediaRecorder = new MediaRecorder(this.stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
         this.mediaRecorder.ondataavailable = (chunk) => {
             let now = new Date().getTime();
-            this.chunkKeys.push({id: now.toString(), timecode: chunk.timecode});
-            window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise
+            this.chunkKeys.push({id: now.toString()}); //TODO remove object
+            window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise, if error disable recording
         };
         console.log('starting recorder');
         this.recordSlideChange(this.initialURL);
@@ -82,7 +81,7 @@ class SessionRecorder extends React.Component {
     }
 
     StartRecordSlideChanges(deckID, url = '') {
-        if(window.sessionStorage) {
+        if(window.sessionStorage) { //TODO else condition: if error disable recording
             sessionStorage.setItem('deck', deckID);
             sessionStorage.setItem('origin', window.location.origin);
             sessionStorage.setItem('slideTimings', '');//clear it
@@ -91,24 +90,22 @@ class SessionRecorder extends React.Component {
         }
     }
 
-    recordSlideChange(url = '') {
+    recordSlideChange(url = '') { //TODO handle paused and resumed
         // console.log('recording slide change', url, first);
         if(window.sessionStorage){
             let prev = sessionStorage.getItem('slideTimings');
             prev = (isEmpty(prev)) ? '{}' : prev;
             prev = JSON.parse(prev);
-            let now = new Date().getTime();
-            let newEl = {};
-            newEl[now] = url;
-            let toSave = Object.assign(prev, newEl);
-            sessionStorage.setItem('slideTimings', JSON.stringify(toSave));
-        }
+            prev[new Date().getTime()] = url;
+            sessionStorage.setItem('slideTimings', JSON.stringify(prev));
+        } //TODO else condition
     }
 
     saveRecording() {
         this.mediaRecorder.pause();
+        this.recordSlideChange('paused');
         this.setState({recordingStopped: true});
-        swal({
+        swal({ //TODO add third button for delete record and starting later again
             titleText: 'Save this session as a video?',
             text: 'We will upload your speech and slide changes (nothing else) to our servers and create a video out of it. This is, due to technologcial reasons, only possible serverside. If you agree, please click "Yes". If you do not want to upload something, please click "No". We will continue to record until you either close this window or save your session as a video.',
             type: 'question',
@@ -127,7 +124,8 @@ class SessionRecorder extends React.Component {
             if(e === 'cancel'){
                 this.setState({recordingStopped: false});
                 this.mediaRecorder.resume();
-            }
+                this.recordSlideChange('resumed');
+            } //TODO add else case for error in promise
         });
     }
 
@@ -142,7 +140,7 @@ class SessionRecorder extends React.Component {
             // console.log(name);
             // this.saveTrackToDisk(track, trackName);
             this.uploadTrack(track, trackName, sessionStorage.getItem('slideTimings'));
-        });
+        }); //TODO catch case
     }
 
     uploadTrack(audioTrack, audioTrackName, slideTimings) {
@@ -154,14 +152,14 @@ class SessionRecorder extends React.Component {
             url: Microservices.file.uri + '/PRvideo?deckID=' + this.props.deckID +'&revision=' + (this.props.revision ? this.props.revision : 1),
             data: form,
             headers: {
-                '----jwt----': context.getStore(UserProfileStore).jwt
+                '----jwt----': this.context.getUser().jwt
             },
             cache: false,
             contentType: false,
             processData: false,
             method: 'POST',
             success: ( data, textStatus, jqXHR ) => {
-                console.log(textStatus);
+                console.log(textStatus); //TODO loading indicator and message
             },
             error: ( jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown, jqXHR);
@@ -172,7 +170,7 @@ class SessionRecorder extends React.Component {
     render() {
         return (
           <div>
-          {this.state.recordSession ? <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px'}} icon={<Icon name="record" color={(!this.state.recordingStopped) ? 'red' : 'grey'}/>} disabled={!this.state.recordingStopped ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" role="button" data-tooltip={!this.state.recordingStopped ? ' Recording...': 'Recording stopped'} data-position="bottom center"/> : ''}
+          {this.state.recordSession ? <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px'}} icon={<Icon name="record" color={(!this.state.recordingStopped) ? 'red' : 'grey'}/>} disabled={!this.state.recordingStopped ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" role="button" data-tooltip={!this.state.recordingStopped ? 'Click to pause recording and open dialog.': 'Recording stopped'} data-position="bottom center"/> : ''}
           </div>
 
         );
@@ -180,7 +178,8 @@ class SessionRecorder extends React.Component {
 }
 
 SessionRecorder.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    getUser: React.PropTypes.func
 };
 
 export default SessionRecorder;
