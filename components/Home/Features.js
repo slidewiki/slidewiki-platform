@@ -11,7 +11,7 @@ class features extends React.Component {
                 <div className="basic container">
                     <p>
                         <FormattedMessage id="features.p1"
-                            defaultMessage="SlideWiki&apo;s goal is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics."/>
+                            defaultMessage="The goal of SlideWiki is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics."/>
                     </p>
                 </div>
                 <div className="ui padded stackable grid">
@@ -21,11 +21,11 @@ class features extends React.Component {
                         </div>
                         <div className="ui attached fluid segment">
                             <div className="ui medium right floated image">
-                                <FormattedMessage id="features." defaultMessage="screenshot of slide editor interface."/>
+                                <FormattedMessage id="features.screenshot" defaultMessage="screenshot of slide editor interface.">
                                     {
-                                        (alt) => <img src="assets/images/features/slide-edit.png" alt="{alt}"></img>
+                                        (alt) => <img alt={alt} src="assets/images/features/slide-edit.png"></img>
                                     }
-                                <FormattedMessage/>
+                                </FormattedMessage>
                             </div>
                             <p>
                                 <FormattedMessage id="features.1.p1"
@@ -33,7 +33,7 @@ class features extends React.Component {
                             </p>
                             <p>
                                 <FormattedMessage id="features.1.p2"
-                                    defaultMessage="SlideWiki&apo;s editor offers many formatting tools, including being able to add images, videos, equations and code snippet."/>
+                                    defaultMessage="The slideWiki editor offers many formatting tools, including being able to add images, videos, equations and code snippet."/>
                             </p>
                         </div>
                     </div>
@@ -110,7 +110,7 @@ class features extends React.Component {
                                     <i className="large circle blue play middle aligned icon"></i>
                                     <div className="content">
                                         <div className="header"><FormattedMessage id="features.3.slideshow.header" defaultMessage="Slideshow mode"/></div>
-                                        <div className="description"><FormattedMessage id="features.3.slideshow.description" defaultMessage="Use the Slideshow mode to view a deck as a slideshow. Includes a timer and speaker notes&apo; view."/></div>
+                                        <div className="description"><FormattedMessage id="features.3.slideshow.description" defaultMessage="Use the Slideshow mode to view a deck as a slideshow. Includes a timer and speaker notes view."/></div>
                                     </div>
                                 </div>
                             </div>
