@@ -10,7 +10,7 @@ class PrivatePublicUserProfile extends React.Component {
     }
 
     showUserDecks(){
-        return <UserDecks decks={this.props.decks} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
+        return <UserDecks decks={this.props.decks} decksMeta={this.props.decksMeta} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
     }
 
     showUserCollections(){
