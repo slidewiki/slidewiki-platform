@@ -48,9 +48,9 @@ class DeckCard extends React.Component {
                         )
                     ) : (
                         this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
+                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}><h3 className="header">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
                         ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID}><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
+                            <a href={'/deck/' + this.props.cardContent.deckID}><h3 className="header" >{this.props.cardContent.title}</h3></a>
                         )
                     )}
                     <div className="meta">
@@ -64,10 +64,10 @@ class DeckCard extends React.Component {
                 <div className="ui menu top attached">
                     <div className="ui fluid basic buttons">
                         <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
-                            <i className="yellow open folder large icon" tabIndex="0"></i>
+                            <i className="yellow open folder large icon" ></i>
                         </a>
                         <a href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                            <i className="grey circle play large icon" tabIndex="0"></i>
+                            <i className="grey circle play large icon" ></i>
                         </a>
 
                     </div>
