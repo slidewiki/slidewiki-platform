@@ -26,7 +26,7 @@ class DeckEditStore extends BaseStore {
 
         this.showGroupModal = false;
 
-        // variables for error handling 
+        // variables for error handling
         this.loadCollectionsError = false;
         this.addCollectionError = false;
         this.collectionsLoading = false;
@@ -65,10 +65,10 @@ class DeckEditStore extends BaseStore {
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
-            showGroupModal: this.showGroupModal, 
+            showGroupModal: this.showGroupModal,
             collectionOptions: this.collectionOptions,
             selectedCollections: this.selectedCollections,
-            loadCollectionsError: this.loadCollectionsError, 
+            loadCollectionsError: this.loadCollectionsError,
             addCollectionError: this.addCollectionError,
             collectionsLoading: this.collectionsLoading
         };
@@ -89,7 +89,7 @@ class DeckEditStore extends BaseStore {
         this.showGroupModal = state.showGroupModal;
         this.collectionOptions = state.collectionOptions;
         this.selectedCollections = state.selectedCollections;
-        this.loadCollectionsError = state.loadCollectionsError; 
+        this.loadCollectionsError = state.loadCollectionsError;
         this.addCollectionError = state.addCollectionError;
         this.collectionsLoading = state.collectionsLoading;
     }
@@ -110,6 +110,7 @@ class DeckEditStore extends BaseStore {
     }
 
     loadUsergroup(group) {
+        console.log('DeckEditStore loadUsergroup:', group);
         this.detailedGroup = group;
         this.showGroupModal = true;
         this.emitChange();
@@ -134,7 +135,7 @@ class DeckEditStore extends BaseStore {
         this.loadCollectionsError = false;
     }
 
-    addCollection(newCollection){        
+    addCollection(newCollection){
         this.collectionOptions.push(newCollection);
         this.collectionOptions = [...new Set(this.collectionOptions)];
         this.selectedCollections.push(newCollection._id);
@@ -173,19 +174,19 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'LOAD_DECK_PROPS_FAILURE': 'resetProperties', 
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties',
 
     // load user groups created by a specific user
-    'LOAD_USER_COLLECTIONS_SUCCESS': 'loadUserCollections', 
-    'LOAD_USER_COLLECTIONS_FAILURE': 'loadCollectionsFail', 
+    'LOAD_USER_COLLECTIONS_SUCCESS': 'loadUserCollections',
+    'LOAD_USER_COLLECTIONS_FAILURE': 'loadCollectionsFail',
 
     // load deck groups assigned to a deck
-    'LOAD_COLLECTIONS_SUCCESS': 'loadCollections', 
+    'LOAD_COLLECTIONS_SUCCESS': 'loadCollections',
     'LOAD_COLLECTIONS_FAILURE': 'loadCollectionsFail',
-    'UPDATE_COLLECTIONS_LOADING': 'updateCollectionsLoading', 
+    'UPDATE_COLLECTIONS_LOADING': 'updateCollectionsLoading',
 
-    'ADD_COLLECTION_SUCCESS': 'addCollection', 
-    'ADD_COLLECTION_FAILURE': 'addCollectionFailure', 
+    'ADD_COLLECTION_SUCCESS': 'addCollection',
+    'ADD_COLLECTION_FAILURE': 'addCollectionFailure',
 
     // add/remove selected deck groups
     'ADD_SELECTED_COLLECTION': 'addSelectedCollection',

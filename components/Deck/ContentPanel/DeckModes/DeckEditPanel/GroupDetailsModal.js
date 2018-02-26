@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { TextArea } from 'semantic-ui-react';
 import UserPicture from '../../../../common/UserPicture';
 let classNames = require('classnames');
+import FocusTrap from 'focus-trap-react';
+import {Button, Icon, Modal, Header, TextArea} from 'semantic-ui-react';
+import {showGroupDetailsModal, hideGroupDetailsModal} from '../../../actions/deckedit/functionsForGroupDetailsModal';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -12,6 +14,16 @@ const modalStyle = {
 };
 
 class GroupDetailsModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleClose() {
+      e.preventDefault();
+      this.context.executeAction(hideGroupDetailsModal, {});
+    }
+
     render() {
         let members = [];
         //first the creator
@@ -62,11 +74,11 @@ class GroupDetailsModal extends React.Component {
         }
 
         return (
-            <div className="ui groupdetails modal" ref='groupdetailsmodal' style={modalStyle}>
-              <div className="header">
+            <div className="ui groupdetails modal" ref='groupdetailsmodal' style={modalStyle} role="dialog" aria-labelledby="groupdetailsmodal_header" aria-describedby="groupdetailsmodal_content">
+              <div className="header" id="groupdetailsmodal_header">
                   <h1 style={headerStyle}>Group details</h1>
               </div>
-              <div className="content">
+              <div className="content" id="groupdetailsmodal_content">
                 <div className="ui container">
                   <h3 className="header" >{this.props.group.name}</h3>
                   <p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
@@ -76,7 +88,7 @@ class GroupDetailsModal extends React.Component {
                 </div>
               </div>
               <div className="actions">
-                <button type="cancel" className="ui cancel button">
+                <button type="button" className="ui cancel button" role="button" tabIndex="0" onClick={this.handleClose}>
                   <i className="remove icon"/>Close
                 </button>
               </div>
