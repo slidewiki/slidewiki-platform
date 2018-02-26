@@ -55,15 +55,11 @@ class DeckCard extends React.Component {
                             )
                         )}
                     </div>
-                    <div className="meta">
-                        <div className="two column stackable grid">
-                            <div className="column">
-                                <i className="edit icon" aria-label="Last updated">{' ' + timeSince((new Date(this.props.cardContent.updated)))}</i>
-                            </div>
-                            <div className="right floated column">
-                                <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}
-                            </div>
-                        </div>
+                    <div className="extra content">
+                        <span className="right floated">
+                            <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}
+                        </span>
+                        <span aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</span>
                     </div>
                 </div>
                 <div className="ui menu top attached">
@@ -74,7 +70,6 @@ class DeckCard extends React.Component {
                         <a href={'/Presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                             <i className="grey circle play large icon" aria-hidden="true" ></i>
                         </a>
-
                     </div>
                 </div>
             </div>
