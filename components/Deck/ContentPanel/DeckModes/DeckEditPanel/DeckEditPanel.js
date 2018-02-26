@@ -112,6 +112,7 @@ class DeckEditPanel extends React.Component {
             $('.ui.login.modal').modal('show');
             return;
         }
+        const nodeURL = ContentUtil.makeNodeURL(this.props.selector, 'view');
         // console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
         if (interestedUser) {
             this.users = this.props.DeckEditStore.authorizedUsers;
@@ -126,7 +127,11 @@ class DeckEditPanel extends React.Component {
                     confirmButtonText: this.context.intl.formatMessage(this.messages.confirm),
                     confirmButtonClass: 'positive ui button',
                     buttonsStyling: false
-                }).then().catch();
+                }).then(() => this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                })).catch(() => this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                }));
             }
             else if (this.props.DeckEditStore.deckProps.deckOwner === this.props.UserProfileStore.user.id) {
                 swal({
@@ -136,7 +141,11 @@ class DeckEditPanel extends React.Component {
                     confirmButtonText: this.context.intl.formatMessage(this.messages.confirm),
                     confirmButtonClass: 'positive ui button',
                     buttonsStyling: false
-                }).then().catch();
+                }).then(() => this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                })).catch(() => this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                }));
             }
             else if (this.users.findIndex((member) => {
                 return member.id === parseInt(this.user.id);
@@ -148,7 +157,11 @@ class DeckEditPanel extends React.Component {
                     confirmButtonText: this.context.intl.formatMessage(this.messages.confirm),
                     confirmButtonClass: 'positive ui button',
                     buttonsStyling: false
-                }).then().catch();
+                }).then(() => this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                })).catch(() => this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                }));
             }
             else {
                 this.isModalOpen = true;
@@ -160,6 +173,9 @@ class DeckEditPanel extends React.Component {
     handleClose() {
         this.isModalOpen = false;
         this.forceUpdate();
+        this.context.executeAction(navigateAction, {
+            url: ContentUtil.makeNodeURL(this.props.selector, 'view')
+        });
     }
 
     handleAddUser() {
