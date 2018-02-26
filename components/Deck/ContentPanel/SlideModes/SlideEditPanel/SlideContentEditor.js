@@ -1697,7 +1697,9 @@ class SlideContentEditor extends React.Component {
             }, (reason) => {
                 //done(reason);
             });
-
+            setTimeout(() => {
+                $('.swal2-confirm').focus();
+            }, 500);
         }
         if (nextProps.SlideEditStore.slideSize !== '' && nextProps.SlideEditStore.slideSize !== this.props.SlideEditStore.slideSize)
         {

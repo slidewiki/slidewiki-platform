@@ -466,7 +466,7 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Slide name' />
+                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
                   </a>
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                       <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
@@ -485,6 +485,7 @@ class SlideEditLeftPanel extends React.Component {
                 //working: //external
                 //<FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='The entire slide is save together with the slide name.' />
                 //placeholder="Slide name" //needs to be translated
+
 
         let titleChangeContent  = (
                 <div className="ui form">
@@ -505,11 +506,6 @@ class SlideEditLeftPanel extends React.Component {
                     </button>
                   </div>
                   <TextArea className="sr-only" id="ariaLabelSlideNameSaveButton" value="submit slide name" tabIndex ='-1'/>
-                  <div>
-                    <label>
-                    <FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='Your slide name will be updated once you have saved and exited the slide edit mode..' />
-                    </label>
-                  </div>
                 </div>);
 
         let sizeContent = (
