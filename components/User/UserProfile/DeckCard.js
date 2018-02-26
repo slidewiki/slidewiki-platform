@@ -43,15 +43,15 @@ class DeckCard extends React.Component {
                     <div className="header">
                         {this.props.newTab === true ? (
                             this.props.cardContent.title.length > 25 ? (
-                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} aria-describedby={'Last updated' + timeSince((new Date(this.props.cardContent.updated)))} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated)))} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
-                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} aria-describedby={'Last updated' + timeSince((new Date(this.props.cardContent.updated)))} target='_blank' >{this.props.cardContent.title}</a>
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated)))} target='_blank' >{this.props.cardContent.title}</a>
                             )
                         ) : (
                             this.props.cardContent.title.length > 25 ? (
-                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} aria-describedby={'Last updated' + timeSince((new Date(this.props.cardContent.updated)))} >{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated)))}  >{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
-                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} aria-describedby={'Last updated' + timeSince((new Date(this.props.cardContent.updated)))}>{this.props.cardContent.title}</a>
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated)))} >{this.props.cardContent.title}</a>
                             )
                         )}
                     </div>
