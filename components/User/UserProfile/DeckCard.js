@@ -40,24 +40,30 @@ class DeckCard extends React.Component {
                 )}
 
                 <div className="content">
-                    {this.props.newTab === true ? (
-                        this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} title={'Deck: '+this.props.cardContent.title} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                    <div className="header">
+                        {this.props.newTab === true ? (
+                            this.props.cardContent.title.length > 25 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                            ) : (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} target='_blank' >{this.props.cardContent.title}</a>
+                            )
                         ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} title={'Deck: '+this.props.cardContent.title} target='_blank' >{this.props.cardContent.title}</a>
-                        )
-                    ) : (
-                        this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} title={'Deck: '+this.props.cardContent.title} >{this.props.cardContent.title.slice(0,24) + '...'}</a>
-                        ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} title={'Deck: '+this.props.cardContent.title} >{this.props.cardContent.title}</a>
-                        )
-                    )}
+                            this.props.cardContent.title.length > 25 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} >{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                            ) : (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title} >{this.props.cardContent.title}</a>
+                            )
+                        )}
+                    </div>
                     <div className="meta">
-                        <span className="right floated meta">
-                            <i className="thumbs up icon" aria-label="Number of likes"></i>{this.props.cardContent.noOfLikes}
-                        </span>
-                            <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
+                        <div className="two column stackable grid">
+                            <div className="column">
+                                <i className="edit icon" aria-label="Last updated">{' ' + timeSince((new Date(this.props.cardContent.updated)))}</i>
+                            </div>
+                            <div className="right floated column">
+                                <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="ui menu top attached">
