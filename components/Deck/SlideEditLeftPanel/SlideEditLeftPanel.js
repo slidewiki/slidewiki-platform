@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {Button, Icon, Input} from 'semantic-ui-react';
+import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
 import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
@@ -291,6 +291,9 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleTitleClick':
                     this.handleTitleClick();
                     break;
+                case 'handleSlideNameChangeKeyInInput': //this is a special case
+                    this.handleTitleChangeClick();
+                    break;
                 case 'handleTitleChangeClick':
                     this.handleTitleChangeClick();
                     break;
@@ -480,6 +483,8 @@ class SlideEditLeftPanel extends React.Component {
                 //crop
                 //map outline
                 //working: //external
+                //<FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='The entire slide is save together with the slide name.' />
+                //placeholder="Slide name" //needs to be translated
 
         let titleChangeContent  = (
                 <div className="ui form">
@@ -488,18 +493,23 @@ class SlideEditLeftPanel extends React.Component {
                   </a>
                   <i className="error">
                       {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
-                      <br />                      
+                      <br />
                   </i>
                   <label htmlFor="slideTitle">
                     <FormattedMessage id='editpanel.slideTitle' defaultMessage='Change slide name:' />
                   </label>
-                  <div className="ui action input">
-                    <input type="text" placeholder="Slide name" onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide name" aria-required="true" required autoFocus/>
-                    <button className="ui icon button blue" aria-describedby="handleTitleChangeClickDescription" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
+                  <div className="ui fluid action input">
+                    <TextArea type="text" onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideNameChangeKeyInInput')} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide name" aria-required="true" required autoFocus tabIndex='0'/>
+                    <button className="ui icon button blue" aria-describedby="ariaLabelSlideNameSaveButton" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
                         <i tabIndex="0" className="check icon white big"></i>
                     </button>
                   </div>
-                  <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" ><FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='(The slide name is updated when saving the slide by clicking the separate save button).' /></label>
+                  <TextArea className="sr-only" id="ariaLabelSlideNameSaveButton" value="submit slide name" tabIndex ='-1'/>
+                  <div>
+                    <label>
+                    <FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='Your slide name will be updated once you have saved and exited the slide edit mode..' />
+                    </label>
+                  </div>
                 </div>);
 
         let sizeContent = (
