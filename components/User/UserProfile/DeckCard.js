@@ -40,36 +40,36 @@ class DeckCard extends React.Component {
                 )}
 
                 <div className="content">
-                    {this.props.newTab === true ? (
-                        this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
+                    <div className="header">
+                        {this.props.newTab === true ? (
+                            this.props.cardContent.title.length > 25 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                            ) : (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'} target='_blank' >{this.props.cardContent.title}</a>
+                            )
                         ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
-                        )
-                    ) : (
-                        this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
-                        ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID}><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
-                        )
-                    )}
-                    <div className="meta">
-                        <span className="right floated meta">
-                            <i className="thumbs up icon" aria-label="Number of likes"></i>{this.props.cardContent.noOfLikes}
+                            this.props.cardContent.title.length > 25 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'}  >{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                            ) : (
+                                <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'} >{this.props.cardContent.title}</a>
+                            )
+                        )}
+                    </div>
+                    <div className="extra content">
+                        <span className="right floated">
+                            <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}
                         </span>
-                        <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
-
+                        <span aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</span>
                     </div>
                 </div>
                 <div className="ui menu top attached">
                     <div className="ui fluid basic buttons">
-                        <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
-                            <i className="yellow open folder large icon" tabIndex="0"></i>
+                        <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip="Open deck" type="button" role="button" className="ui button" aria-label="Open deck">
+                            <i className="yellow open folder large icon" aria-hidden="true" ></i>
                         </a>
-                        <a href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                            <i className="grey circle play large icon" tabIndex="0"></i>
+                        <a href={'/Presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                            <i className="grey circle play large icon" aria-hidden="true" ></i>
                         </a>
-
                     </div>
                 </div>
             </div>
