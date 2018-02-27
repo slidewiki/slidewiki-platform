@@ -76,6 +76,7 @@ class Presentation extends React.Component{
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    // Plugin from https://github.com/marcysutton/reveal-a11y
                     { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: true,condition: function() {return !!document.body.classList;}}
                 ]
             });
