@@ -79,10 +79,10 @@ class UserMenuDropdown extends React.Component {
             <AriaMenuButton.Wrapper
               onSelection={this.onHandleSelection}>
                <AriaMenuButton.Button >
-                <div  className='text right aligned'>
-                <i className="caret down icon "></i>
+                <div style={{'display': 'inline-flex', 'bottom': '0px'}} >
                  <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
-                 {alarmIcon}
+                  {alarmIcon}
+                  <i className="caret down icon "></i>
                  </div>
 
                </AriaMenuButton.Button>
