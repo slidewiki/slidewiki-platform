@@ -204,6 +204,10 @@ export default {
                 };
             }
 
+            if(params.roles === 'editor'){
+                requestCall.headers = { '----jwt----': params.jwt };
+            }
+
             rp(requestCall).then( (response) => {
                 let decks = response.decks;
 
@@ -227,6 +231,8 @@ export default {
                     }
 
                     let converted = decks.map((deck) => { return transform(deck); });
+                    response.metadata.roles = params.roles;
+
                     callback(null, {
                         metadata: response.metadata, 
                         decks: converted

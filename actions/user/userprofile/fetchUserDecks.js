@@ -11,8 +11,7 @@ export function fetchUserDecks(context, payload, done) {
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;
     payload.params.page = 1;        // fetch first page
-    payload.params.roles = 'owner';
-    
+
     context.dispatch('NEW_USER_DECKS_LOADING');
     context.service.read('userProfile.fetchUserOwnedDecks', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
