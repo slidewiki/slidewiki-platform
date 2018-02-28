@@ -73,16 +73,16 @@ class UserMenuDropdown extends React.Component {
     render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
         const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
-        const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" />) : '';
+        const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" style={{'marginTop':'0.5em'}}/>) : '';
 
         return(
             <AriaMenuButton.Wrapper
               onSelection={this.onHandleSelection}>
                <AriaMenuButton.Button >
-                <div style={{'display': 'inline-flex', 'bottom': '0px'}} >
+                <div style={{'display': 'inline-flex'}} >
                  <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                   {alarmIcon}
-                  <i className="caret down icon "></i>
+                  <i className="ui caret down icon" style={{'marginTop':'0.5em'}}></i>
                  </div>
 
                </AriaMenuButton.Button>
