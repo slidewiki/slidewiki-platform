@@ -80,9 +80,10 @@ class UserMenuDropdown extends React.Component {
               onSelection={this.onHandleSelection}>
                <AriaMenuButton.Button >
                 <div  className='text right aligned'>
+                <i className="caret down icon "></i>
                  <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
+                 {alarmIcon}
                  </div>
-                 <i className="caret down icon floated"></i> {alarmIcon}
 
                </AriaMenuButton.Button>
                <AriaMenuButton.Menu className='ui menu vertical'
