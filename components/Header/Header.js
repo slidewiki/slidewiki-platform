@@ -3,7 +3,6 @@ import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal';
-import HeaderDropdown from '../Login/HeaderDropdown';
 import UserMenuDropdown from '../Login/UserMenuDropdown';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
