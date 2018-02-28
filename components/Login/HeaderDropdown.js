@@ -96,15 +96,10 @@ class HeaderDropdown extends React.Component {
         const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
         const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" />) : '';
         return(
-<<<<<<< HEAD
             <div>
 
               <div id="userButtonMenu" role="button" className="ui top right dropdown larger blue button" ref={(drop) => {this.userDropDown=drop;}}  aria-haspopup="true" aria-controls="userHeaderMenu" aria-label="User management" aria-expanded={this.state.userMenuButtonExpanded}>
                 {/*<div className="text">*/}
-=======
-            <div className="ui top right dropdown larger blue button" ref="userDropDown" role="button" aria-haspopup="true" aria-label={this.context.intl.formatMessage(header_messages.usermanagement)}>
-                <div className="text">
->>>>>>> master
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 {/*</div>*/}
 
@@ -114,7 +109,6 @@ class HeaderDropdown extends React.Component {
                     {/*
                     <li className="header" role="separator" tabIndex="-1">
                         {this.props.UserProfileStore.username}
-<<<<<<< HEAD
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
                      */}
@@ -137,26 +131,6 @@ class HeaderDropdown extends React.Component {
                 </ul>
               </div>
                 {alarmIcon} {/*Placed here to avoid sr problems*/}
-=======
-                    </div>
-                    <div className="divider"></div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label={this.context.intl.formatMessage(header_messages.mydecks)} tabIndex="0" >
-                        <i className="user icon link"  /> {this.context.intl.formatMessage(header_messages.mydecks)}
-                    </div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label={this.context.intl.formatMessage(header_messages.mygroups)} tabIndex="0" >
-                        <i className="icon users" /> {this.context.intl.formatMessage(header_messages.mygroups)}
-                    </div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label={this.context.intl.formatMessage(header_messages.mysettings)} tabIndex="0" >
-                        <i className="setting icon" /> {this.context.intl.formatMessage(header_messages.mysettings)}
-                    </div>
-                    <div className="item" data-value={'/notifications'} role="menuitem" aria-label={this.context.intl.formatMessage(header_messages.mynotifications)} tabIndex="0" >
-                        <i className={alarmClassName} />{this.context.intl.formatMessage(header_messages.mynotifications)}
-                    </div>
-                    <div className="item" data-value={'logout'} role="menuitem" aria-label={this.context.intl.formatMessage(header_messages.signout)} tabIndex="0" >
-                        <i className="sign out icon"/> {this.context.intl.formatMessage(header_messages.signout)}
-                    </div>
-                </div>
->>>>>>> master
             </div>
 
         );

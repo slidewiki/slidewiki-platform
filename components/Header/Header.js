@@ -1,15 +1,10 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
-<<<<<<< HEAD
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal';
 import HeaderDropdown from '../Login/HeaderDropdown';
 import UserMenuDropdown from '../Login/UserMenuDropdown';
-=======
-import LoginModal from '../Login/LoginModal.js';
-import HeaderDropdown from '../Login/HeaderDropdown.js';
->>>>>>> master
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
