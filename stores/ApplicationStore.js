@@ -12,8 +12,8 @@ class ApplicationStore extends BaseStore {
             if (!this.frozen || payload.allowUnfreeze) {
                 this.pageTitle = payload.pageTitle;
                 this.frozen = payload.frozen;
-                this.emitChange();
             }
+            this.emitChange();
         });
     }
     getPageTitle() {
