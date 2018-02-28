@@ -122,7 +122,7 @@ class UserMenuDropdown extends React.Component {
                    value={'/notifications'}
                    text='My Notifications'>
                    <span style={{color:'black'}}>
-                   <i className="setting icon" aria-hidden={true} /> My Notifications
+                   <i className={alarmClassName} aria-hidden={true} /> My Notifications
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
