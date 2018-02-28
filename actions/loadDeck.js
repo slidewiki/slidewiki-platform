@@ -196,13 +196,17 @@ export default function loadDeck(context, payload, done) {
         else {
             if (payload.params.mode !== 'edit') {
                 //Create activity
-                let activity = {
-                    activity_type: 'view',
-                    user_id: String(context.getStore(UserProfileStore).userid),
-                    content_id: payload.params.sid,
-                    content_kind: payload.params.stype
-                };
-                context.executeAction(addActivity, {activity: activity});
+                let userId = String(context.getStore(UserProfileStore).userid);
+                if (userId === '') {
+		                userId = '0';//Unknown - not logged in
+		            }
+		            let activity = {
+		                activity_type: 'view',
+		                user_id: userId,
+		                content_id: payload.params.sid,
+		                content_kind: payload.params.stype
+		            };
+		            context.executeAction(addActivity, {activity: activity});
             }
 
             done();
