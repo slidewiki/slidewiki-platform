@@ -10,16 +10,7 @@ import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 import NoPermissionsModal from './NoPermissionsModal';
 
 class ContentPanel extends React.Component {
-    shouldComponentUpdate(nextProps, nextState) {
-        let samePropsState = this.props.ContentStore.selector.stype === nextProps.ContentStore.selector.stype &&
-                this.props.ContentStore.mode === nextProps.ContentStore.mode;
-        // Content should be updated only when properties have changed.
-        return !samePropsState;
-    }
 
-    componentDidUpdate() {
-        console.log('Updated ContentPanel.');
-    }
 
     render() {
         let targetComponent = '';
