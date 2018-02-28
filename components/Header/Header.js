@@ -1,10 +1,15 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
+<<<<<<< HEAD
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal';
 import HeaderDropdown from '../Login/HeaderDropdown';
 import UserMenuDropdown from '../Login/UserMenuDropdown';
+=======
+import LoginModal from '../Login/LoginModal.js';
+import HeaderDropdown from '../Login/HeaderDropdown.js';
+>>>>>>> master
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
@@ -24,6 +29,8 @@ class Header extends React.Component {
     componentDidMount() {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+        $(this.refs.languagebar)
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
     }
 
     toggleSidebar() {
@@ -31,8 +38,13 @@ class Header extends React.Component {
             .sidebar('toggle');
     }
 
+    toggleLanguageBar() {
+        $(this.refs.languagebar)
+            .sidebar('toggle');
+    }
+
     closeSidebar(event) {
-        if(($(event.target).hasClass('item') && !$(event.target).hasClass('search')))
+        if(($(event.target).parentsUntil( $('div.menubar'), '.item' ).length >= 0 && $(event.target).parentsUntil( $('div.menubar'), '.search' ).length === 0))
             $(this.refs.menubar).sidebar('hide');
     }
 
@@ -60,22 +72,22 @@ class Header extends React.Component {
             loginButton = <UserMenuDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
-              <FormattedMessage id='header.mydecks' defaultMessage='My Decks'/>
+              <FormattedMessage id='header.mydecks.mobile' defaultMessage='My Decks'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>
-              <FormattedMessage id='header.mygroups' defaultMessage='My Groups'/>
+              <FormattedMessage id='header.mygroups.mobile' defaultMessage='My Groups'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>
-              <FormattedMessage id='header.mysettings' defaultMessage='My Settings'/>
+              <FormattedMessage id='header.mysettings.mobile' defaultMessage='My Settings'/>
               </NavLink>
               <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>
-              <FormattedMessage id='header.mynotifications' defaultMessage='My Notifications'/>
+              <FormattedMessage id='header.mynotifications.mobile' defaultMessage='My Notifications'/>
               </NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>
-              <FormattedMessage id='header.logout' defaultMessage='Logout'/>
+              <FormattedMessage id='header.logout.mobile' defaultMessage='Logout'/>
               </a>
             </div>);
-            notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
+            notification_locale = '';
 
         } else{
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
@@ -130,19 +142,25 @@ class Header extends React.Component {
                     </NavLink>
                   </div>
                 </div>
-                <div className="ui inverted left dimmed sidebar vertical menu" ref="menubar" onClick={this.closeSidebar.bind(this)}>
+                <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                     <NavLink className="item" href='/'>
                         <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
                     </NavLink>
                     <NavLink className="item" routeName="addDeck">
                         <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                     </NavLink>
-                    {/*<UserNotificationsBadge className="ui item"/>*/}
+                    <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
+                        <i className="caret right icon"/>
+                        <LocaleSwitcher mode="headeronly"/>
+                    </div>
                     {mobileLoginButton}
                     <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                     <div className="item search">
                         <SearchBox className="item"/>
                     </div>
+                </div>
+                <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
+                    <LocaleSwitcher mode="sidebar"/>
                 </div>
               </MediaQuery>
             </div>

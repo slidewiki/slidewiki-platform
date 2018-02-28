@@ -4,15 +4,18 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
+import loadQuestion from '../../../../actions/questions/loadQuestion';
 
 class ContentQuestionAnswersList extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
+            // isEditButtonClicked: false,
             showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
     }
 
     handleButtonClick() {
@@ -22,21 +25,25 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
-        //console.log(this);
+        // this.setState({
+        //     isEditButtonClicked: true
+        // });
+
+        this.context.executeAction(loadQuestion, {qstid: this.props.qstid});
     }
 
     render() {
         const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
         const editButton = (
-            <button className="ui compact button primary" onClick={this.handleEditButtonClick.bind(this)}>
+            <button className="ui compact button primary" onClick={this.handleEditButtonClick}>
                 <i className="edit icon" />
                 Edit question
             </button>
         );
 
         const showEditButton = () => {
-            if(userId === creatorId){
+            if(this.props.editPermission) {
                 return editButton;
             }
             return null;
@@ -50,21 +57,20 @@ class ContentQuestionAnswersList extends React.Component {
 
         let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
             return (
-              <div key={index}>
-                  <a className="header">
-                      {node.answer}
-                  </a>
+              <div key={index} className="header">
+                  {node.answer}
               </div>
             );
         });
 
-        let explanation = (
+        let explanation = (this.props.explanation && this.props.explanation.trim() !== '') ?
             <div className="description">
                 <p>
                     <label><strong>Explanation:</strong></label> {this.props.explanation}
                 </p>
             </div>
-        );
+        : '';
+        let showButtonLabel = this.state.showCorrect ? 'Hide answer' : 'Show answer';
         let answers = (
             <div className="ui two column stackable grid">
                 <div className="column">
@@ -75,18 +81,18 @@ class ContentQuestionAnswersList extends React.Component {
                     </div>
                 </div>
                 <div className="column">
-                    <button className="ui compact button primary" onClick={this.handleButtonClick}>
-                        <i className=" help circle icon" />
-                        Show answer
-                    </button>
-                    {/*showEditButton()*/}
-                    <div className="ui item">
-                        <div className="content">
-                            {this.state.showCorrect ? correctAnswers : null}
-                            {this.state.showCorrect ? explanation : null}
-                        </div>
+                  <button className="ui compact button primary" onClick={this.handleButtonClick}>
+                    <i className=" help circle icon" />
+                    {showButtonLabel}
+                  </button>
+                  {showEditButton()}
+                  <div className="ui item">
+                    <div className="content">
+                      {this.state.showCorrect ? correctAnswers : null}
+                      {this.state.showCorrect ? explanation : null}
                     </div>
-                </div>
+                  </div>
+              </div>
             </div>
         );
 
@@ -99,6 +105,10 @@ class ContentQuestionAnswersList extends React.Component {
         );
     }
 }
+
+ContentQuestionAnswersList.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 ContentQuestionAnswersList = connectToStores(ContentQuestionAnswersList, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {
     return {
