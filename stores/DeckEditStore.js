@@ -110,7 +110,7 @@ class DeckEditStore extends BaseStore {
     }
 
     loadUsergroup(group) {
-        console.log('DeckEditStore loadUsergroup:', group);
+        // console.log('DeckEditStore loadUsergroup:', group);
         this.detailedGroup = group;
         this.showGroupModal = true;
         this.emitChange();
@@ -165,6 +165,11 @@ class DeckEditStore extends BaseStore {
         this.collectionsLoading = payload;
         this.emitChange();
     }
+
+    hideGroupsDetailsModal() {
+        this.showGroupModal = false;
+        this.emitChange();
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -190,7 +195,10 @@ DeckEditStore.handlers = {
 
     // add/remove selected deck groups
     'ADD_SELECTED_COLLECTION': 'addSelectedCollection',
-    'REMOVE_SELECTED_COLLECTION': 'removeSelectedCollection'
+    'REMOVE_SELECTED_COLLECTION': 'removeSelectedCollection',
+
+    //Group details modal
+    'HIDE_GROUP_DETAILS_MODAL': 'hideGroupsDetailsModal'
 };
 
 export default DeckEditStore;

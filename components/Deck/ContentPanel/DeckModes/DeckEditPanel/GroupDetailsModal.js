@@ -1,34 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import UserPicture from '../../../../common/UserPicture';
-let classNames = require('classnames');
 import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Modal, Header, TextArea} from 'semantic-ui-react';
-import {showGroupDetailsModal, hideGroupDetailsModal} from '../../../actions/deckedit/functionsForGroupDetailsModal';
-
-const headerStyle = {
-    'textAlign': 'center'
-};
-const modalStyle = {
-    top: '15%'
-};
+import {hideGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class GroupDetailsModal extends React.Component {
     constructor(props) {
         super(props);
         this.handleClose = this.handleClose.bind(this);
+
+        this.messages = defineMessages({
+            modalHeading: {
+                id: 'GroupDetails.modalHeading',
+                defaultMessage: 'Group details'
+            },
+            close: {
+                id: 'GroupDetails.close',
+                defaultMessage: 'Close'
+            },
+            groupCreator: {
+                id: 'GroupDetails.groupCreator',
+                defaultMessage: 'Group creator'
+            },
+            unknownCountry: {
+                id: 'GroupDetails.unknownCountry',
+                defaultMessage: 'unknown country'
+            },
+            unknownOrganization: {
+                id: 'GroupDetails.unknownOrganization',
+                defaultMessage: 'Unknown organization'
+            },
+            linkHint: {
+                id: 'GroupDetails.linkHint',
+                defaultMessage: 'The username is a link which will open a new browser tab. Close it when you want to go back to this page.'
+            }
+        });
     }
 
-    handleClose() {
-      e.preventDefault();
-      this.context.executeAction(hideGroupDetailsModal, {});
+    handleClose(e) {
+	      e.preventDefault();
+	      this.context.executeAction(hideGroupDetailsModal, {});
     }
 
     render() {
         let members = [];
         //first the creator
         let optionalText = (this.props.group.creator.organization || this.props.group.creator.country) ?
-            (this.props.group.creator.organization || 'Unknown organization') + ', ' + (this.props.group.creator.country || 'unknown country') :
+            (this.props.group.creator.organization || this.context.intl.formatMessage(this.messages.unknownOrganization)) + ', ' + (this.props.group.creator.country || this.context.intl.formatMessage(this.messages.unknownCountry)) :
             '';
         members.push(
           (
@@ -38,10 +58,10 @@ class GroupDetailsModal extends React.Component {
                   <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
                 </div>
                 <div className="fifteen wide column">
-                  <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                  <TextArea className="sr-only" id="usernameIsALinkHint" value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
                   <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.username}</a>
                   <div className="description">
-                    Group creator
+                    {this.context.intl.formatMessage(this.messages.groupCreator)}
                   </div>
                   {optionalText}
                 </div>
@@ -52,7 +72,7 @@ class GroupDetailsModal extends React.Component {
         if (this.props.group.members !== undefined && this.props.group.members.length > 0) {
             this.props.group.members.forEach((user) => {
                 optionalText = (user.organization || user.country) ?
-                    (user.organization || 'Unknown organization') + ', ' + (user.country || 'unknown country') :
+                    (user.organization || this.context.intl.formatMessage(this.messages.unknownOrganization)) + ', ' + (user.country || this.context.intl.formatMessage(this.messages.unknownCountry)) :
                     '';
                 members.push(
                   (
@@ -62,7 +82,7 @@ class GroupDetailsModal extends React.Component {
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
                         <div className="fifteen wide column">
-                          <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                          <TextArea className="sr-only" id="usernameIsALinkHint" value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
                           <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
                           {optionalText}
                         </div>
@@ -73,30 +93,36 @@ class GroupDetailsModal extends React.Component {
             });
         }
 
+        let showModal = this.props.show;
+
         return (
-            <div className="ui groupdetails modal" ref='groupdetailsmodal' style={modalStyle} role="dialog" aria-labelledby="groupdetailsmodal_header" aria-describedby="groupdetailsmodal_content">
-              <div className="header" id="groupdetailsmodal_header">
-                  <h1 style={headerStyle}>Group details</h1>
-              </div>
-              <div className="content" id="groupdetailsmodal_content">
-                <div className="ui container">
-                  <h3 className="header" >{this.props.group.name}</h3>
-                  <p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
-                  <div className="ui very relaxed  list">
-                      {members}
-                  </div>
-                </div>
-              </div>
-              <div className="actions">
-                <button type="button" className="ui cancel button" role="button" tabIndex="0" onClick={this.handleClose}>
-                  <i className="remove icon"/>Close
-                </button>
-              </div>
-            </div>
+          <Modal dimmer='blurring' ref="modal1" role='dialog' aria-labelledby='groupdetailsmodal_header'
+									 aria-describedby='groupdetailsmodal_content' open={showModal} >
+								<Header as="h1" content={this.context.intl.formatMessage(this.messages.modalHeading)} id='groupdetailsmodal_header'/>
+								<Modal.Content id='groupdetailsmodal_content'>
+									<h3 className="header" >{this.props.group.name}</h3>
+									<p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
+									<div className="ui very relaxed  list">
+											{members}
+									</div>
+								</Modal.Content>
+								<Modal.Actions>
+										<FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={showModal}>
+											<Button labelPosition='right' onClick={ this.handleClose } role="button" tabIndex="0">
+													{this.context.intl.formatMessage(this.messages.close)}
+											</Button>
+										</FocusTrap>
+								</Modal.Actions>
+						</Modal>
         );
 
         window.scrollTo(0, 0);
     }
 }
+
+GroupDetailsModal.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
+};
 
 export default GroupDetailsModal;

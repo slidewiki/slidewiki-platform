@@ -1,4 +1,4 @@
-const log = require('../../log/clog');
+const log = require('../log/clog');
 
 export function showGroupDetailsModal(context, payload, done) {
     log.info(context);
