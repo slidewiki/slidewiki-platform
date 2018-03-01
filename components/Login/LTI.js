@@ -12,21 +12,21 @@ let queryData = '';
 
 class LTI extends React.Component {
 
-  constructor(props) {
+    constructor(props) {
       super(props);
       this.componentDidMount = this.componentDidMount.bind(this);
       this.state = {
           queryData: this.props.currentRoute.query.data
-        };
-      cookie.save("user_json_storage", this.state.queryData, {path: "/"});
-    }
+      };
+      cookie.save('user_json_storage', this.state.queryData, {path: '/'});
+  }
 
-  componentWillMount() {
-        console.log('Will be called on the server...')
-   }
+    componentWillMount() {
+      console.log('Will be called on the server...');
+  }
     componentDidMount() {
         console.log('LTI. componentDidMount');
-    }
+  }
 
     render() {
         //console.log('LTILogin.render called. queryData='+this.state.queryData);
