@@ -15,8 +15,6 @@ class LTI extends React.Component {
   constructor(props) {
       super(props);
       this.componentDidMount = this.componentDidMount.bind(this);
-      this.signin = this.signin.bind(this);
-      this.findGetParameter = this.findGetParameter.bind(this);
       this.state = {
           queryData: this.props.currentRoute.query.data
         };
