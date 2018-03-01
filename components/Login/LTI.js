@@ -16,8 +16,8 @@ class LTI extends React.Component {
         super(props);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.state = {
-          queryData: this.props.currentRoute.query.data
-      };
+            queryData: this.props.currentRoute.query.data
+        };
         cookie.save('user_json_storage', this.state.queryData, {path: '/'});
     }
 
