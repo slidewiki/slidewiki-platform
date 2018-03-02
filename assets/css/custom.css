@@ -207,3 +207,9 @@
   background-color: transparent;
   text-decoration: none;
 }
+
+/** OVERRIDING REVEAL.JS SLIDES to SHOW MODAL - may not be necessary due to change in react-contextmenu.css zindex **/
+
+.reveal .slides {
+    z-index: 0 !important;
+}

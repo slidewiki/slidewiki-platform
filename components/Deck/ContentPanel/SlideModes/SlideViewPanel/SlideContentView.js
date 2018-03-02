@@ -2,6 +2,11 @@ import React from 'react';
 //import ResizeAware from 'react-resize-aware';
 import {findDOMNode} from 'react-dom';
 const ReactDOM = require('react-dom');
+//import {NavLink} from 'fluxible-router';
+//import {connectToStores} from 'fluxible-addons-react';
+//import SlideViewStore from '../../../../../stores/SlideViewStore';
+import AnnotationContextMenu from '../../../../Annotation/AnnotationContextMenu';
+import { ContextMenu, MenuItem, ContextMenuTrigger, SubMenu } from 'react-contextmenu';
 
 class SlideContentView extends React.Component {
     constructor(props) {
@@ -183,16 +188,19 @@ class SlideContentView extends React.Component {
         <div ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div ref="slideContentView" className="ui" style={compStyle}>
-                <div className={['reveal', style.reveal].join(' ')}>
-                    <div className={['slides', style.slides].join(' ')}>
-                        <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
-                                 dangerouslySetInnerHTML={{__html: this.props.content}}>
-                            </div>
-                        </section>
+                <ContextMenuTrigger id="anno-context-menu">
+                    <div className={['reveal', style.reveal].join(' ')}>
+                        <div className={['slides', style.slides].join(' ')}>
+                            <section className="present" style={sectionElementStyle}>
+                                <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
+                                     dangerouslySetInnerHTML={{__html: this.props.content}}>
+                                </div>
+                            </section>
+                        </div>
                     </div>
-                    <br />
-                </div>
+                </ContextMenuTrigger>
+                <AnnotationContextMenu />
+                <br />
             </div>
             <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                 {this.props.speakernotes ? <b>Speaker notes:</b> : ''}

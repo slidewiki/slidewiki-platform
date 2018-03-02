@@ -123,6 +123,9 @@ class ContentActionsHeader extends React.Component {
             'ui small basic left attached button': true,
             'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
+        const annotateClass = classNames({
+            'item ui small basic left attached button': true
+        });
         const duplicateItemClass = classNames({
             'ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'

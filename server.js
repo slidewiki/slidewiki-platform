@@ -97,6 +97,7 @@ fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/usergroup'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
+fetchrPlugin.registerService(require('./services/annotations'));
 fetchrPlugin.registerService(require('./services/logservice'));
 fetchrPlugin.registerService(require('./services/like'));
 fetchrPlugin.registerService(require('./services/media'));

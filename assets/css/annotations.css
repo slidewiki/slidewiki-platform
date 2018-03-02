@@ -1,0 +1,19 @@
+.r_entity {
+    z-index: -1;
+    margin: -3px;
+    padding: 1px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px outset rgba(0, 0, 0, 0.5);
+    /*-webkit-user-select: none;*/
+    /*-moz-user-select: none;*/
+}
+
+.r_prop {
+    z-index: -1;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px outset rgba(0, 0, 0, 0.5);
+}
+
+.r_highlight { background-color: yellow !important; }
