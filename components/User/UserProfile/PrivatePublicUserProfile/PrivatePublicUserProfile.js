@@ -3,6 +3,7 @@ import PublicUserData from '../PublicUserData';
 import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
+import UserRecommendations from '../UserRecommendations';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
@@ -17,12 +18,18 @@ class PrivatePublicUserProfile extends React.Component {
         return <UserCollections user={this.props.user} loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} />;
     }
 
+    showUserRecommendactions(){
+        return <UserRecommendations loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} />;
+    }
+
     chooseView(){
         switch(this.props.category){
             case 'collections':
                 return this.showUserCollections();
-            default: 
-                return this.showUserDecks();        
+            case 'recommendations':
+                return this.showUserRecommendactions();
+            default:
+                return this.showUserDecks();
         }
     }
 

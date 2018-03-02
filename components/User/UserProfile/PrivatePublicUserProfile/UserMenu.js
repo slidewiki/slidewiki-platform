@@ -10,10 +10,17 @@ class UserMenu extends React.Component {
     render() {
         let decksMsg = 'My Decks';
         let deckCollectionsMsg = 'My Deck Collections';
+        let deckRecommendationsMsg = 'Recommended Decks';
+        let deckRecommendationNavLink = (
+            <NavLink className="item" href={'/user/' + this.props.user.uname + '/recommendations'} activeStyle={this.styles}>
+                <p><i className="icon grid layout"/> {deckRecommendationsMsg}</p>
+            </NavLink>
+        );
 
         if(this.props.user.uname !== this.props.loggedinuser){
             decksMsg = 'Owned Decks';
             deckCollectionsMsg = 'Owned Deck Collections';
+            deckRecommendationNavLink = '';
         }
 
         return (
@@ -25,6 +32,7 @@ class UserMenu extends React.Component {
                   <NavLink className="item" href={'/user/' + this.props.user.uname + '/collections'} activeStyle={this.styles}>
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
+                  {deckRecommendationNavLink}
               </div>
 
           </div>
