@@ -75,7 +75,7 @@ class UserDecks extends React.Component {
                 {loadMoreContent}
             </div>;
         }
-        let sortBy = meta.sortBy;
+        let sortBy = meta.sort;
         let header = (this.props.loggedinuser === this.props.user.uname) 
             ? <FormattedMessage id='UserDecks.header.myDecks' defaultMessage='My Decks' />
             : <FormattedMessage id='UserDecks.header.ownedDecks' defaultMessage='Owned Decks' />;

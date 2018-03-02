@@ -76,7 +76,7 @@ class UserSharedDecks extends React.Component {
                 {loadMoreContent}
             </div>;
         }
-        let sortBy = meta.sortBy;
+        let sortBy = meta.sort;
         
         return (
           <div className="ui segments">

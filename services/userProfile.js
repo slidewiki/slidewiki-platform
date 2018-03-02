@@ -196,9 +196,9 @@ export default {
                         user: params.id2,
                         roles: params.roles, 
                         rootsOnly: true,
-                        sortBy: (params.sort || 'lastUpdate'),
+                        sort: (params.sort || 'lastUpdate'),
                         page: params.page, 
-                        per_page: 30
+                        pageSize: 30
                     },
                     json: true
                 };
@@ -209,7 +209,7 @@ export default {
             }
 
             rp(requestCall).then( (response) => {
-                let decks = response.decks;
+                let decks = response.items;
 
                 //get the number of likes
                 let arrayOfPromises = [];
@@ -231,10 +231,10 @@ export default {
                     }
 
                     let converted = decks.map((deck) => { return transform(deck); });
-                    response.metadata.roles = params.roles;
+                    response._meta.roles = params.roles;
 
                     callback(null, {
-                        metadata: response.metadata, 
+                        metadata: response._meta, 
                         decks: converted
                     });
                 });
