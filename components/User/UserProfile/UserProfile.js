@@ -197,7 +197,7 @@ class UserProfile extends React.Component {
               </div>
 
               <div className="ui segment">
-                <DeactivateAccount />
+                <DeactivateAccount showModal={this.props.UserProfileStore.showDeactivateAccountModal} />
               </div>
             </div>
         </div>);

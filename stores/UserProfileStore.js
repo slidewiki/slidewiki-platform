@@ -59,6 +59,9 @@ class UserProfileStore extends BaseStore {
 
         //LoginModal
         this.showLoginModal = false;
+
+        //Deactivate account modal
+        this.showDeactivateAccountModal = false;
     }
 
     destructor() {
@@ -100,6 +103,8 @@ class UserProfileStore extends BaseStore {
 
         //LoginModal
         this.showLoginModal = false;
+
+        this.showDeactivateAccountModal = false;
     }
 
     getState() {
@@ -130,7 +135,8 @@ class UserProfileStore extends BaseStore {
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
             saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
-            usergroupsViewStatus: this.usergroupsViewStatus, 
+            usergroupsViewStatus: this.usergroupsViewStatus,
+            showDeactivateAccountModal: this.showDeactivateAccountModal
         };
     }
 
@@ -166,6 +172,7 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = state.saveProfileIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
+        this.showDeactivateAccountModal = state.showDeactivateAccountModal;
     }
 
     changeTo(payload) {
@@ -402,6 +409,16 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
         this.nextUserDecksError = false;
     }
+
+    showDeactivateModal() {
+        this.showDeactivateAccountModal = true;
+        this.emitChange();
+    }
+
+    hideDeactivateModal() {
+        this.showDeactivateAccountModal = false;
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -447,6 +464,8 @@ UserProfileStore.handlers = {
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
     'SAVE_USERPROFILE_START': 'saveProfileStart',
+    'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
+    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal'
 };
 
 export default UserProfileStore;
