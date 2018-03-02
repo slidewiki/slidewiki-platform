@@ -18,6 +18,7 @@ import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import ContentUtil from '../../util/ContentUtil';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import {equals} from '../../../../../common.js';
 
 let ReactDOM = require('react-dom');
 
@@ -1980,6 +1981,12 @@ class SlideContentEditor extends React.Component {
     emitChange(context){
         context.hasChanges = true;
     }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let samePropsState = equals(this.props, nextProps);
+        return !samePropsState;
+    }
+
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.

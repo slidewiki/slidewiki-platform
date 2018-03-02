@@ -4,8 +4,7 @@ import SlideEditStore from '../../../../../stores/SlideEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import SlideContentEditor from './SlideContentEditor';
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
-
-
+import {equals} from '../../../../../common.js';
 
 class SlideEditPanel extends React.Component {
     constructor(props) {
@@ -60,6 +59,11 @@ class SlideEditPanel extends React.Component {
 
     isContentUndefined(props) {
         return props.SlideEditStore.content === undefined || props.SlideEditStore.content === '';
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let samePropsState = equals(this.props, nextProps);
+        return !samePropsState;
     }
 
     render() {
