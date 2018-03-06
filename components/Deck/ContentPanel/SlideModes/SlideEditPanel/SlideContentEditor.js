@@ -1663,8 +1663,44 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
         {
             this.hasChanges = true;
-            //no need for this -> title is updated on slide save.
-            //this.handleSaveButton();
+            const messagesSaveAfterSlideNameChangeModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalTitle',
+                    defaultMessage: 'Save now or continue editing?',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalText',
+                    defaultMessage: 'The slide name will be updated after saving the slide and exiting slide edit mode. Click "yes" to save the slide and exit edit mode. Click "no" to continue editing your slide.'
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalConfirm',
+                    defaultMessage: 'Yes, save and exit slide edit mode',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalCancel',
+                    defaultMessage: 'No, continue editing',
+                },
+            });
+            swal({
+                title: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_title),
+                text: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_text),
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_confirm),
+                confirmButtonClass: 'ui olive button',
+                cancelButtonText: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_cancel),
+                cancelButtonClass: 'ui red button',
+                buttonsStyling: false,
+                allowEnterKey: true
+            }).then((accepted) => {
+                this.handleSaveButton();
+            }, (reason) => {
+                //done(reason);
+            });
+            setTimeout(() => {
+                $('.swal2-confirm').focus();
+            }, 500);
         }
         if (nextProps.SlideEditStore.slideSize !== '' && nextProps.SlideEditStore.slideSize !== this.props.SlideEditStore.slideSize)
         {
