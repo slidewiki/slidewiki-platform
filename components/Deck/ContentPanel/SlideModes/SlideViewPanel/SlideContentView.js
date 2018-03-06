@@ -44,7 +44,8 @@ class SlideContentView extends React.Component {
             }
             */
             //initial resize
-            this.resize();
+            this.resize(true);
+            $('.pptx2html').css({'margin': 'auto'});
             window.addEventListener('resize', this.handleResize);
             /*ReactDOM.findDOMNode(this.refs.container).addEventListener('onResize', (evt) =>
                 {
@@ -62,35 +63,59 @@ class SlideContentView extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize();
+        this.resize(false);
 
         //this.loading = '';
         //console.log('componentDidUpdate');
     }
 
-    resize()
+    resize(initialResize)
     {
-        let containerwidth = document.getElementById('container').offsetWidth;
-        let containerheight = document.getElementById('container').offsetHeight;
-        //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
-
-        //reset scaling of pptx2html element to get original size
-        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-
-        //Function to fit contents in edit and view component
-        let pptxwidth = $('.pptx2html').width();
-        let pptxheight = $('.pptx2html').height();
-
-        //only calculate scaleration for width for now
-        this.scaleratio = containerwidth / (pptxwidth+50);
-        //console.log(containerwidth);
-        //console.log(pptxwidth);
-
         if ($('.pptx2html').length)
         {
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            let containerwidth = document.getElementById('slideContainer').offsetWidth;
+            let containerheight = document.getElementById('slideContainer').offsetHeight;
+            console.log(containerwidth);
+            if(initialResize === true)
+            {
+                //Function to fit contents in edit and view component
+                let pptxwidth = $('.pptx2html').width();
+                console.log(pptxwidth);
+                let pptxheight = $('.pptx2html').height();
 
+                //this.scaleratio = containerwidth / (pptxwidth+50);
+                //this.vScaleratio = containerheight / (pptxheight+100);
+                this.scaleratio = containerwidth / (pptxwidth);
+                this.vScaleratio = containerheight / (pptxheight);
+                //console.log(containerwidth);
+                //reset scaling of pptx2html element to get original size
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                let scaleratio;
+                if (this.vScaleratio < this.scaleratio)
+                {scaleratio = this.vScaleratio;}
+                else {scaleratio = this.scaleratio;}
+                console.log('initial' + this.scaleratio + this.vScaleratio);
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                $('.pptx2html').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+            }
+
+
+            //show that content is outside of pptx2html box (alternative to ridge: groove)
+            //$('.pptx2html').css({'borderStyle': 'ridge ridge ridge ridge', 'borderColor': '#7AB0D7', 'box-shadow': '0px 0px 1000px #E28447'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
+            //all borders
+            //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+
+            //Function to fit contents in edit and view component
+            let pptxwidth = $('.pptx2html').width();
+            let pptxheight = $('.pptx2html').height();
+
+            //this.scaleratio = containerwidth / (pptxwidth+50);
+            //this.vScaleratio = containerheight / (pptxheight+100);
+            this.scaleratio = containerwidth / (pptxwidth);
+            this.vScaleratio = containerheight / (pptxheight);
+            //console.log(containerwidth);
+            //console.log(pptxwidth);
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
             //width = pptxwidth + 40
             //height + 40
@@ -100,14 +125,9 @@ class SlideContentView extends React.Component {
             //style.padding left = 20 px, top 20 px
             //this.refs.slideContentView.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideContentView.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-
-            //show that content is outside of pptx2html box (alternative to ridge: groove)
-            //$('.pptx2html').css({'borderStyle': 'ridge ridge ridge ridge', 'borderColor': '#7AB0D7', 'box-shadow': '0px 0px 1000px #E28447'});
-            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
-            //all borders
-            //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            this.refs.slideContentView.style.height = ((pptxheight + 10 + 20) * this.vScaleratio) + 'px';
+            this.refs.inlineContent.style.height = ((pptxheight + 0 + 0) * this.vScaleratio) + 'px';
+            //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
         }
     }
 
@@ -121,7 +141,7 @@ class SlideContentView extends React.Component {
         const compStyle = {
             //minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 610,
+            minHeight: 740,
             //minHeight: '100%',
             overflowY: 'auto',
             overflowX: 'auto',
@@ -130,7 +150,7 @@ class SlideContentView extends React.Component {
             position: 'relative'
         };
         const sectionElementStyle = {
-            overflowY: 'hidden',
+            overflowY: 'auto',
             overflowX: 'auto',
             //paddingTop: 40,
             height: '100%'
@@ -138,9 +158,6 @@ class SlideContentView extends React.Component {
         const contentStyle = {
             minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 610,
-            overflowY: 'auto',
-            overflowX: 'auto',
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
@@ -181,17 +198,19 @@ class SlideContentView extends React.Component {
         return (
         //<ResizeAware ref='container' id='container' style={{ position: 'relative' }}>
         <div ref='container' id='container'>
-            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-            <div ref="slideContentView" className="ui" style={compStyle}>
-                <div className={['reveal', style.reveal].join(' ')}>
-                    <div className={['slides', style.slides].join(' ')}>
-                        <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
-                                 dangerouslySetInnerHTML={{__html: this.props.content}}>
-                            </div>
-                        </section>
+            <div ref='slideContainer' id='slideContainer'>
+                {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                <div ref="slideContentView" className="ui" style={compStyle}>
+                    <div className={['reveal', style.reveal].join(' ')}>
+                        <div className={['slides', style.slides].join(' ')}>
+                            <section className="present" style={sectionElementStyle}>
+                                <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
+                                     dangerouslySetInnerHTML={{__html: this.props.content}}>
+                                </div>
+                            </section>
+                        </div>
+                        <br />
                     </div>
-                    <br />
                 </div>
             </div>
             <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
