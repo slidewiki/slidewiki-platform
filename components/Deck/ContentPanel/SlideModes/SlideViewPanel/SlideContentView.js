@@ -7,6 +7,7 @@ class SlideContentView extends React.Component {
     constructor(props) {
         super(props);
         this.loading = 'loading';
+        this.zoom = 1.0;
     }
     componentWillReceiveProps(nextProps){
         // alert('styleName in componentWillReceiveProps: ' + styleName);
@@ -46,6 +47,7 @@ class SlideContentView extends React.Component {
             //initial resize
             this.resize();
             window.addEventListener('resize', this.handleResize);
+            //window.addEventListener('resize', (evt) => { this.resize();});
             /*ReactDOM.findDOMNode(this.refs.container).addEventListener('onResize', (evt) =>
                 {
                 console.log('onresize');
@@ -55,9 +57,11 @@ class SlideContentView extends React.Component {
         }
         this.forceUpdate();
     }
+
     handleResize = () => {
         this.forceUpdate();
     }
+
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
@@ -84,7 +88,10 @@ class SlideContentView extends React.Component {
         //only calculate scaleration for width for now
         this.scaleratio = containerwidth / (pptxwidth+50);
         //console.log(containerwidth);
-        //console.log(pptxwidth);
+        console.log(this.zoom);
+        this.scaleratio *= this.zoom;
+        //this.scaleratio = this.scaleratio * this.zoom;
+        console.log(this.scaleratio);
 
         if ($('.pptx2html').length)
         {
@@ -110,7 +117,19 @@ class SlideContentView extends React.Component {
             //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }
     }
-
+    zoomIn(){
+        this.zoom += 0.25;
+        //this.forceUpdate();
+        this.resize();
+    }
+    resetZoom(){
+        this.zoom = 1;
+        this.resize();
+    }
+    zoomOut(){
+        this.zoom -= 0.25;
+        this.resize();
+    }
     render() {
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
@@ -194,6 +213,9 @@ class SlideContentView extends React.Component {
                     <br />
                 </div>
             </div>
+            <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="search plus icon"></i></button>
+            <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="reset zoom" data-tooltip="reset zoom"><i className="compress icon"></i></button>
+            <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="search minus icon"></i></button>
             <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                 {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
                 <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
