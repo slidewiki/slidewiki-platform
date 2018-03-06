@@ -198,7 +198,7 @@ class DeckViewPanel extends React.Component {
                     </div>
                 </div>
                 <div className="ui  divider"></div>
-                <div key={this.props.slideIndex} className="ui three column grid container">
+                <div key={this.props.slideIndex} className="ui three column stackable grid container">
                     {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                     {slidesArr.map((slide, index) => {
                         let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;

@@ -21,8 +21,8 @@ class PrivatePublicUserProfile extends React.Component {
         switch(this.props.category){
             case 'collections':
                 return this.showUserCollections();
-            default: 
-                return this.showUserDecks();        
+            default:
+                return this.showUserDecks();
         }
     }
 
@@ -30,8 +30,14 @@ class PrivatePublicUserProfile extends React.Component {
         return (
           <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
-                  <PublicUserData user={ this.props.user } loggedinuser={ this.props.loggedinuser } />
-                  <UserMenu user={ this.props.user } loggedinuser={this.props.loggedinuser} choice={ this.props.category } />
+                  <div className = "ui stackable grid ">
+                    <div className = "tablet computer only sixteen wide column">
+                        <PublicUserData user={ this.props.user } loggedinuser={ this.props.loggedinuser }/>
+                    </div>
+                    <div className = "sixteen wide column">
+                        <UserMenu user={ this.props.user } loggedinuser={this.props.loggedinuser} choice={ this.props.category } />
+                    </div>
+                  </div>
               </div>
               <div className = "twelve wide column" >
                   {this.chooseView()}
