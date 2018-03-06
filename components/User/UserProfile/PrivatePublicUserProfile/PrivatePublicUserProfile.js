@@ -3,6 +3,7 @@ import PublicUserData from '../PublicUserData';
 import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
+import classNames from 'classnames/bind';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
@@ -27,11 +28,19 @@ class PrivatePublicUserProfile extends React.Component {
     }
 
     render() {
+        let profileClasses = classNames({
+            'tablet': this.props.loggedinuser,
+            'computer': this.props.loggedinuser,
+            'only': this.props.loggedinuser,
+            'sixteen': true,
+            'wide': true,
+            'column': true
+        });
         return (
           <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
                   <div className = "ui stackable grid ">
-                    <div className = "tablet computer only sixteen wide column">
+                    <div className = {profileClasses}>
                         <PublicUserData user={ this.props.user } loggedinuser={ this.props.loggedinuser }/>
                     </div>
                     <div className = "sixteen wide column">
