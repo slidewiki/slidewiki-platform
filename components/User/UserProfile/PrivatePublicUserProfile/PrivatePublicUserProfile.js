@@ -29,9 +29,9 @@ class PrivatePublicUserProfile extends React.Component {
 
     render() {
         let profileClasses = classNames({
-            'tablet': this.props.loggedinuser,
-            'computer': this.props.loggedinuser,
-            'only': this.props.loggedinuser,
+            'tablet': this.props.loggedinuser && this.props.user.uname === this.props.loggedinuser,
+            'computer': this.props.loggedinuser && this.props.user.uname === this.props.loggedinuser,
+            'only': this.props.loggedinuser && this.props.user.uname === this.props.loggedinuser,
             'sixteen': true,
             'wide': true,
             'column': true
