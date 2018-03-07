@@ -214,10 +214,13 @@ class ContentActionsHeader extends React.Component {
           <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
         </button>
         */
+        let mobileMessage = <div className="ui top attached disabled orange compact button">
+            You are on a mobile device. If you want to modify slides, please change to a desktop computer.
+        </div>;
 
         return (
                 <div className="ui two column grid">
-                    <div className="column tablet computer only">
+                    <div className="column computer only">
                         <div className="ui left floated top attached buttons" >
                             {editButton}
                             {saveButton}
@@ -226,7 +229,13 @@ class ContentActionsHeader extends React.Component {
                             {redoButton}
                         </div>
                     </div>
-                    <div className="column  tablet computer only">
+                    <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
+                        {mobileMessage}
+                    </div>
+                    <div className="sixteen wide column tablet only">
+                        {mobileMessage}
+                    </div>
+                    <div className="column computer only">
                         {this.props.UserProfileStore.username === '' ? '' :
                             <div className="ui right floated basic top attached buttons" >
                             <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
