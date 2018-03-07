@@ -9,6 +9,7 @@ class ContributorsStore extends BaseStore {
         this.translators = [];
         this.listName = '';
         this.selector = {};
+
     }
     updateContributors(payload) {
         this.contributors = this.getContributors(payload.contributors);
@@ -38,13 +39,9 @@ class ContributorsStore extends BaseStore {
     }
 
     getBasedonRole(role, list) {
-        let output = [];
-        list.forEach((contributor) => {
-            if(contributor.type === role){
-                output.push(contributor);
-            }
+        return list.filter((contributor) => {
+            return contributor.type === role;
         });
-        return output;
     }
     getCreator(contributorsAll){
         return this.getBasedonRole('creator', contributorsAll);

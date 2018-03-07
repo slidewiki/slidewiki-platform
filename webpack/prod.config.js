@@ -18,7 +18,8 @@ let webpackConfig = {
         ],
         vendor: [
             'react-intl', 'react', 'react-dom', 'semantic-ui-react', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
-        ]
+        ],
+        chart: ['react-svg-piechart']
     },
     output: {
         path: path.resolve('./build/js'),
@@ -29,7 +30,7 @@ let webpackConfig = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules(?!(\/|\\)identicons)/ , 
+                exclude: /node_modules(?!(\/|\\)identicons)/ ,
                 loader: 'babel-loader'
             },
             // Getting URLs for font files otherwise we get encoding errors in css-loader

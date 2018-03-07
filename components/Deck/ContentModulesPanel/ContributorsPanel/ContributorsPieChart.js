@@ -29,7 +29,7 @@ class ContributorsPieChart extends React.Component {
 
     render() {
         const colors = [ '#253494', '#2c7fb8', '#41b6c4', '#a1dab4', '#B6B69C',  ];
-        let data = this.props.ContributorsStore.contributors.concat(this.props.ContributorsStore.creator);
+        let data = this.props.ContributorsStore.creator.concat(this.props.ContributorsStore.contributors);
         let legend = [];
         let pie = {};
         let first_contributors = [];
