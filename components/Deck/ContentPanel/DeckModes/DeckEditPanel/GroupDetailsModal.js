@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import UserPicture from '../../../../common/UserPicture';
 import FocusTrap from 'focus-trap-react';
-import {Button, Icon, Modal, Header, TextArea} from 'semantic-ui-react';
+import {Button, Icon, Modal, Header, TextArea, Segment, Container} from 'semantic-ui-react';
 import {hideGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
@@ -10,6 +10,7 @@ class GroupDetailsModal extends React.Component {
     constructor(props) {
         super(props);
         this.handleClose = this.handleClose.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
 
         this.messages = defineMessages({
             modalHeading: {
@@ -39,9 +40,13 @@ class GroupDetailsModal extends React.Component {
         });
     }
 
-    handleClose(e) {
-	      e.preventDefault();
+    handleClose() {
+	      $('#app').attr('aria-hidden','false');
 	      this.context.executeAction(hideGroupDetailsModal, {});
+    }
+
+    unmountTrap() {
+        this.handleClose();
     }
 
     render() {
@@ -96,23 +101,42 @@ class GroupDetailsModal extends React.Component {
         let showModal = this.props.show;
 
         return (
-          <Modal dimmer='blurring' ref="modal1" role='dialog' aria-labelledby='groupdetailsmodal_header'
-									 aria-describedby='groupdetailsmodal_content' open={showModal} >
-								<Header as="h1" content={this.context.intl.formatMessage(this.messages.modalHeading)} id='groupdetailsmodal_header'/>
-								<Modal.Content id='groupdetailsmodal_content'>
-									<h3 className="header" >{this.props.group.name}</h3>
-									<p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
-									<div className="ui very relaxed  list">
-											{members}
-									</div>
+          <Modal dimmer='blurring'
+            ref="modal1"
+            role='dialog'
+            aria-labelledby='groupdetailsmodal_header'
+						aria-describedby='groupdetailsmodal_content'
+            open={showModal}
+            tabIndex="0" >
+              <FocusTrap focusTrapOptions={{
+                  clickOutsideDeactivates: true,
+                  onDeactivate: this.unmountTrap,
+                  initialFocus:'#groupdetailsmodal_content'
+                }}
+                active={showModal}
+                id="focusTrapGroupDetailsModal"
+                className="header">
+								<Modal.Header as="h1" content={this.context.intl.formatMessage(this.messages.modalHeading)} id='groupdetailsmodal_header'/>
+								<Modal.Content id='groupdetailsmodal_content' tabIndex="0">
+                  <Container>
+                    <Segment color="blue" textAlign="center" padded>
+                      <Segment attached="bottom" textAlign="left">
+      									<h3 className="header" >{this.props.group.name}</h3>
+      									<p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
+      									<div className="ui very relaxed  list">
+      											{members}
+      									</div>
+                      </Segment>
+                      <Modal.Actions>
+  											<Button onClick={ this.handleClose } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.close)}>
+  													{this.context.intl.formatMessage(this.messages.close)}
+  											</Button>
+      								</Modal.Actions>
+                    </Segment>
+                  </Container>
 								</Modal.Content>
-								<Modal.Actions>
-										<FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={showModal}>
-											<Button labelPosition='right' onClick={ this.handleClose } role="button" tabIndex="0">
-													{this.context.intl.formatMessage(this.messages.close)}
-											</Button>
-										</FocusTrap>
-								</Modal.Actions>
+
+              </FocusTrap>
 						</Modal>
         );
 

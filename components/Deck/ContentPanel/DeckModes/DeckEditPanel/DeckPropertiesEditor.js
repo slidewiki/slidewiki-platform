@@ -282,7 +282,7 @@ class DeckPropertiesEditor extends React.Component {
     handleClickShowGroupDetails(groupid, event) {
         event.preventDefault();
         // console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
-
+        $('#app').attr('aria-hidden','true');
         //call service
         this.context.executeAction(loadUsergroup, {groupid: groupid});
     }
