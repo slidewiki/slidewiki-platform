@@ -112,7 +112,7 @@ class GroupDetailsModal extends React.Component {
                   clickOutsideDeactivates: true,
                   onDeactivate: this.unmountTrap,
                   initialFocus:'#groupdetailsmodal_content'
-                }}
+              }}
                 active={showModal}
                 id="focusTrapGroupDetailsModal"
                 className="header">
