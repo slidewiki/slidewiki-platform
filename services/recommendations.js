@@ -16,9 +16,9 @@ export default {
         if (resource === 'recommendations.list'){
 
 
+            const recommendationServiceUri = 'http://localhost:8084';
 
-
-            rp.get({uri: 'http://localhost/analytics/webresources/recommender?userid=' + uid, proxy: '' }).then((res) => {
+            rp.get({uri: recommendationServiceUri + '/analytics/webresources/recommender?userid=' + uid, proxy: '' }).then((res) => {
 
 
 
