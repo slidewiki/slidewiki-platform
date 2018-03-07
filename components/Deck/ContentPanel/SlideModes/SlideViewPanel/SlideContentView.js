@@ -62,7 +62,7 @@ class SlideContentView extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-
+        this.resize();
         //this.loading = '';
         //console.log('componentDidUpdate');
     }
@@ -147,14 +147,13 @@ class SlideContentView extends React.Component {
             overflowX: 'auto',
         };
         const compSpeakerStyle = {
-            minHeight: 50,
             overflowY: 'auto',
             position: 'relative',
-            resize: 'vertical'
+            paddingLeft: '5px'
         };
         const SpeakerStyle = {
             minWidth: '100%',
-            minHeight: 60,
+            minHeight: 80,
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
@@ -192,12 +191,16 @@ class SlideContentView extends React.Component {
                     <br />
                 </div>
             </div>
-            <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="search plus icon"></i></button>
-            <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="reset zoom" data-tooltip="reset zoom"><i className="compress icon"></i></button>
-            <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="search minus icon"></i></button>
-            <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+            <div className="ui horizontal segments">
+                <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
+                    {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
+                    <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+                    </div>
+                </div>
+                <div className="ui segment vertical attached left icon buttons">
+                    <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="plus icon"></i><i className="search icon"></i></button>
+                    <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="reset zoom" data-tooltip="reset zoom"><i className="compress icon"></i><i className="search icon"></i></button>
+                    <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="minus icon"></i><i className="search icon"></i></button>
                 </div>
             </div>
         </div>
