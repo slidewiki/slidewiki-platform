@@ -1,5 +1,4 @@
 import React from 'react';
-//import ResizeAware from 'react-resize-aware';
 import {findDOMNode} from 'react-dom';
 const ReactDOM = require('react-dom');
 
@@ -10,12 +9,9 @@ class SlideContentView extends React.Component {
         this.zoom = 1.0;
     }
     componentWillReceiveProps(nextProps){
-        // alert('styleName in componentWillReceiveProps: ' + styleName);
-        // console.log(this.props.PresentationStore);
         if (nextProps.theme === this.props.theme){
 
         }
-        //console.log('componentWillReceiveProps ' + this.props.loadingIndicator + nextProps.loadingIndicator);
         if (nextProps.loadingIndicator !== this.props.loadingIndicator)
         {
             if (nextProps.loadingIndicator === 'true')
@@ -66,7 +62,6 @@ class SlideContentView extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize();
 
         //this.loading = '';
         //console.log('componentDidUpdate');
@@ -87,10 +82,8 @@ class SlideContentView extends React.Component {
 
         //only calculate scaleration for width for now
         this.scaleratio = containerwidth / (pptxwidth+50);
-        //console.log(containerwidth);
         console.log(this.zoom);
         this.scaleratio *= this.zoom;
-        //this.scaleratio = this.scaleratio * this.zoom;
         console.log(this.scaleratio);
 
         if ($('.pptx2html').length)
@@ -119,7 +112,6 @@ class SlideContentView extends React.Component {
     }
     zoomIn(){
         this.zoom += 0.25;
-        //this.forceUpdate();
         this.resize();
     }
     resetZoom(){
@@ -138,30 +130,21 @@ class SlideContentView extends React.Component {
             position: 'relative'
         };
         const compStyle = {
-            //minWidth: '100%',
-            // maxHeight: 450,
             minHeight: 610,
-            //minHeight: '100%',
             overflowY: 'auto',
             overflowX: 'auto',
-            //overflowY: 'visible',
-            //overflow: 'hidden,'
             position: 'relative'
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
-            //paddingTop: 40,
             height: '100%'
         };
         const contentStyle = {
             minWidth: '100%',
-            // maxHeight: 450,
             minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
-            //borderStyle: 'dashed',
-            //borderColor: '#e7e7e7',
         };
         const compSpeakerStyle = {
             minHeight: 50,
@@ -193,12 +176,8 @@ class SlideContentView extends React.Component {
             styleName = 'white';
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        //console.log(style);
-        //console.log(style.reveal);
-        //console.log(style.slides);
 
         return (
-        //<ResizeAware ref='container' id='container' style={{ position: 'relative' }}>
         <div ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div ref="slideContentView" className="ui" style={compStyle}>
