@@ -123,7 +123,10 @@ class UserProfile extends React.Component {
                     <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
-                <div className = "twelve wide column" >
+                <div className = "eleven wide column tablet only" >
+                    {toInsert()}
+                </div>
+                <div className = "twelve wide column mobile computer only" >
                     {toInsert()}
                 </div>
             </div>
