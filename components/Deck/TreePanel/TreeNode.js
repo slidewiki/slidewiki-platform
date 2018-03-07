@@ -152,7 +152,7 @@ class TreeNode extends React.Component {
         /*
         let actionSignifierStyle = {
             display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none',
-            'background-color': '#FFFFFF',
+            'backgroundColor': '#FFFFFF',
             height: '0.5em'
         };
         let actionSignifier = <Button as='button' icon ui size='tiny' floated='right'

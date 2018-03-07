@@ -235,7 +235,7 @@ class AddDeck extends React.Component {
                     },
                     success_text:{
                         id: 'AddDeck.swal.success_text',
-                        defaultMessage: 'The selected file has been imported and a new deck nas been created.',
+                        defaultMessage: 'The selected file has been imported and a new deck has been created.',
                     },
                     success_confirm_text:{
                         id: 'AddDeck.swal.success_confirm_text',
