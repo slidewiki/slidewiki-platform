@@ -105,7 +105,7 @@ class Header extends React.Component {
         return (
             <div>
             {cookieBanner}
-              <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
+              <MediaQuery minDeviceWidth={769} values={{deviceWidth: 1600}}>
                 <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                     <div className="ui fluid container">
                         <a className="item" href='/'>
@@ -127,7 +127,7 @@ class Header extends React.Component {
                     </div>
                 </div>
               </MediaQuery>
-              <MediaQuery maxDeviceWidth={767}>
+              <MediaQuery maxDeviceWidth={768}>
                 <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
                   <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
                     &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki Logo" style={{width: '9rem', paddingTop: '0.5rem'}}/>
