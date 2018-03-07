@@ -43,7 +43,7 @@ class UserMenu extends React.Component {
         }
 
         return (
-          <div>
+          <div role="navigation">
               <div className="ui vertical fluid menu" role="menu">
                   <NavLink className="item" href={'/user/' + this.props.user.uname } activeStyle={this.styles} role="menuitem">
                       <p><i className="yellow icon open folder"/> {decksMsg}</p>

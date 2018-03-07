@@ -14,9 +14,7 @@ class UserSharedDecks extends React.Component {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
     }
 
-    componentDidUpdate() {
-        $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
-    }
+    componentDidUpdate() {}
 
     dropdownSelect(value) {
         this.context.executeAction(fetchUserDecks, {
@@ -46,6 +44,10 @@ class UserSharedDecks extends React.Component {
             sortTitle: {
                 id: 'UserDecks.sort.title', 
                 defaultMessage: 'Title'
+            }, 
+            sharedDecks: {
+                id: 'UserSharedDecks.header', 
+                defaultMessage: 'Decks shared with me'
             }
         });
     }
@@ -82,18 +84,16 @@ class UserSharedDecks extends React.Component {
           <div className="ui segments">
             {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div className="ui secondary clearing segment">
-                <h1 className="ui left floated header"><FormattedMessage id='UserSharedDecks.header' defaultMessage='Decks shared with me' /></h1>
-                { (this.props.decks) && 
-                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
-                        <i className="icon exchange"/>
-                        <div className="text">{this.getSelectedSort(sortBy)}</div>
-                        <div className="menu">
-                            <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
-                            <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
-                            <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
-                        </div>
+                <h1 className="ui left floated header">{this.context.intl.formatMessage(this.messages.sharedDecks)}</h1>
+                <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+                    <i className="icon exchange"/>
+                    <div className="text">{this.getSelectedSort(sortBy)}</div>
+                    <div className="menu">
+                        <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
+                        <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
+                        <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                     </div>
-                }
+                </div>
             </div>
             <div className="ui segment">
                 { (this.props.decks) && 

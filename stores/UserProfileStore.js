@@ -386,7 +386,10 @@ class UserProfileStore extends BaseStore {
 
     setUserDecksLoading(){
         this.userDecks = undefined;
-        this.userDecksMeta = {};
+        // preserve sorting of sort dropdown during loading
+        this.userDecksMeta = {
+            sort: this.userDecksMeta.sort
+        };
         this.emitChange();
     }
 

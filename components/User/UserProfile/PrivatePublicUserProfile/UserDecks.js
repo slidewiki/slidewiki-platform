@@ -14,9 +14,7 @@ class UserDecks extends React.Component {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
     }
 
-    componentDidUpdate() {
-        $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
-    }
+    componentDidUpdate() { }
 
     dropdownSelect(value) {
         this.context.executeAction(fetchUserDecks, {
@@ -45,6 +43,14 @@ class UserDecks extends React.Component {
             sortTitle: {
                 id: 'UserDecks.sort.title', 
                 defaultMessage: 'Title'
+            }, 
+            myDecks: {
+                id: 'UserDecks.header.myDecks', 
+                defaultMessage: 'My Decks'
+            }, 
+            ownedDecks: {
+                id: 'UserDecks.header.ownedDecks', 
+                defaultMessage: 'Owned Decks'
             }
         });
     }
@@ -77,25 +83,23 @@ class UserDecks extends React.Component {
         }
         let sortBy = meta.sort;
         let header = (this.props.loggedinuser === this.props.user.uname) 
-            ? <FormattedMessage id='UserDecks.header.myDecks' defaultMessage='My Decks' />
-            : <FormattedMessage id='UserDecks.header.ownedDecks' defaultMessage='Owned Decks' />;
-
+            ? this.context.intl.formatMessage(this.messages.myDecks)
+            : this.context.intl.formatMessage(this.messages.ownedDecks);
+            
         return (
           <div className="ui segments">
             {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div className="ui secondary clearing segment">
                 <h1 className="ui left floated header">{header}</h1>
-                { (this.props.decks) && 
-                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
-                        <i className="icon exchange"/>
-                        <div className="text">{this.getSelectedSort(sortBy)}</div>
-                        <div className="menu">
-                            <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
-                            <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
-                            <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
-                        </div>
+                <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+                    <i className="icon exchange"/>
+                    <div className="text">{this.getSelectedSort(sortBy)}</div>
+                    <div className="menu">
+                        <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
+                        <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
+                        <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                     </div>
-                }
+                </div>
             </div>
             <div className="ui segment">
                 { (this.props.decks) && 
