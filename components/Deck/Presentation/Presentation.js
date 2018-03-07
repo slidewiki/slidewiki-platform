@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ResizeAware from 'react-resize-aware';
+//import ResizeAware from 'react-resize-aware';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import PresentationSlide from './PresentationSlide';
@@ -37,12 +37,12 @@ class Presentation extends React.Component{
         if(process.env.BROWSER){
              //loading reveal style
             //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
+            $('.ui.footer.sticky.segment').css({'aria-hidden': 'hidden','display': 'none'});
+            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'aria-hidden': 'hidden','display': 'none'});
             $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'display': 'none'});
-            $('.ui.vertical.footer').css({'display': 'none'});
+            $('.ui.horizontal.segments.footer').css({'aria-hidden': 'hidden','display': 'none'});
+            $('.ui.vertical.footer').css({'aria-hidden': 'hidden','display': 'none'});
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.vertical.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
@@ -76,6 +76,8 @@ class Presentation extends React.Component{
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    // Plugin from https://github.com/marcysutton/reveal-a11y
+                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: true,condition: function() {return !!document.body.classList;}}
                 ]
             });
 
@@ -94,11 +96,14 @@ class Presentation extends React.Component{
 
         }
         //listen to resize event and resize.
-        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
+        /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
             {
             //console.log('resize');
             this.resize();
-        });
+        });*/
+        if(process.env.BROWSER){
+            window.addEventListener('resize', this.resize());
+        }
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the slide content
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
@@ -163,7 +168,8 @@ class Presentation extends React.Component{
         //console.log(style);
         this.slides = this.getSlides();
         return(
-            <ResizeAware ref='container' id='container'>
+            //<ResizeAware ref='container' id='container'>
+            <div ref='container' id='container'>
                 <div>
                     <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                         <div className={['slides', style.slides].join(' ')}>
@@ -172,7 +178,8 @@ class Presentation extends React.Component{
                     </div>
                     <br style={clearStyle} />
                 </div>
-            </ResizeAware>
+            </div>
+            //</ResizeAware>
         );
     }
 
