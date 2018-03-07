@@ -130,6 +130,16 @@ class UserMenuDropdown extends React.Component {
                    className="item"
                    key= {4}
                    tag='li'
+                   value={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}
+                   text='My Analytics'>
+                   <span style={{color:'black'}}>
+                   <i className={alarmClassName} aria-hidden={true} /> My Analytics
+                   </span>
+                  </AriaMenuButton.MenuItem>
+                  <AriaMenuButton.MenuItem
+                   className="item"
+                   key= {5}
+                   tag='li'
                    value={'logout'}
                    text='Sign Out'>
                    <span style={{color:'black'}}>
