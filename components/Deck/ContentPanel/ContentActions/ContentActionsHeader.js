@@ -220,7 +220,7 @@ class ContentActionsHeader extends React.Component {
 
         return (
                 <div className="ui two column grid">
-                    <div className="column computer only">
+                    <div className="column computer tablet only">
                         <div className="ui left floated top attached buttons" >
                             {editButton}
                             {saveButton}
@@ -232,10 +232,7 @@ class ContentActionsHeader extends React.Component {
                     <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
                         {mobileMessage}
                     </div>
-                    <div className="sixteen wide column tablet only">
-                        {mobileMessage}
-                    </div>
-                    <div className="column computer only">
+                    <div className="column computer tablet only">
                         {this.props.UserProfileStore.username === '' ? '' :
                             <div className="ui right floated basic top attached buttons" >
                             <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
