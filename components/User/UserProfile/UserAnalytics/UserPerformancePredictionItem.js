@@ -7,43 +7,35 @@ class UserpPerformancePredictionItem extends React.Component {
         const prediction = this.props.prediction;
 
         return (
-            <List.Item style={{border:0}}>
+            <List.Item className="ui raised segment" style={{border:0}}>
                 <List.Content style={{width:'100%'}} tabIndex='0'>
 
                     <List.Description>
+                        <div key={this.props.key} className="ui vertical segment" >
+                            <div className="ui five column stackable grid container">
 
-                        <div >
-                            Id:
-                            {prediction.id}
+                                <div className="column">
+                                    <div className="ui header"><h3>{prediction.title}</h3></div>
+                                </div>
+                                <div className="column">
+                                    Started:
+                                    {prediction.started}
+                                </div>
+                                <div className="column">
+                                    Finished:
+                                    {prediction.finished}
+                                </div>
+                                <div className="column">
+                                    Result:
+                                    {prediction.result}
+                                </div>
+                                <div className="column">
+                                    Accuracy:
+                                    {prediction.accuracy}
+                                </div>
+                            </div>
                         </div>
-                        <div >
-                            Deck title:
-                            {prediction.title}
-                        </div>
-                        <div >
-                            Deck id:
-                            {prediction.deckId}
-                        </div>
-                        <div >
-                            User id:
-                            {prediction.userId}
-                        </div>
-                        <div >
-                            Started:
-                            {prediction.started}
-                        </div>
-                        <div >
-                            Finished:
-                            {prediction.finished}
-                        </div>
-                        <div >
-                            Result:
-                            {prediction.result}
-                        </div>
-                        <div >
-                            Accuracy:
-                            {prediction.accuracy}
-                        </div>
+
                     </List.Description>
                 </List.Content>
             </List.Item>

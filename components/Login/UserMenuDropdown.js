@@ -133,7 +133,7 @@ class UserMenuDropdown extends React.Component {
                    value={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}
                    text='My Analytics'>
                    <span style={{color:'black'}}>
-                   <i className={alarmClassName} aria-hidden={true} /> My Analytics
+                   <i className="icon chart bar" aria-hidden={true} /> My Analytics
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
