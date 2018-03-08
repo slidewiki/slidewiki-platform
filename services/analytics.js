@@ -18,8 +18,6 @@ export default {
 
             const analyticsServiceUri = 'http://localhost:8084';
 
-console.log('##########################', uid);
-
             rp.get({uri: analyticsServiceUri + '/analytics/webresources/predictionjob/' + uid, proxy: '' }).then((res) => {
 
 
