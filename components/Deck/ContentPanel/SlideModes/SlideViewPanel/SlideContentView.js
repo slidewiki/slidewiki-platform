@@ -43,7 +43,6 @@ class SlideContentView extends React.Component {
             //initial resize
             this.resize();
             window.addEventListener('resize', this.handleResize);
-            //window.addEventListener('resize', (evt) => { this.resize();});
             /*ReactDOM.findDOMNode(this.refs.container).addEventListener('onResize', (evt) =>
                 {
                 console.log('onresize');
@@ -62,52 +61,33 @@ class SlideContentView extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        //this.resize();
-        //this.loading = '';
-        //console.log('componentDidUpdate');
     }
 
     resize()
     {
         let containerwidth = document.getElementById('container').offsetWidth;
         let containerheight = document.getElementById('container').offsetHeight;
-        //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
 
         //reset scaling of pptx2html element to get original size
         $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
         //Function to fit contents in edit and view component
-        let pptxwidth = $('.pptx2html').width();
-        let pptxheight = $('.pptx2html').height();
+        let pptxwidth = $('.pptx2html').outerWidth();
+        let pptxheight = $('.pptx2html').outerHeight();
 
         //only calculate scaleration for width for now
-        this.scaleratio = containerwidth / (pptxwidth+50);
-        console.log(this.zoom);
-        this.scaleratio *= this.zoom;
-        console.log(this.scaleratio);
+        this.scaleratio = this.zoom;
 
         if ($('.pptx2html').length)
         {
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            //width = pptxwidth + 40
-            //height + 40
-            //this.refs.slideContentView.style.width = ((pptxwidth + 40) * this.scaleratio) + 'px';
-            //this.refs.slideContentView.style.padding = '20px 20px 20px 20px';
-            //$(".pptx2html").css({'padding': '20px 20px 20px 20px'});
-            //style.padding left = 20 px, top 20 px
-            //this.refs.slideContentView.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideContentView.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            pptxheight = $('.pptx2html').outerHeight();
 
-            //show that content is outside of pptx2html box (alternative to ridge: groove)
-            //$('.pptx2html').css({'borderStyle': 'ridge ridge ridge ridge', 'borderColor': '#7AB0D7', 'box-shadow': '0px 0px 1000px #E28447'});
+            this.refs.slideContentView.style.height = (pptxheight * this.scaleratio) + 'px';
+
             $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
-            //all borders
-            //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }
     }
     zoomIn(){
@@ -137,14 +117,15 @@ class SlideContentView extends React.Component {
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
-            overflowX: 'auto',
-            height: '100%'
+            overflowX: 'hidden',
+            height: '100%',
+            padding: 0,
         };
         const contentStyle = {
             minWidth: '100%',
-            minHeight: 610,
-            overflowY: 'auto',
+            overflowY: 'hidden',
             overflowX: 'auto',
+            height: '100%'
         };
         const compSpeakerStyle = {
             overflowY: 'auto',
