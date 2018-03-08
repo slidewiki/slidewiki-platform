@@ -36,15 +36,6 @@ class Presentation extends React.Component{
     componentDidMount(){
         if(process.env.BROWSER){
              //loading reveal style
-            //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.vertical.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.vertical.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
