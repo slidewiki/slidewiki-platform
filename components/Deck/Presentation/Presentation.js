@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ResizeAware from 'react-resize-aware';
+//import ResizeAware from 'react-resize-aware';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import PresentationSlide from './PresentationSlide';
@@ -87,11 +87,14 @@ class Presentation extends React.Component{
 
         }
         //listen to resize event and resize.
-        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
+        /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
             {
             //console.log('resize');
             this.resize();
-        });
+        });*/
+        if(process.env.BROWSER){
+            window.addEventListener('resize', this.resize());
+        }
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the slide content
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
@@ -156,7 +159,8 @@ class Presentation extends React.Component{
         //console.log(style);
         this.slides = this.getSlides();
         return(
-            <ResizeAware ref='container' id='container'>
+            //<ResizeAware ref='container' id='container'>
+            <div ref='container' id='container'>
                 <div>
                     <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                         <div className={['slides', style.slides].join(' ')}>
@@ -165,7 +169,8 @@ class Presentation extends React.Component{
                     </div>
                     <br style={clearStyle} />
                 </div>
-            </ResizeAware>
+            </div>
+            //</ResizeAware>
         );
     }
 
