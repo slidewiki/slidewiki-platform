@@ -29,13 +29,22 @@ class Application extends React.Component {
             );
         }
         else {
+            //add the route name to the following array if you don;t want header and footer rendered there
+            const noHF_pages = ['presentation'];
             return (
-
-                    <div className="slidewiki-page">
-                        <Header currentRoute={this.props.currentRoute} links={pages} />
-                        <Handler />
-                        <Footer />
-                    </div>
+                  <div className="slidewiki-page">
+                      {noHF_pages.indexOf(this.props.currentRoute.name) === -1 ?
+                          <Header currentRoute={this.props.currentRoute} links={pages} />
+                      :
+                      null
+                      }
+                      <Handler />
+                      {noHF_pages.indexOf(this.props.currentRoute.name) === -1 ?
+                          <Footer />
+                      :
+                      null
+                      }
+                  </div>
 
             );
         }
