@@ -17,6 +17,10 @@ class UserpPerformancePredictionItem extends React.Component {
                             {prediction.id}
                         </div>
                         <div >
+                            Deck title:
+                            {prediction.title}
+                        </div>
+                        <div >
                             Deck id:
                             {prediction.deckId}
                         </div>

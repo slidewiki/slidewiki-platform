@@ -24,9 +24,44 @@ export default {
 
 
                 let predictions = JSON.parse(res);
+                //GET DATA FOR DECKS FROM DECK SERVICE
+                let deckPromises = [];
+                // let likesPromises = [];//get the number of deck likes
 
+                // get details for the decks in the collection
+                for(let prediction of predictions){
+                    let deckId = prediction.deckId;
+                    deckPromises.push(
+                        rp.get({
+                            uri: `${Microservices.deck.uri}/deck/${deckId}`,
+                            json: true
+                        })
+                    );
 
-                callback(null, {predictions: predictions});
+                    // likesPromises.push(
+                    //     rp.get({
+                    //         uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
+                    //     })
+                    // );
+                }
+                // let deckPromise = Promise.all(deckPromises);
+                // let likesPromise = Promise.all(likesPromises);
+
+                // Promise.all([deckPromise, likesPromise]).then( (data) => {
+                Promise.all(deckPromises).then( (data) => {
+                    let decks = data;
+                    for (let i = 0; i < decks.length; i++) {
+                        let deck = decks[i];
+                        // get the active revision of the deck
+                        let activeRevision = deck.revisions[deck.revisions.length-1];
+                        predictions[i].title = activeRevision.title;
+                    }
+
+                    callback(null, {predictions: predictions});
+                }).catch( (err) => {
+                    console.log(err);
+                    callback(null, {predictions: []});
+                });
 
             }).catch((err) => {
                 console.log(err);
