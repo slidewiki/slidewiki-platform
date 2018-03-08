@@ -29,9 +29,6 @@ class UserRecommendationsStore extends BaseStore {
             };
         });
 
-      // remove user owned decks?
-
-
         this.loading = false;
 
         this.emitChange();

@@ -51,12 +51,17 @@ export default {
 
                 Promise.all([deckPromise, likesPromise]).then( (data) => {
                     let decks = data[0];
+                    let recommendationDecks = [];
                     for (let i = 0; i < data[1].length; i++) {
-                        decks[i].noOfLikes = data[1][i];
-                        decks[i].recommendationWeight = recommendations[i].weight;
+                        let recommendationDeck = decks[i];
+                        if (recommendationDeck.user !== uid) {// do not recommend decks owned by the user
+                            recommendationDeck.noOfLikes = data[1][i];
+                            recommendationDeck.recommendationWeight = recommendations[i].weight;
+                            recommendationDecks.push(recommendationDeck);
+                        }
                     }
 
-                    callback(null, {recommendations: decks});
+                    callback(null, {recommendations: recommendationDecks});
                 }).catch( (err) => {
                     console.log(err);
                     callback(null, {recommendations: []});
