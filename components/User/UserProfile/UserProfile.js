@@ -10,6 +10,7 @@ import UserGroups from './UserGroups';
 import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import UserPerformancePredictions from './UserAnalytics/UserPerformancePredictions';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -107,6 +108,14 @@ class UserProfile extends React.Component {
                         break;
                     case categories.groups[1]:
                         return this.displayGroupedit();
+                        break;
+                    default:
+                        return this.notImplemented();
+                }});
+            case categories.categories[4]:
+                return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
+                    case categories.analytics[0]:
+                        return this.displayPerformancePredictions();
                         break;
                     default:
                         return this.notImplemented();
@@ -219,6 +228,18 @@ class UserProfile extends React.Component {
 
     displayGroupedit() {
         return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
+    }
+
+
+
+
+
+
+
+    displayPerformancePredictions() {
+        return (
+            <UserPerformancePredictions />
+        );
     }
 
     notImplemented() {

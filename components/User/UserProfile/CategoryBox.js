@@ -82,7 +82,7 @@ class CategoryBox extends React.Component {
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
                 <p>
-                  <i className="icon users"/>
+                  <i className="icon chart bar"/>
                   <FormattedMessage
                     id='CategoryBox.myAnalytics'
                     defaultMessage=' My Analytics'
