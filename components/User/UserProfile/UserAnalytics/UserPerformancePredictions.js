@@ -3,14 +3,22 @@ import UserPerformancePredictionItem from './UserPerformancePredictionItem';
 import {List} from 'semantic-ui-react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserPerformancePredictionsStore from '../../../../stores/UserPerformancePredictionsStore';
+import UserProfileStore from '../../../../stores/UserProfileStore';
+import addPerformancePredictionJob from '../../../../actions/analytics/addPerformancePredictionJob';
 
 class UserPerformancePredictions extends React.Component {
     handleCLickNewPrediction(e) {
         e.preventDefault();
-        // this.context.executeAction(updateUsergroup, {group: {}, offline: true});
-        // this.context.executeAction(navigateAction, {
-        //     url: '/user/' + this.props.username + '/groups/edit'
-        // });
+
+
+        let deckId = 2000;
+
+
+
+
+        let uid = this.props.UserProfileStore.userid;
+
+        this.context.executeAction(addPerformancePredictionJob, {uid: uid, deckId: deckId});
     }
 
     render() {
@@ -43,9 +51,14 @@ class UserPerformancePredictions extends React.Component {
     }
 }
 
-UserPerformancePredictions = connectToStores(UserPerformancePredictions, [UserPerformancePredictionsStore], (context, props) => {
+UserPerformancePredictions.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
+UserPerformancePredictions = connectToStores(UserPerformancePredictions, [UserPerformancePredictionsStore, UserProfileStore], (context, props) => {
     return {
-        UserPerformancePredictionsStore: context.getStore(UserPerformancePredictionsStore).getState()
+        UserPerformancePredictionsStore: context.getStore(UserPerformancePredictionsStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 

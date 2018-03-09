@@ -5,7 +5,7 @@ class UserpPerformancePredictionItem extends React.Component {
 
     render() {
         const prediction = this.props.prediction;
-
+        const resultIcon = (!prediction.result) ? '' : (prediction.result < 50) ? (<i className="icon certificate red large"/>) : (prediction.result < 80) ? (<i className="icon certificate yellow large"/>) : (<i className="icon certificate green large"/>);
         return (
             <List.Item className="ui raised segment" style={{border:0}}>
                 <List.Content style={{width:'100%'}} tabIndex='0'>
@@ -28,6 +28,7 @@ class UserpPerformancePredictionItem extends React.Component {
                                 <div className="column">
                                     Result:
                                     {prediction.result}
+                                    {resultIcon}
                                 </div>
                                 <div className="column">
                                     Accuracy:

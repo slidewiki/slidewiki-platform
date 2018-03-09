@@ -16,6 +16,11 @@ class UserPerformancePredictionsStore extends BaseStore {
 
         this.emitChange();
     }
+    addPredictionJob(payload) {
+        this.predictions.push(payload.prediction);
+        // this.showAddBox = false;
+        this.emitChange();
+    }
     getState() {
         return {
             predictions: this.predictions,
@@ -34,7 +39,8 @@ class UserPerformancePredictionsStore extends BaseStore {
 UserPerformancePredictionsStore.storeName = 'UserPerformancePredictionsStore';
 UserPerformancePredictionsStore.handlers = {
     'LOAD_USER_PERFORMANCE_PREDICTIONS_SUCCESS': 'loadPredictions',
-    'SHOW_PERFORMANCE_PREDICTIONS_LOADING': 'showLoading'
+    'SHOW_PERFORMANCE_PREDICTIONS_LOADING': 'showLoading',
+    'ADD_PERFORMANCE_PREDICTION_SUCCESS': 'addPredictionJob'
 };
 
 export default UserPerformancePredictionsStore;

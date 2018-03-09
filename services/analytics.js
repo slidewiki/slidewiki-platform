@@ -2,6 +2,10 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
 
+const analyticsServiceUri = 'http://localhost:8084';
+
+
+
 export default {
     name: 'analytics',
     // At least one of the CRUD methods is Required
@@ -16,7 +20,7 @@ export default {
         if (resource === 'analytics.predictionslist'){
 
 
-            const analyticsServiceUri = 'http://localhost:8084';
+
 
             rp.get({uri: analyticsServiceUri + '/analytics/webresources/predictionjob/' + uid, proxy: '' }).then((res) => {
 
@@ -66,6 +70,36 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 callback(null, {predictions: []});
+            });
+        }
+    },
+
+    create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        let args = params.params? params.params : params;
+        let deckId = args.deckId;
+        let uid = args.uid;
+        if (uid === undefined) {
+            uid = 0;
+        }
+        if(resource === 'analytics.prediction'){
+
+            rp.post({
+                uri: analyticsServiceUri + '/analytics/webresources/predictionjob/',
+                proxy: '',
+                body:JSON.stringify({
+                    user_id: uid,
+                    deck_id: deckId
+                })
+            }).then((res) => {
+
+                console.log(res);
+
+                callback(null, {prediction: JSON.parse(res)});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {prediction: {}});
             });
         }
     }
