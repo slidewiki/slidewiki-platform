@@ -52,7 +52,7 @@ class PresentationsPanel extends React.Component {
                         </div>
                         <div className="content" style={{marginLeft: '1em'}}>
                             <div className="summary">
-                                <a target="_blank" href={url}>{this.props.ActivityFeedStore.presentations[index].roomName} (opened at {new Date(this.props.ActivityFeedStore.presentations[index].openingTime).toLocaleTimeString()})</a>
+                                <a target="_blank" href={url} rel="nofollow">{this.props.ActivityFeedStore.presentations[index].roomName} (opened at {new Date(this.props.ActivityFeedStore.presentations[index].openingTime).toLocaleTimeString()})</a>
                             </div>
                         </div>
                     </div>
