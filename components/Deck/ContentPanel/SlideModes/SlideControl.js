@@ -85,14 +85,13 @@ class SlideControl extends React.Component {
         let compStyle = {
             outline: 'none'
         };
+        let slideProgressNumbers = SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree) + '/' + SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree);
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl" style={compStyle}>
                 <div className="ui icon buttons large left floated">
                     <button className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} type="button" aria-label="Go to the first slide (shift + left arrow)" data-tooltip="Go to the first slide (shift + left arrow)"><i className="icon fast backward"></i></button>
                     <button className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} type="button"  aria-label="Go to the previous slide (left arrow)" data-tooltip="Go to the previous slide (left arrow)"><i className="step backward icon"></i></button>
-                    <button className="ui grey large button" type="button"  aria-label="Slide number" data-tooltip="Slide number">
-                    {SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}
-                    </button>
+                    {!this.props.isMobile ? <button className="ui grey large button" type="button"  aria-label="Slide number" data-tooltip="Slide number">{slideProgressNumbers}</button>: ''}
                     <button className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Go to the next slide (right arrow)" data-tooltip="Go to the next slide (right arrow)"><i className="icon step forward"></i></button>
                     <button className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Go to the last slide (shift + right arrow)" data-tooltip="Go to the last slide (shift + right arrow)"><i className="icon fast forward"></i></button>
                 </div>

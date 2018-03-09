@@ -29,7 +29,7 @@ class UserCollections extends React.Component {
     componentDidMount() {
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
-        this.setState({isMobile: (mobile.phone) ? true : false});
+        this.setState({isMobile: (mobile.phone() !== null ) ? true : false});
     }
 
     showNewCollectionModal(event){
