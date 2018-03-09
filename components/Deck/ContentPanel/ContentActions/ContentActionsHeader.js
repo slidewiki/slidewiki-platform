@@ -214,8 +214,8 @@ class ContentActionsHeader extends React.Component {
           <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
         </button>
         */
-        let mobileMessage = <div className="ui top attached disabled orange compact button">
-            You are on a mobile device. If you want to modify slides, please change to a desktop computer.
+        let mobileMessage = <div className="ui top attached warning message">
+          <p>You are on a mobile device. If you want to modify slides, please change to a desktop computer.</p>
         </div>;
 
         return (
