@@ -6,7 +6,6 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
-import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword, ssoEnabled} from '../../configs/general';
 import common from '../../common';
