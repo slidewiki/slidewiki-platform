@@ -41,6 +41,9 @@ class Presentation extends React.Component{
                     $(this).attr('tabindex', 0);
                 }
             });
+            //TODO: add hidden element at start of PPTX slide content + to focus on this.
+
+
              //loading reveal style
 
             // $('html.ios, html.ios body').css('height': '100% !important');
@@ -81,21 +84,17 @@ class Presentation extends React.Component{
 
             Reveal.addEventListener( 'ready', ( event ) => {
 
-                $('.present >  .accessibilityWrapper > .pptx2html div:first').focus();
-                console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
-                console.log($('.present > .pptx2html div:first').html());
-                //$('.present > .pptx2html div:first').focus();
+                $('.present > .accessibilityWrapper > .pptx2html div:first').focus();
+                //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
-                //this.resize();
-                //alert('test1');
-                //$('.pptx2html div:first').focus();
+                this.resize();
             } );
 
             Reveal.addEventListener( 'slidechanged', ( event ) => {
                 //console.log('slidechanged: ' + $('.present > .accessibilityWrapper > .pptx2html div:first').html());
                 $('.present > .accessibilityWrapper > .pptx2html div:first').focus();
-                    //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                //this.resize();
+                //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
+                this.resize();
             } );
 
             //$('.present > .pptx2html div:first').focus();
