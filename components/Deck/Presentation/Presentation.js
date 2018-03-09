@@ -36,11 +36,10 @@ class Presentation extends React.Component{
     componentDidMount(){
         if(process.env.BROWSER){
             $('[style*="absolute"]').each(function () {
-                //if($(this).attr('tabindex') !== 0)
-                //{
-                //$(this).attr('tabindex', '');
-                $(this).removeAttr('tabindex');
-                //}
+                if($(this).attr('tabindex') !== 0)
+                {
+                    $(this).attr('tabindex', 0);
+                }
             });
             //TODO: add hidden element at start of PPTX slide content + to focus on this.
 
@@ -85,10 +84,7 @@ class Presentation extends React.Component{
 
             Reveal.addEventListener( 'ready', ( event ) => {
 
-                $('.accessibilityWrapper').attr('tabindex', '');
-
-                //$('.present > .accessibilityWrapper > .pptx2html div:first').focus();
-                $('.present > ').find('h3').focus();
+                $('.present > .accessibilityWrapper > .pptx2html div:first').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
                 this.resize();
@@ -96,8 +92,7 @@ class Presentation extends React.Component{
 
             Reveal.addEventListener( 'slidechanged', ( event ) => {
                 //console.log('slidechanged: ' + $('.present > .accessibilityWrapper > .pptx2html div:first').html());
-                //$('.present > .accessibilityWrapper > .pptx2html div:first').focus();
-                $('.present > ').find('h3').focus();
+                $('.present > .accessibilityWrapper > .pptx2html div:first').focus();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
                 this.resize();
             } );
