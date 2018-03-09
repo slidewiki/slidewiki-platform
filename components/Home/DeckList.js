@@ -9,6 +9,7 @@ import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';
 import { NavLink } from 'fluxible-router';
+import slug from 'slug';
 
 class DeckList extends React.Component {
 
@@ -28,12 +29,12 @@ class DeckList extends React.Component {
                     deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
                     //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
-
+                    let deck_slug = deck.title ? slug(deck.title) : '';
                     return (
                         <div className="ui vertical segment " key={'deck_meta' + deck._id}>
                             <div className="ui two column stackable grid">
                                 <div className="column">
-                                    <div className="ui header"><NavLink href={'./deck/' + deck._id}>{deck.title}</NavLink></div>
+                                    <div className="ui header"><NavLink href={'./deck'+(deck_slug ? '_' + deck_slug: '')+'/' + deck._id}>{deck.title}</NavLink></div>
                                     <div className="meta">Creator: <NavLink href={'./user/' + deckCreatorid}>{deckCreator}</NavLink></div>
                                     <div className="meta">Date: {deckDate}</div>
                                 </div>
