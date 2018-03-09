@@ -65,9 +65,6 @@ class SlideContentView extends React.Component {
 
     resize()
     {
-        let containerwidth = document.getElementById('container').offsetWidth;
-        let containerheight = document.getElementById('container').offsetHeight;
-
         //reset scaling of pptx2html element to get original size
         $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
@@ -85,7 +82,8 @@ class SlideContentView extends React.Component {
 
             pptxheight = $('.pptx2html').outerHeight();
 
-            this.refs.slideContentView.style.height = (pptxheight * this.scaleratio) + 'px';
+            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+            this.refs.slideContentView.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
 
             $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
         }
