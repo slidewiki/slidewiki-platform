@@ -74,19 +74,20 @@ class Presentation extends React.Component{
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
-                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: true,condition: function() {return !!document.body.classList;}}
+                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
                 ]
             });
 
 
             Reveal.addEventListener( 'ready', ( event ) => {
 
-                $('.present > .accessibilityWrapper > .pptx2html div:first').focus();
+                $('.present >  .accessibilityWrapper > .pptx2html div:first').focus();
                 console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
+                console.log($('.present > .pptx2html div:first').html());
                 //$('.present > .pptx2html div:first').focus();
             	// event.currentSlide, event.indexh, event.indexv
                 //this.resize();
-                $('.present > .pptx2html div:first').focus();
+                //alert('test1');
                 //$('.pptx2html div:first').focus();
             } );
 
@@ -97,7 +98,7 @@ class Presentation extends React.Component{
                 //this.resize();
             } );
 
-            $('.present > .pptx2html div:first').focus();
+            //$('.present > .pptx2html div:first').focus();
 
         //listen to resize event and resize.
         /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
@@ -107,6 +108,8 @@ class Presentation extends React.Component{
         });*/
             window.addEventListener('resize', this.resize());
         }
+        $('.present >  .pptx2html div:first').focus();
+
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the slide content
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
