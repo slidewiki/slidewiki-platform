@@ -22,8 +22,8 @@ export default function loadDeckView(context, payload, done) {
         let pageTitle = shortTitle + ' | ' + res.slidesData.title;
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle,
-            frozen: true,
-            allowUnfreeze: true,
+        //    frozen: true,
+        //    allowUnfreeze: true,
         });
         done();
     });

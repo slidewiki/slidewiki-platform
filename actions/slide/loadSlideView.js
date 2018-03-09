@@ -28,8 +28,8 @@ export default function loadSlideView(context, payload, done) {
         let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title;
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle,
-            frozen: true,
-            allowUnfreeze: true,
+        //    frozen: true,
+        //    allowUnfreeze: true,
         });
         done();
     });

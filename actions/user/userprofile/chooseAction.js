@@ -3,7 +3,7 @@ import fetchUser from './fetchUser';
 import { fetchUserDecks } from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
-import loadUserCollections from '../../collections/loadUserCollections'; 
+import loadUserCollections from '../../collections/loadUserCollections';
 import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
@@ -50,7 +50,7 @@ export function chooseAction(context, payload, done) {
         default:
             title = shortTitle;
     };
-    context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
+    //context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     async.series([
         (callback) => {

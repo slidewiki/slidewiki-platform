@@ -5,14 +5,14 @@ class ApplicationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.pageTitle = '';
-        this.frozen = false;
+        //this.frozen = false;
     }
     handlePageTitle(payload) {
         this.dispatcher.waitFor(RouteStore, () => {
-            if (!this.frozen || payload.allowUnfreeze) {
-                this.pageTitle = payload.pageTitle;
-                this.frozen = payload.frozen;
-            }
+            //if (!this.frozen || payload.allowUnfreeze) {
+            this.pageTitle = payload.pageTitle;
+            //    this.frozen = payload.frozen;
+            //}
             this.emitChange();
         });
     }

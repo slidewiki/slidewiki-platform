@@ -27,9 +27,9 @@ export default function loadSlideEdit(context, payload, done) {
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
         let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //    pageTitle: pageTitle
+        //});
         done();
     });
 }

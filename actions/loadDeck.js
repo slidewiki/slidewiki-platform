@@ -179,9 +179,9 @@ export default function loadDeck(context, payload, done) {
             context.executeAction(notFoundError, payload, done);
             return;
         }
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //    pageTitle: pageTitle
+        //});
 
         if (payload.params.mode !== 'edit') {
             //Create activity
