@@ -1021,6 +1021,7 @@ class SlideContentEditor extends React.Component {
                 //if(!$('.editMode').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
                 if(!$('.editMode').draggable( 'instance' )){
                     $(this).draggable({
+                        grid: [ 10, 10 ],
                         cursor: 'move',
                         //handle: '.drag-handle',
                         //handle: '.move',
@@ -1052,6 +1053,7 @@ class SlideContentEditor extends React.Component {
                 //if(!$('.editMode').resizable( 'instance' )){$(this).resizable({handles: 'all', scroll: true});}
                 if(!$('.editMode').resizable( 'instance' )){
                     $(this).resizable({
+                        grid: 10,
                         handles: 'all',
                         scroll: true,
                         minWidth: -($(this).width()) * 10,  // these need to be large and negative
