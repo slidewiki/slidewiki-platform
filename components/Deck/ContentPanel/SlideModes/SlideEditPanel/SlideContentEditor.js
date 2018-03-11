@@ -695,7 +695,8 @@ class SlideContentEditor extends React.Component {
         if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             //$('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
-            $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10));
+            let uniqueID = this.getHighestZIndex() + 10;
+            $('.pptx2html').append(this.getAbsoluteDiv(uniqueID));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.hasChanges = true;
             //this.emitChange(); //confirm non-save on-leave
@@ -705,6 +706,9 @@ class SlideContentEditor extends React.Component {
             });
             //this.uniqueIDAllElements();
             this.resizeDrag();
+
+            this.placeCaretAtStart(uniqueID);
+            $('#' + uniqueID).focus();
             //this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             const messagesCanvasModal = defineMessages({
@@ -761,7 +765,7 @@ class SlideContentEditor extends React.Component {
     }
     getAbsoluteDiv(zindex){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
+        return '<div id=\"' + zindex + '\" style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
     componentDidMount() {
         window.onbeforeunload = () => {
