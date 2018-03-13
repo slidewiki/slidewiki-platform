@@ -761,6 +761,7 @@ class presentationBroadcast extends React.Component {
                     that.eventForwarding = true;
                 });
             }
+            $('#slidewikiPresentation').off('load');
         }
 
         function changeSlide(slideID) { // called by peers
