@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
-import LoginModal from '../Login/LoginModal.js';
-import HeaderDropdown from '../Login/HeaderDropdown.js';
+//import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
+import LoginModal from '../Login/LoginModal';
+import UserMenuDropdown from '../Login/UserMenuDropdown';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
@@ -22,6 +23,8 @@ class Header extends React.Component {
     componentDidMount() {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+        $(this.refs.languagebar)
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
     }
 
     toggleSidebar() {
@@ -29,8 +32,13 @@ class Header extends React.Component {
             .sidebar('toggle');
     }
 
+    toggleLanguageBar() {
+        $(this.refs.languagebar)
+            .sidebar('toggle');
+    }
+
     closeSidebar(event) {
-        if(($(event.target).hasClass('item') && !$(event.target).hasClass('search')))
+        if(($(event.target).parentsUntil( $('div.menubar'), '.item' ).length >= 0 && $(event.target).parentsUntil( $('div.menubar'), '.search' ).length === 0))
             $(this.refs.menubar).sidebar('hide');
     }
 
@@ -55,7 +63,7 @@ class Header extends React.Component {
         let cookieBanner = '';
 
         if (this.props.UserProfileStore.username !== '') {
-            loginButton = <HeaderDropdown/>;
+            loginButton = <UserMenuDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
               <FormattedMessage id='header.mydecks.mobile' defaultMessage='My Decks'/>
@@ -128,18 +136,25 @@ class Header extends React.Component {
                     </NavLink>
                   </div>
                 </div>
-                <div className="ui inverted left dimmed sidebar vertical menu" ref="menubar" onClick={this.closeSidebar.bind(this)}>
+                <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                     <NavLink className="item" href='/'>
                         <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
                     </NavLink>
                     <NavLink className="item" routeName="addDeck">
                         <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                     </NavLink>
+                    <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
+                        <i className="caret right icon"/>
+                        <LocaleSwitcher mode="headeronly"/>
+                    </div>
                     {mobileLoginButton}
                     <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                     <div className="item search">
                         <SearchBox className="item"/>
                     </div>
+                </div>
+                <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
+                    <LocaleSwitcher mode="sidebar"/>
                 </div>
               </MediaQuery>
             </div>
