@@ -59,8 +59,8 @@ class ActivityFeedStore extends BaseStore {
     // }
     addActivity(payload) {
         const activity = payload.activity;
-        if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id ||
-            activity.activity_type === 'move' && this.selector.stype === 'deck' && this.selector.sid === activity.move_info.source_id) {
+        if (this.selector.stype === activity.content_kind && this.selector.sid.split('-')[0] === activity.content_id.split('-')[0] ||
+            activity.activity_type === 'move' && this.selector.stype === 'deck' && this.selector.sid.split('-')[0] === activity.move_info.source_id.split('-')[0]) {
             this.activities.unshift(activity);//add to the beginning
             if (isLocalStorageOn()) {
                 localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
@@ -71,7 +71,7 @@ class ActivityFeedStore extends BaseStore {
     }
     addActivities(payload) {
         payload.activities.forEach((activity) => {
-            if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id) {
+            if (this.selector.stype === activity.content_kind && this.selector.sid.split('-')[0] === activity.content_id.split('-')[0]) {
                 this.activities.unshift(activity);//add to the beginning
             }
         });
