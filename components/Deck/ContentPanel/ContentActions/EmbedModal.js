@@ -40,10 +40,14 @@ class EmbedModal extends React.Component {
                 id:'embedModal.embedModal_cancelButton',
                 defaultMessage: 'Cancel'
             },
-            embedModal_sizeLabel:{
-                id:'embedModal.embedModal_sizeLabel',
-                defaultMessage: 'Size'
-            }
+            embedModal_widthLabel:{
+                id:'embedModal.embedModal_widthLabel',
+                defaultMessage: 'Width of embedded content'
+            },
+            embedModal_heightLabel:{
+                id:'embedModal.embedModal_heightLabel',
+                defaultMessage: 'Height of embedded content'
+            },
         });
     }
 
@@ -118,33 +122,38 @@ class EmbedModal extends React.Component {
                         <Container>
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>
-                                    <Form.Field>
-                                        <Label>
-                                            {this.context.intl.formatMessage(this.messages.embedModal_sizeLabel)}
-                                        </Label>
-                                        <Input id="embedModalWidth"
-                                                placeholder={this.defaultWidthValue}
-                                                onChange={this.handleChange}/>
-                                        <Label>x</Label>
-                                        <Input id="embedModalHeight"
-                                                placeholder={this.defaultHeightValue}
-                                                onChange={this.handleChange}/>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <TextArea id="embedModalDescription"
-                                                label="description"
-                                                autoHeight={true}
-                                                value={'<iframe src="' + this.state.href + '" width="' +
-                                                        this.state.width + '" height="' + this.state.height +
-                                                        '"></iframe>'}/>
-                                    </Form.Field>
-                                    <Modal.Actions>
-                                        <Button icon="remove"
-                                                color="red"
-                                                type="button"
-                                                onClick={this.handleClose}
-                                                content={this.context.intl.formatMessage(this.messages.embedModal_cancelButton)}/>
-                                    </Modal.Actions>
+                                    <form className="ui form">
+                                        <Form.Field>
+                                            <Label>
+                                                {this.context.intl.formatMessage(this.messages.embedModal_widthLabel)}
+                                            </Label>
+                                            <Input id="embedModalWidth"
+                                                    placeholder={this.defaultWidthValue}
+                                                    onChange={this.handleChange}/>
+                                            <Label>
+                                                {this.context.intl.formatMessage(this.messages.embedModal_heightLabel)}
+                                            </Label>
+                                            <Input id="embedModalHeight"
+                                                    placeholder={this.defaultHeightValue}
+                                                    onChange={this.handleChange}/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <textarea id="embedModalDescription"
+                                                    ref="embedModalDescription"
+                                                    label="description"
+                                                    autoHeight={true}
+                                                    value={'<iframe src="' + this.state.href + '" width="' +
+                                                            this.state.width + '" height="' + this.state.height +
+                                                            '"></iframe>'}/>
+                                        </Form.Field>
+                                        <Modal.Actions>
+                                            <Button icon="remove"
+                                                    color="red"
+                                                    type="button"
+                                                    onClick={this.handleClose}
+                                                    content={this.context.intl.formatMessage(this.messages.embedModal_cancelButton)}/>
+                                        </Modal.Actions>
+                                    </form>
                                 </Segment>
                             </Segment>
                         </Container>
