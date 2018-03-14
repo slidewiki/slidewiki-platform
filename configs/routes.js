@@ -351,7 +351,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -531,7 +531,7 @@ export default {
         }
     },
     decktree: {
-        path: '/decktree/:id/:spath?',
+        path: '/decktree:slug(_.+)?/:id/:spath?',
         method: 'get',
         page: 'decktree',
         handler: require('../components/Deck/TreePanel/TreePanel'),
@@ -552,7 +552,7 @@ export default {
 
 
     presentation: {
-        path: '/presentation/:id/:subdeck/:sid?',
+        path: '/presentation:slug(_.+)?/:id/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),

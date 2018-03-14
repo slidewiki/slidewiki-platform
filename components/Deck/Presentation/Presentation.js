@@ -35,16 +35,27 @@ class Presentation extends React.Component{
 
     componentDidMount(){
         if(process.env.BROWSER){
+            //$('[style*="absolute"]').children().attr('tabindex', 0);
+
+            //remove existing tabindices
+            $('[style*="absolute"]').each(function () {
+                if($(this).attr('tabindex') !== 0)
+                {
+                    $(this).attr('tabindex', 0);
+                }
+            });
+            //add tabindices to all children in absolute elements
+            $('[style*="absolute"]').each(function () {
+                $(this).children().attr('tabindex', 0);
+                //if($(this).attr('tabindex') !== 0)
+                //{
+                //    $(this).attr('tabindex', 0);
+                //}
+            });
+            //TODO: add hidden element at start of PPTX slide content + to focus on this.
+
+
              //loading reveal style
-            //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.vertical.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.vertical.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
@@ -77,33 +88,38 @@ class Presentation extends React.Component{
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
-                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: true,condition: function() {return !!document.body.classList;}}
+                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
                 ]
             });
 
 
             Reveal.addEventListener( 'ready', ( event ) => {
+                $('.accessibilityWrapper').attr('tabindex', '');
+                $('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
+                //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
                 this.resize();
             } );
 
             Reveal.addEventListener( 'slidechanged', ( event ) => {
-                //console.log('slidechanged: ' + $('.present > .pptx2html').html());
-                    //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
+                //console.log('slidechanged: ' + $('.present > .accessibilityWrapper > .pptx2html div:first').html());
+                $('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
+                //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
                 this.resize();
             } );
 
+            //$('.present > .pptx2html div:first').focus();
 
-        }
         //listen to resize event and resize.
         /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
             {
             //console.log('resize');
             this.resize();
         });*/
-        if(process.env.BROWSER){
             window.addEventListener('resize', this.resize());
         }
+        $('.present >  .pptx2html div:first').focus();
+
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the slide content
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
