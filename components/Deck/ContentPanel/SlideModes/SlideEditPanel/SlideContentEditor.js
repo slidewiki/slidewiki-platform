@@ -1200,10 +1200,12 @@ class SlideContentEditor extends React.Component {
         }
     }
     placeCaretAtStart(id) {
-        console.log('placeCaretAtStart');
+        console.log('placeCaretAtStart' + id);
         let el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
         console.log(el);
         if(!el){el = $('#'+id).find('p:first')[0];console.log('id + find first span not found'); console.log('try id + find first p');}
+        if(!el){el = $('#'+id).find('h3:first')[0];console.log('id + find first p not found'); console.log('try id + find first h3');}
+        if(!el){el = $('#'+id).find('h4:first')[0];console.log('id + find first h3 not found'); console.log('try id + find first h4');}
         if(!el){el = $('#'+id).find('div:first').not('.ui-resizable-handle')[0];console.log('try id + find first div not ui-resizable');}
         if(!el){el = $('#'+id).find('img:first')[0];console.log('try id + find first img');
         //if ($('#'+id).find('img:first')[0])
