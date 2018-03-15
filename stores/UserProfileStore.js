@@ -26,6 +26,9 @@ class UserProfileStore extends BaseStore {
             description: ''
         };
         this.userDecks = undefined;
+        this.userDecksMeta = {};
+        this.nextUserDecksLoading = false;
+        this.nextUserDecksError = false;
         this.lastUser = '';
         this.username = '';
         this.userid = '';
@@ -83,6 +86,9 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+        this.userDecksMeta = {};
+        this.nextUserDecksLoading = false;
+        this.nextUserDecksError = false;
         this.socialLoginError = false;
         this.removeProviderError = false;
         this.addProviderError = false;
@@ -108,6 +114,9 @@ class UserProfileStore extends BaseStore {
             failures: this.failures,
             user: this.user,
             userDecks: this.userDecks,
+            userDecksMeta: this.userDecksMeta,
+            nextUserDecksLoading: this.nextUserDecksLoading, 
+            nextUserDecksError: this.nextUserDecksError,
             dimmer: this.dimmer,
             username: this.username,
             userid: this.userid,
@@ -141,6 +150,9 @@ class UserProfileStore extends BaseStore {
         this.failures = state.failures;
         this.user = state.user;
         this.userDecks = state.userDecks;
+        this.userDecksMeta = state.userDecksMeta;
+        this.nextUserDecksLoading = state.nextUserDecksLoading;
+        this.nextUserDecksError = state.nextUserDecksError;
         this.dimmer = state.dimmer;
         this.username = state.username;
         this.userid = state.userid;
@@ -199,8 +211,8 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUserDecks(payload) {
-        this.userDecks = [];
-        Object.assign(this.userDecks, payload);
+        this.userDecks = payload.decks;
+        this.userDecksMeta = payload.metadata;
         this.lastUser = this.user.uname;
         this.emitChange();
     }
@@ -241,6 +253,7 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.errorMessage = '';
         this.userDecks = undefined;
+        this.userDecksMeta = {};
         this.emitChange();
     }
 
@@ -371,6 +384,35 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    setUserDecksLoading(){
+        this.userDecks = undefined;
+        // preserve sorting of sort dropdown during loading
+        this.userDecksMeta = {
+            sort: this.userDecksMeta.sort
+        };
+        this.emitChange();
+    }
+
+    setNextUserDecksLoading(){
+        this.nextUserDecksLoading = true;
+        this.emitChange();
+    }
+
+    fetchNextUserDecks(payload){
+        this.userDecks = this.userDecks.concat(payload.decks);
+        this.userDecksMeta = payload.metadata;
+        this.nextUserDecksLoading = false;
+        this.nextUserDecksError = false;
+        this.emitChange();
+    }
+
+    fetchNextUserDecksFailed(){
+        this.nextUserDecksError = true;
+        this.nextUserDecksLoading = false;
+        this.emitChange();
+        this.nextUserDecksError = false;
+    }
+
     showDeactivateModal() {
         this.showDeactivateAccountModal = true;
         this.emitChange();
@@ -390,6 +432,13 @@ UserProfileStore.handlers = {
     'NEW_USER_DATA': 'fillInUser',
     'NEW_EDITED_USER_DATA': 'fillInEditedUser',
     'NEW_USER_DECKS': 'fillInUserDecks',
+    'NEW_USER_DECKS_LOADING': 'setUserDecksLoading',
+    
+    // loading more decks
+    'FETCH_NEXT_USER_DECKS_LOADING': 'setNextUserDecksLoading',
+    'FETCH_NEXT_USER_DECKS': 'fetchNextUserDecks', 
+    'FETCH_NEXT_USER_DECKS_FAILED': 'fetchNextUserDecksFailed',
+
     'FETCH_USER_FAILED': 'actionFailed',
     'EDIT_USER_FAILED': 'actionFailed',
     'NEW_PASSWORD': 'successMessage',
