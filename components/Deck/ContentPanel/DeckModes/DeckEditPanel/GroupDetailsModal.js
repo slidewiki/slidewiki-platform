@@ -63,7 +63,7 @@ class GroupDetailsModal extends React.Component {
                   <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
                 </div>
                 <div className="fifteen wide column">
-                  <TextArea className="sr-only" id="usernameIsALinkHint" value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
+                  <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.group.creator.userid} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
                   <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.username}</a>
                   <div className="description">
                     {this.context.intl.formatMessage(this.messages.groupCreator)}
@@ -87,7 +87,7 @@ class GroupDetailsModal extends React.Component {
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
                         <div className="fifteen wide column">
-                          <TextArea className="sr-only" id="usernameIsALinkHint" value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
+                          <TextArea className="sr-only" id={'usernameIsALinkHint' + user.userid} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
                           <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
                           {optionalText}
                         </div>

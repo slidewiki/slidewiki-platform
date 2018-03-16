@@ -26,6 +26,8 @@ class DeckEditStore extends BaseStore {
 
         this.showGroupModal = false;
 
+        this.queryParams = {};
+
         // variables for error handling
         this.loadCollectionsError = false;
         this.addCollectionError = false;
@@ -66,6 +68,8 @@ class DeckEditStore extends BaseStore {
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
             showGroupModal: this.showGroupModal,
+            queryParams: this.queryParams,
+            showGroupModal: this.showGroupModal,
             collectionOptions: this.collectionOptions,
             selectedCollections: this.selectedCollections,
             loadCollectionsError: this.loadCollectionsError,
@@ -87,6 +91,7 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
+        this.queryParams = state.queryParams;
         this.collectionOptions = state.collectionOptions;
         this.selectedCollections = state.selectedCollections;
         this.loadCollectionsError = state.loadCollectionsError;
@@ -115,6 +120,11 @@ class DeckEditStore extends BaseStore {
         this.showGroupModal = true;
         this.emitChange();
         this.showGroupModal = false;
+    }
+
+    setQueryParams(params) {
+        this.queryParams = params;
+        this.emitChange();
     }
 
     loadUserCollections(payload){
@@ -180,6 +190,7 @@ DeckEditStore.handlers = {
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
     'LOAD_DECK_PROPS_FAILURE': 'resetProperties',
+    'DECKEDIT_START_QUERY_PARAMS': 'setQueryParams',
 
     // load user groups created by a specific user
     'LOAD_USER_COLLECTIONS_SUCCESS': 'loadUserCollections',

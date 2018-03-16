@@ -209,6 +209,19 @@ export default {
                     content: err
                 }, {slides: []});
             });
+        } else if (resource ==='deck.requesteditrights'){
+
+            let args = params.params ? params.params : params;
+            rp({
+                method: 'POST',
+                uri: Microservices.deck.uri + '/deck/' + args.deckId + '/requestEditRights',
+                headers: { '----jwt----': args.jwt },
+                json: true
+            })
+            .then((response) => {
+                return callback(null, response);
+            })
+            .catch((err) => callback(err));
         }
     },
     // other methods
