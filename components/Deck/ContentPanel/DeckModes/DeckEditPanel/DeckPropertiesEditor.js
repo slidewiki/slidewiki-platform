@@ -580,10 +580,10 @@ class DeckPropertiesEditor extends React.Component {
         </div>;
 
         let deckCollectionsHtml = <div className="field">
-            <label htmlFor="deck_collections">Deck Collections</label>
+            <label htmlFor="deck_collections">Playlists</label>
             <div className="two fields">
                 <div className="field">
-                    <Dropdown value={this.state.selectedCollection} placeholder='Select Deck Collections' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this)} />
+                    <Dropdown value={this.state.selectedCollection} placeholder='Select Playlists' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this)} />
                 </div>
                 <div className="field">
                     <button className="ui borderless black basic button"
@@ -593,7 +593,7 @@ class DeckPropertiesEditor extends React.Component {
             </div>
             <div className="field">
                 {(this.props.DeckEditStore.collectionsLoading) ?
-                    <div className="ui active centered inline text loader">Loading Deck Collections</div>
+                    <div className="ui active centered inline text loader">Loading Playlists</div>
                     :
                     <div className="ui very relaxed  list">
                         {selectedCollectionsList}

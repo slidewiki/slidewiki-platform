@@ -49,7 +49,7 @@ export function chooseAction(context, payload, done) {
             };
             break;
         case categories.categories[2]:
-            title += 'Collections';
+            title += 'Playlists';
             break;
         case undefined:
         case categories.categories[3]: 

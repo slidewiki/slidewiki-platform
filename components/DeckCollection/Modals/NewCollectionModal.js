@@ -81,7 +81,7 @@ class NewCollectionModal extends React.Component {
         return defineMessages({
             modalTitle: {
                 id: 'NewCollectionModal.title',
-                defaultMessage: 'Create a new Deck Collection'
+                defaultMessage: 'Create a new Playlists'
             }, 
             titleField: {
                 id: 'NewCollectionModal.field.title',
@@ -89,7 +89,7 @@ class NewCollectionModal extends React.Component {
             }, 
             titleFieldPlaceholder: {
                 id: 'NewCollectionModal.field.title.placeholder',
-                defaultMessage: 'Deck Collection Title'
+                defaultMessage: 'Playlist Title'
             }, 
             descriptionField: {
                 id: 'NewCollectionModal.field.description',
@@ -97,7 +97,7 @@ class NewCollectionModal extends React.Component {
             }, 
             descriptionFieldPlaceholder: {
                 id: 'NewCollectionModal.field.description.placeholder',
-                defaultMessage: 'Deck Collection Description'
+                defaultMessage: 'Playlist Description'
             }, 
             usergroupField: {
                 id: 'NewCollectionModal.field.usergroup',
@@ -117,11 +117,11 @@ class NewCollectionModal extends React.Component {
             }, 
             newCollectionSuccessTitle: {
                 id: 'NewCollectionModal.success.title',
-                defaultMessage: 'New Deck Collection'
+                defaultMessage: 'New Playlist'
             }, 
             newCollectionSuccessText: {
                 id: 'NewCollectionModal.success.text',
-                defaultMessage: 'We are creating a new Deck Collection...'
+                defaultMessage: 'We are creating a new Playlist...'
             }
 
         });

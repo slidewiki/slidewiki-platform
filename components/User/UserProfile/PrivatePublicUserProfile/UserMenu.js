@@ -20,15 +20,15 @@ class UserMenu extends React.Component {
             },
             sharedDecks: {
                 id: 'UserMenu.sharedDecks', 
-                defaultMessage: 'Decks shared with me'
+                defaultMessage: 'Shared Decks'
             },
             collections: {
                 id: 'UserMenu.collections', 
-                defaultMessage: 'My Deck Collections'
+                defaultMessage: 'Playlists'
             },
             ownedCollections: {
                 id: 'UserMenu.ownedCollections', 
-                defaultMessage: 'Owned Deck Collections'
+                defaultMessage: 'Owned Playlists'
             }
         });
     }

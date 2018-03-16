@@ -86,11 +86,11 @@ class CollectionPanel extends React.Component {
         return defineMessages({
             reorderError: {
                 id: 'CollectionPanel.error.reorder',
-                defaultMessage: 'An error occurred while updating deck order in collection...'
+                defaultMessage: 'An error occurred while updating deck order in the playlist...'
             }, 
             collectionTitle: {
                 id: 'CollectionPanel.title',
-                defaultMessage: 'Collection'
+                defaultMessage: 'Playlist'
             }, 
             collectionCreator: {
                 id: 'CollectionPanel.creator',
@@ -102,7 +102,7 @@ class CollectionPanel extends React.Component {
             }, 
             decksInCollectionText: {
                 id: 'CollectionPanel.decks.title', 
-                defaultMessage: 'Decks in collection'
+                defaultMessage: 'Decks in Playlist'
             }, 
             reorderDecks: {
                 id: 'CollectionPanel.decks.reorder', 

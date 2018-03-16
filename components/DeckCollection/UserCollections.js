@@ -81,43 +81,43 @@ class UserCollections extends React.Component {
             },
             readError: {
                 id: 'UserCollections.error.read',
-                defaultMessage: 'An error occurred while fetching deck collections. Please try again later.'
+                defaultMessage: 'An error occurred while fetching playlists. Please try again later.'
             },
             deleteError: {
                 id: 'UserCollections.error.delete',
-                defaultMessage: 'An error occurred while deleting collection...'
+                defaultMessage: 'An error occurred while deleting playlist...'
             }, 
             createError: { 
                 id: 'UserCollections.error.create',
-                defaultMessage: 'An error occurred while creating collection....'
+                defaultMessage: 'An error occurred while creating playlist....'
             }, 
             updateError: {
                 id: 'UserCollections.error.update',
-                defaultMessage: 'An error occured while updating collection...'
+                defaultMessage: 'An error occured while updating playlist...'
             }, 
             noCollectionsFound: {
                 id: 'UserCollections.collections.empty',
-                defaultMessage: 'No deck collections available'
+                defaultMessage: 'No playlists available'
             }, 
             collectionCreate: {
                 id: 'UserCollections.collections.create',
-                defaultMessage: 'Create new collection'
+                defaultMessage: 'Create new Playlist'
             },
             collectionDelete: {
                 id: 'UserCollections.collections.delete',
-                defaultMessage: 'Delete Collection'
+                defaultMessage: 'Delete Playlist'
             }, 
             collectionSettings: {
                 id: 'UserCollections.collections.settings',
-                defaultMessage: 'Collection Settings'
+                defaultMessage: 'Playlist Settings'
             }, 
             myCollectionsTitle: {
                 id: 'UserCollections.collections.mycollections',
-                defaultMessage: 'My Deck Collections'
+                defaultMessage: 'Playlists'
             }, 
             ownedCollectionsTitle: {
                 id: 'UserCollections.collections.owned',
-                defaultMessage: 'Owned Deck Collections'
+                defaultMessage: 'Owned Playlists'
             }, 
             deckText: {
                 id: 'UserCollections.deck', 
@@ -129,15 +129,15 @@ class UserCollections extends React.Component {
             }, 
             shareCollectionText: {
                 id: 'UserCollections.collections.shared', 
-                defaultMessage: 'Shared Collection'
+                defaultMessage: 'Shared Playlist'
             }, 
             deleteCollectionConfirmationTitle:{
                 id: 'UserCollections.collections.delete.title', 
-                defaultMessage: 'Delete Collection'
+                defaultMessage: 'Delete Playlist'
             }, 
             deleteCollectionConfirmationText:{
                 id: 'UserCollections.collections.delete.text', 
-                defaultMessage: 'Are you sure you want to delete this collection?'
+                defaultMessage: 'Are you sure you want to delete this playlist?'
             }
         });
     }
