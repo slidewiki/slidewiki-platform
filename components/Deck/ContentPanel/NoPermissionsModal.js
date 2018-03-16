@@ -106,8 +106,9 @@ class NoPermissionsModal extends React.Component {
                     type: 'error',
                     confirmButtonText: this.context.intl.formatMessage(this.messages.close),
                     confirmButtonClass: 'negative ui button',
-                    buttonsStyling: false
-                }).then().catch();
+                    buttonsStyling: false,
+                    focusConfirm: true
+                }).then(() => {}, () => {}).catch(() => {});
             }
             else {
                 this.forceUpdate();
@@ -124,12 +125,13 @@ class NoPermissionsModal extends React.Component {
                 confirmButtonClass: 'negative ui button',
                 allowEscapeKey: true,
                 allowOutsideClick: true,
-                buttonsStyling: false
+                buttonsStyling: false,
+                focusConfirm: true
             })
             .then(() => {
                 return true;
-            })
-            .catch();
+            }, () => {})
+            .catch(() => {});
         }
         else if (nextProps.EditRightsStore.state !== this.props.EditRightsStore.state && nextProps.EditRightsStore.state === 'success') {
             this.loading = false;
@@ -142,12 +144,13 @@ class NoPermissionsModal extends React.Component {
                 confirmButtonClass: 'ui button',
                 allowEscapeKey: true,
                 allowOutsideClick: true,
-                buttonsStyling: false
+                buttonsStyling: false,
+                focusConfirm: true
             })
             .then(() => {
                 return true;
-            })
-            .catch();
+            }, () => {})
+            .catch(() => {});
         }
     }
 
