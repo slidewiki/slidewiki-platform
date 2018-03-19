@@ -76,6 +76,28 @@ class TreePanel extends React.Component {
     handleFork() {
         this.setState({isForkModalOpen: true});
     }
+    handlePresentationClick(){
+        if(process.env.BROWSER){
+            window.open(this.getPresentationHref());
+        }
+    }
+    getPresentationHref(){
+        //console.log(this.props.DeckTreeStore.selector.toJS());
+        let presLocation = '/presentation/' + this.props.DeckTreeStore.selector.toJS().id + '/';
+        if (this.props.DeckTreeStore.selector.toJS().spath.search(';') !== -1)
+        {
+            //if a subdeck is selected - use its selector
+            presLocation += this.props.DeckTreeStore.selector.toJS().spath.substring(0, this.props.DeckTreeStore.selector.toJS().spath.search(';')) + '/';
+        } else {
+            //if it is the main/root deck - use that id
+            presLocation += this.props.DeckTreeStore.selector.toJS().id + '/';
+        }
+        if(this.props.DeckTreeStore.selector.toJS().stype === 'slide'){
+            //if it is a slide, also add ID of slide
+            presLocation += this.props.DeckTreeStore.selector.toJS().sid;// + '/';
+        }
+        return presLocation;
+    }
 
     handleTheme() {
         swal({
@@ -126,6 +148,13 @@ class TreePanel extends React.Component {
         const SegmentStyles = {
             padding: 0
         };
+        let classes_playbtn = classNames({
+            'ui': true,
+            'basic': true,
+            'attached': true,
+            'disabled': false,
+            'button': true
+        });
         let classes_forksbtn = classNames({
             'ui': true,
             'basic': true,
@@ -164,6 +193,15 @@ class TreePanel extends React.Component {
 
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui icon fluid buttons">
+                        {/*                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
+                                                    <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                                                        <i className="circle play large icon"></i>
+                                                    </button>
+                                                </NavLink>
+                        */}
+                        <div className={classes_playbtn} aria-label="Open slideshow in new tab" tabIndex="0" role="button" data-tooltip="Open slideshow in new tab" onClick={this.handlePresentationClick.bind(this)}>
+                            <i className="circle play large icon"></i>
+                        </div>
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
                             <i className="large blue fork icon"></i>
                         </div>
