@@ -5,7 +5,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 
-class UserDecks extends React.Component {
+class UserSharedDecks extends React.Component {
     constructor(props){
         super(props);
         this.messages = this.getIntlMessages();
@@ -14,20 +14,21 @@ class UserDecks extends React.Component {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
     }
 
-    componentDidUpdate() { }
+    componentDidUpdate() {}
 
     dropdownSelect(value) {
         this.context.executeAction(fetchUserDecks, {
             params: {
                 username: this.props.user.uname, 
                 sort: value,
-                roles: 'owner',
+                roles: 'editor',
             }
         });
     }
-    loadMore(nextLink){       
+    loadMore(nextLink){      
         this.context.executeAction(fetchNextUserDecks, {
-            nextLink: nextLink
+            nextLink: nextLink, 
+            roles: 'editor',
         });
     }
     getIntlMessages(){
@@ -44,13 +45,9 @@ class UserDecks extends React.Component {
                 id: 'UserDecks.sort.title', 
                 defaultMessage: 'Title'
             }, 
-            myDecks: {
-                id: 'UserDecks.header.myDecks', 
-                defaultMessage: 'My Decks'
-            }, 
-            ownedDecks: {
-                id: 'UserDecks.header.ownedDecks', 
-                defaultMessage: 'Owned Decks'
+            sharedDecks: {
+                id: 'UserSharedDecks.header', 
+                defaultMessage: 'Decks shared with me'
             }
         });
     }
@@ -82,15 +79,12 @@ class UserDecks extends React.Component {
             </div>;
         }
         let sortBy = meta.sort;
-        let header = (this.props.loggedinuser === this.props.user.uname) 
-            ? this.context.intl.formatMessage(this.messages.myDecks)
-            : this.context.intl.formatMessage(this.messages.ownedDecks);
-            
+        
         return (
           <div className="ui segments">
             {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div className="ui secondary clearing segment">
-                <h1 className="ui left floated header">{header}</h1>
+                <h1 className="ui left floated header">{this.context.intl.formatMessage(this.messages.sharedDecks)}</h1>
                 <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                     <i className="icon exchange"/>
                     <div className="text">{this.getSelectedSort(sortBy)}</div>
@@ -112,9 +106,9 @@ class UserDecks extends React.Component {
     }
 }
 
-UserDecks.contextTypes = {
+UserSharedDecks.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
 
-export default UserDecks;
+export default UserSharedDecks;
