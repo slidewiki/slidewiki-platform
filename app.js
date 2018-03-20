@@ -45,6 +45,10 @@ import ContentLikeStore from './stores/ContentLikeStore';
 import DeckFamilyStore from './stores/DeckFamilyStore';
 import MediaStore from './stores/MediaStore';
 import UserReviewStore from './stores/UserReviewStore';
+<<<<<<< HEAD
+=======
+import EditRightsStore from './stores/EditRightsStore';
+>>>>>>> master
 import DeckCollectionStore from './stores/DeckCollectionStore';
 import SSOStore from './stores/SSOStore';
 
@@ -94,7 +98,12 @@ const app = new Fluxible({
         ContentLikeStore,
         DeckFamilyStore,
         UserReviewStore,
+<<<<<<< HEAD
         MediaStore, 
+=======
+        MediaStore,
+        EditRightsStore,
+>>>>>>> master
         DeckCollectionStore,
         SSOStore
     ]

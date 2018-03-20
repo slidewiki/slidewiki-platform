@@ -8,9 +8,14 @@ import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
+<<<<<<< HEAD
     categories: ['settings', 'groups', 'collections'],
+=======
+    categories: ['settings', 'groups', 'collections', 'decks'],
+>>>>>>> master
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit']
+    groups: ['overview', 'edit'], 
+    decks: ['shared'],
 };
 
 export function chooseAction(context, payload, done) {
@@ -47,6 +52,20 @@ export function chooseAction(context, payload, done) {
                     break;
             };
             break;
+        case categories.categories[2]:
+            title += 'Collections';
+            break;
+        case undefined:
+        case categories.categories[3]: 
+            switch(payload.params.item){
+                case categories.decks[0]:
+                    title += 'Shared Decks';
+                    break;
+                default:
+                    title += 'My Decks';
+                    break;
+            };
+            break;            
         default:
             title = shortTitle;
     };
@@ -72,7 +91,14 @@ export function chooseAction(context, payload, done) {
                     context.executeAction(loadUserCollections, {}, callback);
                     break;
                 case undefined:
-                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
+                case categories.categories[3]:
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+
+                    let roles = 'owner';
+                    if(payload.params.item === categories.decks[0]){
+                        roles = 'editor';
+                    }
+                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username, roles: roles}}, callback);
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);
