@@ -81,7 +81,7 @@ class NewCollectionModal extends React.Component {
         return defineMessages({
             modalTitle: {
                 id: 'NewCollectionModal.title',
-                defaultMessage: 'Create a new Playlists'
+                defaultMessage: 'Create a new Playlist'
             }, 
             titleField: {
                 id: 'NewCollectionModal.field.title',

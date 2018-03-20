@@ -442,7 +442,7 @@
   "CollectionPanel.sort.lastUpdated": "Last updated",
   "CollectionPanel.sort.date": "Creation date",
   "CollectionPanel.sort.title": "Title",
-  "NewCollectionModal.title": "Create a new Playlists",
+  "NewCollectionModal.title": "Create a new Playlist",
   "NewCollectionModal.field.title": "Title",
   "NewCollectionModal.field.title.placeholder": "Playlist Title",
   "NewCollectionModal.field.description": "Description",
