@@ -204,7 +204,7 @@ export default {
                 };
             }
 
-            if(params.roles === 'editor'){
+            if(params.jwt){
                 requestCall.headers = { '----jwt----': params.jwt };
             }
 

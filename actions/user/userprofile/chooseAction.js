@@ -1,6 +1,7 @@
 import async from 'async';
 import fetchUser from './fetchUser';
 import { fetchUserDecks } from './fetchUserDecks';
+import { fetchUserSharedDecks } from './fetchUserSharedDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections'; 
@@ -90,11 +91,12 @@ export function chooseAction(context, payload, done) {
                 case categories.categories[3]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
 
-                    let roles = 'owner';
                     if(payload.params.item === categories.decks[0]){
-                        roles = 'editor';
+                        context.executeAction(fetchUserSharedDecks, {params: {username: payload.params.username}}, callback);
+                    } else {
+                        context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
                     }
-                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username, roles: roles}}, callback);
+
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);

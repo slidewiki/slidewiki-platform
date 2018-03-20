@@ -2,7 +2,7 @@ import React from 'react';
 import PopularDecks from '../PopularDecks';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
+import { fetchUserSharedDecks } from '../../../../actions/user/userprofile/fetchUserSharedDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 
 class UserSharedDecks extends React.Component {
@@ -17,18 +17,16 @@ class UserSharedDecks extends React.Component {
     componentDidUpdate() {}
 
     dropdownSelect(value) {
-        this.context.executeAction(fetchUserDecks, {
+        this.context.executeAction(fetchUserSharedDecks, {
             params: {
                 username: this.props.user.uname, 
                 sort: value,
-                roles: 'editor',
             }
         });
     }
     loadMore(nextLink){      
         this.context.executeAction(fetchNextUserDecks, {
             nextLink: nextLink, 
-            roles: 'editor',
         });
     }
     getIntlMessages(){
