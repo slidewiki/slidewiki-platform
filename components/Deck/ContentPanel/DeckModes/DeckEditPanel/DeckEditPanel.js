@@ -96,8 +96,6 @@ class DeckEditPanel extends React.Component {
         return (<div>Sign-in needed!</div>);
     }
 
-<<<<<<< HEAD
-=======
     getParameterByName(name) {
         try {
             let param = this.props.DeckEditStore.queryParams[name];
@@ -205,7 +203,6 @@ class DeckEditPanel extends React.Component {
         }
     }
 
->>>>>>> master
     render() {
         //make sure user is logged-in
         this.handleAuth(this.props.selector);
@@ -231,8 +228,7 @@ class DeckEditPanel extends React.Component {
                   selector={this.props.selector}
                   userid={this.props.UserProfileStore.userid}
                   groups={this.props.UserProfileStore.user.groups}/>
-<<<<<<< HEAD
-=======
+
 
               <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='grantRightsModalHeader'
                      aria-describedby='grantRightsModalDesc' open={this.isModalOpen}
@@ -248,7 +244,6 @@ class DeckEditPanel extends React.Component {
                       </FocusTrap>
                   </Modal.Actions>
               </Modal>
->>>>>>> master
             </div>
         );
     }

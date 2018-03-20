@@ -129,10 +129,6 @@
     "react-edit-inline": "^1.0.8",
     "react-google-recaptcha": "^0.8.1",
     "react-hotkeys": "^0.10.0",
-<<<<<<< HEAD
-    "slidewiki-react-image-cropper": "^1.1.2",
-=======
->>>>>>> master
     "react-intl": "^2.2.3",
     "react-intl-webpack-plugin": "0.0.3",
     "react-list": "^0.8.6",

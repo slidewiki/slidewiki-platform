@@ -1,8 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-//import ResizeAware from 'react-resize-aware';
-=======
->>>>>>> master
 import {findDOMNode} from 'react-dom';
 const ReactDOM = require('react-dom');
 
@@ -56,17 +52,11 @@ class SlideContentView extends React.Component {
         }
         this.forceUpdate();
     }
-<<<<<<< HEAD
-    handleResize = () => {
-        this.forceUpdate();
-    }
-=======
 
     handleResize = () => {
         this.forceUpdate();
     }
 
->>>>>>> master
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
@@ -118,14 +108,7 @@ class SlideContentView extends React.Component {
             position: 'relative'
         };
         const compStyle = {
-<<<<<<< HEAD
-            //minWidth: '100%',
-            // maxHeight: 450,
             minHeight: 610,
-            //minHeight: '100%',
-=======
-            minHeight: 610,
->>>>>>> master
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
@@ -143,16 +126,6 @@ class SlideContentView extends React.Component {
             height: '100%'
         };
         const compSpeakerStyle = {
-<<<<<<< HEAD
-            minHeight: 50,
-            overflowY: 'auto',
-            position: 'relative',
-            resize: 'vertical'
-        };
-        const SpeakerStyle = {
-            minWidth: '100%',
-            minHeight: 60,
-=======
             overflowY: 'auto',
             position: 'relative',
             paddingLeft: '5px'
@@ -160,7 +133,6 @@ class SlideContentView extends React.Component {
         const SpeakerStyle = {
             minWidth: '100%',
             minHeight: 85,
->>>>>>> master
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
@@ -184,10 +156,6 @@ class SlideContentView extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
         return (
-<<<<<<< HEAD
-        //<ResizeAware ref='container' id='container' style={{ position: 'relative' }}>
-=======
->>>>>>> master
         <div ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div ref="slideContentView" className="ui" style={compStyle}>
@@ -202,11 +170,6 @@ class SlideContentView extends React.Component {
                     <br />
                 </div>
             </div>
-<<<<<<< HEAD
-            <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
-=======
             <div className="ui horizontal segments">
                 <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
                     {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
@@ -217,7 +180,6 @@ class SlideContentView extends React.Component {
                     <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="stacked icons"><i className="small plus icon "></i><i className="large search icon "></i></i></button>
                     <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="reset zoom" data-tooltip="reset zoom"><i className="stacked icons"><i className="small compress icon "></i><i className="large search icon "></i></i></button>
                     <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="stacked icons"><i className="small minus icon "></i><i className="large search icon "></i></i></button>
->>>>>>> master
                 </div>
             </div>
         </div>

@@ -56,18 +56,6 @@ class Presentation extends React.Component{
 
 
              //loading reveal style
-<<<<<<< HEAD
-            //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.vertical.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.vertical.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-=======
->>>>>>> master
 
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
@@ -100,11 +88,7 @@ class Presentation extends React.Component{
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
-<<<<<<< HEAD
-                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: true,condition: function() {return !!document.body.classList;}}
-=======
                     { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
->>>>>>> master
                 ]
             });
 

@@ -161,8 +161,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true, 
-                            activity_type: 'react', 
+                            metaonly: true,
+                            activity_type: 'react',
                             all_revisions: true
                         }
                     });
@@ -185,19 +185,19 @@ export default {
             // from the previous response of the deck-service
             if (params.nextLink){
                 requestCall = {
-                    uri: `${Microservices.deck.uri}${params.nextLink}`, 
+                    uri: `${Microservices.deck.uri}${params.nextLink}`,
                     json: true
                 };
             } else {
                 requestCall = {
                     method: 'GET',
-                    uri: `${Microservices.deck.uri}/decks`, 
+                    uri: `${Microservices.deck.uri}/decks`,
                     qs: {
                         user: params.id2,
-                        roles: params.roles, 
+                        roles: params.roles,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        page: params.page, 
+                        page: params.page,
                         pageSize: 30
                     },
                     json: true
@@ -217,8 +217,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true, 
-                            activity_type: 'react', 
+                            metaonly: true,
+                            activity_type: 'react',
                             all_revisions: true
                         }
                     });
@@ -234,11 +234,11 @@ export default {
                     response._meta.roles = params.roles;
 
                     callback(null, {
-                        metadata: response._meta, 
+                        metadata: response._meta,
                         decks: converted
                     });
                 });
-            }).catch((err) => callback(err));           
+            }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
@@ -304,83 +304,8 @@ export default {
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));
-<<<<<<< HEAD
+
             }
-        } else {
-            //TODO get id of a user
-            if(!isEmpty(params.params.jwt) && params.params.loggedInUser === params.params.username){
-                rp({
-                    method: 'GET',
-                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id,
-                    json: true
-                })
-                .then((body) => {
-                    //get the number of likes
-                    let arrayOfPromises = [];
-                    body.forEach((deck) => {
-                        let promise = rp.get({uri: Microservices.activities.uri + '/activities/deck/' + deck._id + '?metaonly=true&activity_type=react&all_revisions=true'});
-                        arrayOfPromises.push(promise);
-                    });
-
-                    return Promise.all(arrayOfPromises)
-                        .then((numbers) => {
-                            for (let i = 0; i < numbers.length; i++) {
-                                body[i].noOfLikes = numbers[i];
-                            }
-
-                            let converted = body.map((deck) => {
-
-                                return {
-                                    title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                                    picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                                    description: deck.description,
-                                    updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                                    creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                                    deckID: deck._id,
-                                    firstSlide: deck.firstSlide,
-                                    theme: deck.theme,
-                                    language:deck.language,
-                                    countRevisions:deck.countRevisions,
-                                    noOfLikes: deck.noOfLikes
-
-                                };
-
-                            }).sort((a,b) => a.creationDate < b.creationDate);
-                            callback(null, converted);
-                        })
-                        .catch((err) => callback(err));
-                })
-                .catch((err) => callback(err));
-            } else if(params.params.loggedInUser !== params.params.username) {
-                //get id of username
-                rp({
-                    method: 'GET',
-                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id2,
-                    json: true
-                })
-                .then((body) => {
-                    let converted = body.map((deck) => {
-                        console.log(deck);
-                        return {
-                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: deck.description,
-                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id,
-                            firstSlide: deck.firstSlide,
-                            theme: deck.theme,
-                            language:deck.language,
-                            countRevisions:deck.countRevisions
-                        };
-                    });
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
-            }
-=======
-            }            
->>>>>>> master
         }
     }
 };

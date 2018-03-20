@@ -3,18 +3,14 @@ import fetchUser from './fetchUser';
 import { fetchUserDecks } from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
-import loadUserCollections from '../../collections/loadUserCollections'; 
+import loadUserCollections from '../../collections/loadUserCollections';
 import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-<<<<<<< HEAD
-    categories: ['settings', 'groups', 'collections'],
-=======
     categories: ['settings', 'groups', 'collections', 'decks'],
->>>>>>> master
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit'], 
+    groups: ['overview', 'edit'],
     decks: ['shared'],
 };
 
@@ -56,7 +52,7 @@ export function chooseAction(context, payload, done) {
             title += 'Collections';
             break;
         case undefined:
-        case categories.categories[3]: 
+        case categories.categories[3]:
             switch(payload.params.item){
                 case categories.decks[0]:
                     title += 'Shared Decks';
@@ -65,7 +61,7 @@ export function chooseAction(context, payload, done) {
                     title += 'My Decks';
                     break;
             };
-            break;            
+            break;
         default:
             title = shortTitle;
     };
