@@ -1,6 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import {Cropper} from 'slidewiki-react-image-cropper';
+import {Cropper} from 'react-image-cropper';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea} from 'semantic-ui-react';
 import uploadPicture from '../../../actions/user/userprofile/uploadPicture';
@@ -15,7 +15,6 @@ class ChangePictureModal extends React.Component {
             activeTrap: false
         };
 
-        this.cropperWidth = 200;
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
@@ -45,29 +44,20 @@ class ChangePictureModal extends React.Component {
         }
     }
 
-    handleImgLoad(){
-        this.cropperWidth = this.refs.cropper.values().imgWidth;
-        if(this.refs.cropper.values().imgWidth > this.refs.cropper.values().imgHeight)
-            this.cropperWidth = this.refs.cropper.values().imgHeight;
-        else
-            this.cropperWidth = this.refs.cropper.values().imgWidth;
-        this.forceUpdate();
-    }
-
     uploadCroppedPicture(e) {
         const messages = defineMessages({
             modalTitle: {
                 id: 'ChangePictureModal.modalTitle',
-                defaultMessage: 'Photo selection not processible!',
+                defaultMessage: 'A wild error has been spotted!',
             },
             modalText: {
                 id: 'ChangePictureModal.modalText',
-                defaultMessage: 'Sorry, we could not process your chosen selection. Please try again with a different photo or selection.',
+                defaultMessage: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
             },
         });
         let payload = {};
         Object.assign(payload, this.props.user);
-        payload.picture = this.refs.cropper.crop(170);
+        payload.picture = this.refs.cropper.crop({ maxWidth: 170 });//NOTE maxWidth is not used by the cropper
         payload.fileurl = this.props.filePath;
         payload.filesize = payload.picture.length - 22;// minus 22 for data:image/png;base64, which is the prefix
         payload.filetype = 'png';
@@ -132,7 +122,7 @@ class ChangePictureModal extends React.Component {
                   <Modal.Content>
                       <Divider />
                       <TextArea className="sr-only" id="ChangePictureModalDescription" value={this.context.intl.formatMessage(messages.description)}/>
-                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} width={this.cropperWidth} height={this.cropperWidth} rate={1} limitHeight={400} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}} onImgLoad={this.handleImgLoad.bind(this)}/>
+                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}}/>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                         <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)}/>

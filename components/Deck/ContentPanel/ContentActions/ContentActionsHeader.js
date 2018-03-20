@@ -264,7 +264,7 @@ class ContentActionsHeader extends React.Component {
                                 type="button"
                                 aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                                 data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                                tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                                tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                                 <i className="red large trash icon"></i>
                             </button>
                             {/*

@@ -80,9 +80,6 @@ export default {
         },
         'questions': {
             uri: 'https://questionservice.experimental.slidewiki.org'
-        },
-        'nlp': {
-            uri: 'https://nlpservice.experimental.slidewiki.org'
         }
     }
 };

@@ -222,40 +222,22 @@ export default {
                     json: true
                 })
                 .then((body) => {
-                    //get the number of likes
-                    let arrayOfPromises = [];
-                    body.forEach((deck) => {
-                        let promise = rp.get({uri: Microservices.activities.uri + '/activities/deck/' + deck._id + '?metaonly=true&activity_type=react&all_revisions=true'});
-                        arrayOfPromises.push(promise);
-                    });
+                    let converted = body.map((deck) => {
+                        return {
+                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                            description: deck.description,
+                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+                            deckID: deck._id,
+                            firstSlide: deck.firstSlide,
+                            theme: deck.theme,
+                            language:deck.language,
+                            countRevisions:deck.countRevisions
 
-                    return Promise.all(arrayOfPromises)
-                        .then((numbers) => {
-                            for (let i = 0; i < numbers.length; i++) {
-                                body[i].noOfLikes = numbers[i];
-                            }
-
-                            let converted = body.map((deck) => {
-
-                                return {
-                                    title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                                    picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                                    description: deck.description,
-                                    updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                                    creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                                    deckID: deck._id,
-                                    firstSlide: deck.firstSlide,
-                                    theme: deck.theme,
-                                    language:deck.language,
-                                    countRevisions:deck.countRevisions,
-                                    noOfLikes: deck.noOfLikes
-
-                                };
-
-                            }).sort((a,b) => a.creationDate < b.creationDate);
-                            callback(null, converted);
-                        })
-                        .catch((err) => callback(err));
+                        };
+                    }).sort((a,b) => a.creationDate < b.creationDate);
+                    callback(null, converted);
                 })
                 .catch((err) => callback(err));
             } else if(params.params.loggedInUser !== params.params.username) {

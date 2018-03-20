@@ -1,5 +1,5 @@
 import React from 'react';
-//import ResizeAware from 'react-resize-aware';
+import ResizeAware from 'react-resize-aware';
 import {findDOMNode} from 'react-dom';
 const ReactDOM = require('react-dom');
 
@@ -23,8 +23,7 @@ class SlideContentView extends React.Component {
                 this.loading = '';
         }
     }
-    componentWillUnmount(){
-        window.removeEventListener('resize', this.handleResize);
+    componentWillMount(){
     }
     componentDidMount(){
         if(process.env.BROWSER){
@@ -45,17 +44,13 @@ class SlideContentView extends React.Component {
             */
             //initial resize
             this.resize();
-            window.addEventListener('resize', this.handleResize);
-            /*ReactDOM.findDOMNode(this.refs.container).addEventListener('onResize', (evt) =>
+            ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
-                console.log('onresize');
+                //console.log('resize');
                 this.resize();
-            });*/
+            });
             this.loading = '';
         }
-        this.forceUpdate();
-    }
-    handleResize = () => {
         this.forceUpdate();
     }
     componentDidUpdate() {
@@ -121,7 +116,7 @@ class SlideContentView extends React.Component {
         const compStyle = {
             //minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 610,
+            minHeight: 600,
             //minHeight: '100%',
             overflowY: 'auto',
             overflowX: 'auto',
@@ -145,19 +140,12 @@ class SlideContentView extends React.Component {
             //borderColor: '#e7e7e7',
         };
         const compSpeakerStyle = {
+            maxHeight: 50,
             minHeight: 50,
             overflowY: 'auto',
-            position: 'relative',
-            resize: 'vertical'
+            position: 'relative'
         };
-        const SpeakerStyle = {
-            minWidth: '100%',
-            minHeight: 60,
-            overflowY: 'auto',
-            overflowX: 'auto',
-            position: 'relative',
-            resize: 'vertical'
-        };
+
         const containerMinHeight = {
 
         };
@@ -179,16 +167,14 @@ class SlideContentView extends React.Component {
         //console.log(style.slides);
 
         return (
-        //<ResizeAware ref='container' id='container' style={{ position: 'relative' }}>
-        <div ref='container' id='container'>
+        <ResizeAware ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div ref="slideContentView" className="ui" style={compStyle}>
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
-                                 dangerouslySetInnerHTML={{__html: this.props.content}}>
-                            </div>
+                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent'
+                                 dangerouslySetInnerHTML={{__html: this.props.content}}></div>
                         </section>
                     </div>
                     <br />
@@ -196,10 +182,9 @@ class SlideContentView extends React.Component {
             </div>
             <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                 {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
-                </div>
+                <div dangerouslySetInnerHTML={{__html: this.props.speakernotes}}/>
             </div>
-        </div>
+        </ResizeAware>
         );
     }
 }

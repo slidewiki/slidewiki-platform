@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
+import {Button, Icon, Input} from 'semantic-ui-react';
 import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
@@ -32,7 +32,7 @@ class SlideEditLeftPanel extends React.Component {
             showTemplate: false,
             showEmbed: false,
             showProperties: false,
-            showNameChange: false,
+            showTitleChange: false,
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
@@ -291,9 +291,6 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleTitleClick':
                     this.handleTitleClick();
                     break;
-                case 'handleSlideNameChangeKeyInInput': //this is a special case
-                    this.handleTitleChangeClick();
-                    break;
                 case 'handleTitleChangeClick':
                     this.handleTitleChangeClick();
                     break;
@@ -466,7 +463,7 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
+                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Slide title' />
                   </a>
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                       <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
@@ -483,29 +480,25 @@ class SlideEditLeftPanel extends React.Component {
                 //crop
                 //map outline
                 //working: //external
-                //<FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='The entire slide is save together with the slide name.' />
-                //placeholder="Slide name" //needs to be translated
-
 
         let titleChangeContent  = (
                 <div className="ui form">
                   <a className="item" id="handleTitleBack" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
-                  <i className="error">
-                      {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
-                      <br />
-                  </i>
                   <label htmlFor="slideTitle">
-                    <FormattedMessage id='editpanel.slideTitle' defaultMessage='Change slide name:' />
+                    <FormattedMessage id='editpanel.slideTitle' defaultMessage='Slide title:' />
                   </label>
-                  <div className="ui fluid action input">
-                    <TextArea type="text" onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideNameChangeKeyInInput')} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide name" aria-required="true" required autoFocus tabIndex='0'/>
-                    <button className="ui icon button blue" aria-describedby="ariaLabelSlideNameSaveButton" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
-                        <i tabIndex="0" className="check icon white big"></i>
-                    </button>
+                  <div className="inverted required field">
+                    <i className="error">
+                        {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='title cannot be empty' />}
+                    </i>
+                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide title" aria-required="true" required autoFocus/>
                   </div>
-                  <TextArea className="sr-only" id="ariaLabelSlideNameSaveButton" value="submit slide name" tabIndex ='-1'/>
+                  <a className="item" aria-describedby="handleTitleChangeClickDescription" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
+                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleChange' defaultMessage='Change slide title' />
+                  </a>
+                  <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" ><FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='Title is updated when saving the slide' /> <br /> <FormattedMessage id='editpanel.slideTitleChangeUpdateNote2' defaultMessage='(after clicking the separate save button).' /></label>
                 </div>);
 
         let sizeContent = (

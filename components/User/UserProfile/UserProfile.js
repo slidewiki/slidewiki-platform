@@ -10,7 +10,7 @@ import UserGroups from './UserGroups';
 import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
+import PrivatePublicUserProfile from './PrivatePublicUserProfile';
 import Integrations from './Integrations';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
@@ -197,14 +197,14 @@ class UserProfile extends React.Component {
               </div>
 
               <div className="ui segment">
-                <DeactivateAccount showModal={this.props.UserProfileStore.showDeactivateAccountModal} />
+                <DeactivateAccount />
               </div>
             </div>
         </div>);
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} />);
     }
 
     displayIntegrations() {

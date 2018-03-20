@@ -246,7 +246,12 @@ class ActivityItem extends React.Component {
 
                 break;
             default:
-                
+                IconNode = (<i className="ui large warning icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        Unknown type of activity - {node.activity_type}
+                    </div>
+                );
         }
 
         return (

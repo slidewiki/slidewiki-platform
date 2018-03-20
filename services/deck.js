@@ -141,12 +141,10 @@ export default {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
-
             Promise.all([deckPromise, editorsPromise]).then((res) => {
                 let revision,
                     deck = JSON.parse(res[0]),
                     editors = JSON.parse(res[1]);
-
                 //if deck's sid does not specify revision, find the active revision from the corresponding field
                 if (args.sid.split('-').length < 2) {
                     revision = deck.revisions.find((rev) => {

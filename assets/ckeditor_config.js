@@ -29,7 +29,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     // Set the most common block elements.
     config.format_tags = 'p;h3;h4;h5;pre';
-    config.fillEmptyBlocks = true; //emptyblocks need to have space to prevent difference slide edit and slide view mode
+    config.fillEmptyBlocks = false;
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.resize_enabled = false;
     config.disableObjectResizing = true;

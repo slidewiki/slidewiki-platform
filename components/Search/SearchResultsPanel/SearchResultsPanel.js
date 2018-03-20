@@ -6,45 +6,9 @@ import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 import SpellcheckPanel from './SpellcheckPanel';
 import loadMoreResults from '../../../actions/search/loadMoreResults';
-import {FormattedMessage, defineMessages} from 'react-intl';
 
 class SearchResultsPanel extends React.Component {
-    constructor(props){
-        super(props);
-        this.messages = this.getIntlMessages();
-    }
-    getIntlMessages(){
-        return defineMessages({
-            relevanceSort: {
-                id: 'SearchResultsPanel.sort.relevance',
-                defaultMessage: 'Relevance'
-            }, 
-            lastUpdatedSort: {
-                id: 'SearchResultsPanel.sort.lastUpdated',
-                defaultMessage: 'Last updated'
-            },
-            header: {
-                id: 'SearchResultsPanel.header',
-                defaultMessage: 'Search Results'
-            }, 
-            noResults: {
-                id: 'SearchResultsPanel.noResults',
-                defaultMessage: 'No results found for the specified input parameters'
-            }, 
-            loadMore: {
-                id: 'SearchResultsPanel.loadMore',
-                defaultMessage: 'Load More'
-            }, 
-            loading: {
-                id: 'SearchResultsPanel.loading',
-                defaultMessage: 'Loading'
-            }, 
-            resultsMsg: {
-                id: 'SearchResultsPanel.results.message', 
-                defaultMessage: 'Showing {resultsNum} out of {totalResults} results'
-            }
-        });
-    }
+
     initSortDropdown(){
         let changeSort = this.props.changeSort.bind(this);
         $('#sortDropdown').dropdown({
@@ -62,14 +26,14 @@ class SearchResultsPanel extends React.Component {
     renderSortDropdownItems(){
         if(this.props.sort === 'lastUpdate'){
             return <div className="menu">
-                <div className="item" data-value="score"><FormattedMessage {...this.messages.relevanceSort} /></div>
-                <div className="item active selected" data-value="lastUpdate"><FormattedMessage {...this.messages.lastUpdatedSort} /></div>
+                <div className="item" data-value="score">Relevance</div>
+                <div className="item active selected" data-value="lastUpdate">Last updated</div>
             </div>;
         }
         else {
             return <div className="menu">
-                <div className="item active selected" data-value="score"><FormattedMessage {...this.messages.relevanceSort} /></div>
-                <div className="item" data-value="lastUpdate"><FormattedMessage {...this.messages.lastUpdatedSort} /></div>
+                <div className="item active selected" data-value="score">Relevance</div>
+                <div className="item" data-value="lastUpdate">Last updated</div>
             </div>;
         }
     }
@@ -81,18 +45,12 @@ class SearchResultsPanel extends React.Component {
         let resultsDiv = <div ref="resultsDiv">
             <div className="ui grid" key="resultsHeader">
                 <div className="eight wide left floated column" key="resultsTitleDiv">
-                    <h2 className="ui header"><FormattedMessage {...this.messages.header} /></h2> 
-                    {
-                        this.context.intl.formatMessage(this.messages.resultsMsg, {
-                            resultsNum: results.length,
-                            totalResults: numFound
-                        })
-                    }
+                    <h2 className="ui header">Search Results</h2> Showing {results.length} out of {numFound} results
                 </div>
                 <div className="eight wide right floated column" key="resultsSortDropdown">
                     <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
                         <i className="sort content ascending icon"/>
-                        <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
+                        <div className="text">{(this.props.sort === 'lastUpdate') ? 'Last Updated' : 'Relevance'}</div>
                         {this.renderSortDropdownItems()}
                     </div>
                 </div>
@@ -106,16 +64,16 @@ class SearchResultsPanel extends React.Component {
 
         // define no results div
         let noResultsDiv = <div key="noResultsDiv" className="ui basic segment center aligned">
-            <h3><FormattedMessage {...this.messages.noResults} /></h3>
+            <h3>No results found for the specified input parameters</h3>
         </div>;
 
         // define load more results div
         let loadMoreDiv = '';
 
         if(this.props.hasMore){
-            let loadMoreContent = <button className="ui button" onClick={this.props.loadMore.bind(this)}><FormattedMessage {...this.messages.loadMore} /></button>;
+            let loadMoreContent = <button className="ui button" onClick={this.props.loadMore.bind(this)}>Load More</button>;
             if(this.props.loadMoreLoading){
-                loadMoreContent = <div className="ui active text loader"><FormattedMessage {...this.messages.loading} /></div>;
+                loadMoreContent = <div className="ui active text loader">Loading</div>;
             }
             loadMoreDiv = <div key="loadMoreDiv" className="ui basic segment center aligned">
                 {loadMoreContent}
@@ -136,8 +94,7 @@ class SearchResultsPanel extends React.Component {
 }
 
 SearchResultsPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired,
+    executeAction: React.PropTypes.func.isRequired
 };
 
 export default SearchResultsPanel;

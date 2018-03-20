@@ -1,4 +1,5 @@
 import React from 'react';
+import {Cropper} from 'react-image-cropper';
 import UserPicture from '../../common/UserPicture';
 import ChangePictureModal from './ChangePictureModal';
 import { FormattedMessage, defineMessages } from 'react-intl';

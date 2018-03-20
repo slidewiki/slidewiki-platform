@@ -31,4 +31,3 @@ slidewikiplatform:
     #- SMTP_CLIENTNAME=
     - SMTP_FROM=no-reply@slidewiki.org
     - SMTP_To=jira@slidewiki.atlassian.net
-    - SSO_ENABLED=true

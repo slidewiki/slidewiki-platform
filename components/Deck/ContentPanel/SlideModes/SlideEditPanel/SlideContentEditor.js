@@ -8,7 +8,7 @@ import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-//import ResizeAware from 'react-resize-aware';
+import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
@@ -37,7 +37,6 @@ class SlideContentEditor extends React.Component {
         //this.oldContent = '';
         //this.redoContent = '';
     }
-
     handleSlideSizechange(slideSize){
         if (slideSize !== ''){
             if($('.pptx2html').length)  //if slide is in canvas mode
@@ -917,27 +916,15 @@ class SlideContentEditor extends React.Component {
             // otherwise Cross-Origin Resource Sharing method is necessary
         }
 
-        if(process.env.BROWSER){
-            window.addEventListener('resize', this.handleResize);
-        }
-        /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
+        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
                 this.resize();
                 ////this.forceUpdate();
             }
-        });*/
+        });
 
         this.correctDimensionsBoxesImg();
         //('img');
-    }
-    handleResize = () => {
-        this.forceUpdate();
-    }
-    componentDidUpdate() {
-        // update mathjax rendering
-        // add to the mathjax rendering queue the command to type-set the inlineContent
-        //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize();
     }
     correctDimensionsBoxesIframe()
     {
@@ -1662,44 +1649,8 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
         {
             this.hasChanges = true;
-            const messagesSaveAfterSlideNameChangeModal = defineMessages({
-                swal_title:{
-                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalTitle',
-                    defaultMessage: 'Save now or continue editing?',
-                },
-                swal_text:{
-                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalText',
-                    defaultMessage: 'The slide name will be updated after saving the slide and exiting slide edit mode. Click "yes" to save the slide and exit edit mode. Click "no" to continue editing your slide.'
-                },
-                swal_confirm:{
-                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalConfirm',
-                    defaultMessage: 'Yes, save and exit slide edit mode',
-                },
-                swal_cancel:{
-                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalCancel',
-                    defaultMessage: 'No, continue editing',
-                },
-            });
-            swal({
-                title: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_title),
-                text: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_text),
-                type: 'question',
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_confirm),
-                confirmButtonClass: 'ui olive button',
-                cancelButtonText: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_cancel),
-                cancelButtonClass: 'ui red button',
-                buttonsStyling: false,
-                allowEnterKey: true
-            }).then((accepted) => {
-                this.handleSaveButton();
-            }, (reason) => {
-                //done(reason);
-            });
-            setTimeout(() => {
-                $('.swal2-confirm').focus();
-            }, 500);
+            //no need for this -> title is updated on slide save.
+            //this.handleSaveButton();
         }
         if (nextProps.SlideEditStore.slideSize !== '' && nextProps.SlideEditStore.slideSize !== this.props.SlideEditStore.slideSize)
         {
@@ -1967,7 +1918,6 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
         // Remove the warning window.
         window.onbeforeunload = () => {};
         if (CKEDITOR.instances.inlineContent != null) {
@@ -2076,20 +2026,13 @@ class SlideContentEditor extends React.Component {
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
-        const compSpeakerStyle = {
+        const speakernotesStyle = {
+            maxHeight: 50,
             minHeight: 50,
             overflowY: 'auto',
-            position: 'relative',
-            resize: 'vertical'
+            position: 'relative'
         };
-        const speakernotesStyle = {
-            minWidth: '100%',
-            minHeight: 60,
-            overflowY: 'auto',
-            overflowX: 'auto',
-            position: 'relative',
-            resize: 'vertical'
-        };
+
         const buttonColorBlack = {
             color: 'black'
         };
@@ -2132,8 +2075,7 @@ class SlideContentEditor extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
-            //<ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-            <div ref='container' id='container'>
+            <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
             {/*
@@ -2168,19 +2110,15 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
-                                    </div>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                                 </HotKeys>
                             </section>
                         </div>
                     </div>
                 </div>
-                <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                    <b>Speaker notes:</b><br />
-                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
-                    </div>
-                </div>
-            </div>
+                <b>Speaker notes:</b><br />
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+            </ResizeAware>
         );
     }
 

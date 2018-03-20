@@ -4,6 +4,7 @@ class TagsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.tags = [];
+        this.isEditMode = false;
         this.showAllTags = false;
         this.selectedIndex = -1;
         this.contentOwner = 0;
@@ -11,8 +12,6 @@ class TagsStore extends BaseStore {
         this.oldTags = [];
         this.tagsHaveChanged = false;
         this.isLoading = false;
-        this.recommendationsLoading = false;
-        this.recommendedTags = [];
     }
     loadTagsSlide(payload) {
         this.tags = [];
@@ -55,10 +54,7 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     newTag(payload) {
-        this.tags.push({
-            tagName: payload.tag, 
-            defaultName: payload.tag
-        });
+        this.tags.push({tagName: payload.tag});
         this.tagsHaveChanged = this.doHaveTagsChanged();
         this.emitChange();
     }
@@ -67,12 +63,20 @@ class TagsStore extends BaseStore {
         this.tagsHaveChanged = this.doHaveTagsChanged();
         this.emitChange();
     }
+    cancelEditTag() {
+        this.selectedIndex = -1;
+        this.emitChange();
+    }
     handleShowAllTags() {
         this.showAllTags = true;
         this.emitChange();
     }
     handleShowLessTags(){
         this.showAllTags = false;
+        this.emitChange();
+    }
+    changeMode(payload) {
+        this.isEditMode = !this.isEditMode;
         this.emitChange();
     }
     tagSavingPending() {
@@ -92,22 +96,6 @@ class TagsStore extends BaseStore {
 
         return false;
     }
-    setRecommendationsLoading(payload){
-        this.recommendationsLoading = payload;
-        this.emitChange();
-    }
-    loadTagRecommendations(payload){
-        this.recommendedTags = payload.recommendedTags.TagRecommendations;
-        this.emitChange();
-    }
-    loadTagRecommendationsFailed(){
-        this.recommendedTags = [];
-        this.emitChange();
-    }
-    resetTagRecommendation(){
-        this.recommendedTags = [];
-        this.emitChange();
-    }
     getState() {
         return {
             tags: this.tags,
@@ -116,11 +104,10 @@ class TagsStore extends BaseStore {
             selectedIndex: this.selectedIndex,
             contentOwner: this.contentOwner,
             selector: this.selector,
+            isEditMode: this.isEditMode,
             oldTags: this.oldTags,
             tagsHaveChanged: this.tagsHaveChanged,
-            isLoading: this.isLoading, 
-            recommendationsLoading: this.recommendationsLoading, 
-            recommendedTags: this.recommendedTags
+            isLoading: this.isLoading
         };
     }
     dehydrate() {
@@ -132,11 +119,10 @@ class TagsStore extends BaseStore {
         this.selectedIndex = state.selectedIndex;
         this.contentOwner = state.contentOwner;
         this.selector = state.selector;
+        this.isEditMode = state.isEditMode;
         this.oldTags = state.oldTags;
         this.tagsHaveChanged = state.tagsHaveChanged;
         this.isLoading = state.isLoading;
-        this.recommendationsLoading = state.recommendationsLoading;
-        this.recommendedTags = state.recommendedTags;
     }
 }
 
@@ -149,12 +135,10 @@ TagsStore.handlers = {
     'SHOW_ALL_TAGS': 'handleShowAllTags',
     'SHOW_LESS_TAGS': 'handleShowLessTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
+    'CANCEL_EDIT_TAGS': 'cancelEditTag',
+    'CHANGE_EDIT_MODE': 'changeMode',
     'REMOVE_TAG': 'removeTag',
-    'TAGSAVING_PENDING': 'tagSavingPending', 
-    'SET_TAG_RECOMMENDATIONS_LOADING': 'setRecommendationsLoading',
-    'LOAD_TAG_RECOMMENDATIONS_SUCCESS': 'loadTagRecommendations', 
-    'LOAD_TAG_RECOMMENDATIONS_FAILURE': 'loadTagRecommendationsFailed', 
-    'RESET_TAG_RECOMMENDATIONS': 'resetTagRecommendation'
+    'TAGSAVING_PENDING': 'tagSavingPending'
 };
 
 export default TagsStore;

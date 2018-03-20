@@ -37,12 +37,12 @@ class Presentation extends React.Component{
         if(process.env.BROWSER){
              //loading reveal style
             //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'aria-hidden': 'hidden','display': 'none'});
+            $('.ui.footer.sticky.segment').css({'display': 'none'});
+            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
             $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'aria-hidden': 'hidden','display': 'none'});
-            $('.ui.vertical.footer').css({'aria-hidden': 'hidden','display': 'none'});
+            $('.ui.horizontal.segments.footer').css({'display': 'none'});
+            $('.ui.vertical.footer').css({'display': 'none'});
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.vertical.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
@@ -76,8 +76,6 @@ class Presentation extends React.Component{
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
-                    // Plugin from https://github.com/marcysutton/reveal-a11y
-                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: true,condition: function() {return !!document.body.classList;}}
                 ]
             });
 

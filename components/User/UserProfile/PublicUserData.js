@@ -35,7 +35,7 @@ class PublicUserData extends React.Component {
                             <i className="user circle outline icon" aria-label="organisation"/> { this.props.user.organization }
                         </div>
                         : '' }
-                    { !isEmpty(this.props.user.country) ? 
+                    { !isEmpty(this.props.user.country) ?
                         <div className="item">
                             <i className="marker icon" aria-label="country"/> { this.props.user.country }
                         </div>

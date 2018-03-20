@@ -5,7 +5,6 @@ import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
 import loadActivities from './activityfeed/loadActivities';
 import loadContentModules from './loadContentModules';
-import addActivity from './activityfeed/addActivity';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import deckContentPathError from './error/deckContentPathError';
@@ -182,22 +181,6 @@ export default function loadDeck(context, payload, done) {
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle
         });
-
-        if (payload.params.mode !== 'edit') {
-            //Create activity
-            let userId = String(context.getStore(UserProfileStore).userid);
-            if (userId === '') {
-                userId = '0';//Unknown - not logged in
-            }
-            let activity = {
-                activity_type: 'view',
-                user_id: userId,
-                content_id: payload.params.sid,
-                content_kind: payload.params.stype
-            };
-            context.executeAction(addActivity, {activity: activity});
-        }
-
         done();
     });
 }
