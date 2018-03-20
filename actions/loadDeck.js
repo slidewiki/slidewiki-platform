@@ -187,25 +187,6 @@ export default function loadDeck(context, payload, done) {
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle
         });
-<<<<<<< HEAD
-
-        if (payload.params.mode !== 'edit') {
-            //Create activity
-            let userId = String(context.getStore(UserProfileStore).userid);
-            if (userId === '') {
-                userId = '0';//Unknown - not logged in
-            }
-            let activity = {
-                activity_type: 'view',
-                user_id: userId,
-                content_id: payload.params.sid,
-                content_kind: payload.params.stype
-            };
-            context.executeAction(addActivity, {activity: activity});
-        }
-
-        done();
-=======
         if (payload.query.interestedUser)
             context.executeAction(fetchUser, {
                 params: {
@@ -230,6 +211,5 @@ export default function loadDeck(context, payload, done) {
 
             done();
         }
->>>>>>> master
     });
 }
