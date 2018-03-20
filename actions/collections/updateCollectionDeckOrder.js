@@ -18,7 +18,7 @@ export default function updateCollectionDeckOrder(context, payload, done) {
 
             // redirect when new order has been saved
             context.executeAction(navigateAction, {
-                url: `/collection/${payload.id}?sort=order`, 
+                url: `/playlist/${payload.id}?sort=order`, 
             });
         }
 
