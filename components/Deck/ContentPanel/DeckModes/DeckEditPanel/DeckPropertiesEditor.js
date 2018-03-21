@@ -23,6 +23,7 @@ import NewCollectionModal from '../../../../DeckCollection/Modals/NewCollectionM
 import addSelectedCollection from '../../../../../actions/collections/addSelectedCollection';
 import removeSelectedCollection from '../../../../../actions/collections/removeSelectedCollection';
 import updateCollectionDecks from '../../../../../actions/collections/updateCollectionDecks';
+import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -106,9 +107,6 @@ class DeckPropertiesEditor extends React.Component {
     componentDidUpdate() {
         // console.log('DeckPropertiesEditor componentDidUpdate', this.props.DeckEditStore.showGroupModal);
         this.handleDropboxes();
-        if (this.props.DeckEditStore.showGroupModal) {
-            $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
-        }
     }
 
     componentDidMount() {
@@ -285,7 +283,7 @@ class DeckPropertiesEditor extends React.Component {
     handleClickShowGroupDetails(groupid, event) {
         event.preventDefault();
         // console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
-
+        $('#app').attr('aria-hidden','true');
         //call service
         this.context.executeAction(loadUsergroup, {groupid: groupid});
     }
@@ -634,7 +632,7 @@ class DeckPropertiesEditor extends React.Component {
                                         </div>
                                         <div className="ui hidden divider">
                                         </div>
-                                        <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
+                                        <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} show={this.props.DeckEditStore.showGroupModal} />
                                     </div>
                                 </div>
                             ) : ''}
