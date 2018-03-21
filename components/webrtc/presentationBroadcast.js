@@ -1006,8 +1006,8 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
-                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
-                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
+                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}} role="button" aria-label="Edit current deck"/></a>{/*TODO open up the right functionality*/}
+                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)} role="button" aria-label="Ask the audience to complete a task"/>) : ''}
                   {(this.isInitiator) ? (
                     <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)} role="button" aria-label="Copy URL to clipboard"/>
                   ) : (

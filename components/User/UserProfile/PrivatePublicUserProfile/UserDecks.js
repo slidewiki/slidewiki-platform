@@ -19,13 +19,13 @@ class UserDecks extends React.Component {
     dropdownSelect(value) {
         this.context.executeAction(fetchUserDecks, {
             params: {
-                username: this.props.user.uname, 
+                username: this.props.user.uname,
                 sort: value,
                 roles: 'owner',
             }
         });
     }
-    loadMore(nextLink){       
+    loadMore(nextLink){
         this.context.executeAction(fetchNextUserDecks, {
             nextLink: nextLink
         });
@@ -33,35 +33,35 @@ class UserDecks extends React.Component {
     getIntlMessages(){
         return defineMessages({
             sortLastUpdated: {
-                id: 'UserDecks.sort.lastUpdated', 
+                id: 'UserDecks.sort.lastUpdated',
                 defaultMessage: 'Last updated'
-            }, 
+            },
             sortCreationDate: {
-                id: 'UserDecks.sort.date', 
+                id: 'UserDecks.sort.date',
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'UserDecks.sort.title', 
+                id: 'UserDecks.sort.title',
                 defaultMessage: 'Title'
-            }, 
+            },
             myDecks: {
-                id: 'UserDecks.header.myDecks', 
+                id: 'UserDecks.header.myDecks',
                 defaultMessage: 'My Decks'
-            }, 
+            },
             ownedDecks: {
-                id: 'UserDecks.header.ownedDecks', 
+                id: 'UserDecks.header.ownedDecks',
                 defaultMessage: 'Owned Decks'
             }
         });
     }
     getSelectedSort(sortBy){
         switch(sortBy){
-            case 'timestamp': 
+            case 'timestamp':
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
                 return this.context.intl.formatMessage(this.messages.sortTitle);
-            case 'lastUpdate': 
-            default: 
+            case 'lastUpdate':
+            default:
                 return this.context.intl.formatMessage(this.messages.sortLastUpdated);
         }
     }
@@ -82,10 +82,10 @@ class UserDecks extends React.Component {
             </div>;
         }
         let sortBy = meta.sort;
-        let header = (this.props.loggedinuser === this.props.user.uname) 
+        let header = (this.props.loggedinuser === this.props.user.uname)
             ? this.context.intl.formatMessage(this.messages.myDecks)
             : this.context.intl.formatMessage(this.messages.ownedDecks);
-            
+
         return (
           <div className="ui segments">
             {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
@@ -102,7 +102,7 @@ class UserDecks extends React.Component {
                 </div>
             </div>
             <div className="ui segment">
-                { (this.props.decks) && 
+                { (this.props.decks) &&
                     <PopularDecks size={0} decks={this.props.decks} />
                 }
             </div>
