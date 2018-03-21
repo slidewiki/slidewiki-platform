@@ -23,7 +23,7 @@ class DeckEditPanel extends React.Component {
 
         this.messages = defineMessages({
             loading: {
-                id: 'noPermissionModal.loading',
+                id: 'deckEditPanel.loading',
                 defaultMessage: 'loading'
             },
             error: {
@@ -75,7 +75,7 @@ class DeckEditPanel extends React.Component {
                 defaultMessage: 'Deny'
             },
             close: {
-                id: 'noPermissionModal.close',
+                id: 'deckEditPanel.close',
                 defaultMessage: 'Close'
             }
         });
@@ -228,6 +228,7 @@ class DeckEditPanel extends React.Component {
                   selector={this.props.selector}
                   userid={this.props.UserProfileStore.userid}
                   groups={this.props.UserProfileStore.user.groups}/>
+
 
               <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='grantRightsModalHeader'
                      aria-describedby='grantRightsModalDesc' open={this.isModalOpen}

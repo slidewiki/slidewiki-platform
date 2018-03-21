@@ -11,24 +11,24 @@ class UserMenu extends React.Component {
     getIntlMessages(){
         return defineMessages({
             myDecks: {
-                id: 'UserMenu.myDecks', 
+                id: 'UserMenu.myDecks',
                 defaultMessage: 'My Decks'
-            }, 
+            },
             ownedDecks: {
-                id: 'UserMenu.ownedDecks', 
+                id: 'UserMenu.ownedDecks',
                 defaultMessage: 'Owned Decks'
             },
             sharedDecks: {
                 id: 'UserMenu.sharedDecks', 
-                defaultMessage: 'Decks shared with me'
+                defaultMessage: 'Shared Decks'
             },
             collections: {
                 id: 'UserMenu.collections', 
-                defaultMessage: 'My Deck Collections'
+                defaultMessage: 'Playlists'
             },
             ownedCollections: {
                 id: 'UserMenu.ownedCollections', 
-                defaultMessage: 'Owned Deck Collections'
+                defaultMessage: 'Owned Playlists'
             }
         });
     }
@@ -56,7 +56,7 @@ class UserMenu extends React.Component {
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
                   }
-                  <NavLink className="item" href={'/user/' + this.props.user.uname + '/collections'} activeStyle={this.styles} role="menuitem">
+                  <NavLink className="item" href={'/user/' + this.props.user.uname + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
               </div>

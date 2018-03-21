@@ -24,14 +24,14 @@ class PrivatePublicUserProfile extends React.Component {
 
     chooseView(){
         switch(this.props.category){
-            case 'collections':
+            case 'playlists':
                 return this.showUserCollections();
             case 'deck':
-            default: 
+            default:
                 if(this.props.categoryItem === 'shared'){
                     return this.showSharedDecks();
                 }
-                return this.showUserDecks();        
+                return this.showUserDecks();
         }
     }
 
