@@ -17,7 +17,7 @@ class UserPerformancePredictionsStore extends BaseStore {
         this.emitChange();
     }
     addPredictionJob(payload) {
-        this.predictions.push(payload.prediction);
+        this.predictions.unshift(payload.prediction);//add to the beginning
         // this.showAddBox = false;
         this.emitChange();
     }

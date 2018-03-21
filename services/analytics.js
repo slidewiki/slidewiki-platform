@@ -59,6 +59,8 @@ export default {
                         // get the active revision of the deck
                         let activeRevision = deck.revisions[deck.revisions.length-1];
                         predictions[i].title = activeRevision.title;
+                        predictions[i].deckFirstSlide = activeRevision.firstSlide;
+                        predictions[i].deckTheme = activeRevision.theme;
                     }
 
                     callback(null, {predictions: predictions});
@@ -78,33 +80,58 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
-        let deckId = args.deckId;
-        let uid = args.uid;
+        let deckId = args.prediction.deckId;
+        let uid = args.prediction.userId;
         if (uid === undefined) {
             uid = 0;
         }
-        if(resource === 'analytics.prediction'){
 
+        if(resource === 'analytics.prediction'){
             rp.post({
                 uri: analyticsServiceUri + '/analytics/webresources/predictionjob/',
                 proxy: '',
                 body:JSON.stringify({
                     user_id: uid,
                     deck_id: deckId
-                })
+                }),
+                timeout: body.timeout
             }).then((res) => {
+                //LIST OF ALL PREDICTION JOBS RECEIVED
+                let predictions = JSON.parse(res);
+                //GET DATA FOR DECKS FROM DECK SERVICE
+                let deckPromises = [];
 
-                console.log(res);
+                // get details for the decks in the collection
+                for(let prediction of predictions){
+                    let deckId = prediction.deckId;
+                    deckPromises.push(
+                        rp.get({
+                            uri: `${Microservices.deck.uri}/deck/${deckId}`,
+                            json: true,
+                            timeout: body.timeout
+                        })
+                    );
+                }
 
-                callback(null, {prediction: JSON.parse(res)});
+                Promise.all(deckPromises).then( (data) => {
+                    let decks = data;
+                    for (let i = 0; i < decks.length; i++) {
+                        let deck = decks[i];
+                        // get the active revision of the deck
+                        let activeRevision = deck.revisions[deck.revisions.length-1];
+                        predictions[i].title = activeRevision.title;
+                        predictions[i].deckFirstSlide = activeRevision.firstSlide;
+                        predictions[i].deckTheme = activeRevision.theme;
+                    }
+                    callback(null, {predictions: predictions});
+                }).catch( (err) => {
+                    console.log(err);
+                    callback(null, {predictions: []});
+                });
             }).catch((err) => {
                 console.log(err);
-                callback(err, {prediction: {}});
+                callback(err, {predictions: []});
             });
         }
     }
-
-    // other methods
-    // create: (req, resource, params, body, config, callback) => {},
-
 };

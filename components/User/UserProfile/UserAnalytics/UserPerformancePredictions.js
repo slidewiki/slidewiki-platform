@@ -11,16 +11,50 @@ class UserPerformancePredictions extends React.Component {
         e.preventDefault();
 
 
+
+
+        //IMPLEMENT DECK SELECTION
         let deckId = 2000;
+        let deckTitle = 'testTitle';
+        let deckFirstSlide = '14176-2'
+        let deckTheme = 'default';
 
 
 
 
-        let uid = this.props.UserProfileStore.userid;
 
-        this.context.executeAction(addPerformancePredictionJob, {uid: uid, deckId: deckId});
+        let userId = this.props.UserProfileStore.userid;
+        let started = new Date();
+        let prediction = {
+            userId: userId,
+            deckId: deckId,
+            title: deckTitle,
+            started: started,
+            deckTheme: deckTheme,
+            deckFirstSlide: deckFirstSlide
+        }
+        this.context.executeAction(addPerformancePredictionJob, {prediction: prediction});
     }
 
+    componentDidMount() {
+        this.enableAccordion();
+    }
+
+    componentDidUpdate() {
+        this.refreshAccordion();
+    }
+
+    enableAccordion(status) {
+        let accordionDIV = this.refs.predictionsList;
+        $(accordionDIV).find('.ui.accordion').accordion({
+            exclusive: false
+        });
+    }
+
+    refreshAccordion(status) {
+        let accordionDIV = this.refs.predictionsList;
+        $(accordionDIV).find('.ui.accordion').accordion('refresh');
+    }
     render() {
 
         const items = this.props.UserPerformancePredictionsStore.predictions ?  ((this.props.UserPerformancePredictionsStore.predictions.length > 0) ? this.props.UserPerformancePredictionsStore.predictions.map((prediction, index) => {
@@ -35,14 +69,16 @@ class UserPerformancePredictions extends React.Component {
                   <h3 className="ui left floated header" >Performance predictions</h3>
                   <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewPrediction.bind(this)}>
                       <i className="icon chart bar"/>
-                      <p>Create new prediction job</p>
+                      <p>New prediction job</p>
                   </button>
               </div>
 
               {loading}
 
-              <div className="ui vertical segment">
-                  {items}
+              <div className="ui vertical segment" ref="predictionsList">
+                  <div className="ui styled fluid accordion">
+                      {items}
+                  </div>
               </div>
             </div>
         );
