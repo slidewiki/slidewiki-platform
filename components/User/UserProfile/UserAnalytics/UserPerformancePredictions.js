@@ -16,7 +16,7 @@ class UserPerformancePredictions extends React.Component {
         //IMPLEMENT DECK SELECTION
         let deckId = 2000;
         let deckTitle = 'testTitle';
-        let deckFirstSlide = '14176-2'
+        let deckFirstSlide = '14176-2';
         let deckTheme = 'default';
 
 
@@ -32,7 +32,7 @@ class UserPerformancePredictions extends React.Component {
             started: started,
             deckTheme: deckTheme,
             deckFirstSlide: deckFirstSlide
-        }
+        };
         this.context.executeAction(addPerformancePredictionJob, {prediction: prediction});
     }
 
