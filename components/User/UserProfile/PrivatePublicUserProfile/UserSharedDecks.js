@@ -34,20 +34,20 @@ class UserSharedDecks extends React.Component {
     getIntlMessages(){
         return defineMessages({
             sortLastUpdated: {
-                id: 'UserDecks.sort.lastUpdated', 
+                id: 'UserSharedDecks.sort.lastUpdated', 
                 defaultMessage: 'Last updated'
             }, 
             sortCreationDate: {
-                id: 'UserDecks.sort.date', 
+                id: 'UserSharedDecks.sort.date', 
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'UserDecks.sort.title', 
+                id: 'UserSharedDecks.sort.title', 
                 defaultMessage: 'Title'
             }, 
             sharedDecks: {
                 id: 'UserSharedDecks.header', 
-                defaultMessage: 'Decks shared with me'
+                defaultMessage: 'Shared Decks'
             }
         });
     }
