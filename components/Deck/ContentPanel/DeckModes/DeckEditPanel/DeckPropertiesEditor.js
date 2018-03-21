@@ -405,7 +405,7 @@ class DeckPropertiesEditor extends React.Component {
                         </div>
                         <div className="ten wide column">
                             <div className="content">
-                                <a className="header" href={`/collection/${col._id}?sort=order`} target='_blank'>{col.title}</a>
+                                <a className="header" href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a>
                                 <div className="description">{description}</div>
                             </div>
                         </div>
