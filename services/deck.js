@@ -166,6 +166,7 @@ export default {
                         users: [],
                         groups: []
                     },
+                    hidden: deck.hidden,
                     deckOwner: deck.user,
                     revisionOwner: revision.user,
                     sid: args.sid,
@@ -289,7 +290,8 @@ export default {
                 theme: params.theme,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
-                tags: params.tags
+                tags: params.tags,
+                hidden: params.hidden,
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
