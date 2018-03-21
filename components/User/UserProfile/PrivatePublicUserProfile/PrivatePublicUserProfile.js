@@ -27,11 +27,11 @@ class PrivatePublicUserProfile extends React.Component {
             case 'playlists':
                 return this.showUserCollections();
             case 'deck':
-            default: 
+            default:
                 if(this.props.categoryItem === 'shared'){
                     return this.showSharedDecks();
                 }
-                return this.showUserDecks();        
+                return this.showUserDecks();
         }
     }
 

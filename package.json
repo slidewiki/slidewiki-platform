@@ -158,7 +158,8 @@
     "webpack": "^3.8.1",
     "webpack-stats-plugin": "^0.1.5",
     "webpack-visualizer-plugin": "^0.1.11",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "es6-promise": "^4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

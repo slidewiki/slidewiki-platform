@@ -161,8 +161,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true, 
-                            activity_type: 'react', 
+                            metaonly: true,
+                            activity_type: 'react',
                             all_revisions: true
                         }
                     });
@@ -185,19 +185,19 @@ export default {
             // from the previous response of the deck-service
             if (params.nextLink){
                 requestCall = {
-                    uri: `${Microservices.deck.uri}${params.nextLink}`, 
+                    uri: `${Microservices.deck.uri}${params.nextLink}`,
                     json: true
                 };
             } else {
                 requestCall = {
                     method: 'GET',
-                    uri: `${Microservices.deck.uri}/decks`, 
+                    uri: `${Microservices.deck.uri}/decks`,
                     qs: {
                         user: params.id2,
-                        roles: params.roles, 
+                        roles: params.roles,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        page: params.page, 
+                        page: params.page,
                         pageSize: 30
                     },
                     json: true
@@ -217,8 +217,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true, 
-                            activity_type: 'react', 
+                            metaonly: true,
+                            activity_type: 'react',
                             all_revisions: true
                         }
                     });
@@ -234,11 +234,11 @@ export default {
                     response._meta.roles = params.roles;
 
                     callback(null, {
-                        metadata: response._meta, 
+                        metadata: response._meta,
                         decks: converted
                     });
                 });
-            }).catch((err) => callback(err));           
+            }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
@@ -304,7 +304,8 @@ export default {
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));
-            }            
+
+            }
         }
     }
 };

@@ -637,6 +637,31 @@ class DeckPropertiesEditor extends React.Component {
                                 </div>
                             ) : ''}
 
+                            <div className="field">
+                                <label htmlFor="deck_collections">Deck Collections</label>
+                                <div className="two fields">
+                                    <div className="field">
+                                        <Dropdown value={this.state.selectedCollection} placeholder='Select Deck Collections' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this)} />
+                                    </div>
+                                    <div className="field">
+                                        <button className="ui borderless black basic button"
+                                                onClick={this.showNewCollectionModal.bind(this)}>Create
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="field">
+                                    {(this.props.DeckEditStore.collectionsLoading) ?
+                                        <div className="ui active centered inline text loader">Loading Deck Collections</div>
+                                        :
+                                        <div className="ui very relaxed  list">
+                                            {selectedCollectionsList}
+                                        </div>
+                                    }
+                                </div>
+                                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />
+                            </div>
+                            <div className="ui hidden divider"></div>
+
                             {deckCollectionsHtml}
 
                             <div className="ui hidden divider"></div>
