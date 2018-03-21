@@ -19,16 +19,16 @@ class UserMenu extends React.Component {
                 defaultMessage: 'Owned Decks'
             },
             sharedDecks: {
-                id: 'UserMenu.sharedDecks',
-                defaultMessage: 'Decks shared with me'
+                id: 'UserMenu.sharedDecks', 
+                defaultMessage: 'Shared Decks'
             },
             collections: {
-                id: 'UserMenu.collections',
-                defaultMessage: 'My Deck Collections'
+                id: 'UserMenu.collections', 
+                defaultMessage: 'Playlists'
             },
             ownedCollections: {
-                id: 'UserMenu.ownedCollections',
-                defaultMessage: 'Owned Deck Collections'
+                id: 'UserMenu.ownedCollections', 
+                defaultMessage: 'Owned Playlists'
             }
         });
     }
@@ -56,7 +56,7 @@ class UserMenu extends React.Component {
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
                   }
-                  <NavLink className="item" href={'/user/' + this.props.user.uname + '/collections'} activeStyle={this.styles} role="menuitem">
+                  <NavLink className="item" href={'/user/' + this.props.user.uname + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
               </div>

@@ -23,7 +23,7 @@ class DeckEditPanel extends React.Component {
 
         this.messages = defineMessages({
             loading: {
-                id: 'noPermissionModal.loading',
+                id: 'deckEditPanel.loading',
                 defaultMessage: 'loading'
             },
             error: {
@@ -75,7 +75,7 @@ class DeckEditPanel extends React.Component {
                 defaultMessage: 'Deny'
             },
             close: {
-                id: 'noPermissionModal.close',
+                id: 'deckEditPanel.close',
                 defaultMessage: 'Close'
             }
         });
