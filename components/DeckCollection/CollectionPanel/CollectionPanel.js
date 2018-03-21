@@ -31,7 +31,7 @@ class CollectionPanel extends React.Component {
     dropdownSelect(value) {
         // redirect with sort param
         this.context.executeAction(navigateAction, {
-            url: `/collection/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`, 
+            url: `/playlist/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`, 
         });
     }
     setEditMode(value){

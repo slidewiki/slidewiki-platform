@@ -8,7 +8,7 @@ import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    categories: ['settings', 'groups', 'collections', 'decks'],
+    categories: ['settings', 'groups', 'playlists', 'decks'],
     settings: ['profile', 'account', 'integrations'],
     groups: ['overview', 'edit'], 
     decks: ['shared'],
