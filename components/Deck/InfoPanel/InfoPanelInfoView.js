@@ -8,7 +8,7 @@ import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/Contribu
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-
+import SimilarContentPanel from '../SimilarContentPanel/SimilarContentPanel';
 
 class InfoPanelInfoView extends React.Component {
 
@@ -97,6 +97,9 @@ class InfoPanelInfoView extends React.Component {
                 </div>
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
+                </div>
+                <div className="ui attached segment">
+                  <SimilarContentPanel maxHeight="360"/>
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
                   <div className="ui attached segment">

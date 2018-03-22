@@ -4,16 +4,24 @@ import SimilarContentStore from '../../../stores/SimilarContentStore';
 import SimilarContentList from './SimilarContentList';
 
 class SimilarContentPanel extends React.Component {
+    constructor(props){
+        super(props);
+    }
     render() {
+        const panelDIVStyles = {
+            maxHeight: this.props.maxHeight?this.props.maxHeight:800,
+            overflowY: 'auto'
+        };
+
         return (
-            <div ref="similarContentPanel">
-                <div className="ui segments">
-                    <div className="ui secondary segment">
-                        <a href={'/similarcontent/' + this.props.SimilarContentStore.selector.stype + '/' + this.props.SimilarContentStore.selector.sid}>Recommended</a>
-                    </div>
-                    <div className="ui segment">
+            <div>
+                <h5 className="ui small header">
+                  <a href={'/similarcontent/' + this.props.SimilarContentStore.selector.stype + '/' + this.props.SimilarContentStore.selector.sid}>
+                   Recomended Decks
+                  </a>
+                </h5>
+                <div className="ui basic segment" style={panelDIVStyles}>
                         <SimilarContentList selector={this.props.SimilarContentStore.selector} items={this.props.SimilarContentStore.contents} />
-                    </div>
                 </div>
 
              </div>

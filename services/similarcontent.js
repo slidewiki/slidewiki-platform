@@ -11,11 +11,15 @@ export default {
         if(resource === 'similarcontent.list'){
             /*********connect to microservices*************/
             //todo
+            //likes: https://activitiesservice.experimental.slidewiki.org/activities/deck/3951?metaonly=true&activity_type=react&all_revisions=true
+            //download: https://activitiesservice.experimental.slidewiki.org/activities/deck/3951?metaonly=true&activity_type=download&all_revisions=true
+            //user https://userservice.experimental.slidewiki.org/user/16
+
             /*********received data from microservices*************/
             let contents = [
-                {'id': '16', 'title': 'title deck related to ' + args.sid, 'author': 'soeren' , 'authorId':'2' , 'date':'15/05/2016' ,'liked': '20', 'downloaded': '5'},
-                {'id': '28', 'title': 'title deck related to ' + args.sid, 'author': 'soeren', 'authorId':'2' , 'date':'18/04/2016' ,'liked': '15', 'downloaded': '6'},
-                {'id': '39', 'title': 'title deck related to ' + args.sid, 'author': 'ali1k', 'authorId':'1' , 'date':'03/05/2016' ,'liked': '10', 'downloaded': '4'}
+                {'deckId': '718', 'title': 'final test' , 'firstSlideId': '6398', 'author': 'txwkx' , 'authorId':'47' , 'date':'27/01/2017' ,'liked': '0', 'downloaded': '0'},
+                {'deckId': '617', 'title': 'Usability 3', 'firstSlideId': '5144','author': 'abijames1', 'authorId':'6' , 'date':'20/01/2017' ,'liked': '1', 'downloaded': '0'},
+                {'deckId': '2249', 'title': 'Usability', 'firstSlideId': '14738','author': 'dpaun', 'authorId':'16' , 'date':'22/08/2017' ,'liked': '0', 'downloaded': '0'}
             ];
             callback(null, {contents: contents, selector: selector});
         }
