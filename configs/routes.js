@@ -613,11 +613,11 @@ export default {
         page: 'presentationBroadcast',
         handler: require('../components/webrtc/presentationBroadcast')
     },
-    collection: {
-        path: '/collection/:id',
+    playlist: {
+        path: '/playlist/:id',
         method: 'get',
-        page: 'collection',
-        title: 'SlideWiki -- Deck Collection',
+        page: 'playlist',
+        title: 'SlideWiki -- Playlist',
         handler: require('../components/DeckCollection/CollectionPanel/CollectionPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadCollection, payload, done);
