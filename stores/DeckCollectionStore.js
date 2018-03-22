@@ -105,6 +105,7 @@ class DeckCollectionStore extends BaseStore {
             let activeRevision = deck.revisions[deck.revisions.length-1];
             return {
                 deckID: deck._id,
+                hidden: deck.hidden,
                 title: activeRevision.title,
                 firstSlide: activeRevision.firstSlide,
                 theme: activeRevision.theme,

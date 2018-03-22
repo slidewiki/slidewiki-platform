@@ -3,7 +3,6 @@ import PublicUserData from '../PublicUserData';
 import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
-import UserSharedDecks from './UserSharedDecks';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
@@ -11,15 +10,11 @@ class PrivatePublicUserProfile extends React.Component {
     }
 
     showUserDecks(){
-        return <UserDecks decks={this.props.decks} decksMeta={this.props.decksMeta} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
+        return <UserDecks decks={this.props.decks} decksMeta={this.props.decksMeta} deckListType={this.props.categoryItem} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
     }
 
     showUserCollections(){
         return <UserCollections user={this.props.user} loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} />;
-    }
-
-    showSharedDecks(){
-        return <UserSharedDecks decks={this.props.decks} decksMeta={this.props.decksMeta} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
     }
 
     chooseView(){
@@ -28,9 +23,6 @@ class PrivatePublicUserProfile extends React.Component {
                 return this.showUserCollections();
             case 'deck':
             default: 
-                if(this.props.categoryItem === 'shared'){
-                    return this.showSharedDecks();
-                }
                 return this.showUserDecks();        
         }
     }

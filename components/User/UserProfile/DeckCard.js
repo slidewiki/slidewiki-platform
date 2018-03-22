@@ -26,17 +26,19 @@ class DeckCard extends React.Component {
         }
         let deck_slug = this.props.cardContent.title? slug(this.props.cardContent.title) : '';
         let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
+
+        let hiddenRibbon = this.props.cardContent.hidden ? <span className="ui red right ribbon label" aria-label='Unpublished'>Unpublished</span> : '';
         return (
-            <div className='card'>
+            <div className='ui card'>
                 {this.props.newTab === true ? (
-                    <a className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
-                        <Thumbnail url={thumbnailURL} alt={''}
-                            slideId={this.props.cardContent.deckID} />
+                    <a className="image" aria-hidden='true' tabIndex='-1' href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
+                        {hiddenRibbon}
+                        <img src={thumbnailURL} alt={this.props.cardContent.deckID || ''} />
                     </a>
                 ) : (
-                    <NavLink className="ui medium centered spaced image" aria-hidden={'true'}  tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID}>
-                        <Thumbnail url={thumbnailURL} alt={''}
-                            slideId={this.props.cardContent.deckID} />
+                    <NavLink className="image" aria-hidden='true'  tabIndex='-1' href={'/deck/' + this.props.cardContent.deckID}>
+                        {hiddenRibbon}
+                        <img src={thumbnailURL} alt={this.props.cardContent.deckID || ''} />
                     </NavLink>
                 )}
 
@@ -56,22 +58,20 @@ class DeckCard extends React.Component {
                             )
                         )}
                     </div>
-                    <div className="extra content">
+                    <div>
                         <span className="right floated">
                             <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}
                         </span>
                         <span aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</span>
                     </div>
                 </div>
-                <div className="ui menu top attached">
-                    <div className="ui fluid basic buttons">
-                        <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip="Open deck" type="button" role="button" className="ui button" aria-label="Open deck">
-                            <i className="yellow open folder large icon" aria-hidden="true" ></i>
-                        </a>
-                        <a href={'/presentation' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                            <i className="grey circle play large icon" aria-hidden="true" ></i>
-                        </a>
-                    </div>
+                <div className="bottom attached menu ui basic buttons">
+                    <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip="Open deck" type="button" role="button" className="ui icon button" aria-label="Open deck">
+                        <i className="yellow open folder large icon" aria-hidden="true" ></i>
+                    </a>
+                    <a href={'/presentation' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui icon button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                        <i className="grey circle play large icon" aria-hidden="true" ></i>
+                    </a>
                 </div>
             </div>
         );

@@ -1,7 +1,6 @@
 import async from 'async';
 import fetchUser from './fetchUser';
 import { fetchUserDecks } from './fetchUserDecks';
-import { fetchUserSharedDecks } from './fetchUserSharedDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections'; 
@@ -91,11 +90,8 @@ export function chooseAction(context, payload, done) {
                 case categories.categories[3]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
 
-                    if(payload.params.item === categories.decks[0]){
-                        context.executeAction(fetchUserSharedDecks, {params: {username: payload.params.username}}, callback);
-                    } else {
-                        context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
-                    }
+                    let deckListType = payload.params.item === categories.decks[0] ? 'shared' : undefined;
+                    context.executeAction(fetchUserDecks, {deckListType, params: {username: payload.params.username}}, callback);
 
                     break;
                 default:

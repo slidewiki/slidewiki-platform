@@ -148,7 +148,9 @@ class DeckViewPanel extends React.Component {
                     <div className="column">
                         <div className="item">
                         <div className="content">
-                            <h2 className="ui header" aria-describedby="decktitle">{deckTitle}</h2>
+                            <h2 className="ui header" aria-describedby="decktitle">{deckTitle}
+                                <div className={`ui label ${deckData.hidden ? '' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unpublished' : 'Published'}</div>
+                            </h2>
                             <div className="sr-only" id="decktitle">Deck Title:</div>
                             <div className="meta"><strong>Creator:&nbsp;</strong>
                                 <a href={creatorProfileURL}>{deckCreator}</a>
@@ -173,12 +175,12 @@ class DeckViewPanel extends React.Component {
                                 </div>
 
                                {/* <TranslationPanel/>*/}
-                                <div className="ui large label" tabIndex="0">
+                                <div className="ui label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                 </div>
-                                <div className="ui  label" tabIndex="0">
+                                <div className="ui label" tabIndex="0">
                                     <i className="theme icon" aria-label="Theme"></i>{deckTheme}</div>
-                                <div className="ui large label" tabIndex="0">
+                                <div className="ui label" tabIndex="0">
                                     <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
                                 <div className="ui label" tabIndex="0">
                                     <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>

@@ -197,6 +197,7 @@ export default {
                         roles: params.roles, 
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
+                        status: params.status || 'public',
                         page: params.page, 
                         pageSize: 30
                     },
@@ -231,7 +232,6 @@ export default {
                     }
 
                     let converted = decks.map((deck) => { return transform(deck); });
-                    response._meta.roles = params.roles;
 
                     callback(null, {
                         metadata: response._meta, 
@@ -316,6 +316,7 @@ function transform(deck){
         description: deck.description,
         updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
         creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+        hidden: deck.hidden,
         deckID: deck._id,
         firstSlide: deck.firstSlide,
         theme: deck.theme,
