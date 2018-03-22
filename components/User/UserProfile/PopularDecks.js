@@ -10,17 +10,20 @@ class PublicUserDecks extends React.Component {
         let size = 0;
         let content = this.props.decks;
         if(!isEmpty(content)){
-            switch(this.props.sort){
-                case '1':
-                    content = content.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
-                    break;
-                case '0':
-                    content = content.sort((a,b) => (b.title.toUpperCase() < a.title.toUpperCase()) ? 1 : -1 );
-                    break;
-                case '2':
-                default:
-                    content = content.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
-                    break;
+            // if no sort property is given the order of decks is preserved
+            if(this.props.sort){
+                switch(this.props.sort){
+                    case '1':
+                        content = content.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+                        break;
+                    case '0':
+                        content = content.sort((a,b) => (b.title.toUpperCase() < a.title.toUpperCase()) ? 1 : -1 );
+                        break;
+                    case '2':
+                    default:
+                        content = content.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+                        break;
+                }
             }
             if (this.props.size === 0)
                 size = content.length;
