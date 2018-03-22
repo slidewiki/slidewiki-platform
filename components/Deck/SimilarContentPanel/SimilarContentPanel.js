@@ -12,15 +12,34 @@ class SimilarContentPanel extends React.Component {
                 id: 'similarContentPanel.panel_header',
                 defaultMessage:'Recomended Decks'
             },
+            panel_loading:{
+                id: 'similarContentPanel.panel_loading',
+                defaultMessage:'Loading'
+            }
         });
+        this.state = {
+            similarContents: this.props.SimilarContentStore.contents,
+            selector: this.props.SimilarContentStore.selector
+
+        };
+    }
+    componentWillReceiveProps(nextProps){
+
+        this.setState({
+            similarContents: nextProps.SimilarContentStore.contents,
+            selector: nextProps.SimilarContentStore.selector
+
+        });
+
     }
     render() {
         const panelDIVStyles = {
             maxHeight: this.props.maxHeight?this.props.maxHeight:800,
+            minHeight: 80,
             overflowY: 'auto'
         };
         let header = this.props.inPanel?<h5 className="ui small header">
-                                          <a href={'/similarcontent/' + this.props.SimilarContentStore.selector.stype + '/' + this.props.SimilarContentStore.selector.sid}>
+                                          <a href={'/similarcontent/' + this.state.selector.stype + '/' + this.state.selector.sid}>
                                             {this.context.intl.formatMessage(this.messages.panel_header)}
                                           </a>
                                         </h5>
@@ -30,11 +49,23 @@ class SimilarContentPanel extends React.Component {
                                             </h1>
                                           </div>;
 
+        let similarsPanel;
+        if(this.state.similarContents.length === 0){ //loading
+            similarsPanel = <div className="ui active inverted dimmer">
+                                <div className="ui indeterminate text loader">{this.context.intl.formatMessage(this.messages.panel_loading)}</div>
+
+                            </div>;
+        }else{
+            similarsPanel = <SimilarContentList selector={this.state.selector} items={this.state.similarContents}/>;
+
+        }
+
+
         return (
             <div>
                 {header}
                 <div className="ui basic segment" style={panelDIVStyles}>
-                        <SimilarContentList selector={this.props.SimilarContentStore.selector} items={this.props.SimilarContentStore.contents} />
+                   {similarsPanel}
                 </div>
 
              </div>

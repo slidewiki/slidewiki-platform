@@ -1,4 +1,7 @@
-const log = require('../configs/log').log;
+import {log} from '../configs/log';
+import rp from 'request-promise';
+import {Microservices} from '../configs/microservices';
+
 
 export default {
     name: 'similarcontent',
@@ -10,10 +13,86 @@ export default {
         let selector= {'sid': args.sid, 'stype': args.stype};
         if(resource === 'similarcontent.list'){
             /*********connect to microservices*************/
-            //todo
+            //NLP SIMILAR CONTENT
+            //nlp service: https://nlpservice.experimental.slidewiki.org/nlp/deckRecommendationSimilarDecks/?deckId=1&maxRecommendationsToReturn=10&maxCandidatesToUseForSimilarityCalculation=30&tfidfMaxTermsToConsider=10&performTitleBoost=true&titleBoostWithFixedFactor=-1&titleBoostlimitToFrequencyOfMostFrequentWord=true&minFrequencyOfTermOrEntityToBeConsidered=2&minCharLength=3&maxNumberOfWords=4&tfidfMinDocsToPerformLanguageDependent=100
+            let maxRecommendations = 5;
+            let simContNLPservice = Microservices.nlp.uri + '/nlp/deckRecommendationSimilarDecks/?deckId=' +
+               args.sid+'&maxRecommendationsToReturn='+maxRecommendations+
+              '&maxCandidatesToUseForSimilarityCalculation=30'+
+              '&tfidfMaxTermsToConsider=10'+
+              '&performTitleBoost=true&titleBoostWithFixedFactor=-1'+
+              '&titleBoostlimitToFrequencyOfMostFrequentWord=true'+
+              '&minFrequencyOfTermOrEntityToBeConsidered=2'+
+              '&minCharLength=3'+
+              '&maxNumberOfWords=4'+
+              '&tfidfMinDocsToPerformLanguageDependent=100';
+            
+
+/*
+            rp.get({uri: simContNLPservice}).then((res) => {
+              //Retrieve deck details
+                let recommendation = JSON.parse(res);
+
+                  let recDecks = recommendation.items;
+                  //GET DATA FOR DECKS FROM DECK SERVICE
+                  let deckPromises = [];
+                  let likesPromises = [];//get the number of deck likes
+                  // get details for the decks
+                  for(let deck of recDecks){
+                      let deckId = deck.deckid;
+                      deckPromises.push(
+                          rp.get({
+                              uri: Microservices.deck.uri+'/deck/'+deckId,
+                              json: true
+                          }).catch((err) => { //error, no results
+                              callback(err, []);
+                          })
+                      );
+
+                      likesPromises.push(
+                          rp.get({
+                              uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
+                          }).catch((err) => { //error, no results
+                              callback(err, []);
+                          })
+                      );
+                  }
+                  let userPromises = [];
+                  let deckPromise = Promise.all(deckPromises).then((decksDetails) => {
+                      for(let deck of decksDetails){
+                        //retrieve users details
+                          userPromises.push(
+                            rp.get({
+                                uri: Microservices.user.uri+'/user/'+deck.user
+                            }).catch((err) => { //error, no results
+                                callback(err, []);
+                            })
+                          );
+
+                      }
+
+                  });
+
+                  let likesPromise = Promise.all(likesPromises);
+                  let userPromise = Promise.all(userPromises);
+                  //Build the final response
+                  Promise.all([deckPromise, userPromises, likesPromise]).then((collectedData) => {
+                      console.log('Respuesta compuesta');
+                      console.log();
+
+                  });
+
+
+            }).catch((err) => { //error, no results
+                callback(err, []);
+            });
+*/
+            //deckservice
+
             //likes: https://activitiesservice.experimental.slidewiki.org/activities/deck/3951?metaonly=true&activity_type=react&all_revisions=true
             //download: https://activitiesservice.experimental.slidewiki.org/activities/deck/3951?metaonly=true&activity_type=download&all_revisions=true
             //user https://userservice.experimental.slidewiki.org/user/16
+
 
             /*********received data from microservices*************/
             let contents = [

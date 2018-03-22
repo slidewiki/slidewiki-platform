@@ -23,6 +23,7 @@ import loadLikes from './activityfeed/loadLikes';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
+import loadSimilarContentsSelector from './loadSimilarContentsSelector';
 import loadSimilarContents from './loadSimilarContents';
 
 const log = require('./log/clog');
@@ -158,6 +159,13 @@ export default function loadDeck(context, payload, done) {
             if(runNonContentActions){
                 //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
                 context.executeAction(loadContributors, payloadCustom, callback);
+            }else{
+                callback();
+            }
+        },
+        (callback) => {
+            if(runNonContentActions){
+                context.executeAction(loadSimilarContentsSelector, payloadCustom, callback);
             }else{
                 callback();
             }

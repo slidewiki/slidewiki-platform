@@ -3,7 +3,7 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
-const log = require('./log/clog');
+import log from './log/clog';
 
 export default function loadSimilarContents(context, payload, done) {
     log.info(context);
