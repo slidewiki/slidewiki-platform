@@ -1,8 +1,34 @@
 import React from 'react';
 import slug from 'slug';
 import {Microservices} from '../../../configs/microservices';
+import {defineMessages} from 'react-intl';
 
 class SimilarContentItem extends React.Component {
+    constructor(props){
+        super(props);
+        this.messages = defineMessages({
+            creator:{
+                id: 'similarContentItem.creator',
+                defaultMessage:'Creator'
+            },
+            likes:{
+                id: 'similarContentItem.likes',
+                defaultMessage:'Number of likes'
+            },
+            open_deck:{
+                id: 'similarContentItem.open_deck',
+                defaultMessage:'Open deck'
+
+            },
+            open_slideshow:{
+                id:'similarContentItem.open_slideshow',
+                defaultMessage:'Open slideshow in new tab'
+            }
+
+        });
+
+
+    }
     render() {
         let deck_slug = this.props.data.title? slug(this.props.data.title) : '';
         return (
@@ -18,9 +44,9 @@ class SimilarContentItem extends React.Component {
                     <a href={'/deck/' + this.props.data.deckId}>{this.props.data.title} </a>
                   </div>
                   <div className="description">
-                    Creator:<a  href={'/user/' + this.props.data.authorId}> {this.props.data.author}</a>
+                    {this.context.intl.formatMessage(this.messages.creator)}:<a  href={'/user/' + this.props.data.authorId}> {this.props.data.author}</a>
                     <div className="right floated">
-                       <i className="ui thumbs up icon" aria-label="Number of Likes"></i> {this.props.data.liked}
+                       <i className="ui thumbs up icon" aria-label={this.context.intl.formatMessage(this.messages.likes)}></i> {this.props.data.liked}
                      </div>
 
                   </div>
@@ -33,10 +59,16 @@ class SimilarContentItem extends React.Component {
 
                  <div className="ui menu top attached">
                     <div className="ui fluid basic buttons">
-                        <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.data.deckId} data-tooltip="Open deck" type="button" role="button" className="ui button" aria-label="Open deck">
+                        <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.data.deckId}
+                          data-tooltip={this.context.intl.formatMessage(this.messages.open_deck)}
+                          type="button" role="button" className="ui button"
+                          aria-label={this.context.intl.formatMessage(this.messages.open_deck)}>
                             <i className="yellow open folder large icon" aria-hidden="true" ></i>
                         </a>
-                        <a href={'/presentation' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.data.deckId + '/' + this.props.data.deckId} target="_blank" className="ui button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                        <a href={'/presentation' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.data.deckId + '/' + this.props.data.deckId}
+                            target="_blank" className="ui button" type="button"
+                            role="button" aria-label={this.context.intl.formatMessage(this.messages.open_slideshow)}
+                            data-tooltip={this.context.intl.formatMessage(this.messages.open_slideshow)}>
                             <i className="grey circle play large icon" aria-hidden="true" ></i>
                         </a>
                     </div>
@@ -47,5 +79,7 @@ class SimilarContentItem extends React.Component {
         );
     }
 }
-
+SimilarContentItem.contextTypes = {
+    intl: React.PropTypes.object.isRequired
+};
 export default SimilarContentItem;

@@ -99,7 +99,7 @@ class InfoPanelInfoView extends React.Component {
                     <ActivityFeedPanel />
                 </div>
                 <div className="ui attached segment">
-                  <SimilarContentPanel maxHeight="360"/>
+                  <SimilarContentPanel maxHeight="360" inPanel/>
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
                   <div className="ui attached segment">
