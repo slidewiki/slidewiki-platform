@@ -1,5 +1,4 @@
 import React from 'react';
-import {List, Icon, Button} from 'semantic-ui-react';
 import { NavLink } from 'fluxible-router';
 import {formatDate} from '../../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import { Microservices } from '../../../../configs/microservices';
@@ -29,14 +28,15 @@ class UserpPerformancePredictionItem extends React.Component {
                     <i className="icon certificate big green"/>
                 </div>
             );
-        let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/`;
+        let thumbnail = '';
         if (prediction.deckFirstSlide) {
-            thumbnailURL += prediction.deckFirstSlide;
+            let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/` + prediction.deckFirstSlide;
             if (prediction.deckTheme) {
                 thumbnailURL += '/' + prediction.deckTheme;
             }
-        } else {
-            thumbnailURL = '';
+            thumbnail = (
+                <Thumbnail url={thumbnailURL} alt={''} slideId={prediction.deckId} />
+            );
         }
 
         let duration = '';
@@ -47,13 +47,13 @@ class UserpPerformancePredictionItem extends React.Component {
         } else{
             duration = Math.round(elapsed/msPerMinute) + ' minutes';
         }
+        
         return (
             <div className="accordionItem">
                 <div className="title">
                     <i className="dropdown icon"></i>
                     <div className="ui vertical segment" >
                         <div className="ui grid">
-
                             <div className="four wide column ui header">
                                 {prediction.title}
                             </div>
@@ -73,10 +73,9 @@ class UserpPerformancePredictionItem extends React.Component {
                 <div className="content">
                     <div className="ui grid">
                         <div className="four wide column">
-                            {(prediction.deckId) ? 'Deck id: ' + prediction.deckId : ''}
                             <NavLink className="ui medium centered spaced image" aria-hidden={'true'}  tabIndex={'-1'} href={'/deck/' + prediction.deckId}>
-                                <Thumbnail url={thumbnailURL} alt={''}
-                                    slideId={prediction.deckId} />
+                                {(prediction.deckId) ? 'Deck id: ' + prediction.deckId : ''}
+                                {thumbnail}
                             </NavLink>
                         </div>
                         <div className="four wide column">
@@ -85,13 +84,13 @@ class UserpPerformancePredictionItem extends React.Component {
                         <div className="four wide column">
                             {(prediction.finished) ? 'Duration: ' + duration : ''}
                         </div>
-
                     </div>
                 </div>
             </div>
         );
     }
 }
+
 UserpPerformancePredictionItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };

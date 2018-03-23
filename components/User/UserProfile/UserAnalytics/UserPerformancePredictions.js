@@ -1,40 +1,11 @@
 import React from 'react';
 import UserPerformancePredictionItem from './UserPerformancePredictionItem';
-import {List} from 'semantic-ui-react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserPerformancePredictionsStore from '../../../../stores/UserPerformancePredictionsStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
-import addPerformancePredictionJob from '../../../../actions/analytics/addPerformancePredictionJob';
+import SelectDeckModal from './SelectDeckModal';
 
 class UserPerformancePredictions extends React.Component {
-    handleCLickNewPrediction(e) {
-        e.preventDefault();
-
-
-
-
-        //IMPLEMENT DECK SELECTION
-        let deckId = 2000;
-        let deckTitle = 'testTitle';
-        let deckFirstSlide = '14176-2';
-        let deckTheme = 'default';
-
-
-
-
-
-        let userId = this.props.UserProfileStore.userid;
-        let started = new Date();
-        let prediction = {
-            userId: userId,
-            deckId: deckId,
-            title: deckTitle,
-            started: started,
-            deckTheme: deckTheme,
-            deckFirstSlide: deckFirstSlide
-        };
-        this.context.executeAction(addPerformancePredictionJob, {prediction: prediction});
-    }
 
     componentDidMount() {
         this.enableAccordion();
@@ -55,8 +26,8 @@ class UserPerformancePredictions extends React.Component {
         let accordionDIV = this.refs.predictionsList;
         $(accordionDIV).find('.ui.accordion').accordion('refresh');
     }
-    render() {
 
+    render() {
         const items = this.props.UserPerformancePredictionsStore.predictions ?  ((this.props.UserPerformancePredictionsStore.predictions.length > 0) ? this.props.UserPerformancePredictionsStore.predictions.map((prediction, index) => {
             return (
                 <UserPerformancePredictionItem prediction={prediction} key={index} />
@@ -67,10 +38,7 @@ class UserPerformancePredictions extends React.Component {
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
                   <h3 className="ui left floated header" >Performance predictions</h3>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewPrediction.bind(this)}>
-                      <i className="icon chart bar"/>
-                      <p>New prediction job</p>
-                  </button>
+                  <SelectDeckModal />
               </div>
 
               {loading}
@@ -82,8 +50,6 @@ class UserPerformancePredictions extends React.Component {
               </div>
             </div>
         );
-
-
     }
 }
 
@@ -97,6 +63,5 @@ UserPerformancePredictions = connectToStores(UserPerformancePredictions, [UserPe
         UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
-
 
 export default UserPerformancePredictions;
