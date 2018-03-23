@@ -351,7 +351,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -373,6 +373,24 @@ export default {
                 done();
             });
         }
+    },
+    oldSlugDeck: {
+        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/deck',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                payload.params.stype,
+                payload.params.spath,
+                payload.params.mode,
+                payload.params.theme,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+            
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
+        },
     },
     legacydeck: {
         path: '/deck/:oldid(\\d+_\\w+.*)',
@@ -531,7 +549,7 @@ export default {
         }
     },
     decktree: {
-        path: '/decktree:slug(_.+)?/:id/:spath?',
+        path: '/decktree/:id/:spath?',
         method: 'get',
         page: 'decktree',
         handler: require('../components/Deck/TreePanel/TreePanel'),
@@ -552,13 +570,29 @@ export default {
 
 
     presentation: {
-        path: '/presentation:slug(_.+)?/:id/:subdeck/:sid?',
+        path: '/presentation/:id:slug(/[^/]+)?/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
             context.executeAction(loadPresentation, payload, done);
         }
+    },
+    oldSlugPresentation: {
+        path: '/presentation:slug(_.+)?/:id/:subdeck/:sid?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/presentation',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                payload.params.subdeck,
+                payload.params.sid,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+            
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
+        },
     },
     importfile: {
         path: '/importfile',

@@ -2,6 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
+import slug from 'slug';
 
 const log = require('../configs/log').log;
 
@@ -312,6 +313,7 @@ export default {
 function transform(deck){
     return {
         title: !isEmpty(deck.title) ? deck.title : 'No Title',
+        slug: buildSlug(deck),
         picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
         description: deck.description,
         updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
@@ -324,4 +326,8 @@ function transform(deck){
         noOfLikes: deck.noOfLikes
 
     };
+}
+
+function buildSlug(deck) {
+    return slug(deck.title || '').toLowerCase() || '_';
 }

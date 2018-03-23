@@ -139,7 +139,7 @@ class Deck extends React.Component {
                     <div className={contentAndRightPanelClass}>
                         <div className="row">
                             <div className={contentAndRightPanelClass}>
-                                <ContentPanel />
+                                <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                             </div>
                             <div className={contentAndRightModulesPanelClass}>
                                 <div className="ui hidden divider"></div>
@@ -156,7 +156,7 @@ class Deck extends React.Component {
             leftPanel =     <div className={leftColClass}>
                                 <div className="row">
                                     <div className={treePanelClass}>
-                                        <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                                        <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page} deckSlug={this.props.DeckPageStore.deckSlug} />
                                     </div>
 
                                     {/*<div className="ui hidden divider"></div>
@@ -174,7 +174,7 @@ class Deck extends React.Component {
                     <div className={centerColClass}>
                         <div className="row">
                             <div className={contentPanelClass}>
-                                <ContentPanel />
+                                <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                             </div>
                             <div className={contentModulesPanelClass}>
                                 <div className="ui hidden divider"></div>

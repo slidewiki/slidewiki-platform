@@ -82,8 +82,8 @@ class TreePanel extends React.Component {
         }
     }
     getPresentationHref(){
-        //console.log(this.props.DeckTreeStore.selector.toJS());
-        let presLocation = '/presentation/' + this.props.DeckTreeStore.selector.toJS().id + '/';
+        let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
+
         if (this.props.DeckTreeStore.selector.toJS().spath.search(';') !== -1)
         {
             //if a subdeck is selected - use its selector

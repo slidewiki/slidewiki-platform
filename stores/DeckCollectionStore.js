@@ -1,4 +1,5 @@
 import { BaseStore } from 'fluxible/addons';
+import slug from 'slug';
 
 class DeckCollectionStore extends BaseStore {
     constructor(dispatcher) {
@@ -106,6 +107,7 @@ class DeckCollectionStore extends BaseStore {
             return {
                 deckID: deck._id,
                 title: activeRevision.title,
+                slug: slug(activeRevision.title || '').toLowerCase() || '_',
                 firstSlide: activeRevision.firstSlide,
                 theme: activeRevision.theme,
                 updated: deck.lastUpdate,

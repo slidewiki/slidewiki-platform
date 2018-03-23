@@ -10,6 +10,7 @@ import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
 import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+import slug from 'slug';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -126,14 +127,15 @@ class DeckViewPanel extends React.Component {
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const deckURL = '/deck/' + this.props.selector.id;
+        const deckSlug = slug(deckTitle || '').toLowerCase() || '_';
+        const deckURL = ['/deck', deckData._id, deckSlug].join('/');;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
         const user = this.props.UserProfileStore.userid;
 
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
-                <NavLink href={'/deck/' + deckData.origin.id + '-' + deckData.origin.revision}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
+                <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
         </div> : '';
 
         return (
@@ -151,7 +153,7 @@ class DeckViewPanel extends React.Component {
                             <h2 className="ui header" aria-describedby="decktitle">{deckTitle}</h2>
                             <div className="sr-only" id="decktitle">Deck Title:</div>
                             <div className="meta"><strong>Creator:&nbsp;</strong>
-                                <a href={creatorProfileURL}>{deckCreator}</a>
+                                <NavLink href={creatorProfileURL}>{deckCreator}</NavLink>
                             </div>
                             {originInfo}
                             <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
@@ -208,15 +210,13 @@ class DeckViewPanel extends React.Component {
                         if (index < maxSlideThumbnails) {
                             return (<div key={index} className="column">
                                 <div className="ui fluid card">
+                                    <NavLink href={deckURL + '/slide/' + slide.id} className="ui medium image"
+                                       tabIndex="-1">
+                                        <img key={index} src={thumbnailURL} alt={slide.id} tabIndex={-1}/>
+                                    </NavLink>
                                     <div className="content" tabIndex="-1">
-                                        <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
-                                           tabIndex="-1">
-                                            <Thumbnail key={index}
-                                                       url={thumbnailURL}
-                                                       slideId={slide.id} alt={''} abIndex={-1}/>
-                                        </a>
-                                        <a href={deckURL + '/slide/' + slide.id}
-                                           className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
+                                        <NavLink href={deckURL + '/slide/' + slide.id}
+                                           className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</NavLink>
                                         <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
                                     </div>
                                 </div>

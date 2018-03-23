@@ -49,7 +49,7 @@ class ContentPanel extends React.Component {
                     {targetComponent}
                 </div>
                 <div className="ui bottom attached">
-                    <ContentActionsFooter ContentStore={this.props.ContentStore} />
+                    <ContentActionsFooter ContentStore={this.props.ContentStore} deckSlug={this.props.deckSlug} />
                 </div>
                 <NoPermissionsModal selector={this.props.ContentStore.selector} />
              </div>
