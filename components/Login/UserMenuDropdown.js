@@ -60,7 +60,7 @@ class UserMenuDropdown extends React.Component {
 
                </AriaMenuButton.Button>
                <AriaMenuButton.Menu className='ui menu vertical'
-                style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important'}} >
+                style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
                   <AriaMenuButton.MenuItem
                    className='item'
                    key= {0}
