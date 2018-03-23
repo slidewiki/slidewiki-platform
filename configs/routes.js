@@ -521,6 +521,15 @@ export default {
             context.executeAction(loadContentQuestions, payload, done);
         }
     },
+    exam: {
+        path: '/exam/:stype/:sid',
+        method: 'get',
+        page: 'exam',
+        handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ExamPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContentQuestions, payload, done);
+        }
+    },
     discussion: {
         path: '/discussion/:stype/:sid',
         method: 'get',
