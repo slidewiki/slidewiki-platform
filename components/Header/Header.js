@@ -12,6 +12,7 @@ import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
@@ -43,9 +44,21 @@ class Header extends React.Component {
     }
 
     handleLoginButton() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
         $('.ui.login.modal')
+            .modal({
+                onHidden: () => {
+                    this.context.executeAction(updateTrap,{activeTrap:false});
+                    $('#app').attr('aria-hidden','true');
+                }
+            })
             .modal('toggle');
+
+
         this.closeSidebar({target: '<a className="item"></a>'});
+
     }
 
     logout() {

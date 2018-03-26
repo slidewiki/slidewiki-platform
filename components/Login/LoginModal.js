@@ -16,6 +16,8 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 import SelectInstanceModal from '../User/SelectInstanceModal.js';
 import openSSOModal from '../../actions/user/openSSOModal';
 import FocusTrap from 'focus-trap-react';
+import LoginModalStore from '../../stores/LoginModalStore';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -37,14 +39,11 @@ class LoginModal extends React.Component {
         this.provider = '';
         this.isLoading = false;
         this.state = {
-            activeTrap: false,
+            activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
         };
 
         this.errorMessages = defineMessages({
-            headerText:{
-                id:'userSignIn.headerText',
-                defaultMessage:'Sign In'
-            },
+
             error403: {
                 id: 'userSignIn.errormessage.isSPAM',
                 defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
@@ -59,11 +58,18 @@ class LoginModal extends React.Component {
             }
         });
     }
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            activeTrap: nextProps.LoginModalStore.activeTrap
+        });
+
+    }
     unmountTrap(){
         if(this.state.activeTrap){
-            this.setState({ activeTrap: false });
-            $('#app').attr('aria-hidden','false');
-        }
+            this.context.executeAction(updateTrap,{activeTrap:false});
+        };
+        $('#app').attr('aria-hidden','false');
+
 
     }
     isModalShown() {
@@ -73,11 +79,8 @@ class LoginModal extends React.Component {
 
     handleLoginButton() {
         $('.ui.login.modal').modal('toggle');
-        this.setState({
-            activeTrap: true,
-        });
-        //hidden the other page elements to readers
-        $('#app').attr('aria-hidden','true');
+
+
         setTimeout(() => {
             ReactDOM.findDOMNode(this.refs.email1).focus();
         }, 0);
@@ -350,7 +353,11 @@ class LoginModal extends React.Component {
             placeholder_password: {
                 id: 'LoginModal.placeholder.password',
                 defaultMessage: 'Password',
-            }
+            },
+            headerText:{
+                id:'userSignIn.headerText',
+                defaultMessage:'Sign In'
+            },
         });
 
         return(
@@ -367,7 +374,7 @@ class LoginModal extends React.Component {
                     className = "header">
               <div className="header">
                   <h1 id="siginModal_header" style={headerStyle}>
-                     {this.context.intl.formatMessage(this.messages.headerText)}
+                     {this.context.intl.formatMessage(messages.headerText)}
 
                   </h1>
               </div>
@@ -462,4 +469,10 @@ LoginModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
+LoginModal = connectToStores(LoginModal,[LoginModalStore],(context,props) => {
+    return {
+        LoginModalStore: context.getStore(LoginModalStore).getState(),
+
+    };
+});
 export default LoginModal;
