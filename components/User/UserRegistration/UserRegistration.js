@@ -696,7 +696,7 @@ class UserRegistration extends React.Component {
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label={this.context.intl.formatMessage(this.messages.modal_googleButton)}><i className="big google plus lnk icon"></i></button>
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label={this.context.intl.formatMessage(this.messages.modal_githubButton)}><i className="big github icon"></i></button>
 
-                            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/imprint" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
+                            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/terms" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
                             <div className="ui dividing header" ></div>
 
                             <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h3>
@@ -740,7 +740,7 @@ class UserRegistration extends React.Component {
                                 </button>
                             </form>
                             <div className="ui dividing header" ></div>
-                          {this.context.intl.formatMessage(this.messages.form_terms)}<a href="/imprint">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
+                          {this.context.intl.formatMessage(this.messages.form_terms)} <a href="/terms">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
                             <br/><br/>
                             <a href="#" onClick={this.handleNoAccessClick}>{this.context.intl.formatMessage(this.messages.form_noAccess)}</a>
                         </div>
