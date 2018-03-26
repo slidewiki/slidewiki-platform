@@ -15,6 +15,7 @@ let MediaQuery = require ('react-responsive');
 import {FormattedMessage, defineMessages} from 'react-intl';
 import SelectInstanceModal from '../User/SelectInstanceModal.js';
 import openSSOModal from '../../actions/user/openSSOModal';
+import FocusTrap from 'focus-trap-react';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -31,11 +32,19 @@ class LoginModal extends React.Component {
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
         this.isLoading = false;
+        this.state = {
+            activeTrap: false,
+        };
 
         this.errorMessages = defineMessages({
+            headerText:{
+                id:'userSignIn.headerText',
+                defaultMessage:'Sign In'
+            },
             error403: {
                 id: 'userSignIn.errormessage.isSPAM',
                 defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
@@ -50,7 +59,13 @@ class LoginModal extends React.Component {
             }
         });
     }
+    unmountTrap(){
+        if(this.state.activeTrap){
+            this.setState({ activeTrap: false });
+            $('#app').attr('aria-hidden','false');
+        }
 
+    }
     isModalShown() {
         const classes = $('.ui.login.modal').attr('class');
         return classes.indexOf('hidden') === -1;
@@ -58,9 +73,15 @@ class LoginModal extends React.Component {
 
     handleLoginButton() {
         $('.ui.login.modal').modal('toggle');
+        this.setState({
+            activeTrap: true,
+        });
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
         setTimeout(() => {
             ReactDOM.findDOMNode(this.refs.email1).focus();
         }, 0);
+
     }
 
     signin(e) {
@@ -334,20 +355,29 @@ class LoginModal extends React.Component {
 
         return(
           <div>
-            <div className="ui login modal" id='signinModal' style={modalStyle}>
+            <div className="ui login modal" id='signinModal' role="dialog" aria-labelledby="siginModal_header" aria-describedby="signinModalDescription" style={modalStyle}>
+            <FocusTrap
+                    id="focus-trap-signinModal"
+                    focusTrapOptions={{
+                        onDeactivate: this.unmountTrap,
+                        clickOutsideDeactivates: true,
+                        initialFocus: '#email1'
+                    }}
+                    active={this.state.activeTrap}
+                    className = "header">
               <div className="header">
-                  <h1 style={headerStyle}>
-                    <FormattedMessage
-                      id='LoginModal.header.signIn'
-                      defaultMessage='Sign In'
-                    />
+                  <h1 id="siginModal_header" style={headerStyle}>
+                     {this.context.intl.formatMessage(this.messages.headerText)}
+
                   </h1>
               </div>
               <div className="content">
                 <div className="ui container">
-
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
+                        <textarea className="sr-only" id="signinModalDescription"
+                        value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+                        tabIndex ='-1'/>
                         <div className={inputField_classes}>
                           <div><label htmlFor="email1" hidden>
                             <FormattedMessage
@@ -420,6 +450,7 @@ class LoginModal extends React.Component {
                   />
                 </button>
               </div>
+             </FocusTrap>
             </div>
             <SelectInstanceModal />
           </div>
