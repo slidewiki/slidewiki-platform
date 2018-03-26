@@ -16,8 +16,8 @@ export default {
             //NLP SIMILAR CONTENT
             //nlp service: https://nlpservice.experimental.slidewiki.org/nlp/deckRecommendationSimilarDecks/?deckId=1&maxRecommendationsToReturn=10&maxCandidatesToUseForSimilarityCalculation=30&tfidfMaxTermsToConsider=10&performTitleBoost=true&titleBoostWithFixedFactor=-1&titleBoostlimitToFrequencyOfMostFrequentWord=true&minFrequencyOfTermOrEntityToBeConsidered=2&minCharLength=3&maxNumberOfWords=4&tfidfMinDocsToPerformLanguageDependent=100
             let maxRecommendations = 5;
-            let simContNLPservice = Microservices.nlp.uri + '/nlp/deckRecommendationSimilarDecks/?deckId=' +
-               args.sid+'&maxRecommendationsToReturn='+maxRecommendations+
+            let simContNLPservice = Microservices.nlp.uri + '/nlp/deckRecommendationSimilarDecks/?deckId=' + args.sid+
+              '&maxRecommendationsToReturn='+maxRecommendations+
               '&maxCandidatesToUseForSimilarityCalculation=30'+
               '&tfidfMaxTermsToConsider=10'+
               '&performTitleBoost=true&titleBoostWithFixedFactor=-1'+
@@ -26,7 +26,7 @@ export default {
               '&minCharLength=3'+
               '&maxNumberOfWords=4'+
               '&tfidfMinDocsToPerformLanguageDependent=100';
-            
+
 
 /*
             rp.get({uri: simContNLPservice}).then((res) => {
