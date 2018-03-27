@@ -11,7 +11,6 @@ import NoPermissionsModal from './NoPermissionsModal';
 
 class ContentPanel extends React.Component {
 
-
     render() {
         let targetComponent = '';
         switch (this.props.ContentStore.selector.stype) {

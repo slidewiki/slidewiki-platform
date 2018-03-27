@@ -18,6 +18,7 @@ import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import ContentUtil from '../../util/ContentUtil';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import {equals} from '../../../../../common.js';
 
 let ReactDOM = require('react-dom');
 
@@ -32,7 +33,6 @@ class SlideContentEditor extends React.Component {
         this.menuFocus;
         this.previousCaretRange;
         //this.CKeditorMode = 'advanced toolbar';
-        this.loading = '';
         this.hasChanges = false;
         //this.oldContent = '';
         //this.redoContent = '';
@@ -596,7 +596,6 @@ class SlideContentEditor extends React.Component {
                 showConfirmButton: false
             });
             */
-            this.loading = 'loading';
             //remove editing borders input boxes:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
@@ -1990,6 +1989,12 @@ class SlideContentEditor extends React.Component {
     emitChange(context){
         context.hasChanges = true;
     }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let samePropsState = equals(this.props, nextProps);
+        return !samePropsState;
+    }
+
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
@@ -2142,7 +2147,6 @@ class SlideContentEditor extends React.Component {
         return (
             //<ResizeAware ref='container' id='container' style={{position: 'relative'}}>
             <div ref='container' id='container'>
-            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
             {/*
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
