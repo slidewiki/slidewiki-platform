@@ -25,7 +25,14 @@ class Header extends React.Component {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
         $(this.refs.languagebar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+
+        $('.ui.login.modal').modal({
+            onHidden: () => {
+                this.context.executeAction(updateTrap,{activeTrap:false});
+                $('#app').attr('aria-hidden','false');
+            }
+        });
     }
 
     toggleSidebar() {
@@ -47,14 +54,7 @@ class Header extends React.Component {
         this.context.executeAction(updateTrap,{activeTrap:true});
         //hidden the other page elements to readers
         $('#app').attr('aria-hidden','true');
-        $('.ui.login.modal')
-            .modal({
-                onHidden: () => {
-                    this.context.executeAction(updateTrap,{activeTrap:false});
-                    $('#app').attr('aria-hidden','false');
-                }
-            })
-            .modal('toggle');
+        $('.ui.login.modal').modal('toggle');
 
 
         this.closeSidebar({target: '<a className="item"></a>'});

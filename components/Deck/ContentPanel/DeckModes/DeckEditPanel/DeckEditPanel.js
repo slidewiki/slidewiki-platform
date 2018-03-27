@@ -113,14 +113,7 @@ class DeckEditPanel extends React.Component {
             this.context.executeAction(updateTrap,{activeTrap:true});
             //hidden the other page elements to readers
             $('#app').attr('aria-hidden','true');
-            $('.ui.login.modal')
-            .modal({
-                onHidden: () => {
-                    this.context.executeAction(updateTrap,{activeTrap:false});
-                    $('#app').attr('aria-hidden','fasle');
-                }
-            })
-            .modal('show');
+            $('.ui.login.modal').modal('show');
             return;
         }
         const nodeURL = ContentUtil.makeNodeURL(this.props.selector, 'view');
