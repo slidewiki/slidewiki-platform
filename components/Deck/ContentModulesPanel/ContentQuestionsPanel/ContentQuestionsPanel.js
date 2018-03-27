@@ -70,9 +70,7 @@ class ContentQuestionsPanel extends React.Component {
 
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
-        const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
-        const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
         const questionsCount = this.props.ContentQuestionsStore.questionsCount;
         const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
