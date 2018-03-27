@@ -33,8 +33,6 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     render() {
-        const creatorId = this.props.DeckViewStore.creatorData._id;
-        const userId = this.props.UserProfileStore.userid;
         const editButton = (
             <button className="ui compact button primary" onClick={this.handleEditButtonClick}>
                 <i className="edit icon" />
