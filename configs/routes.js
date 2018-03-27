@@ -16,6 +16,7 @@ import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
+import loadExamQuestions from '../actions/questions/loadExamQuestions';
 import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
@@ -527,7 +528,7 @@ export default {
         page: 'exam',
         handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ExamPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadContentQuestions, payload, done);
+            context.executeAction(loadExamQuestions, payload, done);
         }
     },
     discussion: {
