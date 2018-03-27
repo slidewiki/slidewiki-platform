@@ -10,6 +10,7 @@ import ResetPasswordStore from '../../stores/ResetPasswordStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import ReCAPTCHA from 'react-google-recaptcha';
 import common from '../../common';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 class ResetPassword extends React.Component {
     componentDidMount() {
@@ -178,7 +179,18 @@ class ResetPassword extends React.Component {
         this.context.executeAction(navigateAction, {//go to home page after password reset
             url: '/'
         });
-        $('.ui.login.modal').modal('show');
+        //prepraring the modal
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal')
+        .modal({
+            onHidden: () => {
+                this.context.executeAction(updateTrap,{activeTrap:false});
+                $('#app').attr('aria-hidden','false');
+            }
+        })
+        .modal('show');
         return true;
     }
 

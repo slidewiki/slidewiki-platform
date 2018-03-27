@@ -17,7 +17,7 @@ import {hashPassword, ssoEnabled} from '../../../configs/general';
 import common from '../../../common';
 import openSSOModal from '../../../actions/user/openSSOModal';
 import {defineMessages} from 'react-intl';
-
+import updateTrap from '../../../actions/loginModal/updateTrap';
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
 
@@ -384,8 +384,18 @@ class UserRegistration extends React.Component {
                     this.context.executeAction(navigateAction, {
                         url: '/'
                     });
-
-                    $('.ui.login.modal').modal('show');
+                    //prepraring the modal
+                    this.context.executeAction(updateTrap,{activeTrap:true});
+                    //hidden the other page elements to readers
+                    $('#app').attr('aria-hidden','true');
+                    $('.ui.login.modal')
+                    .modal({
+                        onHidden: () => {
+                            this.context.executeAction(updateTrap,{activeTrap:false});
+                            $('#app').attr('aria-hidden','false');
+                        }
+                    })
+                    .modal('show');
 
                     return true;
                 })

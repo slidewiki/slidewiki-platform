@@ -22,7 +22,6 @@ class LoginModalStore extends BaseStore{
 
     updateTrap(payload){
         this.activeTrap = payload.activeTrap;
-        console.log('store payload'+payload.activeTrap);
         this.emitChange();
     }
 

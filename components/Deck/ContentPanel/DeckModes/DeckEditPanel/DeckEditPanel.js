@@ -8,7 +8,7 @@ import {updateAuthorizedUsers} from '../../../../../actions/updateDeckAuthorizat
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {Button, Modal, Header} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
-
+import updateTrap from '../../../../../actions/loginModal/updateTrap';
 import DeckPropertiesEditor from './DeckPropertiesEditor';
 
 
@@ -109,7 +109,18 @@ class DeckEditPanel extends React.Component {
     componentDidMount() {
         let interestedUser = this.getParameterByName('interestedUser');
         if (interestedUser && this.props.UserProfileStore.username === '') {
-            $('.ui.login.modal').modal('show');
+          //prepraring the modal
+            this.context.executeAction(updateTrap,{activeTrap:true});
+            //hidden the other page elements to readers
+            $('#app').attr('aria-hidden','true');
+            $('.ui.login.modal')
+            .modal({
+                onHidden: () => {
+                    this.context.executeAction(updateTrap,{activeTrap:false});
+                    $('#app').attr('aria-hidden','fasle');
+                }
+            })
+            .modal('show');
             return;
         }
         const nodeURL = ContentUtil.makeNodeURL(this.props.selector, 'view');

@@ -159,8 +159,7 @@ class LoginModal extends React.Component {
                 cancelButtonClass: 'ui orange button',
                 buttonsStyling: false
             })
-            .then((dismiss) => {
-                // console.log('action after dismiss', dismiss);
+            .then((dismiss) => {                
                 $('.ui.login.modal').modal('hide');
                 return this.handleRegisterFirst(dismiss);
             })

@@ -51,7 +51,7 @@ class Header extends React.Component {
             .modal({
                 onHidden: () => {
                     this.context.executeAction(updateTrap,{activeTrap:false});
-                    $('#app').attr('aria-hidden','true');
+                    $('#app').attr('aria-hidden','false');
                 }
             })
             .modal('toggle');
