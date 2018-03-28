@@ -33,7 +33,6 @@ class ExamAnswersItem extends React.Component {
         return (
             <div className="field">
                 <div className="ui checkbox">
-
                     <input type="checkbox" ref={name} name={name} id={name} onChange={this.handleOnChange.bind(this)}/>
                     <label htmlFor={name}>
                         {answerIcon} {answer.answer}

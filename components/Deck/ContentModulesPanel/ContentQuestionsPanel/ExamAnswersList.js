@@ -6,7 +6,7 @@ class ExamAnswersList extends React.Component {
     render() {
         let wrongAnswer = false;
 
-        for(let answer of this.props.items) {
+        for (let answer of this.props.items) {
             if (answer.selectedAnswer === undefined) {
                 answer.selectedAnswer = false;
             }
@@ -15,13 +15,9 @@ class ExamAnswersList extends React.Component {
                 break;
             }
         }
-        let explanation = (this.props.showCorrectAnswers && wrongAnswer && this.props.explanation.trim() !== '') ?
-            <div className="description">
-                <p>
-                    <label><strong>Explanation:</strong></label> {this.props.explanation}
-                </p>
-            </div>
-        : '';
+
+        let explanation = (this.props.explanation.trim() !== '') ? 'Explanation: ' + this.props.explanation : '';
+        let wrongAnswerInfo = (this.props.showCorrectAnswers && wrongAnswer) ? (<div><i className="big delete icon red" />{explanation}</div>) : '';
 
         let list = this.props.items.map((node, index) => {
             return (
@@ -29,24 +25,10 @@ class ExamAnswersList extends React.Component {
             );
         });
 
-        let answers = (
-            <div className="ui two column stackable grid">
-                <div className="column">
-                    <div className="ui grouped fields">
-                        <fieldset>
-                            {list}
-                            {explanation}
-                        </fieldset>
-                    </div>
-                </div>
-            </div>
-        );
-
         return (
-            <div ref="contentquestionanswersList">
-                <div className="ui relaxed list">
-                    {answers}
-                </div>
+            <div>
+                {list}
+                {wrongAnswerInfo}
             </div>
         );
     }

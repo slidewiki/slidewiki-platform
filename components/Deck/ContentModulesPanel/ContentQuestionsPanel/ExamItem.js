@@ -31,14 +31,20 @@ class ExamItem extends React.Component {
 
         return (
             <div>
-                <div>
-                    {this.props.questionIndex + 1}. {question.title}
-                    <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
-                    {difficultyStars(question.difficulty)}
-                </div>
-
-                <div>
-                    {answers}
+                <div className="ui three column vertically divided grid segment">
+                    <div className="one wide column">
+                        {this.props.questionIndex + 1}.
+                        <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
+                        {difficultyStars(question.difficulty)}
+                    </div>
+                    <div className="seven wide column">
+                        <h4>
+                            {question.title}
+                        </h4>
+                    </div>
+                    <div className="eight wide column">
+                        {answers}
+                    </div>
                 </div>
             </div>
         );
