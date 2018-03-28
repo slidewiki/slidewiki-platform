@@ -1198,57 +1198,57 @@ class SlideContentEditor extends React.Component {
     placeCaretAtStart(id) {
         console.log('placeCaretAtStart');
         let el = $('#'+id)[0];
-//        let el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
-//        console.log(el);
-//        if (!el) {
-//            el = $('#'+id).find('p:visible:first')[0];
-//            console.log('id + find first span not found');
-//            console.log('try id + find first p');
-//        }
-//        if (!el) {
-//            el = $('#'+id).find('div:visible:first').not('.ui-resizable-handle')[0];
-//            console.log('try id + find first div not ui-resizable');
-//        }
-//        if (!el) {
-//            el = $('#'+id).find('img:visible:first')[0];
-//            console.log('try id + find first img');
-//            //if ($('#'+id).find('img:first')[0])
-//            if (el) {
-//                console.log('create surrounding div so image can be selected with keyboard');
-//                let emptySpan = document.createElement('span');
-//                emptySpan.innerHTML = '';
-//                $('#'+id).prepend(emptySpan);
-//                el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
-//            }
-//        }
-//        if (!el) {
-//            el = $('#'+id).filter(':visible')[0];
-//            console.log('id directly');
-//        }
-//        if (!el) {
-//            el = $(':focus').find('span:visible:first')[0];
-//            console.log('try focus find span first 0');
-//        }
-//        //if(!el){el = $(':focus');console.log('id of focus');}
-//        if (!el) {
-//            console.log('nothing found, create span element');
-//            let emptySpan = document.createElement('span');
-//            emptySpan.innerHTML = '';
-//            $('#'+id).prepend(emptySpan);
-//            el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
-//        }
+        let el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
+        console.log(el);
+        if (!el) {
+            el = $('#'+id).find('p:visible:first')[0];
+            console.log('id + find first span not found');
+            console.log('try id + find first p');
+        }
+        if (!el) {
+            el = $('#'+id).find('div:visible:first').not('.ui-resizable-handle')[0];
+            console.log('try id + find first div not ui-resizable');
+        }
+        if (!el) {
+            el = $('#'+id).find('img:visible:first')[0];
+            console.log('try id + find first img');
+            //if ($('#'+id).find('img:first')[0])
+            if (el) {
+                console.log('create surrounding div so image can be selected with keyboard');
+                let emptySpan = document.createElement('span');
+                emptySpan.innerHTML = '';
+                $('#'+id).prepend(emptySpan);
+                el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
+            }
+        }
+        if (!el) {
+            el = $('#'+id).filter(':visible')[0];
+            console.log('id directly');
+        }
+        if (!el) {
+            el = $(':focus').find('span:visible:first')[0];
+            console.log('try focus find span first 0');
+        }
+        //if(!el){el = $(':focus');console.log('id of focus');}
+        if (!el) {
+            console.log('nothing found, create span element');
+            let emptySpan = document.createElement('span');
+            emptySpan.innerHTML = '';
+            $('#'+id).prepend(emptySpan);
+            el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
+        }
         el.focus();
         if (typeof window.getSelection != 'undefined'
                 && typeof document.createRange != 'undefined') {
             const range = document.createRange();
-//            try{
-//                range.selectNodeContents(el);
-//            } catch(error){
-//                console.log('selectNodeContents - error');
-//                console.log('reset context menu');
-//                $('#'+id).contextMenu(true);
-//                return false;
-//            }
+            try{
+                range.selectNodeContents(el);
+            } catch(error){
+                console.log('selectNodeContents - error');
+                console.log('reset context menu');
+                $('#'+id).contextMenu(true);
+                return false;
+            }
             range.setStart(el, 0);
             range.collapse(true);
 
