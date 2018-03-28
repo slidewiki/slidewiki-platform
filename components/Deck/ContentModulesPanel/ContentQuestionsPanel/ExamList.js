@@ -7,6 +7,7 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import TreeUtil from '../../TreePanel/util/TreeUtil';
 import showCorrectExamAnswers from '../../../../actions/questions/showCorrectExamAnswers';
+import addActivity from '../../../../actions/activityfeed/addActivity';
 
 class ExamList extends React.Component {
     getPath(){
@@ -67,16 +68,17 @@ class ExamList extends React.Component {
         });
         this.context.executeAction(showCorrectExamAnswers, {});
 
-        const userId = this.props.UserProfileStore.userid;
-
-
-
-
-        //NAPRAVITI ACTIVITY SA REZULTATOM EXAM-A
-
-
-
-
+        //create an activity
+        let activity = {
+            activity_type: 'exam',
+            user_id: String(this.props.UserProfileStore.userid),
+            content_id: this.props.selector.sid,
+            content_kind: this.props.selector.stype,
+            exam_info: {
+                score: Math.round(score * 100)
+            }
+        };
+        this.context.executeAction(addActivity, {activity: activity});
 
         return false;
     }

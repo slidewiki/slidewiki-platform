@@ -32,7 +32,7 @@ class ExamItem extends React.Component {
         return (
             <div>
                 <div className="ui three column vertically divided grid segment">
-                    <div className="one wide column">
+                    <div className="two wide column">
                         {this.props.questionIndex + 1}.
                         <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
                         {difficultyStars(question.difficulty)}
@@ -42,7 +42,7 @@ class ExamItem extends React.Component {
                             {question.title}
                         </h4>
                     </div>
-                    <div className="eight wide column">
+                    <div className="seven wide column">
                         {answers}
                     </div>
                 </div>
