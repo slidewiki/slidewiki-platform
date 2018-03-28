@@ -1197,44 +1197,62 @@ class SlideContentEditor extends React.Component {
     }
     placeCaretAtStart(id) {
         console.log('placeCaretAtStart');
-        let el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
-        console.log(el);
-        if(!el){el = $('#'+id).find('p:first')[0];console.log('id + find first span not found'); console.log('try id + find first p');}
-        if(!el){el = $('#'+id).find('div:first').not('.ui-resizable-handle')[0];console.log('try id + find first div not ui-resizable');}
-        if(!el){el = $('#'+id).find('img:first')[0];console.log('try id + find first img');
-        //if ($('#'+id).find('img:first')[0])
-            if (el)
-            {console.log('create surrounding div so image can be selected with keyboard');
-                let emptySpan = document.createElement('span');
-                emptySpan.innerHTML = '';
-                $('#'+id).prepend(emptySpan);
-                el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
-            }
-        }
-        if(!el){el = $('#'+id)[0];console.log('id directly');}
-        if(!el){el = $(':focus').find('span:first')[0];console.log('try focus find span first 0');}
-        //if(!el){el = $(':focus');console.log('id of focus');}
-        if(!el){console.log('nothing found, create span element');
-            let emptySpan = document.createElement('span');
-            emptySpan.innerHTML = '';
-            $('#'+id).prepend(emptySpan);
-            el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
-        }
+        let el = $('#'+id)[0];
+//        let el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
+//        console.log(el);
+//        if (!el) {
+//            el = $('#'+id).find('p:visible:first')[0];
+//            console.log('id + find first span not found');
+//            console.log('try id + find first p');
+//        }
+//        if (!el) {
+//            el = $('#'+id).find('div:visible:first').not('.ui-resizable-handle')[0];
+//            console.log('try id + find first div not ui-resizable');
+//        }
+//        if (!el) {
+//            el = $('#'+id).find('img:visible:first')[0];
+//            console.log('try id + find first img');
+//            //if ($('#'+id).find('img:first')[0])
+//            if (el) {
+//                console.log('create surrounding div so image can be selected with keyboard');
+//                let emptySpan = document.createElement('span');
+//                emptySpan.innerHTML = '';
+//                $('#'+id).prepend(emptySpan);
+//                el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
+//            }
+//        }
+//        if (!el) {
+//            el = $('#'+id).filter(':visible')[0];
+//            console.log('id directly');
+//        }
+//        if (!el) {
+//            el = $(':focus').find('span:visible:first')[0];
+//            console.log('try focus find span first 0');
+//        }
+//        //if(!el){el = $(':focus');console.log('id of focus');}
+//        if (!el) {
+//            console.log('nothing found, create span element');
+//            let emptySpan = document.createElement('span');
+//            emptySpan.innerHTML = '';
+//            $('#'+id).prepend(emptySpan);
+//            el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
+//        }
         el.focus();
         if (typeof window.getSelection != 'undefined'
                 && typeof document.createRange != 'undefined') {
-            let range = document.createRange();
-            try{
-                range.selectNodeContents(el);
-            } catch(error){
-                console.log('selectNodeContents - error');
-                console.log('reset context menu');
-                $('#'+id).contextMenu(true);
-                return false;
-            }
-            //range.collapse(false);
+            const range = document.createRange();
+//            try{
+//                range.selectNodeContents(el);
+//            } catch(error){
+//                console.log('selectNodeContents - error');
+//                console.log('reset context menu');
+//                $('#'+id).contextMenu(true);
+//                return false;
+//            }
+            range.setStart(el, 0);
             range.collapse(true);
-            let sel = window.getSelection();
+
+            const sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
         } else if (typeof document.body.createTextRange != 'undefined') {
@@ -1301,7 +1319,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').each(function () {
             this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
-            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="context-menu-'+ $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
             //let menuID = $(this).attr('id');
