@@ -109,7 +109,7 @@ class DeckEditPanel extends React.Component {
     componentDidMount() {
         let interestedUser = this.getParameterByName('interestedUser');
         if (interestedUser && this.props.UserProfileStore.username === '') {
-          //prepraring the modal
+            //prepraring the modal
             this.context.executeAction(updateTrap,{activeTrap:true});
             //hidden the other page elements to readers
             $('#app').attr('aria-hidden','true');

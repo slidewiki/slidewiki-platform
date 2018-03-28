@@ -26,14 +26,6 @@ export default function loadAddDeck(context, payload, done) {
             onHidden: () => {
                 context.executeAction(updateTrap,{activeTrap:false});
                 $('#app').attr('aria-hidden','false');
-                //When the modal is called from this action, the following steps are needed
-                //They are the same than normally occurs when the modal is shown from a component
-                /*
-                $('.ui.dimmer.modals.page.transition').removeClass('visible');
-                $('.ui.dimmer.modals.page.transition').removeClass('active');
-                $('.ui.dimmer.modals.page.transition').addClass('hidden');
-                $('body').addClass('dimmable');
- */
             }
 
         }). modal('show');
