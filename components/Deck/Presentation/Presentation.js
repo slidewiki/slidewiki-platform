@@ -86,15 +86,15 @@ class Presentation extends React.Component{
                 viewDistance: 2,
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
-                    { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true }
                     // Plugin from https://github.com/marcysutton/reveal-a11y
-                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
+                    //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
                 ]
             });
 
 
             Reveal.addEventListener( 'ready', ( event ) => {
-                $('.accessibilityWrapper').attr('tabindex', '');
+                //$('.accessibilityWrapper').attr('tabindex', '');
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
