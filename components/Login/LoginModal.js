@@ -64,6 +64,12 @@ class LoginModal extends React.Component {
         });
 
     }
+    openModal() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('show');
+    }
     unmountTrap(){
         if(this.state.activeTrap){
             this.context.executeAction(updateTrap,{activeTrap:false});
@@ -78,7 +84,7 @@ class LoginModal extends React.Component {
     }
 
     handleLoginButton() {
-        $('.ui.login.modal').modal('toggle');
+        this.openModal();
 
 
         setTimeout(() => {
@@ -159,7 +165,7 @@ class LoginModal extends React.Component {
                 cancelButtonClass: 'ui orange button',
                 buttonsStyling: false
             })
-            .then((dismiss) => {                
+            .then((dismiss) => {
                 $('.ui.login.modal').modal('hide');
                 return this.handleRegisterFirst(dismiss);
             })
@@ -201,7 +207,7 @@ class LoginModal extends React.Component {
 
     handleSignupClick(e) {
         e.preventDefault();
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/signup'
         });
@@ -210,7 +216,7 @@ class LoginModal extends React.Component {
 
     handleNoAccessClick(e) {
         e.preventDefault();
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/resetpassword'
         });
@@ -221,7 +227,7 @@ class LoginModal extends React.Component {
         console.log('Hit on social login icon', provider);
         this.provider = provider;
 
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
 
         //prepare localStorage
         localStorage.setItem(MODI, 'login');
@@ -247,7 +253,7 @@ class LoginModal extends React.Component {
     doSSO(e) {
         e.preventDefault();
 
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
 
         this.context.executeAction(openSSOModal, {register: false});
     }
