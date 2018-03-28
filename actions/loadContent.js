@@ -84,6 +84,7 @@ export default function loadContent(context, payload, done) {
     (err, results) => {
         if (err) {
             log.error(context, {filepath: __filename});
+            console.log(err);
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {

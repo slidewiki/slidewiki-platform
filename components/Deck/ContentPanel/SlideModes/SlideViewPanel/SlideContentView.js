@@ -159,16 +159,16 @@ class SlideContentView extends React.Component {
         <div ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div ref="slideContentView" className="ui" style={compStyle}>
-                <div className={['reveal', style.reveal].join(' ')}>
-                    <div className={['slides', style.slides].join(' ')}>
-                        <section className="present" style={sectionElementStyle}>
+                // <div className={['reveal', style.reveal].join(' ')}>
+                //     <div className={['slides', style.slides].join(' ')}>
+                //         <section className="present" style={sectionElementStyle}>
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
                                  dangerouslySetInnerHTML={{__html: this.props.content}}>
                             </div>
-                        </section>
-                    </div>
-                    <br />
-                </div>
+                //         </section>
+                //     </div>
+                //     <br />
+                // </div>
             </div>
             <div className="ui horizontal segments">
                 <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>

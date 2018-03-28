@@ -12,7 +12,8 @@ export default {
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'slide.content'){
             /*********connect to microservices*************/
-            rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
+            let uri = `${Microservices.pdf.uri}/exportRevealSlide/${selector.sid}?theme=black`;
+            rp.get({uri: uri}).then((res) => {
             //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
                 //console.log('From slide Service:', res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
@@ -31,6 +32,27 @@ export default {
             });
         }
     },
+    // Gets a slide which has CSS applied as well.
+    // readTheme: (req, resource, params, config, callback) => {
+    //     console.log('readTheme');
+    //     req.reqId = req.reqId ? req.reqId : -1;
+    //     log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'readTheme', Method: req.method});
+    //     let args = params.params? params.params : params;
+    //     let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+    //     let theme = args.theme ? args.theme : 'default';
+    //     if(resource === 'slide.content'){
+    //         /*********connect to microservices*************/
+    //         let uri = `${Microservices.pdf.uri}/exportRevealSlide/${selector.sid}?theme=${theme}`;
+    //         rp.get({uri: uri}).then((res) => {
+    //
+    //             callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
+    //         }).catch((err) => {
+    //             //console.log(err);
+    //             callback(null, {slide: {}, selector: selector, 'page': params.page, 'mode': args.mode});
+    //         });
+    //     }
+    //
+    // },
     /*
         For now hardcoded slide template - powerpoint basic slide
     */
