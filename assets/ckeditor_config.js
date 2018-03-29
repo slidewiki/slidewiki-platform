@@ -29,7 +29,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     // Set the most common block elements.
     config.format_tags = 'p;h3;h4;h5;pre';
-    config.fillEmptyBlocks = false;
+    config.fillEmptyBlocks = true; //emptyblocks need to have space to prevent difference slide edit and slide view mode
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.resize_enabled = false;
     config.disableObjectResizing = true;
@@ -38,21 +38,22 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
-        '/',
+        //'/',
             { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
             { name: 'styles', items: [ 'lineheight' ] },
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
-        '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
-            { name: 'source', items: [ 'Mathjax'] },
+        //'/',
+            //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'insert', items: [ 'Symbol'] },
+            //{ name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        '/',
-            { name: 'document', items: [ 'Sourcedialog'] },
-            { name: 'document', items: [ 'CodeSnippet'] },
+        //'/',
+            //{ name: 'document', items: [ 'Sourcedialog'] },
+            //{ name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        '/',
+        //'/',
     ];
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
@@ -122,7 +123,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'forms,' +
 		'horizontalrule,' +
 		'htmlwriter,' +
-        'image2,' +
+        'image,' +
 		'iframe,' +
 		'indentlist,' +
 		'indentblock,' +

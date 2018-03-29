@@ -48,6 +48,40 @@ export default {
                         error: err
                     });
                 });
+        } else if (resource === 'user.ssosignin') {
+            rp.post({
+                uri: Microservices.user.uri + '/login',
+                body: JSON.stringify({
+                    email: args.email,
+                    password: args.password
+                }),
+                resolveWithFullResponse: true
+            })
+                .then((res) => {
+                    console.log('user.ssosignin', res.body);
+                    callback(null, { data: res.body, jwt: res.headers['----jwt----']});
+                })
+                .catch((err) => {
+                    callback(err);
+                });
+        } else if (resource === 'user.ssofinalize') {
+            rp.post({
+                uri: args.url,
+                body: {
+                    email: args.email,
+                    username: args.username
+                },
+                json: true,
+                resolveWithFullResponse: true
+            })
+              .then((res) => {
+                  let json = res.body;
+                  json.jwt = res.headers['----jwt----'];
+                  callback(null, json);
+              })
+              .catch((err) => {
+                  callback(err);
+              });
         } else if (resource === 'user.socialsignin') {
             rp.post({
                 uri: Microservices.user.uri + '/social/login',
@@ -78,7 +112,10 @@ export default {
             if (args.email === '' || !regExp.test(args.email)) {//Do not call microservice with invalid email
                 callback(null, {taken: undefined});
             } else {
-                rp.get({uri: Microservices.user.uri + '/information/email/' + args.email}).then((res) => {
+                let url = args.url;
+                if (url === undefined  || url === '')
+                    url = Microservices.user.uri + '/information/email/';
+                rp.get({uri: url + args.email}).then((res) => {
                     callback(null, JSON.parse(res));
                 }).catch((err) => {
                     console.log(err.StatusCodeError, err.message, err.options);
@@ -90,7 +127,10 @@ export default {
             if (args.username === '' || !regExp.test(args.username)) {//Do not call microservice with invalid username
                 callback(null, {username: '', res: {taken: undefined, alsoTaken:[]}});
             } else {
-                rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
+                let url = args.url;
+                if (url === undefined  || url === '')
+                    url = Microservices.user.uri + '/information/username/';
+                rp.get({uri: url + args.username}).then((res) => {
                     callback(null, {username: args.username, res: JSON.parse(res)});
                 }).catch((err) => {
                     console.log(err.StatusCodeError, err.message, err.options);
@@ -218,6 +258,24 @@ export default {
                 resolveWithFullResponse: true
             }).then((res) => {
                 callback(null, res);  //no JSON
+            }).catch((err) => {
+                callback(err, {});
+            });
+        }
+        else if (resource === 'user.sendEmail') {
+            rp.post({
+                uri: Microservices.user.uri + '/user/' + params.ownerid + '/sendEmail',
+                body: {
+                    reason: 1,
+                    data: {
+                        deckid: parseInt(params.deckId),
+                        deckname: params.deckname
+                    }
+                },
+                headers: { '----jwt----': params.jwt },
+                json: true
+            }).then((res) => {
+                callback(null, res);  //no data
             }).catch((err) => {
                 callback(err, {});
             });

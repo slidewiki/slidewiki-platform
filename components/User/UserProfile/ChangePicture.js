@@ -1,8 +1,8 @@
 import React from 'react';
 import UserPicture from '../../common/UserPicture';
-import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import {Cropper} from 'react-image-cropper';
 import ChangePictureModal from './ChangePictureModal';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
 class ChangePicture extends React.Component {
 
@@ -21,6 +21,24 @@ class ChangePicture extends React.Component {
     }
 
     openCropPictureModal(e) {
+        const messages = defineMessages({
+            modalTitle: {
+                id: 'ChangePicture.modalTitle',
+                defaultMessage: 'Big file',
+            },
+            modalText: {
+                id: 'ChangePicture.modalText',
+                defaultMessage: 'The selected file is quite big (> 10MB). This could cause problems like a white profile picture. You should upload a smaller picture if you notice strange things.',
+            },
+            modalTitle2: {
+                id: 'ChangePicture.modalTitle2',
+                defaultMessage: 'Wrong file type',
+            },
+            modalText2: {
+                id: 'ChangePicture.modalText2',
+                defaultMessage: 'You have selected a file type that we currently do not support',
+            },
+        });
         this.filePath = URL.createObjectURL(e.target.files[0]);
         let toCheck = e.target.files[0].name.toLowerCase().trim();
         this.filesize = e.target.files[0].size;
@@ -29,8 +47,8 @@ class ChangePicture extends React.Component {
         if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png')) {
             if (this.filesize > 10000000) {
                 swal({
-                    title: 'Big file',
-                    text: 'The selected file is quite big (> 10MB). This could cause problems like a white profile picture. You should upload a smaller picture if you notice strange things.',
+                    title: this.context.intl.formatMessage(messages.modalTitle),
+                    text: this.context.intl.formatMessage(messages.modalText),
                     type: 'warning',
                     confirmButtonClass: 'ui primary button',
                     buttonsStyling: false
@@ -45,8 +63,8 @@ class ChangePicture extends React.Component {
             }
         } else
             swal({
-                title: 'Wrong file type',
-                text: 'You have selected a file type that we currently do not support',
+                title: this.context.intl.formatMessage(messages.modalTitle2),
+                text: this.context.intl.formatMessage(messages.modalText2),
                 type: 'error',
                 confirmButtonClass: 'ui primary button',
                 buttonsStyling: false
@@ -79,15 +97,27 @@ class ChangePicture extends React.Component {
                         <div className="ui vertical buttons">
                             <input type="file" accept="image/jpg, image/jpeg, image/png" style={{display: 'none'}} onChange={ this.openCropPictureModal.bind(this) } ref="fileDialog"/>
                             <button className="ui primary labeled icon button" onClick={ this.openFileDialog.bind(this) }>
-                                <i className="icon upload"/>Upload new Image
+                                <i className="icon upload"/>
+                                <FormattedMessage
+                                  id='ChangePicture.upload'
+                                  defaultMessage='Upload new Image'
+                                />
                             </button>
                             <div className="ui hidden divider"/>
                             <button className="ui teal labeled icon button" onClick={ this.useGravatar.bind(this) }>
-                                <i className="icon user"/>Use Gravatar Image
+                                <i className="icon user"/>
+                                <FormattedMessage
+                                  id='ChangePicture.gravatar'
+                                  defaultMessage='Use Gravatar Image'
+                                />
                             </button>
                             <div className="ui hidden divider"/>
                             <button className="ui red labeled icon button" onClick={ this.removePicture.bind(this) }>
-                                <i className="icon ban"/>Remove Image
+                                <i className="icon ban"/>
+                                <FormattedMessage
+                                  id='ChangePicture.remove'
+                                  defaultMessage='Remove Image'
+                                />
                             </button>
                         </div>
                     </div>
@@ -99,7 +129,8 @@ class ChangePicture extends React.Component {
 }
 
 ChangePicture.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 export default ChangePicture;

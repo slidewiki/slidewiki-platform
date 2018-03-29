@@ -1,6 +1,8 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
+import slug from 'slug';
+
 const log = require('../configs/log').log;
 
 function extractSpellcheckSuggestion(spellcheck){
@@ -58,7 +60,8 @@ function parseSlide(slide){
 
 function parseDeck(deck){
     // different link if this is a root deck or a sub-deck
-    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
+    let deck_slug = deck.title? slug(deck.title) : '';
+    deck.link = (deck.isRoot || !deck.usage) ? `/deck${deck_slug ? '_' + deck_slug: ''}/${deck.db_id}-${deck.db_revision_id}` : `/deck${deck_slug ? '_' + deck_slug: ''}/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -136,7 +139,7 @@ export default {
 
             // request search results from search service
             rp.get({
-                uri: `${Microservices.search.uri}/search/v2?${args.queryparams}${requestOptions}`, 
+                uri: `${Microservices.search.uri}/search/v2?${args.queryparams}${requestOptions}`,
                 json: true
             }).then( (response) => {
 
@@ -168,7 +171,7 @@ export default {
                     }
 
                 });
-                
+
                 // get required usernames
                 let usernames = {};
                 let userPromise = getUsers(userIds).then( (usernamesFromService) => {
@@ -183,7 +186,7 @@ export default {
                 });
 
                 // get deck forks to show as deck other versions
-                let forks = {}; 
+                let forks = {};
                 let forksPromise = getForks(deckIds).then( (forksFromService) => {
                     forks = forksFromService;
                 });
@@ -199,6 +202,9 @@ export default {
                         if(returnItem.kind === 'Deck'){
 
                             returnItem.revisionsCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
+                            returnItem.theme = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
+                                                        deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].theme : '';
+
                             returnItem.firstSlide = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
                                                         deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
 
@@ -206,8 +212,8 @@ export default {
                             if(forks[returnItem.db_id].length > 0){
                                 returnItem.subItems = forks[returnItem.db_id].map( (fork) => {
                                     return {
-                                        id: fork.id, 
-                                        title: fork.title, 
+                                        id: fork.id,
+                                        title: fork.title,
                                         link: `/deck/${fork.id}`
                                     };
                                 });
@@ -233,9 +239,9 @@ export default {
 
                     callback(null, {
                         numFound: response.numFound,
-                        hasMore: response.hasMore, 
+                        hasMore: response.hasMore,
                         page: response.page,
-                        spellcheck: response.spellcheck, 
+                        spellcheck: response.spellcheck,
                         facets: response.facets,
                         docs: response.docs
                     });

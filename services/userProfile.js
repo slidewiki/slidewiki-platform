@@ -1,7 +1,12 @@
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
+import cookieParser from 'cookie';
+
 const log = require('../configs/log').log;
+
+const user_cookieName = 'user_json_storage';
+const secondsCookieShouldBeValid = 60*60*24*14 ;  //2 weeks
 
 export default {
     name: 'userProfile',
@@ -142,17 +147,110 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-        if(resource !== 'userProfile.fetchUserDecks') {
-            if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
+        params = (params.params) ? params.params : params;
+
+        if(resource === 'userProfile.fetchUserDecks') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/alldecks/' + params.id2,
+                json: true
+            }).then((body) => {
+                //get the number of likes
+                let arrayOfPromises = [];
+                body.forEach((deck) => {
+                    let promise = rp.get({
+                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
+                        qs: {
+                            metaonly: true, 
+                            activity_type: 'react', 
+                            all_revisions: true
+                        }
+                    });
+                    arrayOfPromises.push(promise);
+                });
+
+                return Promise.all(arrayOfPromises).then((numbers) => {
+                    for (let i = 0; i < numbers.length; i++) {
+                        body[i].noOfLikes = numbers[i];
+                    }
+
+                    let converted = body.map((deck) => { return transform(deck); });
+                    callback(null, converted);
+                });
+            }).catch((err) => callback(err));
+        } else if (resource === 'userProfile.fetchUserOwnedDecks'){
+            let requestCall = '';
+
+            // if we want to load more results, we already have a next link
+            // from the previous response of the deck-service
+            if (params.nextLink){
+                requestCall = {
+                    uri: `${Microservices.deck.uri}${params.nextLink}`, 
+                    json: true
+                };
+            } else {
+                requestCall = {
+                    method: 'GET',
+                    uri: `${Microservices.deck.uri}/decks`, 
+                    qs: {
+                        user: params.id2,
+                        roles: params.roles, 
+                        rootsOnly: true,
+                        sort: (params.sort || 'lastUpdate'),
+                        page: params.page, 
+                        pageSize: 30
+                    },
+                    json: true
+                };
+            }
+
+            if(params.roles === 'editor'){
+                requestCall.headers = { '----jwt----': params.jwt };
+            }
+
+            rp(requestCall).then( (response) => {
+                let decks = response.items;
+
+                //get the number of likes
+                let arrayOfPromises = [];
+                decks.forEach((deck) => {
+                    let promise = rp.get({
+                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
+                        qs: {
+                            metaonly: true, 
+                            activity_type: 'react', 
+                            all_revisions: true
+                        }
+                    });
+                    arrayOfPromises.push(promise);
+                });
+
+                return Promise.all(arrayOfPromises).then((numbers) => {
+                    for (let i = 0; i < numbers.length; i++) {
+                        decks[i].noOfLikes = numbers[i];
+                    }
+
+                    let converted = decks.map((deck) => { return transform(deck); });
+                    response._meta.roles = params.roles;
+
+                    callback(null, {
+                        metadata: response._meta, 
+                        decks: converted
+                    });
+                });
+            }).catch((err) => callback(err));           
+        } else {
+            if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
-                    uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
-                    headers: { '----jwt----': params.params.jwt },
-                    json: true
+                    uri: Microservices.user.uri + '/user/' + params.id + '/profile',
+                    headers: { '----jwt----': params.jwt },
+                    resolveWithFullResponse: true,
                 })
-                .then((body) => {
+                .then((response) => {
                     //console.log(body);
+                    let body = JSON.parse(response.body);
                     let converted = {
                         id: body._id,
                         uname: body.username,
@@ -168,14 +266,26 @@ export default {
                         providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : []
                     };
-                    callback(null, converted);
+                    callback(null, converted, {
+                        headers: {
+                            'Set-Cookie': cookieParser.serialize(user_cookieName, JSON.stringify({
+                                username: body.username,
+                                userid: body._id,
+                                jwt: response.headers['----jwt----'],
+                            }), {
+                                maxAge: secondsCookieShouldBeValid,
+                                sameSite: true,
+                                path: '/',
+                            }),
+                        }
+                    });
                 })
                 .catch((err) => callback(err));
             } else {
                 // console.log('trying to get public user with username: ', params);
                 rp({
                     method: 'GET',
-                    uri: Microservices.user.uri + '/user/' + params.params.username,
+                    uri: Microservices.user.uri + '/user/' + params.username,
                     json: true
                 })
                 .then((body) => {
@@ -194,59 +304,24 @@ export default {
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));
-            }
-        } else {
-            //TODO get id of a user
-            if(!isEmpty(params.params.jwt) && params.params.loggedInUser === params.params.username){
-                rp({
-                    method: 'GET',
-                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id,
-                    json: true
-                })
-                .then((body) => {
-                    let converted = body.map((deck) => {
-                        return {
-                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
-                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id,
-                            firstSlide: deck.firstSlide,
-                            language:deck.language,
-                            countRevisions:deck.countRevisions
-
-                        };
-                    }).sort((a,b) => a.creationDate < b.creationDate);
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
-            } else if(params.params.loggedInUser !== params.params.username) {
-                //get id of username
-                rp({
-                    method: 'GET',
-                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id2,
-                    json: true
-                })
-                .then((body) => {
-                    let converted = body.map((deck) => {
-                        console.log(deck);
-                        return {
-                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
-                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id,
-                            firstSlide: deck.firstSlide,
-                            language:deck.language,
-                            countRevisions:deck.countRevisions
-                        };
-                    });
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
-            }
+            }            
         }
     }
 };
+
+function transform(deck){
+    return {
+        title: !isEmpty(deck.title) ? deck.title : 'No Title',
+        picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+        description: deck.description,
+        updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+        creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+        deckID: deck._id,
+        firstSlide: deck.firstSlide,
+        theme: deck.theme,
+        language:deck.language,
+        countRevisions:deck.countRevisions,
+        noOfLikes: deck.noOfLikes
+
+    };
+}

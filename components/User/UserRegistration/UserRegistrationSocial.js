@@ -7,6 +7,7 @@ import socialSignUp from '../../../actions/user/registration/socialSignUp';
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import common from '../../../common';
 
 const headerStyle = {
@@ -28,6 +29,44 @@ class UserRegistrationSocial extends React.Component {
     }
 
     componentDidMount() {
+        const messages = defineMessages({
+            firstnameprompt: {
+                id: 'UserRegistrationSocial.firstnameprompt',
+                defaultMessage: 'Please enter your first name',
+            },
+            lastnameprompt: {
+                id: 'UserRegistrationSocial.lastnameprompt',
+                defaultMessage: 'Please enter your last name',
+            },
+            usernameprompt: {
+                id: 'UserRegistrationSocial.usernameprompt',
+                defaultMessage: 'Please select your username',
+            },
+            usernameprompt2: {
+                id: 'UserRegistrationSocial.usernameprompt2',
+                defaultMessage: 'The username is already in use',
+            },
+            usernameprompt3: {
+                id: 'UserRegistrationSocial.usernameprompt3',
+                defaultMessage: 'Your username can not be longer than 64 characters',
+            },
+            usernameprompt4: {
+                id: 'UserRegistrationSocial.usernameprompt4',
+                defaultMessage: 'The username must contain only alphanumeric characters plus the following: _ . - ~',
+            },
+            mailprompt: {
+                id: 'UserRegistrationSocial.mailprompt',
+                defaultMessage: 'Please enter your email address',
+            },
+            mailprompt2: {
+                id: 'UserRegistrationSocial.mailprompt2',
+                defaultMessage: 'Please enter a valid email address',
+            },
+            mailprompt3: {
+                id: 'UserRegistrationSocial.mailprompt3',
+                defaultMessage: 'The email address is already in use',
+            },
+        });
         //Form validation
         const validationRules = {
             fields: {
@@ -35,43 +74,43 @@ class UserRegistrationSocial extends React.Component {
                     identifier: 'firstname',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your first name'
+                        prompt: this.context.intl.formatMessage(messages.firstnameprompt)
                     }]
                 },
                 lastname: {
                     identifier: 'lastname',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your last name'
+                        prompt: this.context.intl.formatMessage(messages.lastnameprompt)
                     }]
                 },
                 username: {
                     identifier: 'username',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please select your username'
+                        prompt: this.context.intl.formatMessage(messages.usernameprompt)
                     }, {
                         type: 'uniqueUsername',
-                        prompt: 'The username is already in use'
+                        prompt: this.context.intl.formatMessage(messages.usernameprompt2)
                     }, {
                         type   : 'maxLength[64]',
-                        prompt : 'Your username can not be longer than 64 characters'
+                        prompt : this.context.intl.formatMessage(messages.usernameprompt3)
                     }, {
                         type   : 'regExp[/^[a-zA-Z0-9-.~_]+$/i]',
-                        prompt : 'The username must contain only alphanumeric characters plus the following: _ . - ~'
+                        prompt : this.context.intl.formatMessage(messages.usernameprompt4)
                     }]
                 },
                 email: {
                     identifier: 'email',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your email address'
+                        prompt: this.context.intl.formatMessage(messages.mailprompt)
                     }, {
                         type: 'email',
-                        prompt: 'Please enter a valid email address'
+                        prompt: this.context.intl.formatMessage(messages.mailprompt2)
                     }, {
                         type: 'uniqueEmail',
-                        prompt: 'The email address is already in use'
+                        prompt: this.context.intl.formatMessage(messages.mailprompt3)
                     }]
                 }
             },
@@ -93,12 +132,8 @@ class UserRegistrationSocial extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         // console.log('UserRegistrationSocial componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
-        if (nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
-            this.setUserdata({}, false);
-            return;
-        }
         if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'register') {
-            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
+            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) && (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
     }
@@ -108,15 +143,21 @@ class UserRegistrationSocial extends React.Component {
 
         $(ReactDOM.findDOMNode(this.refs.SocialRegistration_Modal)).modal('hide');
         let user = this.props.UserRegistrationStore.socialuserdata;
-        user.email = this.refs.email.value;
-        user.username = this.refs.username.value;
-        user.forename = this.refs.firstname.value;
-        user.surname = this.refs.lastname.value;
+        user.email = this.refs.email.value + '';
+        user.username = this.refs.username.value + '';
+        user.forename = this.refs.firstname.value + '';
+        user.surname = this.refs.lastname.value + '';
 
         let language = common.getIntlLanguage();
         user.language = language;
 
         this.context.executeAction(socialSignUp, user);
+
+        this.refs.username.value = '';
+        this.refs.email.value = '';
+        this.refs.lastname.value = '';
+        this.refs.firstname.value = '';
+
         return false;
     }
 
@@ -167,7 +208,26 @@ class UserRegistrationSocial extends React.Component {
         });
     }
 
+    handleCancelClick(e) {
+        e.preventDefault();
+
+        this.refs.username.value = '';
+        this.refs.email.value = '';
+        this.refs.lastname.value = '';
+        this.refs.firstname.value = '';
+    }
+
     render() {
+        const messages = defineMessages({
+            emailNotAllowed: {
+                id: 'UserRegistrationSocial.emailNotAllowed',
+                defaultMessage: 'This E-Mail has already been used by someone else. Please choose another one.',
+            },
+            usernameNotAllowed: {
+                id: 'UserRegistrationSocial.usernameNotAllowed',
+                defaultMessage: 'This Username has already been used by someone else. Please choose another one.',
+            },
+        });
         const signUpLabelStyle = {width: '150px'};
 
         const emailNotAllowed = this.props.UserRegistrationStore.failures.emailNotAllowed;
@@ -182,7 +242,7 @@ class UserRegistrationSocial extends React.Component {
             'inverted circular red remove': (emailNotAllowed !== undefined) ? emailNotAllowed : false,
             'inverted circular green checkmark': (emailNotAllowed !== undefined) ? !emailNotAllowed : false
         });
-        let emailToolTipp = emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
+        let emailToolTipp = emailNotAllowed ? this.context.intl.formatMessage(messages.emailNotAllowed) : undefined;
 
         const usernameNotAllowed = this.props.UserRegistrationStore.failures.usernameNotAllowed;
         let usernameClasses = classNames({
@@ -196,7 +256,7 @@ class UserRegistrationSocial extends React.Component {
             'inverted circular red remove': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false,
             'inverted circular green checkmark': (usernameNotAllowed !== undefined) ? !usernameNotAllowed : false
         });
-        let usernameToolTipp = usernameNotAllowed ? 'This Username has already been used by someone else. Please choose another one.' : undefined;
+        let usernameToolTipp = usernameNotAllowed ? this.context.intl.formatMessage(messages.usernameNotAllowed) : undefined;
         if (this.props.UserRegistrationStore.suggestedUsernames.length > 0) {
             usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
         }
@@ -204,36 +264,75 @@ class UserRegistrationSocial extends React.Component {
           <div>
             <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal" >
               <div className="header">
-                  <h1 style={headerStyle}>Validate user information</h1>
+                  <h1 style={headerStyle}>
+                    <FormattedMessage
+                      id='UserRegistrationSocial.validate'
+                      defaultMessage='Validate user information'
+                    />
+                  </h1>
               </div>
               <div className="content">
                   <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
                       <div className="ui inline field">
-                          <label style={signUpLabelStyle}>First name * </label>
+                          <label style={signUpLabelStyle}>
+                            <FormattedMessage
+                              id='UserRegistrationSocial.fname'
+                              defaultMessage='First name * '
+                            />
+                          </label>
                           <div className="ui icon input"><input type="text" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                       </div>
                       <div className="ui inline field">
-                          <label style={signUpLabelStyle}>Last name * </label>
+                          <label style={signUpLabelStyle}>
+                            <FormattedMessage
+                              id='UserRegistrationSocial.lname'
+                              defaultMessage='Last name * '
+                            />
+                          </label>
                           <div className="ui icon input"><input type="text" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
                       </div>
                       <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                          <label style={signUpLabelStyle}>Username * </label>
+                          <label style={signUpLabelStyle}>
+                            <FormattedMessage
+                              id='UserRegistrationSocial.uname'
+                              defaultMessage='Username * '
+                            />
+                          </label>
                           <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                       </div>
                       <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                          <label style={signUpLabelStyle}>Email * </label>
+                          <label style={signUpLabelStyle}>
+                            <FormattedMessage
+                              id='UserRegistrationSocial.email'
+                              defaultMessage='Email * '
+                            />
+                          </label>
                           <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                       </div>
                       <div className="ui error message"></div>
                       <button type="submit" className="ui blue labeled submit icon button" >
-                          <i className="icon add user"/> Sign Up
+                          <i className="icon add user"/>
+                          <FormattedMessage
+                            id='UserRegistrationSocial.signup'
+                            defaultMessage=' Sign Up'
+                          />
                       </button>
                   </form>
                   <div className="ui dividing header" ></div>
-                  <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
+                  <a href="#" onClick={this.handleNoAccessClick}>
+                    <FormattedMessage
+                      id='UserRegistrationSocial.account'
+                      defaultMessage='I can not access my account'
+                    />
+                  </a>
               </div>
               <div className="actions">
-                  <div className="ui cancel button">Cancel</div>
+                  <div className="ui cancel button" onClick={this.handleCancelClick.bind(this)}>
+                    <FormattedMessage
+                      id='UserRegistrationSocial.cancel'
+                      defaultMessage='Cancel'
+                    />
+                  </div>
               </div>
             </div>
           </div>
@@ -242,7 +341,8 @@ class UserRegistrationSocial extends React.Component {
 }
 
 UserRegistrationSocial.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 UserRegistrationSocial = connectToStores(UserRegistrationSocial, [UserRegistrationStore], (context, props) => {
     return {

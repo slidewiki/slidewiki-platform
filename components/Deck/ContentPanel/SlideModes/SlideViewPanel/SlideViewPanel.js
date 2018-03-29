@@ -4,15 +4,75 @@ import SlideContentView from './SlideContentView';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 
-class SlideViewPanel extends React.Component {
+class SlideViewPanel extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.isLoading = this.isContentUndefined();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let samePropsState = this.props.SlideViewStore.content === nextProps.SlideViewStore.content;
+        let undefinedContent = nextProps.SlideViewStore.content === undefined ||
+                nextProps.SlideViewStore.content === '';
+        this.isLoading = undefinedContent;
+
+        // Content should be updated only when new content is ready or component properties/state have changed.
+        let shouldUpdate = !undefinedContent && !samePropsState;
+        return shouldUpdate;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let undefinedContent = this.isContentUndefined();
+        this.isLoading = undefinedContent;
+    }
+
+    componentWillUnmount() {
+        this.props.SlideViewStore.content = '';
+        this.isLoading = true;
+    }
+
+    isContentUndefined() {
+        return this.props.SlideViewStore.content === undefined || this.props.SlideViewStore.content === '';
+    }
+
     render() {
+        let deckTheme = this.props.selector && this.props.selector.theme;
+        if (!deckTheme) {
+            // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
+            let treeNode = this.props.DeckTreeStore.flatTree
+                .find((node) => node.get('id') === this.props.SlideViewStore.slideId && node.get('type') === 'slide');
+
+            if (treeNode) {
+                deckTheme = treeNode.get('theme');
+            } else {
+                // pick theme from deck root as a last resort
+                deckTheme = this.props.DeckTreeStore.theme;
+            }
+        }
+
+        const compStyle = {
+            minHeight: 600,
+            overflowY: 'auto',
+            overflowX: 'auto',
+            position: 'relative'
+        };
+
+        if (this.isLoading) {
+            return (
+                <div className="ui bottom attached segment">
+                    <div className="ui active dimmer"><div className="ui text loader">Loading...</div></div>
+                    <div className="ui" style={compStyle}/>
+                </div>
+            );
+        }
+
         return (
             <div className="ui bottom attached segment">
-            {(this.props.SlideViewStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                 <SlideContentView content={this.props.SlideViewStore.content}
-                                  speakernotes={this.props.SlideViewStore.speakernotes}
-                                  loadingIndicator={this.props.SlideViewStore.loadingIndicator}
-                                  theme={this.props.selector && this.props.selector.theme ? this.props.selector.theme : this.props.DeckTreeStore.theme} />
+                        speakernotes={this.props.SlideViewStore.speakernotes}
+                        loadingIndicator={this.props.SlideViewStore.loadingIndicator}
+                        theme={deckTheme}/>
             </div>
         );
     }

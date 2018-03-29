@@ -8,28 +8,17 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-        let selector= {'sid': args.sid, 'stype': args.stype};
-
-        if (resource === 'questions.count') {
-            let randomNumber = Math.round(Math.random() * 20);
-            callback(null, {'count' : randomNumber, 'selector': selector, 'mode': args.mode});
-        }
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
 
         if(resource === 'questions.list') {
             rp.get({
-                uri: 'https://questionservice.experimental.slidewiki.org/questions',
-                //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
+                // uri: 'https://questionservice.experimental.slidewiki.org/questions',
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true'
             }).then((res) => {
-            /* This is what we get from microservice */
-            /*
-            let q = [{'related_object':'slide','related_object_id':'10678','question':'string','user_id':'17','difficulty':1,'choices':[{'choice':'string','is_correct':true}],'explanation':'string explanation','id':10},
-                {'related_object':'slide','related_object_id':'1141','question':'question 2','user_id':'17','difficulty':2,'choices':[{'choice':'string1','is_correct':true},{'choice':'string2','is_correct':true},{'choice':'string3','is_correct':false}],'explanation':'string1 string2 explanation','id':11}];
-            */
-                let questions = JSON.parse(res)
-            // let questions = q
-                .map((item, index) => {
+
+                let questions = JSON.parse(res).map((item, index) => {
                     return {
-                        id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
+                        id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id, relatedObjectName: item.related_object_name,
                         answers: item.choices
                             .map((ans, ansIndex) => {
                                 return {answer: ans.choice, correct: ans.is_correct};
@@ -38,9 +27,17 @@ export default {
                         userId: item.user_id,
                     };
                 });
-                callback(null, {questions: questions, totalLength: 2, selector: selector});
+                callback(null, {questions: questions, selector: selector});
             }).catch((err) => {
-                console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
+                console.log(err);
+                callback(err, {});
+            });
+        } else if(resource === 'questions.count') {
+            rp.get({
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true&include_subdecks_and_slides=true',
+            }).then((res) => {
+                callback(null, {count: JSON.parse(res).count});
+            }).catch((err) => {
                 console.log(err);
                 callback(err, {});
             });
@@ -111,21 +108,44 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
 
+        let choices = [];
+        if (args.question.answer1 !== '') {
+            choices.push({'choice': args.question.answer1, 'is_correct': args.question.correct1});
+        }
+        if (args.question.answer2 !== '') {
+            choices.push({'choice': args.question.answer2, 'is_correct': args.question.correct2});
+        }
+        if (args.question.answer3 !== '') {
+            choices.push({'choice': args.question.answer3, 'is_correct': args.question.correct3});
+        }
+        if (args.question.answer4 !== '') {
+            choices.push({'choice': args.question.answer4, 'is_correct': args.question.correct4});
+        }
+
         if (resource === 'questions.add') {
             rp.post({
-                uri: Microservices.questions.uri + '/question',
+                uri: Microservices.questions.uri + '/' + args.question.relatedObject + '/question',
                 body:JSON.stringify({
-                    user_id: args.userId,
-                    related_object_id: args.sid,
-                    related_object: args.stype,
-                    difficulty: args.difficulty,
-                    choices: args.choices,
-                    question: args.question})
+                    user_id: args.question.userId.toString(),
+                    related_object_id: args.question.relatedObjectId.split('-')[0],
+                    //related_object: args.question.relatedObject,
+                    difficulty: parseInt(args.question.difficulty),
+                    choices: choices,
+                    question: args.question.title,
+                    explanation: args.question.explanation})
             }).then((res) => {
-                console.log('Question create method should be successful. Check via swagger for following oid, otype, and qid:', args.sid, args.stype, args.questionId);
-                callback(null, {});
+                let question = JSON.parse(res);
+                const answers = question.choices
+                    .map((ans, ansIndex) => {
+                        return {answer: ans.choice, correct: ans.is_correct};
+                    });
+                callback(null, {question: {
+                    id: question.id, title: question.question, difficulty: question.difficulty, relatedObject: question.related_object, relatedObjectId: question.related_object_id,
+                    answers: answers,
+                    explanation: question.explanation,
+                    userId: question.user_id
+                }});
             }).catch((err) => {
-                console.log('Question create method errored. Check via swagger for following oid and qid:', args.sid, args.questionId);
                 console.log(err);
                 callback(err, {});
             });
@@ -138,25 +158,50 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
 
+        let choices = [];
+        let answers = [];//There is a problem with different names used on the platform and service
+        if (args.question.answer1 !== '') {
+            choices.push({'choice': args.question.answer1, 'is_correct': args.question.correct1});
+            answers.push({'answer': args.question.answer1, 'correct': args.question.correct1});
+        }
+        if (args.question.answer2 !== '') {
+            choices.push({'choice': args.question.answer2, 'is_correct': args.question.correct2});
+            answers.push({'answer': args.question.answer2, 'correct': args.question.correct2});
+        }
+        if (args.question.answer3 !== '') {
+            choices.push({'choice': args.question.answer3, 'is_correct': args.question.correct3});
+            answers.push({'answer': args.question.answer3, 'correct': args.question.correct3});
+        }
+        if (args.question.answer4 !== '') {
+            choices.push({'choice': args.question.answer4, 'is_correct': args.question.correct4});
+            answers.push({'answer': args.question.answer4, 'correct': args.question.correct4});
+        }
+
         if (resource === 'questions.update') {
             rp.put({
-                uri: Microservices.questions.uri + '/question/' + args.questionId,
+                uri: Microservices.questions.uri + '/question/' + args.question.qid,
                 body:JSON.stringify({
-                    user_id: args.userId,
-                    related_object_id: args.sid,
-                    related_object: args.stype,
-                    difficulty: args.difficulty,
-                    choices: args.choices,
-                    question: args.question})
+                    user_id: args.question.userId.toString(),
+                    related_object_id: args.question.relatedObjectId.split('-')[0],
+                    related_object: args.question.relatedObject,
+                    difficulty: parseInt(args.question.difficulty),
+                    choices: choices,
+                    question: args.question.title,
+                    explanation: args.question.explanation
+                })
             }).then((res) => {
-                console.log('Question update should be successful. Check via swagger for questionId:', args.questionId);
-                callback(null, {});
+                const question = {
+                    id: args.question.qid, title: args.question.title, difficulty: parseInt(args.question.difficulty), relatedObject: args.question.relatedObject, relatedObjectId: args.question.relatedObjectId.split('-')[0],
+                    answers: answers,
+                    explanation: args.question.explanation,
+                    userId: args.question.userId.toString()
+                };
+                callback(null, {question: question});
             }).catch((err) => {
                 console.log(err);
                 callback(err, {});
             });
         }
-
     },
 
     delete: (req, resource, params, config, callback) => {
@@ -169,7 +214,7 @@ export default {
                 uri: Microservices.questions.uri + '/question/' + args.questionId
             }).then((res) => {
                 console.log('Question delete should be successful. Check via swagger for questionId:', args.questionId);
-                callback(null, {});
+                callback(null, {questionId: args.questionId});
             }).catch((err) => {
                 console.log(err);
                 callback(err, {});

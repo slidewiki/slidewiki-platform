@@ -3,8 +3,7 @@ import {BaseStore} from 'fluxible/addons';
 class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.notifications = [];
-        this.newNotifications = [];
+        this.notifications = undefined;
         this.newNotificationsCount = 0;
         this.subscriptions = [];
         this.loading = true;
@@ -33,69 +32,54 @@ class UserNotificationsStore extends BaseStore {
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        this.newNotifications = payload.newNotifications;
         this.subscriptions = payload.subscriptions;
         this.loading = false;
 
-        this.markNewNotifications();
-        this.newNotificationsCount = this.newNotifications.length;
+        this.newNotificationsCount = this.countNewNotifications();
         this.addVisibleParameterToNotifications();
 
-        this.emitChange();
-    }
-    loadNewNotifications(payload) {
-        this.newNotifications = payload.newNotifications;
-        this.newNotificationsCount = this.newNotifications.length;
         this.emitChange();
     }
     loadNewNotificationsCount(payload) {
         this.newNotificationsCount = payload.count;
         this.emitChange();
     }
-    markNewNotifications() {
-        let invalidNewNotificationsIndexes = [];
-        for (let i = 0; i < this.newNotifications.length; i++) {
-            let newNotification = this.newNotifications[i];
-
-            //find the matching item in notifications array
-            let notification;
-            for(let j = 0; j < this.notifications.length; j++) {
-                if (this.notifications[j].id === newNotification.activity_id) {
-                    notification = this.notifications[j];
-                    break;
-                }
-            }
-            if (notification !== undefined) {
-                notification.newNotificationId = newNotification.id;
-            } else {
-                invalidNewNotificationsIndexes.push(i);
-            }
-        }
-
-        //remove invalid new notifications
-        for (let i = invalidNewNotificationsIndexes.length - 1; i >=0; i--) {
-            this.newNotifications.splice(invalidNewNotificationsIndexes[i], 1);
-        }
-
+    countNewNotifications() {
+        let count = 0;
+        this.notifications.forEach((notification) => {if (notification.new) count++;});
+        return count;
     }
-    clearNotificationNewParameter(payload) {
-        let index = this.newNotifications.findIndex((newNotification) => {return (newNotification.id === payload.newNotificationId);});
-        if (index >= 0) {
-            this.newNotifications.splice(index, 1);
-
-            let notification = this.notifications.find((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
-            if (notification !== undefined) {
-                notification.newNotificationId = '';
-            }
-
-            this.emitChange();
+    readUserNotificationSuccess(payload) {
+        let notification = this.notifications.find((notification) => {return (notification.id === payload.id);});
+        if (notification !== undefined) {
+            notification.new = false;
+            this.newNotificationsCount--;
         }
-        this.newNotificationsCount = this.newNotifications.length;
+
+        this.emitChange();
     }
-    clearAllNotificationsNewParameter(payload) {
-        this.notifications.forEach((notification) => {notification.newNotificationId = '';});
-        this.newNotifications = [];
+    readAllUserNotificationsSuccess(payload) {
+        this.notifications.forEach((notification) => {notification.new = false;});
         this.newNotificationsCount = 0;
+        this.emitChange();
+    }
+
+    deleteUserNotification(payload) {
+        let index = this.notifications.findIndex((notification) => {return (notification.id === payload.id);});
+        if (index !== -1) {
+            if (this.notifications[index].new) {
+                this.newNotificationsCount--;
+            }
+            this.notifications.splice(index, 1);
+        }
+
+        this.emitChange();
+    }
+
+    deleteAllUserNotifications() {
+        this.notifications = [];
+        this.newNotificationsCount = 0;
+
         this.emitChange();
     }
     updateNotificationsVisibility(payload) {
@@ -107,6 +91,14 @@ class UserNotificationsStore extends BaseStore {
                 notification.visible = this.isVisible(notification);
             });
         }
+
+        this.emitChange();
+    }
+    selectAllActivityTypes(payload) {
+        this.activityTypes.forEach((at) => {at.selected = payload.value;});
+        this.notifications.forEach((notification) => {
+            notification.visible = this.isVisible(notification);
+        });
 
         this.emitChange();
     }
@@ -184,7 +176,6 @@ class UserNotificationsStore extends BaseStore {
     getState() {
         return {
             notifications: this.notifications,
-            newNotifications: this.newNotifications,
             newNotificationsCount: this.newNotificationsCount,
             loading: this.loading,
             subscriptions: this.subscriptions,
@@ -196,7 +187,6 @@ class UserNotificationsStore extends BaseStore {
     }
     rehydrate(state) {
         this.notifications = state.notifications;
-        this.newNotifications = state.newNotifications;
         this.newNotificationsCount = state.newNotificationsCount;
         this.loading = state.loading;
         this.subscriptions = state.subscriptions;
@@ -207,11 +197,13 @@ class UserNotificationsStore extends BaseStore {
 UserNotificationsStore.storeName = 'UserNotificationsStore';
 UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
-    'LOAD_NEW_USER_NOTIFICATIONS_SUCCESS': 'loadNewNotifications',
     'LOAD_NEW_USER_NOTIFICATIONS_COUNT_SUCCESS': 'loadNewNotificationsCount',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
-    'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
-    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter',
+    'SELECT_ALL_ACTIVITY_TYPES': 'selectAllActivityTypes',
+    'DELETE_USER_NOTIFICATION_SUCCESS': 'deleteUserNotification',
+    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'deleteAllUserNotifications',
+    'READ_ALL_USER_NOTIFICATIONS_SUCCESS': 'readAllUserNotificationsSuccess',
+    'READ_USER_NOTIFICATION_SUCCESS': 'readUserNotificationSuccess',
     'SHOW_NOTIFICATIONS_LOADING': 'showLoading'
 };
 
