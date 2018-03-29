@@ -12,7 +12,7 @@ import addActivity from '../../../../actions/activityfeed/addActivity';
 class ExamList extends React.Component {
     getPath(){
         const selector = this.props.selector;
-        if (selector.id === undefined || selector.id === 'undefined') {//this can happen when exam was not opened from the deck view
+        if (selector.id === undefined || selector.id === 'undefined') {//this can happen when exam has not been opened from the deck view
             return '/' + selector.stype + '/' + selector.sid;
         } else {
             const flatTree = this.props.DeckTreeStore.flatTree;
@@ -55,11 +55,11 @@ class ExamList extends React.Component {
             }
         });
 
-        const score = (questions.length - errorsCount) / questions.length;
+        const roundedScore = Math.round((questions.length - errorsCount) / questions.length * 100);
 
         swal({
             title: 'Exam submitted',
-            text: 'Score: ' + Math.round(score * 100),
+            text: 'Your score: ' + roundedScore,
             type: 'success',
             showCloseButton: false,
             showCancelButton: false,
@@ -75,7 +75,7 @@ class ExamList extends React.Component {
             content_id: this.props.selector.sid,
             content_kind: this.props.selector.stype,
             exam_info: {
-                score: Math.round(score * 100)
+                score: roundedScore
             }
         };
         this.context.executeAction(addActivity, {activity: activity});
@@ -97,7 +97,7 @@ class ExamList extends React.Component {
                 {list}
                 <div className="ui hidden divider" />
                 <button type="submit" className="ui blue labeled submit icon button">
-                    <i className="icon checkmark"/>Submit Answers
+                    <i className="icon checkmark"/>Submit answers
                 </button>
                 <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
                     <i className="icon close" />Cancel
