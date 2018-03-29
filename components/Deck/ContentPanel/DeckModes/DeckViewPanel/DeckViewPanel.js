@@ -200,7 +200,7 @@ class DeckViewPanel extends React.Component {
                     </div>
                 </div>
                 <div className="ui  divider"></div>
-                <div key={this.props.slideIndex} className="ui three column grid container">
+                <div key={this.props.slideIndex} className="ui container three cards">
                     {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                     {slidesArr.map((slide, index) => {
                         let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
@@ -208,9 +208,9 @@ class DeckViewPanel extends React.Component {
                             thumbnailURL += '/' + slide.theme;
                         }
                         if (index < maxSlideThumbnails) {
-                            return (<div key={index} className="column">
-                                <div className="ui fluid card">
-                                    <NavLink href={deckURL + '/slide/' + slide.id} className="ui medium image"
+                            return (
+                                <div key={index} className="ui card">
+                                    <NavLink href={deckURL + '/slide/' + slide.id} className="ui image"
                                        tabIndex="-1">
                                         <img key={index} src={thumbnailURL} alt={slide.id} tabIndex={-1}/>
                                     </NavLink>
@@ -220,7 +220,6 @@ class DeckViewPanel extends React.Component {
                                         <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
                                     </div>
                                 </div>
-                            </div>
                             );
                         }
                     })}
