@@ -1,5 +1,6 @@
 import {BaseStore} from 'fluxible/addons';
 import Immutable from 'immutable';
+import slug from 'slug';
 
 class DeckTreeStore extends BaseStore {
     constructor(dispatcher) {
@@ -18,6 +19,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = null;
         this.latestRevisionId = null;
         this.theme = null;
+        this.slug = null;
     }
     updateDeckTree(payload) {
         this.isSelectorValid = true;
@@ -59,6 +61,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.theme = payload.deckTree.theme;
+        this.slug = slug(payload.deckTree.title).toLowerCase() || '_';
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -599,7 +602,8 @@ class DeckTreeStore extends BaseStore {
             isSelectorValid: this.isSelectorValid,
             revisionId: this.revisionId,
             latestRevisionId: this.latestRevisionId,
-            theme: this.theme
+            theme: this.theme,
+            slug: this.slug,
         };
     }
     dehydrate() {
@@ -617,6 +621,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = state.revisionId;
         this.latestRevisionId = state.latestRevisionId;
         this.theme = state.theme;
+        this.slug = state.slug;
     }
     handleDeckTreeError(err){
         this.error = err;

@@ -129,7 +129,7 @@ class TreeNode extends React.Component {
         const {isDragging, connectDragSource, nodeIndex} = this.props;
         //adapt URLs based on the current page
         let nodeSelector = {
-            id: this.props.rootNode.id,
+            id: `${this.props.rootNode.id}/${this.props.rootNode.slug}`,
             stype: this.props.item.get('type'),
             sid: this.props.item.get('id'),
             spath: this.props.item.get('path')

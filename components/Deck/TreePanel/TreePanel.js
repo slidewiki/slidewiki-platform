@@ -176,7 +176,7 @@ class TreePanel extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
         let nextSelector = this.props.DeckTreeStore.nextSelector;
-        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
+        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id'), 'slug': this.props.DeckTreeStore.slug};
         let rootNodeTitle = <strong>{rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         /*                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
