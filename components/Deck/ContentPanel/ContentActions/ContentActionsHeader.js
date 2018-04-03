@@ -198,7 +198,7 @@ class ContentActionsHeader extends React.Component {
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
-                        <i className="large icons">
+                        <i className="icons">
                             <i className="large blue edit icon"></i>
                             <i className=""></i>
                         </i>
