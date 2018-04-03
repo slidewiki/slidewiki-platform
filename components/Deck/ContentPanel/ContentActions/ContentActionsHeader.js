@@ -108,7 +108,7 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const editClass = classNames({
-            'ui button basic': true,
+            'ui button attached basic': true,
             //'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const viewClass = classNames({
@@ -140,11 +140,10 @@ class ContentActionsHeader extends React.Component {
 
         let buttonStyle = {
             classNames : classNames({
-                'small left attached':true,
+                'ui basic button':true,
                 'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
             }),
             iconSize : 'large',
-            attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
         let editButton, saveButton, cancelButton, undoButton, redoButton;
@@ -157,7 +156,7 @@ class ContentActionsHeader extends React.Component {
                 saveButton =
                     <button tabIndex="0"  className="ui button primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
                         <i className="large icons">
-                            <i className="save icon large"></i>
+                            <i className="save icon "></i>
                             <i className=""></i>
                         </i>
                         Save
@@ -165,7 +164,7 @@ class ContentActionsHeader extends React.Component {
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
                         <i className="large icons">
-                            <i className="cancel icon large"></i>
+                            <i className="cancel icon "></i>
                             <i className=""></i>
                         </i>
                         Cancel
@@ -200,7 +199,7 @@ class ContentActionsHeader extends React.Component {
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
                         <i className="large icons">
-                            <i className="large inverted edit icon "></i>
+                            <i className="large blue edit icon"></i>
                             <i className=""></i>
                         </i>
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
@@ -244,8 +243,8 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                            <i className="icons">
-                                <i className="grey file large text icon"></i>
+                            <i className="large icons">
+                                <i className="grey file text icon"></i>
                                 <i className="inverted corner plus icon"></i>
                             </i>
 
@@ -256,8 +255,8 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                            <i className="medium icons">
-                                <i className="yellow large folder icon"></i>
+                            <i className="large icons">
+                                <i className="yellow folder icon"></i>
                                 <i className="inverted corner plus icon"></i>
                             </i>
                         </button>
