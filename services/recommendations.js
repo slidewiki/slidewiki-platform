@@ -16,7 +16,7 @@ export default {
         if (resource === 'recommendations.list'){
             const minNoOfRecommendations = 6;
 
-            const recommendationServiceUri = 'http://localhost';
+            const recommendationServiceUri = 'http://slidewiki.imp.bg.ac.rs';
 
             rp.get({uri: recommendationServiceUri + '/analytics/webresources/recommender?userid=' + uid, proxy: '' }).then((res) => {
 
