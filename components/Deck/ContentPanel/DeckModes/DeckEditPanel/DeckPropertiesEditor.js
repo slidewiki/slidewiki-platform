@@ -569,10 +569,9 @@ class DeckPropertiesEditor extends React.Component {
         let titleAndLanguageAndPublished = <div className="fields">
             <div className="fourteen wide field">{titleAndLanguage}</div>
             <div className="two wide field">
-                <label htmlFor="published" id="published_label">
-                    Published
-                </label>
-                <Checkbox toggle name="deck-published" id="published_input" checked={this.state.published} onChange={this.handleChangeCheckbox.bind(this, 'published')} placeholder="Published" aria-required="true" />
+                <label id="published_label">Published</label>
+                <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
+                    checked={this.state.published} onChange={this.handleChangeCheckbox.bind(this, 'published')} />
             </div>
         </div>;
 
