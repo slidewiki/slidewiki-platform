@@ -122,7 +122,7 @@ class UserDecks extends React.Component {
 
                 {
                     this.props.loggedinuser === this.props.user.uname ?
-                    <Button icon toggle active={showHidden} aria-label='Show Hidden' title='Show Hidden' onClick={this.publishedToggleChanged.bind(this)}>
+                    <Button icon toggle active={showHidden} aria-label='Show not published' data-tooltip='Show not published' onClick={this.publishedToggleChanged.bind(this)}>
                         <Icon name='eye' />
                     </Button> :
                     ''
