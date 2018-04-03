@@ -27,7 +27,7 @@ class DeckCard extends React.Component {
         let deck_slug = this.props.cardContent.title? slug(this.props.cardContent.title) : '';
         let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
 
-        let hiddenRibbon = this.props.cardContent.hidden ? <span className="ui red right ribbon label" aria-label='Unpublished'>Unpublished</span> : '';
+        let hiddenRibbon = this.props.cardContent.hidden ? <span className="ui red right ribbon label" aria-label='Not published'>Not published</span> : '';
         return (
             <div className='ui card'>
                 {this.props.newTab === true ? (
