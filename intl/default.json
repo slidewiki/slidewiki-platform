@@ -8,6 +8,7 @@
   "AddDeck.progress.slides": "slides",
   "AddDeck.swal.success_title_text": "Deck created!",
   "AddDeck.swal.success_text": "The selected file has been imported and a new deck has been created.",
+  "AddDeck.swal.success_text_extra": "This new deck will not be visible to others in your decks page or in search results until published.",
   "AddDeck.swal.success_confirm_text": "View deck",
   "AddDeck.swal.error_title_text": "Error",
   "AddDeck.swal.error_text": "There was a problem with importing this file. Please, try again.",
