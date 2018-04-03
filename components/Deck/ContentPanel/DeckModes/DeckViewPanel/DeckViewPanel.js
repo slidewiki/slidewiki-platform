@@ -156,7 +156,7 @@ class DeckViewPanel extends React.Component {
                                         <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
                                         {deckDescription &&
                                             <div className="meta"><strong>Description:</strong>
-                                                <div className="description" tabIndex="0" aria-label="deck description">{deckDescription}</div>
+                                                <div className="description" tabIndex="0" >{deckDescription}</div>
                                             </div>
                                         }
                                     </div>
@@ -195,39 +195,37 @@ class DeckViewPanel extends React.Component {
                                     })}
                                 </div>
 
-
+                            </div>
+                            <div className="ui divider"></div>
+                            <div key={this.props.slideIndex} className="ui three column grid container">
+                                {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
+                                {slidesArr.map((slide, index) => {
+                                    let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
+                                    if (slide.theme) {
+                                        thumbnailURL += '/' + slide.theme;
+                                    }
+                                    if (index < maxSlideThumbnails) {
+                                        return (<div key={index} className="column">
+                                                <div className="ui fluid card">
+                                                    <div className="content" tabIndex="-1">
+                                                        <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
+                                                            tabIndex="-1">
+                                                            <Thumbnail key={index}
+                                                                url={thumbnailURL}
+                                                                slideId={slide.id} alt={''} tabIndex={-1}/>
+                                                        </a>
+                                                        <a href={deckURL + '/slide/' + slide.id}
+                                                            className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
+                                                        <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                })}
                             </div>
                         </div>
                     </div>
-                    <div className="ui  divider"></div>
-                    <div key={this.props.slideIndex} className="ui three column grid container">
-                        {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
-                        {slidesArr.map((slide, index) => {
-                            let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
-                            if (slide.theme) {
-                                thumbnailURL += '/' + slide.theme;
-                            }
-                            if (index < maxSlideThumbnails) {
-                                return (<div key={index} className="column">
-                                        <div className="ui fluid card">
-                                            <div className="content" tabIndex="-1">
-                                                <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
-                                                    tabIndex="-1">
-                                                    <Thumbnail key={index}
-                                                        url={thumbnailURL}
-                                                        slideId={slide.id} alt={''} abIndex={-1}/>
-                                                </a>
-                                                <a href={deckURL + '/slide/' + slide.id}
-                                                    className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
-                                                <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            }
-                        })}
-                    </div>
-                 
                 </main>
             </div>
         );
