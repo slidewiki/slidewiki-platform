@@ -26,10 +26,10 @@ export default function loadSlideEdit(context, payload, done) {
             //TODO: do not allow editing title when on the edit slide mode
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
-        let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
+
+        // I have absolutely no idea why, but without this fake dispatch,
+        // going from view to edit mode messes with the UI
+        context.dispatch('');
         done();
     });
 }

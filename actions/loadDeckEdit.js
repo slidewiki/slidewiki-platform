@@ -34,7 +34,7 @@ export default function loadDeckEdit(context, payload, done) {
         }
 
         context.dispatch('LOAD_DECK_PROPS_SUCCESS', res);
-        let pageTitle = shortTitle + ' | Deck Edit | ' + payload.params.sid;
+        //let pageTitle = shortTitle + ' | Deck Edit | ' + payload.params.sid;
         //context.dispatch('UPDATE_PAGE_TITLE', {
         //    pageTitle: pageTitle
         //});

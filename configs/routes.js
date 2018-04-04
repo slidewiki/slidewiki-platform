@@ -549,8 +549,6 @@ export default {
         }
 
     },
-
-
     presentation: {
         path: '/presentation:slug(_.+)?/:id/:subdeck/:sid?',
         method: 'get',
