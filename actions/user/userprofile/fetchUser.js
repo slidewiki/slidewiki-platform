@@ -3,6 +3,7 @@ import notFoundError from '../../error/notFoundError';
 import spamDetectedError from '../../error/spamDetectedError';
 import serviceUnavailable from '../../error/serviceUnavailable';
 import { isEmpty } from '../../../common.js';
+import {shortTitle} from '../../../configs/general';
 const log = require('../../log/clog');
 
 export default function fetchUser(context, payload, done) {
@@ -46,7 +47,7 @@ export default function fetchUser(context, payload, done) {
             }
         } else {
             if(!isEmpty(payload.params.category)){
-                if(context.getStore(UserProfileStore).username === payload.params.username 
+                if(context.getStore(UserProfileStore).username === payload.params.username
                     || payload.params.category === 'playlists')  // allow route /{username}/playlists
                     res.category = isEmpty(payload.params.category) ? '' : payload.params.category;
                 else{
@@ -59,6 +60,11 @@ export default function fetchUser(context, payload, done) {
             res.onlyPicture = !isEmpty(payload.onlyPicture) ? payload.onlyPicture : false;
             context.dispatch('NEW_USER_DATA', res);
         }
+
+        let pageTitle = shortTitle + ' | My Decks';
+        context.dispatch('UPDATE_PAGE_TITLE', {
+            pageTitle: pageTitle
+        });
         done();
     });
 }
