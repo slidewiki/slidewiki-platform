@@ -46,6 +46,14 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount.questions = payload.count;
         this.emitChange();
     }
+    addQuestionSuccess() {
+        this.moduleCount.questions++;
+        this.emitChange();
+    }
+    deleteQuestionSuccess() {
+        this.moduleCount.questions--;
+        this.emitChange();
+    }
     updateCommentsCount(payload) {
         this.moduleCount.comments = payload.count;
         this.emitChange();
@@ -106,7 +114,9 @@ ContentModulesStore.handlers = {
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
-    'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount'
+    'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount',
+    'ADD_QUESTION': 'addQuestionSuccess',
+    'DELETE_QUESTION': 'deleteQuestionSuccess'
 };
 
 export default ContentModulesStore;
