@@ -18,13 +18,8 @@ class UserMenuDropdown extends React.Component {
             userMenuButtonExpanded : false
         };
         this.onHandleSelection = this.onHandleSelection.bind(this);
-    /*    this.handleOnShowMenu = this.handleOnShowMenu.bind(this);
-        this.handleOnHideMenu = this.handleOnHideMenu.bind(this);
-*/
     }
     componentDidMount(){
-        //$(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false}); //string refs are legacy
-      //  $('#userButtonMenu').dropdown({action: this.onEnterAndClick, selectOnKeydown: false, onShow: this.handleOnShowMenu, onHide:this.handleOnHideMenu});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
 
@@ -32,8 +27,6 @@ class UserMenuDropdown extends React.Component {
     }
 
     componentDidUpdate() {
-        //$(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
-        //$('#userButtonMenu').dropdown({action: this.onEnterAndClick, selectOnKeydown: false, onShow: this.handleOnShowMenu, onHide:this.handleOnHideMenu});
 
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
@@ -44,28 +37,8 @@ class UserMenuDropdown extends React.Component {
             this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
         else
             this.context.executeAction(navigateAction, {url: value});
-        //$(this.refs.userDropDown).dropdown('hide'); //ref strings are legacy
-        //$('#userButtonMenu').dropdown('hide');
-
-      //  return false;
-    }
-    /*
-    handleOnShowMenu(){
-        if(process.env.BROWSER){ //ensure the component is mounted
-            this.setState({
-                userMenuButtonExpanded : true
-            });
-            $('#myDecksMenuItem').focus();
-        }
-    }
-    handleOnHideMenu(){
-        this.setState({
-            userMenuButtonExpanded : false
-        });
 
     }
-
-*/
 
 
 
@@ -87,7 +60,7 @@ class UserMenuDropdown extends React.Component {
 
                </AriaMenuButton.Button>
                <AriaMenuButton.Menu className='ui menu vertical'
-                style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important'}} >
+                style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
                   <AriaMenuButton.MenuItem
                    className='item'
                    key= {0}
@@ -95,7 +68,7 @@ class UserMenuDropdown extends React.Component {
                    value={'/user/' + this.props.UserProfileStore.username}
                    text='My Decks'>
                    <span style={{color:'black'}}>
-                   <i className="user icon link"  aria-hidden={true} />  My Decks</span>
+                   <i className="user icon link"  aria-hidden={true} />Decks</span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className='item'
@@ -104,7 +77,7 @@ class UserMenuDropdown extends React.Component {
                    value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}
                    text='My Groups'>
                    <span style={{color:'black'}}>
-                   <i className="icon users" aria-hidden={true} /> My Groups </span>
+                   <i className="icon users" aria-hidden={true} />Groups </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className="item"
@@ -113,7 +86,7 @@ class UserMenuDropdown extends React.Component {
                    value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}
                    text=' My Settings'>
                     <span style={{color:'black'}}>
-                   <i className="setting icon" aria-hidden={true} /> My Settings
+                   <i className="setting icon" aria-hidden={true} />Settings
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -123,7 +96,7 @@ class UserMenuDropdown extends React.Component {
                    value={'/notifications'}
                    text='My Notifications'>
                    <span style={{color:'black'}}>
-                   <i className={alarmClassName} aria-hidden={true} /> My Notifications
+                   <i className={alarmClassName} aria-hidden={true} />Notifications
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
