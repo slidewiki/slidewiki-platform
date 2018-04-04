@@ -2,7 +2,7 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
 
-const analyticsServiceUri = 'http://localhost';
+const analyticsServiceUri = 'http://slidewiki.imp.bg.ac.rs';
 
 
 
