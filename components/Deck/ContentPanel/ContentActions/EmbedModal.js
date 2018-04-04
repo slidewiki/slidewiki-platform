@@ -14,12 +14,16 @@ class EmbedModal extends React.Component {
     constructor(props) {
         super(props);
 
+//        this.widthInput = React.createRef();
+//        this.heightInput = React.createRef();
+
         this.defaultWidthValue = 800;
         this.defaultHeightValue = 400;
 
         this.state = {
             modalOpen: false,
             activeTrap: false,
+            size: 'sm',
             width: this.defaultWidthValue,
             height: this.defaultHeightValue,
             href: null
@@ -61,15 +65,35 @@ class EmbedModal extends React.Component {
         });
     }
 
-    handleChange() {
-        var widthInput = $('#embedModalWidth');
-        var heightInput = $('#embedModalHeight');
-
-        this.setState({
-            width: widthInput.val() || this.defaultWidthValue,
-            height: heightInput.val() || this.defaultHeightValue,
-            href: window.location.href
-        });
+    handleChange(e, sender) {
+        if (sender.type === 'radio') {
+            switch (sender.value) {
+                case 'sm':
+                    this.widthInput.inputRef.value = '400'
+                    this.heightInput.inputRef.value = '200'
+                    break;
+                case 'md':
+                    this.widthInput.inputRef.value = '800'
+                    this.heightInput.inputRef.value = '400'
+                    break;
+                case 'lg':
+                    this.widthInput.inputRef.value = '1000'
+                    this.heightInput.inputRef.value = '600'
+                    break;
+            }
+            this.setState({
+                size: sender.value,
+                width: this.widthInput && this.widthInput.inputRef.value || this.defaultWidthValue,
+                height: this.heightInput && this.heightInput.inputRef.value || this.defaultHeightValue,
+                href: window.location.href
+            });
+        } else {
+            this.setState({
+                width: this.widthInput && this.widthInput.inputRef.value || this.defaultWidthValue,
+                height: this.heightInput && this.heightInput.inputRef.value || this.defaultHeightValue,
+                href: window.location.href
+            });
+        }
     }
 
     handleClose(){
@@ -98,6 +122,7 @@ class EmbedModal extends React.Component {
     }
 
     render() {
+        const {size} = this.state;
         return(
             <Modal
                     trigger={
@@ -134,21 +159,32 @@ class EmbedModal extends React.Component {
                         <Container>
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>
-                                    <form className="ui form">
-                                        <Form.Field>
-                                            <Label>
-                                                {this.context.intl.formatMessage(this.messages.embedModal_widthLabel)}
-                                            </Label>
-                                            <Input id="embedModalWidth"
-                                                    placeholder={this.defaultWidthValue}
-                                                    onChange={this.handleChange}/>
-                                            <Label>
-                                                {this.context.intl.formatMessage(this.messages.embedModal_heightLabel)}
-                                            </Label>
-                                            <Input id="embedModalHeight"
-                                                    placeholder={this.defaultHeightValue}
-                                                    onChange={this.handleChange}/>
-                                        </Form.Field>
+                                    <Form>
+                                        <Form.Group inline>
+                                            <label>Size</label>
+                                            <Form.Radio label='Small' value='sm' checked={size === 'sm'} onChange={this.handleChange}/>
+                                            <Form.Radio label='Medium' value='md' checked={size === 'md'} onChange={this.handleChange}/>
+                                            <Form.Radio label='Large' value='lg' checked={size === 'lg'} onChange={this.handleChange}/>
+                                            <Form.Radio label='Other' value='ot' checked={size === 'ot'} onChange={this.handleChange}/>
+                                            <Form.Field>
+                                                <Label>
+                                                    {this.context.intl.formatMessage(this.messages.embedModal_widthLabel)}
+                                                </Label>
+                                                <Input id="embedModalWidth" ref={(ref) => this.widthInput = ref}
+                                                        disabled={this.state.size !== 'ot'}
+                                                        placeholder={this.defaultWidthValue}
+                                                        onChange={this.handleChange}/>
+                                            </Form.Field>
+                                            <Form.Field>
+                                                <Label>
+                                                    {this.context.intl.formatMessage(this.messages.embedModal_heightLabel)}
+                                                </Label>
+                                                <Input id="embedModalHeight" ref={(ref) => this.heightInput = ref}
+                                                        disabled={this.state.size !== 'ot'}
+                                                        placeholder={this.defaultHeightValue}
+                                                        onChange={this.handleChange}/>
+                                            </Form.Field>
+                                        </Form.Group>
                                         <Form.Field>
                                             <textarea id="embedModalDescription"
                                                     ref="embedModalDescription"
@@ -177,7 +213,7 @@ class EmbedModal extends React.Component {
                                                     onClick={this.handleClose}
                                                     content={this.context.intl.formatMessage(this.messages.embedModal_closeButton)}/>
                                         </Modal.Actions>
-                                    </form>
+                                    </Form>
                                 </Segment>
                             </Segment>
                         </Container>
