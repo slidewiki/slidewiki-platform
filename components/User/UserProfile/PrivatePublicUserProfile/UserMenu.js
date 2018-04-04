@@ -40,7 +40,10 @@ class UserMenu extends React.Component {
         let deckRecommendationsMsg = this.context.intl.formatMessage(this.messages.recommendedDecks);
         let deckRecommendationNavLink = (
             <NavLink className="item" href={'/user/' + this.props.user.uname + '/recommendations'} activeStyle={this.styles}>
-                <p><i className="icon grid layout"/> {deckRecommendationsMsg}</p>
+                <p><i className="icons">
+                    <i className="yellow open folder icon"></i>
+                    <i className="corner thumbs up icon"></i>
+                </i> {deckRecommendationsMsg}</p>
             </NavLink>
         );
 
