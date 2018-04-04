@@ -10,7 +10,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups', 'playlists', 'decks'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit'], 
+    groups: ['overview', 'edit'],
     decks: ['shared'],
 };
 
@@ -52,7 +52,7 @@ export function chooseAction(context, payload, done) {
             title += 'Playlists';
             break;
         case undefined:
-        case categories.categories[3]: 
+        case categories.categories[3]:
             switch(payload.params.item){
                 case categories.decks[0]:
                     title += 'Shared Decks';
@@ -61,11 +61,11 @@ export function chooseAction(context, payload, done) {
                     title += 'My Decks';
                     break;
             };
-            break;            
+            break;
         default:
             title = shortTitle;
     };
-    //context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
+    context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     async.series([
         (callback) => {

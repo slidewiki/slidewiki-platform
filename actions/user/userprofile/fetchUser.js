@@ -3,7 +3,6 @@ import notFoundError from '../../error/notFoundError';
 import spamDetectedError from '../../error/spamDetectedError';
 import serviceUnavailable from '../../error/serviceUnavailable';
 import { isEmpty } from '../../../common.js';
-import {shortTitle} from '../../../configs/general';
 const log = require('../../log/clog');
 
 export default function fetchUser(context, payload, done) {
@@ -60,11 +59,6 @@ export default function fetchUser(context, payload, done) {
             res.onlyPicture = !isEmpty(payload.onlyPicture) ? payload.onlyPicture : false;
             context.dispatch('NEW_USER_DATA', res);
         }
-
-        let pageTitle = shortTitle + ' | My Decks';
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
         done();
     });
 }
