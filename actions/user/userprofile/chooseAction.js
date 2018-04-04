@@ -36,7 +36,7 @@ export function chooseAction(context, payload, done) {
                 default:
                     title = shortTitle;
                     break;
-            };
+            }
             break;
         case categories.categories[1]:
             switch(payload.params.item){
@@ -49,7 +49,7 @@ export function chooseAction(context, payload, done) {
                 default:
                     title = shortTitle;
                     break;
-            };
+            }
             break;
         case categories.categories[2]:
             title += 'Playlists';
@@ -63,11 +63,11 @@ export function chooseAction(context, payload, done) {
                 default:
                     title += 'My Decks';
                     break;
-            };
+            }
             break;
         default:
             title = shortTitle;
-    };
+    }
     context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     async.series([
@@ -101,7 +101,7 @@ export function chooseAction(context, payload, done) {
                     break;
                 case categories.categories[4]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
-                    context.executeAction(loadUserRecommendations, {}, callback);
+                    // context.executeAction(loadUserRecommendations, {}, callback);
                     break;
                 case categories.categories[5]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});

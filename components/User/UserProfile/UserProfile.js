@@ -112,7 +112,7 @@ class UserProfile extends React.Component {
                     default:
                         return this.notImplemented();
                 }});
-            case categories.categories[4]:
+            case categories.categories[5]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.analytics[0]:
                         return this.displayPerformancePredictions();
