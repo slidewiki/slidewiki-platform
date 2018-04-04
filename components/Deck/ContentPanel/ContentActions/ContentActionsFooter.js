@@ -164,14 +164,14 @@ class ContentActionsFooter extends React.Component {
                                 </button>
                             </NavLink>
 
-                           <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
+                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
                             <DownloadModal/>
                             <ReportModal/>
-                            <EmbedModal /*onClose={this.handleClose}*//>
+                            <EmbedModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
                                 <i className={classNameLikeButton}></i>

@@ -5,6 +5,9 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../../stores/ContentStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
+import DeckViewStore from '../../../../stores/DeckViewStore';
+import SlideViewStore from '../../../../stores/SlideViewStore';
+import ContributorsStore from '../../../../stores/ContributorsStore';
 
 
 class EmbedModal extends React.Component {
@@ -36,9 +39,9 @@ class EmbedModal extends React.Component {
                 id:'embedModal.embedModal_embedButton',
                 defaultMessage: 'Embed'
             },
-            embedModal_cancelButton:{
-                id:'embedModal.embedModal_cancelButton',
-                defaultMessage: 'Cancel'
+            embedModal_closeButton:{
+                id:'embedModal.embedModal_closeButton',
+                defaultMessage: 'Close'
             },
             embedModal_widthLabel:{
                 id:'embedModal.embedModal_widthLabel',
@@ -56,7 +59,6 @@ class EmbedModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
-        // TODO: implement.
     }
 
     handleChange() {
@@ -82,6 +84,16 @@ class EmbedModal extends React.Component {
         if(this.state.activeTrap){
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
+        }
+    }
+
+    findCurrentRevision(deckData) {
+        if (deckData.revisions) {
+            return deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
+                return rev.id === deckData.active;
+            });
+        } else {
+            return null;
         }
     }
 
@@ -142,16 +154,28 @@ class EmbedModal extends React.Component {
                                                     ref="embedModalDescription"
                                                     label="description"
                                                     autoHeight={true}
-                                                    value={'<iframe src="' + this.state.href + '" width="' +
-                                                            this.state.width + '" height="' + this.state.height +
-                                                            '"></iframe>'}/>
+                                                    value={
+                                                        '<iframe src="' + this.state.href + '" width="'
+                                                        + this.state.width + '" height="' + this.state.height
+                                                        + '"></iframe><p>'
+                                                        + '<a href="' + this.state.href +'">'
+                                                        + ((this.props.ContentStore.selector.stype === 'slide')
+                                                        ? this.props.SlideViewStore.title
+                                                        : this.findCurrentRevision(this.props.DeckViewStore.deckData)
+                                                                .title)
+                                                        + ' - '
+                                                        + ((this.props.ContentStore.selector.stype === 'slide')
+                                                        ? this.props.ContributorsStore.creator[0].username
+                                                        : this.props.DeckViewStore.creatorData.username)
+                                                        + '</a></p>'
+                                                    }/>
                                         </Form.Field>
                                         <Modal.Actions>
                                             <Button icon="remove"
                                                     color="red"
                                                     type="button"
                                                     onClick={this.handleClose}
-                                                    content={this.context.intl.formatMessage(this.messages.embedModal_cancelButton)}/>
+                                                    content={this.context.intl.formatMessage(this.messages.embedModal_closeButton)}/>
                                         </Modal.Actions>
                                     </form>
                                 </Segment>
@@ -170,11 +194,15 @@ EmbedModal.contextTypes = {
     intl: React.PropTypes.object.isRequired
 };
 
-EmbedModal = connectToStores(EmbedModal,[ContentStore, UserProfileStore], (context, props) => {
-    return{
-        ContentStore : context.getStore(ContentStore).getState(),
-        UserProfileStore : context.getStore(UserProfileStore).getState()
-    };
-});
+EmbedModal = connectToStores(EmbedModal, [ContentStore, UserProfileStore, DeckViewStore, SlideViewStore,
+        ContributorsStore], (context, props) => {
+            return {
+                ContentStore: context.getStore(ContentStore).getState(),
+                UserProfileStore: context.getStore(UserProfileStore).getState(),
+                DeckViewStore: context.getStore(DeckViewStore).getState(),
+                SlideViewStore: context.getStore(SlideViewStore).getState(),
+                ContributorsStore: context.getStore(ContributorsStore).getState()
+            };
+        });
 
 export default EmbedModal;

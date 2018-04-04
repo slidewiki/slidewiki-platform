@@ -8,8 +8,6 @@ import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import EmbedModal from './EmbedModal';
-
 
 class DownloadModal extends React.Component{
     constructor(props) {
