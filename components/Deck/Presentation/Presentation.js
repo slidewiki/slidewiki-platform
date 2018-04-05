@@ -7,6 +7,7 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
+import ChartRender from '../ContentPanel/util/ChartRender';
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
@@ -93,11 +94,13 @@ class Presentation extends React.Component{
             });
 
 
+
             Reveal.addEventListener( 'ready', ( event ) => {
                 //$('.accessibilityWrapper').attr('tabindex', '');
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
+                ChartRender.renderCharts();
                 this.resize();
             } );
 
