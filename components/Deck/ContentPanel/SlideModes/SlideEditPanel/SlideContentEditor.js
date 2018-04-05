@@ -8,6 +8,7 @@ import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import ChartRender from '../../util/ChartRender';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -1138,6 +1139,9 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').not('.drawing').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
         //give each input box element a context menu (hide/overlap CKeditor context menu)
         this.contextMenuAll();
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts();
 
         //***************content mode//***************
         //TODO: on undo (ctr-l Z) - restore resize/drag elements previously removed
