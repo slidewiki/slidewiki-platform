@@ -43,7 +43,6 @@ class SlideContentView extends React.Component {
             */
             //initial resize
 
-            ChartRender.renderCharts();
             this.resize();
             window.addEventListener('resize', this.handleResize);
             /*ReactDOM.findDOMNode(this.refs.container).addEventListener('onResize', (evt) =>
@@ -54,6 +53,10 @@ class SlideContentView extends React.Component {
             this.loading = '';
         }
         this.forceUpdate();
+
+        // Resize of charts only necessary here.
+        ChartRender.renderCharts(true);
+
     }
 
     handleResize = () => {
@@ -61,9 +64,9 @@ class SlideContentView extends React.Component {
     }
 
     componentDidUpdate() {
+        ChartRender.renderCharts(false);
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
-        ChartRender.renderCharts();
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
     }
 
@@ -79,10 +82,12 @@ class SlideContentView extends React.Component {
         //only calculate scaleration for width for now
         this.scaleratio = this.zoom;
 
-        if ($('.pptx2html').length)
-        {
+        if ($('.pptx2html').length) {
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            $('.pptx2html').css({
+                'transform': 'scale(' + this.scaleratio + ',' + this.scaleratio + ')',
+                'transform-origin': 'top left'
+            });
 
             pptxheight = $('.pptx2html').outerHeight();
 

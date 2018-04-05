@@ -942,7 +942,7 @@ class SlideContentEditor extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize();
+        this.resize(false);
     }
     correctDimensionsBoxesIframe()
     {

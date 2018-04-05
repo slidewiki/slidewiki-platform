@@ -1,6 +1,6 @@
 class ChartRender {
 
-    static renderCharts(){
+    static renderCharts(resize){
 
         let charts = $('div[id^=chart]');
 
@@ -87,6 +87,10 @@ class ChartRender {
                 nv.utils.windowResize(chart.update);
 
             }
+        }
+
+        if (resize) {
+            window.dispatchEvent(new Event('resize'));
         }
     }
 }

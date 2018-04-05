@@ -100,7 +100,7 @@ class Presentation extends React.Component{
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
-                ChartRender.renderCharts();
+                ChartRender.renderCharts(false);
                 this.resize();
             } );
 
