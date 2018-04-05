@@ -32,12 +32,12 @@ class ChartRender {
                     data = chartData;
                     chart = nv.models.lineChart()
                         .useInteractiveGuideline(true);
-                    chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
+                    chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'barChart':
                     data = chartData;
                     chart = nv.models.multiBarChart();
-                    chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
+                    chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'pieChart':
                     chartData = chartData[0].values;
@@ -52,7 +52,7 @@ class ChartRender {
                     chart = nv.models.stackedAreaChart()
                         .clipEdge(true)
                         .useInteractiveGuideline(true);
-                    chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
+                    chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'scatterChart':
 
