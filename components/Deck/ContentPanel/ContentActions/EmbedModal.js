@@ -66,16 +66,16 @@ class EmbedModal extends React.Component {
         if (sender.type === 'radio') {
             switch (sender.value) {
                 case 'sm':
-                    this.widthInput.inputRef.value = '400'
-                    this.heightInput.inputRef.value = '200'
+                    this.widthInput.inputRef.value = '400';
+                    this.heightInput.inputRef.value = '200';
                     break;
                 case 'md':
-                    this.widthInput.inputRef.value = '800'
-                    this.heightInput.inputRef.value = '400'
+                    this.widthInput.inputRef.value = '800';
+                    this.heightInput.inputRef.value = '400';
                     break;
                 case 'lg':
-                    this.widthInput.inputRef.value = '1000'
-                    this.heightInput.inputRef.value = '600'
+                    this.widthInput.inputRef.value = '1000';
+                    this.heightInput.inputRef.value = '600';
                     break;
             }
             this.setState({
@@ -127,13 +127,13 @@ class EmbedModal extends React.Component {
                             <div role="button" tabIndex="0" className="SocialMediaShareButton Demo__some-network__share-button">
                                 <div style={{width: this.props.size + 'px', height: this.props.size + 'px'}}>
                                     <i className="code icon" style={{
-                                            width: this.props.size + 'px',
-                                            height: this.props.size + 'px',
-                                            fontSize: this.props.fontSize + 'px !important',
-                                            paddingTop: (this.props.size - 3) / 2 + 'px',
-                                            borderRadius: this.props.size / 2 + 'px',
-                                            backgroundColor: this.props.backgroundColor,
-                                            color: this.props.color
+                                        width: this.props.size + 'px',
+                                        height: this.props.size + 'px',
+                                        fontSize: this.props.fontSize + 'px !important',
+                                        paddingTop: (this.props.size - 3) / 2 + 'px',
+                                        borderRadius: this.props.size / 2 + 'px',
+                                        backgroundColor: this.props.backgroundColor,
+                                        color: this.props.color
                                     }}></i>
                                 </div>
                             </div>
@@ -238,14 +238,14 @@ EmbedModal.contextTypes = {
 };
 
 EmbedModal = connectToStores(EmbedModal, [ContentStore, UserProfileStore, DeckViewStore, SlideViewStore,
-        ContributorsStore], (context, props) => {
-            return {
-                ContentStore: context.getStore(ContentStore).getState(),
-                UserProfileStore: context.getStore(UserProfileStore).getState(),
-                DeckViewStore: context.getStore(DeckViewStore).getState(),
-                SlideViewStore: context.getStore(SlideViewStore).getState(),
-                ContributorsStore: context.getStore(ContributorsStore).getState()
-            };
-        });
+    ContributorsStore], (context, props) => {
+        return {
+            ContentStore: context.getStore(ContentStore).getState(),
+            UserProfileStore: context.getStore(UserProfileStore).getState(),
+            DeckViewStore: context.getStore(DeckViewStore).getState(),
+            SlideViewStore: context.getStore(SlideViewStore).getState(),
+            ContributorsStore: context.getStore(ContributorsStore).getState()
+        };
+    });
 
 export default EmbedModal;
