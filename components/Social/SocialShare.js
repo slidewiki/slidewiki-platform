@@ -95,21 +95,7 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-                    <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbedClick.bind(this)}>
-                        <div role="button" tabindex="0" className="SocialMediaShareButton Demo__some-network__share-button">
-                            <div style={{width: 33 + 'px', height: 33 + 'px'}}>
-                                <i className="code icon" style={{
-                                        width: 33 + 'px',
-                                        height: 33 + 'px',
-                                        fontSize: '24px !important',
-                                        paddingTop: '15px',
-                                        borderRadius: '16px',
-                                        backgroundColor: 'blue',
-                                        color: 'white'
-                                }}></i>
-                            </div>
-                        </div>
-                    </div>
+                    <EmbedModal size={iconSize} fontSize={24} color="white" backgroundColor="#1e78bb"/>
                     <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}

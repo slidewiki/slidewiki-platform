@@ -17,7 +17,6 @@ import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
 import DownloadModal from './DownloadModal';
-import EmbedModal from './EmbedModal';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -171,7 +170,6 @@ class ContentActionsFooter extends React.Component {
                             </NavLink>
                             <DownloadModal/>
                             <ReportModal/>
-                            <EmbedModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
                                 <i className={classNameLikeButton}></i>

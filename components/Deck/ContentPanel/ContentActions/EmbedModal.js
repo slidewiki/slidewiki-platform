@@ -123,11 +123,21 @@ class EmbedModal extends React.Component {
         return(
             <Modal
                     trigger={
-                        <Button icon="code"
-                                color="grey"
-                                type="button"
-                                onClick={this.handleEmbed}
-                                content={this.context.intl.formatMessage(this.messages.embedModal_embedButton)}/>
+                        <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbed.bind(this)}>
+                            <div role="button" tabIndex="0" className="SocialMediaShareButton Demo__some-network__share-button">
+                                <div style={{width: this.props.size + 'px', height: this.props.size + 'px'}}>
+                                    <i className="code icon" style={{
+                                            width: this.props.size + 'px',
+                                            height: this.props.size + 'px',
+                                            fontSize: this.props.fontSize + 'px !important',
+                                            paddingTop: (this.props.size - 3) / 2 + 'px',
+                                            borderRadius: this.props.size / 2 + 'px',
+                                            backgroundColor: this.props.backgroundColor,
+                                            color: this.props.color
+                                    }}></i>
+                                </div>
+                            </div>
+                        </div>
                     }
                     open={this.state.modalOpen}
                     onOpen={this.handleChange}
