@@ -2,6 +2,8 @@ import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
 import addActivity from '../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
+import EmbedModal from '../Deck/ContentPanel/ContentActions/EmbedModal';
+import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
 
 class SocialShare extends React.Component {
 
@@ -16,6 +18,10 @@ class SocialShare extends React.Component {
     onEnterAndClick(text, value) {
         $(this.refs.shareDropDown).dropdown('hide');
         return false;
+    }
+
+    handleEmbedClick(){
+//        this.createShareActivity('Embed');
     }
 
     handleEmailClick(){
@@ -58,6 +64,7 @@ class SocialShare extends React.Component {
     }
 
     render() {
+        const iconSize = 33;
         let shareUrl = '';
         if (typeof window !== 'undefined') {
             shareUrl = window.location.href;
@@ -79,6 +86,7 @@ class SocialShare extends React.Component {
         const shareMessage = 'I have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.';
         const emailShareMessage = 'Hi.\nI have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.\n' + shareUrl;
         const emailShareSubject = 'Interesting ' + this.props.selector.stype + ' on SlideWiki';
+
         return(
             <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share">
                 <div className="text">
@@ -87,6 +95,21 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
+                    <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbedClick.bind(this)}>
+                        <div role="button" tabindex="0" className="SocialMediaShareButton Demo__some-network__share-button">
+                            <div style={{width: 33 + 'px', height: 33 + 'px'}}>
+                                <i className="code icon" style={{
+                                        width: 33 + 'px',
+                                        height: 33 + 'px',
+                                        fontSize: '24px !important',
+                                        paddingTop: '15px',
+                                        borderRadius: '16px',
+                                        backgroundColor: 'blue',
+                                        color: 'white'
+                                }}></i>
+                            </div>
+                        </div>
+                    </div>
                     <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}
@@ -94,7 +117,7 @@ class SocialShare extends React.Component {
                             body={emailShareMessage}
                             className="Demo__some-network__share-button">
                             <EmailIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </EmailShareButton>
                     </div>
@@ -104,7 +127,7 @@ class SocialShare extends React.Component {
                             title={shareMessage}
                             className="Demo__some-network__share-button">
                             <TwitterIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </TwitterShareButton>
                     </div>
@@ -114,7 +137,7 @@ class SocialShare extends React.Component {
                             quote={shareMessage}
                             className="Demo__some-network__share-button">
                             <FacebookIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </FacebookShareButton>
                     </div>
@@ -124,7 +147,7 @@ class SocialShare extends React.Component {
                             content={shareMessage}
                             className="Demo__some-network__share-button">
                             <GooglePlusIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </GooglePlusShareButton>
                     </div>
@@ -136,7 +159,7 @@ class SocialShare extends React.Component {
                             windowHeight={600}
                             className="Demo__some-network__share-button">
                             <LinkedinIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </LinkedinShareButton>
                     </div>

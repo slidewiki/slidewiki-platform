@@ -14,9 +14,6 @@ class EmbedModal extends React.Component {
     constructor(props) {
         super(props);
 
-//        this.widthInput = React.createRef();
-//        this.heightInput = React.createRef();
-
         this.defaultWidthValue = 800;
         this.defaultHeightValue = 400;
 
