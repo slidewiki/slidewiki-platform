@@ -1667,7 +1667,9 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
             }
         }
-        if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
+        if (nextProps.SlideEditStore.title !== '' &&
+        nextProps.SlideEditStore.title !== this.props.SlideEditStore.title &&
+        nextProps.SlideEditStore.LeftPanelTitleChange !== false)
         {
             this.hasChanges = true;
             const messagesSaveAfterSlideNameChangeModal = defineMessages({
