@@ -607,14 +607,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
-            //if (CKEDITOR.instances.inlineContent != null) {
+            if (CKEDITOR.instances.inlineContent != null) {
             //    console.log('destroy previous CKEDITOR instance');
-            CKEDITOR.instances.inlineContent.destroy();
-            //}
-            //if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+                CKEDITOR.instances.inlineContent.destroy();
+            }
+            if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
             //    console.log('destroy previous CKEDITOR instance');
-            CKEDITOR.instances.inlineSpeakerNotes.destroy();
-            //}
+                CKEDITOR.instances.inlineSpeakerNotes.destroy();
+            }
             //this.refreshCKeditor();
             this.disableResizeDrag();
             this.contextMenuAndDragDivAllRemove();
@@ -1990,7 +1990,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     emitChange(context){
-        context.hasChanges = true;
+        //context.hasChanges = true;
     }
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
@@ -2178,7 +2178,7 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
                                     </div>
                                 </HotKeys>
                             </section>
@@ -2187,7 +2187,7 @@ class SlideContentEditor extends React.Component {
                 </div>
                 <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                     <b>Speaker notes:</b><br />
-                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
                     </div>
                 </div>
             </div>
