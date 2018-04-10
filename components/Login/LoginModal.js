@@ -118,7 +118,7 @@ class LoginModal extends React.Component {
                 }),
                 text: this.context.intl.formatMessage({
                     id: 'LoginModal.hint.noAccountForTheProviderData',
-                    defaultMessage: 'You haven&apos;t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
+                    defaultMessage: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
                 }),
                 type: 'question',
                 showCloseButton: true,
