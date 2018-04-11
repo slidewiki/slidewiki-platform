@@ -131,6 +131,7 @@ class DownloadModal extends React.Component{
         }
 
         this.createDownloadActivity();
+        this.handleClose();
 
 
     }
