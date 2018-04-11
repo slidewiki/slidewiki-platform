@@ -192,7 +192,7 @@ class ContentQuestionsPanel extends React.Component {
                 </a>
             </div>
         );
-        let questionsList = (<ContentQuestionsList items={questions} selector={selector} />);
+        let questionsList = (<ContentQuestionsList items={questions} selector={selector} editPermission={editPermission}/>);
         let content = (
             <div>
                 {/* {buttonBar} */}

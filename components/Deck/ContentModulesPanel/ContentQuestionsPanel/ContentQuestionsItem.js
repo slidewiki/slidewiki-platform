@@ -39,7 +39,7 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList qstid={question.id} items={question.answers} explanation={question.explanation} />
+            <ContentQuestionAnswersList qstid={question.id} items={question.answers} explanation={question.explanation} editPermission={this.props.editPermission}/>
         );
 
         //HEAD of 1602:

@@ -21,7 +21,17 @@ class DeckEditStore extends BaseStore {
             users: [],
             groups: []
         };
+        this.collectionOptions = [];
+        this.selectedCollections = [];
+
         this.showGroupModal = false;
+
+        this.queryParams = {};
+
+        // variables for error handling
+        this.loadCollectionsError = false;
+        this.addCollectionError = false;
+        this.collectionsLoading = false;
     }
 
     updateProperties(payload) {
@@ -43,6 +53,8 @@ class DeckEditStore extends BaseStore {
             groups: []
         };
 
+        this.selectedCollections = [];
+
         this.emitChange();
     }
 
@@ -55,7 +67,14 @@ class DeckEditStore extends BaseStore {
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
-            showGroupModal: this.showGroupModal
+            showGroupModal: this.showGroupModal,
+            queryParams: this.queryParams,
+            showGroupModal: this.showGroupModal,
+            collectionOptions: this.collectionOptions,
+            selectedCollections: this.selectedCollections,
+            loadCollectionsError: this.loadCollectionsError,
+            addCollectionError: this.addCollectionError,
+            collectionsLoading: this.collectionsLoading
         };
     }
 
@@ -72,6 +91,12 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
+        this.queryParams = state.queryParams;
+        this.collectionOptions = state.collectionOptions;
+        this.selectedCollections = state.selectedCollections;
+        this.loadCollectionsError = state.loadCollectionsError;
+        this.addCollectionError = state.addCollectionError;
+        this.collectionsLoading = state.collectionsLoading;
     }
 
     updateAuthorizedUsers(users) {
@@ -90,10 +115,70 @@ class DeckEditStore extends BaseStore {
     }
 
     loadUsergroup(group) {
+        // console.log('DeckEditStore loadUsergroup:', group);
         this.detailedGroup = group;
         this.showGroupModal = true;
         this.emitChange();
         this.showGroupModal = false;
+    }
+
+    setQueryParams(params) {
+        this.queryParams = params;
+        this.emitChange();
+    }
+
+    loadUserCollections(payload){
+        this.collectionOptions = payload.documents;
+        this.emitChange();
+    }
+
+    loadCollections(payload){
+        this.selectedCollections = payload.map( (collection) => {
+            return collection._id;
+        });
+        this.emitChange();
+    }
+
+    loadCollectionsFail(){
+        this.loadCollectionsError = true;
+        this.emitChange();
+        this.loadCollectionsError = false;
+    }
+
+    addCollection(newCollection){
+        this.collectionOptions.push(newCollection);
+        this.collectionOptions = [...new Set(this.collectionOptions)];
+        this.selectedCollections.push(newCollection._id);
+
+        this.emitChange();
+    }
+
+    addCollectionFailure(){
+        this.addCollectionError = true;
+        this.emitChange();
+        this.addCollectionError = false;
+    }
+
+    addSelectedCollection(groupId){
+        this.selectedCollections.push(groupId);
+        this.emitChange();
+    }
+
+    removeSelectedCollection(groupId){
+        this.selectedCollections = this.selectedCollections.filter( (e) => {
+            return e !== groupId;
+        });
+        this.emitChange();
+    }
+
+    updateCollectionsLoading(payload){
+        this.collectionsLoading = payload;
+        this.emitChange();
+    }
+
+    hideGroupsDetailsModal() {
+        this.showGroupModal = false;
+        this.emitChange();
     }
 }
 
@@ -104,7 +189,27 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties',
+    'DECKEDIT_START_QUERY_PARAMS': 'setQueryParams',
+
+    // load user groups created by a specific user
+    'LOAD_USER_COLLECTIONS_SUCCESS': 'loadUserCollections',
+    'LOAD_USER_COLLECTIONS_FAILURE': 'loadCollectionsFail',
+
+    // load deck groups assigned to a deck
+    'LOAD_COLLECTIONS_SUCCESS': 'loadCollections',
+    'LOAD_COLLECTIONS_FAILURE': 'loadCollectionsFail',
+    'UPDATE_COLLECTIONS_LOADING': 'updateCollectionsLoading',
+
+    'ADD_COLLECTION_SUCCESS': 'addCollection',
+    'ADD_COLLECTION_FAILURE': 'addCollectionFailure',
+
+    // add/remove selected deck groups
+    'ADD_SELECTED_COLLECTION': 'addSelectedCollection',
+    'REMOVE_SELECTED_COLLECTION': 'removeSelectedCollection',
+
+    //Group details modal
+    'HIDE_GROUP_DETAILS_MODAL': 'hideGroupsDetailsModal'
 };
 
 export default DeckEditStore;

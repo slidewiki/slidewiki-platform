@@ -262,6 +262,24 @@ export default {
                 callback(err, {});
             });
         }
+        else if (resource === 'user.sendEmail') {
+            rp.post({
+                uri: Microservices.user.uri + '/user/' + params.ownerid + '/sendEmail',
+                body: {
+                    reason: 1,
+                    data: {
+                        deckid: parseInt(params.deckId),
+                        deckname: params.deckname
+                    }
+                },
+                headers: { '----jwt----': params.jwt },
+                json: true
+            }).then((res) => {
+                callback(null, res);  //no data
+            }).catch((err) => {
+                callback(err, {});
+            });
+        }
     }
         // delete: (req, resource, params, config, callback) => {}
 };

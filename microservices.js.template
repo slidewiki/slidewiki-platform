@@ -46,6 +46,9 @@ export default {
         },
         'questions': {
             uri: '${SERVICE_URL_QUESTION}'
+        }, 
+        'nlp': {
+            uri: '${SERVICE_URL_NLP}'
         }
     }
 };

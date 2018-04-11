@@ -31,8 +31,8 @@ import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
 import checkReviewableUser from '../actions/userReview/checkReviewableUser';
+import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
-
 import {navigateAction} from 'fluxible-router';
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
@@ -122,6 +122,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | About'
+            });
+            done();
+        }
+    },
+    accessibility: {
+        path: '/accessibility',
+        method: 'get',
+        page: 'accessibility',
+        title: 'SlideWiki -- Accessibility',
+        handler: require('../components/Home/Accessibility'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Accessibility'
             });
             done();
         }
@@ -338,7 +351,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -518,7 +531,7 @@ export default {
         }
     },
     decktree: {
-        path: '/decktree/:id/:spath?',
+        path: '/decktree:slug(_.+)?/:id/:spath?',
         method: 'get',
         page: 'decktree',
         handler: require('../components/Deck/TreePanel/TreePanel'),
@@ -539,7 +552,7 @@ export default {
 
 
     presentation: {
-        path: '/presentation/:id/:subdeck/:sid?',
+        path: '/presentation:slug(_.+)?/:id/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
@@ -599,6 +612,16 @@ export default {
         method: 'get',
         page: 'presentationBroadcast',
         handler: require('../components/webrtc/presentationBroadcast')
+    },
+    playlist: {
+        path: '/playlist/:id',
+        method: 'get',
+        page: 'playlist',
+        title: 'SlideWiki -- Playlist',
+        handler: require('../components/DeckCollection/CollectionPanel/CollectionPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadCollection, payload, done);
+        }
     },
     /* This should be the last route in routes.js */
     notfound: {
