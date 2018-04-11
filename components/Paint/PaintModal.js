@@ -47,7 +47,7 @@ class PaintModal extends React.Component {
 
             <Modal
                 trigger={
-                    <a className="item" id="handlePaintClick" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}>
+                    <a className="item" id="paintModalTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}>
                         <i tabIndex="0" className="paint brush icon"></i> Paint
                     </a>
                 }
