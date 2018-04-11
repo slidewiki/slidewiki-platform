@@ -24,13 +24,6 @@ class BasicHTMLLayout extends React.Component {
             </head>
             <body>
                 <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
-
-                {/* All external vendors bundle*/
-                    this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'} defer></script> : ''
-                }
-                {/* Main app bundle */}
-                <script src={'/public/js/' + this.props.clientFile} defer></script>
-                <script dangerouslySetInnerHTML={ {__html: ga} } />
             </body>
             </html>
         );
