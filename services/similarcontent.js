@@ -14,26 +14,36 @@ export default {
         if(resource === 'similarcontent.list'){
             /*********connect to microservices*************/
             //NLP SIMILAR CONTENT
-            //nlp service: https://nlpservice.experimental.slidewiki.org/nlp/deckRecommendationSimilarDecks/?deckId=1&maxRecommendationsToReturn=10&maxCandidatesToUseForSimilarityCalculation=30&tfidfMaxTermsToConsider=10&performTitleBoost=true&titleBoostWithFixedFactor=-1&titleBoostlimitToFrequencyOfMostFrequentWord=true&minFrequencyOfTermOrEntityToBeConsidered=2&minCharLength=3&maxNumberOfWords=4&tfidfMinDocsToPerformLanguageDependent=100
+            //nlp service:https://nlpservice.experimental.slidewiki.org/nlp/deckRecommendationSimilarDecks/?deckId=1&maxRecommendationsToReturn=10&maxCandidatesToUseForSimilarityCalculation=30&tfidfMaxTermsToConsider=10&performLiveTFIDFCalculationOfGivenDeck=true&performLiveTFIDFCalculationOfDeckCandidates=true&performTitleBoost=true&titleBoostWithFixedFactor=-1&titleBoostlimitToFrequencyOfMostFrequentWord=true&minFrequencyOfTermOrEntityToBeConsidered=2&applyMinFrequencyOfTermOnlyAfterTitleBoost=true&minCharLength=3&maxNumberOfWords=4&tfidfMinDocsToPerformLanguageDependent=100
+
             let maxRecommendations = 5;
             let simContNLPservice = Microservices.nlp.uri + '/nlp/deckRecommendationSimilarDecks/?deckId=' + args.sid+
               '&maxRecommendationsToReturn='+maxRecommendations+
               '&maxCandidatesToUseForSimilarityCalculation=30'+
               '&tfidfMaxTermsToConsider=10'+
-              '&performTitleBoost=true&titleBoostWithFixedFactor=-1'+
+              '&performLiveTFIDFCalculationOfGivenDeck=true'+
+              '&performLiveTFIDFCalculationOfDeckCandidates=true'+
+              '&performTitleBoost=true'+
+              '&titleBoostWithFixedFactor=-1'+
               '&titleBoostlimitToFrequencyOfMostFrequentWord=true'+
               '&minFrequencyOfTermOrEntityToBeConsidered=2'+
+              '&applyMinFrequencyOfTermOnlyAfterTitleBoost=true'+
               '&minCharLength=3'+
               '&maxNumberOfWords=4'+
               '&tfidfMinDocsToPerformLanguageDependent=100';
 
 
-/*
+
+
+
             rp.get({uri: simContNLPservice}).then((res) => {
               //Retrieve deck details
                 let recommendation = JSON.parse(res);
 
-                  let recDecks = recommendation.items;
+                let recDecks = recommendation.items;
+                console.log('Service similar');
+                console.log(recDecks);
+/*
                   //GET DATA FOR DECKS FROM DECK SERVICE
                   let deckPromises = [];
                   let likesPromises = [];//get the number of deck likes
@@ -81,12 +91,18 @@ export default {
                       console.log();
 
                   });
-
+*/
+                let contents = [
+                    {'deckId': '718', 'title': 'final test' , 'firstSlideId': '6398', 'author': 'txwkx' , 'authorId':'47' , 'date':'27/01/2017' ,'liked': '0', 'downloaded': '0'},
+                    {'deckId': '617', 'title': 'Usability 3', 'firstSlideId': '5144','author': 'abijames1', 'authorId':'6' , 'date':'20/01/2017' ,'liked': '1', 'downloaded': '0'},
+                    {'deckId': '2249', 'title': 'Usability', 'firstSlideId': '14738','author': 'dpaun', 'authorId':'16' , 'date':'22/08/2017' ,'liked': '0', 'downloaded': '0'}
+                ];
+                callback(null, {contents: contents, selector: selector});
 
             }).catch((err) => { //error, no results
                 callback(err, []);
             });
-*/
+
             //deckservice
 
             //likes: https://activitiesservice.experimental.slidewiki.org/activities/deck/3951?metaonly=true&activity_type=react&all_revisions=true
@@ -95,12 +111,13 @@ export default {
 
 
             /*********received data from microservices*************/
+            /*
             let contents = [
                 {'deckId': '718', 'title': 'final test' , 'firstSlideId': '6398', 'author': 'txwkx' , 'authorId':'47' , 'date':'27/01/2017' ,'liked': '0', 'downloaded': '0'},
                 {'deckId': '617', 'title': 'Usability 3', 'firstSlideId': '5144','author': 'abijames1', 'authorId':'6' , 'date':'20/01/2017' ,'liked': '1', 'downloaded': '0'},
                 {'deckId': '2249', 'title': 'Usability', 'firstSlideId': '14738','author': 'dpaun', 'authorId':'16' , 'date':'22/08/2017' ,'liked': '0', 'downloaded': '0'}
             ];
-            callback(null, {contents: contents, selector: selector});
+            callback(null, {contents: contents, selector: selector});*/
         }
     }
     // other methods
