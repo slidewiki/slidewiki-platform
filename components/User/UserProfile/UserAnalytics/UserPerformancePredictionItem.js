@@ -5,27 +5,39 @@ import { Microservices } from '../../../../configs/microservices';
 import Thumbnail from '../../../common/Thumbnail';
 
 class UserpPerformancePredictionItem extends React.Component {
+    componentDidUpdate() {
+        $('.progress').progress();
+    }
+    componentDidMount() {
+        $('.progress').progress();
+    }
 
     render() {
         const prediction = this.props.prediction;
-        const resultIcons = (!prediction.result) ? '' :
-            (prediction.result < 50) ? (
-                <div className="ui raised compact segment">
-                    <i className="icon certificate big red"/>
-                    <i className="icon circle outline large yellow"/>
-                    <i className="icon circle outline large green"/>
-                </div>
-            ) : (prediction.result < 80) ? (
-                <div className="ui raised compact segment">
-                    <i className="icon circle outline large red"/>
-                    <i className="icon certificate big yellow"/>
-                    <i className="icon circle outline large green"/>
-                </div>
-            ) : (
-                <div className="ui raised compact segment">
-                    <i className="icon circle outline large red"/>
-                    <i className="icon circle outline large yellow"/>
-                    <i className="icon certificate big green"/>
+        // const resultIcons = (!prediction.result) ? '' :
+        //     (prediction.result < 50) ? (
+        //         <div className="ui raised compact segment">
+        //             <i className="icon certificate big red"/>
+        //             <i className="icon circle outline large yellow"/>
+        //             <i className="icon circle outline large green"/>
+        //         </div>
+        //     ) : (prediction.result < 80) ? (
+        //         <div className="ui raised compact segment">
+        //             <i className="icon circle outline large red"/>
+        //             <i className="icon certificate big yellow"/>
+        //             <i className="icon circle outline large green"/>
+        //         </div>
+        //     ) : (
+        //         <div className="ui raised compact segment">
+        //             <i className="icon circle outline large red"/>
+        //             <i className="icon circle outline large yellow"/>
+        //             <i className="icon certificate big green"/>
+        //         </div>
+        //     );
+        const resultProgress = (!prediction.result) ? '' :
+            (
+                <div className="ui indicating progress" ref="div_progress" id="progressbar_result" role="progressbar" data-percent={prediction.result} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
+                    <div className="bar"><div className="progress"></div></div>
                 </div>
             );
         let thumbnail = '';
@@ -47,7 +59,7 @@ class UserpPerformancePredictionItem extends React.Component {
         } else{
             duration = Math.round(elapsed/msPerMinute) + ' minutes';
         }
-        
+
         return (
             <div className="accordionItem">
                 <div className="title">
@@ -62,10 +74,10 @@ class UserpPerformancePredictionItem extends React.Component {
                                 {formatDate(prediction.started)}
                             </div>
                             <div className="four wide column">
-                                {(prediction.result) ? 'Predicted result: ' + Math.round(prediction.result * 100) / 100 : ''}
+                                {(prediction.result) ? 'Predicted result: ' + Math.round(prediction.result * 100) / 100  + ' %': ''}
                             </div>
-                            <div className="three wide column">
-                                {resultIcons}
+                            <div className="four wide column">
+                                {resultProgress}
                             </div>
                         </div>
                     </div>
@@ -73,7 +85,7 @@ class UserpPerformancePredictionItem extends React.Component {
                 <div className="content">
                     <div className="ui grid">
                         <div className="four wide column">
-                            <NavLink className="ui medium centered spaced image" aria-hidden={'true'}  tabIndex={'-1'} href={'/deck/' + prediction.deckId}>
+                            <NavLink className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + prediction.deckId}>
                                 {(prediction.deckId) ? 'Deck id: ' + prediction.deckId : ''}
                                 {thumbnail}
                             </NavLink>
@@ -84,6 +96,7 @@ class UserpPerformancePredictionItem extends React.Component {
                         <div className="four wide column">
                             {(prediction.finished) ? 'Duration: ' + duration : ''}
                         </div>
+
                     </div>
                 </div>
             </div>
