@@ -7,6 +7,7 @@ import { Grid, Button, Popup } from 'semantic-ui-react';
 import { Microservices } from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
 import SessionRecorder from './SessionRecorder.js';
+import SocialSharing from './SocialSharing.js';
 import Chat from './Chat.js';
 import { QRCode } from 'react-qr-svg';
 
@@ -39,6 +40,7 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
         this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
+        this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -747,6 +749,7 @@ class presentationBroadcast extends React.Component {
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
                     that.refs.sessionRecorder.recordSlideChange(that.currentSlide);
+                    that.forceUpdate();
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
                 iframe.on('paused', () => {
@@ -757,9 +760,11 @@ class presentationBroadcast extends React.Component {
                 });
             } else {
                 iframe.on('slidechanged', () => {
-                    if (document.getElementById('slidewikiPresentation').contentWindow.location.href !== that.lastRemoteSlide) {
+                    that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    if (that.currentSlide !== that.lastRemoteSlide) {
                         that.setState({paused: true});
                     }
+                    that.forceUpdate();
                 });
                 let textArea = $('#messageToSend');
                 textArea.on('focus', () => {
@@ -769,6 +774,7 @@ class presentationBroadcast extends React.Component {
                     that.eventForwarding = true;
                 });
             }
+            $('#slidewikiPresentation').off('load');
         }
 
         function changeSlide(slideID) { // called by peers
@@ -890,50 +896,6 @@ class presentationBroadcast extends React.Component {
         //NOTE SlideChange is triggerd by componentDidUpdate
     }
 
-    copyURLToClipboard() {
-        let toCopy = document.createElement('input');
-        toCopy.style.position = 'fixed';
-        toCopy.style.top = 0;
-        toCopy.style.left = 0;
-        toCopy.style.width = '2em';
-        toCopy.style.height = '2em';
-        toCopy.style.padding = 0;
-        toCopy.style.border = 'none';
-        toCopy.style.outline = 'none';
-        toCopy.style.boxShadow = 'none';
-        toCopy.style.background = 'transparent';
-        toCopy.value = window.location.href;
-        document.body.appendChild(toCopy);
-        toCopy.value = window.location.href;
-        toCopy.select();
-
-        try {
-            let successful = document.execCommand('copy');
-            if(!successful)
-                throw 'Unable to copy';
-            else{
-                swal({
-                    titleText: 'URL copied to clipboard',
-                    type: 'success',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    timer: 1500
-                }).then(() => {}, () => {});
-            }
-        } catch (err) {
-            console.log('Oops, unable to copy');
-            swal({
-                titleText: 'Can\'t copy URL to clipboard',
-                text: 'Please select the URL in your browser and share it manually.',
-                type: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Check',
-                allowOutsideClick: false
-            });
-        }
-        document.body.removeChild(toCopy);
-    }
-
     showQRCode() {
         swal({
             titleText: 'Share this Room',
@@ -1037,12 +999,19 @@ class presentationBroadcast extends React.Component {
 
             <Grid.Row>
               <Grid.Column width={13}>
-                <h4>
-                  {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
-                      trigger={<span>{Object.keys(this.pcs).length}</span>}
-                      content={peernames}
-                    /></p>) : <p>{this.state.roleText}</p>}
-                </h4>
+                <Grid stackable columns={2} rows={1}>
+                  <Grid.Column width={15}>
+                    <h4>
+                      {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
+                          trigger={<span>{Object.keys(this.pcs).length}</span>}
+                          content={peernames}
+                        /></p>) : <p>{this.state.roleText}</p>}
+                    </h4>
+                  </Grid.Column>
+                  <Grid.Column width={1} style={{'padding-left': '0'}}>
+                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} hashTags={this.hashTags} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
+                  </Grid.Column>
+                </Grid>
                 <div id="media" style={{'display': 'none'}}></div>
                 <SpeechRecognition ref="speechRecognition"
                     isInitiator={this.isInitiator}
@@ -1053,11 +1022,9 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
-                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}} role="button" aria-label="Edit current deck"/></a>{/*TODO open up the right functionality*/}
-                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)} role="button" aria-label="Ask the audience to complete a task"/>) : ''}
-                  {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)} role="button" aria-label="Copy URL to clipboard"/>
-                  ) : (
+                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
+                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
+                  {(this.isInitiator) ? ('') : (
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
                   )}
                   {(this.state.showReopenModalButton) ? (

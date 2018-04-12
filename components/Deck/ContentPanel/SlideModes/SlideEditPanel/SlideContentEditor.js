@@ -695,7 +695,8 @@ class SlideContentEditor extends React.Component {
         if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             //$('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
-            $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10));
+            let uniqueID = this.getuniqueID();
+            $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10, uniqueID));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.hasChanges = true;
             //this.emitChange(); //confirm non-save on-leave
@@ -705,6 +706,9 @@ class SlideContentEditor extends React.Component {
             });
             //this.uniqueIDAllElements();
             this.resizeDrag();
+
+            this.placeCaretAtStart(uniqueID);
+            $('#' + uniqueID).focus();
             //this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             const messagesCanvasModal = defineMessages({
@@ -759,9 +763,9 @@ class SlideContentEditor extends React.Component {
         }
 
     }
-    getAbsoluteDiv(zindex){
+    getAbsoluteDiv(zindex, id){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
+        return '<div id=\"' + id + '\" style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
     componentDidMount() {
         window.onbeforeunload = () => {
@@ -1017,6 +1021,7 @@ class SlideContentEditor extends React.Component {
                 //if(!$('.editMode').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
                 if(!$('.editMode').draggable( 'instance' )){
                     $(this).draggable({
+                        grid: [ 10, 10 ],
                         cursor: 'move',
                         //handle: '.drag-handle',
                         //handle: '.move',
@@ -1048,6 +1053,7 @@ class SlideContentEditor extends React.Component {
                 //if(!$('.editMode').resizable( 'instance' )){$(this).resizable({handles: 'all', scroll: true});}
                 if(!$('.editMode').resizable( 'instance' )){
                     $(this).resizable({
+                        grid: 10,
                         handles: 'all',
                         scroll: true,
                         minWidth: -($(this).width()) * 10,  // these need to be large and negative
@@ -1194,10 +1200,12 @@ class SlideContentEditor extends React.Component {
         }
     }
     placeCaretAtStart(id) {
-        console.log('placeCaretAtStart');
+        console.log('placeCaretAtStart' + id);
         let el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
         console.log(el);
         if(!el){el = $('#'+id).find('p:first')[0];console.log('id + find first span not found'); console.log('try id + find first p');}
+        if(!el){el = $('#'+id).find('h3:first')[0];console.log('id + find first p not found'); console.log('try id + find first h3');}
+        if(!el){el = $('#'+id).find('h4:first')[0];console.log('id + find first h3 not found'); console.log('try id + find first h4');}
         if(!el){el = $('#'+id).find('div:first').not('.ui-resizable-handle')[0];console.log('try id + find first div not ui-resizable');}
         if(!el){el = $('#'+id).find('img:first')[0];console.log('try id + find first img');
         //if ($('#'+id).find('img:first')[0])
@@ -1662,8 +1670,44 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
         {
             this.hasChanges = true;
-            //no need for this -> title is updated on slide save.
-            //this.handleSaveButton();
+            const messagesSaveAfterSlideNameChangeModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalTitle',
+                    defaultMessage: 'Save now or continue editing?',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalText',
+                    defaultMessage: 'The slide name will be updated after saving the slide and exiting slide edit mode. Click "yes" to save the slide and exit edit mode. Click "no" to continue editing your slide.'
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalConfirm',
+                    defaultMessage: 'Yes, save and exit slide edit mode',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.SaveAfterSlideNameChangeModalCancel',
+                    defaultMessage: 'No, continue editing',
+                },
+            });
+            swal({
+                title: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_title),
+                text: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_text),
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_confirm),
+                confirmButtonClass: 'ui olive button',
+                cancelButtonText: this.context.intl.formatMessage(messagesSaveAfterSlideNameChangeModal.swal_cancel),
+                cancelButtonClass: 'ui red button',
+                buttonsStyling: false,
+                allowEnterKey: true
+            }).then((accepted) => {
+                this.handleSaveButton();
+            }, (reason) => {
+                //done(reason);
+            });
+            setTimeout(() => {
+                $('.swal2-confirm').focus();
+            }, 500);
         }
         if (nextProps.SlideEditStore.slideSize !== '' && nextProps.SlideEditStore.slideSize !== this.props.SlideEditStore.slideSize)
         {

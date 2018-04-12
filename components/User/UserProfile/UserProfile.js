@@ -197,14 +197,14 @@ class UserProfile extends React.Component {
               </div>
 
               <div className="ui segment">
-                <DeactivateAccount />
+                <DeactivateAccount showModal={this.props.UserProfileStore.showDeactivateAccountModal} />
               </div>
             </div>
         </div>);
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} decksMeta={this.props.UserProfileStore.userDecksMeta} loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading} loadMoreError={this.props.UserProfileStore.nextUserDecksError} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} categoryItem={this.props.UserProfileStore.categoryItem} />);
     }
 
     displayIntegrations() {

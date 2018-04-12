@@ -37,10 +37,10 @@ class ContentActionsFooter extends React.Component {
         return false;
     }
     getPresentationHref(){
-        let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
+        let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
         if(!this.props.ContentStore.selector.subdeck){
-
-            presLocation += this.props.ContentStore.selector.id + '/';
+            //do not duplicate deck ID!
+            //presLocation += this.props.ContentStore.selector.id + '/';
         }
         else{
             presLocation += this.props.ContentStore.selector.subdeck + '/';
