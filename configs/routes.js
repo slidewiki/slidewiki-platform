@@ -550,7 +550,7 @@ export default {
 
     },
     presentation: {
-        path: '/presentation:slug(_.+)?/:id/:subdeck/:sid?',
+        path: '/presentation:slug(_.+)?/:id/:subdeck?/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
@@ -569,6 +569,15 @@ export default {
                     done();
                 }
             ]);
+        }
+    },
+    neo4jguide: {
+        path: '/neo4jguide:slug(_.+)?/:id/:subdeck?/:sid?',
+        method: 'get',
+        page: 'neo4jguide',
+        handler: require('../components/Deck/Presentation/PresentationNeo4J'),
+        action: (context, payload, done) => {
+            context.executeAction(loadPresentation, payload, done);
         }
     },
     importfile: {
