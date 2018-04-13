@@ -34,6 +34,7 @@ class SlideContentEditor extends React.Component {
         //this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
         this.hasChanges = false;
+        this.finishLoading = false;
         //this.oldContent = '';
         //this.redoContent = '';
     }
@@ -625,7 +626,13 @@ class SlideContentEditor extends React.Component {
             }
 
             this.uniqueIDAllElements();
+            //if (this.props.SlideEditStore.LeftPanelTitleChange !== false)
+            //{
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
+            //} else {
+            //    let title = (this.props.title !== '') ? this.props.title : ' ';
+            //}
+
             let content = (this.refs.inlineContent.innerHTML !== '') ? this.refs.inlineContent.innerHTML : ' ';
             let speakernotes = (this.refs.inlineSpeakerNotes.innerHTML !== '') ? this.refs.inlineSpeakerNotes.innerHTML : ' ';
             //update store
@@ -842,6 +849,8 @@ class SlideContentEditor extends React.Component {
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
+            this.finishLoading = true;
+            //console.log('test');
             CKEDITOR.instances.inlineContent.on( 'key', () => {
                 this.hasChanges = true;
             });
@@ -1396,7 +1405,51 @@ class SlideContentEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
-            this.handleSaveButton();
+            if (this.hasChanges === false && this.finishLoading === true)
+            {
+                //console.log('there are changes!');
+                const messagesSaveChangesNoChangeDetectedModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalTitle',
+                        defaultMessage: 'We did not detect changes. Do you still want to save the slide?',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalText',
+                        defaultMessage: 'Are you sure you want to save the slide without changes?'
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalConfirm',
+                        defaultMessage: 'Yes',
+                    },
+                    swal_cancel:{
+                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalCancel',
+                        defaultMessage: 'No',
+                    },
+                });
+                swal({
+                    title: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_title),
+                    text: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_text),
+                    type: 'question',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_confirm),
+                    confirmButtonClass: 'ui olive button',
+                    cancelButtonText: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_cancel),
+                    cancelButtonClass: 'ui red button',
+                    buttonsStyling: false,
+                    allowEnterKey: true
+                }).then((accepted) => {
+                    this.handleSaveButton();
+                }, (reason) => {
+                    //done(reason);
+                });
+                setTimeout(() => {
+                    $('.swal2-confirm').focus();
+                }, 500);
+            }
+            else if (this.hasChanges === true && this.finishLoading === true){
+                this.handleSaveButton();
+            }
         }
         if (nextProps.SlideEditStore.cancelClick === 'true' && nextProps.SlideEditStore.cancelClick !== this.props.SlideEditStore.cancelClick)
         {
