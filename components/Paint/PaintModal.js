@@ -5,6 +5,12 @@ const headerStyle = {
     'textAlign': 'center'
 };
 
+const canvasStyle = {
+    'height': '0px',
+    'width': '0px',
+    'border': '1px solid #000000'
+}
+
 class PaintModal extends React.Component {
     constructor(props) {
         super(props);
@@ -14,17 +20,26 @@ class PaintModal extends React.Component {
             activeTrap: false
         };
 
+        this.canvas = null;
         this.handleOpen = this.handleOpen.bind(this);
+        this.startFabric = this.startFabric.bind(this);
     }
 
     componentDidMount() {
-
     }
 
     componentDidUpdate() {
 
     }
 
+    startFabric(){
+
+        this.canvas = new fabric.Canvas('fabriccanvas');
+
+        this.canvas.setHeight(500);
+        this.canvas.setWidth(600);
+
+    }
 
     handleOpen(){
         $('#app').attr('aria-hidden', 'true');
@@ -32,6 +47,8 @@ class PaintModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
+
+
     }
 
     unmountTrap() {
@@ -78,8 +95,12 @@ class PaintModal extends React.Component {
                                 <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
 
                                 <Segment textAlign="center" >
+                                    <p>Draw inside the canvas using the tools provided.</p>
+                                    <button onClick={this.startFabric} onKeyPress={(evt) => this.handleKeyPress(evt, 'stratFabric')}>Click and start drawing!</button>
+                                    <canvas id="fabriccanvas" style={canvasStyle}></canvas>
                                 </Segment>
                             </Segment>
+
                         </Container>
 
                     </Modal.Content>
