@@ -23,9 +23,13 @@ class PaintModal extends React.Component {
         this.canvas = null;
         this.handleOpen = this.handleOpen.bind(this);
         this.startFabric = this.startFabric.bind(this);
+        this.addRect = this.addRect.bind(this);
+        this.addCircle = this.addCircle.bind(this);
+        this.addTriangle = this.addTriangle.bind(this);
     }
 
     componentDidMount() {
+        this.startFabric();
     }
 
     componentDidUpdate() {
@@ -33,7 +37,6 @@ class PaintModal extends React.Component {
     }
 
     startFabric(){
-
         this.canvas = new fabric.Canvas('fabriccanvas');
 
         this.canvas.setHeight(500);
@@ -57,6 +60,44 @@ class PaintModal extends React.Component {
             $('#app').attr('aria-hidden','false');
         }
     }
+
+    addRect() {
+        let coord = {left: 10, top: 10};
+        this.canvas.add(new fabric.Rect({
+            left: coord.left,
+            top: coord.top,
+            fill: 'red',
+            width: 50,
+            height: 50,
+            opacity: 1
+        }));
+    };
+
+    addCircle() {
+        let coord = {left: 10, top: 10};
+
+        this.canvas.add(new fabric.Circle({
+            left: coord.left,
+            top: coord.top,
+            fill: 'blue',
+            radius: 50,
+            opacity: 1
+        }));
+    };
+
+    addTriangle() {
+        let coord = {left: 10, top: 10};
+
+        this.canvas.add(new fabric.Triangle({
+            left: coord.left,
+            top: coord.top,
+            fill: 'yellow',
+            width: 50,
+            height: 50,
+            opacity: 1
+        }));
+    };
+
 
     render() {
 
@@ -97,7 +138,13 @@ class PaintModal extends React.Component {
                                 <Segment textAlign="center" >
                                     <p>Draw inside the canvas using the tools provided.</p>
                                     <button onClick={this.startFabric} onKeyPress={(evt) => this.handleKeyPress(evt, 'stratFabric')}>Click and start drawing!</button>
+
                                     <canvas id="fabriccanvas" style={canvasStyle}></canvas>
+                                    <div>
+                                        <button onClick={this.addRect}>Add Rectangle</button>
+                                        <button onClick={this.addCircle}>Add Circle</button>
+                                        <button onClick={this.addTriangle}>Add Triangle</button>
+                                    </div>
                                 </Segment>
                             </Segment>
 
