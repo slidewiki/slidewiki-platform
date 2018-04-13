@@ -74,6 +74,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/api.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
+                <script src="/custom_modules/fabricjs/fabric.min.js" defer></script>
                 {/* All external vendors bundle*/
                     this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'} defer></script> : ''
                 }
