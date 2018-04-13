@@ -23,7 +23,6 @@ class SessionRecorder extends React.Component {
         };
 
         this.createAudioTrack = this.createAudioTrack.bind(this);
-        this.saveTrackToDisk = this.saveTrackToDisk.bind(this);
         this.mime = '';
         this.stream = null;
         this.initialURL = '';
@@ -138,7 +137,6 @@ class SessionRecorder extends React.Component {
             console.log(track);
             let trackName = 'test' + ((this.mime.includes('webm')) ? '.webm' : '.ogg');
             // console.log(name);
-            // this.saveTrackToDisk(track, trackName);
             this.uploadTrack(track, trackName, sessionStorage.getItem('slideTimings'));
         }); //TODO catch case
     }
