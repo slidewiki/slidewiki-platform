@@ -5,99 +5,97 @@ const ReactDOM = require('react-dom');
 class SlideContentView extends React.Component {
     constructor(props) {
         super(props);
-        this.loading = 'loading';
-        this.zoom = 1.0;
+        this.scaleratio;
+        this.initialScale;
+        this.currentContent;
     }
     componentWillReceiveProps(nextProps){
-        if (nextProps.theme === this.props.theme){
-
-        }
-        if (nextProps.loadingIndicator !== this.props.loadingIndicator)
+        if (this.currentContent !== this.props.content)
         {
-            if (nextProps.loadingIndicator === 'true')
-                this.loading = 'loading';
-            if(nextProps.loadingIndicator === 'false')
-                this.loading = '';
+            this.currentContent = this.props.content;
+            this.initialScale = 1;
         }
     }
     componentWillUnmount(){
-        window.removeEventListener('resize', this.handleResize);
+        //window.removeEventListener('resize', this.handleResize);
     }
     componentDidMount(){
         if(process.env.BROWSER){
-            //Function toi fit contents in edit and view component
-            //$(".pptx2html").addClass('schaal');
-            //$(".pptx2html [style*='absolute']").addClass('schaal');
-            /*
-            if ($('.pptx2html').length)
-            {
-                $(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                //$("#signinModal").css({'zIndex': '99999', 'position': 'absolute'});
-
-            } else {
-                //do nothing - relative content scales anyways.
-                //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                //$("#signinModal").css({'zIndex': '99999', 'position': 'absolute'});
-            }
-            */
             //initial resize
             this.resize();
-            window.addEventListener('resize', this.handleResize);
-            /*ReactDOM.findDOMNode(this.refs.container).addEventListener('onResize', (evt) =>
-                {
-                console.log('onresize');
-                this.resize();
-            });*/
-            this.loading = '';
+            //window.addEventListener('resize', this.handleResize);
         }
         this.forceUpdate();
     }
 
-    handleResize = () => {
-        this.forceUpdate();
-    }
+    //handleResize = () => {
+        //this.forceUpdate();
+    //}
 
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
+        this.resize();
     }
 
     resize()
     {
-        //reset scaling of pptx2html element to get original size
-        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-
-        //Function to fit contents in edit and view component
-        let pptxwidth = $('.pptx2html').outerWidth();
-        let pptxheight = $('.pptx2html').outerHeight();
-
-        //only calculate scaleration for width for now
-        this.scaleratio = this.zoom;
-
         if ($('.pptx2html').length)
         {
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            if (this.initialScale === 1)
+            {
+                //Function to fit canvas/pptx2html contents in edit and view component
+                let containerwidth = document.getElementById('container').offsetWidth;
+                //let containerheight = document.getElementById('container').offsetHeight;
+                //reset scaling of pptx2html element to get original size
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                //get width of PPTX2html content
+                //let pptxwidth = $('.pptx2html').outerWidth();
+                //let pptxheight = $('.pptx2html').outerHeight();
+                let pptxwidth = $('.pptx2html').width();
+                //let pptxheight = $('.pptx2html').height();
+                this.scaleratio = containerwidth / (pptxwidth + 10);
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
-            pptxheight = $('.pptx2html').outerHeight();
+                let pptxheight = $('.pptx2html').outerHeight();
 
-            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-            this.refs.slideContentView.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
+                const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+                this.refs.slideContentView.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
 
-            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
+                //$('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
+                $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+
+                //set vars for zoom
+                this.initialScale = this.scaleratio;
+            }
+            else
+            {
+                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+                let pptxheight = $('.pptx2html').outerHeight();
+                const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+                this.refs.slideContentView.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
+            }
+            this.refs.inlineContent.style.overflowY = 'auto';
+            this.refs.inlineContent.style.height = '';
+        }
+        else {
+            this.refs.inlineContent.style.overflowY = 'scroll';
+            this.refs.inlineContent.style.height = '100%';
         }
     }
     zoomIn(){
-        this.zoom += 0.25;
+        this.scaleratio += 0.25;
         this.resize();
     }
     resetZoom(){
-        this.zoom = 1;
+        //this.zoom = 1;
+        this.scaleratio = this.initialScale;
         this.resize();
     }
     zoomOut(){
-        this.zoom -= 0.25;
+        this.scaleratio -= 0.25;
         this.resize();
     }
     render() {
@@ -123,7 +121,6 @@ class SlideContentView extends React.Component {
             minWidth: '100%',
             overflowY: 'hidden',
             overflowX: 'auto',
-            height: '100%'
         };
         const compSpeakerStyle = {
             overflowY: 'auto',
@@ -157,7 +154,6 @@ class SlideContentView extends React.Component {
 
         return (
         <div ref='container' id='container'>
-            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div ref="slideContentView" className="ui" style={compStyle}>
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>

@@ -2018,6 +2018,13 @@ class SlideContentEditor extends React.Component {
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
             this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            this.refs.inlineContent.style.overflowY = 'auto';
+            this.refs.present.style.overflowY = 'hidden';
+        }
+        else {
+            this.refs.inlineContent.style.overflowY = 'scroll';
+            this.refs.present.style.overflowY = 'scroll';
+            this.refs.inlineContent.style.height = '100%';
         }
         //$('.cke_float').width( $('.pptx2html').width());
         //$('.cke_top').css('maxwidth', $('.pptx2html').width());
@@ -2229,7 +2236,7 @@ class SlideContentEditor extends React.Component {
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
-                            <section className="present"  style={sectionElementStyle}>
+                            <section className="present" ref='present' id='present'  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
                                     <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
                                     </div>

@@ -4,36 +4,36 @@ import SlideContentView from './SlideContentView';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 
-class SlideViewPanel extends React.PureComponent {
+class SlideViewPanel extends React.Component {
     constructor(props) {
         super(props);
-
-        this.isLoading = this.isContentUndefined();
+        this.currentID;
+        this.slideContentView = '';
     }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        let samePropsState = this.props.SlideViewStore.content === nextProps.SlideViewStore.content;
-        let undefinedContent = nextProps.SlideViewStore.content === undefined ||
-                nextProps.SlideViewStore.content === '';
-        this.isLoading = undefinedContent;
-
-        // Content should be updated only when new content is ready or component properties/state have changed.
-        let shouldUpdate = !undefinedContent && !samePropsState;
-        return shouldUpdate;
+    componentWillReceiveProps(nextProps){
+        if (this.props.SlideViewStore.content !== nextProps.SlideViewStore.content)
+        {
+            this.slideContentView = '';
+            this.forceUpdate();
+        }
     }
-
-    componentWillReceiveProps(nextProps) {
-        let undefinedContent = this.isContentUndefined();
-        this.isLoading = undefinedContent;
+    componentWillMount(){
+        if (this.currentID !== this.props.selector.sid)
+        {
+            this.slideContentView = '';
+            this.currentID = this.props.selector.sid;
+            this.forceUpdate();
+        }
     }
-
+    componentDidUpdate(){
+        if (this.currentID !== this.props.selector.sid)
+        {
+            this.slideContentView = '';
+            this.currentID = this.props.selector.sid;
+            //this.forceUpdate();
+        }
+    }
     componentWillUnmount() {
-        this.props.SlideViewStore.content = '';
-        this.isLoading = true;
-    }
-
-    isContentUndefined() {
-        return this.props.SlideViewStore.content === undefined || this.props.SlideViewStore.content === '';
     }
 
     render() {
@@ -50,29 +50,27 @@ class SlideViewPanel extends React.PureComponent {
                 deckTheme = this.props.DeckTreeStore.theme;
             }
         }
-
-        const compStyle = {
-            minHeight: 600,
+        if (this.currentID === this.props.selector.sid){
+            this.slideContentView = (
+                <div className="ui bottom attached segment">
+                    <SlideContentView content={this.props.SlideViewStore.content}
+                            speakernotes={this.props.SlideViewStore.speakernotes}
+                            theme={deckTheme}/>
+                </div>);
+        } else {
+            this.slideContentView = null;
+        }
+        const loadStyle = {
+            minWidth: '100%',
+            minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
         };
-
-        if (this.isLoading) {
-            return (
-                <div className="ui bottom attached segment">
-                    <div className="ui active dimmer"><div className="ui text loader">Loading...</div></div>
-                    <div className="ui" style={compStyle}/>
-                </div>
-            );
-        }
-
         return (
             <div className="ui bottom attached segment">
-                <SlideContentView content={this.props.SlideViewStore.content}
-                        speakernotes={this.props.SlideViewStore.speakernotes}
-                        loadingIndicator={this.props.SlideViewStore.loadingIndicator}
-                        theme={deckTheme}/>
+                {(this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {this.slideContentView}
             </div>
         );
     }
