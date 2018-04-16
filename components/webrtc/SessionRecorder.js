@@ -26,6 +26,9 @@ class SessionRecorder extends React.Component {
         this.mime = '';
         this.stream = null;
         this.initialURL = '';
+        this.webm = 'audio/webm\;codecs=opus';
+        this.ogg = 'audio/ogg\;codecs=opus';
+        this.processRecording = false;
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -36,9 +39,14 @@ class SessionRecorder extends React.Component {
     }
 
     recordSessionModal() {
-        if(isEmpty(this.context.getUser().username))
+        //NOTE check that all dependencies are available
+        if(isEmpty(this.context.getUser()) || isEmpty(this.context.getUser().username))
             return;
-        else {
+        if(!MediaRecorder || !(MediaRecorder.isTypeSupported(this.webm) || MediaRecorder.isTypeSupported(this.ogg)) )
+            return;
+        if(!window.sessionStorage)
+            return;
+        return window.localforage.setItem('test','test').then( () => {
             return swal({
                 titleText: 'Do you want to record this session?',
                 html: '<p>We provide the possibility to record this session and to create a video out of it.</p><p>We are only recording slide changes and your voice (nothing else). All data stays on your computer until you tell us to create a video out of it. Videos can by only created on our servers due to technological reasons. So if you change your mind and do not want upload anything to us, do not hit the camera button in the end. Otherwise, remember to hit this button in the end. <strong>It is not possible to recover a once closed session.</strong></p>',
@@ -56,7 +64,7 @@ class SessionRecorder extends React.Component {
                 if (!result.dismiss)
                     this.setState({modalAccepted: true});
             }).catch(() => {});
-        }
+        }).catch((e) => console.log('localforage not working', e));
     }
 
     recordStream(stream) {
@@ -65,39 +73,81 @@ class SessionRecorder extends React.Component {
     }
 
     startRecording() {
-        let webm = 'audio/webm\;codecs=opus', ogg = 'audio/ogg\;codecs=opus';
-        this.mime = (MediaRecorder.isTypeSupported(ogg)) ? ogg : webm;
-        this.mediaRecorder = new MediaRecorder(this.stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
-        this.mediaRecorder.ondataavailable = (chunk) => {
-            let now = new Date().getTime();
-            this.chunkKeys.push({id: now.toString()}); //TODO remove object
-            window.localforage.setItem(now.toString(), chunk.data); //TODO implement catch for promise, if error disable recording
-        };
-        console.log('starting recorder');
-        this.recordSlideChange(this.initialURL);
-        this.mediaRecorder.start(2000);
-        this.setState({recordSession: true});
-    }
-
-    StartRecordSlideChanges(deckID, url = '') {
-        if(window.sessionStorage) { //TODO else condition: if error disable recording
-            sessionStorage.setItem('deck', deckID);
-            sessionStorage.setItem('origin', window.location.origin);
-            sessionStorage.setItem('slideTimings', '');//clear it
-            this.initialURL = url;
-            this.setState({iframeLoaded: true});
+        try {
+            this.mime = (MediaRecorder.isTypeSupported(this.ogg)) ? this.ogg : this.webm;
+            this.mediaRecorder = new MediaRecorder(this.stream, {mimeType : this.mime, audioBitsPerSecond: 64000});//64kbit/s opus
+            this.mediaRecorder.ondataavailable = (chunk) => {
+                let now = new Date().getTime().toString();
+                this.chunkKeys.push(now);
+                window.localforage.setItem(now, chunk.data).then(() => {
+                    if(this.processRecording && this.mediaRecorder.state === 'inactive')
+                        this.createAudioTrack();//NOTE called on last chunk
+                }).catch((e) => {
+                    console.log('Error setting item with localforage', e);
+                    this.abortRecording();
+                });
+            };
+            console.log('starting recorder');
+            this.recordSlideChange(this.initialURL);
+            this.mediaRecorder.start(2000);
+            this.setState({recordSession: true});
+        } catch (e) {
+            console.log('Error starting mediarecorder, aborting recording now', e);
+            this.abortRecording();
         }
     }
 
-    recordSlideChange(url = '') { //TODO handle paused and resumed
-        // console.log('recording slide change', url, first);
-        if(window.sessionStorage){
-            let prev = sessionStorage.getItem('slideTimings');
-            prev = (isEmpty(prev)) ? '{}' : prev;
-            prev = JSON.parse(prev);
-            prev[new Date().getTime()] = url;
-            sessionStorage.setItem('slideTimings', JSON.stringify(prev));
-        } //TODO else condition
+    StartRecordSlideChanges(deckID, url = '') {
+        if(window.sessionStorage) { //NOTE else is handled in recordSessionModal
+            try {
+                sessionStorage.setItem('deck', deckID);
+                sessionStorage.setItem('origin', window.location.origin);
+                sessionStorage.setItem('slideTimings', '');//clear it
+                this.initialURL = url;
+                this.setState({iframeLoaded: true});
+            } catch (e) {
+                console.log('Error using sessionstorage, aborting recording now', e);
+                this.abortRecording();
+            }
+        }
+    }
+
+    recordSlideChange(url = '') {
+        if(window.sessionStorage){ //NOTE else is handled in recordSessionModal
+            try{
+
+                if(url !== 'resumed' && this.lastURL === 'paused')
+                    return;
+                this.lastURL = url;
+                let prev = sessionStorage.getItem('slideTimings');
+                prev = (isEmpty(prev)) ? '{}' : prev;
+                prev = JSON.parse(prev);
+                prev[new Date().getTime()] = url;
+                sessionStorage.setItem('slideTimings', JSON.stringify(prev));
+            } catch (e) {
+                console.log('Error using sessionstorage, aborting recording now', e);
+                this.abortRecording();
+            }
+        }
+    }
+
+    abortRecording() {
+        if(!this.recordingStopped && this.recordSession){
+            try {
+                this.mediaRecorder.stop();
+            } catch (e) {} finally {
+                this.setState({recordingStopped: true, });
+                swal({
+                    titleText: 'Recording aborted due to an error',
+                    text: 'We needed to abort to record of your session due to an execution error. We are sorry about this! Feel free to continue presenting.',
+                    type: 'error',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Okay',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+            }
+        }
     }
 
     saveRecording() {
@@ -116,29 +166,35 @@ class SessionRecorder extends React.Component {
             allowOutsideClick: false,
             allowEscapeKey: false
         }).then(() => {
-            this.mediaRecorder.stop();
             this.recordSlideChange();
-            setTimeout(this.createAudioTrack, 500);//NOTE Wait for recorder to write last chunk
+            this.processRecording = true;
+            this.mediaRecorder.stop();
+            //NOTE createAudioTrack is called from startRecording as soon as the last chunk has been written
         }).catch((e) => {
             if(e === 'cancel'){
                 this.setState({recordingStopped: false});
                 this.mediaRecorder.resume();
                 this.recordSlideChange('resumed');
-            } //TODO add else case for error in promise
+            } else {//error from promise above
+                console.log(e);
+                this.abortRecording();
+            }
         });
     }
 
     createAudioTrack() {
-        let promises = this.chunkKeys.map((obj) => window.localforage.getItem(obj.id));
+        let promises = this.chunkKeys.map((id) => window.localforage.getItem(id));
         Promise.all(promises).then((blobArray) => {
-            let safeChunkArray = (isEmpty(blobArray)) ? [] : blobArray;//TODO implement better version
-            console.log(safeChunkArray);
-            let track = new Blob(safeChunkArray, { 'type' : this.mime });
+            if(isEmpty(blobArray)) throw new Error('blobArray empty');
+            console.log(blobArray);
+            let track = new Blob(blobArray, { 'type' : this.mime });
             console.log(track);
             let trackName = 'test' + ((this.mime.includes('webm')) ? '.webm' : '.ogg');
-            // console.log(name);
             this.uploadTrack(track, trackName, sessionStorage.getItem('slideTimings'));
-        }); //TODO catch case
+        }).catch( (e) => {
+            console.log(e);
+            this.abortRecording();
+        });
     }
 
     uploadTrack(audioTrack, audioTrackName, slideTimings) {
@@ -157,7 +213,7 @@ class SessionRecorder extends React.Component {
             processData: false,
             method: 'POST',
             success: ( data, textStatus, jqXHR ) => {
-                console.log(textStatus); //TODO loading indicator and message
+                console.log(textStatus); //TODO loading indicator and (swal?) message
             },
             error: ( jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown, jqXHR);
