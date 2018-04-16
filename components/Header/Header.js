@@ -12,6 +12,7 @@ import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
@@ -24,7 +25,14 @@ class Header extends React.Component {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
         $(this.refs.languagebar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+
+        $('.ui.login.modal').modal({
+            onHidden: () => {
+                this.context.executeAction(updateTrap,{activeTrap:false});
+                $('#app').attr('aria-hidden','false');
+            }
+        });
     }
 
     toggleSidebar() {
@@ -43,9 +51,14 @@ class Header extends React.Component {
     }
 
     handleLoginButton() {
-        $('.ui.login.modal')
-            .modal('toggle');
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('toggle');
+
+
         this.closeSidebar({target: '<a className="item"></a>'});
+
     }
 
     logout() {
