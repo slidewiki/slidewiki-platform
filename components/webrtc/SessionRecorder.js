@@ -29,6 +29,7 @@ class SessionRecorder extends React.Component {
         this.webm = 'audio/webm\;codecs=opus';
         this.ogg = 'audio/ogg\;codecs=opus';
         this.processRecording = false;
+        this.lastURL = '';
     }
 
     componentWillUpdate(nextProps, nextState) {
