@@ -1,6 +1,8 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import { Container, Modal, Segment } from 'semantic-ui-react';
+let fileSaver = require('../../custom_modules/fabricjs/fileSaver');
+
 const headerStyle = {
     'textAlign': 'center'
 };
@@ -20,12 +22,17 @@ class PaintModal extends React.Component {
             activeTrap: false
         };
 
+
+        this.primaryColor = 'black';
+        this.secondaryColor = 'black';
         this.canvas = null;
         this.handleOpen = this.handleOpen.bind(this);
         this.startFabric = this.startFabric.bind(this);
         this.addRect = this.addRect.bind(this);
         this.addCircle = this.addCircle.bind(this);
         this.addTriangle = this.addTriangle.bind(this);
+        this.downloadImg = this.downloadImg.bind(this);
+        this.deleteElement = this.deleteElement.bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +49,19 @@ class PaintModal extends React.Component {
         this.canvas.setHeight(500);
         this.canvas.setWidth(600);
 
+        // Adding event listeners to the color inputs.
+
+        let primaryColorInput = document.getElementById('primaryColor');
+        let secondaryColorInput = document.getElementById('secondaryColor');
+
+        primaryColorInput.addEventListener('input', () => {
+            this.primaryColor = primaryColorInput.value;
+
+        });
+
+        secondaryColorInput.addEventListener('input', () => {
+           this.secondaryColor = secondaryColorInput.value;
+        });
     }
 
     handleOpen(){
@@ -66,12 +86,12 @@ class PaintModal extends React.Component {
         this.canvas.add(new fabric.Rect({
             left: coord.left,
             top: coord.top,
-            fill: 'red',
+            fill: this.primaryColor,
             width: 50,
             height: 50,
             opacity: 1
         }));
-    };
+    }
 
     addCircle() {
         let coord = {left: 10, top: 10};
@@ -79,11 +99,11 @@ class PaintModal extends React.Component {
         this.canvas.add(new fabric.Circle({
             left: coord.left,
             top: coord.top,
-            fill: 'blue',
+            fill: this.primaryColor,
             radius: 50,
             opacity: 1
         }));
-    };
+    }
 
     addTriangle() {
         let coord = {left: 10, top: 10};
@@ -91,12 +111,25 @@ class PaintModal extends React.Component {
         this.canvas.add(new fabric.Triangle({
             left: coord.left,
             top: coord.top,
-            fill: 'yellow',
+            fill: this.primaryColor,
             width: 50,
             height: 50,
             opacity: 1
         }));
-    };
+    }
+
+    deleteElement() {
+        let activeObjects = this.canvas.getActiveObjects();
+        this.canvas.discardActiveObject()
+        if (activeObjects.length) {
+            this.canvas.remove.apply(this.canvas, activeObjects);
+        }
+    }
+
+    downloadImg() {
+
+
+    }
 
 
     render() {
@@ -137,13 +170,17 @@ class PaintModal extends React.Component {
 
                                 <Segment textAlign="center" >
                                     <p>Draw inside the canvas using the tools provided.</p>
-                                    <button onClick={this.startFabric} onKeyPress={(evt) => this.handleKeyPress(evt, 'stratFabric')}>Click and start drawing!</button>
+                                    <button onClick={this.startFabric} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')}>Click and start drawing!</button>
 
                                     <canvas id="fabriccanvas" style={canvasStyle}></canvas>
                                     <div>
                                         <button onClick={this.addRect}>Add Rectangle</button>
                                         <button onClick={this.addCircle}>Add Circle</button>
                                         <button onClick={this.addTriangle}>Add Triangle</button>
+                                        <button onClick={this.downloadImg}>Download Image</button>
+                                        <input type="color" id="primaryColor"/>
+                                        <input type="color" id="secondaryColor"/>
+                                        <button onClick={this.deleteElement}>Delete selected objects</button>
                                     </div>
                                 </Segment>
                             </Segment>
