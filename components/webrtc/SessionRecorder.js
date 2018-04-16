@@ -28,7 +28,6 @@ class SessionRecorder extends React.Component {
         this.initialURL = '';
         this.webm = 'audio/webm\;codecs=opus';
         this.ogg = 'audio/ogg\;codecs=opus';
-        this.processRecording = false;
         this.lastURL = '';
     }
 
@@ -80,10 +79,7 @@ class SessionRecorder extends React.Component {
             this.mediaRecorder.ondataavailable = (chunk) => {
                 let now = new Date().getTime().toString();
                 this.chunkKeys.push(now);
-                window.localforage.setItem(now, chunk.data).then(() => {
-                    if(this.processRecording && this.mediaRecorder.state === 'inactive')
-                        this.createAudioTrack();//NOTE called on last chunk
-                }).catch((e) => {
+                window.localforage.setItem(now, chunk.data).catch((e) => {
                     console.log('Error setting item with localforage', e);
                     this.abortRecording();
                 });
@@ -92,6 +88,9 @@ class SessionRecorder extends React.Component {
             this.recordSlideChange(this.initialURL);
             this.mediaRecorder.start(2000);
             this.setState({recordSession: true});
+            this.mediaRecorder.onstop = () => {
+                setTimeout( () => this.createAudioTrack(), 300);//NOTE wait for last chunk, TODO bad implementation, find better one
+            };
         } catch (e) {
             console.log('Error starting mediarecorder, aborting recording now', e);
             this.abortRecording();
@@ -116,7 +115,6 @@ class SessionRecorder extends React.Component {
     recordSlideChange(url = '') {
         if(window.sessionStorage){ //NOTE else is handled in recordSessionModal
             try{
-
                 if(url !== 'resumed' && this.lastURL === 'paused')
                     return;
                 this.lastURL = url;
@@ -167,8 +165,6 @@ class SessionRecorder extends React.Component {
             allowOutsideClick: false,
             allowEscapeKey: false
         }).then(() => {
-            this.recordSlideChange();
-            this.processRecording = true;
             this.mediaRecorder.stop();
             //NOTE createAudioTrack is called from startRecording as soon as the last chunk has been written
         }).catch((e) => {
