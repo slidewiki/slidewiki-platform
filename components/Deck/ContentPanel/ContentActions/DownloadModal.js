@@ -44,6 +44,10 @@ class DownloadModal extends React.Component{
             downloadModal_cancelButton:{
                 id:'downloadModal.downloadModal_cancelButton',
                 defaultMessage: 'Cancel'
+            },
+            downloadModal_HTML:{
+                id:'downloadModal.downloadModal_HTML',
+                defaultMessage: 'HTML (unzip and open index.html to access off-line presentation)'
             }
         });
     }
@@ -202,7 +206,7 @@ class DownloadModal extends React.Component{
                                       </Form.Field>
                                       <Form.Field>
                                         <Radio
-                                          label='HTML'
+                                          label={this.context.intl.formatMessage(this.messages.downloadModal_HTML)}
                                           name='downloadRadioGroup'
                                           value='HTML'
                                           checked={this.state.radioValue === 'HTML'}
