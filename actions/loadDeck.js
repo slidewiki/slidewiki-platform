@@ -55,6 +55,10 @@ export default function loadDeck(context, payload, done) {
         return;
     }
 
+    if (payload.params.language && payload.params.language.startsWith('_')) {
+        payload.params.language = payload.params.language.substring(1);
+    }
+
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;

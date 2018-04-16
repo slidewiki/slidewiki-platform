@@ -345,13 +345,14 @@ export default {
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
+    // language: language/translation of the deck, if not given then the standard deck language is used
     // stype: 'type of selected content e.g. slide, deck or question',
     // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
     // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+):language(_[a-z_]{2,5})?/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),

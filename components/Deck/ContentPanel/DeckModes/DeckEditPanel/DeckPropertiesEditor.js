@@ -436,7 +436,8 @@ class DeckPropertiesEditor extends React.Component {
         let langFieldClass = classNames({
             'required': true,
             'field': true,
-            'error': this.state.validationErrors.language != null
+            'error': this.state.validationErrors.language != null,
+            'disabled': true
         });
         /*
         let licenseFieldClass = classNames({

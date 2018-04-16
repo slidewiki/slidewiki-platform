@@ -104,6 +104,15 @@ class ContentActionsHeader extends React.Component {
             });
         }
     }
+
+    handleTranslateButton() {
+
+    }
+
+    handleLanguageButtonClick() {
+
+    }
+
     render() {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
@@ -147,7 +156,12 @@ class ContentActionsHeader extends React.Component {
             attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
-        let editButton, saveButton, cancelButton, undoButton, redoButton;
+        let editButton, saveButton, cancelButton, undoButton, redoButton, languageButton, translateButton;
+
+        languageButton =
+          <button tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
+              Language: dummy
+          </button>;
 
         if (contentDetails.mode === 'edit' && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -196,6 +210,13 @@ class ContentActionsHeader extends React.Component {
                         >
                         <i className="ui large blue edit icon "></i>{this.context.intl.formatMessage(this.messages.editButtonText)}
                     </button>;
+                translateButton =
+                  <button className={editClass} onClick={this.handleTranslateButton.bind(this,selector)}
+                      type="button"
+                      tabIndex = {contentDetails.mode ==='edit'?-1:0}
+                      >
+                      <i className="ui large blue copy icon "></i>Translate {selector.stype}
+                  </button>;
             }
             saveButton ='';
             cancelButton ='';
@@ -224,6 +245,8 @@ class ContentActionsHeader extends React.Component {
                             {cancelButton}
                             {undoButton}
                             {redoButton}
+                            {languageButton}
+                            {translateButton}
                         </div>
                     </div>
                     <div className="column">
