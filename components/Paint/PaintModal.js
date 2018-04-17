@@ -25,6 +25,7 @@ class PaintModal extends React.Component {
 
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
+        this.drawingMode = false;
         this.canvas = null;
         this.handleOpen = this.handleOpen.bind(this);
         this.startFabric = this.startFabric.bind(this);
@@ -33,6 +34,7 @@ class PaintModal extends React.Component {
         this.addTriangle = this.addTriangle.bind(this);
         this.downloadImg = this.downloadImg.bind(this);
         this.deleteElement = this.deleteElement.bind(this);
+        this.setDrawingMode = this.setDrawingMode.bind(this);
     }
 
     componentDidMount() {
@@ -56,7 +58,7 @@ class PaintModal extends React.Component {
 
         primaryColorInput.addEventListener('input', () => {
             this.primaryColor = primaryColorInput.value;
-
+            this.canvas.freeDrawingBrush.color = this.primaryColor;
         });
 
         secondaryColorInput.addEventListener('input', () => {
@@ -126,6 +128,11 @@ class PaintModal extends React.Component {
         }
     }
 
+    setDrawingMode() {
+        this.drawingMode = !this.drawingMode;
+        this.canvas.isDrawingMode = this.drawingMode;
+    }
+
     downloadImg() {
 
 
@@ -181,6 +188,12 @@ class PaintModal extends React.Component {
                                         <input type="color" id="primaryColor"/>
                                         <input type="color" id="secondaryColor"/>
                                         <button onClick={this.deleteElement}>Delete selected objects</button>
+                                        <br/>
+                                        <div className="ui slider checkbox">
+                                            {/*<label>Drawing mode</label>*/}
+                                            <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
+                                            <label>Free Drawing mode</label>
+                                        </div>
                                     </div>
                                 </Segment>
                             </Segment>
