@@ -148,7 +148,7 @@ class DeckViewPanel extends React.Component {
                             <div className="column">
                                 <div className="item">
                                     <div className="content">
-                                        <h2 className="ui header">{deckTitle}</h2>                                  
+                                        <h2 className="ui header">{deckTitle}</h2>
                                         <div className="meta"><strong>Creator:&nbsp;</strong>
                                             <a href={creatorProfileURL}>{deckCreator}</a>
                                         </div>
