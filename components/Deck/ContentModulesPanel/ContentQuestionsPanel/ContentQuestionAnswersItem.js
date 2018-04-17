@@ -1,28 +1,39 @@
 import React from 'react';
+import {Icon} from 'semantic-ui-react';
 
 class ContentQuestionAnswersItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {checkboxValue: false};
+    }
+
+    handleCheckboxChange(event) {
+        this.setState({checkboxValue: !this.state.checkboxValue});
+    }
 
     render() {
         const answer = this.props.answer;
         const name = this.props.name;
-
-        // let rightIcon = (<i className="icon"></i>);
-        // switch (answer.correct) {
-        //     case true:
-        //         rightIcon = (<i className="checkmark icon teal"></i>);
-        //         break;
-        // }
+        console.log(this.props.correctValue, this.state.checkboxValue);
 
         return (
-            //<div className="item"> {rightIcon}
-            //        <div className="content"> {answer.answer} </div>
-            //    </div>
-
             <div className="field">
               <div className="ui checkbox">
-                <input type="checkbox" name={name} id={name} /> {/* defaultChecked={answer.correct} */}
+                <input type="checkbox" name={name} id={name} onChange={(event) => this.handleCheckboxChange(event)}/>
                 <label htmlFor={name}>
                   {answer.answer}
+                  {this.props.showAnswer && (
+                      (this.props.correct && this.state.checkboxValue) ||
+                      (!this.props.correct && !this.state.checkboxValue)
+                  ) &&
+                    <Icon name="check"/>
+                  }
+                  {this.props.showAnswer && (
+                      (!this.props.correct && this.state.checkboxValue) ||
+                      (this.props.correct && !this.state.checkboxValue)
+                  ) &&
+                    <Icon name="close"/>
+                  }
                 </label>
               </div>
             </div>

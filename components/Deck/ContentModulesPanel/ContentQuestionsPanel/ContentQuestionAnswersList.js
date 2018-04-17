@@ -51,17 +51,23 @@ class ContentQuestionAnswersList extends React.Component {
 
         let list = this.props.items.map((node, index) => {
             return (
-                <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index}/>
+                <ContentQuestionAnswersItem
+                    answer={node}
+                    name={'answer' + index}
+                    key={index}
+                    correct={node.correct}
+                    showAnswer={this.state.showCorrect}
+                />
             );
         });
 
-        let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
-            return (
-              <div key={index} className="header">
-                  {node.answer}
-              </div>
-            );
-        });
+        // let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
+        //     return (
+        //       <div key={index} className="header">
+        //           {node.answer}
+        //       </div>
+        //     );
+        // });
 
         let explanation = (this.props.explanation && this.props.explanation.trim() !== '') ?
             <div className="description">
@@ -88,7 +94,7 @@ class ContentQuestionAnswersList extends React.Component {
                   {showEditButton()}
                   <div className="ui item">
                     <div className="content">
-                      {this.state.showCorrect ? correctAnswers : null}
+                      {/*{this.state.showCorrect ? correctAnswers : null}*/}
                       {this.state.showCorrect ? explanation : null}
                     </div>
                   </div>
