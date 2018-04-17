@@ -6,14 +6,15 @@ class SlideContentView extends React.Component {
     constructor(props) {
         super(props);
         this.scaleratio;
-        this.initialScale;
+        //this.initialScale;
         this.currentContent;
     }
     componentWillReceiveProps(nextProps){
         if (this.currentContent !== this.props.content)
         {
             this.currentContent = this.props.content;
-            this.initialScale = 1;
+            //this.initialScale = 1;
+            this.scaleratio = 1;
         }
     }
     componentWillUnmount(){
@@ -43,7 +44,8 @@ class SlideContentView extends React.Component {
     {
         if ($('.pptx2html').length)
         {
-            if (this.initialScale === 1)
+            //if (this.initialScale === 1)
+            if (this.scaleratio === 1)
             {
                 //Function to fit canvas/pptx2html contents in edit and view component
                 let containerwidth = document.getElementById('container').offsetWidth;
@@ -68,7 +70,7 @@ class SlideContentView extends React.Component {
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
 
                 //set vars for zoom
-                this.initialScale = this.scaleratio;
+                //this.initialScale = this.scaleratio;
             }
             else
             {
@@ -91,7 +93,8 @@ class SlideContentView extends React.Component {
     }
     resetZoom(){
         //this.zoom = 1;
-        this.scaleratio = this.initialScale;
+        //this.scaleratio = this.initialScale;
+        this.scaleratio = 1;
         this.resize();
     }
     zoomOut(){
