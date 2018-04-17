@@ -4,7 +4,7 @@ import {formatDate} from '../../../Deck/ActivityFeedPanel/util/ActivityFeedUtil'
 import { Microservices } from '../../../../configs/microservices';
 import Thumbnail from '../../../common/Thumbnail';
 
-class UserpPerformancePredictionItem extends React.Component {
+class UserPerformancePredictionItem extends React.Component {
     componentDidUpdate() {
         $('.progress').progress();
     }
@@ -51,13 +51,18 @@ class UserpPerformancePredictionItem extends React.Component {
             );
         }
 
-        let duration = '';
-        let msPerMinute = 60 * 1000;
-        let elapsed = new Date(prediction.finished).getTime() - new Date(prediction.started).getTime();
-        if (elapsed < msPerMinute) {
-            duration = Math.round(elapsed/1000) + ' seconds';
-        } else{
-            duration = Math.round(elapsed/msPerMinute) + ' minutes';
+        let additionalInfo = '';
+        if (prediction.finished) {
+            let duration = '';
+            let msPerMinute = 60 * 1000;
+            let elapsed = new Date(prediction.finished).getTime() - new Date(prediction.started).getTime();
+            if (elapsed < msPerMinute) {
+                duration = Math.round(elapsed/1000) + ' seconds';
+            } else{
+                duration = Math.round(elapsed/msPerMinute) + ' minutes';
+            }
+
+            additionalInfo = 'Prediction is based on data for 30 decks and 55 users; calculation lasted ' + duration;
         }
 
         return (
@@ -84,17 +89,14 @@ class UserpPerformancePredictionItem extends React.Component {
                 </div>
                 <div className="content">
                     <div className="ui grid">
-                        <div className="four wide column">
+                        <div className="eight wide column">
                             <NavLink className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + prediction.deckId}>
                                 {(prediction.deckId) ? 'Deck id: ' + prediction.deckId : ''}
                                 {thumbnail}
                             </NavLink>
                         </div>
-                        <div className="four wide column">
-                            {(prediction.started) ? 'Started: ' + prediction.started : ''}
-                        </div>
-                        <div className="four wide column">
-                            {(prediction.finished) ? 'Duration: ' + duration : ''}
+                        <div className="eight wide column">
+                            {additionalInfo}
                         </div>
 
                     </div>
@@ -104,8 +106,8 @@ class UserpPerformancePredictionItem extends React.Component {
     }
 }
 
-UserpPerformancePredictionItem.contextTypes = {
+UserPerformancePredictionItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-export default UserpPerformancePredictionItem;
+export default UserPerformancePredictionItem;
