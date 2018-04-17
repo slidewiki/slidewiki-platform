@@ -14,7 +14,6 @@ class ContentQuestionAnswersItem extends React.Component {
     render() {
         const answer = this.props.answer;
         const name = this.props.name;
-        console.log(this.props.correctValue, this.state.checkboxValue);
 
         return (
             <div className="field">
@@ -22,22 +21,24 @@ class ContentQuestionAnswersItem extends React.Component {
                 <input type="checkbox" name={name} id={name} onChange={(event) => this.handleCheckboxChange(event)}/>
                 <label htmlFor={name}>
                   {answer.answer}
-                  {this.props.showAnswer && (
+                  {/* show check mark if this checkbox is correct */
+                      this.props.showAnswer && (
                       (this.props.correct && this.state.checkboxValue) ||
                       (!this.props.correct && !this.state.checkboxValue)
                   ) &&
-                    <Icon name="check"/>
+                    <Icon name="check" className={'green'}/>
                   }
-                  {this.props.showAnswer && (
+
+                  {/* show cross mark if this checkbox is incorrect */
+                      this.props.showAnswer && (
                       (!this.props.correct && this.state.checkboxValue) ||
                       (this.props.correct && !this.state.checkboxValue)
                   ) &&
-                    <Icon name="close"/>
+                    <Icon name="close" className={'red'}/>
                   }
                 </label>
               </div>
             </div>
-
         );
     }
 }
