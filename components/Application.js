@@ -30,7 +30,7 @@ class Application extends React.Component {
         }
         else {
             //add the route name to the following array if you don;t want header and footer rendered there
-            const noHF_pages = ['presentation'];
+            const noHF_pages = ['presentation', 'neo4jguide'];
             return (
                   <div className="slidewiki-page">
                       {noHF_pages.indexOf(this.props.currentRoute.name) === -1 ?
