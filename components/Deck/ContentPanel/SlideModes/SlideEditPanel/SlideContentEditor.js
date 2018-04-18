@@ -1405,49 +1405,7 @@ class SlideContentEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
-            if (this.hasChanges === false && this.finishLoading === true)
-            {
-                //console.log('there are changes!');
-                const messagesSaveChangesNoChangeDetectedModal = defineMessages({
-                    swal_title:{
-                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalTitle',
-                        defaultMessage: 'We did not detect changes. Do you still want to save the slide?',
-                    },
-                    swal_text:{
-                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalText',
-                        defaultMessage: 'Are you sure you want to save the slide without changes?'
-                    },
-                    swal_confirm:{
-                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalConfirm',
-                        defaultMessage: 'Yes',
-                    },
-                    swal_cancel:{
-                        id: 'SlideContentEditor.saveChangesNoChangeDetectedModalCancel',
-                        defaultMessage: 'No',
-                    },
-                });
-                swal({
-                    title: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_title),
-                    text: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_text),
-                    type: 'question',
-                    showCloseButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_confirm),
-                    confirmButtonClass: 'ui olive button',
-                    cancelButtonText: this.context.intl.formatMessage(messagesSaveChangesNoChangeDetectedModal.swal_cancel),
-                    cancelButtonClass: 'ui red button',
-                    buttonsStyling: false,
-                    allowEnterKey: true
-                }).then((accepted) => {
-                    this.handleSaveButton();
-                }, (reason) => {
-                    //done(reason);
-                });
-                setTimeout(() => {
-                    $('.swal2-confirm').focus();
-                }, 500);
-            }
-            else if (this.hasChanges === true && this.finishLoading === true){
+            if (this.finishLoading === true){
                 this.handleSaveButton();
             }
         }
