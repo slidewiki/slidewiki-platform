@@ -79,7 +79,7 @@ class Presentation extends React.Component{
             Reveal.initialize({
                 width: pptxwidth,
 			         height: pptxheight,
-                margin: 0.2,
+                // margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
@@ -89,7 +89,15 @@ class Presentation extends React.Component{
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true }
                     // Plugin from https://github.com/marcysutton/reveal-a11y
                     //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
+<<<<<<< HEAD
                 ]
+=======
+                ],
+                keyboard: {
+                    72: null,
+                    78: null
+                }
+>>>>>>> master
             });
 
 
