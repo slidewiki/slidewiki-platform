@@ -11,7 +11,7 @@ const canvasStyle = {
     'height': '0px',
     'width': '0px',
     'border': '1px solid #000000'
-}
+};
 
 class PaintModal extends React.Component {
     constructor(props) {
@@ -35,6 +35,8 @@ class PaintModal extends React.Component {
         this.downloadImg = this.downloadImg.bind(this);
         this.deleteElement = this.deleteElement.bind(this);
         this.setDrawingMode = this.setDrawingMode.bind(this);
+        this.setLineWidth = this.setLineWidth.bind(this);
+        /*this.loadImg = this.loadImg.bind(this);*/
     }
 
     componentDidMount() {
@@ -56,14 +58,16 @@ class PaintModal extends React.Component {
         let primaryColorInput = document.getElementById('primaryColor');
         let secondaryColorInput = document.getElementById('secondaryColor');
 
-        primaryColorInput.addEventListener('input', () => {
-            this.primaryColor = primaryColorInput.value;
-            this.canvas.freeDrawingBrush.color = this.primaryColor;
-        });
+        if (primaryColorInput) {
+            primaryColorInput.addEventListener('input', () => {
+                this.primaryColor = primaryColorInput.value;
+                this.canvas.freeDrawingBrush.color = this.primaryColor;
+            });
 
-        secondaryColorInput.addEventListener('input', () => {
-           this.secondaryColor = secondaryColorInput.value;
-        });
+            secondaryColorInput.addEventListener('input', () => {
+                this.secondaryColor = secondaryColorInput.value;
+            });
+        }
     }
 
     handleOpen(){
@@ -122,7 +126,7 @@ class PaintModal extends React.Component {
 
     deleteElement() {
         let activeObjects = this.canvas.getActiveObjects();
-        this.canvas.discardActiveObject()
+        this.canvas.discardActiveObject();
         if (activeObjects.length) {
             this.canvas.remove.apply(this.canvas, activeObjects);
         }
@@ -132,6 +136,36 @@ class PaintModal extends React.Component {
         this.drawingMode = !this.drawingMode;
         this.canvas.isDrawingMode = this.drawingMode;
     }
+
+    setLineWidth(event) {
+        let value = parseInt(event.target.value, 10) || 1
+        this.canvas.freeDrawingBrush.width = value;
+    }
+/*
+
+    loadImg(event) {
+        let reader = new FileReader();
+        let that = this;
+        reader.onload = (event) => {
+            let imgObj = new Image();
+            imgObj.src = event.target.result;
+            imgObj.onload = () => {
+                let image = new fabric.Image(imgObj);
+                image.set({
+                    angle: 0,
+                    padding: 10,
+                    cornersize:10,
+                    height:110,
+                    width:110,
+                });
+                that.canvas.centerObject(image);
+                that.canvas.add(image);
+                that.canvas.renderAll();
+            };
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+*/
 
     downloadImg() {
 
@@ -190,10 +224,11 @@ class PaintModal extends React.Component {
                                         <button onClick={this.deleteElement}>Delete selected objects</button>
                                         <br/>
                                         <div className="ui slider checkbox">
-                                            {/*<label>Drawing mode</label>*/}
                                             <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
-                                            <label>Free Drawing mode</label>
+                                            <label>Drawing mode</label>
                                         </div>
+                                        <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
+{/*                                        <p>Load Image! </p><input type="file" onChange={this.loadImg}/>*/}
                                     </div>
                                 </Segment>
                             </Segment>
