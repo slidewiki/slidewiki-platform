@@ -32,12 +32,10 @@ class DeckCard extends React.Component {
             <div className='ui card'>
                 {this.props.newTab === true ? (
                     <a className="image" aria-hidden='true' tabIndex='-1' href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
-                        {hiddenRibbon}
                         <img src={thumbnailURL} alt={this.props.cardContent.deckID || ''} />
                     </a>
                 ) : (
                     <NavLink className="image" aria-hidden='true'  tabIndex='-1' href={'/deck/' + this.props.cardContent.deckID}>
-                        {hiddenRibbon}
                         <img src={thumbnailURL} alt={this.props.cardContent.deckID || ''} />
                     </NavLink>
                 )}
@@ -58,6 +56,7 @@ class DeckCard extends React.Component {
                             )
                         )}
                     </div>
+                    {hiddenRibbon}
                     <div>
                         <span className="right floated">
                             <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}

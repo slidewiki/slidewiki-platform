@@ -73,8 +73,8 @@ class UserDecks extends React.Component {
     }
 
     publishedToggleChanged(event, data) {
-        // button toggles, so new value for showHidden is...
-        let showHidden = !data.active;
+        // button toggles, so new value for showHidden is the reverse of current showHidden state
+        let showHidden = !data.icon.includes('unlock');
         this.context.executeAction(fetchUserDecks, {
             deckListType: this.props.deckListType,
             params: {
@@ -120,15 +120,9 @@ class UserDecks extends React.Component {
             <div className="ui secondary clearing segment">
                 <h1 className="ui left floated header">{header}</h1>
 
-                {
-                    this.props.loggedinuser === this.props.user.uname ?
-                    <Button icon toggle active={showHidden} aria-label='Show not published' data-tooltip='Show not published' onClick={this.publishedToggleChanged.bind(this)}>
-                        <Icon name='eye' />
-                    </Button> :
-                    ''
-                }
+                <div style={{ float: 'right' }}>
 
-                <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+                <div className="ui pointing labeled icon dropdown button" ref="sortDropdown">
                     <i className="icon exchange"/>
                     <div className="text">{this.getSelectedSort(sortBy)}</div>
                     <div className="menu">
@@ -138,6 +132,15 @@ class UserDecks extends React.Component {
                     </div>
                 </div>
 
+                {
+                    this.props.loggedinuser === this.props.user.uname ?
+                    <Button icon={showHidden ? 'unlock' : 'lock'}
+                            aria-label='Show not published' data-tooltip='Show not published'
+                            onClick={this.publishedToggleChanged.bind(this)} />
+                    : ''
+                }
+
+                </div>
             </div>
             <div className="ui segment">
                 { (this.props.decks) && 
