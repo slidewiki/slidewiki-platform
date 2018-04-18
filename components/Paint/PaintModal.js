@@ -22,7 +22,7 @@ class PaintModal extends React.Component {
             activeTrap: false
         };
 
-
+        this.reader = new FileReader();
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
         this.drawingMode = false;
@@ -36,7 +36,7 @@ class PaintModal extends React.Component {
         this.deleteElement = this.deleteElement.bind(this);
         this.setDrawingMode = this.setDrawingMode.bind(this);
         this.setLineWidth = this.setLineWidth.bind(this);
-        /*this.loadImg = this.loadImg.bind(this);*/
+        this.loadImg = this.loadImg.bind(this);
     }
 
     componentDidMount() {
@@ -68,6 +68,22 @@ class PaintModal extends React.Component {
                 this.secondaryColor = secondaryColorInput.value;
             });
         }
+
+        /*event handler for the file reader*/
+        this.reader.onload = (event) => {
+            let imgObj = new Image();
+            imgObj.src = event.target.result;
+            imgObj.onload = () => {
+                let image = new fabric.Image(imgObj);
+                image.set({
+                    angle: 0,
+                    padding: 0
+                });
+                this.canvas.centerObject(image);
+                this.canvas.add(image);
+                this.canvas.renderAll();
+            };
+        };
     }
 
     handleOpen(){
@@ -138,34 +154,13 @@ class PaintModal extends React.Component {
     }
 
     setLineWidth(event) {
-        let value = parseInt(event.target.value, 10) || 1
+        let value = parseInt(event.target.value, 10) || 1;
         this.canvas.freeDrawingBrush.width = value;
     }
-/*
 
     loadImg(event) {
-        let reader = new FileReader();
-        let that = this;
-        reader.onload = (event) => {
-            let imgObj = new Image();
-            imgObj.src = event.target.result;
-            imgObj.onload = () => {
-                let image = new fabric.Image(imgObj);
-                image.set({
-                    angle: 0,
-                    padding: 10,
-                    cornersize:10,
-                    height:110,
-                    width:110,
-                });
-                that.canvas.centerObject(image);
-                that.canvas.add(image);
-                that.canvas.renderAll();
-            };
-        };
-        reader.readAsDataURL(event.target.files[0]);
+        this.reader.readAsDataURL(event.target.files[0]);
     }
-*/
 
     downloadImg() {
 
@@ -228,7 +223,7 @@ class PaintModal extends React.Component {
                                             <label>Drawing mode</label>
                                         </div>
                                         <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
-{/*                                        <p>Load Image! </p><input type="file" onChange={this.loadImg}/>*/}
+                                        <p>Load Image! </p><input type="file" onChange={this.loadImg}/>
                                     </div>
                                 </Segment>
                             </Segment>
