@@ -198,8 +198,8 @@ class DeckViewPanel extends React.Component {
                                 </div>
 
                             </div>
-                            <div className="ui divider"></div>
                         </div>
+                        <div className="ui divider"></div>
                         <div key={this.props.slideIndex} className="ui container three cards">
                             {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                             {slidesArr.map((slide, index) => {
