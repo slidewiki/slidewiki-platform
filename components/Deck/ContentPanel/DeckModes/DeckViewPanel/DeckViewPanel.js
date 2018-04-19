@@ -139,94 +139,94 @@ class DeckViewPanel extends React.Component {
         </div> : '';
 
         return (
-        <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
+            <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
 
                 <main role="main">
-            <div className="ui segment" style={heightStyle}>
-            {(this.props.TranslationStore.inProgress) ? <div className="ui active dimmer"><div className="ui text loader">Translating</div></div> : ''}
-                <div className="ui two column grid container">
-                {(deckTitle === undefined) ? <div className="ui active dimmer">
-                        <div className="ui text loader">Loading</div></div> : ''}
-                    <div className="column">
-                        <div className="item">
-                        <div className="content">
-                            <h2 className="ui header" aria-describedby="decktitle">{deckTitle}</h2>
-                            <div className="sr-only" id="decktitle">Deck Title:</div>
-                            <div className="meta"><strong>Creator:&nbsp;</strong>
-                                <NavLink href={creatorProfileURL}>{deckCreator}</NavLink>
-                            </div>
-                            {originInfo}
-                            <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
-                            {deckDescription &&
-                            <div className="meta"><strong>Description:</strong>
-                                <div className="description" tabIndex="0" aria-label="deck description">{deckDescription}</div>
-                            </div>
-                            }
-                        </div>
-                        </div>
-                    </div>
-                    <div className="right aligned column">
-
-                            <div className="ui hidden divider"></div>
-
-                            <div className="meta">
-                                <div className="ui label" tabIndex="0">
-                                    <i className="comments icon" aria-label="Language"></i>{deckLanguage}
-                                </div>
-
-                               {/* <TranslationPanel/>*/}
-                                <div className="ui large label" tabIndex="0">
-                                    <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
-                                </div>
-                                <div className="ui  label" tabIndex="0">
-                                    <i className="theme icon" aria-label="Theme"></i>{deckTheme}</div>
-                                <div className="ui large label" tabIndex="0">
-                                    <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
-                                <div className="ui label" tabIndex="0">
-                                    <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
-                                <div className="ui label" tabIndex="0">
-                                    <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
-                                <div className="ui label" tabIndex="0">
-                                    <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
-                            </div>
-                            {tags.length > 0 ? <div className="ui divider"></div> : ''}
-                            <div className="ui tag labels large meta">
-                                {tags.map((tag, index) => {
-                                    return <a className="ui label" key={index} tabIndex="0">{tag}</a>;
-                                })}
-                            </div>
-
-
-                    </div>
-                </div>
-                <div className="ui  divider"></div>
-                <div key={this.props.slideIndex} className="ui container three cards">
-                    {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
-                    {slidesArr.map((slide, index) => {
-                        let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
-                        if (slide.theme) {
-                            thumbnailURL += '/' + slide.theme;
-                        }
-                        if (index < maxSlideThumbnails) {
-                            return (
-                                <div key={index} className="ui card">
-                                    <NavLink href={deckURL + '/slide/' + slide.id} className="ui image"
-                                       tabIndex="-1">
-                                        <img key={index} src={thumbnailURL} alt={slide.id} tabIndex={-1}/>
-                                    </NavLink>
-                                    <div className="content" tabIndex="-1">
-                                        <NavLink href={deckURL + '/slide/' + slide.id}
-                                           className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</NavLink>
-                                        <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
+                    <div className="ui segment" style={heightStyle}>
+                        {(this.props.TranslationStore.inProgress) ? <div className="ui active dimmer"><div className="ui text loader">Translating</div></div> : ''}
+                        <div className="ui two column grid container">
+                            {(deckTitle === undefined) ? <div className="ui active dimmer">
+                                <div className="ui text loader">Loading</div></div> : ''}
+                            <div className="column">
+                                <div className="item">
+                                    <div className="content">
+                                        <h2 className="ui header">{deckTitle}</h2>
+                                        <div className="meta"><strong>Creator:&nbsp;</strong>
+                                            <NavLink href={creatorProfileURL}>{deckCreator}</NavLink>
+                                        </div>
+                                        {originInfo}
+                                        <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
+                                        {deckDescription &&
+                                            <div className="meta"><strong>Description:</strong>
+                                                <div className="description" tabIndex="0" >{deckDescription}</div>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
-                            );
-                        }
-                    })}
-                </div>
-            </div>
+                            </div>
+                            <div className="column">
+
+                                <div className="ui hidden divider"></div>
+                                <div className="row">
+                                    <div className="ui labels">
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
+                                        </div>
+                                        {/* <TranslationPanel/>*/}
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="ui labels">
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
+                                    </div>
+                                </div>
+                                {tags.length > 0 ? <div className="ui divider"></div> : ''}
+                                <div className="ui tag labels large meta">
+                                    {tags.map((tag, index) => {
+                                        return <a className="ui label" key={index} tabIndex="0">{tag}</a>;
+                                    })}
+                                </div>
+
+                            </div>
+                            <div className="ui divider"></div>
+                        </div>
+                        <div key={this.props.slideIndex} className="ui container three cards">
+                            {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
+                            {slidesArr.map((slide, index) => {
+                                let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
+                                if (slide.theme) {
+                                    thumbnailURL += '/' + slide.theme;
+                                }
+                                if (index < maxSlideThumbnails) {
+                                    return (
+                                        <div key={index} className="ui card">
+                                            <NavLink href={deckURL + '/slide/' + slide.id} className="ui image"
+                                               tabIndex="-1">
+                                                <img key={index} src={thumbnailURL} alt={slide.id} tabIndex={-1}/>
+                                            </NavLink>
+                                            <div className="content" tabIndex="-1">
+                                                <NavLink href={deckURL + '/slide/' + slide.id}
+                                                   className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</NavLink>
+                                                <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </div>
+                    </div>
                 </main>
-        </div>
+            </div>
         );
     }
 }

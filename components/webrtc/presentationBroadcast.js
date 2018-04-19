@@ -1008,9 +1008,7 @@ class presentationBroadcast extends React.Component {
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
                   <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
-                  {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)} role="button" aria-label="Copy URL to clipboard"/>
-                  ) : (
+                  {(this.isInitiator) ? ('') : (
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
                   )}
                   {(this.state.showReopenModalButton) ? (

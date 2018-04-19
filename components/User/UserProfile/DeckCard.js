@@ -32,17 +32,18 @@ class DeckCard extends React.Component {
 
         let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
 
+        let thumbnailAlt= this.props.cardContent.title + ' | ' + this.props.cardContent.deckID;
         return (
             <div className='card'>
                 {this.props.newTab === true ? (
                     <a className="ui medium centered spaced image" aria-hidden tabIndex='-1' href={viewUrl} target='_blank'>
-                        <Thumbnail url={thumbnailURL} alt={''}
-                            slideId={this.props.cardContent.deckID} />
+                        <Thumbnail url={thumbnailURL}
+                           alt={ thumbnailAlt } />
                     </a>
                 ) : (
                     <NavLink className="ui medium centered spaced image" aria-hidden tabIndex='-1' href={viewUrl}>
-                        <Thumbnail url={thumbnailURL} alt={''}
-                            slideId={this.props.cardContent.deckID} />
+                        <Thumbnail url={thumbnailURL}
+                           alt={ thumbnailAlt } />
                     </NavLink>
                 )}
 

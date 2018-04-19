@@ -14,6 +14,7 @@ import UserProfileReviewDecks from './UserProfileReviewDecks';
 import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 import getNextReviewableUser from '../../../actions/userReview/getNextReviewableUser';
+import updateTrap from '../../../actions/loginModal/updateTrap';
 
 class UserProfileReviewUser extends React.Component {
     componentDidMount() {
@@ -21,7 +22,10 @@ class UserProfileReviewUser extends React.Component {
         if (!((userProfileStore.username !== undefined && userProfileStore.username !== null && userProfileStore.username !== '')
           && (userProfileStore.userid !== undefined && userProfileStore.userid !== null && userProfileStore.userid !== '')
           && (userProfileStore.jwt !== undefined && userProfileStore.jwt !== null && userProfileStore.jwt !== ''))) {
-
+            //prepraring the modal
+            this.context.executeAction(updateTrap,{activeTrap:true});
+            //hidden the other page elements to readers
+            $('#app').attr('aria-hidden','true');
             $('.ui.login.modal').modal('show');
         } else if (!this.props.UserReviewStore.secretCorrect) {
             this.context.executeAction(navigateAction, {

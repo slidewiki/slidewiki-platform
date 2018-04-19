@@ -7,6 +7,7 @@ class SlideEditStore extends BaseStore {
         this.id = '';
         this.slideId = '';
         this.title = '';
+        this.LeftPanelTitleChange = false;
         this.content = '';
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
@@ -149,6 +150,7 @@ class SlideEditStore extends BaseStore {
     }
     changeTitle(payload){
         this.title = payload.title;
+        this.LeftPanelTitleChange = payload.LeftPanelTitleChange;
         this.emitChange();
         //this.title = '';
         //this.emitChange();
@@ -165,6 +167,7 @@ class SlideEditStore extends BaseStore {
             id: this.id,
             slideId: this.slideId,
             title: this.title,
+            LeftPanelTitleChange: this.LeftPanelTitleChange,
             content: this.content,
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
@@ -196,6 +199,7 @@ class SlideEditStore extends BaseStore {
         this.id = state.id;
         this.slideId = state.slideId;
         this.title = state.title;
+        this.LeftPanelTitleChange = state.LeftPanelTitleChange;
         this.content = state.content;
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
