@@ -25,7 +25,7 @@ export default function loadContent(context, payload, done) {
         return;
     }
 
-    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+    if(!(['view', 'edit', 'questions', 'datasources', 'markdownEdit'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
         context.executeAction(deckModeError, payload, done);
         return;
     }

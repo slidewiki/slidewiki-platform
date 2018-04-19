@@ -3,6 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import SlideContentEditor from './SlideContentEditor';
+import MarkdownEditor from './MarkdownEditor';
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 
@@ -26,14 +27,18 @@ class SlideEditPanel extends React.Component {
         }
     }
     render() {
-        if (this.currentID === this.props.selector.sid){
-            this.editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}
-                                content={this.props.SlideEditStore.content}
-                                id={this.props.SlideEditStore.id}
-                                speakernotes={this.props.SlideEditStore.speakernotes}
-                                selector={this.props.selector} />;
-        }else {
-            this.editorcontent = null;
+        if(this.props.useMarkdown){
+            this.editorcontent = <MarkdownEditor />;
+        }else{
+            if (this.currentID === this.props.selector.sid){
+                this.editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}
+                                    content={this.props.SlideEditStore.content}
+                                    id={this.props.SlideEditStore.id}
+                                    speakernotes={this.props.SlideEditStore.speakernotes}
+                                    selector={this.props.selector} />;
+            }else {
+                this.editorcontent = null;
+            }
         }
         const loadStyle = {
             minWidth: '100%',
@@ -44,7 +49,7 @@ class SlideEditPanel extends React.Component {
         //{(this.props.SlideEditStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
         return (
             <div ref="slideEditPanel" className="ui bottom attached segment">
-            {(this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+            {(this.currentID && this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             {this.editorcontent}
             </div>
         );
