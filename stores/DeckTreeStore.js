@@ -47,7 +47,7 @@ class DeckTreeStore extends BaseStore {
         this.focusedSelector = this.selector;
         //if the root deck was selected, focus it's first node
         if (!this.focusedSelector.get('spath')) {
-            this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector), this.selector.language);
+            this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
         }
         //update the focused node in the tree
         this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
@@ -71,6 +71,7 @@ class DeckTreeStore extends BaseStore {
         let nodePath = this.makeSelectorPathString(path);
         let newTree = {
             id: deckTree.id,
+            title: deckTree.title,
             type: deckTree.type,
             path: nodePath,
             theme: deckTree.theme,
@@ -78,26 +79,7 @@ class DeckTreeStore extends BaseStore {
             editable: false,
             onAction: 0
         };
-        //select translation if selector has language attribute
-        if (deckTree.type === 'slide') {
-            newTree.title = deckTree.title;
-            if (deckTree.variants) {
-                let translation = deckTree.variants.find((variant) => {
-                    return variant.lang === this.selector.language;
-                });
-                if (translation) {
-                    newTree.id = translation.id;
-                    newTree.title = translation.title;
-                    newTree.theme = translation.theme || deckTree.theme;
-                }
-            }
-        }
         if (deckTree.type === 'deck') {
-            if (deckTree.title.variants && deckTree.title.variants[this.selector.language])
-                newTree.title = deckTree.title.variants[this.selector.language];
-            else
-                newTree.title = deckTree.title.value ? deckTree.title.value : deckTree.title;
-
             newTree.children = [];
             newTree.expanded = true;
             deckTree.children.forEach((item, index) => {
@@ -253,8 +235,8 @@ class DeckTreeStore extends BaseStore {
         }
         return node;
     }
-    makeSelectorFromNode(node, language = undefined) {//TODO use language parameter in every call if possible
-        return Immutable.fromJS({'id': this.deckTree.get('id'), 'spath': node.get('path'), 'sid': node.get('id'), 'stype': node.get('type'), 'language': language});
+    makeSelectorFromNode(node) {
+        return Immutable.fromJS({'id': this.deckTree.get('id'), 'spath': node.get('path'), 'sid': node.get('id'), 'stype': node.get('type')});
     }
     //get the node in immutable tree given its immutable selector
     getImmNodeFromImmSelector(nodeIndex) {
@@ -293,7 +275,7 @@ class DeckTreeStore extends BaseStore {
 
     selectTreeNode(args) {
         let oldSelector = this.selector;
-        this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'language': args.language});
+        this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
         this.switchSelector(oldSelector, this.selector);
         this.emitChange();
     }
@@ -407,14 +389,13 @@ class DeckTreeStore extends BaseStore {
             this.focusedSelector = newSelector;
             //if the root deck was selected, focus it's first node
             if (!this.focusedSelector.get('spath')) {
-                this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector), newSelector.language);
+                this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
             }
             //update the focused node in the tree
             this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
             this.updatePrevNextSelectors();
         } catch (e) {
             //todo: handle unexpected events here
-            console.log('DeckTreeStore switchSelector error', e);
         }
     }
     deleteTreeNode(selector, silent) {

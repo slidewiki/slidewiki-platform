@@ -4,6 +4,7 @@ const log = require('../log/clog');
 
 export default function changeTitle(context, payload, done) {
     context.dispatch('CHANGE_TITLE', {
-        title: payload.title
+        title: payload.title,
+        LeftPanelTitleChange: payload.LeftPanelTitleChange
     });
 }

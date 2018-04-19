@@ -79,7 +79,7 @@ class Presentation extends React.Component{
             Reveal.initialize({
                 width: pptxwidth,
 			         height: pptxheight,
-                margin: 0.2,
+                // margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
