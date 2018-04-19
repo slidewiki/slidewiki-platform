@@ -595,13 +595,29 @@ export default {
         },
     },
     neo4jguide: {
-        path: '/neo4jguide:slug(_.+)?/:id/:subdeck?/:sid?',
+        path: '/neo4jguide/:id:slug(/[^/]+)?/:subdeck?/:sid?',
         method: 'get',
         page: 'neo4jguide',
         handler: require('../components/Deck/Presentation/PresentationNeo4J'),
         action: (context, payload, done) => {
             context.executeAction(loadPresentation, payload, done);
         }
+    },
+    oldNeo4jguide: {
+        path: '/neo4jguide:slug(_.+)?/:id/:subdeck?/:sid?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/neo4jguide',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                payload.params.subdeck,
+                payload.params.sid,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+            
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
+        },
     },
     importfile: {
         path: '/importfile',
