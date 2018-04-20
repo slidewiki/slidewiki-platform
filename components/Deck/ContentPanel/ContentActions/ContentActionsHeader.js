@@ -216,19 +216,22 @@ class ContentActionsHeader extends React.Component {
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
-                markdownEditButton =
-                    <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
-                        type="button"
-                        aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
-                        tabIndex = {contentDetails.mode ==='markdownEdit'?-1:0}
-                        >
-                        <i className="icons">
-                            <i className="large violet edit icon"></i>
-                            <i className=""></i>
-                        </i>
-                        Markdown Editor
+                if(contentDetails.selector.stype === 'slide'){
+                    markdownEditButton =
+                        <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
+                            type="button"
+                            aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
+                            tabIndex = {contentDetails.mode ==='markdownEdit'?-1:0}
+                            >
+                            <i className="icons">
+                                <i className="large violet edit icon"></i>
+                                <i className=""></i>
+                            </i>
+                            Markdown Editor
 
-                    </button>;
+                        </button>;
+                }
+
             }
             saveButton ='';
             cancelButton ='';
