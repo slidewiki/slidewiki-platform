@@ -8,15 +8,25 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import showdown from 'showdown';
+import turndown from 'turndown';
 import ContentUtil from '../../util/ContentUtil';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 
 let converter = new showdown.Converter();
+let t_converter = new turndown();
 
 class MarkdownEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {markdownContent: '', htmlContent: this.props.content, title: this.props.title};
+        let htmlContent = this.props.content;
+        let markdownContent = '';
+        //if no markdown is provided, we can try to make an estimate
+        if((!this.props.markdown || this.props.markdown === '') && htmlContent){
+            markdownContent = t_converter.turndown(htmlContent);
+        }else{
+            markdownContent =  this.props.markdown;
+        }
+        this.state = {markdownContent: markdownContent, htmlContent: htmlContent, title: this.props.title};
     }
     handleChange(event) {
         if(event.target.value.trim()){
@@ -73,7 +83,7 @@ class MarkdownEditor extends React.Component {
                 <div className="ui stackable equal width left aligned padded grid">
                   <div className="row">
                     <div className="column form field ui">
-                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.state.markdownContent}></textarea>
+                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown || this.props.markdown === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
                     </div>
                     <div className="column">
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
