@@ -8,6 +8,9 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import showdown from 'showdown';
+import ContentUtil from '../../util/ContentUtil';
+import saveSlide from '../../../../../actions/slide/saveSlide';
+
 let converter = new showdown.Converter();
 
 class MarkdownEditor extends React.Component {
@@ -24,6 +27,45 @@ class MarkdownEditor extends React.Component {
     componentDidMount(){
         //to re-scale
         this.forceUpdate();
+    }
+    handleSaveButton(){
+        if (this.props.UserProfileStore.username !== '') {
+            //update store
+            let title = this.props.title;
+            let content = this.state.htmlContent;
+            let speakernotes = this.props.speakernotes;
+            this.props.SlideEditStore.title = title;
+            this.props.SlideEditStore.content = content;
+            this.props.SlideEditStore.speakernotes = speakernotes;
+            let currentSelector = this.props.selector;
+            let deckID = currentSelector.id;
+            //let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
+            //let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
+            this.context.executeAction(saveSlide, {
+                id: currentSelector.sid,
+                deckID: deckID,
+                title: title,
+                content: content,
+                speakernotes: speakernotes,
+                dataSources: [],
+                selector: currentSelector,
+                tags: []
+            });
+        }
+        return false;
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.SlideEditStore.saveSlideClick === 'true')
+        {
+            this.handleSaveButton();
+        }
+        if (nextProps.SlideEditStore.cancelClick === 'true')
+        {
+            const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+            this.context.executeAction(navigateAction, {
+                url: nodeURL
+            });
+        }
     }
     render() {
         return (
