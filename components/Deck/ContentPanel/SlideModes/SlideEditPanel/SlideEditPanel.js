@@ -15,7 +15,7 @@ class SlideEditPanel extends React.Component {
         this.editorcontent = '';
     }
     componentWillMount(){
-        if (this.currentID !== this.props.selector.sid)
+        if (this.props.useMarkdown && (this.currentID !== this.props.selector.sid))
         {
             //console.log('slide id changed - destroy/unmount SlideContentEditor component');
             this.editorcontent = ''; //destroy/unmount SlideContentEditor component
