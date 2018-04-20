@@ -24,12 +24,16 @@ class MarkdownEditor extends React.Component {
     render() {
 
         return (
-            <div ref='markdownEditor' id='markdownEditor'>
-
-                <textarea onChange={this.handleChange.bind(this)}>
-                    {this.state.markdownContent}
-                </textarea>
-                <div dangerouslySetInnerHTML={{__html: this.state.htmlContent}}>
+            <div ref='markdownEditor' id='markdownEditor' style={{minHeight: '500px'}}>
+                <div className="ui stackable equal width left aligned padded grid">
+                  <div className="row">
+                    <div className="column form field ui">
+                        <textarea rows="33" onChange={this.handleChange.bind(this)} value={this.state.markdownContent}></textarea>
+                    </div>
+                    <div className="column">
+                      <div style={{maxHeight: '600px', 'overflow-y': 'scroll'}} dangerouslySetInnerHTML={{__html: this.state.htmlContent}}></div>
+                    </div>
+                  </div>
                 </div>
             </div>
         );
