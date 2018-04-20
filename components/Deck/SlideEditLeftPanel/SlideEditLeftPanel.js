@@ -194,7 +194,7 @@ class SlideEditLeftPanel extends React.Component {
         swal({
             title: this.context.intl.formatMessage({
                 id: 'editpanel.KeyboardShortcutsModal.title',
-                defaultMessage: 'Keyboard shortcuts',
+                defaultMessage: 'Information on slide editor controls and keyboard shortcuts',
             }),
             html: this.context.intl.formatMessage({
                 id: 'editpanel.KeyboardShortcutsModal.html',
@@ -203,9 +203,10 @@ class SlideEditLeftPanel extends React.Component {
                 '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
                 '&#8226; Duplicate an input box: control + d <br/>'+
                 '&#8226; Delete an input box: control + delete <br/>'+
-                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>' +
-                '&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>'
+                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/> <br/>' +
+                '&#8226; <b>Tip:</b> press the "shift" keyboard button while resizing an image to maintain the width-to-heigth ratio/dimensions of the image <br/>'
             }),
+            //'&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>' +
             type: 'question',
             showCloseButton: true,
             showCancelButton: false,
