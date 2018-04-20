@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import SlideContentView from '../SlideViewPanel/SlideContentView';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
@@ -28,10 +29,12 @@ class MarkdownEditor extends React.Component {
                 <div className="ui stackable equal width left aligned padded grid">
                   <div className="row">
                     <div className="column form field ui">
-                        <textarea rows="33" onChange={this.handleChange.bind(this)} value={this.state.markdownContent}></textarea>
+                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.state.markdownContent}></textarea>
                     </div>
                     <div className="column">
-                      <div style={{maxHeight: '600px', 'overflow-y': 'scroll'}} dangerouslySetInnerHTML={{__html: this.state.htmlContent}}></div>
+                    <SlideContentView content={this.state.htmlContent}
+                    speakernotes='' hideSpeakerNotes={true}
+                    theme=''/>
                     </div>
                   </div>
                 </div>
