@@ -13,16 +13,17 @@ let converter = new showdown.Converter();
 class MarkdownEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {markdownContent: '', htmlContent: this.props.content};
+        this.state = {markdownContent: '', htmlContent: this.props.content, title: this.props.title};
     }
     handleChange(event) {
         if(event.target.value.trim()){
             let html = converter.makeHtml(event.target.value);
-            this.setState({markdownContent: event.target.value, htmlContent: html});
+            this.setState({markdownContent: event.target.value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
         }
     }
-    componentDidUpdate() {
-
+    componentDidMount(){
+        //to re-scale
+        this.forceUpdate();
     }
     render() {
         return (
@@ -33,7 +34,7 @@ class MarkdownEditor extends React.Component {
                         <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.state.markdownContent}></textarea>
                     </div>
                     <div className="column">
-                        <SlideContentView content={this.state.htmlContent}
+                        <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
                         speakernotes='' hideSpeakerNotes={true} theme=''/>
                     </div>
                   </div>

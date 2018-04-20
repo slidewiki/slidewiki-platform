@@ -23,7 +23,10 @@ class SlideEditPanel extends React.Component {
         }
     }
     componentDidMount(){
-
+        if(this.props.useMarkdown){
+            console.log(this.currentID , this.props.selector.sid);
+            this.forceUpdate();
+        }
     }
     componentDidUpdate(){
         if (this.currentID !== this.props.selector.sid)
