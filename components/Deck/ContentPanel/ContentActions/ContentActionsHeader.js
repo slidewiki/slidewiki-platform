@@ -218,7 +218,7 @@ class ContentActionsHeader extends React.Component {
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
-                if(contentDetails.selector.stype === 'slide'){
+                if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
                     markdownEditButton =
                         <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
                             type="button"
@@ -229,7 +229,7 @@ class ContentActionsHeader extends React.Component {
                                 <i className="large violet edit icon"></i>
                                 <i className=""></i>
                             </i>
-                            Markdown Editor
+                            Markdown
 
                         </button>;
                 }
