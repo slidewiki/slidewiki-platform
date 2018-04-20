@@ -67,6 +67,9 @@ export default function loadContent(context, payload, done) {
                 case 'edit':
                     targetAction = loadSlideEdit;
                     break;
+                case 'markdownEdit':
+                    targetAction = loadSlideEdit;
+                    break;
                 default:
                     targetAction = loadSlideView;
             }

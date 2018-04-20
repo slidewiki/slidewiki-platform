@@ -13,7 +13,7 @@ let converter = new showdown.Converter();
 class MarkdownEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {markdownContent: '', htmlContent: ''};
+        this.state = {markdownContent: '', htmlContent: this.props.content};
     }
     handleChange(event) {
         if(event.target.value.trim()){
@@ -21,9 +21,10 @@ class MarkdownEditor extends React.Component {
             this.setState({markdownContent: event.target.value, htmlContent: html});
         }
     }
+    componentDidUpdate() {
 
+    }
     render() {
-
         return (
             <div ref='markdownEditor' id='markdownEditor' style={{minHeight: '500px'}}>
                 <div className="ui stackable equal width left aligned padded grid">
@@ -32,9 +33,8 @@ class MarkdownEditor extends React.Component {
                         <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.state.markdownContent}></textarea>
                     </div>
                     <div className="column">
-                    <SlideContentView content={this.state.htmlContent}
-                    speakernotes='' hideSpeakerNotes={true}
-                    theme=''/>
+                        <SlideContentView content={this.state.htmlContent}
+                        speakernotes='' hideSpeakerNotes={true} theme=''/>
                     </div>
                   </div>
                 </div>

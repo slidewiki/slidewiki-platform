@@ -14,9 +14,16 @@ class SlideEditPanel extends React.Component {
         this.currentID;
         this.editorcontent = '';
     }
-    componentWillUnmount(){
+    componentWillMount(){
+        if (this.currentID !== this.props.selector.sid)
+        {
+            //console.log('slide id changed - destroy/unmount SlideContentEditor component');
+            this.editorcontent = ''; //destroy/unmount SlideContentEditor component
+            this.currentID = this.props.selector.sid;
+        }
     }
     componentDidMount(){
+
     }
     componentDidUpdate(){
         if (this.currentID !== this.props.selector.sid)
@@ -28,7 +35,15 @@ class SlideEditPanel extends React.Component {
     }
     render() {
         if(this.props.useMarkdown){
-            this.editorcontent = <MarkdownEditor />;
+            if (this.currentID === this.props.selector.sid){
+                this.editorcontent = <MarkdownEditor title={this.props.SlideEditStore.title}
+                                content={this.props.SlideEditStore.content}
+                                id={this.props.SlideEditStore.id}
+                                speakernotes={this.props.SlideEditStore.speakernotes}
+                                selector={this.props.selector} />;
+            }else {
+                this.editorcontent = null;
+            }
         }else{
             if (this.currentID === this.props.selector.sid){
                 this.editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}

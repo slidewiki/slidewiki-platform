@@ -148,7 +148,7 @@ class ContentActionsHeader extends React.Component {
         } ;
         let editButton, saveButton, cancelButton, undoButton, redoButton;
 
-        if (contentDetails.mode === 'edit' && this.props.UserProfileStore.username !== ''){
+        if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
             editButton = '';
             //ref="" --> we can't use string refs as they are legacy. ref={(refName)=>{this.refName=refName}}
