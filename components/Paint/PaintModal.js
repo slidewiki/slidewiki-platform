@@ -22,11 +22,27 @@ class PaintModal extends React.Component {
             activeTrap: false
         };
 
+        //
         this.reader = new FileReader();
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
         this.drawingMode = false;
         this.canvas = null;
+
+        // For undo - redo
+        /*this.canvasState = {
+            current: null,
+            list: [],
+            state: [],
+            index: 0,
+            index2: 0,
+            action: false,
+            refresh: true,
+        };
+*/
+        this.objectsStack = [];
+
+        //
         this.handleOpen = this.handleOpen.bind(this);
         this.startFabric = this.startFabric.bind(this);
         this.addRect = this.addRect.bind(this);
@@ -37,6 +53,8 @@ class PaintModal extends React.Component {
         this.setDrawingMode = this.setDrawingMode.bind(this);
         this.setLineWidth = this.setLineWidth.bind(this);
         this.loadImg = this.loadImg.bind(this);
+        this.undo = this.undo.bind(this);
+        this.redo = this.redo.bind(this);
     }
 
     componentDidMount() {
@@ -84,6 +102,53 @@ class PaintModal extends React.Component {
                 this.canvas.renderAll();
             };
         };
+
+        /*
+        // Event handlers for undo/redo
+        this.canvas.on("object:added", (e) => {
+            let object = e.target;
+            //console.log('object:modified');
+
+            if (this.canvasState.action === true) {
+                this.canvasState.state = [this.canvasState.state[this.canvasState.index2]];
+                this.canvasState.list = [this.canvasState.list[this.canvasState.index2]];
+                this.canvasState.list = this.canvasState.list[];
+                this.canvasState.action = false;
+                this.canvasState.index = 1;
+            }
+            object.saveState();
+
+            console.log(JSON.stringify(object.originalState));
+            this.canvasState.state[this.canvasState.index] = object;
+            this.canvasState.list[this.canvasState.index] = object;
+            this.canvasState.index++;
+            this.canvasState.index2 = this.canvasState.index - 1;
+            this.canvasState.refresh = true;
+        });
+
+        this.canvas.on("object:modified", (e) => {
+            let object = e.target;
+            //console.log('object:modified');
+
+            if (this.action === true) {
+                this.canvasState.state = [this.canvasState.state[this.canvasState.index2]];
+                this.canvasState.list = [this.canvasState.list[this.canvasState.index2]];
+
+                this.canvasState.action = false;
+                //console.log(state);
+                this.canvasState.index = 1;
+            }
+
+            object.saveState();
+
+            this.canvasState.state[this.canvasState.index] = object.originalState;
+            this.list[this.canvasState.index] = object;
+            this.canvasState.index++;
+            this.canvasState.index2 = this.canvasState.index - 1;
+
+            //console.log(state);
+            this.canvasState.refresh = true;
+        });*/
     }
 
     handleOpen(){
@@ -168,6 +233,65 @@ class PaintModal extends React.Component {
     }
 
 
+    undo() {
+        let objects = this.canvas.getObjects();
+        if (objects.length !== 0) {
+            let last = objects[objects.length - 1];
+            console.log('////////////////eo');
+            console.log(this);
+            console.log(this.objectsStack);
+            this.objectsStack.push(last);
+            this.canvas.remove(last);
+            this.canvas.renderAll();
+        }
+        /*
+        if (this.canvasState.index <= 0) {
+            this.canvasState.index = 0;
+            return;
+        }
+
+        if (this.canvasState.refresh === true) {
+            this.canvasState.index--;
+            this.canvasState.refresh = false;
+        }
+
+        this.canvasState.index2 = this.canvasState.index - 1;
+        this.canvasState.current = this.canvasState.list[this.canvasState.index2];
+        console.log(this.canvasState.current);
+        console.log(this.canvasState.state);
+        this.canvasState.current = this.canvasState.state[this.canvasState.index2];
+
+        this.canvasState.index--;
+
+        this.canvasState.current.setCoords();
+        this.canvas.renderAll();
+        this.canvasState.action = true;
+*/
+    }
+
+    redo() {
+
+        if (this.objectsStack.length > 0) {
+            let object = this.objectsStack.pop();
+            this.canvas.add(object);
+        }
+
+        /*
+        this.canvasState.action = true;
+        if (this.canvasState.index >= this.canvasState.state.length - 1) {
+            return;
+        }
+
+        this.canvasState.index2 = this.canvasState.index + 1;
+        this.canvasState.current = this.canvasState.list[this.canvasState.index2];
+        this.canvasState.current.setOptions(JSON.parse(this.canvasState.state[this.canvasState.index2]));
+
+        this.canvasState.index++;
+        this.canvasState.current.setCoords();
+        this.canvas.renderAll();
+        */
+    }
+
     render() {
 
         return(
@@ -208,7 +332,7 @@ class PaintModal extends React.Component {
                                     <p>Draw inside the canvas using the tools provided.</p>
                                     <button onClick={this.startFabric} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')}>Click and start drawing!</button>
 
-                                    <canvas id="fabriccanvas" style={canvasStyle}></canvas>
+                                    <canvas id="fabriccanvas" style={canvasStyle}/>
                                     <div>
                                         <button onClick={this.addRect}>Add Rectangle</button>
                                         <button onClick={this.addCircle}>Add Circle</button>
@@ -224,6 +348,9 @@ class PaintModal extends React.Component {
                                         </div>
                                         <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
                                         <p>Load Image! </p><input type="file" onChange={this.loadImg}/>
+
+                                        <button onClick={this.undo}>Undo</button>
+                                        <button onClick={this.redo}>Redo</button>
                                     </div>
                                 </Segment>
                             </Segment>
