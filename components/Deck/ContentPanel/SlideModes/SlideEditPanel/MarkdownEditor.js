@@ -19,12 +19,10 @@ class MarkdownEditor extends React.Component {
     constructor(props) {
         super(props);
         let htmlContent = this.props.content;
-        let markdownContent = '';
+        let markdownContent = this.props.markdown.trim();
         //if no markdown is provided, we can try to make an estimate
-        if((!this.props.markdown || this.props.markdown === '') && htmlContent){
+        if(htmlContent && (!markdownContent || markdownContent==='')){
             markdownContent = t_converter.turndown(htmlContent);
-        }else{
-            markdownContent =  this.props.markdown;
         }
         this.state = {markdownContent: markdownContent, htmlContent: htmlContent, title: this.props.title};
     }
@@ -43,23 +41,25 @@ class MarkdownEditor extends React.Component {
             //update store
             let title = this.props.title;
             let content = this.state.htmlContent;
+            let markdown = this.state.markdownContent;
             let speakernotes = this.props.speakernotes;
             this.props.SlideEditStore.title = title;
             this.props.SlideEditStore.content = content;
             this.props.SlideEditStore.speakernotes = speakernotes;
             let currentSelector = this.props.selector;
             let deckID = currentSelector.id;
-            //let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
-            //let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
+            let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
+            let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
                 title: title,
                 content: content,
+                markdown: markdown,
                 speakernotes: speakernotes,
-                dataSources: [],
+                dataSources: dataSources,
                 selector: currentSelector,
-                tags: []
+                tags: tags
             });
         }
         return false;
@@ -83,7 +83,7 @@ class MarkdownEditor extends React.Component {
                 <div className="ui stackable equal width left aligned padded grid">
                   <div className="row">
                     <div className="column form field ui">
-                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown || this.props.markdown === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
+                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
                     </div>
                     <div className="column">
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}

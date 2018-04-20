@@ -37,7 +37,7 @@ class SlideEditPanel extends React.Component {
         if(this.props.useMarkdown){
             if (this.currentID === this.props.selector.sid){
                 this.editorcontent = <MarkdownEditor title={this.props.SlideEditStore.title}
-                                content={this.props.SlideEditStore.content}
+                                content={this.props.SlideEditStore.content} markdown={this.props.SlideEditStore.markdown}
                                 id={this.props.SlideEditStore.id}
                                 speakernotes={this.props.SlideEditStore.speakernotes}
                                 selector={this.props.selector} />;
