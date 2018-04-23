@@ -5,6 +5,37 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 
 class SlideViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.currentID;
+        this.slideContentView = '';
+    }
+    componentWillReceiveProps(nextProps){
+        if (this.props.SlideViewStore.content !== nextProps.SlideViewStore.content)
+        {
+            this.slideContentView = '';
+            this.forceUpdate();
+        }
+    }
+    componentWillMount(){
+        if (this.currentID !== this.props.selector.sid)
+        {
+            this.slideContentView = '';
+            this.currentID = this.props.selector.sid;
+            this.forceUpdate();
+        }
+    }
+    componentDidUpdate(){
+        if (this.currentID !== this.props.selector.sid)
+        {
+            this.slideContentView = '';
+            this.currentID = this.props.selector.sid;
+            //this.forceUpdate();
+        }
+    }
+    componentWillUnmount() {
+    }
+
     render() {
         let deckTheme = this.props.selector && this.props.selector.theme;
         if (!deckTheme) {
@@ -18,14 +49,28 @@ class SlideViewPanel extends React.Component {
                 // pick theme from deck root as a last resort
                 deckTheme = this.props.DeckTreeStore.theme;
             }
-        } 
+        }
+        if (this.currentID === this.props.selector.sid){
+            this.slideContentView = (
+                <div className="ui bottom attached segment">
+                    <SlideContentView content={this.props.SlideViewStore.content}
+                            speakernotes={this.props.SlideViewStore.speakernotes}
+                            theme={deckTheme}/>
+                </div>);
+        } else {
+            this.slideContentView = null;
+        }
+        const loadStyle = {
+            minWidth: '100%',
+            minHeight: 610,
+            overflowY: 'auto',
+            overflowX: 'auto',
+            position: 'relative'
+        };
         return (
             <div className="ui bottom attached segment">
-            {(this.props.SlideViewStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-                <SlideContentView content={this.props.SlideViewStore.content}
-                                  speakernotes={this.props.SlideViewStore.speakernotes}
-                                  loadingIndicator={this.props.SlideViewStore.loadingIndicator}
-                                  theme={deckTheme} />
+                {(this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {this.slideContentView}
             </div>
         );
     }

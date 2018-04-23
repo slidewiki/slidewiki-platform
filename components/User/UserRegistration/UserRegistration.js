@@ -13,10 +13,11 @@ import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
-import {hashPassword} from '../../../configs/general';
+import {hashPassword, ssoEnabled} from '../../../configs/general';
 import common from '../../../common';
+import openSSOModal from '../../../actions/user/openSSOModal';
 import {defineMessages} from 'react-intl';
-
+import updateTrap from '../../../actions/loginModal/updateTrap';
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
 
@@ -383,7 +384,10 @@ class UserRegistration extends React.Component {
                     this.context.executeAction(navigateAction, {
                         url: '/'
                     });
-
+                    //prepraring the modal
+                    this.context.executeAction(updateTrap,{activeTrap:true});
+                    //hidden the other page elements to readers
+                    $('#app').attr('aria-hidden','true');
                     $('.ui.login.modal').modal('show');
 
                     return true;
@@ -546,6 +550,12 @@ class UserRegistration extends React.Component {
         win.focus();
     }
 
+    doSSO(e) {
+        e.preventDefault();
+
+        this.context.executeAction(openSSOModal, {register: true});
+    }
+
     handleStorageEvent(e) {
         // console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
@@ -685,10 +695,11 @@ class UserRegistration extends React.Component {
                             <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h3>
 
                             {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
+                            {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title='Sign up with an account of another SlideWiki instance' aria-label="Sign up with another SlideWiki instance"><i className="big user icon"></i></button> : ''}
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label={this.context.intl.formatMessage(this.messages.modal_googleButton)}><i className="big google plus lnk icon"></i></button>
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label={this.context.intl.formatMessage(this.messages.modal_githubButton)}><i className="big github icon"></i></button>
 
-                            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/imprint" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
+                            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/terms" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
                             <div className="ui dividing header" ></div>
 
                             <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h3>
@@ -732,7 +743,7 @@ class UserRegistration extends React.Component {
                                 </button>
                             </form>
                             <div className="ui dividing header" ></div>
-                          {this.context.intl.formatMessage(this.messages.form_terms)}<a href="/imprint">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
+                          {this.context.intl.formatMessage(this.messages.form_terms)} <a href="/terms">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
                             <br/><br/>
                             <a href="#" onClick={this.handleNoAccessClick}>{this.context.intl.formatMessage(this.messages.form_noAccess)}</a>
                         </div>

@@ -15,7 +15,7 @@ class UserGroupEdit extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError, this.props.currentUsergroup);
+        // console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError, this.props.currentUsergroup);
         if (this.props.saveUsergroupError) {
             swal({
                 title: 'Error',
@@ -33,8 +33,8 @@ class UserGroupEdit extends React.Component {
             .catch();
             return;
         }
-        this.refs.GroupName.value = this.props.currentUsergroup.name;
-        this.refs.GroupDescription.value = this.props.currentUsergroup.description;
+        this.refs.GroupName.value = this.props.currentUsergroup.name || '';
+        this.refs.GroupDescription.value = this.props.currentUsergroup.description || '';
     }
 
     componentDidMount() {
@@ -158,7 +158,7 @@ class UserGroupEdit extends React.Component {
               </div>
               <div className="fourteen wide column">
                 <div className="content">
-                    <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                    <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.userid} value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
                     <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.username}</a>
                     <div className="description">Group owner</div>
                 </div>
@@ -189,7 +189,7 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                              <TextArea className="sr-only" id={'usernameIsALinkHint' + member.userid} value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
                               <a className="header" href={'/user/' + member.username} target="_blank">{member.username}</a>
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
@@ -220,12 +220,12 @@ class UserGroupEdit extends React.Component {
                                 <label htmlFor="usergroupedit_input_GroupName">
                                     Group Name
                                 </label>
-                                <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={this.props.currentUsergroup.name}  />
+                                <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={this.props.currentUsergroup.name || ''}  />
                             </div>
 
                             <div className="field">
                                 <label htmlFor="usergroupedit_input_GroupDescription">Description</label>
-                                <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={this.props.currentUsergroup.description} ></textarea>
+                                <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={this.props.currentUsergroup.description || ''} ></textarea>
                             </div>
                             <div className="field">
                                 <label htmlFor="usergroupedit_input_AddUserGr">Add user</label>

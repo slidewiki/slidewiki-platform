@@ -144,7 +144,7 @@ class TreeNode extends React.Component {
             spath: this.props.item.get('path')
         };
         let canEdit = !this.props.permissions.readOnly && this.props.permissions.edit && this.props.ContentStore.mode !== 'edit';
-        let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, this.props.mode);
+        let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, 'view');
         let childNodesDIV = '';
         let actionSigClass;
         let actionBtnsClass;
@@ -160,7 +160,7 @@ class TreeNode extends React.Component {
         /*
         let actionSignifierStyle = {
             display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none',
-            'background-color': '#FFFFFF',
+            'backgroundColor': '#FFFFFF',
             height: '0.5em'
         };
         let actionSignifier = <Button as='button' icon ui size='tiny' floated='right'
