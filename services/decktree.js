@@ -12,8 +12,11 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
-            rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).then((res) => {
-                callback(null, {deckTree: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
+            let uri = Microservices.deck.uri + '/decktree/' + selector.id;
+            if (args.language)
+                uri += '?language=' + args.language;
+            rp.get({uri: uri}).then((res) => {
+                callback(null, {deckTree: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode, language: args.language});
             }).catch((err) => {
                 //we should report the error to the action creator
                 callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', details: err});
@@ -24,9 +27,9 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
-        let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
-        
-        if(resource === 'decktree.node'){
+        let selector = {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
+
+        if (resource === 'decktree.node') {
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/decktree/node/create',
@@ -37,6 +40,23 @@ export default {
                 })
             }).then((res) => {
                 callback(null, {node: JSON.parse(res), selector: args.selector});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {node: {}, selector: args.selector});
+            });
+        }
+        else if (resource === 'decktree.nodetranslation') {
+            /*********connect to microservices*************/
+            rp.post({
+                uri: Microservices.deck.uri + '/decktree/node/translations',
+                headers: {'----jwt----': args.jwt},
+                body:JSON.stringify({
+                    selector: selector,
+                    nodeSpec:args.nodeSpec,
+                    language: args.language
+                })
+            }).then((res) => {
+                callback(null, {node: JSON.parse(res), selector: args.selector, language: args.language});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {node: {}, selector: args.selector});
@@ -59,7 +79,8 @@ export default {
                 headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
                     selector: selector,
-                    name: params.newValue
+                    name: params.newValue,
+                    language: args.language
                 })
             }).then((res) => {
                 callback(null, JSON.parse(res));
@@ -90,14 +111,32 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
-        if(resource === 'decktree.node'){
+        if (resource === 'decktree.node') {
             /*********connect to microservices*************/
             let options = {
                 method: 'DELETE',
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 headers: {'----jwt----': args.jwt},
-                body:JSON.stringify({
+                body: JSON.stringify({
                     selector: selector
+                })
+            };
+            rp(options).then((res) => {
+                callback(null, JSON.parse(res));
+            }).catch((err) => {
+                console.log(err);
+                callback(null, params);
+            });
+        }
+        else if (resource === 'decktree.nodetranslation') {
+            /*********connect to microservices*************/
+            let options = {
+                method: 'DELETE',
+                uri: Microservices.deck.uri + '/decktree/node/translations',
+                headers: {'----jwt----': args.jwt},
+                body: JSON.stringify({
+                    selector: selector,
+                    language: args.language
                 })
             };
             rp(options).then((res) => {

@@ -58,6 +58,8 @@ export default function loadDeck(context, payload, done) {
     if (payload.params.language && payload.params.language.startsWith('_')) {
         payload.params.language = payload.params.language.substring(1);
     }
+    if (payload.params.language.length > 5)
+      payload.params.language = payload.params.language.substring(0,5);//TODO check if its in the ISO?
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();

@@ -44,9 +44,15 @@ export default {
         if (resource === 'deck.content') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             /* Create promise for deck data success */
-            let deckRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid});
+            let uri = Microservices.deck.uri + '/deck/' + args.sid;
+            if (args.language)
+                uri += '?language=' + args.language;
+            let deckRes = rp.get({uri: uri});
             /* Create promise for slides data success */
-            let slidesRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/slides'});
+            let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
+            if (args.language)
+              uri2 += '?language=' + args.language;
+            let slidesRes = rp.get({uri:uri2});
             /* Catch errors from deck data response */
             let deckPromise = deckRes.catch((err) => {
                 callback({msg: 'Error in retrieving deck meta data ' + Microservices.deck.uri + ',', content: err}, {});
@@ -139,7 +145,10 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'deck.properties') { //this is only used for deck edit - thus we call all the api routes with one service call
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
+            let uri = Microservices.deck.uri + '/deck/' + args.sid;
+            if (args.language)
+                uri += '?language=' + args.language;
+            let deckPromise = rp.get({uri: uri}).promise().bind(this);
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
 
             Promise.all([deckPromise, editorsPromise]).then((res) => {
@@ -201,7 +210,10 @@ export default {
         } else if (resource ==='deck.slides'){
 
             let args = params.params ? params.params : params;
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'}).then((res) => {
+            let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
+            if (args.language)
+              uri2 += '?language=' + args.language;
+            rp.get({uri: uri2}).then((res) => {
                 callback(null, {slides: JSON.parse(res).children});
             }).catch((err) => {
                 callback({
