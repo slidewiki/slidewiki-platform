@@ -107,6 +107,14 @@ class TreeNode extends React.Component {
         e.target.select();
     }
 
+    handleFocus(e) {
+        $(e.target).find('div.card:first').css('border','1px solid #1e78bb');
+    }
+
+    handleBlur(e) {
+        $(e.target).find('div.card:first').css('border','');
+    }
+
     handleNameChange(e) {
         //console.log(e.target.value);
     }
@@ -227,20 +235,18 @@ class TreeNode extends React.Component {
         //change the node title style if it is selected
         let iconClass = classNames({
             'ui icon': true,
-            'huge': true,
+            'large': true,
             'yellow folder link': true,
             'open': this.props.item.get('expanded')
         });
         let imgClass = {
-            'border': (this.props.item.get('selected')) ? '1px solid blue' : '1px solid black',
-            'border-radius': '5px',
-            'margin-left': 'auto',
-            'margin-right': 'auto',
-            'display': 'block',
-            'width': '80%'
+            'border': (this.props.item.get('selected')) ? '1px solid #1e78bb' : ''
         };
-        let img = <div style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/default'} width='90%' style={{'margin-left': 'auto', 'margin-right': 'auto', 'display': 'block'}}/></div>;
-        if (this.props.item.get('type') === 'deck') img = cheerio.load(this.props.item.get('title')).text();
+        let img = '';
+        if (this.props.item.get('type') === 'slide'){
+            img = <div className="ui fluid card" style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + this.props.item.get('theme')} alt={this.props.item.get('title')} width='100%' style={{'margin-left': 'auto', 'margin-right': 'auto', 'display': 'block'}}/></div>;
+        } else
+            img = cheerio.load(this.props.item.get('title')).text();
         let nodeTitle = img;
         //let nodeTitle = <div> {img} <div style={{'text-align': 'center'}}>{cheerio.load(this.props.item.get('title')).text()}</div></div>;
         let nodeTitleDIV = nodeTitle;
@@ -254,7 +260,7 @@ class TreeNode extends React.Component {
             //actionSignifier = '';
         } else {
             let tmp = (this.props.item.get('type') === 'deck') ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true" /> : '';
-            nodeDIV = <h3>{tmp}<NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
+            nodeDIV = <h3 onFocus={this.handleFocus} onBlur={this.handleBlur}>{tmp}<NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
                 {nodeTitleDIV}</NavLink>{(this.props.item.get('type') === 'deck') ? <div className="ui fitted divider"/> : ''}</h3>;
         }
         //change the node icon based on the type of node and its expanded state
