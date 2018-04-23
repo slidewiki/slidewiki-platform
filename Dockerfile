@@ -44,7 +44,8 @@ ENV SERVICE_URL_DECK= \
 
 ENV SMTP_HOST=localhost \
     SMTP_PORT=25 \
-    LOGGING_LEVEL=debug
+    LOGGING_LEVEL=debug \
+    SSO_ENABLED=true
 
 # ----------------------------------- #
 #         Default Webpack Build       #
