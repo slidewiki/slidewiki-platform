@@ -6,7 +6,6 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
-import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword, ssoEnabled} from '../../configs/general';
 import common from '../../common';
@@ -16,6 +15,9 @@ let MediaQuery = require ('react-responsive');
 import {FormattedMessage, defineMessages} from 'react-intl';
 import SelectInstanceModal from '../User/SelectInstanceModal.js';
 import openSSOModal from '../../actions/user/openSSOModal';
+import FocusTrap from 'focus-trap-react';
+import LoginModalStore from '../../stores/LoginModalStore';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -32,11 +34,16 @@ class LoginModal extends React.Component {
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
         this.isLoading = false;
+        this.state = {
+            activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
+        };
 
         this.errorMessages = defineMessages({
+
             error403: {
                 id: 'userSignIn.errormessage.isSPAM',
                 defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
@@ -51,17 +58,39 @@ class LoginModal extends React.Component {
             }
         });
     }
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            activeTrap: nextProps.LoginModalStore.activeTrap
+        });
 
+    }
+    openModal() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('show');
+    }
+    unmountTrap(){
+        if(this.state.activeTrap){
+            this.context.executeAction(updateTrap,{activeTrap:false});
+        };
+        $('#app').attr('aria-hidden','false');
+
+
+    }
     isModalShown() {
         const classes = $('.ui.login.modal').attr('class');
         return classes.indexOf('hidden') === -1;
     }
 
     handleLoginButton() {
-        $('.ui.login.modal').modal('toggle');
+        this.openModal();
+
+
         setTimeout(() => {
             ReactDOM.findDOMNode(this.refs.email1).focus();
         }, 0);
+
     }
 
     signin(e) {
@@ -119,7 +148,7 @@ class LoginModal extends React.Component {
                 }),
                 text: this.context.intl.formatMessage({
                     id: 'LoginModal.hint.noAccountForTheProviderData',
-                    defaultMessage: 'You haven&apos;t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
+                    defaultMessage: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
                 }),
                 type: 'question',
                 showCloseButton: true,
@@ -137,7 +166,6 @@ class LoginModal extends React.Component {
                 buttonsStyling: false
             })
             .then((dismiss) => {
-                // console.log('action after dismiss', dismiss);
                 $('.ui.login.modal').modal('hide');
                 return this.handleRegisterFirst(dismiss);
             })
@@ -179,7 +207,7 @@ class LoginModal extends React.Component {
 
     handleSignupClick(e) {
         e.preventDefault();
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/signup'
         });
@@ -188,7 +216,7 @@ class LoginModal extends React.Component {
 
     handleNoAccessClick(e) {
         e.preventDefault();
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/resetpassword'
         });
@@ -199,7 +227,7 @@ class LoginModal extends React.Component {
         console.log('Hit on social login icon', provider);
         this.provider = provider;
 
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
 
         //prepare localStorage
         localStorage.setItem(MODI, 'login');
@@ -225,7 +253,7 @@ class LoginModal extends React.Component {
     doSSO(e) {
         e.preventDefault();
 
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
 
         this.context.executeAction(openSSOModal, {register: false});
     }
@@ -330,25 +358,38 @@ class LoginModal extends React.Component {
             placeholder_password: {
                 id: 'LoginModal.placeholder.password',
                 defaultMessage: 'Password',
-            }
+            },
+            headerText:{
+                id:'userSignIn.headerText',
+                defaultMessage:'Sign In'
+            },
         });
 
         return(
           <div>
-            <div className="ui login modal" id='signinModal' style={modalStyle}>
+            <div className="ui login modal" id='signinModal' role="dialog" aria-labelledby="siginModal_header" aria-describedby="signinModalDescription" style={modalStyle}>
+            <FocusTrap
+                    id="focus-trap-signinModal"
+                    focusTrapOptions={{
+                        onDeactivate: this.unmountTrap,
+                        clickOutsideDeactivates: true,
+                        initialFocus: '#email1'
+                    }}
+                    active={this.state.activeTrap}
+                    className = "header">
               <div className="header">
-                  <h1 style={headerStyle}>
-                    <FormattedMessage
-                      id='LoginModal.header.signIn'
-                      defaultMessage='Sign In'
-                    />
+                  <h1 id="siginModal_header" style={headerStyle}>
+                     {this.context.intl.formatMessage(messages.headerText)}
+
                   </h1>
               </div>
               <div className="content">
                 <div className="ui container">
-
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
+                        <textarea className="sr-only" id="signinModalDescription"
+                        value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+                        tabIndex ='-1'/>
                         <div className={inputField_classes}>
                           <div><label htmlFor="email1" hidden>
                             <FormattedMessage
@@ -421,6 +462,7 @@ class LoginModal extends React.Component {
                   />
                 </button>
               </div>
+             </FocusTrap>
             </div>
             <SelectInstanceModal />
           </div>
@@ -432,4 +474,10 @@ LoginModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
+LoginModal = connectToStores(LoginModal,[LoginModalStore],(context,props) => {
+    return {
+        LoginModalStore: context.getStore(LoginModalStore).getState(),
+
+    };
+});
 export default LoginModal;
