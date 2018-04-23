@@ -86,9 +86,9 @@ export default function loadContent(context, payload, done) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         }
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //  pageTitle: pageTitle
+        //});
         done();
     });
 

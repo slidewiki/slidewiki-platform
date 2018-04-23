@@ -28,9 +28,9 @@ export default function loadContentDiscussion(context, payload, done) {
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'discussion'});
         }
         let pageTitle = shortTitle + ' | Content Discussion | ' + payload.params.stype + ' | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //    pageTitle: pageTitle
+        //});
         done();
     });
 }
