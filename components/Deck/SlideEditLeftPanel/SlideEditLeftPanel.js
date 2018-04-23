@@ -36,6 +36,7 @@ class SlideEditLeftPanel extends React.Component {
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
+            LeftPanelTitleChange: false,
             titleMissingError: false
         };
     }
@@ -48,6 +49,7 @@ class SlideEditLeftPanel extends React.Component {
             prevState.showSize !== this.state.showSize ||
             prevState.showBackground !== this.state.showBackground)
         {
+            //set focus on buttons depending on submenu navigation
             if (this.state.showTitleChange === true)
             {
                 $('#slideTitle').focus();
@@ -57,7 +59,6 @@ class SlideEditLeftPanel extends React.Component {
             } else {
                 $('#handleBackLink').focus();
             }
-            //$('#handleAddInputBox').focus(); //if back at root menu
         }
     }
     handleAddInputBox(){
@@ -153,7 +154,8 @@ class SlideEditLeftPanel extends React.Component {
         } else {
             console.log(this.state.slideTitle);
             this.context.executeAction(changeTitle, {
-                title: this.state.slideTitle
+                title: this.state.slideTitle,
+                LeftPanelTitleChange: true
             });
             this.setState({showProperties: true});
             this.setState({showTitleChange: false});
