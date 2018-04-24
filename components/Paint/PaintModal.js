@@ -149,6 +149,9 @@ class PaintModal extends React.Component {
             //console.log(state);
             this.canvasState.refresh = true;
         });*/
+
+        // After each render save state of canvas
+
     }
 
     handleOpen(){
@@ -228,7 +231,14 @@ class PaintModal extends React.Component {
     }
 
     downloadImg() {
+        let href = this.canvas.toDataURL({
+            format: 'png',
+            quality: 1
+        });
 
+        let url = href.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+
+        window.open(url);
 
     }
 
@@ -237,9 +247,6 @@ class PaintModal extends React.Component {
         let objects = this.canvas.getObjects();
         if (objects.length !== 0) {
             let last = objects[objects.length - 1];
-            console.log('////////////////eo');
-            console.log(this);
-            console.log(this.objectsStack);
             this.objectsStack.push(last);
             this.canvas.remove(last);
             this.canvas.renderAll();
