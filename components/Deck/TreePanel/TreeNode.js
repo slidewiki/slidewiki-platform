@@ -108,11 +108,15 @@ class TreeNode extends React.Component {
     }
 
     handleFocus(e) {
-        $(e.target).find('div.card:first').css('border','1px solid #1e78bb');
+        $(e.target).find('div.card:first').css('border','2px solid #1e78bb');
     }
 
     handleBlur(e) {
-        $(e.target).find('div.card:first').css('border','');
+        let selected = $(e.target).find('div.card:first').attr('data-selected');
+        if(selected === 'false')
+            $(e.target).find('div.card:first').css('border','');
+        else
+            $(e.target).find('div.card:first').css('border','2px solid black');
     }
 
     handleNameChange(e) {
@@ -240,11 +244,11 @@ class TreeNode extends React.Component {
             'open': this.props.item.get('expanded')
         });
         let imgClass = {
-            'border': (this.props.item.get('selected')) ? '1px solid #1e78bb' : ''
+            'border': (this.props.item.get('selected')) ? '2px solid black' : '2px solid lightgrey'
         };
         let img = '';
         if (this.props.item.get('type') === 'slide'){
-            img = <div className="ui fluid card" style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + this.props.item.get('theme')} alt={this.props.item.get('title')} width='100%' style={{'margin-left': 'auto', 'margin-right': 'auto', 'display': 'block'}}/></div>;
+            img = <div className="ui fluid card" data-selected={this.props.item.get('selected')} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + this.props.item.get('theme')} alt={this.props.item.get('title')} width='100%' style={{'margin-left': 'auto', 'margin-right': 'auto', 'display': 'block'}}/></div>;
         } else
             img = cheerio.load(this.props.item.get('title')).text();
         let nodeTitle = img;
