@@ -15,11 +15,8 @@ import {navigateAction} from 'fluxible-router';
 
 import ContentLikeStore from '../../../../../stores/ContentLikeStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
-import TranslationStore from '../../../../../stores/TranslationStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
-
-import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -120,7 +117,6 @@ class DeckViewPanel extends React.Component {
         //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
         // //const countryFlag = 'gb';
-        //let translations = this.props.TranslationStore.translations;
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
@@ -141,7 +137,6 @@ class DeckViewPanel extends React.Component {
 
                 <main role="main">
                     <div className="ui segment" style={heightStyle}>
-                        {(this.props.TranslationStore.inProgress) ? <div className="ui active dimmer"><div className="ui text loader">Translating</div></div> : ''}
                         <div className="ui two column grid container">
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
@@ -170,7 +165,6 @@ class DeckViewPanel extends React.Component {
                                         <div className="ui label" tabIndex="0">
                                             <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
                                         </div>
-                                        {/* <TranslationPanel/>*/}
                                         <div className="ui label" tabIndex="0">
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                         </div>
@@ -237,13 +231,12 @@ DeckViewPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore, TranslationStore], (context, props) => {
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {
     return {
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 export default DeckViewPanel;
