@@ -8,7 +8,7 @@ import {navigateAction} from 'fluxible-router';
 
 export default function saveSlide(context, payload, done) {
     log.info(context);
-    
+
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -47,10 +47,10 @@ export default function saveSlide(context, payload, done) {
             }
 
             //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
-            let pageTitle = shortTitle + ' | Slide Edit | ';
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: pageTitle
-            });
+            //let pageTitle = shortTitle + ' | Slide Edit | ';
+            //context.dispatch('UPDATE_PAGE_TITLE', {
+            //    pageTitle: pageTitle
+            //});
             done();
         });
     }
