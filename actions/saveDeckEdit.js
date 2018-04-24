@@ -22,7 +22,7 @@ export default function saveDeckEdit(context, payload, done) {
             nodeSpec: {
                 title: striptags(payload.title), id: payload.selector.sid,
                 path: payload.selector.spath,
-                theme: payload.theme,
+                theme: payload.theme, allowMarkdown: payload.allowMarkdown
             }
         });
         //update the URL: redirect to view after edit
