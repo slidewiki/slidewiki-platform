@@ -8,7 +8,7 @@ import {updateAuthorizedUsers} from '../../../../../actions/updateDeckAuthorizat
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {Button, Modal, Header} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
-
+import updateTrap from '../../../../../actions/loginModal/updateTrap';
 import DeckPropertiesEditor from './DeckPropertiesEditor';
 
 
@@ -23,7 +23,7 @@ class DeckEditPanel extends React.Component {
 
         this.messages = defineMessages({
             loading: {
-                id: 'noPermissionModal.loading',
+                id: 'deckEditPanel.loading',
                 defaultMessage: 'loading'
             },
             error: {
@@ -75,7 +75,7 @@ class DeckEditPanel extends React.Component {
                 defaultMessage: 'Deny'
             },
             close: {
-                id: 'noPermissionModal.close',
+                id: 'deckEditPanel.close',
                 defaultMessage: 'Close'
             }
         });
@@ -109,6 +109,10 @@ class DeckEditPanel extends React.Component {
     componentDidMount() {
         let interestedUser = this.getParameterByName('interestedUser');
         if (interestedUser && this.props.UserProfileStore.username === '') {
+            //prepraring the modal
+            this.context.executeAction(updateTrap,{activeTrap:true});
+            //hidden the other page elements to readers
+            $('#app').attr('aria-hidden','true');
             $('.ui.login.modal').modal('show');
             return;
         }

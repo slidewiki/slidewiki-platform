@@ -34,6 +34,7 @@ class SlideContentEditor extends React.Component {
         //this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
         this.hasChanges = false;
+        this.finishLoading = false;
         //this.oldContent = '';
         //this.redoContent = '';
     }
@@ -607,14 +608,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
-            //if (CKEDITOR.instances.inlineContent != null) {
+            if (CKEDITOR.instances.inlineContent != null) {
             //    console.log('destroy previous CKEDITOR instance');
-            CKEDITOR.instances.inlineContent.destroy();
-            //}
-            //if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+                CKEDITOR.instances.inlineContent.destroy();
+            }
+            if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
             //    console.log('destroy previous CKEDITOR instance');
-            CKEDITOR.instances.inlineSpeakerNotes.destroy();
-            //}
+                CKEDITOR.instances.inlineSpeakerNotes.destroy();
+            }
             //this.refreshCKeditor();
             this.disableResizeDrag();
             this.contextMenuAndDragDivAllRemove();
@@ -625,7 +626,13 @@ class SlideContentEditor extends React.Component {
             }
 
             this.uniqueIDAllElements();
+            //if (this.props.SlideEditStore.LeftPanelTitleChange !== false)
+            //{
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
+            //} else {
+            //    let title = (this.props.title !== '') ? this.props.title : ' ';
+            //}
+
             let content = (this.refs.inlineContent.innerHTML !== '') ? this.refs.inlineContent.innerHTML : ' ';
             let speakernotes = (this.refs.inlineSpeakerNotes.innerHTML !== '') ? this.refs.inlineSpeakerNotes.innerHTML : ' ';
             //update store
@@ -842,6 +849,8 @@ class SlideContentEditor extends React.Component {
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
+            this.finishLoading = true;
+            //console.log('test');
             CKEDITOR.instances.inlineContent.on( 'key', () => {
                 this.hasChanges = true;
             });
@@ -1396,7 +1405,9 @@ class SlideContentEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
-            this.handleSaveButton();
+            if (this.finishLoading === true){
+                this.handleSaveButton();
+            }
         }
         if (nextProps.SlideEditStore.cancelClick === 'true' && nextProps.SlideEditStore.cancelClick !== this.props.SlideEditStore.cancelClick)
         {
@@ -1667,7 +1678,9 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
             }
         }
-        if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
+        if (nextProps.SlideEditStore.title !== '' &&
+        nextProps.SlideEditStore.title !== this.props.SlideEditStore.title &&
+        nextProps.SlideEditStore.LeftPanelTitleChange !== false)
         {
             this.hasChanges = true;
             const messagesSaveAfterSlideNameChangeModal = defineMessages({
@@ -1963,6 +1976,13 @@ class SlideContentEditor extends React.Component {
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
             this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            this.refs.inlineContent.style.overflowY = 'auto';
+            this.refs.present.style.overflowY = 'hidden';
+        }
+        else {
+            this.refs.inlineContent.style.overflowY = 'scroll';
+            this.refs.present.style.overflowY = 'scroll';
+            this.refs.inlineContent.style.height = '100%';
         }
         //$('.cke_float').width( $('.pptx2html').width());
         //$('.cke_top').css('maxwidth', $('.pptx2html').width());
@@ -1988,7 +2008,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     emitChange(context){
-        context.hasChanges = true;
+        //context.hasChanges = true;
     }
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
@@ -2174,9 +2194,9 @@ class SlideContentEditor extends React.Component {
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
-                            <section className="present"  style={sectionElementStyle}>
+                            <section className="present" ref='present' id='present'  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
                                     </div>
                                 </HotKeys>
                             </section>
@@ -2185,7 +2205,7 @@ class SlideContentEditor extends React.Component {
                 </div>
                 <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
                     <b>Speaker notes:</b><br />
-                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange(this)} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
                     </div>
                 </div>
             </div>
