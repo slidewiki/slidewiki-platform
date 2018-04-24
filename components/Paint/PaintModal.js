@@ -238,8 +238,14 @@ class PaintModal extends React.Component {
 
         let url = href.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
 
-        window.open(url);
 
+        let a = document.createElement("a");
+        a.style = "display: none";
+        a.href = url;
+        a.download = 'image.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 
 
