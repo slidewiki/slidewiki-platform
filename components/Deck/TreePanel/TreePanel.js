@@ -32,12 +32,17 @@ class TreePanel extends React.Component {
         };
     }
 
-    handleFocus() {
-
+    componentDidMount() {
+        if (sessionStorage.getItem('DeckTree.ShowThumbnails')) {
+            this.setState({showThumbnails: sessionStorage.getItem('DeckTree.ShowThumbnails')});
+        } else {
+            sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
+        }
     }
 
-    handleBlur() {
-
+    toggleShowThumbnails() {
+        sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
+        this.setState({showThumbnails: !this.state.showThumbnails});
     }
 
     handleToggleNode(selector) {
@@ -188,7 +193,7 @@ class TreePanel extends React.Component {
                                 </div>
         */
         return (
-            <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+            <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
@@ -233,7 +238,7 @@ class TreePanel extends React.Component {
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
                     <div className="ui attached segment">
-                        <Checkbox ref="showThumbnails" toggle label='Show Thumbnails' onChange={this.setState.bind(this, {showThumbnails: !this.state.showThumbnails})} checked={this.state.showThumbnails}/>
+                        <Checkbox ref="showThumbnails" toggle label='Show Thumbnails' onChange={this.toggleShowThumbnails.bind(this)} checked={this.state.showThumbnails}/>
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
