@@ -159,7 +159,8 @@ class TreeNode extends React.Component {
                                           onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
                                           onMoveNode={self.props.onMoveNode} mode={self.props.mode}
                                           page={self.props.page} rootNode={self.props.rootNode}
-                                          username={self.props.username} permissions={self.props.permissions}/>;
+                                          username={self.props.username} permissions={self.props.permissions}
+                                          showThumbnails={this.props.showThumbnails}/>;
         }
         /*
         let actionSignifierStyle = {
@@ -246,8 +247,14 @@ class TreeNode extends React.Component {
         let imgClass = {
             'border': (this.props.item.get('selected')) ? '2px solid black' : '2px solid lightgrey'
         };
+        let iconClass2 = classNames({
+            'ui icon': true,
+            'grey file text': (this.props.item.get('type') === 'slide'),
+            'yellow folder link': (this.props.item.get('type') === 'deck'),
+            'open': this.props.item.get('expanded')
+        });
         let img = '';
-        if (this.props.item.get('type') === 'slide'){
+        if (this.props.item.get('type') === 'slide' && this.props.showThumbnails){
             img = <div className="ui fluid card" data-selected={this.props.item.get('selected')} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + this.props.item.get('theme')} alt={this.props.item.get('title')} width='100%' style={{'margin-left': 'auto', 'margin-right': 'auto', 'display': 'block'}}/></div>;
         } else
             img = cheerio.load(this.props.item.get('title')).text();
@@ -263,9 +270,11 @@ class TreeNode extends React.Component {
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
             //actionSignifier = '';
         } else {
-            let tmp = (this.props.item.get('type') === 'deck') ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true" /> : '';
-            nodeDIV = <h3 onFocus={this.handleFocus} onBlur={this.handleBlur}>{tmp}<NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
-                {nodeTitleDIV}</NavLink>{(this.props.item.get('type') === 'deck') ? <div className="ui fitted divider"/> : ''}</h3>;
+            //let tmp = (this.props.item.get('type') === 'deck') ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true" /> : '';
+            if(!this.props.showThumbnails)
+                nodeDIV = <div><i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass2} aria-hidden="true"> </i><NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink></div>;
+            else
+                nodeDIV = <h3 onFocus={this.handleFocus} onBlur={this.handleBlur}>{(this.props.item.get('type') === 'deck') && this.props.showThumbnails ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true"> </i> : ''}<NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink>{(this.props.item.get('type') === 'deck'  && this.props.showThumbnails) ? <div className="ui fitted divider"/> : ''}</h3>;
         }
         //change the node icon based on the type of node and its expanded state
         //hide focused outline

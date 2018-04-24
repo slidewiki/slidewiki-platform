@@ -18,6 +18,8 @@ import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
+import { Checkbox } from 'semantic-ui-react';
+
 
 class TreePanel extends React.Component {
 
@@ -25,7 +27,8 @@ class TreePanel extends React.Component {
         super(props);
         this.state = {
             isForkModalOpen: false,
-            isTranslationModalOpen: false
+            isTranslationModalOpen: false,
+            showThumbnails: false
         };
     }
 
@@ -226,7 +229,11 @@ class TreePanel extends React.Component {
                             onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                             onMoveNode={this.handleMoveNode.bind(this)}
                             username={this.props.UserProfileStore.username}
-                            permissions={this.props.PermissionsStore.permissions}/>
+                            permissions={this.props.PermissionsStore.permissions}
+                            showThumbnails={this.state.showThumbnails}/>
+                    </div>
+                    <div className="ui attached segment">
+                        <Checkbox ref="showThumbnails" toggle label='Show Thumbnails' onChange={this.setState.bind(this, {showThumbnails: !this.state.showThumbnails})} checked={this.state.showThumbnails}/>
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
