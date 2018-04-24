@@ -16,13 +16,13 @@ before_install:
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/install_compose.sh ; fi
 before_script:
 - npm update --dev
-- cp microservices.js.template configs/microservices.js && cp general.js.template configs/general.js && export SMTP_PORT=993 && cat secrets.js.template | envsubst > configs/secrets.js && unset SMTP_PORT
+- ./travis_scripts/before_script.sh
 script:
 - npm run lint
 - npm run test
 - npm run build:nostart
 after_success:
-- git reset --hard && rm configs/microservices.js
+- git reset --hard && rm configs/microservices.js configs/general.js configs/secrets.js
 - openssl aes-256-cbc -K $encrypted_ecdba13b2a41_key -iv $encrypted_ecdba13b2a41_iv -in deployment_keys.tar.enc -out deployment_keys.tar -d
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/dockerhub.sh ; fi
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/deploy.sh ; fi
