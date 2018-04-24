@@ -1,6 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
+import { Microservices } from '../../configs/microservices';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ImportStore from '../../stores/ImportStore';
@@ -242,19 +243,83 @@ class AddDeck extends React.Component {
                         defaultMessage: 'View deck',
                     }
                 });
-                swal({
-                    title: this.context.intl.formatMessage(success_messages.success_title_text),
-                    text: this.context.intl.formatMessage(success_messages.success_text),
-                    type: 'success',
-                    confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
-                    confirmButtonClass: 'positive ui button',
-                    buttonsStyling: false
-                })
-                    .then((dismiss) => {
+                // swal({
+                //     title: this.context.intl.formatMessage(success_messages.success_title_text),
+                //     text: this.context.intl.formatMessage(success_messages.success_text),
+                //     type: 'success',
+                //     confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
+                //     confirmButtonClass: 'positive ui button',
+                //     buttonsStyling: false
+                // })
+                //     .then((dismiss) => {
+                //         this.handleImportRedirect();
+                //         return true;
+                //     })
+                //     .catch(() => {
+                //         return true;
+                //     });
+
+
+                    let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:50%;"';
+                    let borderStyle = 'border:1px solid black;border-radius:5px;';
+                    let html = '<div style="height: 400px;overflow: auto;" />' +
+                        '<h3>Imported slides:</h3>';
+                    let slides = this.props.ImportStore.slides;
+
+                    //EXTRACT WIDTH AND HEIGHT
+                    let firstSlideContent = slides[0].content;
+                    let indexOfWidth = firstSlideContent.indexOf('width:');
+                    let indexOfendOfWidth = firstSlideContent.indexOf('px;', indexOfWidth);
+                    let widthString = firstSlideContent.substring(indexOfWidth + 6, indexOfendOfWidth);
+                    let indexOfHeight = firstSlideContent.indexOf('height:');
+                    let indexOfendOfHeight = firstSlideContent.indexOf('px;', indexOfHeight);
+                    let heightString = firstSlideContent.substring(indexOfHeight + 7, indexOfendOfHeight);
+
+                    // let width = 1058.33;
+                    // let height = 793.66;
+                    let width = parseFloat(widthString);
+                    let height = parseFloat(heightString);
+                    let scaledWidth = 400;
+                    let scale = scaledWidth / width;
+                    let translate_x = (width - scaledWidth) / 2;
+                    let translate_y = (height - height * scale) / 2;
+                    for(let i = 0; i < slides.length; i++) {
+                        let slide = slides[i];
+                        let slideContent = slide.content;
+                        //find a place to incect border
+                        indexOfWidth = slideContent.indexOf('width:');
+                        let contentFirstPart = slideContent.substring(0, indexOfWidth);
+                        let contentSecondPart = slideContent.substring(indexOfWidth);
+                        html += '<div >' + (i+1) + '. ' + slide.title + '<img style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default /></div>'; //THUMBNAIL
+                        // html += '<h4>' + (i+1) + '. ' + slide.title + '</h4>' +
+                        //     '<div style="height:70%;transform: scale(' + scale + ') translate(-' + translate_x + 'px,-' + translate_y + 'px);" >' +
+                        //     contentFirstPart + borderStyle + contentSecondPart + '</div>';
+                    }
+                    html += '</div>';
+
+                    swal({
+                        title: this.context.intl.formatMessage(success_messages.success_title_text),
+                        text: this.context.intl.formatMessage(success_messages.success_text),
+                        html: html,
+                        type: 'success',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
+                        confirmButtonClass: 'positive ui button',
+                        cancelButtonText: 'Discard',
+                        cancelButtonClass: 'ui red button',
+                        buttonsStyling: false
+                    }).then((accepted) => {
+                        console.log('accepted', accepted);
+
+
                         this.handleImportRedirect();
                         return true;
-                    })
-                    .catch(() => {
+                        //this.applyTemplate(template);
+                    }, (reason) => {
+                        console.log('reason', reason);
+                        //done(reason);
+                    }).catch(() => {
                         return true;
                     });
             } else {

@@ -14,6 +14,7 @@ class ImportStore extends BaseStore {
         this.noOfSlides = 0;
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
+        this.slides = [];
     }
     destructor()
     {
@@ -28,6 +29,7 @@ class ImportStore extends BaseStore {
         this.noOfSlides = 0;
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
+        this.slides = [];
     }
     cancel() {
         this.destructor();
@@ -45,7 +47,8 @@ class ImportStore extends BaseStore {
             error: this.error,
             noOfSlides: this.noOfSlides,
             totalNoOfSlides: this.totalNoOfSlides,
-            safetyCounter: this.safetyCounter
+            safetyCounter: this.safetyCounter,
+            slides: this.slides
         };
     }
     dehydrate() {
@@ -63,6 +66,7 @@ class ImportStore extends BaseStore {
         this.noOfSlides = state.noOfSlides;
         this.totalNoOfSlides = state.totalNoOfSlides;
         this.safetyCounter = state.safetyCounter;
+        this.slides = state.slides;
     }
 
     storeFile(payload) {
@@ -107,6 +111,7 @@ class ImportStore extends BaseStore {
         this.noOfSlides = 0;
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
+        this.slides = [];
         this.emitChange();
     }
     uploadMoreProgress(progress) {
@@ -122,8 +127,10 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     slidesProgress(res) {
-        if (this.noOfSlides < res.noofslides) {//no of slides has changed
-            this.noOfSlides = res.noofslides;
+        const noOfSlides = res.slides.length;
+        if (this.noOfSlides < noOfSlides) {//no of slides has changed
+            this.noOfSlides = noOfSlides;
+            this.slides = res.slides;
             if (this.noOfSlides === 1) {//only one slide imported - still converting (progress should stay at 'converting') or one-slide presentation?
                 if (this.totalNoOfSlides === 1) {//one-slide presentation - complete
                     this.uploadProgress = 100;
