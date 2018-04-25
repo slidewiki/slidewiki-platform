@@ -39,7 +39,7 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
         this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
-        this.hashTag = ['#SWORG','#D' + this.deckID.replace('-','R')];//['#javascript'];
+        this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];//['#javascript'];
     }
 
     componentDidUpdate(prevProps, prevState){
