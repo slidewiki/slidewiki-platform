@@ -92,7 +92,7 @@ class DeckTranslationsModal extends React.Component {
             },
         });
 
-        let message = this.props.TranslationStore.translations.find((t) => {return t === this.props.TranslationStore.treeLanguage}) ? messages.currentTranslation : messages.currentLanguage;
+        let message = this.props.TranslationStore.translations.find((t) => t === this.props.TranslationStore.treeLanguage) ? messages.currentTranslation : messages.currentLanguage;
 
         let translationOptions = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
