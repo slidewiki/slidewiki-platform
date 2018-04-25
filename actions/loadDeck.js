@@ -23,6 +23,7 @@ import loadLikes from './activityfeed/loadLikes';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
+import changeCurrentLanguage from './translation/changeCurrentLanguage';
 
 const log = require('./log/clog');
 
@@ -55,11 +56,12 @@ export default function loadDeck(context, payload, done) {
         return;
     }
 
+    //language/translation stuff
     if (payload.params.language && payload.params.language.startsWith('_')) {
         payload.params.language = payload.params.language.substring(1);
     }
-    if (payload.params.language.length > 5)
-      payload.params.language = payload.params.language.substring(0,5);//TODO check if its in the ISO?
+    if (payload.params.language && payload.params.language.length > 5)
+        payload.params.language = payload.params.language.substring(0,5);//TODO check if its in the ISO?
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
@@ -117,6 +119,9 @@ export default function loadDeck(context, payload, done) {
                     username: context.getStore(UserProfileStore).getState().username
                 }
             }, callback);
+        },
+        (callback) => {
+            context.executeAction(changeCurrentLanguage, {language: payload.params.language}, callback);
         },
         (callback) => {
             permissionsPromise.then(() => {

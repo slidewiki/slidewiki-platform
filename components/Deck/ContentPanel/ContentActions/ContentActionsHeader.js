@@ -17,6 +17,9 @@ import cancelClick from '../../../../actions/slide/cancelClick';
 import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
 import {defineMessages} from 'react-intl';
+import TranslationStore from '../../../../stores/TranslationStore';
+import ISO6391 from 'iso-639-1';
+
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -157,10 +160,12 @@ class ContentActionsHeader extends React.Component {
         } ;
         let editButton, saveButton, cancelButton, undoButton, redoButton, languageButton, translateButton;
 
+        let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
         languageButton =
-          <button tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
-              Language: dummy
+          <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
+              Language: {ISO6391.getName(language)}
           </button>;
+        console.log('TranslationStore state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
 
         if (contentDetails.mode === 'edit' && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -318,12 +323,13 @@ ContentActionsHeader.contextTypes = {
     intl: React.PropTypes.object.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default ContentActionsHeader;

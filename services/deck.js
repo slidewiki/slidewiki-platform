@@ -51,7 +51,7 @@ export default {
             /* Create promise for slides data success */
             let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
             if (args.language)
-              uri2 += '?language=' + args.language;
+                uri2 += '?language=' + args.language;
             let slidesRes = rp.get({uri:uri2});
             /* Catch errors from deck data response */
             let deckPromise = deckRes.catch((err) => {
@@ -178,7 +178,8 @@ export default {
                     deckOwner: deck.user,
                     revisionOwner: revision.user,
                     sid: args.sid,
-                    localRootDeck: args.id
+                    localRootDeck: args.id,
+                    translations: revision.translations || []
                 };
                 let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
                 // console.log('Returned editors of deck:', editors.editors);
@@ -212,7 +213,7 @@ export default {
             let args = params.params ? params.params : params;
             let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
             if (args.language)
-              uri2 += '?language=' + args.language;
+                uri2 += '?language=' + args.language;
             rp.get({uri: uri2}).then((res) => {
                 callback(null, {slides: JSON.parse(res).children});
             }).catch((err) => {
