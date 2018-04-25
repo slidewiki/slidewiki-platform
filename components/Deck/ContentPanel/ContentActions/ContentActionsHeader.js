@@ -19,6 +19,7 @@ import redoClick from '../../../../actions/slide/redoClick';
 import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import ISO6391 from 'iso-639-1';
+import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 
 
 class ContentActionsHeader extends React.Component {
@@ -113,7 +114,7 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleLanguageButtonClick() {
-
+        $('#DeckTranslationsModalOpenButton').click();
     }
 
     render() {
@@ -263,6 +264,7 @@ class ContentActionsHeader extends React.Component {
 												{translateButton}
                     </div>
                 </div>
+                <DeckTranslationsModal />
                 <div className="column">
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui right floated basic top attached buttons" >

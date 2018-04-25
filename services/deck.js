@@ -235,6 +235,20 @@ export default {
                 return callback(null, response);
             })
             .catch((err) => callback(err));
+        } else if (resource === 'deck.translations') {
+            //atm dummy
+            return callback(null, []);
+
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
+                headers: { '----jwt----': args.jwt },
+                json: true
+            })
+            .then((body) => {
+                callback(null, body);
+            })
+            .catch((err) => callback(err));
         }
     },
     // other methods

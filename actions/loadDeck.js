@@ -24,6 +24,7 @@ import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
 import changeCurrentLanguage from './translation/changeCurrentLanguage';
+import loadDeckTranslations from './translation/loadDeckTranslations';
 
 const log = require('./log/clog');
 
@@ -122,6 +123,9 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             context.executeAction(changeCurrentLanguage, {language: payload.params.language}, callback);
+        },
+        (callback) => {
+            context.executeAction(loadDeckTranslations, {}, callback);
         },
         (callback) => {
             permissionsPromise.then(() => {
