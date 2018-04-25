@@ -17,15 +17,19 @@ export default function saveDeckEdit(context, payload, done) {
         context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
         context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);
         //console.log(payload.selector);
-        context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
+        let params = {
             selector: payload.selector,
             nodeSpec: {
                 title: striptags(payload.title), id: payload.selector.sid,
                 path: payload.selector.spath,
                 theme: payload.theme
-            },
-            allowMarkdown: payload.allowMarkdown
-        });
+            }
+        };
+        //only apply it if root deck is changed
+        if(!payload.selector.spath){
+            params.allowMarkdown = payload.allowMarkdown;
+        }
+        context.dispatch('UPDATE_TREE_NODE_SUCCESS', params);
         //update the URL: redirect to view after edit
         let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + payload.selector.sid + '/' + payload.selector.spath;
         context.executeAction(navigateAction, {
