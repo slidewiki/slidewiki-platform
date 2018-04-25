@@ -33,15 +33,18 @@ class TreePanel extends React.Component {
     }
 
     componentDidMount() {
-        if (sessionStorage.getItem('DeckTree.ShowThumbnails')) {
-            this.setState({showThumbnails: sessionStorage.getItem('DeckTree.ShowThumbnails')});
-        } else {
-            sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
+        if(window.sessionStorage){
+            if (window.sessionStorage.getItem('DeckTree.ShowThumbnails')) {
+                this.setState({showThumbnails: window.sessionStorage.getItem('DeckTree.ShowThumbnails')});
+            } else {
+                window.sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
+            }
         }
     }
 
     toggleShowThumbnails() {
-        sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
+        if(window.sessionStorage)
+            window.sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
         this.setState({showThumbnails: !this.state.showThumbnails});
     }
 
