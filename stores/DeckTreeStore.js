@@ -60,7 +60,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.theme = payload.deckTree.theme;
-        this.allowMarkdown = payload.deckTree.allowMarkdown ? payload.deckTree.allowMarkdown : false;
+        this.allowMarkdown= payload.deckTree.allowMarkdown;
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -77,7 +77,6 @@ class DeckTreeStore extends BaseStore {
             type: deckTree.type,
             path: nodePath,
             theme: deckTree.theme,
-            allowMarkdown: deckTree.allowMarkdown,
             selected: false,
             editable: false,
             onAction: 0
@@ -108,9 +107,8 @@ class DeckTreeStore extends BaseStore {
     //flat tree is used to avoid complex recursive functions on tree
     //it is a trade off: updating the tree needs this to be synchronized
     //this also propagates themes from decks to slide children
-    flattenTree(deckTree, theme, allowMarkdown) {
+    flattenTree(deckTree, theme) {
         if (!theme) theme = deckTree.get('theme');
-        if (!allowMarkdown) allowMarkdown = deckTree.get('allowMarkdown');
 
         let list = [];
         list.push({
@@ -118,18 +116,15 @@ class DeckTreeStore extends BaseStore {
             title: deckTree.get('title'),
             type: deckTree.get('type'),
             path: deckTree.get('path'),
-            theme: theme,
-            allowMarkdown: allowMarkdown,
+            theme: theme
         });
 
         if (deckTree.get('type') === 'deck') {
             deckTree.get('children').forEach((item, index) => {
                 let theme = item.get('theme');
-                let allowMarkdown = item.get('allowMarkdown');
                 if (item.get('type') === 'slide') theme = deckTree.get('theme');
-                if (item.get('type') === 'slide') allowMarkdown = deckTree.get('allowMarkdown');
 
-                list = list.concat(this.flattenTree(item, theme, allowMarkdown));
+                list = list.concat(this.flattenTree(item, theme));
             });
         }
         return list;
@@ -324,9 +319,11 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.nodeSpec.path));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('theme', (val) => payload.nodeSpec.theme));
-        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('allowMarkdown', (val) => payload.nodeSpec.allowMarkdown));
         //update flat tree for slide control
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
+        if (typeof payload.allowMarkdown !== 'undefined') {
+            this.allowMarkdown = payload.allowMarkdown;
+        }
         this.emitChange();
     }
     renameTreeNode(selector) {
