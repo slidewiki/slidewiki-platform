@@ -143,9 +143,9 @@ class DeckTranslationsModal extends React.Component {
 
         let btnMessage = ' ';
         if (this.state.action === 'languageselect')
-            btnMessage = this.context.intl.formatMessage(messages.language)
+            btnMessage = this.context.intl.formatMessage(messages.language);
         else if (this.state.action === 'translate')
-            btnMessage = this.context.intl.formatMessage(messages.translate)
+            btnMessage = this.context.intl.formatMessage(messages.translate);
 
         return (
           <Modal trigger={
