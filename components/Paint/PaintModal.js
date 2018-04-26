@@ -1,7 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import { Container, Modal, Segment } from 'semantic-ui-react';
-let fileSaver = require('../../custom_modules/fabricjs/fileSaver');
 
 const headerStyle = {
     'textAlign': 'center'
@@ -41,6 +40,7 @@ class PaintModal extends React.Component {
         };
 */
         this.objectsStack = [];
+        this.clipboard = null;
 
         //
         this.handleOpen = this.handleOpen.bind(this);
@@ -57,6 +57,8 @@ class PaintModal extends React.Component {
         this.loadImg = this.loadImg.bind(this);
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
+        this.copyActiveObjects = this.copyActiveObjects.bind(this);
+        this.paste = this.paste.bind(this);
     }
 
     componentDidMount() {
@@ -247,8 +249,8 @@ class PaintModal extends React.Component {
         let url = href.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
 
 
-        let a = document.createElement("a");
-        a.style = "display: none";
+        let a = document.createElement('a');
+        a.style = 'display: none';
         a.href = url;
         a.download = 'image.png';
         document.body.appendChild(a);
@@ -313,6 +315,42 @@ class PaintModal extends React.Component {
         */
     }
 
+    copyActiveObjects() {
+
+        this.canvas.getActiveObject().clone((cloned) => {
+            this.clipboard = cloned;
+        });
+
+    }
+
+    paste() {
+
+        this.clipboard.clone( (clonedObj) => {
+            this.canvas.discardActiveObject();
+            clonedObj.set({
+                left: clonedObj.left + 10,
+                top: clonedObj.top + 10,
+                evented: true,
+            });
+
+            if (clonedObj.type === 'activeSelection') {
+                // active selection needs a reference to the canvas.
+                clonedObj.canvas = this.canvas;
+                clonedObj.forEachObject((obj) => {
+                    this.canvas.add(obj);
+                });
+                // this should solve the unselectability
+                clonedObj.setCoords();
+            } else {
+                this.canvas.add(clonedObj);
+            }
+            this.clipboard.top += 10;
+            this.clipboard.left += 10;
+            this.canvas.setActiveObject(clonedObj);
+            this.canvas.requestRenderAll();
+        });
+    }
+
     render() {
 
         return(
@@ -372,6 +410,8 @@ class PaintModal extends React.Component {
 
                                         <button onClick={this.undo}>Undo</button>
                                         <button onClick={this.redo}>Redo</button>
+                                        <button onClick={this.copyActiveObjects}>Copy Selected Objects</button>
+                                        <button onClick={this.paste}>Paste</button>
                                     </div>
                                 </Segment>
                             </Segment>
