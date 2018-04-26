@@ -45,8 +45,10 @@ import ContentLikeStore from './stores/ContentLikeStore';
 import DeckFamilyStore from './stores/DeckFamilyStore';
 import MediaStore from './stores/MediaStore';
 import UserReviewStore from './stores/UserReviewStore';
+import EditRightsStore from './stores/EditRightsStore';
 import DeckCollectionStore from './stores/DeckCollectionStore';
 import SSOStore from './stores/SSOStore';
+import LoginModalStore from './stores/LoginModalStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -94,9 +96,11 @@ const app = new Fluxible({
         ContentLikeStore,
         DeckFamilyStore,
         UserReviewStore,
-        MediaStore, 
+        MediaStore,
+        EditRightsStore,
         DeckCollectionStore,
-        SSOStore
+        SSOStore,
+        LoginModalStore
     ]
 });
 

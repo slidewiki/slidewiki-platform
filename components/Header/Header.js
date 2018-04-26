@@ -12,6 +12,7 @@ import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
@@ -24,7 +25,14 @@ class Header extends React.Component {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
         $(this.refs.languagebar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+
+        $('.ui.login.modal').modal({
+            onHidden: () => {
+                this.context.executeAction(updateTrap,{activeTrap:false});
+                $('#app').attr('aria-hidden','false');
+            }
+        });
     }
 
     toggleSidebar() {
@@ -43,9 +51,14 @@ class Header extends React.Component {
     }
 
     handleLoginButton() {
-        $('.ui.login.modal')
-            .modal('toggle');
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('toggle');
+
+
         this.closeSidebar({target: '<a className="item"></a>'});
+
     }
 
     logout() {
@@ -104,59 +117,59 @@ class Header extends React.Component {
 
         return (
             <div>
-            {cookieBanner}
-              <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
-                <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
-                    <div className="ui fluid container">
-                        <a className="item" href='/'>
-                            <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
-                        </a>
-                        <div className="item">
+                {cookieBanner}
+                <MediaQuery minWidth={768} values={{deviceWidth: 1600}}>
+                    <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
+                        <div className="ui fluid container">
+                            <a className="item" href='/'>
+                                <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
+                            </a>
+                            <div className="item">
+                                <SearchBox className="item"/>
+                            </div>
+                            <div className="ui right inverted blue menu">
+                                <div className="item">
+                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button" role="button">
+                                      <i className="right plus icon"></i>
+                                      <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
+                                  </NavLink>
+                                </div>
+                                {notification_locale}
+                                <div className="item">{loginButton}<LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/></div>
+                            </div>
+                        </div>
+                    </div>
+                </MediaQuery>
+                <MediaQuery maxWidth={767}>
+                    <div className="ui inverted blue menu" style={{borderRadius: '0px'}} ref="header">
+                        <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
+                        <div className="ui right inverted blue menu">
+                            <NavLink className="item" href='/'>
+                                <i className="home icon"/><FormattedMessage id='header.slidewiki' defaultMessage='SlideWiki'/>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
+                        <NavLink className="item" href='/'>
+                            <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
+                        </NavLink>
+                        <NavLink className="item" routeName="addDeck">
+                            <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
+                        </NavLink>
+                        <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
+                            <i className="caret right icon"/>
+                            <LocaleSwitcher mode="headeronly"/>
+                        </div>
+                        {mobileLoginButton}
+                        <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
+                        <div className="item search">
                             <SearchBox className="item"/>
                         </div>
-                        <div className="ui right inverted blue menu">
-                            <div className="item">
-                              <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button" role="button">
-                                  <i className="right plus icon"></i>
-                                  <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
-                              </NavLink>
-                            </div>
-                            {notification_locale}
-                            <div className="item">{loginButton}<LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/></div>
-                        </div>
                     </div>
-                </div>
-              </MediaQuery>
-              <MediaQuery maxDeviceWidth={767}>
-                <div className="ui inverted blue menu" style={{borderRadius: '0px'}} ref="header">
-                  <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
-                  <div className="ui right inverted blue menu">
-                    <NavLink className="item" href='/'>
-                        <i className="home icon"/><FormattedMessage id='header.slidewiki' defaultMessage='SlideWiki'/>
-                    </NavLink>
-                  </div>
-                </div>
-                <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
-                    <NavLink className="item" href='/'>
-                        <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
-                    </NavLink>
-                    <NavLink className="item" routeName="addDeck">
-                        <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
-                    </NavLink>
-                    <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
-                        <i className="caret right icon"/>
-                        <LocaleSwitcher mode="headeronly"/>
+                    <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
+                        <LocaleSwitcher mode="sidebar"/>
                     </div>
-                    {mobileLoginButton}
-                    <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
-                    <div className="item search">
-                        <SearchBox className="item"/>
-                    </div>
-                </div>
-                <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
-                    <LocaleSwitcher mode="sidebar"/>
-                </div>
-              </MediaQuery>
+                </MediaQuery>
             </div>
         );
     }
