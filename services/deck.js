@@ -237,7 +237,7 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'deck.translations') {
             //atm dummy
-            return callback(null, []);
+            return callback(null, ['de']);
 
             rp({
                 method: 'GET',

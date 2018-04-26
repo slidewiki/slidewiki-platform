@@ -2,9 +2,10 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { Button, Modal, Divider, TextArea,Dropdown} from 'semantic-ui-react';
+import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-react';
 import TranslationStore from '../../../../stores/TranslationStore';
 import ISO6391 from 'iso-639-1';
+import {navigateAction} from 'fluxible-router';
 
 class DeckTranslationsModal extends React.Component {
 
@@ -13,7 +14,9 @@ class DeckTranslationsModal extends React.Component {
 
         this.state = {
             openModal: false,
-            activeTrap: false
+            activeTrap: false,
+            action: '',
+            languageCode: ''
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -33,7 +36,9 @@ class DeckTranslationsModal extends React.Component {
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,
-            activeTrap: false
+            activeTrap: false,
+            action: '',
+            languageCode: ''
         });
     }
 
@@ -44,12 +49,33 @@ class DeckTranslationsModal extends React.Component {
         }
     }
 
-    handleTranslationSelection() {
-
+    handleTranslationSelection(e, data) {
+        this.setState({ action: 'languageselect', languageCode: data.value });
     }
 
-    handleLanguageSelection() {
+    handleLanguageSelection(e, data) {
+        this.setState({ action: 'translate', languageCode: data.value });
+    }
 
+    handleActionClick(e) {
+        if (this.state.action === 'languageselect') {
+            this.handleClose();
+
+            let path = location.pathname;
+            let pathElements = path.split('/');
+            let element = pathElements[2];
+            let index = element.indexOf('_');
+            if (index === -1) {
+                pathElements[2] = element + '_' + this.state.languageCode;
+            }
+            else {
+                pathElements[2] = element.substring(0, index) + '_' + this.state.languageCode;
+            }
+            path = pathElements.join('/');
+            this.context.executeAction(navigateAction, {
+                url: path
+            });
+        }
     }
 
     render() {
@@ -86,9 +112,13 @@ class DeckTranslationsModal extends React.Component {
                 id: 'DeckTranslationsModal.cancel',
                 defaultMessage: 'Cancel',
             },
-            save: {
-                id: 'DeckTranslationsModal.save',
-                defaultMessage: 'Save',
+            translate: {
+                id: 'DeckTranslationsModal.translate',
+                defaultMessage: 'Create translation',
+            },
+            language: {
+                id: 'DeckTranslationsModal.language',
+                defaultMessage: 'Switch to language',
             },
         });
 
@@ -105,10 +135,17 @@ class DeckTranslationsModal extends React.Component {
         let languagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
-                arr.push({key: current, value: current, text: ISO6391.getNativeName(current)});
+                if (!this.props.TranslationStore.translations.find((t) => t === current))
+                    arr.push({key: current, value: current, text: ISO6391.getNativeName(current)});
                 return arr;
             }, []);
         }
+
+        let btnMessage = ' ';
+        if (this.state.action === 'languageselect')
+            btnMessage = this.context.intl.formatMessage(messages.language)
+        else if (this.state.action === 'translate')
+            btnMessage = this.context.intl.formatMessage(messages.translate)
 
         return (
           <Modal trigger={
@@ -136,19 +173,22 @@ class DeckTranslationsModal extends React.Component {
                   </Modal.Header>
                   <Modal.Content id="DeckTranslationsModalDescription">
                       <Divider />
-                      {this.context.intl.formatMessage(message)} {ISO6391.getNativeName(this.props.TranslationStore.treeLanguage)}
+                      {this.context.intl.formatMessage(message)} <Segment compact>{ISO6391.getNativeName(this.props.TranslationStore.treeLanguage)}</Segment>
+                      <br/>
                       <br/>
 
                       {this.context.intl.formatMessage(messages.switch)}
                       <br/>
                       <Dropdown
                           placeholder={this.context.intl.formatMessage(messages.chooseTranslation)}
+                          fluid
                           scrolling
                           selection
                           search
                           options={translationOptions}
                           onChange={this.handleTranslationSelection.bind(this)}
                           id="DeckTranslationsModalTranslationsDropdown"
+                          name='translationSelection'
                         />
                       <br/>
                       <br/>
@@ -157,14 +197,17 @@ class DeckTranslationsModal extends React.Component {
                       <br/>
                       <Dropdown
                           placeholder={this.context.intl.formatMessage(messages.chooseLanguage)}
+                          fluid
                           scrolling
                           selection
                           search
                           options={languagesOptions}
                           onChange={this.handleLanguageSelection.bind(this)}
+                          name='languageSelection'
                         />
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
+                        <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} icon="save" labelPosition='left' content={btnMessage}/>
                         <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)}/>
                       </Modal.Actions>
                   </Modal.Content>

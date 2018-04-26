@@ -125,6 +125,7 @@ export default function loadDeck(context, payload, done) {
             context.executeAction(changeCurrentLanguage, {language: payload.params.language}, callback);
         },
         (callback) => {
+            delete payload.params.language;//TODO remove
             context.executeAction(loadDeckTranslations, {}, callback);
         },
         (callback) => {
