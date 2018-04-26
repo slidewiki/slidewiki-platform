@@ -19,7 +19,10 @@ export default {
             let returnErr = false;
             let slideServiceRes;
             //let theme = get_sample_theme();
-            let isSubdeck = selector.id !== selector.subdeck;
+            let isSubdeck = false;
+            if(selector.subdeck){
+                isSubdeck = selector.id !== selector.subdeck;
+            }
             let id = isSubdeck ? selector.subdeck : selector.id;
             console.log( Microservices.deck.uri + '/deck/' + String(id) + '/slides');
 
