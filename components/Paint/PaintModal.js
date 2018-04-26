@@ -44,6 +44,8 @@ class PaintModal extends React.Component {
 
         //
         this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
         this.startFabric = this.startFabric.bind(this);
         this.addRect = this.addRect.bind(this);
         this.addCircle = this.addCircle.bind(this);
@@ -160,8 +162,14 @@ class PaintModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
+    }
 
-
+    handleClose(){
+        $('#app').attr('aria-hidden', 'false');
+        this.setState({
+            modalOpen: false,
+            activeTrap: false
+        });
     }
 
     unmountTrap() {
@@ -369,7 +377,12 @@ class PaintModal extends React.Component {
                             </Segment>
 
                         </Container>
-
+                        <div className="actions">
+                            <button type="cancel" onClick={this.handleClose} className="ui cancel button">
+                                <i className="remove icon"/>
+                                Cancel
+                            </button>
+                        </div>
                     </Modal.Content>
 
                 </FocusTrap>
