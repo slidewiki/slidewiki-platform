@@ -36,7 +36,7 @@ class TreePanel extends React.Component {
         if(window.sessionStorage){
             let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
             if (showThumbnails) {
-                this.setState({showThumbnails: (showThumbnails === true)});
+                this.setState({showThumbnails: (showThumbnails === 'true')});
             } else {
                 window.sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
             }
