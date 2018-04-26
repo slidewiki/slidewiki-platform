@@ -919,7 +919,7 @@ class SlideContentEditor extends React.Component {
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
         $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
-        if(document.domain !== 'localhost')
+        if(!document.domain in ['localhost', '0.0.0.0'])
         {
             // prevent problems with Cross Origin Resource Sharing when import service returns script
             // set document domain to a suffix of the current domain
