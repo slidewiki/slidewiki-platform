@@ -356,6 +356,14 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
+            // check params for slug misinterpretation
+            if (payload.params.slug && !payload.params.stype && payload.params.sid) {
+                let stype = payload.params.slug.substring(1);
+                if (['deck', 'slide', 'question'].includes(stype)) {
+                    payload.params.stype = stype;
+                    payload.params.slug = undefined;
+                }
+            }
             async.series([
                 (callback) => {
                     context.executeAction(loadDeck, payload, callback);
