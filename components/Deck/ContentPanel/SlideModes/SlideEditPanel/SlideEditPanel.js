@@ -15,12 +15,14 @@ class SlideEditPanel extends React.Component {
         this.editorcontent = '';
     }
     componentWillMount(){
+      /* TODO: allow server-side rendering
         if (this.props.useMarkdown && (this.currentID !== this.props.selector.sid))
         {
             //console.log('slide id changed - destroy/unmount SlideContentEditor component');
             this.editorcontent = ''; //destroy/unmount SlideContentEditor component
             this.currentID = this.props.selector.sid;
         }
+        */
     }
     componentDidMount(){
 
