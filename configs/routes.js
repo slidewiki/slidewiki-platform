@@ -549,15 +549,26 @@ export default {
         }
 
     },
-
-
     presentation: {
         path: '/presentation:slug(_.+)?/:id/:subdeck?/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.sid = payload.params.id;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
         }
     },
     neo4jguide: {
