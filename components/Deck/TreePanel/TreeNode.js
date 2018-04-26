@@ -195,11 +195,11 @@ class TreeNode extends React.Component {
                     </div>;
             } else {
                 divToInsert =
-                    <h3 onFocus={this.handleFocus} onBlur={this.handleBlur}>
+                    <div onFocus={this.handleFocus} onBlur={this.handleBlur}>
                         {(this.props.item.get('type') === 'deck') && this.props.showThumbnails ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassImageMode} aria-hidden="true"> </i> : ''}
                         <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }}>{content}</NavLink>
                         {(this.props.item.get('type') === 'deck'  && this.props.showThumbnails) ? <div className="ui fitted divider"/> : ''}
-                    </h3>;
+                    </div>;
             }
         }
         let compStyle = {

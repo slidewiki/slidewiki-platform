@@ -34,8 +34,9 @@ class TreePanel extends React.Component {
 
     componentDidMount() {
         if(window.sessionStorage){
-            if (window.sessionStorage.getItem('DeckTree.ShowThumbnails')) {
-                this.setState({showThumbnails: window.sessionStorage.getItem('DeckTree.ShowThumbnails')});
+            let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
+            if (showThumbnails) {
+                this.setState({showThumbnails: (showThumbnails === true)});
             } else {
                 window.sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
             }
@@ -241,7 +242,7 @@ class TreePanel extends React.Component {
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
                     <div className="ui attached segment">
-                        <Checkbox ref="showThumbnails" toggle label='Show Thumbnails' onChange={this.toggleShowThumbnails.bind(this)} checked={this.state.showThumbnails}/>
+                        <Checkbox ref="showThumbnails" toggle onChange={this.toggleShowThumbnails.bind(this)} checked={this.state.showThumbnails} id="ShowThumbnails" label={<label htmlFor="ShowThumbnails">Show Thumbnails</label>}></Checkbox>
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
