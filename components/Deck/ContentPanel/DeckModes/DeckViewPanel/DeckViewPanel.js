@@ -204,6 +204,7 @@ class DeckViewPanel extends React.Component {
                             {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                             {slidesArr.map((slide, index) => {
                                 let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
+                                let thumbnailAlt = slide.title === undefined ? slide.id : slide.title + ' | ' + slide.id;
                                 if (slide.theme) {
                                     thumbnailURL += '/' + slide.theme;
                                 }
@@ -212,7 +213,7 @@ class DeckViewPanel extends React.Component {
                                         <div key={index} className="ui card">
                                             <NavLink href={deckURL + '/slide/' + slide.id} className="ui image"
                                                tabIndex="-1">
-                                                <img key={index} src={thumbnailURL} alt={slide.id} tabIndex={-1}/>
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
                                             </NavLink>
                                             <div className="content" tabIndex="-1">
                                                 <NavLink href={deckURL + '/slide/' + slide.id}

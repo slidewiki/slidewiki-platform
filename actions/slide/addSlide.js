@@ -15,9 +15,9 @@ export default function addSlide(context, payload, done) {
         }
         //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
         let pageTitle = shortTitle + ' | Slide Edit | ';
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //    pageTitle: pageTitle
+        //});
         done();
     }
 
