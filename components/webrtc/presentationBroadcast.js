@@ -86,7 +86,7 @@ class presentationBroadcast extends React.Component {
                 peerCountText: 'People currently listening: '
             });
             setmyID();
-            that.socket.emit('follow hashtag', that.hashTag.join(' '), that.room, that.deckID);
+            that.socket.emit('follow hashtag', that.hashTags.join(' '), that.room, that.deckID);
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             requestStreams({
                 audio: true,
