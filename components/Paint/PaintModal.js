@@ -1,14 +1,14 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import { Container, Modal, Segment } from 'semantic-ui-react';
+import { Divider, Modal, Segment } from 'semantic-ui-react';
 
 const headerStyle = {
     'textAlign': 'center'
 };
 
 const canvasStyle = {
-    'height': '0px',
-    'width': '0px',
+    'height': '1em',
+    'width': '1em',
     'border': '1px solid #000000'
 };
 
@@ -50,6 +50,9 @@ class PaintModal extends React.Component {
         this.addRect = this.addRect.bind(this);
         this.addCircle = this.addCircle.bind(this);
         this.addTriangle = this.addTriangle.bind(this);
+        //this.getRandomInt = fabric.util.getRandomInt;
+        this.addArrow = this.addArrow.bind(this);
+        this.addText = this.addText.bind(this);
         this.downloadImg = this.downloadImg.bind(this);
         this.deleteElement = this.deleteElement.bind(this);
         this.setDrawingMode = this.setDrawingMode.bind(this);
@@ -211,6 +214,46 @@ class PaintModal extends React.Component {
         this.canvas.add(new fabric.Triangle({
             left: coord.left,
             top: coord.top,
+            fill: this.primaryColor,
+            width: 50,
+            height: 50,
+            opacity: 1
+        }));
+    }
+
+    addText(){
+        //let text = 'Insert your text\n   here';
+
+        let textSample = new fabric.IText('Insert your text\n   here', {
+            left: 55,
+            top: 30,
+            fontFamily: 'helvetica',
+            angle: 0,
+            fill: this.primaryColor,
+            scaleX: 0.5,
+            scaleY: 0.5,
+            fontWeight: '',
+            originX: 'left',
+            hasRotatingPoint: true,
+            centerTransform: true
+        });
+
+        this.canvas.add(textSample);
+        this.canvas.renderAll();
+
+    }
+
+    addArrow() {
+        let path = new fabric.Path('M121.32,0L44.58,0C36.67,0,29.5,3.22,24.31,8.41\
+            c-5.19,5.19-8.41,12.37-8.41,20.28c0,15.82,12.87,28.69,28.69,28.69c0,0,4.4,\
+            0,7.48,0C36.66,72.78,8.4,101.04,8.4,101.04C2.98,106.45,0,113.66,0,121.32\
+            c0,7.66,2.98,14.87,8.4,20.29l0,0c5.42,5.42,12.62,8.4,20.28,8.4c7.66,0,14.87\
+            -2.98,20.29-8.4c0,0,28.26-28.25,43.66-43.66c0,3.08,0,7.48,0,7.48c0,15.82,\
+            12.87,28.69,28.69,28.69c7.66,0,14.87-2.99,20.29-8.4c5.42-5.42,8.4-12.62,8.4\
+            -20.28l0-76.74c0-7.66-2.98-14.87-8.4-20.29C136.19,2.98,128.98,0,121.32,0z');
+
+        this.canvas.add(path.set({ left: 30,
+            top: 30,
             fill: this.primaryColor,
             width: 50,
             height: 50,
@@ -383,7 +426,7 @@ class PaintModal extends React.Component {
                         <h1 style={headerStyle}>Draw and Paint</h1>
                     </Modal.Header>
                     <Modal.Content>
-                        <Container>
+                        <Divider/>
                             <Segment color="blue" textAlign="left" padded>
                                 <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
 
@@ -396,6 +439,8 @@ class PaintModal extends React.Component {
                                         <button onClick={this.addRect}>Add Rectangle</button>
                                         <button onClick={this.addCircle}>Add Circle</button>
                                         <button onClick={this.addTriangle}>Add Triangle</button>
+                                        {/*<button onClick={this.addText}>Add Text</button>*/}
+                                        <button onClick={this.addArrow}>Add Arrow</button>
                                         <button onClick={this.downloadImg}>Download Image</button>
                                         <input type="color" id="primaryColor"/>
                                         <input type="color" id="secondaryColor"/>
@@ -416,7 +461,7 @@ class PaintModal extends React.Component {
                                 </Segment>
                             </Segment>
 
-                        </Container>
+                        <Divider/>
                         <div className="actions">
                             <button type="cancel" onClick={this.handleClose} className="ui cancel button">
                                 <i className="remove icon"/>
