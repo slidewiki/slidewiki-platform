@@ -42,6 +42,7 @@ class DeckPropertiesEditor extends React.Component {
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
+            allowMarkdown: props.deckProps.allowMarkdown || false,
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
@@ -225,6 +226,7 @@ class DeckPropertiesEditor extends React.Component {
             this.context.executeAction(saveAction, {
                 deckId: deckId,
                 title: this.state.title,
+                allowMarkdown: this.state.allowMarkdown,
                 language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
@@ -252,6 +254,9 @@ class DeckPropertiesEditor extends React.Component {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
         this.setState(stateChange);
+    }
+    onChangeMarkdown(event) {
+        this.setState({allowMarkdown: !this.state.allowMarkdown});
     }
 
     handleClickRemoveUser(member, event) {
@@ -557,6 +562,12 @@ class DeckPropertiesEditor extends React.Component {
                 <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
             </div>
         </div>;
+        let markdownField = <div className="field">
+                <div className="ui checkbox">
+                    <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
+                    <label>Allow Markdown editing of slides</label>
+                </div>
+         </div>;
 
 
         let description = <div className="field">
@@ -609,7 +620,7 @@ class DeckPropertiesEditor extends React.Component {
                             {titleAndLanguage}
                             {description}
                             {themeAndLicence}
-
+                            {markdownField}
                             {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
                                 <div>
                                     <div className="two fields">

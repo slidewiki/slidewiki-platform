@@ -18,6 +18,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = null;
         this.latestRevisionId = null;
         this.theme = null;
+        this.allowMarkdown = false;
     }
     updateDeckTree(payload) {
         this.isSelectorValid = true;
@@ -59,6 +60,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.theme = payload.deckTree.theme;
+        this.allowMarkdown= payload.deckTree.allowMarkdown;
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -114,7 +116,7 @@ class DeckTreeStore extends BaseStore {
             title: deckTree.get('title'),
             type: deckTree.get('type'),
             path: deckTree.get('path'),
-            theme: theme,
+            theme: theme
         });
 
         if (deckTree.get('type') === 'deck') {
@@ -319,6 +321,9 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('theme', (val) => payload.nodeSpec.theme));
         //update flat tree for slide control
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
+        if (typeof payload.allowMarkdown !== 'undefined') {
+            this.allowMarkdown = payload.allowMarkdown;
+        }
         this.emitChange();
     }
     renameTreeNode(selector) {
@@ -599,7 +604,8 @@ class DeckTreeStore extends BaseStore {
             isSelectorValid: this.isSelectorValid,
             revisionId: this.revisionId,
             latestRevisionId: this.latestRevisionId,
-            theme: this.theme
+            theme: this.theme,
+            allowMarkdown: this.allowMarkdown
         };
     }
     dehydrate() {
@@ -617,6 +623,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = state.revisionId;
         this.latestRevisionId = state.latestRevisionId;
         this.theme = state.theme;
+        this.allowMarkdown = state.allowMarkdown;
     }
     handleDeckTreeError(err){
         this.error = err;

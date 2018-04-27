@@ -47,15 +47,15 @@ class ContentActionsFooter extends React.Component {
     getPresentationHref(){
         let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
         if(!this.props.ContentStore.selector.subdeck){
-
+            //do not duplicate deck ID! only for slides duplicate it
             presLocation += this.props.ContentStore.selector.id + '/';
         }
         else{
             presLocation += this.props.ContentStore.selector.subdeck + '/';
         }
         if(this.props.ContentStore.selector.stype === 'slide'){
-            // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += this.props.ContentStore.selector.sid;// + '/';
+            presLocation += this.props.ContentStore.selector.sid + '/';
+            //presLocation = presLocation+ '#' + this.props.ContentStore.selector.sid;// + '/';
         }
         return presLocation;
     }
