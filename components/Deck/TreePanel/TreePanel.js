@@ -18,9 +18,6 @@ import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
-import { Checkbox } from 'semantic-ui-react';
-
-
 class TreePanel extends React.Component {
 
     constructor(props) {
@@ -33,6 +30,7 @@ class TreePanel extends React.Component {
     }
 
     componentDidMount() {
+        $('#showThumbnails').checkbox();
         if(window.sessionStorage){
             let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
             if (showThumbnails) {
@@ -196,6 +194,13 @@ class TreePanel extends React.Component {
                                     <i className="translate blue large icon"></i>
                                 </div>
         */
+
+        let ShowThumbnailsCheckBoxClasses = classNames({
+            'ui': true,
+            'toggle': true,
+            'checkbox': true,
+            'checked': this.state.showThumbnails
+        });
         return (
             <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
@@ -242,7 +247,10 @@ class TreePanel extends React.Component {
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
                     <div className="ui attached segment">
-                        <Checkbox ref="showThumbnails" toggle onChange={this.toggleShowThumbnails.bind(this)} checked={this.state.showThumbnails} id="ShowThumbnails" label={<label htmlFor="ShowThumbnails">Show Thumbnails</label>}></Checkbox>
+                        <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
+                            <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" value={this.state.showThumbnails ? 'on' : 'off'}/>
+                            <label htmlFor="ShowThumbnails">Show Thumbnails</label>
+                        </div>
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
