@@ -7,9 +7,8 @@ const headerStyle = {
 };
 
 const canvasStyle = {
-    'height': '1em',
-    'width': '1em',
-    'border': '1px solid #000000'
+    'height': '0px',
+    'width': '0px'
 };
 
 class PaintModal extends React.Component {
@@ -75,6 +74,7 @@ class PaintModal extends React.Component {
     startFabric(){
         this.canvas = new fabric.Canvas('fabriccanvas');
 
+        $('#fabriccanvas').css('border', '1px solid #000000');
         this.canvas.setHeight(500);
         this.canvas.setWidth(600);
 
@@ -167,6 +167,11 @@ class PaintModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
+        // Hack to properly recreate the canvas
+        setTimeout(() => {
+            this.startFabric();
+        }, 100);
+
     }
 
     handleClose(){
@@ -395,6 +400,37 @@ class PaintModal extends React.Component {
     }
 
     render() {
+        let content = <div>
+            <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
+
+            <Segment textAlign="center" >
+                <p>Draw inside the canvas using the tools provided.</p>
+                <canvas id="fabriccanvas" style={canvasStyle}/>
+                <div>
+                    <button onClick={this.addRect}>Add Rectangle</button>
+                    <button onClick={this.addCircle}>Add Circle</button>
+                    <button onClick={this.addTriangle}>Add Triangle</button>
+                    {/*<button onClick={this.addText}>Add Text</button>*/}
+                    <button onClick={this.addArrow}>Add Arrow</button>
+                    <button onClick={this.downloadImg}>Download Image</button>
+                    <input type="color" id="primaryColor"/>
+                    <input type="color" id="secondaryColor"/>
+                    <button onClick={this.deleteElement}>Delete selected objects</button>
+                    <br/>
+                    <div className="ui slider checkbox">
+                        <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
+                        <label>Drawing mode</label>
+                    </div>
+                    <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
+                    <p>Load Image! </p><input type="file" onChange={this.loadImg}/>
+
+                    <button onClick={this.undo}>Undo</button>
+                    <button onClick={this.redo}>Redo</button>
+                    <button onClick={this.copyActiveObjects}>Copy Selected Objects</button>
+                    <button onClick={this.paste}>Paste</button>
+                </div>
+            </Segment>
+        </div>
 
         return(
 
@@ -427,40 +463,8 @@ class PaintModal extends React.Component {
                     </Modal.Header>
                     <Modal.Content>
                         <Divider/>
-                            <Segment color="blue" textAlign="left" padded>
-                                <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
-
-                                <Segment textAlign="center" >
-                                    <p>Draw inside the canvas using the tools provided.</p>
-                                    <button onClick={this.startFabric} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')}>Click and start drawing!</button>
-
-                                    <canvas id="fabriccanvas" style={canvasStyle}/>
-                                    <div>
-                                        <button onClick={this.addRect}>Add Rectangle</button>
-                                        <button onClick={this.addCircle}>Add Circle</button>
-                                        <button onClick={this.addTriangle}>Add Triangle</button>
-                                        {/*<button onClick={this.addText}>Add Text</button>*/}
-                                        <button onClick={this.addArrow}>Add Arrow</button>
-                                        <button onClick={this.downloadImg}>Download Image</button>
-                                        <input type="color" id="primaryColor"/>
-                                        <input type="color" id="secondaryColor"/>
-                                        <button onClick={this.deleteElement}>Delete selected objects</button>
-                                        <br/>
-                                        <div className="ui slider checkbox">
-                                            <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
-                                            <label>Drawing mode</label>
-                                        </div>
-                                        <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
-                                        <p>Load Image! </p><input type="file" onChange={this.loadImg}/>
-
-                                        <button onClick={this.undo}>Undo</button>
-                                        <button onClick={this.redo}>Redo</button>
-                                        <button onClick={this.copyActiveObjects}>Copy Selected Objects</button>
-                                        <button onClick={this.paste}>Paste</button>
-                                    </div>
-                                </Segment>
-                            </Segment>
-
+                            <Segment color="blue" textAlign="left" padded/>
+                                {content}
                         <Divider/>
                         <div className="actions">
                             <button type="cancel" onClick={this.handleClose} className="ui cancel button">
