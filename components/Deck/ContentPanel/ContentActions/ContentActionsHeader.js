@@ -63,7 +63,9 @@ class ContentActionsHeader extends React.Component {
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "slide", id: "0"}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
+        const contentDetails = this.props.ContentStore;
+        //added mode to the navigate action
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec, mode: contentDetails.mode});
     }
 
     handleDeleteNode(selector) {
@@ -96,6 +98,16 @@ class ContentActionsHeader extends React.Component {
 
     handleEditButton(selector) {
         const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
+        if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
+            this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else {
+            this.context.executeAction(navigateAction, {
+                url: nodeURL
+            });
+        }
+    }
+    handleMarkdownEditButton(selector) {
+        const nodeURL = ContentUtil.makeNodeURL(selector, 'markdownEdit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
@@ -146,11 +158,12 @@ class ContentActionsHeader extends React.Component {
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
-        let editButton, saveButton, cancelButton, undoButton, redoButton;
+        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
 
-        if (contentDetails.mode === 'edit' && this.props.UserProfileStore.username !== ''){
+        if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
             editButton = '';
+            markdownEditButton = '';
             //ref="" --> we can't use string refs as they are legacy. ref={(refName)=>{this.refName=refName}}
             if(contentDetails.selector.stype === 'slide'){
                 saveButton =
@@ -205,6 +218,22 @@ class ContentActionsHeader extends React.Component {
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
+                if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
+                    markdownEditButton =
+                        <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
+                            type="button"
+                            aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
+                            tabIndex = {contentDetails.mode ==='markdownEdit'?-1:0}
+                            >
+                            <i className="icons">
+                                <i className="large violet edit icon"></i>
+                                <i className=""></i>
+                            </i>
+                            Markdown
+
+                        </button>;
+                }
+
             }
             saveButton ='';
             cancelButton ='';
@@ -229,6 +258,7 @@ class ContentActionsHeader extends React.Component {
                 <div className="column">
                     <div className="ui left floated top attached buttons" >
                         {editButton}
+                        {markdownEditButton}
                         {saveButton}
                         {cancelButton}
                         {undoButton}
