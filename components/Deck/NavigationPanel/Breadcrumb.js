@@ -9,7 +9,7 @@ class Breadcrumb extends React.Component {
         let self = this;
         let nodes = [];
         let list, output = '';
-        let urlPrefix = '/deck/' + self.props.selector.get('id') + '/' + (slug(this.props.rootDeckName).toLowerCase() || '_');
+        let urlPrefix = '/deck/' + self.props.selector.get('id') + '/' + (slug(this.props.rootDeckName || '').toLowerCase() || '_');
         if(this.props.selector.get('spath')){
             nodes = this.props.selector.get('spath').split(';');
             list = nodes.map((node, index) => {
