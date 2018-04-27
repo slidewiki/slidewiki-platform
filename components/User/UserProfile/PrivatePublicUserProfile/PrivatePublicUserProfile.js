@@ -54,15 +54,18 @@ class PrivatePublicUserProfile extends React.Component {
                         <Header size='small' dividing >Publication status</Header>
                         <List>
                             <List.Item>
-                                <Checkbox radio name='published_status' value='public' label='Published'
+                                <Checkbox radio name='published_status' value='public'
+                                    aria-labelledby='published_public_label' label={<label id='published_public_label'>Published</label>}
                                     checked={meta.status === 'public'} onChange={this.handleFilterChange.bind(this)} />
                             </List.Item>
                             <List.Item>
-                                <Checkbox radio name='published_status' value='hidden' label='Not published'
+                                <Checkbox radio name='published_status' value='hidden'
+                                    aria-labelledby='published_hidden_label' label={<label id='published_hidden_label'>Unlisted</label>}
                                     checked={meta.status === 'hidden'} onChange={this.handleFilterChange.bind(this)} />
                             </List.Item>
                             <List.Item>
                                 <Checkbox radio name='published_status' value='any' label='All'
+                                    aria-labelledby='published_any_label' label={<label id='published_any_label'>All</label>}
                                     checked={meta.status === 'any'} onChange={this.handleFilterChange.bind(this)} />
                             </List.Item>
                         </List>

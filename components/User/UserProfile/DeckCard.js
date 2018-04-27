@@ -27,7 +27,13 @@ class DeckCard extends React.Component {
         let deck_slug = this.props.cardContent.title? slug(this.props.cardContent.title) : '';
         let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
 
-        let hiddenRibbon = this.props.cardContent.hidden ? <span className="ui red right ribbon label" aria-label='Not published'>Not published</span> : '';
+        let ariaLabel = `Deck: ${this.props.cardContent.title}. Last updated ${timeSince((new Date(this.props.cardContent.updated)))} ago`;
+
+        let hiddenRibbon = '';
+        if (this.props.cardContent.hidden) {
+            hiddenRibbon = <span className="ui red right ribbon label" tabIndex={-1}>Unlisted</span>;
+            ariaLabel = `Unlisted ${ariaLabel}`;
+        };
         return (
             <div className='ui card'>
                 {this.props.newTab === true ? (
@@ -44,15 +50,15 @@ class DeckCard extends React.Component {
                     <div className="header">
                         {this.props.newTab === true ? (
                             this.props.cardContent.title.length > 25 ? (
-                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={ariaLabel} target='_blank'>{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
-                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'} target='_blank' >{this.props.cardContent.title}</a>
+                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={ariaLabel} target='_blank' >{this.props.cardContent.title}</a>
                             )
                         ) : (
                             this.props.cardContent.title.length > 25 ? (
-                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'}  >{this.props.cardContent.title.slice(0,24) + '...'}</a>
+                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={ariaLabel}  >{this.props.cardContent.title.slice(0,24) + '...'}</a>
                             ) : (
-                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={'Deck: ' + this.props.cardContent.title + '. Last updated ' + timeSince((new Date(this.props.cardContent.updated))) + 'ago'} >{this.props.cardContent.title}</a>
+                                <a href={'/deck' +(deck_slug ? '_' + deck_slug: '')+'/'+ this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title} aria-label={ariaLabel} >{this.props.cardContent.title}</a>
                             )
                         )}
                     </div>

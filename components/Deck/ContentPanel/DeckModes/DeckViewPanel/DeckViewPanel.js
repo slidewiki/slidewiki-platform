@@ -149,7 +149,7 @@ class DeckViewPanel extends React.Component {
                         <div className="item">
                         <div className="content">
                             <h2 className="ui header" aria-describedby="decktitle">{deckTitle}
-                                <div className={`ui label ${deckData.hidden ? '' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Not published' : 'Published'}</div>
+                                <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
                             </h2>
                             <div className="sr-only" id="decktitle">Deck Title:</div>
                             <div className="meta"><strong>Creator:&nbsp;</strong>

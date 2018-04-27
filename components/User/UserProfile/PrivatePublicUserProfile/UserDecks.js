@@ -135,7 +135,7 @@ class UserDecks extends React.Component {
                 {
                     this.props.loggedinuser === this.props.user.uname ?
                     <Button icon={showHidden ? 'unlock' : 'lock'}
-                            aria-label='Show not published' data-tooltip='Show not published'
+                            aria-label='Show unlisted' data-tooltip='Show unlisted'
                             onClick={this.publishedToggleChanged.bind(this)} />
                     : ''
                 }
