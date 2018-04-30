@@ -1,6 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import { Divider, Modal, Segment } from 'semantic-ui-react';
+import { Divider, Modal, Segment, Button } from 'semantic-ui-react';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -28,6 +28,7 @@ class PaintModal extends React.Component {
         this.canvas = null;
 
         // For undo - redo
+        // TODO: properly store the object's modifications for undo-redo, also deletions.
         /*this.canvasState = {
             current: null,
             list: [],
@@ -63,9 +64,9 @@ class PaintModal extends React.Component {
         this.paste = this.paste.bind(this);
     }
 
-    componentDidMount() {
+    /*componentDidMount() {
         this.startFabric();
-    }
+    }*/
 
     componentDidUpdate() {
 
@@ -167,10 +168,14 @@ class PaintModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
-        // Hack to properly recreate the canvas
-        setTimeout(() => {
-            this.startFabric();
-        }, 100);
+        if (this.canvas === null){
+            // Hack to properly recreate the canvas
+            /*setTimeout(() => {
+                $('#startFabric').click();
+                //this.startFabric();
+            }, 100);*/
+        }
+
 
     }
 
@@ -180,6 +185,10 @@ class PaintModal extends React.Component {
             modalOpen: false,
             activeTrap: false
         });
+
+        this.canvas = null;
+        this.objectsStack = [];
+
     }
 
     unmountTrap() {
@@ -400,11 +409,17 @@ class PaintModal extends React.Component {
     }
 
     render() {
+
+        let submitButtonText = 'Add to Slide';
+        let submitButtonIcon = 'arrow right';
+
         let content = <div>
             <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
 
             <Segment textAlign="center" >
                 <p>Draw inside the canvas using the tools provided.</p>
+                <button id="startFabric" onClick={() => {this.startFabric()}} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')} >Click and start drawing!</button>
+                {/*style={{display: 'none'}}*/}
                 <canvas id="fabriccanvas" style={canvasStyle}/>
                 <div>
                     <button onClick={this.addRect}>Add Rectangle</button>
@@ -466,14 +481,18 @@ class PaintModal extends React.Component {
                             <Segment color="blue" textAlign="left" padded/>
                                 {content}
                         <Divider/>
-                        <div className="actions">
-                            <button type="cancel" onClick={this.handleClose} className="ui cancel button">
-                                <i className="remove icon"/>
-                                Cancel
-                            </button>
-                        </div>
                     </Modal.Content>
-
+                    <Modal.Actions>
+                        <button type="cancel" onClick={this.handleClose} className="ui cancel button">
+                            <i className="remove icon"/>
+                            Cancel
+                        </button>
+                        <Button id="PaintModalSaveButton" ref="PaintModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" icon={submitButtonIcon} labelPosition='left' content={submitButtonText}/>
+                        {/*
+                         onClick={saveHandler}
+                         disabled={isEmpty(this.state.files)}
+                        */}
+                    </Modal.Actions>
                 </FocusTrap>
             </Modal>
 
