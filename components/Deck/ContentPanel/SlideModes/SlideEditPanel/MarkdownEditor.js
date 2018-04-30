@@ -13,6 +13,16 @@ import ContentUtil from '../../util/ContentUtil';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 
 let converter = new showdown.Converter();
+converter.setOption('tables', true);
+converter.setOption('tasklists', 'true');
+converter.setOption('smoothLivePreview', 'true');
+converter.setOption('ghMentions', 'true');
+converter.setOption('openLinksInNewWindow', 'true');
+converter.setOption('emoji', 'true');
+converter.setOption('underline', 'true');
+converter.setOption('strikethrough', 'true');
+converter.setOption('literalMidWordUnderscores', 'true');
+converter.setOption('simplifiedAutoLink', 'true');
 let t_converter = new turndown();
 
 class MarkdownEditor extends React.Component {
