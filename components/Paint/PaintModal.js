@@ -121,7 +121,7 @@ class PaintModal extends React.Component {
         };
 
 
-        this.canvas.on("object:added", (e) => {
+        this.canvas.on('object:added', (e) => {
             this.setState({canvasDirty: true});
         });
         /*
@@ -511,7 +511,7 @@ class PaintModal extends React.Component {
 
             <Segment textAlign="center" >
                 <p>Draw inside the canvas using the tools provided.</p>
-                <button id="startFabric" onClick={() => {this.startFabric()}} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')} >Click and start drawing!</button>
+                <button id="startFabric" onClick={() => {this.startFabric();}} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')} >Click and start drawing!</button>
                 {/*style={{display: 'none'}}*/}
                 <canvas id="fabriccanvas" style={canvasStyle}/>
                 <div>
