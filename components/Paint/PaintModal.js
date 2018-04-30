@@ -1,6 +1,7 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import { Divider, Modal, Segment, Button } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Image, Input, Modal, Popup, Segment } from 'semantic-ui-react';
+import uploadMediaFiles from '../../actions/media/uploadMediaFile';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -17,7 +18,13 @@ class PaintModal extends React.Component {
 
         this.state = {
             modalOpen: false,
-            activeTrap: false
+            activeTrap: false,
+            canvasDirty: false,
+            license: false,
+            licenseValue: 'CC0',
+            copyrightHolder: '',
+            alt: '',
+            title: ''
         };
 
         //
@@ -62,6 +69,8 @@ class PaintModal extends React.Component {
         this.redo = this.redo.bind(this);
         this.copyActiveObjects = this.copyActiveObjects.bind(this);
         this.paste = this.paste.bind(this);
+        this.showLicense = this.showLicense.bind(this);
+        this.submitPressed = this.submitPressed.bind(this);
     }
 
     /*componentDidMount() {
@@ -111,6 +120,10 @@ class PaintModal extends React.Component {
             };
         };
 
+
+        this.canvas.on("object:added", (e) => {
+            this.setState({canvasDirty: true});
+        });
         /*
         // Event handlers for undo/redo
         this.canvas.on("object:added", (e) => {
@@ -168,6 +181,10 @@ class PaintModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
+
+        this.setState({canvasDirty: false});
+
+
         if (this.canvas === null){
             // Hack to properly recreate the canvas
             /*setTimeout(() => {
@@ -183,11 +200,17 @@ class PaintModal extends React.Component {
         $('#app').attr('aria-hidden', 'false');
         this.setState({
             modalOpen: false,
-            activeTrap: false
+            activeTrap: false,
+            license: false,
+            licenseValue: 'CC0',
+            copyrightHolder: '',
+            alt: '',
+            title: ''
         });
 
         this.canvas = null;
         this.objectsStack = [];
+        this.setState({canvasDirty: false});
 
     }
 
@@ -408,11 +431,81 @@ class PaintModal extends React.Component {
         });
     }
 
-    render() {
+    showLicense() {
 
+        let href = this.canvas.toDataURL({
+            format: 'png',
+            quality: 1
+        });
+
+        let file = this.dataURLtoBlob(href);
+
+        this.setState({
+            license: true,
+            file: {
+                url: href,
+                format: 'png',
+                name: 'Image',
+                size: file.size
+            }
+        });
+    }
+
+    handleChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    changeLicense(event, data) {
+        this.setState({
+            licenseValue: data.value,
+
+        });
+    }
+
+    dataURLtoBlob(dataURL) {
+        //http://mitgux.com/send-canvas-to-server-as-file-using-ajax
+        // Decode the dataURL
+        let binary = atob(dataURL.split(',')[1]);
+        // Create 8-bit unsigned array
+        let array = [];
+        for(let i = 0; i < binary.length; i++) {
+            array.push(binary.charCodeAt(i));
+        }
+        // Return our Blob object
+        return new Blob([new Uint8Array(array)], {type: 'image/png'});
+    }
+
+    submitPressed(e) {
+        e.preventDefault();
+        if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
+
+        // console.log('copyrighthodler: ' + this.state.copyrightHolder);
+        let payload = {
+            type: 'image/png',
+            license: this.state.licenseValue,
+            copyrightHolder: this.state.copyrightHolder,
+            title: this.state.title || 'Image',
+            text: this.state.alt,
+            filesize: this.state.file.size,
+            filename: 'Image.png',
+            bytes: this.state.file.url
+        };
+        // console.log(this.state, payload);
+
+        this.context.executeAction(uploadMediaFiles, payload);
+        this.handleClose();
+        return false;
+    }
+
+    render() {
+        this.context.getUser().username;
         let submitButtonText = 'Add to Slide';
         let submitButtonIcon = 'arrow right';
 
+        let saveHandler= this.showLicense;
+
+        let heading = 'Draw and Paint';
+        let licenseBoxes = '';
         let content = <div>
             <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
 
@@ -445,7 +538,43 @@ class PaintModal extends React.Component {
                     <button onClick={this.paste}>Paste</button>
                 </div>
             </Segment>
-        </div>
+        </div>;
+
+        if(this.state.license){
+            heading = 'License information';
+            //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
+            content = <div>
+                <Image src={this.state.file.url} size="large" centered={true}/>
+                <Divider/>
+                <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
+                    <div className="required field">
+                        <label htmlFor="mediaTitle">Title:</label>
+                        <Input defaultValue={this.state.file.name} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label="Title of the image" aria-required="true"required autoFocus/>
+                    </div>
+                    <div className="required field">
+                        <label htmlFor="mediaAltText">Description/Alt Text:</label>
+                        <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} aria-label="Description of the image" aria-required="true" required/>} content='What does the picture mean?' position='top center'/>
+                    </div>
+                    <div className="required field">
+                        <label htmlFor="mediaLicense">Choose a license:</label>
+                        <Dropdown id="mediaLicense" selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" aria-label="Select a license" aria-required="true" required/>
+                    </div>
+                    {licenseBoxes}
+                    <div className="required field">
+                        <div className="ui checkbox">
+                            <input id="terms" type="checkbox" aria-label="Agree to terms and conditions" aria-required="true" required/>
+                            <label htmlFor="terms">I confirm that I have the rights to upload this image as per the SlideWiki <a href="/imprint">terms and conditions</a> and that the <a href="/license">license information</a> I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
+                        </div>
+                    </div>
+                    <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
+                </form>
+            </div>;
+            saveHandler = (() => {$('#UploadFormSubmitButton').click();});
+            submitButtonText = 'Upload';
+            submitButtonIcon = 'upload';
+        }
+
 
         return(
 
@@ -474,11 +603,10 @@ class PaintModal extends React.Component {
                     }}
                 >
                     <Modal.Header className="ui center aligned" id="paintModalHeader">
-                        <h1 style={headerStyle}>Draw and Paint</h1>
+                        <h1 style={headerStyle}>{heading}</h1>
                     </Modal.Header>
                     <Modal.Content>
                         <Divider/>
-                            <Segment color="blue" textAlign="left" padded/>
                                 {content}
                         <Divider/>
                     </Modal.Content>
@@ -487,11 +615,11 @@ class PaintModal extends React.Component {
                             <i className="remove icon"/>
                             Cancel
                         </button>
-                        <Button id="PaintModalSaveButton" ref="PaintModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" icon={submitButtonIcon} labelPosition='left' content={submitButtonText}/>
-                        {/*
-                         onClick={saveHandler}
-                         disabled={isEmpty(this.state.files)}
-                        */}
+                        <Button id="PaintModalSaveButton" ref="PaintModalSaveButton" color="green" tabIndex="0" type="button"
+                                aria-label="Upload" icon={submitButtonIcon} labelPosition='left' content={submitButtonText}
+                                disabled={!this.state.canvasDirty}
+                                onClick={saveHandler}
+                        />
                     </Modal.Actions>
                 </FocusTrap>
             </Modal>
@@ -502,7 +630,8 @@ class PaintModal extends React.Component {
 
 PaintModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    intl: React.PropTypes.object.isRequired,
+    getUser: React.PropTypes.func
 };
 
 export default PaintModal;
