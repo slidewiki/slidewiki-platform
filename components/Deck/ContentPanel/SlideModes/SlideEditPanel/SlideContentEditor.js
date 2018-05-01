@@ -2099,15 +2099,16 @@ class SlideContentEditor extends React.Component {
                 </button>
                 */}
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className={[style.reveal, 'reveal'].join(' ')}>
-                        <div className={[style.slides, 'slides'].join(' ')}>
-                            <section className="present"  style={sectionElementStyle}>
+
+//                    <div className={[style.reveal, 'reveal'].join(' ')}>
+//                        <div className={[style.slides, 'slides'].join(' ')}>
+//                           <section className="present"  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
                                     <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
-                                </HotKeys>
-                            </section>
-                        </div>
-                    </div>
+                                 </HotKeys>
+                            // </section>
+                        // </div>
+                    // </div>
                 </div>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>

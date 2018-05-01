@@ -6,13 +6,18 @@ export default {
     name: 'slide',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        console.log('slide service read', params);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+        let theme = 'white';
+        let uri = Microservices.pdf.uri + '/exportRevealSlide/' + selector.sid + '?theme=' + theme;
+        console.log('loadSlideView uri: ', uri);    
         if(resource === 'slide.content'){
             /*********connect to microservices*************/
-            rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
+
+            rp.get({uri: uri}).then((res) => {
             //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
                 //console.log('From slide Service:', res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});

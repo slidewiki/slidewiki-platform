@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
+import HTMLDocument from 'react-html-document';
 import ResizeAware from 'react-resize-aware';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -162,18 +164,17 @@ class Presentation extends React.Component{
         let style = require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //console.log(style);
         this.slides = this.getSlides();
-        return(
-            <ResizeAware ref='container' id='container'>
-                <div>
-                    <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                        <div className={['slides', style.slides].join(' ')}>
-            			     	{this.slides}
-            			      </div>
-                    </div>
-                    <br style={clearStyle} />
-                </div>
-            </ResizeAware>
+
+        let doc = (
+            <HTMLDocument title="This is a test">
+                <h1>This is a test!</h1>
+            </HTMLDocument>
         );
+
+        return doc;
+
+
+
     }
 
     getSlides(){
