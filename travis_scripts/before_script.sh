@@ -7,7 +7,7 @@
 export	SMTP_HOST=localhost \
 		SMTP_PORT=25 \
 		LOGGING_LEVEL=debug \
-		SSO_ENABLED=true
+		SSO_ENABLED=false
 
 # ----------------------------------- #
 #         Default Webpack Build       #

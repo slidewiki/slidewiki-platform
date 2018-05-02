@@ -45,7 +45,7 @@ ENV SERVICE_URL_DECK= \
 ENV SMTP_HOST=localhost \
     SMTP_PORT=25 \
     LOGGING_LEVEL=debug \
-    SSO_ENABLED=true
+    SSO_ENABLED=false
 
 # ----------------------------------- #
 #         Default Webpack Build       #
@@ -63,6 +63,6 @@ RUN npm run build:nostart
 
 # default value for some configuration variables in case they is left blank in the .env file
 ENV SMTP_PORT=25
-ENV SSO_ENABLED=true
+ENV SSO_ENABLED=false
 
 ENTRYPOINT ["./entrypoint.sh"]
