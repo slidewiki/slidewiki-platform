@@ -92,8 +92,8 @@ class TreePanel extends React.Component {
         }
     }
     getPresentationHref(){
-        //console.log(this.props.DeckTreeStore.selector.toJS());
-        let presLocation = '/presentation/' + this.props.DeckTreeStore.selector.toJS().id + '/';
+        let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
+
         if (this.props.DeckTreeStore.selector.toJS().spath.search(';') !== -1)
         {
             //if a subdeck is selected - use its selector
@@ -186,7 +186,7 @@ class TreePanel extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
         let nextSelector = this.props.DeckTreeStore.nextSelector;
-        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
+        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id'), 'slug': this.props.DeckTreeStore.slug};
         let rootNodeTitle = <strong>{rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         /*                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"

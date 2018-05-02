@@ -1,5 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+import slug from 'slug';
+
 const log = require('../configs/log').log;
 
 export default {
@@ -23,8 +25,11 @@ export default {
             let limit, offset = 0;
             if (args.limit) limit = args.limit;
             if (args.offset) offset = args.offset;
-            rp.get({uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset}).then((res) => {
-                callback(null, {featured: JSON.parse(res)});
+            rp.get({
+                uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset,
+                json: true,
+            }).then((res) => {
+                callback(null, {featured: addSlugs(res)});
             }).catch((err) => {
                 callback(err, {featured: []});
             });
@@ -35,10 +40,13 @@ export default {
             let limit, offset = null;
             if (args.limit) limit = args.limit;
             if (args.offset) offset = args.offset;
-            rp.get({uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset}).then((res) => {
-                callback(null, {recent: JSON.parse(res)});
+            rp.get({
+                uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset,
+                json: true,
+            }).then((res) => {
+                callback(null, {recent: addSlugs(res)});
             }).catch((err) => {
-                callback(err, {featured: []});
+                callback(err, {recent: []});
             });
         }
         if (resource === 'deck.content') {
@@ -114,6 +122,8 @@ export default {
                 deckData.forkCount = JSON.parse(data[2]);
                 deckData.shareCount = JSON.parse(data[4]);
                 deckData.downloadCount = JSON.parse(data[5]);
+
+                addSlug(deckData);
 
                 callback(null, {
                     deckData: deckData,
@@ -404,3 +414,21 @@ export default {
     }
     // delete: (req, resource, params, config, callback) => {}
 };
+
+function addSlugs(decks) {
+    if (decks.forEach) {
+        // we hope it's an array :)
+        return decks.map(addSlug);
+    } else {
+        // we guess it's just one deck object
+        return addSlug(deck);
+    }
+}
+
+function addSlug(deck) {
+    deck.slug = slug(deck.title || '').toLowerCase() || '_';
+    if (deck.origin) {
+        addSlug(deck.origin);
+    };
+    return deck;
+}
