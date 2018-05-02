@@ -1,10 +1,13 @@
 import React from 'react';
+import { List, Segment, Checkbox, Header } from 'semantic-ui-react';
+
 import PublicUserData from '../PublicUserData';
 import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
 import UserRecommendations from '../UserRecommendations';
-import UserSharedDecks from './UserSharedDecks';
+
+import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
@@ -12,7 +15,7 @@ class PrivatePublicUserProfile extends React.Component {
     }
 
     showUserDecks(){
-        return <UserDecks decks={this.props.decks} decksMeta={this.props.decksMeta} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
+        return <UserDecks decks={this.props.decks} decksMeta={this.props.decksMeta} deckListType={this.props.categoryItem} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
     }
 
     showUserCollections(){
@@ -23,10 +26,6 @@ class PrivatePublicUserProfile extends React.Component {
         return <UserRecommendations loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} />;
     }
 
-    showSharedDecks(){
-        return <UserSharedDecks decks={this.props.decks} decksMeta={this.props.decksMeta} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
-    }
-
     chooseView(){
         switch(this.props.category){
             case 'playlists':
@@ -34,20 +33,51 @@ class PrivatePublicUserProfile extends React.Component {
             case 'recommendations':
                 return this.showUserRecommendactions();
             case 'deck':
-            default:
-                if(this.props.categoryItem === 'shared'){
-                    return this.showSharedDecks();
-                }
-                return this.showUserDecks();
+            default: 
+                return this.showUserDecks();        
         }
     }
 
+    handleFilterChange(event, { value }) {
+        this.context.executeAction(fetchUserDecks, {
+            deckListType: this.props.categoryItem,
+            params: {
+                username: this.props.user.uname, 
+                sort: this.props.decksMeta.sort,
+                status: value,
+            }
+        });
+    }
+
     render() {
+        let meta = this.props.decksMeta;
         return (
           <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
                   <PublicUserData user={ this.props.user } loggedinuser={ this.props.loggedinuser } />
                   <UserMenu user={ this.props.user } loggedinuser={this.props.loggedinuser} choice={ this.props.category } />
+                  { this.props.user.uname === this.props.loggedinuser && this.props.category !== 'playlists' &&
+                    <Segment>
+                        <Header size='small' dividing >Publication status</Header>
+                        <List>
+                            <List.Item>
+                                <Checkbox radio name='published_status' value='public'
+                                    aria-labelledby='published_public_label' label={<label id='published_public_label'>Published</label>}
+                                    checked={meta.status === 'public'} onChange={this.handleFilterChange.bind(this)} />
+                            </List.Item>
+                            <List.Item>
+                                <Checkbox radio name='published_status' value='hidden'
+                                    aria-labelledby='published_hidden_label' label={<label id='published_hidden_label'>Unlisted</label>}
+                                    checked={meta.status === 'hidden'} onChange={this.handleFilterChange.bind(this)} />
+                            </List.Item>
+                            <List.Item>
+                                <Checkbox radio name='published_status' value='any' label='All'
+                                    aria-labelledby='published_any_label' label={<label id='published_any_label'>All</label>}
+                                    checked={meta.status === 'any'} onChange={this.handleFilterChange.bind(this)} />
+                            </List.Item>
+                        </List>
+                    </Segment>
+                  }
               </div>
               <div className = "twelve wide column" >
                   {this.chooseView()}

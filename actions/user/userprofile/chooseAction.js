@@ -91,11 +91,9 @@ export function chooseAction(context, payload, done) {
                 case categories.categories[3]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
 
-                    let roles = 'owner';
-                    if(payload.params.item === categories.decks[0]){
-                        roles = 'editor';
-                    }
-                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username, roles: roles}}, callback);
+                    let deckListType = payload.params.item === categories.decks[0] ? 'shared' : undefined;
+                    context.executeAction(fetchUserDecks, {deckListType, params: {username: payload.params.username}}, callback);
+
                     break;
                 case categories.categories[4]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});

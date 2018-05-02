@@ -392,8 +392,8 @@ function loadLocaleData(locale) {
 //removing hash, for redirects
 function removeHash () {
     let scrollV, scrollH, loc = window.location;
-    if ('pushState' in history)
-        history.pushState('', document.title, loc.pathname + loc.search);
+    if ('replaceState' in history)
+        history.replaceState('', document.title, loc.pathname + loc.search);
     else {
         // Prevent scrolling by storing the page's current scroll offset
         scrollV = document.body.scrollTop;
