@@ -100,21 +100,13 @@ class DeckCollectionStore extends BaseStore {
     updateCollectionDetails(payload){
 
         // format the results of the service
-        payload.decks = payload.decks.map( (deck) => {
-
-            // get the active revision of the deck
-            let activeRevision = deck.revisions[deck.revisions.length-1];
-            return {
+        payload.decks.forEach((deck) => {
+            Object.assign(deck, {
                 deckID: deck._id,
-                title: activeRevision.title,
-                slug: slug(activeRevision.title || '').toLowerCase() || '_',
-                firstSlide: activeRevision.firstSlide,
-                theme: activeRevision.theme,
+                slug: slug(deck.title || '').toLowerCase() || '_',
                 updated: deck.lastUpdate,
-                description: deck.description,
                 creationDate: deck.timestamp,
-                noOfLikes: deck.noOfLikes
-            };
+            });
         });
 
         this.collectionDetails = payload;

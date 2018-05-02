@@ -59,9 +59,9 @@ function parseSlide(slide){
 }
 
 function parseDeck(deck){
+    let deckSlug = buildSlug(deck);
     // different link if this is a root deck or a sub-deck
-    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
-    deck.link = deck.link + '/' + buildSlug(deck);
+    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -118,7 +118,7 @@ function getForks(deckIdsSet){
 
     for(let deckId of deckIdsSet){
         forkPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
-            forks[deckId] = deckForks;
+            forks[deckId] = deckForks.filter((f) => !f.hidden);
         }).catch( (err) => {
             forks[deckId] = [];
         }));
