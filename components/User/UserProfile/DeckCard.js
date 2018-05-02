@@ -67,15 +67,13 @@ class DeckCard extends React.Component {
                         <span aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</span>
                     </div>
                 </div>
-                <div className="ui menu top attached">
-                    <div className="ui fluid basic buttons">
-                        <NavLink href={viewUrl} data-tooltip="Open deck" type="button" role="button" className="ui button" aria-label="Open deck">
-                            <i className="yellow open folder large icon" aria-hidden="true" ></i>
-                        </NavLink>
-                        <a href={presentationUrl} target="_blank" className="ui button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                            <i className="grey circle play large icon" aria-hidden="true" ></i>
-                        </a>
-                    </div>
+                <div className="bottom attached menu ui basic buttons">
+                    <NavLink href={viewUrl} data-tooltip="Open deck" type="button" role="button" className="ui icon button" aria-label="Open deck">
+                        <i className="yellow open folder large icon" aria-hidden="true" ></i>
+                    </NavLink>
+                    <a href={presentationUrl} target="_blank" className="ui icon button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                        <i className="grey circle play large icon" aria-hidden="true" ></i>
+                    </a>
                 </div>
             </div>
         );
