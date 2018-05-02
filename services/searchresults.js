@@ -118,7 +118,7 @@ function getForks(deckIdsSet){
 
     for(let deckId of deckIdsSet){
         forkPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
-            forks[deckId] = deckForks;
+            forks[deckId] = deckForks.filter((f) => !f.hidden);
         }).catch( (err) => {
             forks[deckId] = [];
         }));
