@@ -40,18 +40,18 @@ export default function loadDeckTree(context, payload, done) {
                 res.deckTree.language = 'en';
 
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
-                context.dispatch('UPDATE_PAGE_TITLE', {
-                    pageTitle: pageTitle
-                });
+                //context.dispatch('UPDATE_PAGE_TITLE', {
+                //    pageTitle: pageTitle
+                //});
                 done();
             }
         });
     } else {
         //when we only select the node in tree, there is no need to call the external service
         context.dispatch('SELECT_TREE_NODE_SUCCESS', payload.params);
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //    pageTitle: pageTitle
+        //});
         done();
     }
 }

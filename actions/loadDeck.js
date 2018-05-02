@@ -52,7 +52,7 @@ export default function loadDeck(context, payload, done) {
         return;
     }
 
-    if (!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+    if (!(['view', 'edit', 'questions', 'datasources', 'markdownEdit'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
         context.executeAction(deckModeError, payload, done);
         return;
     }
@@ -200,9 +200,9 @@ export default function loadDeck(context, payload, done) {
             context.executeAction(notFoundError, payload, done);
             return;
         }
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        // context.dispatch('UPDATE_PAGE_TITLE', {
+        //     pageTitle: pageTitle
+        // });
         if (payload.query.interestedUser)
             context.executeAction(fetchUser, {
                 params: {

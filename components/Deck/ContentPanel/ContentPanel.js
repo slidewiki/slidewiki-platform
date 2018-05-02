@@ -35,6 +35,9 @@ class ContentPanel extends React.Component {
                     case 'edit':
                         targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
                         break;
+                    case 'markdownEdit':
+                        targetComponent = <SlideEditPanel useMarkdown={true} selector={this.props.ContentStore.selector} />;
+                        break;
                     default:
                         targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
                 }

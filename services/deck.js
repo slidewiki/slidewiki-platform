@@ -171,6 +171,7 @@ export default {
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license,
                     theme: revision.theme != null ? revision.theme : deck.theme,
+                    allowMarkdown: revision.allowMarkdown != null ? revision.allowMarkdown : false,
                     editors: editors.editors || {
                         users: [],
                         groups: []
@@ -314,6 +315,7 @@ export default {
                 title: params.title,
                 license: params.license,
                 theme: params.theme,
+                allowMarkdown: params.allowMarkdown,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
                 tags: params.tags

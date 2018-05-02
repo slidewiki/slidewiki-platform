@@ -18,23 +18,33 @@ import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
-
 class TreePanel extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             isForkModalOpen: false,
-            isTranslationModalOpen: false
+            isTranslationModalOpen: false,
+            showThumbnails: false
         };
     }
 
-    handleFocus() {
-
+    componentDidMount() {
+        $('#showThumbnails').checkbox();
+        if(window.sessionStorage){
+            let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
+            if (showThumbnails) {
+                this.setState({showThumbnails: (showThumbnails === 'true')});
+            } else {
+                window.sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
+            }
+        }
     }
 
-    handleBlur() {
-
+    toggleShowThumbnails() {
+        if(window.sessionStorage)
+            window.sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
+        this.setState({showThumbnails: !this.state.showThumbnails});
     }
 
     handleToggleNode(selector) {
@@ -185,8 +195,15 @@ class TreePanel extends React.Component {
                                     <i className="translate blue large icon"></i>
                                 </div>
         */
+
+        let ShowThumbnailsCheckBoxClasses = classNames({
+            'ui': true,
+            'toggle': true,
+            'checkbox': true,
+            'checked': this.state.showThumbnails
+        });
         return (
-            <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+            <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
@@ -227,7 +244,14 @@ class TreePanel extends React.Component {
                             onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                             onMoveNode={this.handleMoveNode.bind(this)}
                             username={this.props.UserProfileStore.username}
-                            permissions={this.props.PermissionsStore.permissions}/>
+                            permissions={this.props.PermissionsStore.permissions}
+                            showThumbnails={this.state.showThumbnails}/>
+                    </div>
+                    <div className="ui attached segment">
+                        <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
+                            <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" value={this.state.showThumbnails ? 'on' : 'off'}/>
+                            <label htmlFor="ShowThumbnails">Show Thumbnails</label>
+                        </div>
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
