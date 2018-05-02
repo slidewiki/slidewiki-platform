@@ -1,6 +1,7 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import { Button, Divider, Dropdown, Image, Input, Modal, Popup, Segment } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Input, Modal, Popup, Segment } from 'semantic-ui-react';
+import { Image as Img}  from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFile';
 
 const headerStyle = {
@@ -545,7 +546,7 @@ class PaintModal extends React.Component {
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
-                <Image src={this.state.file.url} size="large" centered={true}/>
+                <Img src={this.state.file.url} size="large" centered={true}/>
                 <Divider/>
                 <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                     <div className="required field">
