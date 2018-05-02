@@ -1,5 +1,6 @@
 import {BaseStore} from 'fluxible/addons';
 import Immutable from 'immutable';
+import slug from 'slug';
 
 class DeckTreeStore extends BaseStore {
     constructor(dispatcher) {
@@ -18,6 +19,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = null;
         this.latestRevisionId = null;
         this.theme = null;
+        this.slug = null;
         this.allowMarkdown = false;
     }
     updateDeckTree(payload) {
@@ -60,6 +62,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.theme = payload.deckTree.theme;
+        this.slug = slug(payload.deckTree.title).toLowerCase() || '_';
         this.allowMarkdown= payload.deckTree.allowMarkdown;
         this.emitChange();
     }
@@ -605,6 +608,7 @@ class DeckTreeStore extends BaseStore {
             revisionId: this.revisionId,
             latestRevisionId: this.latestRevisionId,
             theme: this.theme,
+            slug: this.slug,
             allowMarkdown: this.allowMarkdown
         };
     }
@@ -623,6 +627,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = state.revisionId;
         this.latestRevisionId = state.latestRevisionId;
         this.theme = state.theme;
+        this.slug = state.slug;
         this.allowMarkdown = state.allowMarkdown;
     }
     handleDeckTreeError(err){
