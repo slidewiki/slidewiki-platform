@@ -1,4 +1,5 @@
 import { BaseStore } from 'fluxible/addons';
+import slug from 'slug';
 
 class DeckCollectionStore extends BaseStore {
     constructor(dispatcher) {
@@ -102,6 +103,7 @@ class DeckCollectionStore extends BaseStore {
         payload.decks.forEach((deck) => {
             Object.assign(deck, {
                 deckID: deck._id,
+                slug: slug(deck.title || '').toLowerCase() || '_',
                 updated: deck.lastUpdate,
                 creationDate: deck.timestamp,
             });

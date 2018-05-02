@@ -79,7 +79,7 @@ class Presentation extends React.Component{
             Reveal.initialize({
                 width: pptxwidth,
 			         height: pptxheight,
-                margin: 0.2,
+                // margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
@@ -87,14 +87,19 @@ class Presentation extends React.Component{
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: '/custom_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
-                    { src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
-                ]
+                    //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
+                ],
+                keyboard: {
+                    72: null,
+                    78: null
+                }
             });
 
 
             Reveal.addEventListener( 'ready', ( event ) => {
-                $('.accessibilityWrapper').attr('tabindex', '');
+                //$('.accessibilityWrapper').attr('tabindex', '');
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
