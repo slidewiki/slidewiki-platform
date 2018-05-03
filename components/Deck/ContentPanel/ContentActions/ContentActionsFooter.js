@@ -37,37 +37,20 @@ class ContentActionsFooter extends React.Component {
         return false;
     }
     getPresentationHref(){
-        let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
+        let presLocation = ['/presentation', this.props.ContentStore.selector.id, this.props.deckSlug || '_'].join('/') + '/';
         if(!this.props.ContentStore.selector.subdeck){
-            //do not duplicate deck ID!
-            //presLocation += this.props.ContentStore.selector.id + '/';
+            //do not duplicate deck ID! only for slides duplicate it
+            presLocation += this.props.ContentStore.selector.id + '/';
         }
         else{
             presLocation += this.props.ContentStore.selector.subdeck + '/';
         }
         if(this.props.ContentStore.selector.stype === 'slide'){
-            // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += this.props.ContentStore.selector.sid;// + '/';
+            presLocation += this.props.ContentStore.selector.sid + '/';
+            //presLocation = presLocation+ '#' + this.props.ContentStore.selector.sid;// + '/';
         }
         return presLocation;
     }
-    handlePresentationClick(e){
-        if(process.env.BROWSER){
-            e.preventDefault();
-            window.open(this.getPresentationHref());
-        }
-    }
-
-    /*
-    getPrintHref(){
-        return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
-    }
-    handlePrintClick(e){
-        if(process.env.BROWSER){
-            e.preventDefault();
-            window.open(this.getPrintHref());
-        }
-    }*/
 
     handlePrintClick(e){
 
@@ -96,8 +79,6 @@ class ContentActionsFooter extends React.Component {
             return Microservices.pdf.uri + '/export' + type + '/';
         }
     }
-
-
 
     createDownloadActivity() {
         //create new activity
@@ -157,13 +138,13 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu">
                         <div className="ui icon buttons large right floated">
 
-                            <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
+                            <a href={this.getPresentationHref()} target="_blank">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
-                            </NavLink>
+                            </a>
 
-                           <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
+                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
                                 <i className="print large icon"></i>
                             </button>

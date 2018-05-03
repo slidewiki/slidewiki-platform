@@ -26,9 +26,9 @@ export default function loadSimilarContents(context, payload, done) {
             context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
         }
         let pageTitle = shortTitle + ' | Similar Content | ' + payload.params.stype + ' | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        //context.dispatch('UPDATE_PAGE_TITLE', {
+        //    pageTitle: pageTitle
+        //});
         done();
     });
 }

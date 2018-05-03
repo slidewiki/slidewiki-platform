@@ -7,7 +7,9 @@ class SlideEditStore extends BaseStore {
         this.id = '';
         this.slideId = '';
         this.title = '';
+        this.LeftPanelTitleChange = false;
         this.content = '';
+        this.markdown = '';
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
@@ -41,6 +43,7 @@ class SlideEditStore extends BaseStore {
             let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
             this.title = lastRevision.title? lastRevision.title: ' ';
             this.content = lastRevision.content? lastRevision.content: ' ';
+            this.markdown = lastRevision.markdown? lastRevision.markdown: ' ';
             this.speakernotes = lastRevision.speakernotes? lastRevision.speakernotes: ' ';
 
             this.emitChange();
@@ -50,6 +53,7 @@ class SlideEditStore extends BaseStore {
             this.slideId = '';
             this.title = 'title not found';
             this.content = 'content not found';
+            this.markdown = 'content not found';
             this.speakernotes = 'speaker notes not found';
             this.emitChange();
         }
@@ -149,6 +153,7 @@ class SlideEditStore extends BaseStore {
     }
     changeTitle(payload){
         this.title = payload.title;
+        this.LeftPanelTitleChange = payload.LeftPanelTitleChange;
         this.emitChange();
         //this.title = '';
         //this.emitChange();
@@ -165,7 +170,9 @@ class SlideEditStore extends BaseStore {
             id: this.id,
             slideId: this.slideId,
             title: this.title,
+            LeftPanelTitleChange: this.LeftPanelTitleChange,
             content: this.content,
+            markdown: this.markdown,
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
             saveSlideClick: this.saveSlideClick,
@@ -196,7 +203,9 @@ class SlideEditStore extends BaseStore {
         this.id = state.id;
         this.slideId = state.slideId;
         this.title = state.title;
+        this.LeftPanelTitleChange = state.LeftPanelTitleChange;
         this.content = state.content;
+        this.markdown = state.markdown;
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
         this.saveSlideClick = state.saveSlideClick;

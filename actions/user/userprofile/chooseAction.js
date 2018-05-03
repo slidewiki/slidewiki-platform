@@ -3,14 +3,14 @@ import fetchUser from './fetchUser';
 import { fetchUserDecks } from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
-import loadUserCollections from '../../collections/loadUserCollections'; 
+import loadUserCollections from '../../collections/loadUserCollections';
 import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups', 'playlists', 'decks'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit'], 
+    groups: ['overview', 'edit'],
     decks: ['shared'],
 };
 
@@ -52,7 +52,7 @@ export function chooseAction(context, payload, done) {
             title += 'Playlists';
             break;
         case undefined:
-        case categories.categories[3]: 
+        case categories.categories[3]:
             switch(payload.params.item){
                 case categories.decks[0]:
                     title += 'Shared Decks';
@@ -61,7 +61,7 @@ export function chooseAction(context, payload, done) {
                     title += 'My Decks';
                     break;
             };
-            break;            
+            break;
         default:
             title = shortTitle;
     };
@@ -90,11 +90,9 @@ export function chooseAction(context, payload, done) {
                 case categories.categories[3]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
 
-                    let roles = 'owner';
-                    if(payload.params.item === categories.decks[0]){
-                        roles = 'editor';
-                    }
-                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username, roles: roles}}, callback);
+                    let deckListType = payload.params.item === categories.decks[0] ? 'shared' : undefined;
+                    context.executeAction(fetchUserDecks, {deckListType, params: {username: payload.params.username}}, callback);
+
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);
