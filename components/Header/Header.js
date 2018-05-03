@@ -140,14 +140,11 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </MediaQuery>
-                <MediaQuery maxWidth={767}>
-                    <div className="ui inverted blue menu" style={{borderRadius: '0px'}} ref="header">
-                        <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
-                        <div className="ui right inverted blue menu">
-                            <NavLink className="item" href='/'>
-                                <i className="home icon"/><FormattedMessage id='header.slidewiki' defaultMessage='SlideWiki'/>
-                            </NavLink>
-                        </div>
+                <MediaQuery maxWidth={768}>
+                    <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
+                        <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
+                          &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki Logo" style={{width: '9rem', paddingTop: '0.5rem'}}/>
+                        </button>
                     </div>
                     <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                         <NavLink className="item" href='/'>
