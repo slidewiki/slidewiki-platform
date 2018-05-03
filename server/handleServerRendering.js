@@ -93,7 +93,7 @@ export default function handleServerRendering(req, res, next){
                 if (err) {
                     if (err.statusCode && err.statusCode === '301') {
                         //console.log('REDIRECTING to '+ JSON.stringify(err));
-                        res.redirect(err.redirectURL);
+                        res.redirect(301, err.redirectURL);
                     }else
                     if (err.statusCode && err.statusCode === '404') {
                         let html = renderApp(req, res, context);
