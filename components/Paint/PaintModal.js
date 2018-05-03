@@ -226,7 +226,9 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1
+            opacity: 1,
+            stroke: this.secondaryColor,
+            strokeWidth: this.canvas.freeDrawingBrush.width
         }));
     }
 
@@ -238,7 +240,9 @@ class PaintModal extends React.Component {
             top: coord.top,
             fill: this.primaryColor,
             radius: 50,
-            opacity: 1
+            opacity: 1,
+            stroke: this.secondaryColor,
+            strokeWidth: this.canvas.freeDrawingBrush.width
         }));
     }
 
@@ -251,7 +255,9 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1
+            opacity: 1,
+            stroke: this.secondaryColor,
+            strokeWidth: this.canvas.freeDrawingBrush.width
         }));
     }
 
@@ -291,7 +297,9 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1
+            opacity: 1,
+            stroke: this.secondaryColor,
+            strokeWidth: this.canvas.freeDrawingBrush.width
         }));
     }
 
