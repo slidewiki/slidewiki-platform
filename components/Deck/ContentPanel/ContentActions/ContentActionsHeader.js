@@ -18,7 +18,7 @@ import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
 import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 
 
@@ -177,7 +177,7 @@ class ContentActionsHeader extends React.Component {
         let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
         languageButton =
           <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
-              Language: {ISO6391.getName(language)}
+              Language: {getLanguageName(language)}
           </button>;
         console.log('TranslationStore state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
 

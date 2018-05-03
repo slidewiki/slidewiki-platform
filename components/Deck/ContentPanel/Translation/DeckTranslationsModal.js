@@ -4,7 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-react';
 import TranslationStore from '../../../../stores/TranslationStore';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
 import {navigateAction} from 'fluxible-router';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 
@@ -145,7 +145,7 @@ class DeckTranslationsModal extends React.Component {
         let translationOptions = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
             translationOptions = this.props.TranslationStore.translations.reduce((arr, current)  => {
-                arr.push({key: current, value: current, text: ISO6391.getNativeName(current)});
+                arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []);
         }
@@ -154,7 +154,7 @@ class DeckTranslationsModal extends React.Component {
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
                 if (!this.props.TranslationStore.translations.find((t) => t === current))
-                    arr.push({key: current, value: current, text: ISO6391.getNativeName(current)});
+                    arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []);
         }
@@ -191,7 +191,7 @@ class DeckTranslationsModal extends React.Component {
                   </Modal.Header>
                   <Modal.Content id="DeckTranslationsModalDescription">
                       <Divider />
-                      {this.context.intl.formatMessage(message)} <Segment compact>{ISO6391.getNativeName(this.props.TranslationStore.treeLanguage)}</Segment>
+                      {this.context.intl.formatMessage(message)} <Segment compact>{getLanguageNativeName(this.props.TranslationStore.treeLanguage)}</Segment>
                       <br/>
                       <br/>
 

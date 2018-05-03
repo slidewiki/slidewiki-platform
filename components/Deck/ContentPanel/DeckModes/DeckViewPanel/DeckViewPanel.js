@@ -3,7 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
 import Thumbnail from '../../../../common/Thumbnail';
 import CustomDate from '../../../util/CustomDate';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../../configs/general.js';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
@@ -111,7 +111,7 @@ class DeckViewPanel extends React.Component {
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
 
         let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
-        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+        let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
         // default English
         deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
         //const deckLanguageCode = lodash.get(deckData, 'language', undefined);

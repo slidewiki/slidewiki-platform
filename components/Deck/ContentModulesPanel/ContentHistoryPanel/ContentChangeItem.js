@@ -6,7 +6,7 @@ import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO
 
 import {NavLink} from 'fluxible-router';
 
-import Iso from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
 
 class ContentChangeItem extends React.Component {
 
@@ -65,7 +65,7 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'translate':
                 iconName = 'translate';
-                description = <span>created a translation of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink> into { Iso.getName(change.translatedTo.substring(0, 2)) } </span>;
+                description = <span>created a translation of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink> into { getLanguageName(change.translatedTo.substring(0, 2)) } </span>;
                 break;
             case 'revise':
                 iconName = 'save';

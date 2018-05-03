@@ -4,7 +4,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import Iso from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../configs/general.js';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales } from '../../../configs/general';
@@ -46,7 +46,7 @@ class ChangePersonalData extends React.Component {
         return locales.map((locale) => {
             let options = {
                 key: locale,
-                text: '' + Iso.getName(locale),
+                text: '' + getLanguageName(locale),
                 value: locale,
             };
 

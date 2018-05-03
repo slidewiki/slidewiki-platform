@@ -12,5 +12,19 @@ export default {
     locales: ['en', 'de', 'it', 'es', 'nl', 'el', 'ca', 'sr'],
     publicRecaptchaKey: '${SERVICE_USER_PUBLIC_RECAPTCHA_KEY}',
     loglevel: '${LOGGING_LEVEL}',
-    ssoEnabled: ${SSO_ENABLED}
+    ssoEnabled: ${SSO_ENABLED},
+    getLanguageName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageName(code.replace('_', '-'));
+        return '';
+    },
+    getLanguageNativeName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getNativeName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageNativeName(code.replace('_', '-'));
+        return '';
+    }
 };

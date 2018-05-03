@@ -5,6 +5,8 @@ This file gets overridden by entrypoint.sh with the substitude of general.js.tem
 
 import sha512 from 'js-sha512';
 const co = require('../common');
+import ISO6391 from 'iso-639-1';
+import locale from 'locale-code';
 
 export default {
     //full page title
@@ -20,5 +22,19 @@ export default {
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     locales: ['en', 'de', 'it', 'es', 'nl', 'el', 'ca', 'sr'],
     loglevel: 'debug',
-    ssoEnabled: true
+    ssoEnabled: true,
+    getLanguageName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageName(code.replace('_', '-'));
+        return '';
+    },
+    getLanguageNativeName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getNativeName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageNativeName(code.replace('_', '-'));
+        return '';
+    }
 };

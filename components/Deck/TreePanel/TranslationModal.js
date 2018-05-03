@@ -2,7 +2,7 @@ import React from 'react';
 import FocusTrap from 'focus-trap-react';
 
 import {connectToStores} from 'fluxible-addons-react';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../configs/general.js';
 import {navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
@@ -63,7 +63,7 @@ class TranslationModal extends React.Component {
 
         const deckLanguage = this.props.TranslationStore.currentLang;
         if (deckLanguage){
-            current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+            current =getLanguageName(deckLanguage.toLowerCase().substr(0,2));
         }else{
             current = '';
         }
@@ -83,7 +83,7 @@ class TranslationModal extends React.Component {
             });
 
             available_array = translations.map((translation) => {
-                let languageName = ISO6391.getName(translation.toLowerCase().substr(0,2));
+                let languageName = getLanguageName(translation.toLowerCase().substr(0,2));
                 if (languageName){
                     if (translation !== this.props.TranslationStore.currentLang){
                         let link = '/deck/';

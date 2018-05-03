@@ -1,5 +1,5 @@
 import React from 'react';
-import Iso from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../configs/general.js';
 import { writeCookie } from '../../common';
 import IntlStore from '../../stores/IntlStore';
 import { locales } from '../../configs/general';
@@ -31,7 +31,7 @@ class LocaleSwitcher extends React.Component {
                 return(
                   <div key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className="item">
                     <Flag name={flag}/>
-                    {Iso.getName(locale)}
+                    {getLanguageName(locale)}
                   </div>
                 );
                 break;
@@ -39,7 +39,7 @@ class LocaleSwitcher extends React.Component {
                 return (
                     <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
                       {(this.props.mode === 'icon') ? <Flag name={flag}/> : ''}
-                      {Iso.getName(locale)}
+                      {getLanguageName(locale)}
                     </Dropdown.Item>
                 );
         }
@@ -60,7 +60,7 @@ class LocaleSwitcher extends React.Component {
             case 'headeronly':
                 return(
                     <div>
-                      <span>{Iso.getName(this.state.currentLocale)}  </span>
+                      <span>{getLanguageName(this.state.currentLocale)}  </span>
                       {current_header}
                     </div>);
                 break;
@@ -72,7 +72,7 @@ class LocaleSwitcher extends React.Component {
                 );
                 break;
             default:
-                current_header = <span><i className='icon comments'/>{Iso.getName(this.state.currentLocale)}</span>;
+                current_header = <span><i className='icon comments'/>{getLanguageName(this.state.currentLocale)}</span>;
                 return (
                     <Dropdown item trigger={current_header}>
                       <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
