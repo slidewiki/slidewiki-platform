@@ -27,9 +27,9 @@ class UserRecommendations extends React.Component {
                 <h1 className="ui left floated header">'Recommended Decks'</h1>
                 <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                     <i className="icon exchange" aria-label="change order" />
-                    <div className="text">Weight</div>
+                    <div className="text">Ranking</div>
                     <div className="menu">
-                        <div className="item active selected" data-value={3}>Weight</div>
+                        <div className="item active selected" data-value={3}>Ranking</div>
                         <div className="item" data-value={2}>Last updated</div>
                         <div className="item" data-value={1}>Creation date</div>
                         <div className="item" data-value={0}>Title</div>
