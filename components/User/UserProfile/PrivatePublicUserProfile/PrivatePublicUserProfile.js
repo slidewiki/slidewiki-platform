@@ -6,7 +6,6 @@ import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
 import classNames from 'classnames/bind';
-import UserSharedDecks from './UserSharedDecks';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 
 class PrivatePublicUserProfile extends React.Component {
@@ -45,6 +44,14 @@ class PrivatePublicUserProfile extends React.Component {
 
     render() {
         let meta = this.props.decksMeta;
+        let profileClasses = classNames({
+            'tablet': this.props.loggedinuser && this.props.user.uname === this.props.loggedinuser,
+            'computer': this.props.loggedinuser && this.props.user.uname === this.props.loggedinuser,
+            'only': this.props.loggedinuser && this.props.user.uname === this.props.loggedinuser,
+            'sixteen': true,
+            'wide': true,
+            'column': true
+        });
         return (
           <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
