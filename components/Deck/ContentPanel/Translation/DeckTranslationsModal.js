@@ -6,6 +6,7 @@ import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-
 import TranslationStore from '../../../../stores/TranslationStore';
 import ISO6391 from 'iso-639-1';
 import {navigateAction} from 'fluxible-router';
+import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 
 class DeckTranslationsModal extends React.Component {
 
@@ -24,11 +25,19 @@ class DeckTranslationsModal extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.TranslationStore.redirectToNewLanguage) {
+            this.redirectToNewLanguage(nextProps.TranslationStore.currentLang);
+        }
+    }
+
     handleOpen(){
         $('#app').attr('aria-hidden','true');
         this.setState({
             modalOpen:true,
-            activeTrap:true
+            activeTrap:true,
+            action: '',
+            languageCode: ''
         });
     }
 
@@ -36,9 +45,7 @@ class DeckTranslationsModal extends React.Component {
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,
-            activeTrap: false,
-            action: '',
-            languageCode: ''
+            activeTrap: false
         });
     }
 
@@ -61,21 +68,32 @@ class DeckTranslationsModal extends React.Component {
         if (this.state.action === 'languageselect') {
             this.handleClose();
 
-            let path = location.pathname;
-            let pathElements = path.split('/');
-            let element = pathElements[2];
-            let index = element.indexOf('_');
-            if (index === -1) {
-                pathElements[2] = element + '_' + this.state.languageCode;
-            }
-            else {
-                pathElements[2] = element.substring(0, index) + '_' + this.state.languageCode;
-            }
-            path = pathElements.join('/');
-            this.context.executeAction(navigateAction, {
-                url: path
+            this.redirectToNewLanguage(this.state.languageCode);
+        }
+        else if (this.state.action === 'translate') {
+            this.handleClose();
+
+            this.context.executeAction(addDeckTranslation, {
+                language: this.state.languageCode
             });
         }
+    }
+
+    redirectToNewLanguage(language) {
+        let path = location.pathname;
+        let pathElements = path.split('/');
+        let element = pathElements[2];
+        let index = element.indexOf('_');
+        if (index === -1) {
+            pathElements[2] = element + '_' + language;
+        }
+        else {
+            pathElements[2] = element.substring(0, index) + '_' + language;
+        }
+        path = pathElements.join('/');
+        this.context.executeAction(navigateAction, {
+            url: path
+        });
     }
 
     render() {

@@ -297,7 +297,7 @@ class ContentActionsHeader extends React.Component {
 												{translateButton}
                     </div>
                 </div>
-                <DeckTranslationsModal focusedSelector={this.props.DeckTreeStore.focusedSelector}/>
+                <DeckTranslationsModal />
                 <div className="column">
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui right floated basic top attached buttons" >

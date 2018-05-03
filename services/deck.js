@@ -428,6 +428,24 @@ export default {
                 callback(null, {tags: tags});
             }).catch((err) => callback(err));
         }
+        else if (resource === 'deck.translations') {
+            //atm dummy
+            return callback(null, {language: args.language});
+
+            rp({
+                method: 'POST',
+                uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
+                headers: { '----jwt----': args.jwt },
+                json: true,
+                body: {
+                    language: args.language
+                }
+            })
+            .then((body) => {
+                callback(null, body);
+            })
+            .catch((err) => callback(err));
+        }
     }
     // delete: (req, resource, params, config, callback) => {}
 };

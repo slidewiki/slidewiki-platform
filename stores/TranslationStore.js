@@ -11,6 +11,7 @@ class TranslationStore extends BaseStore {
         this.originLanguage = '';
         this.nodeLanguage = '';
         this.treeLanguage = '';
+        this.redirectToNewLanguage = false;
 
         this.supportedLangs = ISO6391.getAllCodes();
     }
@@ -22,7 +23,8 @@ class TranslationStore extends BaseStore {
             inTranslationMode: this.inTranslationMode,
             originLanguage: this.originLanguage,
             nodeLanguage: this.nodeLanguage,
-            treeLanguage: this.treeLanguage
+            treeLanguage: this.treeLanguage,
+            redirectToNewLanguage: this.redirectToNewLanguage
         };
     }
     dehydrate() {
@@ -36,6 +38,7 @@ class TranslationStore extends BaseStore {
         this.originLanguage = state.originLanguage;
         this.nodeLanguage = state.nodeLanguage;
         this.treeLanguage = state.treeLanguage;
+        this.redirectToNewLanguage = state.redirectToNewLanguage;
     }
 
     deckGotLoaded(data) { //TODO only override if deck is root deck!
@@ -83,6 +86,15 @@ class TranslationStore extends BaseStore {
         this.logState();
     }
 
+    translationAdded(data) {
+        this.translations = this.translations.push(data.language);
+        this.currentLang = data.language;
+        this.inTranslationMode = true;
+        this.redirectToNewLanguage = true;
+        this.emitChange();
+        this.redirectToNewLanguage = false;
+    }
+
     //-- util functions --
 
     logState() {
@@ -106,7 +118,8 @@ TranslationStore.handlers = {
     'LOAD_SLIDE_CONTENT_SUCCESS': 'slideLoaded',
     'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
     'LOAD_DECK_TRANSLATIONS_SUCCESS': 'translationsLoaded',
-    'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded'
+    'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
+    'ADD_DECK_TRANSLATION_SUCCESS': 'translationAdded'
 };
 
 export default TranslationStore;
