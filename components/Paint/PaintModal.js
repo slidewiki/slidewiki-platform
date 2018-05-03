@@ -49,6 +49,7 @@ class PaintModal extends React.Component {
 */
         this.objectsStack = [];
         this.clipboard = null;
+        this.canvasOpen = false;
 
         //
         this.handleOpen = this.handleOpen.bind(this);
@@ -79,7 +80,11 @@ class PaintModal extends React.Component {
     }*/
 
     componentDidUpdate() {
-
+        let ele = document.querySelector('#fabriccanvas');
+        if (ele && !this.canvasOpen) {
+            this.startFabric();
+            this.canvasOpen = true;
+        }
     }
 
     startFabric(){
@@ -185,16 +190,6 @@ class PaintModal extends React.Component {
 
         this.setState({canvasDirty: false});
 
-
-        if (this.canvas === null){
-            // Hack to properly recreate the canvas
-            /*setTimeout(() => {
-                $('#startFabric').click();
-                //this.startFabric();
-            }, 100);*/
-        }
-
-
     }
 
     handleClose(){
@@ -210,6 +205,7 @@ class PaintModal extends React.Component {
         });
 
         this.canvas = null;
+        this.canvasOpen = false;
         this.objectsStack = [];
         this.setState({canvasDirty: false});
 
@@ -512,8 +508,6 @@ class PaintModal extends React.Component {
 
             <Segment textAlign="center" >
                 <p>Draw inside the canvas using the tools provided.</p>
-                <button id="startFabric" onClick={() => {this.startFabric();}} onKeyPress={(evt) => this.handleKeyPress(evt, 'startFabric')} >Click and start drawing!</button>
-                {/*style={{display: 'none'}}*/}
                 <canvas id="fabriccanvas" style={canvasStyle}/>
                 <div>
                     <button onClick={this.addRect}>Add Rectangle</button>
