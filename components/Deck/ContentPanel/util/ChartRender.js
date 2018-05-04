@@ -55,19 +55,27 @@ class ChartRender {
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'scatterChart':
+                    data = [];
+                    for (let k = 0; k < chartData.length; k++) {
+                        data.push({
+                            key: chartData[k].key,
+                            values: []
+                        });
 
-                    for (let i=0; i<chartData.length; i++) {
-                        let arr = [];
-                        for (let j=0; j<chartData[i].length; j++) {
-                            arr.push({x: j, y: chartData[i][j]});
+                        for (let h = 0; h < chartData[k].values.length; h++) {
+                            data[k].values.push({
+                                x: chartData[k].values[h].x,
+                                y: chartData[k].values[h].y
+                            });
                         }
-                        data.push({key: 'data' + (i + 1), values: arr});
                     }
 
                     chart = nv.models.scatterChart()
                         .showDistX(true)
                         .showDistY(true)
                         .color(d3.scale.category10().range());
+
+
                     chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
                     chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
                     chartData = data;
@@ -82,7 +90,7 @@ class ChartRender {
                 d3.select('#' + chartID)
                     .append('svg')
                     .datum(chartData)
-                    .transition().duration(500)
+                    // .transition().duration(500)
                     .call(chart)
                     .style({'width': w, 'height': h});
 
