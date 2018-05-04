@@ -20,6 +20,7 @@ class EmbedModal extends React.Component {
         this.state = {
             modalOpen: false,
             activeTrap: false,
+            handleEmbedChange: 'd',
             size: 'sm',
             width: this.defaultWidthValue,
             height: this.defaultHeightValue,
@@ -30,27 +31,40 @@ class EmbedModal extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
+        this.handleEmbedChange = this.handleEmbedChange.bind(this);
 
         this.messages = defineMessages({
-            embedModal_header:{
-                id:'embedModal.embedModal_embedHeader',
-                defaultMessage: 'Embed deck'
-            },
-            embedModal_embedButton:{
-                id:'embedModal.embedModal_embedButton',
-                defaultMessage: 'Embed'
-            },
-            embedModal_closeButton:{
-                id:'embedModal.embedModal_closeButton',
+            closeButton:{
+                id:'embedModal.closeButton',
                 defaultMessage: 'Close'
             },
-            embedModal_widthLabel:{
-                id:'embedModal.embedModal_widthLabel',
-                defaultMessage: 'Width of embedded content'
+            deckRadio:{
+                id:'embedModal.deckRadio',
+                defaultMessage: 'Deck'
             },
-            embedModal_heightLabel:{
-                id:'embedModal.embedModal_heightLabel',
-                defaultMessage: 'Height of embedded content'
+            slideshowRadio:{
+                id:'embedModal.slideshowRadio',
+                defaultMessage: 'Slideshow'
+            },
+            slideRadio:{
+                id:'embedModal.slideRadio',
+                defaultMessage: 'Slide'
+            },
+            small:{
+                id:'embedModal.small',
+                defaultMessage: 'Small'
+            },
+            medium:{
+                id:'embedModal.medium',
+                defaultMessage: 'Medium'
+            },
+            large:{
+                id:'embedModal.large',
+                defaultMessage: 'Large'
+            },
+            other:{
+                id:'embedModal.other',
+                defaultMessage: 'Other'
             },
         });
     }
@@ -60,6 +74,10 @@ class EmbedModal extends React.Component {
             modalOpen:true,
             activeTrap:true
         });
+    }
+
+    handleEmbedChange(e, sender) {
+        this.setState({exportObject: sender.value});
     }
 
     handleChange(e, sender) {
@@ -93,7 +111,16 @@ class EmbedModal extends React.Component {
         }
     }
 
-    handleClose(){
+    createHref() {
+        var href = window.location.href;
+        switch (this.state.exportObject) {
+            case 'ss':
+                href = href.replace('deck', 'presentation');
+                break;
+        }
+    }
+
+    handleClose() {
         $('#app').attr('aria-hidden', 'false');
         this.setState({
             modalOpen: false,
@@ -118,8 +145,21 @@ class EmbedModal extends React.Component {
         }
     }
 
+//    {() => {
+//        if (this.props.ContentStore.selector.stype === 'slide') {
+//        return (<Form.Radio label={this.context.intl.formatMessage(this.messages.slideRadio)}
+//                value='s' checked={this.state.export === 's'} onChange={this.setState({export: 's'})}/>);
+//        } else {
+//            return null;
+//        }
+//    }}
+
     render() {
-        const {size} = this.state;
+        const {handleEmbedChange, exportObject} = this.state;
+        const title = ((this.props.ContentStore.selector.stype === 'slide') ? this.props.SlideViewStore.title
+                : this.findCurrentRevision(this.props.DeckViewStore.deckData).title);
+        const userName = ((this.props.ContentStore.selector.stype === 'slide')
+                ? this.props.ContributorsStore.creator[0].username : this.props.DeckViewStore.creatorData.username);
         return(
             <Modal
                     trigger={
@@ -159,23 +199,49 @@ class EmbedModal extends React.Component {
                         }}>
                     <Modal.Header className="ui center aligned" id="embedModalHeader">
                         <h1 style={{'textAlign': 'center'}}>
-                            {this.context.intl.formatMessage(this.messages.embedModal_header)}
+                            <FormattedMessage id='embedModal.embedHeader'
+                                values={{
+                                    title: title,
+                                    creator: userName
+                                }}
+                                defaultMessage={'SlideWiki deck on "{title}" by {creator}.'}
+                            />
                         </h1>
                     </Modal.Header>
                     <Modal.Content>
                         <Container>
+                            <FormattedMessage id='embedModel.desc'
+                                    defaultMessage='Select from the options below and the copy the generate HTML into your site.'/>
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>
                                     <Form>
                                         <Form.Group inline>
-                                            <label>Size</label>
-                                            <Form.Radio label='Small' value='sm' checked={size === 'sm'} onChange={this.handleChange}/>
-                                            <Form.Radio label='Medium' value='md' checked={size === 'md'} onChange={this.handleChange}/>
-                                            <Form.Radio label='Large' value='lg' checked={size === 'lg'} onChange={this.handleChange}/>
-                                            <Form.Radio label='Other' value='ot' checked={size === 'ot'} onChange={this.handleChange}/>
+                                            <label>
+                                                <FormattedMessage id='embedModal.embed' defaultMessage='Embed'/>
+                                            </label>
+                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.deckRadio)}
+                                                    value='d' checked={handleEmbedChange === 'd'}
+                                                    onChange={this.handleEmbedChange}/>
+                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.slideshowRadio)}
+                                                    value='ss' checked={handleEmbedChange === 'ss'}
+                                                    onChange={this.handleEmbedChange}/>
+                                        </Form.Group>
+                                        <Form.Group inline>
+                                            <label>
+                                                <FormattedMessage id='embedModal.size' defaultMessage='Size'/>
+                                            </label>
+                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.small)}
+                                                    value='sm' checked={size === 'sm'} onChange={this.handleChange}/>
+                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.medium)}
+                                                    value='md' checked={size === 'md'} onChange={this.handleChange}/>
+                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.large)}
+                                                    value='lg' checked={size === 'lg'} onChange={this.handleChange}/>
+                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.other)}
+                                                    value='ot' checked={size === 'ot'} onChange={this.handleChange}/>
                                             <Form.Field>
                                                 <Label>
-                                                    {this.context.intl.formatMessage(this.messages.embedModal_widthLabel)}
+                                                    <FormattedMessage id='embedModal.widthLabel'
+                                                            defaultMessage='Width of embedded content'/>
                                                 </Label>
                                                 <Input id="embedModalWidth" ref={(ref) => this.widthInput = ref}
                                                         disabled={this.state.size !== 'ot'}
@@ -184,7 +250,8 @@ class EmbedModal extends React.Component {
                                             </Form.Field>
                                             <Form.Field>
                                                 <Label>
-                                                    {this.context.intl.formatMessage(this.messages.embedModal_heightLabel)}
+                                                    <FormattedMessage id='embedModal.heightLabel'
+                                                            defaultMessage='Height of embedded content'/>
                                                 </Label>
                                                 <Input id="embedModalHeight" ref={(ref) => this.heightInput = ref}
                                                         disabled={this.state.size !== 'ot'}
@@ -202,14 +269,9 @@ class EmbedModal extends React.Component {
                                                         + this.state.width + '" height="' + this.state.height
                                                         + '"></iframe><p>'
                                                         + '<a href="' + this.state.href +'">'
-                                                        + ((this.props.ContentStore.selector.stype === 'slide')
-                                                        ? this.props.SlideViewStore.title
-                                                        : this.findCurrentRevision(this.props.DeckViewStore.deckData)
-                                                                .title)
+                                                        + title
                                                         + ' - '
-                                                        + ((this.props.ContentStore.selector.stype === 'slide')
-                                                        ? this.props.ContributorsStore.creator[0].username
-                                                        : this.props.DeckViewStore.creatorData.username)
+                                                        + userName
                                                         + '</a></p>'
                                                     }/>
                                         </Form.Field>
@@ -218,7 +280,7 @@ class EmbedModal extends React.Component {
                                                     color="red"
                                                     type="button"
                                                     onClick={this.handleClose}
-                                                    content={this.context.intl.formatMessage(this.messages.embedModal_closeButton)}/>
+                                                    content={this.context.intl.formatMessage(this.messages.closeButton)}/>
                                         </Modal.Actions>
                                     </Form>
                                 </Segment>
