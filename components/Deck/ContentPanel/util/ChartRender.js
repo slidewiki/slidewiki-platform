@@ -22,6 +22,7 @@ class ChartRender {
 
             let jsonChart = JSON.parse( charts[i].getAttribute('datum'));
 
+            if (jsonChart === null) return;
             let chartID = jsonChart.chartID;
             let chartType = jsonChart.chartType;
             let chartData = jsonChart.chartData;
@@ -40,7 +41,6 @@ class ChartRender {
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'pieChart':
-                    chartData = chartData[0].values;
                     chart = nv.models.pieChart();
                     break;
                 case 'pie3DChart':
@@ -77,14 +77,16 @@ class ChartRender {
 
 
             if (chart !== null) {
-
+                let h = $('#' + chartID).height();
+                let w = $('#' + chartID).width();
                 d3.select('#' + chartID)
                     .append('svg')
                     .datum(chartData)
                     .transition().duration(500)
-                    .call(chart);
+                    .call(chart)
+                    .style({'width': w, 'height': h});
 
-                nv.utils.windowResize(chart.update);
+                // nv.utils.windowResize(chart.update);
 
             }
         }
