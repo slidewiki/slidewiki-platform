@@ -20,7 +20,7 @@ class EmbedModal extends React.Component {
         this.state = {
             modalOpen: false,
             activeTrap: false,
-            handleEmbedChange: 'd',
+            exportObject: 'd',
             size: 'sm',
             width: this.defaultWidthValue,
             height: this.defaultHeightValue,
@@ -32,6 +32,7 @@ class EmbedModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleEmbedChange = this.handleEmbedChange.bind(this);
+        this.getHref = this.getHref.bind(this);
 
         this.messages = defineMessages({
             closeButton:{
@@ -77,7 +78,17 @@ class EmbedModal extends React.Component {
     }
 
     handleEmbedChange(e, sender) {
-        this.setState({exportObject: sender.value});
+        this.setState({exportObject: sender.value, href: this.getHref()});
+    }
+
+    getHref() {
+        switch (this.state.exportObject) {
+            case 'd':
+                return window.location.href;
+            case 'ss':
+                return window.location.protocol + '//' + window.location.host + this.props.embedPresentationHref;
+        }
+        return null;
     }
 
     handleChange(e, sender) {
@@ -100,23 +111,14 @@ class EmbedModal extends React.Component {
                 size: sender.value,
                 width: this.widthInput && this.widthInput.inputRef.value || this.defaultWidthValue,
                 height: this.heightInput && this.heightInput.inputRef.value || this.defaultHeightValue,
-                href: window.location.href
+                href: this.getHref()
             });
         } else {
             this.setState({
                 width: this.widthInput && this.widthInput.inputRef.value || this.defaultWidthValue,
                 height: this.heightInput && this.heightInput.inputRef.value || this.defaultHeightValue,
-                href: window.location.href
+                href: this.getHref()
             });
-        }
-    }
-
-    createHref() {
-        var href = window.location.href;
-        switch (this.state.exportObject) {
-            case 'ss':
-                href = href.replace('deck', 'presentation');
-                break;
         }
     }
 
@@ -155,7 +157,7 @@ class EmbedModal extends React.Component {
 //    }}
 
     render() {
-        const {handleEmbedChange, exportObject} = this.state;
+        const {size, exportObject} = this.state;
         const title = ((this.props.ContentStore.selector.stype === 'slide') ? this.props.SlideViewStore.title
                 : this.findCurrentRevision(this.props.DeckViewStore.deckData).title);
         const userName = ((this.props.ContentStore.selector.stype === 'slide')
@@ -220,10 +222,10 @@ class EmbedModal extends React.Component {
                                                 <FormattedMessage id='embedModal.embed' defaultMessage='Embed'/>
                                             </label>
                                             <Form.Radio label={this.context.intl.formatMessage(this.messages.deckRadio)}
-                                                    value='d' checked={handleEmbedChange === 'd'}
+                                                    value='d' checked={exportObject === 'd'}
                                                     onChange={this.handleEmbedChange}/>
                                             <Form.Radio label={this.context.intl.formatMessage(this.messages.slideshowRadio)}
-                                                    value='ss' checked={handleEmbedChange === 'ss'}
+                                                    value='ss' checked={exportObject === 'ss'}
                                                     onChange={this.handleEmbedChange}/>
                                         </Form.Group>
                                         <Form.Group inline>

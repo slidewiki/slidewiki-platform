@@ -170,7 +170,8 @@ class ContentActionsFooter extends React.Component {
                             </NavLink>
                             <DownloadModal/>
                             <ReportModal/>
-                            <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
+                            <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
+                                    embedPresentationHref={this.getPresentationHref()} />
                             <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
                                 <i className={classNameLikeButton}></i>
                             </button>
