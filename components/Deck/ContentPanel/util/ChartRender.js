@@ -41,7 +41,19 @@ class ChartRender {
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'pieChart':
-                    chart = nv.models.pieChart();
+                    data = [];
+                    for (let k = 0; k < chartData[0].values.length; k++) {
+                        data.push({
+                            label: chartData[0].xlabels[k][0],
+                            value: chartData[0].values[k].y
+                        });
+                    }
+                    chart = nv.models.pieChart()
+                        .x((d) => { return d.label; })
+                        .y((d) => { return d.value; })
+                        .showLabels(true);
+
+                    chartData = data;
                     break;
                 case 'pie3DChart':
                     chartData = chartData[0].values;
