@@ -78,15 +78,25 @@ class EmbedModal extends React.Component {
     }
 
     handleEmbedChange(e, sender) {
-        this.setState({exportObject: sender.value, href: this.getHref()});
+        this.setState({exportObject: sender.value, href: this.getHref(sender.value)});
     }
 
-    getHref() {
-        switch (this.state.exportObject) {
+    getHref(exportObject) {
+        if (exportObject == undefined) {
+            exportObject = this.state.exportObject;
+        }
+        switch (exportObject) {
             case 'd':
-                return window.location.href;
+                const href = window.location.href;
+                if (this.props.ContentStore.selector.stype === 'slide') {
+                    return href.substring(0, href.indexOf('/slide/') + 1);
+                } else {
+                    return href;
+                }
             case 'ss':
                 return window.location.protocol + '//' + window.location.host + this.props.embedPresentationHref;
+            case 's':
+                return window.location.href;
         }
         return null;
     }
@@ -147,21 +157,15 @@ class EmbedModal extends React.Component {
         }
     }
 
-//    {() => {
-//        if (this.props.ContentStore.selector.stype === 'slide') {
-//        return (<Form.Radio label={this.context.intl.formatMessage(this.messages.slideRadio)}
-//                value='s' checked={this.state.export === 's'} onChange={this.setState({export: 's'})}/>);
-//        } else {
-//            return null;
-//        }
-//    }}
-
     render() {
         const {size, exportObject} = this.state;
         const title = ((this.props.ContentStore.selector.stype === 'slide') ? this.props.SlideViewStore.title
                 : this.findCurrentRevision(this.props.DeckViewStore.deckData).title);
         const userName = ((this.props.ContentStore.selector.stype === 'slide')
                 ? this.props.ContributorsStore.creator[0].username : this.props.DeckViewStore.creatorData.username);
+        const slideRadio = (this.props.ContentStore.selector.stype === 'slide')
+                ? <Form.Radio label={this.context.intl.formatMessage(this.messages.slideRadio)}
+                        value='s' checked={exportObject === 's'} onChange={this.handleEmbedChange}/> : null;
         return(
             <Modal
                     trigger={
@@ -213,7 +217,7 @@ class EmbedModal extends React.Component {
                     <Modal.Content>
                         <Container>
                             <FormattedMessage id='embedModel.desc'
-                                    defaultMessage='Select from the options below and the copy the generate HTML into your site.'/>
+                                    defaultMessage='Select from the options below and then copy the generate HTML into your site.'/>
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>
                                     <Form>
@@ -227,6 +231,7 @@ class EmbedModal extends React.Component {
                                             <Form.Radio label={this.context.intl.formatMessage(this.messages.slideshowRadio)}
                                                     value='ss' checked={exportObject === 'ss'}
                                                     onChange={this.handleEmbedChange}/>
+                                            {slideRadio}
                                         </Form.Group>
                                         <Form.Group inline>
                                             <label>
