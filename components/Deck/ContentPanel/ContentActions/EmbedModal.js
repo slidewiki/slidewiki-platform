@@ -82,7 +82,7 @@ class EmbedModal extends React.Component {
     }
 
     getHref(exportObject) {
-        if (exportObject == undefined) {
+        if (exportObject === undefined) {
             exportObject = this.state.exportObject;
         }
         switch (exportObject) {
