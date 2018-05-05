@@ -395,9 +395,15 @@ class SlideEditLeftPanel extends React.Component {
                   </label>
                 </form>);
 
+        const templateListStyle = {
+            maxHeight: 600,
+            minHeight: 320,
+            padding: 5,
+            overflowY: 'auto'
+        };
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
-                <div >
+                <div style={templateListStyle}>
                   <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
