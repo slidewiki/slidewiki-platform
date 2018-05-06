@@ -56,7 +56,24 @@ export default {
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)
                 uri += '?language=' + args.language;
-            let deckRes = rp.get({uri: uri});
+            let deckRes = rp.get({uri: uri, json: true}).then((deck) => {
+                if (deck.revisions) {
+                    // support old style api response
+                    // TODO remove this
+                    let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
+                        return rev.id === deck.active;
+                    });
+                    if (!deck.id) deck.id = deck._id;
+                    deck.revision = currentRevision.id;
+                    deck.revisionUser = currentRevision.user;
+                    delete deck.revisions;
+
+                    // override everything else
+                    Object.assign(deck, currentRevision);
+                }
+
+                return deck;
+            });
             /* Create promise for slides data success */
             let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
             if (args.language)
@@ -104,13 +121,9 @@ export default {
             });
 
             /* Create user data promise which is dependent on deck data promise */
-            let usersPromise = deckPromise.then((deckRes) => {
+            let usersPromise = deckPromise.then((deck) => {
                 // This should be done when deckservice and userservice data is in sync;
-                let deck = JSON.parse(deckRes);
-                let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
-                    return rev.id === deck.active;
-                });
-                let users = [deck.user, currentRevision.user];
+                let users = [deck.user, deck.revisionUser];
                 if (deck.origin != null && deck.origin.user != null){
                     users.push(deck.origin.user);
                 }
@@ -125,7 +138,7 @@ export default {
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
             Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise]).then((data) => {
-                let deckData = JSON.parse(data[0]);
+                let deckData = data[0];
                 deckData.forkCount = JSON.parse(data[2]);
                 deckData.shareCount = JSON.parse(data[4]);
                 deckData.downloadCount = JSON.parse(data[5]);
@@ -159,40 +172,45 @@ export default {
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)
                 uri += '?language=' + args.language;
-            let deckPromise = rp.get({uri: uri}).promise().bind(this);
-            let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
-
-            Promise.all([deckPromise, editorsPromise]).then((res) => {
-                let revision,
-                    deck = JSON.parse(res[0]),
-                    editors = JSON.parse(res[1]);
-
-                //if deck's sid does not specify revision, find the active revision from the corresponding field
-                if (args.sid.split('-').length < 2) {
-                    revision = deck.revisions.find((rev) => {
+            let deckPromise = rp.get({uri: uri, json:true}).then((deck) => {
+                // TODO remove this
+                if (deck.revisions) {
+                    // support old style api response
+                    // TODO remove this
+                    let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
                         return rev.id === deck.active;
                     });
-                } else {
-                    revision = deck.revisions[0];
+                    if (!deck.id) deck.id = deck._id;
+                    deck.revision = currentRevision.id;
+                    deck.revisionUser = currentRevision.user;
+                    delete deck.revisions;
+
+                    // override everything else
+                    Object.assign(deck, currentRevision);
                 }
+                return deck;
+            });
+            let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors', json: true});
+
+            Promise.all([deckPromise, editorsPromise]).then(([deck, editors]) => {
                 let deckProps = {
-                    description: revision.description != null ? revision.description : deck.description,
-                    language: revision.language,
-                    tags: revision.tags != null ? revision.tags : deck.tags,
-                    title: revision.title != null ? revision.title : deck.title,
-                    license: revision.license != null ? revision.license : deck.license,
-                    theme: revision.theme != null ? revision.theme : deck.theme,
-                    allowMarkdown: revision.allowMarkdown != null ? revision.allowMarkdown : false,
+                    description: deck.description,
+                    language: deck.language,
+                    tags: deck.tags,
+                    title: deck.title,
+                    license: deck.license,
+                    theme: deck.theme,
+                    allowMarkdown: deck.allowMarkdown || false,
                     editors: editors.editors || {
                         users: [],
                         groups: []
                     },
                     hidden: deck.hidden,
                     deckOwner: deck.user,
-                    revisionOwner: revision.user,
+                    revisionOwner: deck.revisionUser,
                     sid: args.sid,
                     localRootDeck: args.id,
-                    translations: revision.translations || []
+                    translations: deck.translations || []
                 };
                 let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
                 // console.log('Returned editors of deck:', editors.editors);
@@ -289,6 +307,17 @@ export default {
                 json: true,
                 headers: {'----jwt----': params.jwt},
                 body: toSend
+            }).then((deck) => {
+                // support old style deck api response
+                // TODO remove this
+                if (deck.revisions) {
+                    if (!deck.id) deck.id = deck._id;
+                    deck.revision = deck.revisions[0].id;
+                    deck.title = deck.revisions[0].title;
+
+                    delete deck.revisions;
+                }
+                return deck;
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
@@ -340,47 +369,20 @@ export default {
                 json: true,
                 headers: {'----jwt----': params.jwt},
                 body: toSend
+            }).then((deck) => {
+                // support old style deck api response
+                // TODO remove this
+                if (deck.revisions) {
+                    if (!deck.id) deck.id = deck._id;
+                    deck.revision = deck.revisions[0].id;
+                    deck.title = deck.revisions[0].title;
+
+                    delete deck.revisions;
+                }
+                return deck;
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
-        } else if (resource === 'deck.updateWithRevision') {
-            //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            let selector = {
-                'id': String(params.selector.id),
-                'spath': params.selector.spath,
-                'sid': String(params.selector.sid),
-                'stype': params.selector.stype
-            };
-
-            try {
-                if (params.tags.length === 1 && params.tags[0].length === 0)
-                    params.tags = undefined;
-            } catch (e) {
-
-            }
-            let toSend = {
-                description: params.description,
-                language: params.language,
-                tags: params.tags,
-                title: params.title,
-                user: params.userid.toString(),
-                license: params.license,
-                theme: params.theme,
-                new_revision: true,
-                top_root_deck: selector.id,
-
-            };
-            if (params.root_deck != null) {
-                toSend.root_deck = params.root_deck;
-            }
-            rp({
-                method: 'PUT',
-                uri: Microservices.deck.uri + '/deck/' + params.deckId,
-                json: true,
-                headers: {'----jwt----': params.jwt},
-                body: toSend
-            }).then((deck) => callback(false, deck))
-            .catch((err) => callback(err));
         } else if (resource === 'deck.fork') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             rp({

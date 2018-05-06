@@ -40,14 +40,11 @@ class TranslationStore extends BaseStore {
 
     deckGotLoaded(data) {
         let deck = data.deckData;
-        let revision = deck.revisions.find((r) => {
-            return r.id === deck.active;
-        }) || deck.revisions[0] || {};
-        console.log('TranslationStore deckGotLoaded deckdata', data.deckData, '\n', revision);
-        this.nodeLanguage = revision.language.replace('_', '-') || 'en-GB';
+        console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
+        this.nodeLanguage = deck.language.replace('_', '-') || 'en-GB';
 
         if (data.isRootDeck)
-            this.getAndSetOriginalLanguage(revision.variants || [], this.nodeLanguage);
+            this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
 
         this.emitChange();
         this.logState('deckGotLoaded');

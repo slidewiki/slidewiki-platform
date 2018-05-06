@@ -8,7 +8,6 @@ import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
 import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
-import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import GroupDetailsModal from './GroupDetailsModal';
@@ -192,9 +191,8 @@ class DeckPropertiesEditor extends React.Component {
         });
     }
 
-    handleSave(withNewRevision = false, event) {
+    handleSave(event) {
         event.preventDefault();
-        const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
         if (this.state.title == null || this.state.title.length === 0) {
@@ -224,7 +222,7 @@ class DeckPropertiesEditor extends React.Component {
             let deckId = this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id;
 
             this.context.executeAction(updateDeckEditViewState, 'loading');
-            this.context.executeAction(saveAction, {
+            this.context.executeAction(saveDeckEdit, {
                 deckId: deckId,
                 title: this.state.title,
                 allowMarkdown: this.state.allowMarkdown,
@@ -523,7 +521,7 @@ class DeckPropertiesEditor extends React.Component {
         let buttons = (
             <div>
                 <button className='ui primary button'
-                    onClick={this.handleSave.bind(this, false)}>Save
+                    onClick={this.handleSave.bind(this)}>Save
                 </button>
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>

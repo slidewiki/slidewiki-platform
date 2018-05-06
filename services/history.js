@@ -72,6 +72,9 @@ export default {
                     top_root_deck: params.id
                 },
                 headers: { '----jwt----': params.jwt }
+            }).then((deck) => {
+                if (!deck.id) deck.id = deck._id;
+                return deck;
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
         }
@@ -89,6 +92,13 @@ export default {
                 },
                 headers: { '----jwt----': params.jwt }
             }).then((res) => {
+                // TODO remove these after api changes
+                if (res.revisions) {
+                    res.id = res._id;
+                    res.revision = res.revisions[0].id;
+                    res.title = res.revisions[0].title;
+                }
+
                 callback(null, res);
             }).catch((err) => {
                 callback(err, {

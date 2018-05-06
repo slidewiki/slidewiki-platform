@@ -21,7 +21,7 @@ export default function saveTreeNode(context, payload, done) {
             } else {
                 let newSid = payload.selector.sid, newPath = payload.selector.spath;
                 if (payload.selector.stype === 'slide') {
-                    newSid = res._id + '-' + res.revisions[0].id;
+                    newSid = `${res.id}-${res.revision}`;
                     if (payload.selector.spath !== '') {
                         let pathArr = payload.selector.spath.split(';');
                         let lastPath = pathArr[pathArr.length - 1];

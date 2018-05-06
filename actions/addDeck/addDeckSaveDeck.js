@@ -44,8 +44,8 @@ function createActivity(deck) {
     let activity = {
         activity_type: 'add',
         user_id: String(deck.user),
-        content_id: deck.id ? (String(deck.id) + '-1'): (String(deck._id) + '-1'),
-        content_name: deck.revisions[0].title,
+        content_id: `${deck.id}-1`,
+        content_name: deck.title,
         content_owner_id: String(deck.user),
         content_kind: 'deck'
     };

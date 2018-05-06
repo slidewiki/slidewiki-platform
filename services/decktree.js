@@ -83,7 +83,16 @@ export default {
                     language: args.language
                 })
             }).then((res) => {
-                callback(null, JSON.parse(res));
+                res = JSON.parse(res);
+                // TODO remove this
+                // support old style api response
+                if (res.revisions) {
+                    // means it's a slide
+                    // the last revision is the one we (probably) want
+                    res.id = res._id;
+                    res.revision = res.revisions[0].id;
+                }
+                callback(null, res);
             }).catch((err) => {
                 console.log(err);
                 callback(err, params);

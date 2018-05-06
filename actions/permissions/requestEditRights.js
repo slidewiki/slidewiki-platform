@@ -21,8 +21,9 @@ export default function requestEditRights(context, payload, done) {
         }
         else {
             if (res.isNew) {
-                payload.ownerid = context.getStore(DeckViewStore).getState().deckData.user;
-                payload.deckname = extractDeckTitle(context.getStore(DeckViewStore).getState().deckData);
+                let deckData = context.getStore(DeckViewStore).getState().deckData;
+                payload.ownerid = deckData.user;
+                payload.deckname = deckData.title;
 
                 // console.log('again the payload:', payload);
 
@@ -51,16 +52,4 @@ export default function requestEditRights(context, payload, done) {
             }
         }
     });
-}
-
-function extractDeckTitle(deck) {
-    let active = deck.active;
-    let title = deck.revisions[0].title;
-
-    deck.revisions.forEach((revision) => {
-        if (revision.id === active)
-            title = revision.title;
-    });
-
-    return title;
 }

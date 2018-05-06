@@ -40,23 +40,13 @@ class DeckViewPanel extends React.Component {
         if (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children) {
             slidesArr = this.props.DeckViewStore.slidesData.children;
         }
-        let tags = [];
-        if (deckData && deckData.tags){
-            tags = deckData.tags;
-        }
-        let currentRevision = 1;
-        if(deckData.revisions){
-            currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
-                return rev.id === deckData.active;
-            });
-        }
 
         const forkCount = deckData.forkCount;
         const shareCount = deckData.shareCount;
         const downloadCount = deckData.downloadCount;
 
         //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
-        let deckTheme = currentRevision.theme;
+        let deckTheme = deckData.theme;
         switch (deckTheme) {
             case 'default':
                 deckTheme = 'White - Default';
@@ -103,7 +93,7 @@ class DeckViewPanel extends React.Component {
             default:
         }
         const deckLicense = deckData.license;
-        const deckTitle = currentRevision.title;
+        const deckTitle = deckData.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
@@ -185,13 +175,6 @@ class DeckViewPanel extends React.Component {
                                             <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
                                     </div>
                                 </div>
-                                {tags.length > 0 ? <div className="ui divider"></div> : ''}
-                                <div className="ui tag labels large meta">
-                                    {tags.map((tag, index) => {
-                                        return <a className="ui label" key={index} tabIndex="0">{tag}</a>;
-                                    })}
-                                </div>
-
                             </div>
                         </div>
                         <div className="ui divider"></div>

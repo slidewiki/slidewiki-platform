@@ -29,11 +29,11 @@ export default {
                 //and fill each usage item with the title and user id of the corresponding revision.
                 let deckIds = [... new Set(usage.map((item) => item.id))];
                 deckIds.forEach((deckId) => {
-                    deckPromises.push(rp.get({uri: Microservices.deck.uri + '/deck/' + deckId}).then((res) => {
-                        let deck = JSON.parse(res);
+                    deckPromises.push(rp.get({uri: Microservices.deck.uri + '/deck/' + deckId + '/revisions'}).then((res) => {
+                        let deckRevisions = JSON.parse(res);
                         usage.forEach((usageItem) => {
                             if (usageItem.id === deckId) {
-                                let revision = deck.revisions.find((rev) => {
+                                let revision = deckRevisions.find((rev) => {
                                     return rev.id === usageItem.revision;
                                 });
                                 usageItem.title = revision.title;
