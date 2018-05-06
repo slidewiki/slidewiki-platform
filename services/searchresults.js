@@ -99,17 +99,30 @@ function getDecks(deckIdsSet){
     let deckPromises = [];
 
     for(let deckId of deckIdsSet){
-        deckPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`, json: true}).then( (deckRes) => {
+        deckPromises.push(rp.get({
+            uri: `${Microservices.deck.uri}/deck/${deckId}`,
+            json: true,
+        }).then((deckRes) => {
             decks[deckId] = deckRes;
-            decks[deckId].revisions.forEach( (rev) => {
+        }).catch((err) => {
+            // ignore errors;
+        }));
+
+        // TODO CHANGE THIS
+        // also fetch the revisions
+        deckPromises.push(rp.get({
+            uri: `${Microservices.deck.uri}/deck/${deckId}/revisions`,
+            json: true,
+        }).then((revisions) => {
+            revisions.forEach( (rev) => {
                 deckRevisions[deckId + '-' + rev.id] = rev;
             });
-        }).catch( (err) => {
-            decks[deckId] = null;
+        }).catch((err) => {
+            // ignore errors;
         }));
     }
 
-    return Promise.all(deckPromises).then( () => { return {decks, deckRevisions}; });
+    return Promise.all(deckPromises).then(() => ({decks, deckRevisions}));
 }
 
 function getForks(deckIdsSet){

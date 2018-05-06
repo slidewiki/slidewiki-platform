@@ -58,24 +58,7 @@ export default {
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)
                 uri += '?language=' + args.language;
-            let deckRes = rp.get({uri: uri, json: true}).then((deck) => {
-                if (deck.revisions) {
-                    // support old style api response
-                    // TODO remove this
-                    let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
-                        return rev.id === deck.active;
-                    });
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = currentRevision.id;
-                    deck.revisionUser = currentRevision.user;
-                    delete deck.revisions;
-
-                    // override everything else
-                    Object.assign(deck, currentRevision);
-                }
-
-                return deck;
-            });
+            let deckRes = rp.get({uri: uri, json: true});
             /* Create promise for slides data success */
             let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
             if (args.language)
@@ -174,26 +157,8 @@ export default {
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)
                 uri += '?language=' + args.language;
-            let deckPromise = rp.get({uri: uri, json:true}).then((deck) => {
-                // TODO remove this
-                if (deck.revisions) {
-                    // support old style api response
-                    // TODO remove this
-                    let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
-                        return rev.id === deck.active;
-                    });
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = currentRevision.id;
-                    deck.revisionUser = currentRevision.user;
-                    delete deck.revisions;
 
-                    // override everything else
-                    Object.assign(deck, currentRevision);
-                }
-                return deck;
-            });
-
-            deckPromise.then((deck) => {
+            rp.get({uri: uri, json:true}).then((deck) => {
                 // prepare users and groups from editors object
                 let {users, groups} = deck.editors || {};
                 if (!users) users = [];
@@ -315,17 +280,6 @@ export default {
                 json: true,
                 headers: {'----jwt----': params.jwt},
                 body: toSend
-            }).then((deck) => {
-                // support old style deck api response
-                // TODO remove this
-                if (deck.revisions) {
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = deck.revisions[0].id;
-                    deck.title = deck.revisions[0].title;
-
-                    delete deck.revisions;
-                }
-                return deck;
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
@@ -377,17 +331,6 @@ export default {
                 json: true,
                 headers: {'----jwt----': params.jwt},
                 body: toSend
-            }).then((deck) => {
-                // support old style deck api response
-                // TODO remove this
-                if (deck.revisions) {
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = deck.revisions[0].id;
-                    deck.title = deck.revisions[0].title;
-
-                    delete deck.revisions;
-                }
-                return deck;
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
