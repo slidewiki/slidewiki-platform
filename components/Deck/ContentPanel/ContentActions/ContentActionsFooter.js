@@ -17,6 +17,8 @@ import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
 import DownloadModal from './DownloadModal';
+import MobileDetect from 'mobile-detect';
+import AriaMenuButton from 'react-aria-menubutton';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -24,7 +26,13 @@ class ContentActionsFooter extends React.Component {
         //this.state={expanded: 0};
         this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
         this.visible = true;
+        this.state.isMobile = false;
         // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
+    }
+    componentDidMount(){
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -128,13 +136,60 @@ class ContentActionsFooter extends React.Component {
             tooltipLikeButton = 'Dislike this deck';
         }
 
+        let desktopButtons = <div>
+          <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
+          <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
+              <i className="print large icon"></i>
+          </button>
+          </NavLink>
+          <DownloadModal/>
+          <ReportModal/>
+          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
+          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+              <i className={classNameLikeButton}></i>
+          </button>
+          </div>;
+
+        let mobileButtons = <AriaMenuButton.Wrapper>
+            <AriaMenuButton.Button >
+             <div style={{'display': 'inline-flex'}}>
+               <i className="ui ellipsis vertical large icon" style={{'marginTop':'0.7em'}}></i>
+              </div>
+            </AriaMenuButton.Button>
+            <AriaMenuButton.Menu className='ui menu vertical'
+             style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
+                 <AriaMenuButton.MenuItem className='item' key= {0} tag='li'>
+                   <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank" style={{'color': 'black'}}>
+                    <div aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
+                        <i className="print large icon"></i>
+                        Print
+                    </div>
+                    </NavLink>
+                 </AriaMenuButton.MenuItem>
+                 <AriaMenuButton.MenuItem className='item' key= {1} tag='li'>
+                   <DownloadModal textOnly={true}/>
+                 </AriaMenuButton.MenuItem>
+                 <AriaMenuButton.MenuItem className='item' key= {2} tag='li'>
+                   <ReportModal textOnly={true}/>
+                 </AriaMenuButton.MenuItem>
+                 <AriaMenuButton.MenuItem className='item' key= {3} tag='li'>
+                   <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} textOnly={true}/>
+                 </AriaMenuButton.MenuItem>
+                 <AriaMenuButton.MenuItem className='item' key= {4} tag='li'>
+                   <div aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+                       <i className={classNameLikeButton}></i> Like
+                   </div>
+                 </AriaMenuButton.MenuItem>
+             </AriaMenuButton.Menu>
+         </AriaMenuButton.Wrapper>;
+
         return (
             <div className="ui">
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
                     {this.props.ContentStore.selector.stype === 'slide' ? <div className="bar"></div> : ''}
                 </div>
                 <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
-                    {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
+                    {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : (this.state.isMobile) ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : ''}
                     <div className="right menu">
                         <div className="ui icon buttons large right floated">
 
@@ -144,21 +199,13 @@ class ContentActionsFooter extends React.Component {
                                 </button>
                             </a>
 
-                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
-                            <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
-                                <i className="print large icon"></i>
-                            </button>
-                            </NavLink>
-                            <DownloadModal/>
-                            <ReportModal/>
-                            <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
-                            <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
-                                <i className={classNameLikeButton}></i>
-                            </button>
+                            {!this.state.isMobile ? desktopButtons : ''}
+
                             {/* {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>} */}
                             {/* below is temporary fix (disable) for SWIK-1996 - When expand screen (hide decktree) on slide edit, then no content is displayed
                                 this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)}  aria-label="Reset Layout" data-tooltip="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} aria-label="Expand Content" data-tooltip="Expand Content"><i className="large icon expand"></i></button>*/}
                         </div>
+                        {!this.state.isMobile ? '' : mobileButtons}
                     </div>
                 </div>
             </div>
