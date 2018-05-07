@@ -37,16 +37,19 @@ class PaintModal extends React.Component {
 
         // For undo - redo
         // TODO: properly store the object's modifications for undo-redo, also deletions.
-        /*this.canvasState = {
-            current: null,
-            list: [],
-            state: [],
-            index: 0,
-            index2: 0,
-            action: false,
-            refresh: true,
+        this.canvas_config = {
+            canvasState             : [],
+            currentStateIndex       : -1,
+            undoStatus              : false,
+            redoStatus              : false,
+            undoFinishedStatus      : 1,
+            redoFinishedStatus      : 1,
+            undoButton              : document.getElementById('undo'),
+            redoButton              : document.getElementById('redo'),
         };
-*/
+
+        this.updateCanvasState = this.updateCanvasState.bind(this);
+
         this.objectsStack = [];
         this.clipboard = null;
         this.canvasOpen = false;
@@ -129,6 +132,11 @@ class PaintModal extends React.Component {
 
         this.canvas.on('object:added', (e) => {
             this.setState({canvasDirty: true});
+            this.updateCanvasState();
+        });
+
+        this.canvas.on('object:modified', (e) => {
+           this.updateCanvasState();
         });
         /*
         // Event handlers for undo/redo
@@ -179,6 +187,26 @@ class PaintModal extends React.Component {
 
         // After each render save state of canvas
 
+    }
+
+    updateCanvasState() {
+
+        console.log('///////////////updating');
+        if ((this.canvas_config.undoStatus === false && this.canvas_config.redoStatus === false)) {
+            let jsonData = this.canvas.toJSON();
+            let canvasAsJson = JSON.stringify(jsonData);
+            if (this.canvas_config.currentStateIndex < this.canvas_config.canvasState.length - 1) {
+                let indexToBeInserted = this.canvas_config.currentStateIndex + 1;
+                this.canvas_config.canvasState[indexToBeInserted] = canvasAsJson;
+                let numberOfElementsToRetain = indexToBeInserted + 1;
+                this.canvas_config.canvasState = this.canvas_config.canvasState.splice(0, numberOfElementsToRetain);
+            } else {
+                this.canvas_config.canvasState.push(canvasAsJson);
+            }
+            if ((this.canvas_config.currentStateIndex === this.canvas_config.canvasState.lent - 1 ) && this.canvas_config.currentStateIndex !== -1){
+                this.canvas_config.redoButton.disabled = "disabled";
+            }
+        }
     }
 
     handleOpen(){
@@ -349,13 +377,42 @@ class PaintModal extends React.Component {
 
 
     undo() {
+        console.log('//////////////undoing')
+        if (this.canvas_config.undoFinishedStatus) {
+            if (this.canvas_config.currentStateIndex === -1) {
+                this.canvas_config.undoStatus = false;
+            } else {
+                if (this.canvas_config.canvasState >= 1) {
+                    console.log('////////////////////aquisi');
+                    this.canvas_config.undoFinishedStatus = 0;
+                    this.canvas.loadFromJSON(this.canvas_config.canvasState[this.canvas_config.currentStateIndex - 1], () => {
+                       let jsonData = JSON.parse(this.canvas_config.canvasState[this.canvas_config.currentStateIndex - 1]);
+                       this.canvas.renderAll();
+                       this.canvas_config.undoStatus = false;
+                       this.canvas_config.currentStateIndex -= 1;
+                       this.canvas_config.undoButton.removeAttribute('disabled');
+                       if(this.canvas_config.currentStateIndex !== this.canvas_config.canvasState.length - 1) {
+                           this.canvas_config.redoButton.removeAttribute('disabled');
+                       }
+                       this.canvas_config.undoFinishedStatus = 1;
+                    });
+                } else if (this.canvas_config.currentStateIndex === 0) {
+                    this.canvas.clear();
+                    this.canvas_config.undoFinishedStatus = 1;
+                    this.canvas_config.undoButton.disabled = 'disabled';
+                    this.canvas_config.redoButton.removeAttribute('disabled');
+                    this.canvas_config.currentStateIndex -= 1;
+                }
+            }
+        }
+        /* wp
         let objects = this.canvas.getObjects();
         if (objects.length !== 0) {
             let last = objects[objects.length - 1];
             this.objectsStack.push(last);
             this.canvas.remove(last);
             this.canvas.renderAll();
-        }
+        }*/
         /*
         if (this.canvasState.index <= 0) {
             this.canvasState.index = 0;
@@ -383,10 +440,34 @@ class PaintModal extends React.Component {
 
     redo() {
 
+    if(this.canvas_config.redoFinishedStatus) {
+        if((this.canvas_config.currentStateIndex === this.canvas_config.canvasState.length - 1) && this.canvas_config.currentStateIndex !== -1) {
+            this.canvas_config.redoButton.disabled = 'disabled';
+        } else {
+            if (this.canvas_config.canvasState.length > this.canvas_config.currentStateIndex && this.canvas_config.canvasState.length != 0) {
+                this.canvas_config.redoFinishedStatus = 0;
+                this.canvas_config.redoStatus = true;
+                this.canvas.loadFromJSON(this.canvas_config.canvasState[this.canvas_config.currentStateIndex + 1], () => {
+                    let jsonData = JSON.parse(this.canvas_config.canvasState[this.canvas_config.currentStateIndex + 1]);
+                    this.canvas.renderAll();
+                    this.canvas_config.redoStatur = false;
+                    this.canvas_config.currentStateIndex += 1;
+                    if(this.canvas_config.currentStateIndex !== -1) {
+                        this.canvas_config.undoFinishedStatus.removeAttribute('disabled');
+                    }
+                    this.canvas_config.redoFinishedStatus = 1;
+                    if((this.canvas_config.currentStateIndex === this.canvas_config.canvasState.length - 1) && this.canvas_config.currentStateIndex !== -1) {
+                        this.canvas_config.redoButton.disabled = 'disabled';
+                    }
+                });
+            }
+        }
+    }
+        /* wp
         if (this.objectsStack.length > 0) {
             let object = this.objectsStack.pop();
             this.canvas.add(object);
-        }
+        }*/
 
         /*
         this.canvasState.action = true;
