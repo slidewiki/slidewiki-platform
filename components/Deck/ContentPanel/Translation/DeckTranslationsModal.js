@@ -175,7 +175,7 @@ class DeckTranslationsModal extends React.Component {
             }, []);
         }
 
-        let btnMessage = ' ';
+        let btnMessage = ' &nbsp;';
         if (this.state.action === 'languageselect')
             btnMessage = this.context.intl.formatMessage(messages.language);
         else if (this.state.action === 'translate')

@@ -47,7 +47,7 @@ class TranslationStore extends BaseStore {
         this.originLanguage = revision.language || 'en';
         this.nodeLanguage = this.originLanguage;
         this.emitChange();
-        this.logState();
+        this.logState('deckGotLoaded');
     }
 
     deckPropsGotLoaded(data) {
@@ -55,7 +55,7 @@ class TranslationStore extends BaseStore {
         this.originLanguage = data.deckProps.language;
         this.nodeLanguage = data.deckProps.language;//TODO correct?
         this.emitChange();
-        this.logState();
+        this.logState('deckPropsGotLoaded');
     }
 
     changeCurrentLanguage(language) {
@@ -72,19 +72,19 @@ class TranslationStore extends BaseStore {
     slideLoaded(data) {
         this.nodeLanguage = this.data.slide.language;
         this.emitChange();
-        this.logState();
+        this.logState('slideLoaded');
     }
 
     translationsLoaded(translations) {
         this.translations = translations;
         this.emitChange();
-        this.logState();
+        this.logState('translationsLoaded');
     }
 
     deckTreeGotLoaded(data) {
         this.treeLanguage = data.deckTree.language;
         this.emitChange();
-        this.logState();
+        this.logState('deckTreeGotLoaded');
     }
 
     translationAdded(data) {
@@ -98,8 +98,8 @@ class TranslationStore extends BaseStore {
 
     //-- util functions --
 
-    logState() {
-        console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage);
+    logState(functionName = '') {
+        console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage, 'by', functionName);
     }
 }
 

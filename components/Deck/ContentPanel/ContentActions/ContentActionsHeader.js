@@ -62,6 +62,10 @@ class ContentActionsHeader extends React.Component {
                 id: 'ContentActionsHeader.language',
                 defaultMessage:'Language'
             },
+            translation:{
+                id: 'ContentActionsHeader.translation',
+                defaultMessage:'Translation'
+            },
         });
 
     }
@@ -173,10 +177,11 @@ class ContentActionsHeader extends React.Component {
         } ;
         let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton, languageButton;
 
+        let languageMessage = this.props.TranslationStore.inTranslationMode ? this.messages.translation : this.messages.language;
         let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
         languageButton =
           <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
-              {this.context.intl.formatMessage(this.messages.language)}: {getLanguageName(language)}
+              {this.context.intl.formatMessage(languageMessage)}: {getLanguageName(language)}
           </button>;
         console.log('ContentActionHeader store state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
 
@@ -192,7 +197,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save
+                        Save{this.props.TranslationStore.inTranslationMode ? ' as translation' : ''}
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
