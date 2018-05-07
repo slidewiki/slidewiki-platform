@@ -278,22 +278,28 @@ class ContentActionsHeader extends React.Component {
           <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
         </button>
         */
+        let mobileMessage = <div className="ui top attached warning message">
+          <p>You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use the desktop version.</p>
+        </div>;
 
         return (
-            	<div className="ui two column grid">
-                <div className="column">
-                    <div className="ui left floated top attached buttons" >
-                        {editButton}
-                        {markdownEditButton}
-                        {saveButton}
-                        {cancelButton}
-                        {undoButton}
-                        {redoButton}
-												{languageButton}
+                <div className="ui two column grid">
+                    <div className="column computer tablet only">
+                        <div className="ui left floated top attached buttons" >
+                            {editButton}
+                            {markdownEditButton}
+                            {saveButton}
+                            {cancelButton}
+                            {undoButton}
+                            {redoButton}
+    												{languageButton}
+                        </div>
                     </div>
-                </div>
-                <DeckTranslationsModal />
-                <div className="column">
+                    <DeckTranslationsModal />
+                    <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
+                        {mobileMessage}
+                    </div>
+                    <div className="column computer tablet only">
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui right floated basic top attached buttons" >
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
