@@ -1,12 +1,14 @@
 const log = require('../log/clog');
 import UserProfileStore from '../../stores/UserProfileStore';
 import DeckTreeStore from '../../stores/DeckTreeStore';
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addDeckTranslation(context, payload, done) {
     log.info(context);
 
     payload.jwt = context.getStore(UserProfileStore).getState().jwt;
-    payload.id = context.getStore(DeckTreeStore).getState().selector.id;
+    payload.id = context.getStore(DeckTreeStore).getState().selector.get('id');
+    console.log('action addDeckTranslation selector', context.getStore(DeckTreeStore).getState().selector.get('id'));
 
     context.service.update('deck.translations', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

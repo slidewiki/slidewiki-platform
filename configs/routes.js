@@ -352,7 +352,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?:language(_[a-z_]{2,5})?/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?:language(_[a-z_\-]{2,5})?/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),

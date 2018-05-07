@@ -442,13 +442,17 @@ export default {
             }).catch((err) => callback(err));
         }
         else if (resource === 'deck.translations') {
+            let deckid = params.id;
+            let index = (deckid + '').indexOf('-');
+            if (index !== -1)
+                deckid = deckid.substring(0, index);
             rp({
                 method: 'POST',
-                uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
-                headers: { '----jwt----': args.jwt },
+                uri: Microservices.deck.uri + '/deck/' + deckid + '/translations',
+                headers: { '----jwt----': params.jwt },
                 json: true,
                 body: {
-                    language: args.language
+                    language: params.language
                 }
             })
             .then((body) => {
