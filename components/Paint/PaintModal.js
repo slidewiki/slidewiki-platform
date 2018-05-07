@@ -206,6 +206,10 @@ class PaintModal extends React.Component {
 
         this.canvas = null;
         this.canvasOpen = false;
+        this.drawingMode = false;
+        this.primaryColor = 'black';
+        this.secondaryColor = 'black';
+        this.canvas.isDrawingMode = this.drawingMode;
         this.objectsStack = [];
         this.setState({canvasDirty: false});
 
@@ -518,27 +522,33 @@ class PaintModal extends React.Component {
                 <p>Draw inside the canvas using the tools provided.</p>
                 <canvas id="fabriccanvas" style={canvasStyle}/>
                 <div>
-                    <button onClick={this.addRect}>Add Rectangle</button>
-                    <button onClick={this.addCircle}>Add Circle</button>
-                    <button onClick={this.addTriangle}>Add Triangle</button>
+                    <Button onClick={this.addRect}>Add Rectangle</Button>
+                    <Button onClick={this.addCircle}>Add Circle</Button>
+                    <Button onClick={this.addTriangle}>Add Triangle</Button>
                     {/*<button onClick={this.addText}>Add Text</button>*/}
-                    <button onClick={this.addArrow}>Add Arrow</button>
-                    <button onClick={this.downloadImg}>Download Image</button>
-                    <input type="color" id="primaryColor"/>
-                    <input type="color" id="secondaryColor"/>
-                    <button onClick={this.deleteElement}>Delete selected objects</button>
-                    <br/>
-                    <div className="ui slider checkbox">
-                        <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
-                        <label>Drawing mode</label>
+                    <Button onClick={this.addArrow}>Add Arrow</Button>
+                    <Button onClick={this.downloadImg} disabled={!this.state.canvasDirty}>Download Image</Button>
+                    <div>
+                        <p>Primary color: <input type="color" id="primaryColor"/></p>
+                        <p>Border color: <input type="color" id="secondaryColor"/></p>
                     </div>
-                    <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
-                    <p>Load Image! </p><input type="file" onChange={this.loadImg}/>
+                    <div className="ui slider checkbox">
+                        <label>Drawing mode</label>
+                        <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
+                    </div>
 
-                    <button onClick={this.undo}>Undo</button>
-                    <button onClick={this.redo}>Redo</button>
-                    <button onClick={this.copyActiveObjects}>Copy Selected Objects</button>
-                    <button onClick={this.paste}>Paste</button>
+                    <br/>
+                    <Button color="blue" onClick={() => {$('#uploadImage').click()}}> Upload Image</Button>
+                    <input type="file" id="uploadImage" style={{ display: 'none' }} onChange={this.loadImg}/>
+                    <div>
+                        <p>Line/Border Width: </p>
+                        <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
+                    </div>
+                    <Button onClick={this.deleteElement}>Delete selected objects</Button>
+                    <Button onClick={this.undo}>Undo</Button>
+                    <Button onClick={this.redo}>Redo</Button>
+                    <Button onClick={this.copyActiveObjects}>Copy Selected Objects</Button>
+                    <Button onClick={this.paste}>Paste</Button>
                 </div>
             </Segment>
         </div>;
