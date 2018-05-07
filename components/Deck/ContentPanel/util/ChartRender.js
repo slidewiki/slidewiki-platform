@@ -10,10 +10,9 @@ class ChartRender {
 
         for (let i = 0; i < charts.length; i++){
 
-
             let id = charts[i].getAttribute('id');
 
-            if ($('#' + id).has('svg').length) {
+            if ($('#' + id).has('svg').length) { // case when some svg is already created inside the chart.
                 continue;
             }
 
@@ -26,7 +25,6 @@ class ChartRender {
             let chartID = jsonChart.chartID;
             let chartType = jsonChart.chartType;
             let chartData = jsonChart.chartData;
-
 
             switch (chartType) {
                 case 'lineChart':
@@ -52,7 +50,6 @@ class ChartRender {
                         .x((d) => { return d.label; })
                         .y((d) => { return d.value; })
                         .showLabels(true);
-
                     chartData = data;
                     break;
                 case 'pie3DChart':
@@ -87,14 +84,12 @@ class ChartRender {
                         .showDistY(true)
                         .color(d3.scale.category10().range());
 
-
                     chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
                     chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
                     chartData = data;
                     break;
                 default:
             }
-
 
             if (chart !== null) {
                 let h = $('#' + chartID).height();
@@ -105,9 +100,6 @@ class ChartRender {
                     // .transition().duration(500)
                     .call(chart)
                     .style({'width': w, 'height': h});
-
-                // nv.utils.windowResize(chart.update);
-
             }
         }
 
@@ -116,7 +108,5 @@ class ChartRender {
         }
     }
 }
-
-
 
 export default ChartRender;
