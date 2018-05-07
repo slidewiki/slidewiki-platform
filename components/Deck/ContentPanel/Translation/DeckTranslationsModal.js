@@ -67,7 +67,7 @@ class DeckTranslationsModal extends React.Component {
         this.setState({ action: 'translate', languageCode: data.value });
     }
 
-    handleSWitchBackClick(e) {
+    handleSwitchBackClick(e) {
         this.handleClose();
         this.redirectToLanguage('');
     }
@@ -87,23 +87,22 @@ class DeckTranslationsModal extends React.Component {
         }
     }
 
-    redirectToLanguage(language) {
-        let path = location.pathname;
-        let pathElements = path.split('/');
-        let element = pathElements[2];
-        let index = element.indexOf('_');
+    redirectToLanguage(language = '') {
+        let query = location.search.substring(1);
+        let queryElements = query.split('&');
+        let index = queryElements.findIndex((q) => q.startsWith('language='));
         if (index === -1) {
-            if (language === '') pathElements[2] = element;
-            else pathElements[2] = element + '_' + language;
+            if (language !== '') queryElements.push('language='+language);
         }
         else {
-            if (language === '') pathElements[2] = element.substring(0, index);
-            else pathElements[2] = pathElements[2] = element.substring(0, index) + '_' + language;
+            if (language === '') queryElements[index] = undefined;
+            else queryElements[index] = 'language='+language;
         }
-        path = pathElements.join('/');
+        console.log('redirectToLanguage language', language, ' query', query, ' queryElements', queryElements, ' index', index);
         this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
+        query = queryElements.length > 0 && !(queryElements.length === 1 && queryElements[0] === undefined) ? '?' + queryElements.join('&') : '';
         this.context.executeAction(navigateAction, {
-            url: path
+            url: location.pathname + query
         });
     }
 
@@ -175,7 +174,7 @@ class DeckTranslationsModal extends React.Component {
             }, []);
         }
 
-        let btnMessage = ' &nbsp;';
+        let btnMessage = '<------>';
         if (this.state.action === 'languageselect')
             btnMessage = this.context.intl.formatMessage(messages.language);
         else if (this.state.action === 'translate')
@@ -184,7 +183,7 @@ class DeckTranslationsModal extends React.Component {
         const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? this.props.TranslationStore.currentLang : this.props.TranslationStore.treeLanguage);
 
         let origin = this.props.TranslationStore.inTranslationMode ? <div>
-            {this.context.intl.formatMessage(messages.switchBack)} <br/> <Button onClick={this.handleSWitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage)}</Button>
+            {this.context.intl.formatMessage(messages.switchBack)} <br/> <Button onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.props.TranslationStore.nodeLanguage)}</Button>
             <br/>
             <br/>
             </div>

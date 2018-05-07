@@ -58,6 +58,7 @@ export default function loadDeck(context, payload, done) {
     }
 
     //language/translation stuff
+    payload.params.language = payload.query.language;
     if (payload.params.language && payload.params.language.startsWith('_')) {
         payload.params.language = payload.params.language.substring(1);
     }

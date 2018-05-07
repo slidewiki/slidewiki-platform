@@ -70,7 +70,7 @@ class TranslationStore extends BaseStore {
     }
 
     slideLoaded(data) {
-        this.nodeLanguage = this.data.slide.language;
+        this.nodeLanguage = data.slide.language;
         this.emitChange();
         this.logState('slideLoaded');
     }

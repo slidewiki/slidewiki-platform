@@ -22,9 +22,7 @@ export default function loadSlideView(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
-            console.log('action loadSlideView res', res, ' and payload ', payload);
-            if (res)
-                context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
+            context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
         }
         let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
         let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title;
