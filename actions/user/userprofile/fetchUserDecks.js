@@ -6,7 +6,14 @@ const log = require('../../log/clog');
 
 export function fetchUserDecks(context, payload, done) {
     log.info(context);
-    payload.params.id2 = context.getStore(UserProfileStore).user.id;
+
+    // if we are looking at decks shared with us (not owned) => no `id2`
+    if (payload.deckListType !== 'shared') {
+        payload.params.id2 = context.getStore(UserProfileStore).user.id;
+    } else {
+        payload.params.roles = 'editor';
+    }
+
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;

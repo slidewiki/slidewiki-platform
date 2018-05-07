@@ -15,6 +15,8 @@ import Integrations from './Integrations';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
+let MediaQuery = require ('react-responsive');
+
 class UserProfile extends React.Component {
     componentDidMount() {}
 
@@ -123,9 +125,22 @@ class UserProfile extends React.Component {
                     <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
-                <div className = "twelve wide column" >
-                    {toInsert()}
-                </div>
+                <MediaQuery minDeviceWidth={1024} values={{deviceWidth: 1600}}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={768} maxDeviceWidth={1023}>
+                    <div className = "eleven wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery maxDeviceWidth={767}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+
             </div>
         );
     }

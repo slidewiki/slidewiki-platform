@@ -237,6 +237,10 @@ class AddDeck extends React.Component {
                         id: 'AddDeck.swal.success_text',
                         defaultMessage: 'The selected file has been imported and a new deck has been created.',
                     },
+                    success_text_extra:{
+                        id: 'AddDeck.swal.success_text_extra',
+                        defaultMessage: 'This new deck will not be visible to others in your decks page or in search results until published.',
+                    },
                     success_confirm_text:{
                         id: 'AddDeck.swal.success_confirm_text',
                         defaultMessage: 'View deck',
@@ -244,7 +248,8 @@ class AddDeck extends React.Component {
                 });
                 swal({
                     title: this.context.intl.formatMessage(success_messages.success_title_text),
-                    text: this.context.intl.formatMessage(success_messages.success_text),
+                    text: this.context.intl.formatMessage(success_messages.success_text)
+                        + '\n' + this.context.intl.formatMessage(success_messages.success_text_extra),
                     type: 'success',
                     confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
                     confirmButtonClass: 'positive ui button',
