@@ -44,16 +44,16 @@ class TranslationStore extends BaseStore {
             return r.id === deck.active;
         }) || deck.revisions[0] || {};
         // this.translations = revision.translations || [];
-        this.originLanguage = this.shrinkLanguage(revision.language) || 'en';
-        this.nodeLanguage = this.shrinkLanguage(this.originLanguage);
+        this.originLanguage = revision.language || 'en';
+        this.nodeLanguage = this.originLanguage;
         this.emitChange();
         this.logState();
     }
 
     deckPropsGotLoaded(data) {
         // this.translations = data.deckProps.translations;
-        this.originLanguage = this.shrinkLanguage(data.deckProps.language);
-        this.nodeLanguage = this.shrinkLanguage(data.deckProps.language);
+        this.originLanguage = data.deckProps.language;
+        this.nodeLanguage = data.deckProps.language;//TODO correct?
         this.emitChange();
         this.logState();
     }
@@ -61,12 +61,16 @@ class TranslationStore extends BaseStore {
     changeCurrentLanguage(language) {
         if (!language)
             return;
-        this.currentLang = this.shrinkLanguage(language);
+        this.currentLang = language;
+        if (this.currentLang !== this.originLanguage)
+            this.inTranslationMode = true;
+        else
+            this.inTranslationMode = false;
         this.emitChange();
     }
 
     slideLoaded(data) {
-        this.nodeLanguage = this.shrinkLanguage(data.slide.language);
+        this.nodeLanguage = this.data.slide.language;
         this.emitChange();
         this.logState();
     }
@@ -96,14 +100,6 @@ class TranslationStore extends BaseStore {
 
     logState() {
         console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage);
-    }
-
-    shrinkLanguage(language) {
-        try {
-            return language.substring(0,2).toLowerCase();
-        } catch (e) {
-            return '';
-        }
     }
 }
 

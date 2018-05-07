@@ -58,7 +58,10 @@ class ContentActionsHeader extends React.Component {
                 id: 'ContentActionsHeader.deleteAriaText',
                 defaultMessage:'Delete'
             },
-
+            language:{
+                id: 'ContentActionsHeader.language',
+                defaultMessage:'Language'
+            },
         });
 
     }
@@ -109,10 +112,6 @@ class ContentActionsHeader extends React.Component {
                 url: nodeURL
             });
         }
-    }
-
-    handleTranslateButton() {
-
     }
 
     handleLanguageButtonClick() {
@@ -172,12 +171,12 @@ class ContentActionsHeader extends React.Component {
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
-        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton, languageButton, translateButton;
+        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton, languageButton;
 
         let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
         languageButton =
           <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
-              Language: {getLanguageName(language)}
+              {this.context.intl.formatMessage(this.messages.language)}: {getLanguageName(language)}
           </button>;
         console.log('ContentActionHeader store state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
 
@@ -240,14 +239,6 @@ class ContentActionsHeader extends React.Component {
 
                     </button>;
 
-                translateButton =
-                  <button className={editClass} onClick={this.handleTranslateButton.bind(this,selector)}
-                      type="button"
-                      tabIndex = {contentDetails.mode ==='edit'?-1:0}
-                      >
-                      <i className="ui large blue copy icon "></i>Translate {selector.stype}
-                  </button>;
-
                 if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
                     markdownEditButton =
                         <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
@@ -294,7 +285,6 @@ class ContentActionsHeader extends React.Component {
                         {undoButton}
                         {redoButton}
 												{languageButton}
-												{translateButton}
                     </div>
                 </div>
                 <DeckTranslationsModal />

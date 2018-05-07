@@ -7,6 +7,7 @@ import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
 import {navigateAction} from 'fluxible-router';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
+import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';
 
 class DeckTranslationsModal extends React.Component {
 
@@ -26,10 +27,10 @@ class DeckTranslationsModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('DeckTranslationsModal componentWillReceiveProps redirectToNewLanguage', nextProps.TranslationStore.redirectToNewLanguage);
+        console.log('DeckTranslationsModal componentWillReceiveProps redirectToLanguage', nextProps.TranslationStore.redirectToLanguage);
 
-        if (nextProps.TranslationStore.redirectToNewLanguage) {
-            this.redirectToNewLanguage(nextProps.TranslationStore.currentLang);
+        if (nextProps.TranslationStore.redirectToLanguage) {
+            this.redirectToLanguage(nextProps.TranslationStore.currentLang);
         }
     }
 
@@ -66,11 +67,16 @@ class DeckTranslationsModal extends React.Component {
         this.setState({ action: 'translate', languageCode: data.value });
     }
 
+    handleSWitchBackClick(e) {
+        this.handleClose();
+        this.redirectToLanguage('');
+    }
+
     handleActionClick(e) {
         if (this.state.action === 'languageselect') {
             this.handleClose();
 
-            this.redirectToNewLanguage(this.state.languageCode);
+            this.redirectToLanguage(this.state.languageCode);
         }
         else if (this.state.action === 'translate') {
             this.handleClose();
@@ -81,18 +87,21 @@ class DeckTranslationsModal extends React.Component {
         }
     }
 
-    redirectToNewLanguage(language) {
+    redirectToLanguage(language) {
         let path = location.pathname;
         let pathElements = path.split('/');
         let element = pathElements[2];
         let index = element.indexOf('_');
         if (index === -1) {
-            pathElements[2] = element + '_' + language;
+            if (language === '') pathElements[2] = element;
+            else pathElements[2] = element + '_' + language;
         }
         else {
-            pathElements[2] = element.substring(0, index) + '_' + language;
+            if (language === '') pathElements[2] = element.substring(0, index);
+            else pathElements[2] = pathElements[2] = element.substring(0, index) + '_' + language;
         }
         path = pathElements.join('/');
+        this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
         this.context.executeAction(navigateAction, {
             url: path
         });
@@ -140,9 +149,13 @@ class DeckTranslationsModal extends React.Component {
                 id: 'DeckTranslationsModal.language',
                 defaultMessage: 'Switch to language',
             },
+            switchBack: {
+                id: 'DeckTranslationsModal.switchBack',
+                defaultMessage: 'Switch to origin language:',
+            },
         });
 
-        let message = this.props.TranslationStore.translations.find((t) => t === this.props.TranslationStore.treeLanguage) ? messages.currentTranslation : messages.currentLanguage;
+        let message = this.props.TranslationStore.inTranslationMode ? messages.currentTranslation : messages.currentLanguage;
 
         let translationOptions = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
@@ -167,6 +180,15 @@ class DeckTranslationsModal extends React.Component {
             btnMessage = this.context.intl.formatMessage(messages.language);
         else if (this.state.action === 'translate')
             btnMessage = this.context.intl.formatMessage(messages.translate);
+
+        const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? this.props.TranslationStore.currentLang : this.props.TranslationStore.treeLanguage);
+
+        let origin = this.props.TranslationStore.inTranslationMode ? <div>
+            {this.context.intl.formatMessage(messages.switchBack)} <br/> <Button onClick={this.handleSWitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage)}</Button>
+            <br/>
+            <br/>
+            </div>
+          : '';
 
         return (
           <Modal trigger={
@@ -194,9 +216,10 @@ class DeckTranslationsModal extends React.Component {
                   </Modal.Header>
                   <Modal.Content id="DeckTranslationsModalDescription">
                       <Divider />
-                      {this.context.intl.formatMessage(message)} <Segment compact>{getLanguageNativeName(this.props.TranslationStore.treeLanguage)}</Segment>
+                      {this.context.intl.formatMessage(message)} <Segment compact>{language}</Segment>
                       <br/>
-                      <br/>
+
+                      {origin}
 
                       {this.context.intl.formatMessage(messages.switch)}
                       <br/>
