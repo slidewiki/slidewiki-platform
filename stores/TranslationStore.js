@@ -1,19 +1,16 @@
 import {BaseStore} from 'fluxible/addons';
-import ISO6391 from 'iso-639-1';
 
 class TranslationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.translations = [];
         this.currentLang = '';
-        this.supportedLangs = [];
+        this.supportedLangs = ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB'];
         this.inTranslationMode = false;
         this.originLanguage = '';
         this.nodeLanguage = '';
         this.treeLanguage = '';
         this.redirectToNewLanguage = false;
-
-        this.supportedLangs = ISO6391.getAllCodes();
     }
     getState() {
         return {
@@ -87,7 +84,7 @@ class TranslationStore extends BaseStore {
     }
 
     translationAdded(data) {
-        this.translations = this.translations.push(data.language);
+        this.translations.push(data.language);
         this.currentLang = data.language;
         this.inTranslationMode = true;
         this.redirectToNewLanguage = true;

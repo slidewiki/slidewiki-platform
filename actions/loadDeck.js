@@ -126,7 +126,7 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             delete payload.params.language;//TODO remove
-            context.executeAction(loadDeckTranslations, {}, callback);
+            context.executeAction(loadDeckTranslations, payload.params, callback);
         },
         (callback) => {
             permissionsPromise.then(() => {

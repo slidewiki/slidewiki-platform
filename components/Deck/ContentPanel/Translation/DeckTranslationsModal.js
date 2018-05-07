@@ -26,6 +26,8 @@ class DeckTranslationsModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log('DeckTranslationsModal componentWillReceiveProps redirectToNewLanguage', nextProps.TranslationStore.redirectToNewLanguage);
+
         if (nextProps.TranslationStore.redirectToNewLanguage) {
             this.redirectToNewLanguage(nextProps.TranslationStore.currentLang);
         }
@@ -153,7 +155,8 @@ class DeckTranslationsModal extends React.Component {
         let languagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
-                if (!this.props.TranslationStore.translations.find((t) => t === current))
+                if (!this.props.TranslationStore.translations.find((t) => getLanguageNativeName(t) === getLanguageNativeName(current)) //exclude transations and deck language
+                  && getLanguageNativeName(current) !== getLanguageNativeName(this.props.TranslationStore.treeLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []);

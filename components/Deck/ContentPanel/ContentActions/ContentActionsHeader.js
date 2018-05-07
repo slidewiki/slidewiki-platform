@@ -179,7 +179,7 @@ class ContentActionsHeader extends React.Component {
           <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
               Language: {getLanguageName(language)}
           </button>;
-        console.log('TranslationStore state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
+        console.log('ContentActionHeader store state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore

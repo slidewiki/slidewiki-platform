@@ -50,7 +50,8 @@ export default {
             });
         }
         if (resource === 'deck.content') {
-            //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
+            log.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
+            console.log('service deck.content', args);
             /* Create promise for deck data success */
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)
@@ -252,13 +253,9 @@ export default {
             })
             .catch((err) => callback(err));
         } else if (resource === 'deck.translations') {
-            //atm dummy
-            return callback(null, ['de']);
-
             rp({
                 method: 'GET',
                 uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
-                headers: { '----jwt----': args.jwt },
                 json: true
             })
             .then((body) => {
@@ -445,9 +442,6 @@ export default {
             }).catch((err) => callback(err));
         }
         else if (resource === 'deck.translations') {
-            //atm dummy
-            return callback(null, {language: args.language});
-
             rp({
                 method: 'POST',
                 uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
