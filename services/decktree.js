@@ -9,7 +9,7 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-        let args = params.params? params.params : params;
+        let args = params.params ? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
             let uri = Microservices.deck.uri + '/decktree/' + selector.id;
@@ -52,11 +52,11 @@ export default {
                 headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
                     selector: selector,
-                    nodeSpec:args.nodeSpec,
                     language: args.language
-                })
+                },
+              json: true)
             }).then((res) => {
-                callback(null, {node: JSON.parse(res), selector: args.selector, language: args.language});
+                callback(null, {node: res, language: args.language});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {node: {}, selector: args.selector});
@@ -100,6 +100,22 @@ export default {
                 })
             }).then((res) => {
                 callback(null, JSON.parse(res));
+            }).catch((err) => {
+                console.log(err);
+                callback(err);
+            });
+        } else if (resource === 'decktree.translation'){
+            let {sourceSelector, targetSelector, targetIndex, userid} = args;
+            rp.put({
+                uri: Microservices.deck.uri + '/decktree/node/translations',
+                headers: {'----jwt----': args.jwt},
+                body:JSON.stringify({
+                    language: args.language,
+                    selector: args.selector
+                }),
+                json: true
+            }).then((res) => {
+                callback(null, res);
             }).catch((err) => {
                 console.log(err);
                 callback(err);

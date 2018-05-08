@@ -143,7 +143,7 @@ export default {
                         revision: content_id
                     },
                     position: content_id,
-                    language: 'EN',
+                    language: args.language || 'en-GB',
                     dataSources: args.dataSources,
                     license: 'CC BY-SA',
                     tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []

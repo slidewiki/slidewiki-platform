@@ -5,6 +5,7 @@ import deckIdTypeError from '../error/deckIdTypeError';
 import deckContentPathError from '../error/deckContentPathError';
 import {AllowedPattern} from '../error/util/allowedPattern';
 import UserProfileStore from '../../stores/UserProfileStore';
+import TranslationStore from '../../stores/TranslationStore';
 const log = require('../log/clog');
 
 export default function loadDeckTree(context, payload, done) {
@@ -31,6 +32,7 @@ export default function loadDeckTree(context, payload, done) {
     if (runFetchTree) {
         //we need to load the whole tree for the first time
         payload.params.jwt = context.getStore(UserProfileStore).jwt;
+        payload.params.language = context.getStore(TranslationStore).currentLang;
         context.service.read('decktree.nodes', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});

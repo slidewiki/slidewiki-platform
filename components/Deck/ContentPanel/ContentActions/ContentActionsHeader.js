@@ -20,6 +20,7 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
+import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 
 
 class ContentActionsHeader extends React.Component {
@@ -37,6 +38,10 @@ class ContentActionsHeader extends React.Component {
             editButtonText:{
                 id: 'ContentActionsHeader.editButtonText',
                 defaultMessage:'Edit'
+            },
+            editButtonTextTranslation:{
+                id: 'ContentActionsHeader.editButtonTextTranslation',
+                defaultMessage:'Create node translation'
             },
             editButtonAriaText:{
                 id: 'ContentActionsHeader.editButtonAriaText',
@@ -108,13 +113,18 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleEditButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
+        const nodeURL = ContentUtil.makeNodeURL(selector, 'edit', this.props.TranslationStore.treeLanguage);
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
-            this.context.executeAction(navigateAction, {
-                url: nodeURL
-            });
+            if (selector.stype === 'slide' && this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.treeLanguage) {
+                this.context.executeAction(addSlideTranslation, {language: this.props.TranslationStore.treeLanguage, selector: selector, nodeURL: nodeURL});
+            }
+            else {
+                this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                });
+            }
         }
     }
 
@@ -240,7 +250,9 @@ class ContentActionsHeader extends React.Component {
                             <i className="large blue edit icon"></i>
                             <i className=""></i>
                         </i>
-                        {this.context.intl.formatMessage(this.messages.editButtonText)}
+                        {this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.treeLanguage ?
+                          this.context.intl.formatMessage(this.messages.editButtonTextTranslation)
+                          : this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
 

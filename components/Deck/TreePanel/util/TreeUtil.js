@@ -1,19 +1,28 @@
+import TranslationStore from '../../../../stores/TranslationStore';
+import {connectToStores} from 'fluxible-addons-react';
+
 class TreeUtil {
     //build node URL based on the context
-    static makeNodeURL(selector, page, mode) {
+    static makeNodeURL(selector, page, mode, language) {
         let nodeURL;
+        let query = '';
+        language = language || this.props.TranslationStore.treeLanguage;//geht nicht da static function
+        //da müsste ich JEDEN Aufruf ändern und den Translation Store einbinden ...
+        if (language) {
+            query = '?language=' + language;
+        }
         //adapt URLs based on the current page
         switch (page) {
             case 'deck':
                 if (selector.spath) {
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
+                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode + query;
                 } else {
                     //for root node
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode;
+                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode + query;
                 }
                 break;
             default:
-                nodeURL = '/decktree/' + selector.id + '/' + selector.spath;
+                nodeURL = '/decktree/' + selector.id + '/' + selector.spath + query;
         }
         return nodeURL;
     }
@@ -58,4 +67,9 @@ class TreeUtil {
         }
     }
 }
+TreeUtil = connectToStores(TreeUtil, [TranslationStore], (context, props) => {
+    return {
+        TranslationStore: context.getStore(TranslationStore).getState()
+    };
+});
 export default TreeUtil;
