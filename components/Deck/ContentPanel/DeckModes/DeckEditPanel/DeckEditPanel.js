@@ -233,7 +233,6 @@ class DeckEditPanel extends React.Component {
                   userid={this.props.UserProfileStore.userid}
                   groups={this.props.UserProfileStore.user.groups}/>
 
-
               <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='grantRightsModalHeader'
                      aria-describedby='grantRightsModalDesc' open={this.isModalOpen}
                      onClose={this.handleClose.bind(this)}>
