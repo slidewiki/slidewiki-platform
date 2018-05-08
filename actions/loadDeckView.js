@@ -3,6 +3,7 @@ import slideIdTypeError from './error/slideIdTypeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
 const log = require('./log/clog');
+import TranslationStore from '../stores/TranslationStore';
 
 export default function loadDeckView(context, payload, done) {
     log.info(context);
@@ -10,6 +11,8 @@ export default function loadDeckView(context, payload, done) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
     }
+
+    if (!payload.params.language) payload.params.language = context.getStore(TranslationStore).currentLang;
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

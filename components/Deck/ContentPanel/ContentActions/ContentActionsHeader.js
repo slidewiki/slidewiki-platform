@@ -113,12 +113,15 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleEditButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'edit', this.props.TranslationStore.treeLanguage);
+        const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
             if (selector.stype === 'slide' && this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.treeLanguage) {
-                this.context.executeAction(addSlideTranslation, {language: this.props.TranslationStore.treeLanguage, selector: selector, nodeURL: nodeURL});
+                this.context.executeAction(addSlideTranslation, {
+                    language: this.props.TranslationStore.treeLanguage,
+                    selector: selector
+                });
             }
             else {
                 this.context.executeAction(navigateAction, {

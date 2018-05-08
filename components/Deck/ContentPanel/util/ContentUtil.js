@@ -1,14 +1,17 @@
-import TranslationStore from '../../../../stores/TranslationStore';
-import {connectToStores} from 'fluxible-addons-react';
-
 class ContentUtil{
     //build URL based on the context
     static makeNodeURL(selector, mode, language) {
         let nodeURL;
         let query = '';
-        language = language || this.props.TranslationStore.treeLanguage;
+        try {
+            query = location.search;
+        } catch (e) {
+            try {
+                query = window.location.search;
+            } catch (e) {}
+        }
         if (language) {
-            query = '?language=' + language;
+            query = '?language=' + language + (query ? '&' + (query.startsWith('?') ? query.substring(1) : query) : '');
         }
         //adapt URLs based on the current page
         switch (selector.page) {
@@ -34,9 +37,4 @@ class ContentUtil{
         return nodeURL;
     }
 }
-ContentUtil = connectToStores(ContentUtil, [TranslationStore], (context, props) => {
-    return {
-        TranslationStore: context.getStore(TranslationStore).getState()
-    };
-});
 export default ContentUtil;

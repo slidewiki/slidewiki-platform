@@ -56,10 +56,10 @@ export default {
                 },
               json: true)
             }).then((res) => {
-                callback(null, {node: res, language: args.language});
+                callback(null, {node: res, selector: args.selector, language: args.language});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {node: {}, selector: args.selector});
+                callback(null, {node: {}, selector: args.selector, language: args.language});
             });
         }
     },

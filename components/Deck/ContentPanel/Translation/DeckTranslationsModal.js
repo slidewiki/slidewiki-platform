@@ -26,14 +26,6 @@ class DeckTranslationsModal extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('DeckTranslationsModal componentWillReceiveProps redirectToLanguage', nextProps.TranslationStore.redirectToLanguage);
-
-        if (nextProps.TranslationStore.redirectToLanguage) {
-            this.redirectToLanguage(nextProps.TranslationStore.currentLang);
-        }
-    }
-
     handleOpen(){
         $('#app').attr('aria-hidden','true');
         this.setState({
@@ -102,7 +94,8 @@ class DeckTranslationsModal extends React.Component {
         this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
         query = queryElements.length > 0 && !(queryElements.length === 1 && queryElements[0] === undefined) ? '?' + queryElements.join('&') : '';
         this.context.executeAction(navigateAction, {
-            url: location.pathname + query
+            url: location.pathname + query,
+            runFetchTree: true
         });
     }
 

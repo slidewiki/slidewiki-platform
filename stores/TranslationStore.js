@@ -10,7 +10,6 @@ class TranslationStore extends BaseStore {
         this.originLanguage = '';
         this.nodeLanguage = '';
         this.treeLanguage = '';
-        this.redirectToNewLanguage = false;
     }
     getState() {
         return {
@@ -20,8 +19,7 @@ class TranslationStore extends BaseStore {
             inTranslationMode: this.inTranslationMode,
             originLanguage: this.originLanguage,
             nodeLanguage: this.nodeLanguage,
-            treeLanguage: this.treeLanguage,
-            redirectToNewLanguage: this.redirectToNewLanguage
+            treeLanguage: this.treeLanguage
         };
     }
     dehydrate() {
@@ -35,7 +33,6 @@ class TranslationStore extends BaseStore {
         this.originLanguage = state.originLanguage;
         this.nodeLanguage = state.nodeLanguage;
         this.treeLanguage = state.treeLanguage;
-        this.redirectToNewLanguage = state.redirectToNewLanguage;
     }
 
     deckGotLoaded(data) { //TODO only override if deck is root deck!
@@ -44,7 +41,7 @@ class TranslationStore extends BaseStore {
             return r.id === deck.active;
         }) || deck.revisions[0] || {};
         // this.translations = revision.translations || [];
-        this.originLanguage = revision.language || 'en';
+        // this.originLanguage = revision.language || 'en'; //TODO somehow get the correct value from somewhere? Is it even needed?
         this.nodeLanguage = this.originLanguage;
         this.emitChange();
         this.logState('deckGotLoaded');
@@ -52,7 +49,7 @@ class TranslationStore extends BaseStore {
 
     deckPropsGotLoaded(data) {
         // this.translations = data.deckProps.translations;
-        this.originLanguage = data.deckProps.language;
+        // this.originLanguage = data.deckProps.language;
         this.nodeLanguage = data.deckProps.language;//TODO correct?
         this.emitChange();
         this.logState('deckPropsGotLoaded');
@@ -91,9 +88,12 @@ class TranslationStore extends BaseStore {
         this.translations.push(data.language);
         this.currentLang = data.language;
         this.inTranslationMode = true;
-        this.redirectToNewLanguage = true;
         this.emitChange();
-        this.redirectToNewLanguage = false;
+    }
+
+    addedSlideTranslation(data) {
+        this.nodeLanguage = node.language;
+        this.emitChange();
     }
 
     //-- util functions --
@@ -112,7 +112,8 @@ TranslationStore.handlers = {
     'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
     'LOAD_DECK_TRANSLATIONS_SUCCESS': 'translationsLoaded',
     'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
-    'ADD_DECK_TRANSLATION_SUCCESS': 'translationAdded'
+    'ADD_DECK_TRANSLATION_SUCCESS': 'translationAdded',
+    'ADD_SLIDE_TRANSLATION_SUCCESS': 'addedSlideTranslation'
 };
 
 export default TranslationStore;

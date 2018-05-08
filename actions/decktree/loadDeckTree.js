@@ -38,9 +38,6 @@ export default function loadDeckTree(context, payload, done) {
                 log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
-                //test
-                res.deckTree.language = 'en';
-
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
                 //context.dispatch('UPDATE_PAGE_TITLE', {
                 //    pageTitle: pageTitle
