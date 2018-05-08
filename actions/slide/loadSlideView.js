@@ -23,6 +23,7 @@ export default function loadSlideView(context, payload, done) {
             return;
         } else {
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
+            context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
         }
         let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
         let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title;
