@@ -224,9 +224,13 @@ export default {
         } else if (resource ==='deck.requesteditrights'){
 
             let args = params.params ? params.params : params;
+            let deckid = args.deckId;
+            let index = (deckid + '').indexOf('-');
+            if (index !== -1)
+                deckid = deckid.substring(0, index);
             rp({
                 method: 'POST',
-                uri: Microservices.deck.uri + '/deck/' + args.deckId + '/requestEditRights',
+                uri: Microservices.deck.uri + '/deck/' + deckid + '/requestEditRights',
                 headers: { '----jwt----': args.jwt },
                 json: true
             })
