@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import {Microservices} from '../../../../configs/microservices';
 
 class UserMenu extends React.Component {
     constructor(props){
@@ -51,7 +52,8 @@ class UserMenu extends React.Component {
         let sharedDecksMsg = this.context.intl.formatMessage(this.messages.sharedDecks);
         let deckCollectionsMsg = this.context.intl.formatMessage(this.messages.collections);
 
-        if(this.props.user.uname !== this.props.loggedinuser){
+        //Remove link if it's not user's own page //Until recommendation service is properly integrated into the system, show only on experimental
+        if(this.props.user.uname !== this.props.loggedinuser || Microservices.recommendation === undefined || Microservices.recommendation.uri !== 'http://slidewiki.imp.bg.ac.rs') {
             decksMsg = this.context.intl.formatMessage(this.messages.ownedDecks);
             deckCollectionsMsg = this.context.intl.formatMessage(this.messages.ownedCollections);
             deckRecommendationNavLink = '';
