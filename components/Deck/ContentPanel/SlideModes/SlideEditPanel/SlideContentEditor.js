@@ -2211,7 +2211,7 @@ class SlideContentEditor extends React.Component {
         // Add the CSS dependency for the theme
         // Get the theme information, and download the stylesheet
         let styleName = 'default';
-        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+        if(this.props.selector && this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         } else {
             // we need to figure out the theme based on the parent deck
