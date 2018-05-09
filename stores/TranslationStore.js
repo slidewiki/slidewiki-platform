@@ -35,15 +35,16 @@ class TranslationStore extends BaseStore {
         this.treeLanguage = state.treeLanguage;
     }
 
-    deckGotLoaded(data) { //TODO only override if deck is root deck!
-        console.log('TranslationStore deckGotLoaded deckdata', data.deckData, data.deckData.revisions[1]);
+    deckGotLoaded(data) {
         let deck = data.deckData;
         let revision = deck.revisions.find((r) => {
             return r.id === deck.active;
         }) || deck.revisions[0] || {};
+        console.log('TranslationStore deckGotLoaded deckdata', data, '\n', data.deckData, '\n', revision);
         this.nodeLanguage = revision.language || 'en-GB';
 
-        this.getAndSetOriginalLanguage(revision.variants);
+        if (data.isRootDeck)
+            this.getAndSetOriginalLanguage(revision.variants, this.nodeLanguage);
 
         this.emitChange();
         this.logState('deckGotLoaded');
@@ -83,7 +84,7 @@ class TranslationStore extends BaseStore {
         console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree);
         this.treeLanguage = data.deckTree.language;
 
-        this.getAndSetOriginalLanguage(data.deckTree.variants);
+        this.getAndSetOriginalLanguage(data.deckTree.variants, data.deckTree.language);
 
         this.emitChange();
         this.logState('deckTreeGotLoaded');
@@ -107,14 +108,14 @@ class TranslationStore extends BaseStore {
         console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage, 'by', functionName);
     }
 
-    getAndSetOriginalLanguage(variants) {
+    getAndSetOriginalLanguage(variants, fallback) {
         let variant = variants.find((variant) => {
             return variant.original;
         });
         if (variant && variant.language)
             this.originLanguage = variant.language;
         else
-            this.originLanguage = data.deckTree.language || 'en-GB';
+            this.originLanguage = fallback || 'en-GB';
 
         return this.originLanguage;
     }

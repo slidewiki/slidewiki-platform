@@ -21,6 +21,8 @@ export default function loadDeckView(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
+            console.log('loadDeckView params', payload.params, '\n', payload);
+            res.isRootDeck = payload.params.spath === '';
             context.dispatch('LOAD_DECK_CONTENT_SUCCESS', res);
         }
         let pageTitle = shortTitle + ' | ' + res.slidesData.title;
