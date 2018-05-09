@@ -25,7 +25,7 @@ export default function loadContent(context, payload, done) {
         return;
     }
 
-    if(!(['view', 'edit', 'questions', 'datasources', 'markdownEdit'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
         context.executeAction(deckModeError, payload, done);
         return;
     }
@@ -67,9 +67,6 @@ export default function loadContent(context, payload, done) {
                 case 'edit':
                     targetAction = loadSlideEdit;
                     break;
-                case 'markdownEdit':
-                    targetAction = loadSlideEdit;
-                    break;
                 default:
                     targetAction = loadSlideView;
             }
@@ -89,9 +86,9 @@ export default function loadContent(context, payload, done) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         }
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //  pageTitle: pageTitle
-        //});
+        context.dispatch('UPDATE_PAGE_TITLE', {
+            pageTitle: pageTitle
+        });
         done();
     });
 

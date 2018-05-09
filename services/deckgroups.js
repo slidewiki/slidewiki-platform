@@ -9,8 +9,6 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-
-        let authToken = params.jwt;
         let args = params.params? params.params : params;
 
         let usergroups = (params.usergroups || []).map( (usergroup) => {
@@ -57,18 +55,27 @@ export default {
                 uri: `${Microservices.deck.uri}/group/${args.id}`,
                 json: true
             }).then( (group) => {
+                let deckPromises = [];
+                let likesPromises = [];//get the number of deck likes
 
-                let deckPromise = rp.get({
-                    uri: `${Microservices.deck.uri}/group/${args.id}/decks`,
-                    json: true,
-                    headers: { '----jwt----': authToken || undefined },
-                }).then((decks) =>
-                    Promise.all(decks.map((deck) =>
+                // get details for the decks in the collection
+                for(let deckId of group.decks){
+                    deckPromises.push(
                         rp.get({
-                            uri: Microservices.activities.uri + '/activities/deck/' + deck._id + '?metaonly=true&activity_type=react&all_revisions=true'
-                        }).then((noOfLikes) => Object.assign(deck, { noOfLikes }))
-                    ))
-                );
+                            uri: `${Microservices.deck.uri}/deck/${deckId}`,
+                            json: true
+                        })
+                    );
+
+                    likesPromises.push(
+                        rp.get({
+                            uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
+                        })
+                    );
+                }
+                let deckPromise = Promise.all(deckPromises);
+
+                let likesPromise = Promise.all(likesPromises);
 
                 // get username of the deck collection owner
                 let userPromise = rp.get({
@@ -78,15 +85,18 @@ export default {
                     return user.username;
                 });
 
-                return Promise.all([deckPromise, userPromise]).then( (data) => {
+                Promise.all([deckPromise, userPromise, likesPromise]).then( (data) => {
                     group.decks = data[0];
                     group.user = {
                         id: group.user,
                         username: data[1]
                     };
+                    for (let i = 0; i < data[2].length; i++) {
+                        group.decks[i].noOfLikes = data[2][i];
+                    }
 
                     callback(null, group);
-                });
+                }).catch( (err) => callback(err));
 
             }).catch( (err) => callback(err));
         }

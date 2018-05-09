@@ -86,8 +86,7 @@ class Presentation extends React.Component{
                 viewDistance: 2,
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
-                    { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
-                    { src: '/custom_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true }
                     // Plugin from https://github.com/marcysutton/reveal-a11y
                     //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
                 ],

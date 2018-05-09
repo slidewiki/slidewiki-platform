@@ -18,33 +18,23 @@ import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
+
 class TreePanel extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             isForkModalOpen: false,
-            isTranslationModalOpen: false,
-            showThumbnails: false
+            isTranslationModalOpen: false
         };
     }
 
-    componentDidMount() {
-        $('#showThumbnails').checkbox();
-        if(window.sessionStorage){
-            let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
-            if (showThumbnails) {
-                this.setState({showThumbnails: (showThumbnails === 'true')});
-            } else {
-                window.sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
-            }
-        }
+    handleFocus() {
+
     }
 
-    toggleShowThumbnails() {
-        if(window.sessionStorage)
-            window.sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
-        this.setState({showThumbnails: !this.state.showThumbnails});
+    handleBlur() {
+
     }
 
     handleToggleNode(selector) {
@@ -92,8 +82,8 @@ class TreePanel extends React.Component {
         }
     }
     getPresentationHref(){
-        let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
-
+        //console.log(this.props.DeckTreeStore.selector.toJS());
+        let presLocation = '/presentation/' + this.props.DeckTreeStore.selector.toJS().id + '/';
         if (this.props.DeckTreeStore.selector.toJS().spath.search(';') !== -1)
         {
             //if a subdeck is selected - use its selector
@@ -186,7 +176,7 @@ class TreePanel extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
         let nextSelector = this.props.DeckTreeStore.nextSelector;
-        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id'), 'slug': this.props.DeckTreeStore.slug};
+        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let rootNodeTitle = <strong>{rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         /*                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
@@ -194,15 +184,8 @@ class TreePanel extends React.Component {
                                     <i className="translate blue large icon"></i>
                                 </div>
         */
-
-        let ShowThumbnailsCheckBoxClasses = classNames({
-            'ui': true,
-            'toggle': true,
-            'checkbox': true,
-            'checked': this.state.showThumbnails
-        });
         return (
-            <div className="ui container" ref="treePanel" role="navigation">
+            <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
@@ -243,14 +226,7 @@ class TreePanel extends React.Component {
                             onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                             onMoveNode={this.handleMoveNode.bind(this)}
                             username={this.props.UserProfileStore.username}
-                            permissions={this.props.PermissionsStore.permissions}
-                            showThumbnails={this.state.showThumbnails}/>
-                    </div>
-                    <div className="ui attached segment">
-                        <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
-                            <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" value={this.state.showThumbnails ? 'on' : 'off'}/>
-                            <label htmlFor="ShowThumbnails">Show Thumbnails</label>
-                        </div>
+                            permissions={this.props.PermissionsStore.permissions}/>
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />

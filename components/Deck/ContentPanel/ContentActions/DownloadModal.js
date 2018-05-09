@@ -148,14 +148,10 @@ class DownloadModal extends React.Component{
         return(
 
               <Modal
-                  trigger={ !this.props.textOnly ?
+                  trigger={
                         <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
                               <Icon name='download' size='large'/>
                         </Button>
-                        :
-                        <div aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
-                              <Icon name='download' size='large'/> Download
-                        </div>
                   }
 
                   open={this.state.modalOpen}

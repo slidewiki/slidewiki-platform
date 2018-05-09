@@ -140,8 +140,10 @@ class UpdateCollectionModal extends React.Component {
     }
     render() {
 
-        // the user can assign a user group to that collection
-        let userGroupOptions = (this.props.userGroups || []).map( (userGroup) => ({
+        // the user can assign a user group to a collection only if he is the creator of the user group
+        let userGroupOptions = (this.props.userGroups || []).filter( (userGroup) => {
+            return (userGroup.creator.userid === this.props.loggedInUser);
+        }).map( (userGroup) => ({
             text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
             value: userGroup._id
         }));

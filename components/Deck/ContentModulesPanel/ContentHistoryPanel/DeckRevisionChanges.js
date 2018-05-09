@@ -12,7 +12,7 @@ class DeckRevisionChanges extends React.Component {
         }) : 'There are no changes for this version.';
 
         return (
-            <List relaxed style={{ 'overflow-y': 'auto', 'max-height': '400px' }}>
+            <List relaxed>
                 {changes}
             </List>
         );

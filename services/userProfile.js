@@ -2,7 +2,6 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
-import slug from 'slug';
 
 const log = require('../configs/log').log;
 
@@ -198,15 +197,14 @@ export default {
                         roles: params.roles,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        status: params.status || 'public',
-                        page: params.page, 
+                        page: params.page,
                         pageSize: 30
                     },
                     json: true
                 };
             }
 
-            if(params.jwt){
+            if(params.roles === 'editor'){
                 requestCall.headers = { '----jwt----': params.jwt };
             }
 
@@ -233,6 +231,7 @@ export default {
                     }
 
                     let converted = decks.map((deck) => { return transform(deck); });
+                    response._meta.roles = params.roles;
 
                     callback(null, {
                         metadata: response._meta,
@@ -314,12 +313,10 @@ export default {
 function transform(deck){
     return {
         title: !isEmpty(deck.title) ? deck.title : 'No Title',
-        slug: buildSlug(deck),
         picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
         description: deck.description,
         updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
         creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-        hidden: deck.hidden,
         deckID: deck._id,
         firstSlide: deck.firstSlide,
         theme: deck.theme,
@@ -328,8 +325,4 @@ function transform(deck){
         noOfLikes: deck.noOfLikes
 
     };
-}
-
-function buildSlug(deck) {
-    return slug(deck.title || '').toLowerCase() || '_';
 }
