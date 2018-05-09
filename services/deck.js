@@ -1,7 +1,5 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import slug from 'slug';
-
 const log = require('../configs/log').log;
 
 export default {
@@ -25,11 +23,8 @@ export default {
             let limit, offset = 0;
             if (args.limit) limit = args.limit;
             if (args.offset) offset = args.offset;
-            rp.get({
-                uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset,
-                json: true,
-            }).then((res) => {
-                callback(null, {featured: addSlugs(res)});
+            rp.get({uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset}).then((res) => {
+                callback(null, {featured: JSON.parse(res)});
             }).catch((err) => {
                 callback(err, {featured: []});
             });
@@ -40,13 +35,10 @@ export default {
             let limit, offset = null;
             if (args.limit) limit = args.limit;
             if (args.offset) offset = args.offset;
-            rp.get({
-                uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset,
-                json: true,
-            }).then((res) => {
-                callback(null, {recent: addSlugs(res)});
+            rp.get({uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset}).then((res) => {
+                callback(null, {recent: JSON.parse(res)});
             }).catch((err) => {
-                callback(err, {recent: []});
+                callback(err, {featured: []});
             });
         }
         if (resource === 'deck.content') {
@@ -123,8 +115,6 @@ export default {
                 deckData.shareCount = JSON.parse(data[4]);
                 deckData.downloadCount = JSON.parse(data[5]);
 
-                addSlug(deckData);
-
                 callback(null, {
                     deckData: deckData,
                     slidesData: JSON.parse(data[1]),
@@ -172,12 +162,10 @@ export default {
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license,
                     theme: revision.theme != null ? revision.theme : deck.theme,
-                    allowMarkdown: revision.allowMarkdown != null ? revision.allowMarkdown : false,
                     editors: editors.editors || {
                         users: [],
                         groups: []
                     },
-                    hidden: deck.hidden,
                     deckOwner: deck.user,
                     revisionOwner: revision.user,
                     sid: args.sid,
@@ -303,11 +291,9 @@ export default {
                 title: params.title,
                 license: params.license,
                 theme: params.theme,
-                allowMarkdown: params.allowMarkdown,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
-                tags: params.tags,
-                hidden: params.hidden,
+                tags: params.tags
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
@@ -420,21 +406,3 @@ export default {
     }
     // delete: (req, resource, params, config, callback) => {}
 };
-
-function addSlugs(decks) {
-    if (decks.forEach) {
-        // we hope it's an array :)
-        return decks.map(addSlug);
-    } else {
-        // we guess it's just one deck object
-        return addSlug(deck);
-    }
-}
-
-function addSlug(deck) {
-    deck.slug = slug(deck.title || '').toLowerCase() || '_';
-    if (deck.origin) {
-        addSlug(deck.origin);
-    };
-    return deck;
-}

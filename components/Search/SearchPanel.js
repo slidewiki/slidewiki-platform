@@ -13,8 +13,6 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
-let MediaQuery = require ('react-responsive');
-
 class SearchPanel extends React.Component {
     constructor(props){
         super(props);
@@ -25,7 +23,7 @@ class SearchPanel extends React.Component {
             field: this.props.SearchParamsStore.field,
             user: this.props.SearchParamsStore.user,
             tag: this.props.SearchParamsStore.tag,
-            sort: this.props.SearchParamsStore.sort,
+            sort: this.props.SearchParamsStore.sort, 
         };
         this.messages = this.getIntlMessages();
     }
@@ -34,19 +32,19 @@ class SearchPanel extends React.Component {
             header: {
                 id: 'SearchPanel.header',
                 defaultMessage: 'Search'
-            },
+            }, 
             searchTerm: {
                 id: 'SearchPanel.searchTerm',
                 defaultMessage: 'Search Term'
-            },
+            }, 
             keywordsInputPlaceholder: {
                 id: 'SearchPanel.KeywordsInput.placeholder',
                 defaultMessage: 'Type your keywords here'
-            },
+            }, 
             searchFieldTitle: {
                 id: 'SearchPanel.filters.searchField.title',
                 defaultMessage: 'Search Field'
-            },
+            }, 
             searchFieldPlaceholder: {
                 id: 'SearchPanel.filters.searchField.placeholder',
                 defaultMessage: 'Select Search Field'
@@ -54,79 +52,79 @@ class SearchPanel extends React.Component {
             searchFieldOptionTitle: {
                 id: 'SearchPanel.filters.searchField.option.title',
                 defaultMessage: 'Title'
-            },
+            }, 
             searchFieldOptionDescription: {
                 id: 'SearchPanel.filters.searchField.option.description',
                 defaultMessage: 'Description'
-            },
+            }, 
             searchFieldOptionContent: {
                 id: 'SearchPanel.filters.searchField.option.content',
                 defaultMessage: 'Content'
-            },
+            }, 
             searchFieldOptionSpeakernotes: {
                 id: 'SearchPanel.filters.searchField.option.speakernotes',
                 defaultMessage: 'Speakernotes'
-            },
+            }, 
             entityFilterTitle: {
                 id: 'SearchPanel.filters.entity.title',
                 defaultMessage: 'Entity'
-            },
+            }, 
             entityFilterPlaceholder: {
                 id: 'SearchPanel.filters.entity.placeholder',
                 defaultMessage: 'Select Entity'
-            },
+            }, 
             entityFilterOptionSlide: {
                 id: 'SearchPanel.filters.entity.option.slide',
                 defaultMessage: 'Slide'
-            },
+            }, 
             entityFilterOptionDeck: {
                 id: 'SearchPanel.filters.entity.option.deck',
                 defaultMessage: 'Deck'
-            },
+            }, 
             languageFilterTitle: {
                 id: 'SearchPanel.filters.language.title',
                 defaultMessage: 'Language'
-            },
+            }, 
             languageFilterPlaceholder: {
                 id: 'SearchPanel.filters.language.placeholder',
                 defaultMessage: 'Select Language'
-            },
+            }, 
             languageFilterOptionDutch: {
                 id: 'SearchPanel.filters.language.option.dutch',
                 defaultMessage: 'Dutch'
-            },
+            }, 
             languageFilterOptionEnglish: {
                 id: 'SearchPanel.filters.language.option.english',
                 defaultMessage: 'English'
-            },
+            }, 
             languageFilterOptionGerman: {
                 id: 'SearchPanel.filters.language.option.german',
                 defaultMessage: 'German'
-            },
+            }, 
             languageFilterOptionGreek: {
                 id: 'SearchPanel.filters.language.option.greek',
                 defaultMessage: 'Greek'
-            },
+            }, 
             languageFilterOptionItalian: {
                 id: 'SearchPanel.filters.language.option.italian',
                 defaultMessage: 'Italian'
-            },
+            }, 
             languageFilterOptionPortuguese: {
                 id: 'SearchPanel.filters.language.option.portuguese',
                 defaultMessage: 'Portuguese'
-            },
+            }, 
             languageFilterOptionSerbian: {
                 id: 'SearchPanel.filters.language.option.serbian',
                 defaultMessage: 'Serbian'
-            },
+            }, 
             languageFilterOptionSpanish: {
                 id: 'SearchPanel.filters.language.option.spanish',
                 defaultMessage: 'Spanish'
-            },
+            }, 
             usersFilterTitle: {
                 id: 'SearchPanel.filters.users.title',
                 defaultMessage: 'User'
-            },
+            }, 
             usersFilterPlaceholder: {
                 id: 'SearchPanel.filters.users.placeholder',
                 defaultMessage: 'Select Users'
@@ -134,11 +132,11 @@ class SearchPanel extends React.Component {
             tagsFilterTitle: {
                 id: 'SearchPanel.filters.tags.title',
                 defaultMessage: 'Tags'
-            },
+            }, 
             tagsFilterPlaceholder: {
                 id: 'SearchPanel.filters.tags.placeholder',
                 defaultMessage: 'Select Tags'
-            },
+            }, 
             submitButton: {
                 id: 'SearchPanel.button.submit',
                 defaultMessage: 'Submit'
@@ -153,7 +151,6 @@ class SearchPanel extends React.Component {
     }
     componentDidMount(){
         this.initDropdown();
-        $('.ui.accordion').accordion();
     }
     componentDidUpdate(){
         this.initDropdown();
@@ -186,7 +183,7 @@ class SearchPanel extends React.Component {
         }
     }
     handleRedirect(params){
-
+        
         // form the query parameters to send to search service
         let keywords;
         if(params && params.keywords){
@@ -275,59 +272,9 @@ class SearchPanel extends React.Component {
                 hasMore={this.props.SearchResultsStore.hasMore}
                 loadMore={this.loadMore.bind(this)}
                 loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
-
+                
             />;
         }
-
-        let advanced_options= <div>
-        <div className="three fields">
-            <div className="field">
-                <label htmlFor="field"><FormattedMessage {...this.messages.searchFieldTitle} /></label>
-                <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
-                  <option value=' '>{this.context.intl.formatMessage(this.messages.searchFieldPlaceholder)}</option>
-                  <option value='title'>{this.context.intl.formatMessage(this.messages.searchFieldOptionTitle)}</option>
-                  <option value='description'>{this.context.intl.formatMessage(this.messages.searchFieldOptionDescription)}</option>
-                  <option value='content'>{this.context.intl.formatMessage(this.messages.searchFieldOptionContent)}</option>
-                  <option value='speakernotes'>{this.context.intl.formatMessage(this.messages.searchFieldOptionSpeakernotes)}</option>
-                </select>
-            </div>
-
-            <div className="field">
-                <label htmlFor="kind"><FormattedMessage {...this.messages.entityFilterTitle} /></label>
-                <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
-                  <option value=' '>{this.context.intl.formatMessage(this.messages.entityFilterPlaceholder)}</option>
-                  <option value='slide'>{this.context.intl.formatMessage(this.messages.entityFilterOptionSlide)}</option>
-                  <option value='deck'>{this.context.intl.formatMessage(this.messages.entityFilterOptionDeck)}</option>
-                </select>
-            </div>
-
-            <div className="field">
-                <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
-                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-                  <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
-                  <option value='nl_NL'>{this.context.intl.formatMessage(this.messages.languageFilterOptionDutch)}</option>
-                  <option value='en_GB'>{this.context.intl.formatMessage(this.messages.languageFilterOptionEnglish)}</option>
-                  <option value='de_DE'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGerman)}</option>
-                  <option value='el_GR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGreek)}</option>
-                  <option value='it_IT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionItalian)}</option>
-                  <option value='pt_PT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionPortuguese)}</option>
-                  <option value='sr_RS'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSerbian)}</option>
-                  <option value='es_ES'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSpanish)}</option>
-                </select>
-            </div>
-        </div>
-        <div className="two fields">
-            <div className="field">
-                <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
-                <UsersInput ref='user' placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
-            </div>
-
-            <div className="field">
-                <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
-                <TagsInput ref='tag' placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
-            </div>
-
-        </div></div>;
         return (
             <div className="ui container" ref="searchPanel">
                 <div className='advancedSearch'>
@@ -338,20 +285,55 @@ class SearchPanel extends React.Component {
                                 <label htmlFor="SearchTerm"><FormattedMessage {...this.messages.searchTerm} /></label>
                                 <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
                             </div>
-                            <MediaQuery minDeviceWidth={768}>
-                                {advanced_options}
-                            </MediaQuery>
-                            <MediaQuery maxDeviceWidth={767}>
-                            <div className="ui accordion">
-                                <div className="title active">
-                                  <i className="icon dropdown"></i>
-                                  Advanced Options
+                            <div className="three fields">
+                                <div className="field">
+                                    <label htmlFor="field"><FormattedMessage {...this.messages.searchFieldTitle} /></label>
+                                    <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
+                                      <option value=' '>{this.context.intl.formatMessage(this.messages.searchFieldPlaceholder)}</option>
+                                      <option value='title'>{this.context.intl.formatMessage(this.messages.searchFieldOptionTitle)}</option>
+                                      <option value='description'>{this.context.intl.formatMessage(this.messages.searchFieldOptionDescription)}</option>
+                                      <option value='content'>{this.context.intl.formatMessage(this.messages.searchFieldOptionContent)}</option>
+                                      <option value='speakernotes'>{this.context.intl.formatMessage(this.messages.searchFieldOptionSpeakernotes)}</option>
+                                    </select>
                                 </div>
-                                <div className="content field">
-                                    {advanced_options}
+
+                                <div className="field">
+                                    <label htmlFor="kind"><FormattedMessage {...this.messages.entityFilterTitle} /></label>
+                                    <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
+                                      <option value=' '>{this.context.intl.formatMessage(this.messages.entityFilterPlaceholder)}</option>
+                                      <option value='slide'>{this.context.intl.formatMessage(this.messages.entityFilterOptionSlide)}</option>
+                                      <option value='deck'>{this.context.intl.formatMessage(this.messages.entityFilterOptionDeck)}</option>
+                                    </select>
+                                </div>
+
+                                <div className="field">
+                                    <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
+                                    <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
+                                      <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
+                                      <option value='nl_NL'>{this.context.intl.formatMessage(this.messages.languageFilterOptionDutch)}</option>
+                                      <option value='en_GB'>{this.context.intl.formatMessage(this.messages.languageFilterOptionEnglish)}</option>
+                                      <option value='de_DE'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGerman)}</option>
+                                      <option value='el_GR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGreek)}</option>
+                                      <option value='it_IT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionItalian)}</option>
+                                      <option value='pt_PT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionPortuguese)}</option>
+                                      <option value='sr_RS'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSerbian)}</option>
+                                      <option value='es_ES'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSpanish)}</option>
+                                    </select>
                                 </div>
                             </div>
-                            </MediaQuery>
+
+                            <div className="two fields">
+                                <div className="field">
+                                    <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
+                                    <UsersInput ref='user' placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
+                                </div>
+
+                                <div className="field">
+                                    <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
+                                    <TagsInput ref='tag' placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
+                                </div>
+
+                            </div>
                             <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
                                  <FormattedMessage {...this.messages.submitButton} />
                             </div>

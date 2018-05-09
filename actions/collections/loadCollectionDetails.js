@@ -1,6 +1,5 @@
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
-import UserProfileStore from '../../stores/UserProfileStore';
 import notFoundError from '../error/notFoundError';
 
 // loads a deck collection
@@ -8,8 +7,6 @@ export default function loadCollectionDetails(context, payload, done) {
     log.info(context);
 
     context.dispatch('SET_COLLECTIONS_LOADING'); // show loading indicator
-
-    payload.jwt = context.getStore(UserProfileStore).jwt;
 
     context.service.read('deckgroups.get', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

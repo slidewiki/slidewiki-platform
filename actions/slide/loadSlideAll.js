@@ -13,9 +13,9 @@ export default function loadSlideAll(context, payload, done) {
         }
         //let pageTitle = shortTitle + ' | Slide View | ' + payload.params.sid;
         let pageTitle = shortTitle + ' | Slide View | ';
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
+        context.dispatch('UPDATE_PAGE_TITLE', {
+            pageTitle: pageTitle
+        });
         done();
     });
 }

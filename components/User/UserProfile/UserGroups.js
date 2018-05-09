@@ -90,7 +90,7 @@ class UserGroups extends React.Component {
         this.props.groups.forEach((group) => {
             items.push( (
                 <div key={group._id} className="ui vertical segment" >
-                    <div className="ui two column grid container">
+                    <div className="ui two column stackable grid container">
 
                         <div className="column">
                             <div className="ui header"><h3>{group.name}</h3></div>
@@ -142,7 +142,9 @@ class UserGroups extends React.Component {
 
               {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
-              {items}
+              <div className="ui vertical segment">
+                  {items}
+              </div>
             </div>
         );
     }

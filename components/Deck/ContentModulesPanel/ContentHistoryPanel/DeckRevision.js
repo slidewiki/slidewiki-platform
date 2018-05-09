@@ -2,7 +2,7 @@ import React from 'react';
 import revertRevision from '../../../../actions/history/revertRevision';
 import showRevisionChanges from '../../../../actions/history/showRevisionChanges';
 import hideRevisionChanges from '../../../../actions/history/hideRevisionChanges';
-import {List, Button, Icon, Header, Segment, Divider} from 'semantic-ui-react';
+import {List, Button, Icon, Header, Segment} from 'semantic-ui-react';
 import DeckRevisionChanges from './DeckRevisionChanges';
 //import moment from 'moment';
 import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
@@ -51,6 +51,10 @@ class DeckRevision extends React.Component {
     render() {
         const revision = this.props.revision;
         const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+        let segmentStyle = {
+            'overflow-y': 'auto',
+            'max-height': '400px'
+        };
         const datechange = new Date(revision.lastUpdate);
         return (
             <List.Item>
@@ -61,20 +65,19 @@ class DeckRevision extends React.Component {
                         className="user"
                         href={'/user/' + revision.username}> {revision.username}</a>
                             </span>
-                        <Button basic floated='right' size='tiny'
-                                aria-label='Show details' data-tooltip='Show details'
+                        <Button basic floated='right' size='tiny' aria-label='expand details'
                                 icon='ellipsis horizontal'
                                 onClick={this.handleExpandClick.bind(this)}/>
                     </List.Header>
                     {revision.expanded &&
-                        <Segment>
+                        <Segment style={segmentStyle}>
                             <Header size='small'>Version changes
                                 {revision.latest ? '' :
                                     <Button.Group basic size='tiny' floated='right'>
-                                        <Button icon='history' disabled={!canEdit}
-                                                aria-label='Restore deck' data-tooltip='Restore deck'
+                                        <Button aria-label='Compare to current deck' icon='exchange' disabled/>
+                                        <Button aria-label='Restore deck' icon='history' disabled={!canEdit}
                                                 onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
-                                        <Button icon aria-label='View deck in new tab' data-tooltip='View deck in new tab'
+                                        <Button aria-label='View deck in new tab' icon
                                                 onClick={this.handleViewRevisionClick.bind(this)} tabIndex='0'>
                                             <Icon.Group>
                                                 <Icon name='unhide'/>
@@ -84,7 +87,6 @@ class DeckRevision extends React.Component {
                                     </Button.Group>
                                 }
                             </Header>
-                            <Divider clearing hidden fitted/>
                             <DeckRevisionChanges selector={this.props.selector} permissions={this.props.permissions}
                                                  changes={this.props.changes}/>
                         </Segment>

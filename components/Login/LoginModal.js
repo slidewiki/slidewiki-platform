@@ -339,9 +339,10 @@ class LoginModal extends React.Component {
     }
 
     render() {
-
         let inputField_classes = classNames({
             'ui': true,
+            'five': true,
+            'wide': true,
             'icon': true,
             'disabled': this.isLoading,
             'input': true,
@@ -363,38 +364,6 @@ class LoginModal extends React.Component {
                 defaultMessage:'Sign In'
             },
         });
-
-        let inputs =
-        <div className="ui one column grid">
-          <div className="ui center aligned column">
-            <textarea className="sr-only" id="signinModalDescription"
-            value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
-            tabIndex ='-1'/>
-            <div className={inputField_classes}>
-              <div><label htmlFor="email1" hidden>
-                <FormattedMessage
-                  id='LoginModal.label.email'
-                  defaultMessage='E-Mail'
-                />
-              </label></div>
-              <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
-            </div>
-          </div>
-          <br/>
-          <div className="ui center aligned column">
-            <div className={inputField_classes}>
-              <div>
-                <label htmlFor="password1" hidden>
-                  <FormattedMessage
-                    id='LoginModal.label.password'
-                    defaultMessage='Password'
-                  />
-                </label>
-              </div>
-              <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
-            </div>
-          </div>
-        </div>;
 
         return(
           <div>
@@ -418,19 +387,28 @@ class LoginModal extends React.Component {
                 <div className="ui container">
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
-                        <div className="ui one column centered grid">
-                          <MediaQuery minDeviceWidth={769} values={{deviceWidth: 1600}}>
-                            <div className="ui five wide column">
-                              {inputs}
-                            </div>
-                          </MediaQuery>
-                          <MediaQuery maxDeviceWidth={768}>
-                            <div className="ui twelve wide centered column">
-                              {inputs}
-                            </div>
-                          </MediaQuery>
+                        <textarea className="sr-only" id="signinModalDescription"
+                        value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+                        tabIndex ='-1'/>
+                        <div className={inputField_classes}>
+                          <div><label htmlFor="email1" hidden>
+                            <FormattedMessage
+                              id='LoginModal.label.email'
+                              defaultMessage='E-Mail'
+                            />
+                          </label></div>
+                          <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
                         </div>
-
+                        <br/>
+                        <div className={inputField_classes}>
+                          <div><label htmlFor="password1" hidden>
+                            <FormattedMessage
+                              id='LoginModal.label.password'
+                              defaultMessage='Password'
+                            />
+                          </label></div>
+                          <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
+                        </div>
                         <br/>
                         <div className="ui center aligned">
                             <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
