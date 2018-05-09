@@ -36,21 +36,22 @@ class TranslationStore extends BaseStore {
     }
 
     deckGotLoaded(data) { //TODO only override if deck is root deck!
+        console.log('TranslationStore deckGotLoaded deckdata', data.deckData, data.deckData.revisions[1]);
         let deck = data.deckData;
         let revision = deck.revisions.find((r) => {
             return r.id === deck.active;
         }) || deck.revisions[0] || {};
-        // this.translations = revision.translations || [];
-        // this.originLanguage = revision.language || 'en'; //TODO somehow get the correct value from somewhere? Is it even needed?
-        this.nodeLanguage = this.originLanguage;
+        this.nodeLanguage = revision.language || 'en-GB';
+
+        this.getAndSetOriginalLanguage(revision.variants);
+
         this.emitChange();
         this.logState('deckGotLoaded');
     }
 
     deckPropsGotLoaded(data) {
-        // this.translations = data.deckProps.translations;
-        // this.originLanguage = data.deckProps.language;
-        this.nodeLanguage = data.deckProps.language;//TODO correct?
+        console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
+        this.nodeLanguage = data.deckProps.language;
         this.emitChange();
         this.logState('deckPropsGotLoaded');
     }
@@ -79,7 +80,11 @@ class TranslationStore extends BaseStore {
     }
 
     deckTreeGotLoaded(data) {
+        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree);
         this.treeLanguage = data.deckTree.language;
+
+        this.getAndSetOriginalLanguage(data.deckTree.variants);
+
         this.emitChange();
         this.logState('deckTreeGotLoaded');
     }
@@ -100,6 +105,18 @@ class TranslationStore extends BaseStore {
 
     logState(functionName = '') {
         console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage, 'by', functionName);
+    }
+
+    getAndSetOriginalLanguage(variants) {
+        let variant = variants.find((variant) => {
+            return variant.original;
+        });
+        if (variant && variant.language)
+            this.originLanguage = variant.language;
+        else
+            this.originLanguage = data.deckTree.language || 'en-GB';
+
+        return this.originLanguage;
     }
 }
 
