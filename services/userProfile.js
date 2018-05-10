@@ -2,6 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
+import slug from 'slug';
 
 const log = require('../configs/log').log;
 
@@ -161,8 +162,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true,
-                            activity_type: 'react',
+                            metaonly: true, 
+                            activity_type: 'react', 
                             all_revisions: true
                         }
                     });
@@ -185,26 +186,27 @@ export default {
             // from the previous response of the deck-service
             if (params.nextLink){
                 requestCall = {
-                    uri: `${Microservices.deck.uri}${params.nextLink}`,
+                    uri: `${Microservices.deck.uri}${params.nextLink}`, 
                     json: true
                 };
             } else {
                 requestCall = {
                     method: 'GET',
-                    uri: `${Microservices.deck.uri}/decks`,
+                    uri: `${Microservices.deck.uri}/decks`, 
                     qs: {
                         user: params.id2,
-                        roles: params.roles,
+                        roles: params.roles, 
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        page: params.page,
+                        status: params.status || 'public',
+                        page: params.page, 
                         pageSize: 30
                     },
                     json: true
                 };
             }
 
-            if(params.roles === 'editor'){
+            if(params.jwt){
                 requestCall.headers = { '----jwt----': params.jwt };
             }
 
@@ -217,8 +219,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true,
-                            activity_type: 'react',
+                            metaonly: true, 
+                            activity_type: 'react', 
                             all_revisions: true
                         }
                     });
@@ -231,14 +233,13 @@ export default {
                     }
 
                     let converted = decks.map((deck) => { return transform(deck); });
-                    response._meta.roles = params.roles;
 
                     callback(null, {
-                        metadata: response._meta,
+                        metadata: response._meta, 
                         decks: converted
                     });
                 });
-            }).catch((err) => callback(err));
+            }).catch((err) => callback(err));           
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
@@ -304,8 +305,7 @@ export default {
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));
-
-            }
+            }            
         }
     }
 };
@@ -313,10 +313,12 @@ export default {
 function transform(deck){
     return {
         title: !isEmpty(deck.title) ? deck.title : 'No Title',
+        slug: buildSlug(deck),
         picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
         description: deck.description,
         updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
         creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+        hidden: deck.hidden,
         deckID: deck._id,
         firstSlide: deck.firstSlide,
         theme: deck.theme,
@@ -325,4 +327,8 @@ function transform(deck){
         noOfLikes: deck.noOfLikes
 
     };
+}
+
+function buildSlug(deck) {
+    return slug(deck.title || '').toLowerCase() || '_';
 }

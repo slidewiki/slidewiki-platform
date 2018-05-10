@@ -2,6 +2,7 @@ import React from 'react';
 import PopularDecks from '../PopularDecks';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { Button, Icon } from 'semantic-ui-react';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 
@@ -18,14 +19,15 @@ class UserDecks extends React.Component {
 
     dropdownSelect(value) {
         this.context.executeAction(fetchUserDecks, {
+            deckListType: this.props.deckListType,
             params: {
-                username: this.props.user.uname,
+                username: this.props.user.uname, 
                 sort: value,
-                roles: 'owner',
+                status: this.props.decksMeta.status,
             }
         });
     }
-    loadMore(nextLink){
+    loadMore(nextLink){       
         this.context.executeAction(fetchNextUserDecks, {
             nextLink: nextLink
         });
@@ -33,38 +35,56 @@ class UserDecks extends React.Component {
     getIntlMessages(){
         return defineMessages({
             sortLastUpdated: {
-                id: 'UserDecks.sort.lastUpdated',
+                id: 'UserDecks.sort.lastUpdated', 
                 defaultMessage: 'Last updated'
-            },
+            }, 
             sortCreationDate: {
-                id: 'UserDecks.sort.date',
+                id: 'UserDecks.sort.date', 
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'UserDecks.sort.title',
+                id: 'UserDecks.sort.title', 
                 defaultMessage: 'Title'
-            },
+            }, 
             myDecks: {
-                id: 'UserDecks.header.myDecks',
+                id: 'UserDecks.header.myDecks', 
                 defaultMessage: 'My Decks'
-            },
+            }, 
             ownedDecks: {
-                id: 'UserDecks.header.ownedDecks',
+                id: 'UserDecks.header.ownedDecks', 
                 defaultMessage: 'Owned Decks'
+            },
+            sharedDecks: {
+                id: 'UserDecks.header.sharedDecks',
+                defaultMessage: 'Shared Decks'
             }
         });
     }
     getSelectedSort(sortBy){
         switch(sortBy){
-            case 'timestamp':
+            case 'timestamp': 
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
                 return this.context.intl.formatMessage(this.messages.sortTitle);
-            case 'lastUpdate':
-            default:
+            case 'lastUpdate': 
+            default: 
                 return this.context.intl.formatMessage(this.messages.sortLastUpdated);
         }
     }
+
+    publishedToggleChanged(event, data) {
+        // button toggles, so new value for showHidden is the reverse of current showHidden state
+        let showHidden = !data.icon.includes('unlock');
+        this.context.executeAction(fetchUserDecks, {
+            deckListType: this.props.deckListType,
+            params: {
+                username: this.props.user.uname, 
+                sort: this.props.decksMeta.sort,
+                status: showHidden ? 'any' : 'public',
+            }
+        });
+    }
+
     render() {
          // define load more results div
         let loadMoreDiv = '';
@@ -82,16 +102,27 @@ class UserDecks extends React.Component {
             </div>;
         }
         let sortBy = meta.sort;
-        let header = (this.props.loggedinuser === this.props.user.uname)
-            ? this.context.intl.formatMessage(this.messages.myDecks)
-            : this.context.intl.formatMessage(this.messages.ownedDecks);
+        let showHidden = meta.status && meta.status !== 'public';
+
+        let headerMessage;
+        if (this.props.deckListType === 'shared') {
+            headerMessage = this.messages.sharedDecks;
+        } else if (this.props.loggedinuser === this.props.user.uname) {
+            headerMessage = this.messages.myDecks;
+        } else {
+            headerMessage = this.messages.ownedDecks;
+        }
+        let header = this.context.intl.formatMessage(headerMessage);
 
         return (
           <div className="ui segments">
             {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div className="ui secondary clearing segment">
                 <h1 className="ui left floated header">{header}</h1>
-                <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+
+                <div style={{ float: 'right' }}>
+
+                <div className="ui pointing labeled icon dropdown button" ref="sortDropdown">
                     <i className="icon exchange"/>
                     <div className="text">{this.getSelectedSort(sortBy)}</div>
                     <div className="menu">
@@ -100,9 +131,19 @@ class UserDecks extends React.Component {
                         <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                     </div>
                 </div>
+
+                {
+                    this.props.loggedinuser === this.props.user.uname ?
+                    <Button icon={showHidden ? 'unlock' : 'lock'}
+                            aria-label='Show unlisted' data-tooltip='Show unlisted'
+                            onClick={this.publishedToggleChanged.bind(this)} />
+                    : ''
+                }
+
+                </div>
             </div>
             <div className="ui segment">
-                { (this.props.decks) &&
+                { (this.props.decks) && 
                     <PopularDecks size={0} decks={this.props.decks} />
                 }
             </div>
