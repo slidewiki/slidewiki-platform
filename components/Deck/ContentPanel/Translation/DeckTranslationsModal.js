@@ -95,7 +95,8 @@ class DeckTranslationsModal extends React.Component {
         query = queryElements.length > 0 && !(queryElements.length === 1 && queryElements[0] === undefined) ? '?' + queryElements.join('&') : '';
         this.context.executeAction(navigateAction, {
             url: location.pathname + query,
-            runFetchTree: true
+            runFetchTree: true,
+            fetchWholeTree: true
         });
     }
 
