@@ -3,6 +3,7 @@ import FocusTrap from 'focus-trap-react';
 import { Button, Divider, Dropdown, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import { Image as Img}  from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFile';
+import { fabric } from 'fabric';
 
 const headerStyle = {
     'textAlign': 'center'
