@@ -23,7 +23,7 @@ export default function addSlideTranslation(context, payload, done) {
             const nodeURL = ContentUtil.makeNodeURL(payload.selector, 'edit', payload.language);
             context.executeAction(navigateAction, {
                 url: nodeURL,
-                runFetchTree: true
+                runFetchTree: true //TODO also fetchWholeTree ?
             });
         }
         done();

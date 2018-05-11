@@ -86,7 +86,7 @@ export default {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
                 console.log(err);
-                callback(null, params);
+                callback(err, params);
             });
         } else if (resource === 'decktree.move'){
             let {sourceSelector, targetSelector, targetIndex, userid} = args;
