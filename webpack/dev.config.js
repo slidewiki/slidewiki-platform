@@ -78,6 +78,10 @@ let webpackConfig = {
                 BROWSER: JSON.stringify(true)
             }
         }),
+	new webpack.ProvidePlugin({
+		d3: 'd3',
+		nvd3: 'nvd3'
+	})
 
     ],
     devtool: 'source-map'
