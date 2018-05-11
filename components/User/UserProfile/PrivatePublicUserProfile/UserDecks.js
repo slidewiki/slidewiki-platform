@@ -72,19 +72,6 @@ class UserDecks extends React.Component {
         }
     }
 
-    publishedToggleChanged(event, data) {
-        // button toggles, so new value for showHidden is the reverse of current showHidden state
-        let showHidden = !data.icon.includes('unlock');
-        this.context.executeAction(fetchUserDecks, {
-            deckListType: this.props.deckListType,
-            params: {
-                username: this.props.user.uname, 
-                sort: this.props.decksMeta.sort,
-                status: showHidden ? 'any' : 'public',
-            }
-        });
-    }
-
     render() {
          // define load more results div
         let loadMoreDiv = '';
@@ -131,14 +118,6 @@ class UserDecks extends React.Component {
                         <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                     </div>
                 </div>
-
-                {
-                    this.props.loggedinuser === this.props.user.uname ?
-                    <Button icon={showHidden ? 'unlock' : 'lock'}
-                            aria-label='Show unlisted' data-tooltip='Show unlisted'
-                            onClick={this.publishedToggleChanged.bind(this)} />
-                    : ''
-                }
 
                 </div>
             </div>
