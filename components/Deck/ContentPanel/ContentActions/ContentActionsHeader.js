@@ -21,6 +21,7 @@ import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
+import changeLoadingState from '../../../../actions/translation/changeLoadingState';
 
 
 class ContentActionsHeader extends React.Component {
@@ -71,8 +72,11 @@ class ContentActionsHeader extends React.Component {
                 id: 'ContentActionsHeader.translation',
                 defaultMessage:'Translation'
             },
+            loading:{
+                id: 'ContentActionsHeader.loading',
+                defaultMessage:'Loading'
+            },
         });
-
     }
 
 
@@ -118,6 +122,7 @@ class ContentActionsHeader extends React.Component {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
             if (selector.stype === 'slide' && this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.treeLanguage) {
+                this.context.executeAction(changeLoadingState, {isLoading: true});
                 this.context.executeAction(addSlideTranslation, {
                     language: this.props.TranslationStore.treeLanguage,
                     selector: selector
@@ -196,7 +201,6 @@ class ContentActionsHeader extends React.Component {
           <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
               {this.context.intl.formatMessage(languageMessage)}: {getLanguageName(language)}
           </button>;
-        console.log('ContentActionHeader store state: currentLang', this.props.TranslationStore.currentLang, ', originLanguage', this.props.TranslationStore.originLanguage, ', nodeLanguage', this.props.TranslationStore.nodeLanguage);
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -210,7 +214,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save{this.props.TranslationStore.inTranslationMode ? ' as translation' : ''}
+                        Save{this.props.TranslationStore.inTranslationMode ? ' translation' : ''}
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
@@ -299,6 +303,7 @@ class ContentActionsHeader extends React.Component {
 
         return (
                 <div className="ui two column grid">
+                    {this.props.TranslationStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
                     <div className="column computer tablet only">
                         <div className="ui left floated top attached buttons" >
                             {editButton}

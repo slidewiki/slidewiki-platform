@@ -152,7 +152,8 @@ class DeckTranslationsModal extends React.Component {
         let translationOptions = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
             translationOptions = this.props.TranslationStore.translations.reduce((arr, current)  => {
-                arr.push({key: current, value: current, text: getLanguageNativeName(current)});
+                if (current !== this.props.TranslationStore.originLanguage)
+                    arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []);
         }
@@ -164,7 +165,7 @@ class DeckTranslationsModal extends React.Component {
                   && getLanguageNativeName(current) !== getLanguageNativeName(this.props.TranslationStore.treeLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
-            }, []);
+            }, []).sort();
         }
 
         let btnMessage = '<------>';

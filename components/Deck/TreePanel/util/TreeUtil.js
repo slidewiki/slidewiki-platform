@@ -11,7 +11,16 @@ class TreeUtil {
             } catch (e) {}
         }
         if (language) {
-            query = '?language=' + language + (query ? '&' + (query.startsWith('?') ? query.substring(1) : query) : '');
+            let index = query.indexOf('language=');
+            if (index === -1)
+                query = '?language=' + language + (query ? '&' + (query.startsWith('?') ? query.substring(1) : query) : '');
+            else {
+                let valueIndex = query.substring(index + 9).indexOf('&');
+                if (valueIndex === -1)
+                    query = query.substring(0, index + 9) + language;
+                else
+                    query = query.substring(0, index + 9) + language + query.substring(index + 9 + valueIndex);
+            }
         }
         //adapt URLs based on the current page
         switch (page) {

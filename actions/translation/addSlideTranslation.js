@@ -17,8 +17,9 @@ export default function addSlideTranslation(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);//TODO improve
             return;
         } else {
+            console.log('addSlideTranslation service returned', res);
             context.dispatch('ADD_SLIDE_TRANSLATION_SUCCESS', res);
-            payload.selector.sid = res.id + '-' + res.revision;
+            payload.selector.sid = res.node.id + '-' + res.node.revision;
             const nodeURL = ContentUtil.makeNodeURL(payload.selector, 'edit', payload.language);
             context.executeAction(navigateAction, {
                 url: nodeURL,

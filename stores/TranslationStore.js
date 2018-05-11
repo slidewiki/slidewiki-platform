@@ -10,6 +10,7 @@ class TranslationStore extends BaseStore {
         this.originLanguage = '';
         this.nodeLanguage = '';
         this.treeLanguage = '';
+        this.isLoading = false;
     }
     getState() {
         return {
@@ -19,7 +20,8 @@ class TranslationStore extends BaseStore {
             inTranslationMode: this.inTranslationMode,
             originLanguage: this.originLanguage,
             nodeLanguage: this.nodeLanguage,
-            treeLanguage: this.treeLanguage
+            treeLanguage: this.treeLanguage,
+            isLoading: this.isLoading
         };
     }
     dehydrate() {
@@ -33,6 +35,7 @@ class TranslationStore extends BaseStore {
         this.originLanguage = state.originLanguage;
         this.nodeLanguage = state.nodeLanguage;
         this.treeLanguage = state.treeLanguage;
+        this.isLoading = state.isLoading;
     }
 
     deckGotLoaded(data) {
@@ -40,7 +43,7 @@ class TranslationStore extends BaseStore {
         let revision = deck.revisions.find((r) => {
             return r.id === deck.active;
         }) || deck.revisions[0] || {};
-        console.log('TranslationStore deckGotLoaded deckdata', data, '\n', data.deckData, '\n', revision);
+        console.log('TranslationStore deckGotLoaded deckdata', data.deckData, '\n', revision);
         this.nodeLanguage = revision.language || 'en-GB';
 
         if (data.isRootDeck)
@@ -98,7 +101,13 @@ class TranslationStore extends BaseStore {
     }
 
     addedSlideTranslation(data) {
-        this.nodeLanguage = node.language;
+        this.nodeLanguage = data.language;
+        this.isLoading = false;
+        this.emitChange();
+    }
+
+    newLoadingState(state) {
+        this.isLoading = state;
         this.emitChange();
     }
 
@@ -131,7 +140,8 @@ TranslationStore.handlers = {
     'LOAD_DECK_TRANSLATIONS_SUCCESS': 'translationsLoaded',
     'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
     'ADD_DECK_TRANSLATION_SUCCESS': 'translationAdded',
-    'ADD_SLIDE_TRANSLATION_SUCCESS': 'addedSlideTranslation'
+    'ADD_SLIDE_TRANSLATION_SUCCESS': 'addedSlideTranslation',
+    'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState'
 };
 
 export default TranslationStore;

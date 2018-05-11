@@ -53,8 +53,8 @@ export default {
                 body:JSON.stringify({
                     selector: selector,
                     language: args.language
-                },
-              json: true)
+                }),
+                json: true
             }).then((res) => {
                 callback(null, {node: res, selector: args.selector, language: args.language});
             }).catch((err) => {

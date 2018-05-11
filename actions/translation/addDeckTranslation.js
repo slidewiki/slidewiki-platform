@@ -29,7 +29,8 @@ export default function addDeckTranslation(context, payload, done) {
             const nodeURL = ContentUtil.makeNodeURL(selector, 'edit', payload.language);
             context.executeAction(navigateAction, {
                 url: nodeURL,
-                runFetchTree: true
+                runFetchTree: true,
+                fetchWholeTree: true
             });
         }
         done();

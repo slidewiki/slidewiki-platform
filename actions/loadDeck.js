@@ -143,7 +143,7 @@ export default function loadDeck(context, payload, done) {
             });
         },
         (callback) => {
-            if(runNonContentActions){
+            if(runNonContentActions || payload.navigate.fetchWholeTree){
                 context.executeAction(loadDeckTree, payloadCustom, callback);
             }else{
                 callback();
