@@ -131,6 +131,7 @@ export default {
                     title: args.title,
                     //args.title
                     content: args.content? args.content: ' ',
+                    markdown: args.markdown? args.markdown: ' ',
                     //TODO
                     speakernotes: args.speakernotes? args.speakernotes: ' ',
                     //args.content
