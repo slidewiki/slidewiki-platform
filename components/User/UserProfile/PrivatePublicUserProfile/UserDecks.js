@@ -21,13 +21,13 @@ class UserDecks extends React.Component {
         this.context.executeAction(fetchUserDecks, {
             deckListType: this.props.deckListType,
             params: {
-                username: this.props.user.uname,
+                username: this.props.user.uname, 
                 sort: value,
                 status: this.props.decksMeta.status,
             }
         });
     }
-    loadMore(nextLink){
+    loadMore(nextLink){       
         this.context.executeAction(fetchNextUserDecks, {
             nextLink: nextLink
         });
@@ -35,23 +35,23 @@ class UserDecks extends React.Component {
     getIntlMessages(){
         return defineMessages({
             sortLastUpdated: {
-                id: 'UserDecks.sort.lastUpdated',
+                id: 'UserDecks.sort.lastUpdated', 
                 defaultMessage: 'Last updated'
-            },
+            }, 
             sortCreationDate: {
-                id: 'UserDecks.sort.date',
+                id: 'UserDecks.sort.date', 
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'UserDecks.sort.title',
+                id: 'UserDecks.sort.title', 
                 defaultMessage: 'Title'
-            },
+            }, 
             myDecks: {
-                id: 'UserDecks.header.myDecks',
+                id: 'UserDecks.header.myDecks', 
                 defaultMessage: 'My Decks'
-            },
+            }, 
             ownedDecks: {
-                id: 'UserDecks.header.ownedDecks',
+                id: 'UserDecks.header.ownedDecks', 
                 defaultMessage: 'Owned Decks'
             },
             sharedDecks: {
@@ -62,27 +62,14 @@ class UserDecks extends React.Component {
     }
     getSelectedSort(sortBy){
         switch(sortBy){
-            case 'timestamp':
+            case 'timestamp': 
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
                 return this.context.intl.formatMessage(this.messages.sortTitle);
-            case 'lastUpdate':
-            default:
+            case 'lastUpdate': 
+            default: 
                 return this.context.intl.formatMessage(this.messages.sortLastUpdated);
         }
-    }
-
-    publishedToggleChanged(event, data) {
-        // button toggles, so new value for showHidden is the reverse of current showHidden state
-        let showHidden = !data.icon.includes('unlock');
-        this.context.executeAction(fetchUserDecks, {
-            deckListType: this.props.deckListType,
-            params: {
-                username: this.props.user.uname, 
-                sort: this.props.decksMeta.sort,
-                status: showHidden ? 'any' : 'public',
-            }
-        });
     }
 
     render() {
@@ -132,18 +119,10 @@ class UserDecks extends React.Component {
                     </div>
                 </div>
 
-                {
-                    this.props.loggedinuser === this.props.user.uname ?
-                    <Button icon={showHidden ? 'unlock' : 'lock'}
-                            aria-label='Show unlisted' data-tooltip='Show unlisted'
-                            onClick={this.publishedToggleChanged.bind(this)} />
-                    : ''
-                }
-
                 </div>
             </div>
             <div className="ui segment">
-                { (this.props.decks) &&
+                { (this.props.decks) && 
                     <PopularDecks size={0} decks={this.props.decks} />
                 }
             </div>

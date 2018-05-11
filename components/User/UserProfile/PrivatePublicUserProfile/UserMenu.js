@@ -11,11 +11,11 @@ class UserMenu extends React.Component {
     getIntlMessages(){
         return defineMessages({
             myDecks: {
-                id: 'UserMenu.myDecks',
+                id: 'UserMenu.myDecks', 
                 defaultMessage: 'My Decks'
-            },
+            }, 
             ownedDecks: {
-                id: 'UserMenu.ownedDecks',
+                id: 'UserMenu.ownedDecks', 
                 defaultMessage: 'Owned Decks'
             },
             sharedDecks: {
