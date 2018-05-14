@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
-import TreeUtil from './util/TreeUtil';
+import Util from '../../common/Util';
 import {DragSource} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
@@ -141,7 +141,7 @@ class TreeNode extends React.Component {
             spath: this.props.item.get('path')
         };
         let canEdit = !this.props.permissions.readOnly && this.props.permissions.edit && this.props.ContentStore.mode !== 'edit' && !this.props.showThumbnails;
-        let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, 'view', this.props.rootNode.slug);
+        let nodeURL = Util.makeNodeURL(nodeSelector, this.props.page, 'view', this.props.rootNode.slug, undefined, true);
         let childNodesDIV = '';
         let actionSigClass;
         let actionBtnsClass;

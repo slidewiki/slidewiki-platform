@@ -2,7 +2,7 @@ import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
-import ContentUtil from '../util/ContentUtil';
+import Util from '../../../common/Util';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
@@ -109,7 +109,7 @@ class ContentActionsHeader extends React.Component {
         });
     }
     handleViewButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'view');
         this.context.executeAction(navigateAction, {
             url: nodeURL
         });
@@ -117,7 +117,7 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleEditButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
@@ -141,7 +141,7 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleMarkdownEditButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'markdownEdit');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {

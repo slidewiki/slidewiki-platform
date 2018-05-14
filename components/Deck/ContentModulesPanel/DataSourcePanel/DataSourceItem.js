@@ -4,7 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import classNames from 'classnames';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
-import TreeUtil from '../../../../components/Deck/TreePanel/util/TreeUtil';
+import Util from '../../../../components/common/Util';
 import loadDataSource from '../../../../actions/datasource/loadDataSource';
 
 class DataSourceItem extends React.Component {
@@ -114,7 +114,7 @@ class DataSourceItem extends React.Component {
             if (flatTree.get(i).get('type') === 'slide' && flatTree.get(i).get('id') === node.sid) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: 'slide', sid: node.sid, spath: path};
-                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+                let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
 
                 return nodeURL;
             }

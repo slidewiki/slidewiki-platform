@@ -5,7 +5,7 @@ import cheerio from 'cheerio';
 import ContentQuestionAnswersList from './ContentQuestionAnswersList';
 import toggleAnswers from '../../../../actions/questions/toggleAnswers';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
-import TreeUtil from '../../TreePanel/util/TreeUtil';
+import Util from '../../../common/Util';
 
 class ContentQuestionsItem extends React.Component {
     //return the position of the node in the deck
@@ -16,7 +16,7 @@ class ContentQuestionsItem extends React.Component {
             if (flatTree.get(i).get('type') === question.relatedObject && flatTree.get(i).get('id').split('-')[0] === question.relatedObjectId) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: question.relatedObject, sid: question.relatedObjectId, spath: path};
-                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+                let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
 
                 return nodeURL;
             }

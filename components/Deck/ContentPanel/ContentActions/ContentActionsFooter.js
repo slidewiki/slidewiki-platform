@@ -1,6 +1,5 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import ContentUtil from '../util/ContentUtil';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';

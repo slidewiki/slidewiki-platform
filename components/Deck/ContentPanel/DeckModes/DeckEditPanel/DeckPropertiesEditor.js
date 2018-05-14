@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
@@ -188,7 +188,7 @@ class DeckPropertiesEditor extends React.Component {
         event.preventDefault();
 
         this.context.executeAction(navigateAction, {
-            url: ContentUtil.makeNodeURL(this.props.selector, 'view')
+            url: Util.makeNodeURL(this.props.selector, this.props.selector.page, 'view')
         });
     }
 

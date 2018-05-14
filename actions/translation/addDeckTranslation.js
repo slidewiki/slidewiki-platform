@@ -2,7 +2,7 @@ const log = require('../log/clog');
 import UserProfileStore from '../../stores/UserProfileStore';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import serviceUnavailable from '../error/serviceUnavailable';
-import ContentUtil from '../../components/Deck/ContentPanel/util/ContentUtil';
+import Util from '../../components/common/Util';
 import {navigateAction} from 'fluxible-router';
 
 export default function addDeckTranslation(context, payload, done) {
@@ -26,7 +26,7 @@ export default function addDeckTranslation(context, payload, done) {
                 sid: currentState.get('sid'),
                 spath: currentState.get('spath')
             };
-            const nodeURL = ContentUtil.makeNodeURL(selector, 'edit', payload.language);
+            const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit', undefined, payload.language);
             context.executeAction(navigateAction, {
                 url: nodeURL,
                 runFetchTree: true,

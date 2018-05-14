@@ -1,6 +1,5 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../configs/log').log;
 
 export default {

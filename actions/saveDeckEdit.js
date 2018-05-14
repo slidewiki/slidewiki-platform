@@ -6,7 +6,7 @@ import serviceUnavailable from './error/serviceUnavailable';
 import addActivity from './activityfeed/addActivity';
 const log = require('./log/clog');
 const common = require('../common.js');
-import ContentUtil from '../components/Deck/ContentPanel/util/ContentUtil';
+import Util from '../components/common/Util';
 
 export default function saveDeckEdit(context, payload, done) {
     log.info(context);
@@ -32,7 +32,7 @@ export default function saveDeckEdit(context, payload, done) {
         }
         context.dispatch('UPDATE_TREE_NODE_SUCCESS', params);
         //update the URL: redirect to view after edit
-        let newURL = ContentUtil.makeNodeURL(payload.selector, '');
+        let newURL = Util.makeNodeURL(payload.selector, payload.selector.page, '');
         context.executeAction(navigateAction, {
             url: newURL
         });

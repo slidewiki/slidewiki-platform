@@ -2,7 +2,7 @@ const log = require('../log/clog');
 import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../stores/UserProfileStore';
 import serviceUnavailable from '../error/serviceUnavailable';
-import ContentUtil from '../../components/Deck/ContentPanel/util/ContentUtil';
+import Util from '../../components/common/Util';
 
 export default function addSlideTranslation(context, payload, done) {
     log.info(context);
@@ -20,7 +20,7 @@ export default function addSlideTranslation(context, payload, done) {
             console.log('addSlideTranslation service returned', res);
             context.dispatch('ADD_SLIDE_TRANSLATION_SUCCESS', res);
             payload.selector.sid = res.node.id + '-' + res.node.revision;
-            const nodeURL = ContentUtil.makeNodeURL(payload.selector, 'edit', payload.language);
+            const nodeURL = Util.makeNodeURL(payload.selector, payload.selector.page, 'edit', undefined, payload.language);
             context.executeAction(navigateAction, {
                 url: nodeURL,
                 runFetchTree: true //TODO also fetchWholeTree ?

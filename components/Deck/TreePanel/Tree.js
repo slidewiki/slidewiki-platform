@@ -1,7 +1,7 @@
 import React from 'react';
 import {HotKeys} from 'react-hotkeys';
 import {NavLink, navigateAction} from 'fluxible-router';
-import TreeUtil from './util/TreeUtil';
+import Util from '../../common/Util';
 import TreeNodeList from './TreeNodeList';
 
 class Tree extends React.Component {
@@ -30,8 +30,31 @@ class Tree extends React.Component {
         return handlers;
     }
 
+    getImmNodeFromPath(deckTree, path) {
+        if (!path) {
+            //in case of root deck selected
+            return deckTree;
+        }
+        let out = ['children'];
+        let tmp, arr = path.split(';');
+        arr.forEach((item, index) => {
+            tmp = item.split(':');
+            out.push(parseInt(tmp[1] - 1));
+            if (index !== (arr.length - 1)) {
+                //last item is always a slide, remaining are decks
+                out.push('children');
+            }
+        });
+        let chain = deckTree;
+        out.forEach((item, index) => {
+            //chain will be a list of all nodes in the same level
+            chain = chain.get(item);
+        });
+        return chain;
+    }
+
     handleRightKey() {
-        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.focusedSelector.get('spath'));
+        let node = this.getImmNodeFromPath(this.props.deckTree, this.props.focusedSelector.get('spath'));
         if (node.get('editable') || this.props.username=== '') {
             //disable handler when editing node or when user is not loggedIn
             return true;
@@ -65,7 +88,7 @@ class Tree extends React.Component {
     }
 
     handleLeftKey() {
-        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.focusedSelector.get('spath'));
+        let node = this.getImmNodeFromPath(this.props.deckTree, this.props.focusedSelector.get('spath'));
         if (node.get('editable')  || this.props.username=== '') {
             //disable handler when editing node or when user is not loggedIn
             return true;
@@ -110,7 +133,7 @@ class Tree extends React.Component {
             sid: firstNode.get('id'),
             spath: firstNode.get('path')
         };
-        let path = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
+        let path = Util.makeNodeURL(selector, this.props.page, this.props.mode, undefined, undefined, true);
         if (path) {
             this.context.executeAction(navigateAction, {
                 url: path
@@ -128,7 +151,7 @@ class Tree extends React.Component {
             sid: lastNode.get('id'),
             spath: lastNode.get('path')
         };
-        let path = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
+        let path = Util.makeNodeURL(selector, this.props.page, this.props.mode, undefined, undefined, true);
         if (path) {
             this.context.executeAction(navigateAction, {
                 url: path
