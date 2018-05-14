@@ -1,6 +1,8 @@
 class TreeUtil {
     //build node URL based on the context
-    static makeNodeURL(selector, page, mode, language) {
+    static makeNodeURL(selector, page, mode, slug) {
+        if (!slug) slug = '_';
+
         let nodeURL;
         let query = '';
         try {
@@ -26,10 +28,10 @@ class TreeUtil {
         switch (page) {
             case 'deck':
                 if (selector.spath) {
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode + query;
+                    nodeURL = '/' + page + '/' + selector.id + '/' + slug + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode + query;
                 } else {
                     //for root node
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode + query;
+                    nodeURL = '/' + page + '/' + selector.id + '/' + slug + '/' + selector.stype + '/' + selector.sid + '/' + mode + query;
                 }
                 break;
             default:
