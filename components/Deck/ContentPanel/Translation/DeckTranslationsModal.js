@@ -92,7 +92,7 @@ class DeckTranslationsModal extends React.Component {
         }
         console.log('redirectToLanguage language', language, ' query', query, ' queryElements', queryElements, ' index', index);
         this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
-        queryElements = queryElements.filter((e) => {return e !== ''});
+        queryElements = queryElements.filter((e) => {return e !== '';});
         query = queryElements.length > 0 ? '?' + queryElements.join('&') : '';
         this.context.executeAction(navigateAction, {
             url: location.pathname + query,
