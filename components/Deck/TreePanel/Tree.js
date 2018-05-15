@@ -167,7 +167,8 @@ class Tree extends React.Component {
                                   onMoveNode={self.props.onMoveNode} mode={self.props.mode}
                                   page={self.props.page} rootNode={self.props.rootNode}
                                   username={self.props.username}
-                                  permissions={self.props.permissions}/>
+                                  permissions={self.props.permissions}
+                                  showThumbnails={this.props.showThumbnails}/>
                 </div>
             </HotKeys>
         );
