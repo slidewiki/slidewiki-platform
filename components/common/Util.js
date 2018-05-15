@@ -15,9 +15,19 @@ class Util{
                 query = window.location.search;
             } catch (e) {}
         }
-        if (language) {
+        if (language !== undefined) {
             let index = query.indexOf('language=');
-            if (index === -1)
+            if (language === '') {
+                //remove from query
+                if (index > -1) {
+                    let valueIndex = query.substring(index + 9).indexOf('&');
+                    if (valueIndex === -1)
+                        query = query.substring(0, index);
+                    else
+                        query = query.substring(0, index) + query.substring(index + 9 + valueIndex);
+                }
+            }
+            else if (index === -1)
                 query = '?language=' + language + (query ? '&' + (query.startsWith('?') ? query.substring(1) : query) : '');
             else {
                 let valueIndex = query.substring(index + 9).indexOf('&');
