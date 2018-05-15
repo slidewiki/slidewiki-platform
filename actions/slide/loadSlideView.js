@@ -2,6 +2,7 @@ import {shortTitle} from '../../configs/general';
 import slideIdTypeError from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';
 import { AllowedPattern } from '../error/util/allowedPattern';
+import DeckTreeStore from '../../stores/DeckTreeStore';
 const log = require('../log/clog');
 
 export default function loadSlideView(context, payload, done) {
@@ -11,7 +12,7 @@ export default function loadSlideView(context, payload, done) {
         return;
     }
     //console.log('send to load');
-    context.dispatch('LOAD_SLIDE_CONTENT_LOAD', {loadingIndicator: 'true'});
+    //context.dispatch('LOAD_SLIDE_CONTENT_LOAD', {loadingIndicator: 'true'});
     //context.dispatch('LOAD_SLIDE_CONTENT_LOAD');
     //console.log('get content');
 
@@ -22,10 +23,18 @@ export default function loadSlideView(context, payload, done) {
             return;
         } else {
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
+            context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Slide View | ' + payload.params.sid;
+        let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
+        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title;
+
+        // remove HTML tags and quotation marks from the title
+        let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
+
         context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
+            pageTitle: cleanTitle,
+        //    frozen: true,
+        //    allowUnfreeze: true,
         });
         done();
     });

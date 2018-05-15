@@ -3,6 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import SlideContentEditor from './SlideContentEditor';
+import MarkdownEditor from './MarkdownEditor';
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 
@@ -11,51 +12,50 @@ class SlideEditPanel extends React.Component {
     constructor(props) {
         super(props);
         this.currentID;
-        //this.currentContent;
         this.editorcontent = '';
-        this.destroy;
     }
-    componentWillUnmount(){
-        //show deckTree again
-        //context.executeAction(restoreDeckPageLayout,{});
+    componentWillMount(){
+      /* TODO: allow server-side rendering
+        if (this.props.useMarkdown && (this.currentID !== this.props.selector.sid))
+        {
+            //console.log('slide id changed - destroy/unmount SlideContentEditor component');
+            this.editorcontent = ''; //destroy/unmount SlideContentEditor component
+            this.currentID = this.props.selector.sid;
+        }
+        */
     }
     componentDidMount(){
-        //this.currentID = this.props.selector.sid;
-        //this.currentContent = this.props.SlideEditStore.content;
+
     }
     componentDidUpdate(){
         if (this.currentID !== this.props.selector.sid)
         {
             //console.log('slide id changed - destroy/unmount SlideContentEditor component');
             this.editorcontent = ''; //destroy/unmount SlideContentEditor component
-            this.destroy = true;
             this.currentID = this.props.selector.sid;
-            //if(this.currentContent !== this.props.SlideEditStore.content)
-            //{
-            //    console.log('content changed');
-            //this.editorcontent = ''; //destroy/unmount SlideContentEditor component
-            //this.destroy = true;
-            //this.currentID = this.props.selector.sid;
-            //this.currentContent = this.props.SlideEditStore.content;
-        }
-        //}
-        else {
-            this.destroy = false;
         }
     }
     render() {
-        //handle the notifications --> in process.env.BROWSER
-        let self = this;
-        //-------------------------------------------------------
-        // Only load WYSIWYG-Editor when the content has been loaded via loadSlideEdit.js
-        if (this.currentID === this.props.selector.sid){
-            this.editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}
-                                content={this.props.SlideEditStore.content}
+        if(this.props.useMarkdown){
+            if (this.currentID === this.props.selector.sid){
+                this.editorcontent = <MarkdownEditor title={this.props.SlideEditStore.title}
+                                content={this.props.SlideEditStore.content} markdown={this.props.SlideEditStore.markdown}
                                 id={this.props.SlideEditStore.id}
                                 speakernotes={this.props.SlideEditStore.speakernotes}
                                 selector={this.props.selector} />;
-        }else {
-            this.editorcontent = null;
+            }else {
+                this.editorcontent = null;
+            }
+        }else{
+            if (this.currentID === this.props.selector.sid){
+                this.editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}
+                                    content={this.props.SlideEditStore.content}
+                                    id={this.props.SlideEditStore.id}
+                                    speakernotes={this.props.SlideEditStore.speakernotes}
+                                    selector={this.props.selector} />;
+            }else {
+                this.editorcontent = null;
+            }
         }
         const loadStyle = {
             minWidth: '100%',
@@ -66,7 +66,7 @@ class SlideEditPanel extends React.Component {
         //{(this.props.SlideEditStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
         return (
             <div ref="slideEditPanel" className="ui bottom attached segment">
-            {(this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+            {(this.currentID && this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             {this.editorcontent}
             </div>
         );
