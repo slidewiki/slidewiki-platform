@@ -11,7 +11,7 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import requestEditRights from '../../../actions/permissions/requestEditRights';
 import EditRightsStore from '../../../stores/EditRightsStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
-
+import Util from '../../common/Util';
 
 class NoPermissionsModal extends React.Component {
 
@@ -164,16 +164,22 @@ class NoPermissionsModal extends React.Component {
     }
 
     navigateToLatestRevision() {
+        let url = Util.makeNodeURL({
+            id: this.props.DeckTreeStore.selector.get('id').split('-')[0] + '-' + this.props.DeckTreeStore.latestRevisionId
+        }, 'plaindeck');
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.props.DeckTreeStore.selector.get('id').split('-')[0] + '-' + this.props.DeckTreeStore.latestRevisionId
+            url: url
         });
         this.context.executeAction(hideNoPermissionsModal);
     }
 
     navigateToOwnedFork() {
         let lastUpdatedFork = _.maxBy(this.props.PermissionsStore.ownedForks, (fork) => new Date(fork.lastUpdate));
+        let url = Util.makeNodeURL({
+            id: lastUpdatedFork.id
+        }, 'plaindeck');
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + lastUpdatedFork.id
+            url: url
         });
         this.context.executeAction(hideNoPermissionsModal);
     }

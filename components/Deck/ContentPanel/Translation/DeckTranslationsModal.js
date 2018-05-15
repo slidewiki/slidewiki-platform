@@ -167,7 +167,7 @@ class DeckTranslationsModal extends React.Component {
                   && getLanguageNativeName(current) !== getLanguageNativeName(this.props.TranslationStore.treeLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
-            }, []).sort();
+            }, []).sort((a, b) => a.text > b.text);
         }
 
         let btnMessage = '<------>';
