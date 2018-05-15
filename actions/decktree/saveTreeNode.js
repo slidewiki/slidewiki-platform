@@ -3,6 +3,7 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import {navigateAction} from 'fluxible-router';
 import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
+import Util from '../../components/common/Util';
 
 export default function saveTreeNode(context, payload, done) {
     log.info(context);
@@ -31,7 +32,12 @@ export default function saveTreeNode(context, payload, done) {
                 context.dispatch('SAVE_TREE_NODE_SUCCESS', {selector: payload.selector, newValue: payload.newValue, newSid: newSid, newPath: newPath});
 
                 //update the URL
-                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + newSid + '/' + newPath;
+                let newURL = Util.makeNodeURL({
+                    id: payload.selector.id,
+                    stype: payload.selector.stype,
+                    sid: newSid,
+                    spath: newPath
+                }, 'deck');
                 context.executeAction(navigateAction, {
                     url: newURL
                 });

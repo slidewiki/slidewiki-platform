@@ -2,6 +2,7 @@ class Util{
     //build URL based on the context
     static makeNodeURL(selector, page, mode, slug, language, defaultIsDecktree = false) {
         if (!slug) slug = '_';
+        if (mode === undefined) {console.log('Util.makeNodeURL without mode', selector, page, slug, language); mode = '';}
 
         let nodeURL;
 
@@ -26,7 +27,7 @@ class Util{
                     query = query.substring(0, index + 9) + language + query.substring(index + 9 + valueIndex);
             }
         }
-        
+
         //adapt URLs based on the current page
         switch (page) {
             case 'deck':
@@ -35,6 +36,9 @@ class Util{
                 }else{
                     nodeURL = '/' + page + '/' + selector.id + '/' + slug + '/' + selector.stype + '/' + selector.sid + '/' + mode + query;
                 }
+                break;
+            case 'plaindeck':
+                nodeURL = '/deck/' + selector.id + '/' + slug + query;
                 break;
             case 'contentmode':
             //Deliberately falls through to content
