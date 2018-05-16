@@ -84,7 +84,7 @@ class TranslationStore extends BaseStore {
     }
 
     deckTreeGotLoaded(data) {
-        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree);
+        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language;
 
         this.getAndSetOriginalLanguage(data.deckTree.variants, data.deckTree.language);

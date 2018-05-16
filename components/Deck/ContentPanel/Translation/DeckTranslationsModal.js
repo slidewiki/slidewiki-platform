@@ -8,6 +8,7 @@ import {getLanguageName, getLanguageNativeName} from '../../../../configs/genera
 import {navigateAction} from 'fluxible-router';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';
+import loadDecktreeAndSwitchLanguage from '../../../../actions/translation/loadDecktreeAndSwitchLanguage';
 
 class DeckTranslationsModal extends React.Component {
 
@@ -80,24 +81,27 @@ class DeckTranslationsModal extends React.Component {
     }
 
     redirectToLanguage(language = '') {
-        let query = location.search.substring(1);
-        let queryElements = query.split('&');
-        let index = queryElements.findIndex((q) => q.startsWith('language='));
-        if (index === -1) {
-            if (language !== '') queryElements.push('language='+language);
-        }
-        else {
-            if (language === '') queryElements[index] = undefined;
-            else queryElements[index] = 'language='+language;
-        }
-        console.log('redirectToLanguage language', language, ' query', query, ' queryElements', queryElements, ' index', index);
+        // let query = location.search.substring(1);
+        // let queryElements = query.split('&');
+        // let index = queryElements.findIndex((q) => q.startsWith('language='));
+        // if (index === -1) {
+        //     if (language !== '') queryElements.push('language='+language);
+        // }
+        // else {
+        //     if (language === '') queryElements[index] = undefined;
+        //     else queryElements[index] = 'language='+language;
+        // }
+        console.log('redirectToLanguage language', language);
         this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
-        queryElements = queryElements.filter((e) => {return e !== '';});
-        query = queryElements.length > 0 ? '?' + queryElements.join('&') : '';
-        this.context.executeAction(navigateAction, {
-            url: location.pathname + query,
-            runFetchTree: true,
-            fetchWholeTree: true
+        // queryElements = queryElements.filter((e) => {return e !== '';});
+        // query = queryElements.length > 0 ? '?' + queryElements.join('&') : '';
+        // this.context.executeAction(navigateAction, {
+        //     url: location.pathname + query,
+        //     runFetchTree: true,
+        //     fetchWholeTree: true
+        // });
+        this.context.executeAction(loadDecktreeAndSwitchLanguage, {
+            language: language
         });
     }
 

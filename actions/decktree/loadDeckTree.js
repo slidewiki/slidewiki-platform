@@ -7,6 +7,8 @@ import {AllowedPattern} from '../error/util/allowedPattern';
 import UserProfileStore from '../../stores/UserProfileStore';
 import TranslationStore from '../../stores/TranslationStore';
 const log = require('../log/clog');
+import Util from '../../components/common/Util';
+import {navigateAction} from 'fluxible-router';
 
 export default function loadDeckTree(context, payload, done) {
     log.info(context);
@@ -43,6 +45,41 @@ export default function loadDeckTree(context, payload, done) {
                 //context.dispatch('UPDATE_PAGE_TITLE', {
                 //    pageTitle: pageTitle
                 //});
+
+                if (payload.navigate.fetchWholeTree && res.selector.stype === 'slide') {
+                    let pathElements = res.selector.spath.split(';');
+                    let pathDepth = pathElements.length;
+                    let currentDepth = 1;
+                    function getVariantChild(children) {
+                        if (currentDepth < pathDepth) {
+                            let deckid = pathElements[currentDepth-1].split(':')[0];
+                            let newChilds = children.find((c) => c.id === deckid && c.type === 'deck').children;
+                            currentDepth++;
+                            console.log('getVariantChild going into next depth', currentDepth, 'with deckid', deckid);
+                            return getVariantChild(newChilds);
+                        }
+
+                        let slideid = pathElements[currentDepth-1].split(':')[0];
+                        let position = parseInt(pathElements[currentDepth-1].split(':')[1]);
+                        let slide = children[position-1];
+                        console.log('getVariantChild got slideid', slideid, ', position', position, ' and slide', slide);
+                        return (slide.id === slideid) ? undefined : slide;
+                    }
+                    let newChild = getVariantChild(res.deckTree.children)
+                    if (newChild) {
+                        let position = parseInt(pathElements[currentDepth-1].split(':')[1]);
+                        pathElements[currentDepth-1] = newChild.id + ':' + position;
+                        res.selector.spath = pathElements.join(';');
+                        res.selector.sid = newChild.id;
+                        console.log('getVariantChild new selector', res.selector);
+
+                        let nodeURL = Util.makeNodeURL(res.selector, 'deck', res.mode, '', payload.params.language);
+                        context.executeAction(navigateAction, {
+                            url: nodeURL
+                        });
+                    }
+                }
+
                 done();
             }
         });
