@@ -45,7 +45,7 @@ class DeckTreeStore extends BaseStore {
         // by stype and sid
         let selectedNode = this.getImmNodeFromImmSelector(selectedNodeIndex);
         console.log('DeckTreeStore made selectedNode', selectedNode, 'and compare it to', this.selector);
-        if (selectedNode.get('type') !== this.selector.get('stype') || selectedNode.get('id').split('-')[0] !== this.selector.get('sid').split('-')[0]){
+        if (!payload.fetchWholeTree && (selectedNode.get('type') !== this.selector.get('stype') || selectedNode.get('id').split('-')[0] !== this.selector.get('sid').split('-')[0])){
             this.isSelectorValid = false;
         }
 
