@@ -66,7 +66,7 @@ export default function loadDeckTree(context, payload, done) {
                         console.log('getVariantChild got slideid', slideid, ', position', position, ' and slide', slide);
                         return (slide.id === slideid) ? undefined : slide;
                     }
-                    let newChild = getVariantChild(res.deckTree.children)
+                    let newChild = getVariantChild(res.deckTree.children);
                     if (newChild) {
                         let position = parseInt(pathElements[currentDepth-1].split(':')[1]);
                         pathElements[currentDepth-1] = newChild.id + ':' + position;
