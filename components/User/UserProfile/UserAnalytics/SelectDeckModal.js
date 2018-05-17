@@ -138,7 +138,7 @@ class SelectDeckModal extends React.Component{
         let selectDeckBtn = <Popup trigger={
             <Button as="button" className="ui right floated labeled icon button"
                                                     type="button"
-                                                    aria-label="Attach Deck"
+                                                    aria-label="New prediction job"
                                                     aria-hidden={this.state.modalOpen}
                                                     basic icon onClick={this.handleOpen}
                                                     tabIndex="0" >
@@ -180,8 +180,8 @@ class SelectDeckModal extends React.Component{
                                     {segmentPanelContent}
                                 </Segment>
                                 <Modal.Actions>
-                                    <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
-                                        data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleCLickNewPrediction}>
+                                    <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Create prediction job"
+                                        data-tooltip="Create prediction job" disabled={this.state.selectedDeckId===-1} onClick={this.handleCLickNewPrediction}>
                                         <Icon name="chart bar"/>
                                         Create prediction job
                                     </Button>
