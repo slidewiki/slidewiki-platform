@@ -12,6 +12,7 @@ import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
@@ -24,7 +25,14 @@ class Header extends React.Component {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
         $(this.refs.languagebar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });;
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+
+        $('.ui.login.modal').modal({
+            onHidden: () => {
+                this.context.executeAction(updateTrap,{activeTrap:false});
+                $('#app').attr('aria-hidden','false');
+            }
+        });
     }
 
     toggleSidebar() {
@@ -43,9 +51,14 @@ class Header extends React.Component {
     }
 
     handleLoginButton() {
-        $('.ui.login.modal')
-            .modal('toggle');
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('toggle');
+
+
         this.closeSidebar({target: '<a className="item"></a>'});
+
     }
 
     logout() {
@@ -66,16 +79,16 @@ class Header extends React.Component {
             loginButton = <UserMenuDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
-              <FormattedMessage id='header.mydecks.mobile' defaultMessage='My Decks'/>
+              <FormattedMessage id='header.mydecks.mobile' defaultMessage='Decks'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>
-              <FormattedMessage id='header.mygroups.mobile' defaultMessage='My Groups'/>
+              <FormattedMessage id='header.mygroups.mobile' defaultMessage='Groups'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>
-              <FormattedMessage id='header.mysettings.mobile' defaultMessage='My Settings'/>
+              <FormattedMessage id='header.mysettings.mobile' defaultMessage='Settings'/>
               </NavLink>
               <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>
-              <FormattedMessage id='header.mynotifications.mobile' defaultMessage='My Notifications'/>
+              <FormattedMessage id='header.mynotifications.mobile' defaultMessage='Notifications'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}><i className="icon chart bar"/>
               <FormattedMessage id='header.myanalytics.mobile' defaultMessage='My Analytics'/>
@@ -130,14 +143,11 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </MediaQuery>
-                <MediaQuery maxWidth={767}>
-                    <div className="ui inverted blue menu" style={{borderRadius: '0px'}} ref="header">
-                        <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
-                        <div className="ui right inverted blue menu">
-                            <NavLink className="item" href='/'>
-                                <i className="home icon"/><FormattedMessage id='header.slidewiki' defaultMessage='SlideWiki'/>
-                            </NavLink>
-                        </div>
+                <MediaQuery maxWidth={768}>
+                    <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
+                        <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
+                          &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki Logo" style={{width: '9rem', paddingTop: '0.5rem'}}/>
+                        </button>
                     </div>
                     <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                         <NavLink className="item" href='/'>

@@ -262,8 +262,12 @@ class UserRegistrationSocial extends React.Component {
         }
         return (
           <div>
-            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal" >
-              <div className="header">
+            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal"
+              role='dialog'
+              aria-labelledby='socialsignupsmodal_header'
+			        aria-describedby='socialsignupsmodal_content'
+              tabIndex="0" >
+              <div className="header" id="socialsignupsmodal_header">
                   <h1 style={headerStyle}>
                     <FormattedMessage
                       id='UserRegistrationSocial.validate'
@@ -271,7 +275,7 @@ class UserRegistrationSocial extends React.Component {
                     />
                   </h1>
               </div>
-              <div className="content">
+              <div className="content" id="socialsignupsmodal_content">
                   <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
                       <div className="ui inline field">
                           <label style={signUpLabelStyle}>
@@ -310,7 +314,7 @@ class UserRegistrationSocial extends React.Component {
                           <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                       </div>
                       <div className="ui error message"></div>
-                      <button type="submit" className="ui blue labeled submit icon button" >
+                      <button type="submit" className="ui blue labeled submit icon button" role="button" tabIndex="0" >
                           <i className="icon add user"/>
                           <FormattedMessage
                             id='UserRegistrationSocial.signup'
@@ -327,12 +331,12 @@ class UserRegistrationSocial extends React.Component {
                   </a>
               </div>
               <div className="actions">
-                  <div className="ui cancel button" onClick={this.handleCancelClick.bind(this)}>
+                  <button type="button" className="ui cancel button" onClick={this.handleCancelClick.bind(this)} role="button" tabIndex="0">
                     <FormattedMessage
                       id='UserRegistrationSocial.cancel'
                       defaultMessage='Cancel'
                     />
-                  </div>
+                  </button>
               </div>
             </div>
           </div>

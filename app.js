@@ -49,6 +49,7 @@ import EditRightsStore from './stores/EditRightsStore';
 import DeckCollectionStore from './stores/DeckCollectionStore';
 import SSOStore from './stores/SSOStore';
 import UserPerformancePredictionsStore from './stores/UserPerformancePredictionsStore';
+import LoginModalStore from './stores/LoginModalStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -100,7 +101,8 @@ const app = new Fluxible({
         EditRightsStore,
         DeckCollectionStore,
         SSOStore,
-        UserPerformancePredictionsStore
+        UserPerformancePredictionsStore,
+        LoginModalStore
     ]
 });
 

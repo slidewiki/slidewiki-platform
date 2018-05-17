@@ -9,6 +9,7 @@ import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageL
 import TreePanel from './TreePanel/TreePanel';
 import SlideEditLeftPanel from './SlideEditLeftPanel/SlideEditLeftPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
+import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import ServiceUnavailable from '../Error/ServiceUnavailable';
@@ -38,7 +39,7 @@ class Deck extends React.Component {
             'twelve':  status.TreePanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
             'sixteen':  status.TreePanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
             'wide column': status.TreePanel.visible || status.ActivityFeedPanel.visible,
-            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible
+            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible,
         });
         let treePanelClass = classNames({
             'hide-element': !status.TreePanel.visible
@@ -139,7 +140,7 @@ class Deck extends React.Component {
                     <div className={contentAndRightPanelClass}>
                         <div className="row">
                             <div className={contentAndRightPanelClass}>
-                                <ContentPanel />
+                                <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                             </div>
                             <div className={contentAndRightModulesPanelClass}>
                                 <div className="ui hidden divider"></div>
@@ -151,48 +152,68 @@ class Deck extends React.Component {
                     </div>
             );
         }
-        else {
-            //if we view something else - show decktree
-            leftPanel =     <div className={leftColClass}>
-                                <div className="row">
-                                    <div className={treePanelClass}>
-                                        <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
-                                    </div>
-
-                                    {/*<div className="ui hidden divider"></div>
-                                    <div className={ActivityFeedPanelClass}>
-                                        <div className="row">
-                                            <ActivityFeedPanel />
-                                        </div>
-                                    </div>*/}
-                                    <div className="ui hidden divider"></div>
+        else {//for makrdown editor
+            if(this.props.DeckPageStore.mode === 'markdownEdit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '') {
+                leftPanel = '';
+                centerPanel = (
+                        <div className="sixteen wide column">
+                            <div className="row">
+                                <div className="sixteen wide column">
+                                    <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                                 </div>
-                            </div>;
 
-
-            centerPanel = (
-                    <div className={centerColClass}>
-                        <div className="row">
-                            <div className={contentPanelClass}>
-                                <ContentPanel />
-                            </div>
-                            <div className={contentModulesPanelClass}>
-                                <div className="ui hidden divider"></div>
-                                <div className="row">
-                                    {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
-                                </div>
                             </div>
                         </div>
-                    </div>);
-            rightPanel = (
-                <div className={rightColClass}>
-                    <div className={treePanelClass}>
-                        <InfoPanel />
-                    </div>
+                );
+            } else {
+              //if we view something else - show decktree
+                leftPanel =     <div className={leftColClass}>
+                                  <div className="ui stackable grid">
+                                    <div className="computer tablet only sixteen wide column">
+                                      <div className={treePanelClass}>
+                                          <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page} deckSlug={this.props.DeckPageStore.deckSlug} />
+                                      </div>
 
-                    <div className="ui hidden divider"></div>
-                </div>
-            );
+                                      {/*<div className="ui hidden divider"></div>
+                                      <div className={ActivityFeedPanelClass}>
+                                          <div className="row">
+                                              <ActivityFeedPanel />
+                                          </div>
+                                      </div>*/}
+                                      <div className="ui hidden divider"></div>
+                                    </div>
+                                    <div className="mobile only sixteen wide column">
+                                          <NavigationPanel/>
+                                          <div className="ui hidden divider"></div>
+                                    </div>
+                                  </div>
+                                </div>;
+
+                centerPanel = (
+                      <div className={centerColClass}>
+                          <div className="row">
+                              <div className={contentPanelClass}>
+                                  <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
+                              </div>
+                              <div className={contentModulesPanelClass}>
+                                  <div className="ui hidden divider"></div>
+                                  <div className="row">
+                                      {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>);
+                rightPanel = (
+                  <div className={rightColClass}>
+                      <div className={treePanelClass}>
+                          <InfoPanel />
+                      </div>
+
+                      <div className="ui hidden divider"></div>
+                  </div>
+              );
+            }
+
 
         }
         return (
