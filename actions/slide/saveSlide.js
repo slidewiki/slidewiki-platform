@@ -5,9 +5,11 @@ import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../log/clog');
 import addActivity from '../activityfeed/addActivity';
 import {navigateAction} from 'fluxible-router';
+import Util from '../../components/common/Util';
 
 export default function saveSlide(context, payload, done) {
     log.info(context);
+    console.log('!!! action saveSlide with payload', payload);
 
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
@@ -31,7 +33,12 @@ export default function saveSlide(context, payload, done) {
                 });
 
                 //update the URL: redirect to view after edit
-                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + res.slide.id + '/' + res.slide.path;
+                let newURL = Util.makeNodeURL({
+                    id: payload.selector.id,
+                    stype: payload.selector.stype,
+                    sid: res.slide.id,
+                    spath: res.slide.path
+                }, 'deck', 'view');
                 context.executeAction(navigateAction, {
                     url: newURL
                 });

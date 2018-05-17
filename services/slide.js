@@ -143,7 +143,6 @@ export default {
                         revision: content_id
                     },
                     position: content_id,
-                    language: args.language || 'en-GB',
                     dataSources: args.dataSources,
                     license: 'CC BY-SA',
                     tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []
@@ -161,6 +160,7 @@ export default {
                 }else{
                     pathArr=[];
                 }
+                console.log('fetch service update slide.content: used id', args.id, ' and retuned id', newSlideID);
                 callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
             }).catch((err) => {
                 console.log(err);

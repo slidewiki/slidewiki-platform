@@ -44,7 +44,7 @@ class TranslationStore extends BaseStore {
             return r.id === deck.active;
         }) || deck.revisions[0] || {};
         console.log('TranslationStore deckGotLoaded deckdata', data.deckData, '\n', revision);
-        this.nodeLanguage = revision.language || 'en-GB';
+        this.nodeLanguage = revision.language.replace('_', '-') || 'en-GB';
 
         if (data.isRootDeck)
             this.getAndSetOriginalLanguage(revision.variants, this.nodeLanguage);
@@ -55,7 +55,7 @@ class TranslationStore extends BaseStore {
 
     deckPropsGotLoaded(data) {
         console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
-        this.nodeLanguage = data.deckProps.language;
+        this.nodeLanguage = data.deckProps.language.replace('_', '-') ;
         this.emitChange();
         this.logState('deckPropsGotLoaded');
     }
@@ -63,7 +63,7 @@ class TranslationStore extends BaseStore {
     changeCurrentLanguage(language) {
         if (!language)
             return;
-        this.currentLang = language;
+        this.currentLang = language.replace('_', '-') ;
         if (this.currentLang !== this.originLanguage)
             this.inTranslationMode = true;
         else
@@ -72,7 +72,8 @@ class TranslationStore extends BaseStore {
     }
 
     slideLoaded(data) {
-        this.nodeLanguage = data.slide.language;
+        console.log('TranslationStore slideLoaded slide', data.slide);
+        this.nodeLanguage = data.slide.language.replace('_', '-') ;
         this.emitChange();
         this.logState('slideLoaded');
     }
@@ -85,7 +86,7 @@ class TranslationStore extends BaseStore {
 
     deckTreeGotLoaded(data) {
         console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
-        this.treeLanguage = data.deckTree.language;
+        this.treeLanguage = data.deckTree.language.replace('_', '-') ;
 
         this.getAndSetOriginalLanguage(data.deckTree.variants, data.deckTree.language);
 
@@ -94,14 +95,14 @@ class TranslationStore extends BaseStore {
     }
 
     translationAdded(data) {
-        this.translations.push(data.language);
-        this.currentLang = data.language;
+        this.translations.push(data.language.replace('_', '-') );
+        this.currentLang = data.language.replace('_', '-') ;
         this.inTranslationMode = true;
         this.emitChange();
     }
 
     addedSlideTranslation(data) {
-        this.nodeLanguage = data.language;
+        this.nodeLanguage = data.language.replace('_', '-') ;
         this.isLoading = false;
         this.emitChange();
     }
@@ -122,9 +123,9 @@ class TranslationStore extends BaseStore {
             return variant.original;
         });
         if (variant && variant.language)
-            this.originLanguage = variant.language;
+            this.originLanguage = variant.language.replace('_', '-') ;
         else
-            this.originLanguage = fallback || 'en-GB';
+            this.originLanguage = fallback.replace('_', '-')  || 'en-GB';
 
         return this.originLanguage;
     }
