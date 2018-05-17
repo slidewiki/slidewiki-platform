@@ -6,10 +6,10 @@ import Thumbnail from '../../../common/Thumbnail';
 
 class UserPerformancePredictionItem extends React.Component {
     componentDidUpdate() {
-        $('.progress').progress();
+        $('#progressbar_result' + this.props.index).progress('set percent', this.props.prediction.result);
     }
     componentDidMount() {
-        $('.progress').progress();
+        $('#progressbar_result' + this.props.index).progress('set percent', this.props.prediction.result);
     }
 
     render() {
@@ -34,10 +34,11 @@ class UserPerformancePredictionItem extends React.Component {
         //             <i className="icon certificate big green"/>
         //         </div>
         //     );
+        const progressBarId = 'progressbar_result' + this.props.index;
         const resultProgress = (!prediction.result) ? '' :
             (
-                <div className="ui indicating progress" ref="div_progress" id="progressbar_result" role="progressbar" data-percent={prediction.result} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
-                    <div className="bar"><div className="progress"></div></div>
+                <div className="ui indicating progress" ref="div_progress" id={progressBarId} role="progressbar" data-value={prediction.result} data-total="100" aria-valuenow={prediction.result} aria-valuemin="0" aria-valuemax="100" tabIndex="0">
+                    <div className="bar"><div className="progress" /></div>
                 </div>
             );
         let thumbnail = '';

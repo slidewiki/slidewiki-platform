@@ -30,7 +30,7 @@ class UserPerformancePredictions extends React.Component {
     render() {
         const items = this.props.UserPerformancePredictionsStore.predictions ?  ((this.props.UserPerformancePredictionsStore.predictions.length > 0) ? this.props.UserPerformancePredictionsStore.predictions.map((prediction, index) => {
             return (
-                <UserPerformancePredictionItem prediction={prediction} key={index} />
+                <UserPerformancePredictionItem prediction={prediction} index={index} key={index} />
             );
         }) : 'There are no predictions') : '';
         const loading = (this.props.UserPerformancePredictionsStore.loading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : '';
