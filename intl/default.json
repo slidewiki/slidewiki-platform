@@ -914,6 +914,8 @@
   "SearchPanel.filters.language.option.portuguese": "Portuguese",
   "SearchPanel.filters.language.option.serbian": "Serbian",
   "SearchPanel.filters.language.option.spanish": "Spanish",
+  "SearchPanel.filters.language.option.french": "French",
+  "SearchPanel.filters.language.option.lithuanian": "Lithuanian",
   "SearchPanel.filters.users.title": "User",
   "SearchPanel.filters.users.placeholder": "Select Users",
   "SearchPanel.filters.tags.title": "Tags",
