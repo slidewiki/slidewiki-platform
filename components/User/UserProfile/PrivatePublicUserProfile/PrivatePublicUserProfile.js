@@ -68,7 +68,7 @@ class PrivatePublicUserProfile extends React.Component {
                   </div>
                   <div className = "sixteen wide column">
                       <UserMenu user={ this.props.user } loggedinuser={this.props.loggedinuser} choice={ this.props.category } />
-                  { this.props.user.uname === this.props.loggedinuser && this.props.category !== 'playlists' &&
+                  { this.props.user.uname === this.props.loggedinuser && this.props.category !== 'playlists' && this.props.category !== 'recommendations' &&
                     <Segment>
                         <Header size='small' dividing >Publication status</Header>
                         <List>
