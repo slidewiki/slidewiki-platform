@@ -257,7 +257,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="large blue edit icon"></i>
                             <i className=""></i>
                         </i>
-                        {this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.treeLanguage ?
+                        {this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.originLanguage ?
                           this.context.intl.formatMessage(this.messages.editButtonTextTranslation)
                           : this.context.intl.formatMessage(this.messages.editButtonText)}
 

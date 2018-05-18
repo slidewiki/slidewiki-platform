@@ -5,7 +5,7 @@ class TranslationStore extends BaseStore {
         super(dispatcher);
         this.translations = [];
         this.currentLang = '';
-        this.supportedLangs = ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB'];
+        this.supportedLangs = ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB', 'lt-LT', 'fr-FR'];
         this.inTranslationMode = false;
         this.originLanguage = '';
         this.nodeLanguage = '';
@@ -94,19 +94,6 @@ class TranslationStore extends BaseStore {
         this.logState('deckTreeGotLoaded');
     }
 
-    translationAdded(data) {
-        this.translations.push(data.language.replace('_', '-') );
-        this.currentLang = data.language.replace('_', '-') ;
-        this.inTranslationMode = true;
-        this.emitChange();
-    }
-
-    addedSlideTranslation(data) {
-        this.nodeLanguage = data.language.replace('_', '-') ;
-        this.isLoading = false;
-        this.emitChange();
-    }
-
     newLoadingState(state) {
         this.isLoading = state;
         this.emitChange();
@@ -140,8 +127,6 @@ TranslationStore.handlers = {
     'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
     'LOAD_DECK_TRANSLATIONS_SUCCESS': 'translationsLoaded',
     'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
-    'ADD_DECK_TRANSLATION_SUCCESS': 'translationAdded',
-    'ADD_SLIDE_TRANSLATION_SUCCESS': 'addedSlideTranslation',
     'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState'
 };
 

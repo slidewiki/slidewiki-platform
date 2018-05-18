@@ -19,7 +19,6 @@ export default function addSlideTranslation(context, payload, done) {
             return;
         } else {
             console.log('addSlideTranslation service returned', res);
-            context.dispatch('ADD_SLIDE_TRANSLATION_SUCCESS', res);
 
             //update selector
             payload.selector.sid = res.node.id + '-' + res.node.revision;
@@ -28,20 +27,8 @@ export default function addSlideTranslation(context, payload, done) {
             pathElements[pathElements.length-1] = payload.selector.sid + ':' + position;
             payload.selector.spath = pathElements.join(';');
 
-            //update deck tree in DeckTreeStore because it should be correct? Does not work - throws Cannot read property 'parent' of undefined from Dispatcher
-            // let deckTree = context.getStore(DeckTreeStore).getState().deckTree;
-            // deckTree.id = payload.selector.sid;
-            // context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
-            //     selector: payload.selector,
-            //     nodeSpec: deckTree
-            // });
-
-            const nodeURL = Util.makeNodeURL(payload.selector, payload.selector.page, 'edit', undefined, payload.language);
-            context.executeAction(navigateAction, {
-                url: nodeURL,
-                runFetchTree: true,
-                fetchWholeTree: true
-            });
+            const nodeURL = Util.makeNodeURL(payload.selector, 'deck', 'edit', undefined, payload.language);
+            location.pathname = nodeURL.split('?')[0];
         }
         done();
     });

@@ -18,7 +18,6 @@ export default function addDeckTranslation(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);//TODO improve
             return;
         } else {
-            context.dispatch('ADD_DECK_TRANSLATION_SUCCESS', res);
             let currentState = context.getStore(DeckTreeStore).getState().selector;
             let selector = {
                 id: currentState.get('id'),
@@ -27,11 +26,7 @@ export default function addDeckTranslation(context, payload, done) {
                 spath: currentState.get('spath')
             };
             const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit', undefined, payload.language);
-            context.executeAction(navigateAction, {
-                url: nodeURL,
-                runFetchTree: true,
-                fetchWholeTree: true
-            });
+            location.href = location.origin + nodeURL;
         }
         done();
     });

@@ -81,25 +81,8 @@ class DeckTranslationsModal extends React.Component {
     }
 
     redirectToLanguage(language = '') {
-        // let query = location.search.substring(1);
-        // let queryElements = query.split('&');
-        // let index = queryElements.findIndex((q) => q.startsWith('language='));
-        // if (index === -1) {
-        //     if (language !== '') queryElements.push('language='+language);
-        // }
-        // else {
-        //     if (language === '') queryElements[index] = undefined;
-        //     else queryElements[index] = 'language='+language;
-        // }
         console.log('redirectToLanguage language', language);
         this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
-        // queryElements = queryElements.filter((e) => {return e !== '';});
-        // query = queryElements.length > 0 ? '?' + queryElements.join('&') : '';
-        // this.context.executeAction(navigateAction, {
-        //     url: location.pathname + query,
-        //     runFetchTree: true,
-        //     fetchWholeTree: true
-        // });
         this.context.executeAction(loadDecktreeAndSwitchLanguage, {
             language: language
         });

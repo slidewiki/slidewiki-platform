@@ -41,13 +41,12 @@ export default function loadDeckTree(context, payload, done) {
                 log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
-                res.fetchWholeTree = payload.navigate.fetchWholeTree;
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
                 //context.dispatch('UPDATE_PAGE_TITLE', {
                 //    pageTitle: pageTitle
                 //});
 
-                if (payload.navigate.fetchWholeTree && res.selector.stype === 'slide') {
+                if (payload.instantNavigation) {
                     let pathElements = res.selector.spath.split(';');
                     let pathDepth = pathElements.length;
                     let currentDepth = 1;
@@ -75,9 +74,7 @@ export default function loadDeckTree(context, payload, done) {
                         console.log('getVariantChild new selector', res.selector);
 
                         let nodeURL = Util.makeNodeURL(res.selector, 'deck', res.mode, '', payload.params.language);
-                        context.executeAction(navigateAction, {
-                            url: nodeURL
-                        });
+                        location.href = location.origin + nodeURL;
                     }
                 }
 

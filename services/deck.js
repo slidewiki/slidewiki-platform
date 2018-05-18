@@ -224,7 +224,7 @@ export default {
         } else if (resource ==='deck.slides'){
 
             let args = params.params ? params.params : params;
-            let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
+            let uri2 = Microservices.deck.uri + '/deck/' + args.id + '/slides';
             if (args.language)
                 uri2 += '?language=' + args.language;
             rp.get({uri: uri2}).then((res) => {
