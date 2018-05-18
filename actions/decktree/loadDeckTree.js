@@ -76,6 +76,19 @@ export default function loadDeckTree(context, payload, done) {
                         let nodeURL = Util.makeNodeURL(res.selector, 'deck', res.mode, '', payload.params.language);
                         location.href = location.origin + nodeURL;
                     }
+                    else {
+                        let languageCodeIndex = location.search.indexOf('language=') + 9;
+                        if (languageCodeIndex === 8) {
+                            location.search = location.search + '&language=' + payload.language;
+                        }
+                        else {
+                            let endLanguageCodeIndex = location.search.substring(languageCodeIndex).indexOf('&');
+                            let code = location.search.substring(languageCodeIndex, endLanguageCodeIndex === -1 ? location.search.length : endLanguageCodeIndex + endLanguageCodeIndex);
+                            if (code !== payload.params.language) {
+                                location.search = location.search.substring(languageCodeIndex) + payload.language + (endLanguageCodeIndex === -1) ? '' : location.search.substring(endLanguageCodeIndex + endLanguageCodeIndex);
+                            }
+                        }                        
+                    }
                 }
 
                 done();

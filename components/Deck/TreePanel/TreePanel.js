@@ -17,6 +17,7 @@ import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
+import TranslationStore from '../../../stores/TranslationStore';
 
 class TreePanel extends React.Component {
 
@@ -136,7 +137,7 @@ class TreePanel extends React.Component {
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
         //only when logged in and having rights
-        if (this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly)
+        if (this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly && !this.props.TranslationStore.inTranslationMode)
             this.context.executeAction(moveTreeNodeAndNavigate, {
                 selector: this.props.DeckTreeStore.selector.toJS(),
                 sourceNode: sourceNode,
@@ -264,11 +265,12 @@ class TreePanel extends React.Component {
 TreePanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore], (context, props) => {
+TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore, TranslationStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default TreePanel;

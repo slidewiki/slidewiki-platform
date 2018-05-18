@@ -69,6 +69,7 @@ class TranslationStore extends BaseStore {
         else
             this.inTranslationMode = false;
         this.emitChange();
+        this.logState('changeCurrentLanguage');
     }
 
     slideLoaded(data) {
