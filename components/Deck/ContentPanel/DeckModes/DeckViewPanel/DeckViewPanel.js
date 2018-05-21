@@ -127,8 +127,7 @@ class DeckViewPanel extends React.Component {
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const deckSlug = slug(deckTitle || '').toLowerCase() || '_';
-        const deckURL = ['/deck', deckData._id, deckSlug].join('/');;
+        const deckURL = ['/deck', this.props.selector.id, this.props.deckSlug].join('/');;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
