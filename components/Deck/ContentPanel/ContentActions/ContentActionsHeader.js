@@ -42,7 +42,7 @@ class ContentActionsHeader extends React.Component {
             },
             editButtonTextTranslation:{
                 id: 'ContentActionsHeader.editButtonTextTranslation',
-                defaultMessage:'Create node translation'
+                defaultMessage:'Edit node translation'
             },
             editButtonAriaText:{
                 id: 'ContentActionsHeader.editButtonAriaText',
@@ -137,7 +137,8 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleLanguageButtonClick() {
-        $('#DeckTranslationsModalOpenButton').click();
+        if (this.props.ContentStore.mode !== 'edit')
+            $('#DeckTranslationsModalOpenButton').click();
     }
 
     handleMarkdownEditButton(selector) {

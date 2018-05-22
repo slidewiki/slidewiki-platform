@@ -36,7 +36,6 @@ class DeckTreeStore extends BaseStore {
         }
         //update the selected node index
         selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-        console.log('DeckTreeStore made nodeIndex', selectedNodeIndex, 'from', this.selector.get('spath'));
 
         //update the selected node in tree
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
@@ -44,7 +43,6 @@ class DeckTreeStore extends BaseStore {
         //check that the spath (actually only the positions specified in the spath are used) corresponds to the node specified
         // by stype and sid
         let selectedNode = this.getImmNodeFromImmSelector(selectedNodeIndex);
-        console.log('DeckTreeStore made selectedNode', selectedNode, 'and compare it to', this.selector);
         if (selectedNode.get('type') !== this.selector.get('stype') || selectedNode.get('id').split('-')[0] !== this.selector.get('sid').split('-')[0]){
             this.isSelectorValid = false;
         }

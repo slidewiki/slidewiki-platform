@@ -79,15 +79,15 @@ export default function loadDeckTree(context, payload, done) {
                     else {
                         let languageCodeIndex = location.search.indexOf('language=') + 9;
                         if (languageCodeIndex === 8) {
-                            location.search = location.search + '&language=' + payload.language;
+                            location.search = location.search + '&language=' + payload.params.language;
                         }
                         else {
                             let endLanguageCodeIndex = location.search.substring(languageCodeIndex).indexOf('&');
-                            let code = location.search.substring(languageCodeIndex, endLanguageCodeIndex === -1 ? location.search.length : endLanguageCodeIndex + endLanguageCodeIndex);
+                            let code = location.search.substring(languageCodeIndex + 9, endLanguageCodeIndex === -1 ? location.search.length : languageCodeIndex + endLanguageCodeIndex);
                             if (code !== payload.params.language) {
-                                location.search = location.search.substring(languageCodeIndex) + payload.language + (endLanguageCodeIndex === -1) ? '' : location.search.substring(endLanguageCodeIndex + endLanguageCodeIndex);
+                                location.search = location.search.substring(languageCodeIndex + 9) + payload.params.language + (endLanguageCodeIndex === -1) ? '' : location.search.substring(languageCodeIndex + endLanguageCodeIndex);
                             }
-                        }                        
+                        }
                     }
                 }
 

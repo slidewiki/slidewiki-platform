@@ -141,17 +141,19 @@ class DeckTranslationsModal extends React.Component {
         let translationOptions = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
             translationOptions = this.props.TranslationStore.translations.reduce((arr, current)  => {
-                if (current.replace('_', '-')  !== this.props.TranslationStore.originLanguage)
+                if (getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.originLanguage)
+                    && getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.currentLang))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
-            }, []);
+            }, []).sort((a, b) => a.text > b.text);
         }
 
         let languagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
                 if (!this.props.TranslationStore.translations.find((t) => getLanguageNativeName(t.replace('_', '-') ) === getLanguageNativeName(current.replace('_', '-') )) //exclude transations and deck language
-                  && getLanguageNativeName(current) !== getLanguageNativeName(this.props.TranslationStore.treeLanguage))
+                  && getLanguageNativeName(current.replace('_', '-')) !== getLanguageNativeName(this.props.TranslationStore.treeLanguage)
+                  && getLanguageNativeName(current.replace('_', '-')) !== getLanguageNativeName(this.props.TranslationStore.originLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []).sort((a, b) => a.text > b.text);

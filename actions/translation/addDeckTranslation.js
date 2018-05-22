@@ -22,10 +22,10 @@ export default function addDeckTranslation(context, payload, done) {
             let selector = {
                 id: currentState.get('id'),
                 stype: currentState.get('stype'),
-                sid: currentState.get('sid'),
-                spath: currentState.get('spath')
+                sid: '',
+                spath: ''
             };
-            const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit', undefined, payload.language);
+            const nodeURL = Util.makeNodeURL(selector, 'plaindeck', 'view', undefined, payload.language);
             location.href = location.origin + nodeURL;
         }
         done();
