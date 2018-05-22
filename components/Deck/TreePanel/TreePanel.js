@@ -248,7 +248,7 @@ class TreePanel extends React.Component {
                     </div>
                     <div className="ui attached segment">
                         <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
-                            <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" value={this.state.showThumbnails ? 'on' : 'off'}/>
+                            <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" checked={this.state.showThumbnails ? 'checked' : ''}/>
                             <label htmlFor="ShowThumbnails">Show Thumbnails</label>
                         </div>
                     </div>
