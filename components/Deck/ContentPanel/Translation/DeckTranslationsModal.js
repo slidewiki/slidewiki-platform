@@ -165,7 +165,7 @@ class DeckTranslationsModal extends React.Component {
         else if (this.state.action === 'translate')
             btnMessage = this.context.intl.formatMessage(messages.translate);
 
-        const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? this.props.TranslationStore.currentLang : this.props.TranslationStore.treeLanguage);
+        const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? (this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage) : this.props.TranslationStore.treeLanguage);
 
         let origin = this.props.TranslationStore.inTranslationMode ? <div>
             {this.context.intl.formatMessage(messages.switchBack)} <br/> <Button onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.props.TranslationStore.nodeLanguage)}</Button>
