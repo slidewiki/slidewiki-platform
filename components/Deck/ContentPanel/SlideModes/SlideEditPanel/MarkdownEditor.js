@@ -39,6 +39,8 @@ class MarkdownEditor extends React.Component {
     handleChange(event) {
         if(event.target.value.trim()){
             let html = converter.makeHtml(event.target.value);
+            //add especial classes for Neo4j Cypher language
+            html = html.replace(/<pre>(.*?)<code class="cypher language-cypher">/g, '<pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">');
             this.setState({markdownContent: event.target.value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
         }
     }
