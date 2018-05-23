@@ -13,6 +13,7 @@ export default function loadDeckView(context, payload, done) {
     }
 
     if (!payload.params.language) payload.params.language = context.getStore(TranslationStore).currentLang;
+    if (!context.getStore(TranslationStore).inTranslationMode) payload.params.language = undefined;
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

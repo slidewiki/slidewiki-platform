@@ -63,11 +63,17 @@ class TranslationStore extends BaseStore {
     changeCurrentLanguage(language) {
         if (!language)
             return;
-        this.currentLang = language.replace('_', '-') ;
-        if (this.currentLang !== this.originLanguage)
-            this.inTranslationMode = true;
-        else
-            this.inTranslationMode = false;
+        this.currentLang = language.replace('_', '-');
+        if (this.originLanguage) {
+            if (this.currentLang !== this.originLanguage)
+                this.inTranslationMode = true;
+            else
+                this.inTranslationMode = false;
+        }
+        else {
+            this.inTranslationMode = this.translations.indexOf(this.currentLang) !== -1;
+        }
+
         this.emitChange();
         this.logState('changeCurrentLanguage');
     }
@@ -80,7 +86,10 @@ class TranslationStore extends BaseStore {
     }
 
     translationsLoaded(translations) {
-        this.translations = translations;
+        this.translations = translations.reduce((arr, cur) => {
+            arr.push(cur.replace('_', '-'));
+            return arr;
+        }, []);
         this.emitChange();
         this.logState('translationsLoaded');
     }
@@ -89,7 +98,19 @@ class TranslationStore extends BaseStore {
         console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language.replace('_', '-') ;
 
-        this.getAndSetOriginalLanguage(data.deckTree.variants, data.deckTree.language);
+        let updateTranslationMode = false;
+        if (!this.originLanguage) {
+            updateTranslationMode = true;
+        }
+
+        this.getAndSetOriginalLanguage(data.deckTree.variants, this.treeLanguage);
+
+        if (updateTranslationMode) {
+            if (this.currentLang !== this.originLanguage)
+                this.inTranslationMode = true;
+            else
+                this.inTranslationMode = false;
+        }
 
         this.emitChange();
         this.logState('deckTreeGotLoaded');
