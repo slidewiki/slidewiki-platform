@@ -4,6 +4,7 @@ import {navigateAction} from 'fluxible-router';
 import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
 import Util from '../../components/common/Util';
+import TranslationStore from '../../stores/TranslationStore';
 
 export default function saveTreeNode(context, payload, done) {
     log.info(context);
@@ -11,6 +12,7 @@ export default function saveTreeNode(context, payload, done) {
     if (userid != null && userid !== '') {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
+        payload.language = context.getStore(TranslationStore).inTranslationMode ? context.getStore(TranslationStore).currentLang : undefined;
         context.service.update('decktree.nodeTitle', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
