@@ -99,7 +99,7 @@ class TranslationStore extends BaseStore {
         this.treeLanguage = data.deckTree.language.replace('_', '-') ;
 
         let updateTranslationMode = false;
-        if (!this.originLanguage) {
+        if (!this.originLanguage && this.currentLang) {
             updateTranslationMode = true;
         }
 
