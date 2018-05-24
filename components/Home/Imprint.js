@@ -19,7 +19,7 @@ class Imprint extends React.Component {
                             <h3>VAT (sales tax) registration number: </h3>
                             <p>DE 214931803</p>
                             <h3>Editorial Office:</h3>
-                            <p>Dr. Sandra Niemeyer; email: sandra.niemeyer@tib.eu</p>
+                            <p>Dr. Sandra Niemeyer; email: <a>sandra.niemeyer@tib.eu</a></p>
                             <h3>Copyright:</h3>
                             <p>The layout of this website is protected under copyright, as are the graphics and all other contents contained in the website.</p>
                             <h3>Content Available:</h3>
