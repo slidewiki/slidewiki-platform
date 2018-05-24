@@ -9,13 +9,13 @@ class Imprint extends React.Component {
                         <div className="ui content">
                             <h2 className="ui header">Imprint – also serves as provider identification according to &para; 5 Telemediengesetz (TMG)</h2>
                             <h3>Provider:</h3>
-                            <p>Technische Informationsbibliothek (TIB)<br>Welfengarten 1 B, 30167 Hannover<br></br>Postfach 6080, 30060 Hannover</p>
+                            <p>Technische Informationsbibliothek (TIB)<br/>Welfengarten 1 B, 30167 Hannover<br/></br>Postfach 6080, 30060 Hannover</p>
                             <h3>Authorised Representative:</h3>
-                            <p>Prof. Dr. Sören Auer (Director of TIB)<br><br>Technische Informationsbibliothek (TIB) is a foundation of public law of the state of Lower Saxony.</p>
+                            <p>Prof. Dr. Sören Auer (Director of TIB)<br/><br/>Technische Informationsbibliothek (TIB) is a foundation of public law of the state of Lower Saxony.</p>
                             <h4>Responsible Supervisory Authority:</h4>
                             <p>Ministry for Science and Culture of Lower Saxony</p>
                             <h4>Contact:</h4>
-                            <p>Customer service phone:&nbsp;+49 511 762-8989<br>Central information desk phone: +49 511 762-2268<br>Fax: +49 511 762-4076<br>Email: <a>information@tib.eu</a></p>
+                            <p>Customer service phone:&nbsp;+49 511 762-8989<br/>Central information desk phone: +49 511 762-2268<br/>Fax: +49 511 762-4076<br/>Email: <a>information@tib.eu</a></p>
                             <h3>VAT (sales tax) registration number: </h3>
                             <p>DE 214931803</p>
                             <h3>Editorial Office:</h3>
