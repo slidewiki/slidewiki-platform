@@ -7,7 +7,7 @@ class Imprint extends React.Component {
                 <div className="ui row">
                     <div className="twelve wide centered column">
                         <div className="ui content">
-                            <h2 className="ui header">Imprint – also serves as provider identification according to &para; 5 Telemediengesetz (TMG)</h2>
+                            <h2 className="ui header">Imprint – also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)</h2>
                             <h3>Provider:</h3>
                             <p>Technische Informationsbibliothek (TIB)<br/>Welfengarten 1 B, 30167 Hannover<br/><br/>Postfach 6080, 30060 Hannover</p>
                             <h3>Authorised Representative:</h3>
