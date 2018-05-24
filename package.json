@@ -157,6 +157,7 @@
     "superagent-csrf-middleware": "^0.3.0",
     "sweetalert2": "^6.11.1",
     "turndown": "^4.0.1",
+    "uglifyjs-webpack-plugin": "^1.1.0",
     "url-loader": "^0.6.2",
     "uuid": "^3.0.1",
     "virtual-dom": "2.1.1",
