@@ -148,10 +148,7 @@ class PaintModal extends React.Component {
 
     updateCanvasState() {
 
-        console.log('/////////////////////');
-        console.log(this.canvas_config.canvasState);
-        console.log('/////////////////////');
-        if ((this.canvas_config.undoStatus === false && this.canvas_config.redoStatus === false)) {
+        if (this.canvas_config.undoStatus === false && this.canvas_config.redoStatus === false) {
             let jsonData = this.canvas.toJSON();
             let canvasAsJson = JSON.stringify(jsonData);
             if (this.canvas_config.currentStateIndex < this.canvas_config.canvasState.length - 1) {
@@ -338,6 +335,7 @@ class PaintModal extends React.Component {
 
 
     undo() {
+        this.canvas_config.redoStatus = false;
         if (this.canvas_config.undoFinishedStatus) {
             if (this.canvas_config.currentStateIndex === -1) {
                 this.canvas_config.undoStatus = false;
@@ -376,10 +374,9 @@ class PaintModal extends React.Component {
 
         if(this.canvas_config.redoFinishedStatus) {
             if((this.canvas_config.currentStateIndex === this.canvas_config.canvasState.length - 1) && this.canvas_config.currentStateIndex !== -1) {
-                this.canvas_config.redoDisabled = true; ////// ojo
-                // this.canvas_config.redoButton.disabled = 'disabled';
+                this.canvas_config.redoDisabled = true;
             } else {
-                if (this.canvas_config.canvasState.length > this.canvas_config.currentStateIndex && this.canvas_config.canvasState.length !== 0) {
+                if (this.canvas_config.canvasState.length >= this.canvas_config.currentStateIndex && this.canvas_config.canvasState.length !== 0) {
                     this.canvas_config.redoFinishedStatus = 0;
                     this.canvas_config.redoStatus = true;
                     this.canvas.loadFromJSON(this.canvas_config.canvasState[this.canvas_config.currentStateIndex + 1], () => {
@@ -388,13 +385,12 @@ class PaintModal extends React.Component {
                         this.canvas_config.redoStatur = false;
                         this.canvas_config.currentStateIndex += 1;
                         if(this.canvas_config.currentStateIndex !== -1) {
-                            this.canvas_config.undoDisabled = false; /////////// ojo
-                            // this.canvas_config.undoFinishedStatus.removeAttribute('disabled');
+                            this.canvas_config.undoDisabled = false;
                         }
                         this.canvas_config.redoFinishedStatus = 1;
                         if((this.canvas_config.currentStateIndex === this.canvas_config.canvasState.length - 1) && this.canvas_config.currentStateIndex !== -1) {
-                            this.canvas_config.redoDisabled = true;///// ojo
-                            // this.canvas_config.redoButton.disabled = 'disabled';
+                            this.canvas_config.redoDisabled = true;
+                            this.canvas_config.redoStatus = false;
                         }
                     });
                 }
@@ -486,7 +482,6 @@ class PaintModal extends React.Component {
         e.preventDefault();
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
 
-        // console.log('copyrighthodler: ' + this.state.copyrightHolder);
         let payload = {
             type: 'image/png',
             license: this.state.licenseValue,
@@ -497,7 +492,6 @@ class PaintModal extends React.Component {
             filename: 'Image.png',
             bytes: this.state.file.url
         };
-        // console.log(this.state, payload);
 
         this.context.executeAction(uploadMediaFiles, payload);
         this.handleClose();
