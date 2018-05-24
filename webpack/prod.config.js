@@ -4,7 +4,7 @@ let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 let Visualizer = require('webpack-visualizer-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let ReactIntlPlugin = require('react-intl-webpack-plugin');
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin")
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
@@ -85,9 +85,9 @@ let webpackConfig = {
         new UglifyJSPlugin({
             sourceMap: true,
             uglifyOptions: {
-               compress: {
-                 warnings: false
-               }
+                compress: {
+                    warnings: false
+                }
             }
         }),
         new webpack.optimize.CommonsChunkPlugin({
