@@ -311,11 +311,13 @@ class PaintModal extends React.Component {
     setDrawingMode() {
         this.drawingMode = !this.drawingMode;
         this.canvas.isDrawingMode = this.drawingMode;
+        this.forceUpdate();
     }
 
     setLineWidth(event) {
         let value = parseInt(event.target.value, 10) || 1;
         this.canvas.freeDrawingBrush.width = value;
+        this.forceUpdate();
     }
 
     loadImg(event) {
@@ -374,7 +376,7 @@ class PaintModal extends React.Component {
         if (this.canvas_config.currentStateIndex === -1) {
             this.canvas_config.undoDisabled = true;
         }
-
+        this.forceUpdate();
     }
 
     redo() {
@@ -531,16 +533,17 @@ class PaintModal extends React.Component {
                         <p>Primary color: <input type="color" id="primaryColor"/></p>
                         <p>Border color: <input type="color" id="secondaryColor"/></p>
                     </div>
+
                     <div className="ui slider checkbox">
-                        <label>Drawing mode</label>
-                        <input type="checkbox" name="newsletter" onClick={this.setDrawingMode}/>
+                        <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode}/>
+                        <label htmlFor="drawing">{this.drawingMode ? 'Drawing Mode' : 'Select Mode'}</label>
                     </div>
                     <br/>
                     <Button color="blue" onClick={() => {$('#uploadImage').click();}}> Upload Image</Button>
                     <input type="file" id="uploadImage" style={{ display: 'none' }} onChange={this.loadImg}/>
                     <div>
                         <p>Line/Border Width: </p>
-                        <input type="range" min="0" max="50" onChange={this.setLineWidth}/>
+                        <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0}/>
                     </div>
                     <Button onClick={this.deleteElement}>Delete selected objects</Button>
                     <Button onClick={this.undo} disabled={this.canvas_config.undoDisabled}>Undo</Button>
