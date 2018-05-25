@@ -47,8 +47,6 @@ class PaintModal extends React.Component {
             redoFinishedStatus      : 1,
             undoDisabled            : true,
             redoDisabled            : true
-            // undoButton              : document.getElementById('undofabric'),
-            // redoButton              : document.getElementById('redofabric')
         };
 
         this.updateCanvasState = this.updateCanvasState.bind(this);
@@ -79,10 +77,6 @@ class PaintModal extends React.Component {
         this.showLicense = this.showLicense.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
     }
-
-    /*componentDidMount() {
-        this.startFabric();
-    }*/
 
     componentDidUpdate() {
         let ele = document.querySelector('#fabriccanvas');
@@ -200,8 +194,17 @@ class PaintModal extends React.Component {
         this.drawingMode = false;
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
-        this.canvas.isDrawingMode = this.drawingMode;
         this.setState({canvasDirty: false});
+        this.canvas_config = {
+            canvasState             : [],
+            currentStateIndex       : -1,
+            undoStatus              : false,
+            redoStatus              : false,
+            undoFinishedStatus      : 1,
+            redoFinishedStatus      : 1,
+            undoDisabled            : true,
+            redoDisabled            : true
+        };
 
     }
 
