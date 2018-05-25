@@ -166,6 +166,10 @@ class PaintModal extends React.Component {
                 this.canvas_config.redoDisabled = true; ///// ojo
             }
         }
+
+        if (this.canvas_config.currentStateIndex >= 0) {
+            this.canvas_config.undoDisabled = false;
+        }
     }
 
     handleOpen(){
@@ -351,11 +355,7 @@ class PaintModal extends React.Component {
                             this.canvas_config.undoStatus = false;
                             this.canvas_config.currentStateIndex -= 1;
                             this.canvas_config.undoDisabled = false;
-                            //this.canvas_config.undoButton.removeAttribute('disabled');
-                            if(this.canvas_config.currentStateIndex !== this.canvas_config.canvasState.length - 1) {
-                                this.canvas_config.redoDisabled = false;
-                                //this.canvas_config.redoButton.removeAttribute('disabled');
-                            }
+                            this.canvas_config.redoDisabled = false;
                             this.canvas_config.undoFinishedStatus = 1;
                         });
                     } else if (this.canvas_config.currentStateIndex === 0) {
@@ -368,6 +368,10 @@ class PaintModal extends React.Component {
                 }
             }
         }
+        if (this.canvas_config.currentStateIndex === -1) {
+            this.canvas_config.undoDisabled = true;
+        }
+
     }
 
     redo() {
