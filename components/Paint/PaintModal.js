@@ -1,6 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import { Button, Divider, Dropdown, Input, Modal, Popup, Segment } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import { Image as Img}  from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFile';
 import { fabric } from 'fabric';
@@ -514,42 +514,50 @@ class PaintModal extends React.Component {
 
         let saveHandler= this.showLicense;
 
+        let mode = this.drawingMode ? (<div><Icon name="pencil"/> Drawing Mode</div>) : (<div><Icon name="hand outline up"/> Select Mode</div>);
+
         let heading = 'Draw and Paint';
         let licenseBoxes = '';
         let content = <div>
             <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
 
             <Segment textAlign="center" >
-                <p>Draw inside the canvas using the tools provided.</p>
-                <canvas id="fabriccanvas" style={canvasStyle}/>
-                <div>
-                    <Button onClick={this.addRect}>Add Rectangle</Button>
-                    <Button onClick={this.addCircle}>Add Circle</Button>
-                    <Button onClick={this.addTriangle}>Add Triangle</Button>
-                    {/*<button onClick={this.addText}>Add Text</button>*/}
-                    <Button onClick={this.addArrow}>Add Arrow</Button>
-                    <Button onClick={this.downloadImg} disabled={!this.state.canvasDirty}>Download Image</Button>
-                    <div>
-                        <p>Primary color: <input type="color" id="primaryColor"/></p>
-                        <p>Border color: <input type="color" id="secondaryColor"/></p>
-                    </div>
+                <div className="ui grid">
+                    <div className="four wide column">
+                        <p></p>
+                        <Button className="icon button" onClick={this.addRect} data-tooltip="Add Rectangle"><Icon name="stop"/></Button>
+                        <Button className="icon button" onClick={this.addCircle} data-tooltip="Add Circle"><Icon name="circle"/></Button>
+                        <Button className="icon button" onClick={this.addTriangle} data-tooltip="Add Triangle"><Icon name="caret up"/></Button>
+                        {/*<button onClick={this.addText}>Add Text</button>*/}
+                        <Button className="icon button" onClick={this.addArrow} data-tooltip="Add Arrow"><Icon name="arrow right"/></Button>
+                        <Button className="icon button" onClick={this.downloadImg} disabled={!this.state.canvasDirty} data-tooltip="Download Image"><Icon name="download"/></Button>
+                        <div>
+                            <p>Primary color: <input type="color" id="primaryColor"/></p>
+                            <p>Border color: <input type="color" id="secondaryColor"/></p>
+                        </div>
 
-                    <div className="ui slider checkbox">
-                        <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode}/>
-                        <label htmlFor="drawing">{this.drawingMode ? 'Drawing Mode' : 'Select Mode'}</label>
+                        <div className="ui slider checkbox">
+                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode}/>
+                            <label htmlFor="drawing">{mode}</label>
+                            {/*<label htmlFor="drawing">{this.drawingMode ? '<Icon name="pencil alternate"/> Drawing Mode' : '<Icon name="mouse pointer"/> Select Mode'}</label>*/}
+                        </div>
+                        <br/>
+                        <Button className="icon button" onClick={() => {$('#uploadImage').click();}} data-tooltip="Upload Image"><Icon name="upload"/></Button>
+                        <input type="file" id="uploadImage" style={{ display: 'none' }} onChange={this.loadImg}/>
+                        <div>
+                            <p>Line/Border Width: </p>
+                            <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0}/>
+                        </div>
+                        <Button className="icon button" onClick={this.deleteElement} data-tooltip="Delete selected objects"><Icon name="trash"/></Button>
+                        <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip="Undo"><Icon name="reply"/></Button>
+                        <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip="Redo"><Icon name="share"/></Button>
+                        <Button className="icon button" onClick={this.copyActiveObjects} data-tolltip="Copy Selected Objects"><Icon name="copy"/></Button>
+                        <Button className="icon button" onClick={this.paste} data-tooltip="Paste"><Icon name="paste"/></Button>
                     </div>
-                    <br/>
-                    <Button color="blue" onClick={() => {$('#uploadImage').click();}}> Upload Image</Button>
-                    <input type="file" id="uploadImage" style={{ display: 'none' }} onChange={this.loadImg}/>
-                    <div>
-                        <p>Line/Border Width: </p>
-                        <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0}/>
+                    <div className="twelve wide column">
+                        <p>Draw inside the canvas using the tools provided.</p>
+                        <canvas id="fabriccanvas" style={canvasStyle}/>
                     </div>
-                    <Button onClick={this.deleteElement}>Delete selected objects</Button>
-                    <Button onClick={this.undo} disabled={this.canvas_config.undoDisabled}>Undo</Button>
-                    <Button onClick={this.redo} disabled={this.canvas_config.redoDisabled}>Redo</Button>
-                    <Button onClick={this.copyActiveObjects}>Copy Selected Objects</Button>
-                    <Button onClick={this.paste}>Paste</Button>
                 </div>
             </Segment>
         </div>;
