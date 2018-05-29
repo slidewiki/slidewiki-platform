@@ -83,7 +83,7 @@ class presentationBroadcast extends React.Component {
             that.isInitiator = true;
             that.setState({
                 roleText: 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ',
-                peerCountText: 'People currently listening: '
+                peerCountText: 'People currently attending: '
             });
             setmyID();
             that.socket.emit('follow hashtag', that.hashTags.join(' '), that.room, that.deckID);
@@ -173,7 +173,7 @@ class presentationBroadcast extends React.Component {
             console.log('Received room is full');
             swal({
                 titleText: 'The Room is already full',
-                text: 'The maximium number of listeners is already reached. Please try again later.',
+                text: 'The maximium number of participants is already reached. Please try again later.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Ok',
@@ -312,7 +312,7 @@ class presentationBroadcast extends React.Component {
                 $('#media').remove();
                 swal({//NOTE implemented here because this dialog interrupted with error dialogs of requestStreams()
                     title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                    html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
+                    html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently attending people.</p>',
                     type: 'info',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok',
