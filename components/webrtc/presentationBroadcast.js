@@ -176,7 +176,7 @@ class presentationBroadcast extends React.Component {
                 text: 'The maximium number of listeners is already reached. Please try again later.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Check',
+                confirmButtonText: 'Ok',
                 allowOutsideClick: false,
                 allowEscapeKey: false
             });
@@ -315,7 +315,7 @@ class presentationBroadcast extends React.Component {
                     html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
                     type: 'info',
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Check',
+                    confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     allowEscapeKey: false
                 }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
@@ -450,7 +450,7 @@ class presentationBroadcast extends React.Component {
                     text: 'This presentation has ended. Feel free to look at the deck as long as you want.',
                     type: 'warning',
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Check',
+                    confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     allowEscapeKey: false
                 });
