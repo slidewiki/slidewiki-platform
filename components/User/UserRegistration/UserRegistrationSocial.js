@@ -65,7 +65,7 @@ class UserRegistrationSocial extends React.Component {
             mailprompt3: {
                 id: 'UserRegistrationSocial.mailprompt3',
                 defaultMessage: 'The email address is already in use',
-            },
+            }
         });
         //Form validation
         const validationRules = {
@@ -135,6 +135,39 @@ class UserRegistrationSocial extends React.Component {
         if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'register') {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) && (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
+        }
+        else if (nextProps.UserRegistrationStore.socialError && !this.props.UserRegistrationStore.socialError) {
+            const messages = defineMessages({
+                genericError: {
+                    id: 'UserRegistrationSocial.genericError',
+                    defaultMessage: 'An error occured. Please try your action at a later time.',
+                },
+                error: {
+                    id: 'UserRegistrationSocial.error',
+                    defaultMessage: 'Error',
+                },
+                confirm: {
+                    id: 'UserRegistrationSocial.confirm',
+                    defaultMessage: 'Confirm',
+                }
+            });
+
+            swal({
+                title: this.context.intl.formatMessage(messages.error),
+                text: this.context.intl.formatMessage(messages.genericError),
+                type: 'error',
+                showCloseButton: true,
+                showCancelButton: false,
+                confirmButtonText: this.context.intl.formatMessage(messages.confirm),
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            })
+                .then((dismiss) => {
+                    return true;
+                })
+                .catch(() => {
+                    return true;
+                });
         }
     }
 
