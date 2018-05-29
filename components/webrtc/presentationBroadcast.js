@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
-import { Grid, Button, Popup } from 'semantic-ui-react';
+import { Grid, Button, Popup, Label } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
 import SocialSharing from './SocialSharing.js';
@@ -1002,7 +1002,7 @@ class presentationBroadcast extends React.Component {
                   <Grid.Column width={15}>
                     <h4>
                       {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
-                          trigger={<span>{Object.keys(this.pcs).length}</span>}
+                          trigger={<Label icon='group' content={Object.keys(this.pcs).length}/>}
                           content={peernames}
                         /></p>) : <p>{this.state.roleText}</p>}
                     </h4>
