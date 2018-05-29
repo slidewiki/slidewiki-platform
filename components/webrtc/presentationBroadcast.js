@@ -799,7 +799,7 @@ class presentationBroadcast extends React.Component {
 
         function handleNewUsername(username, peerID) {
             if(isEmpty(username) || username === 'undefined')
-                that.pcs[peerID].username = 'Peer ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
+                that.pcs[peerID].username = 'Participant ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
             else
                 that.pcs[peerID].username = username;
             sendRTCMessage('username', that.pcs[peerID].username, peerID);
@@ -867,7 +867,7 @@ class presentationBroadcast extends React.Component {
         let indexes = [0,Math.ceil(contentArray.length/3),Math.ceil(contentArray.length/3)*2,contentArray.length];
         if(contentArray.length > 0){
             titleHTMLAddition = ' <span id="taskModalPeerCount">0</span>/' + contentArray.length;
-            contentHTML = '<div class="ui accordion"><div class="title"><i class="dropdown icon"></i>Detailed list of peers</div><div class="content"><div class="transition hidden">'+
+            contentHTML = '<div class="ui accordion"><div class="title"><i class="dropdown icon"></i>Detailed list of participants</div><div class="content"><div class="transition hidden">'+
             '<div class="ui stackable three column grid">'+
                 '<div class="column">'+contentArray.slice(indexes[0],indexes[1]).reduce((a,b) => a + b, '')+'</div>'+
                 '<div class="column">'+contentArray.slice(indexes[1],indexes[2]).reduce((a,b) => a + b, '')+'</div>'+
@@ -967,7 +967,7 @@ class presentationBroadcast extends React.Component {
 
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
-            let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
+            let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Participant');
             return tmp ? 'Anonymous Rabbits' : this.pcs[key].username;
         }));
         peernames = Array.from(peernames).reduce((a,b) => a+', '+b, '').substring(1);

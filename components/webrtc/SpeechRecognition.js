@@ -142,7 +142,7 @@ class SpeechRecognition extends React.Component {
 
             swal({
                 titleText: 'Speech recognition enabled',
-                html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be automatically transcribed and displayed at all peers as a transcript.</p><p>Please select the language in which you will talk or disable the feature.</p>',
+                html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be automatically transcribed and displayed at all participants as a transcript.</p><p>Please select the language in which you will talk or disable the feature.</p>',
                 type: 'info',
                 input: 'select',
                 inputValue: that.recognition.lang,
@@ -172,7 +172,7 @@ class SpeechRecognition extends React.Component {
         } else {
             swal({
                 titleText: 'Speech recognition disabled',
-                text: 'Your browser isn\'t able to transcribe speech to text. Thus, your peers will not recieve a transcript. Google Chrome is currently the only browser that supports speech recognition.',
+                text: 'Your browser isn\'t able to transcribe speech to text. Thus, your participants will not recieve a transcript. Google Chrome is currently the only browser that supports speech recognition.',
                 type: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
