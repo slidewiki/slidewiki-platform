@@ -21,14 +21,26 @@ import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 
 import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
+import MobileDetect from 'mobile-detect/mobile-detect';
 
 class DeckViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isMobile: false};
+    }
+
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();
         if (text.length > 25) {
             text = text.substr(0, 21) + '...';
         }
         return text;
+    }
+
+    componentDidMount() {
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
 
     render() {
@@ -209,7 +221,17 @@ class DeckViewPanel extends React.Component {
                                 if (slide.theme) {
                                     thumbnailURL += '/' + slide.theme;
                                 }
-                                if (index < maxSlideThumbnails) {
+                                if (this.state.isMobile) {
+                                    return (
+                                        <div key={index} className="ui card">
+                                            <a href={deckURL + '/slide/' + slide.id} className="ui image"
+                                               tabIndex="-1">
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
+                                            </a>
+                                        </div>
+                                    );
+                                }
+                                else if (index < maxSlideThumbnails) {
                                     return (
                                         <div key={index} className="ui card">
                                             <a href={deckURL + '/slide/' + slide.id} className="ui image"
