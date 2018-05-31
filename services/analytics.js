@@ -133,5 +133,36 @@ export default {
                 callback(err, {predictions: []});
             });
         }
+    },
+
+    delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        let args = params.params? params.params : params;
+        let pid = args.predictionId;
+        if (pid === undefined) {
+            pid = 0;
+        }
+
+        if(resource === 'analytics.prediction'){
+            let options = {
+                method: 'DELETE',
+                uri:  analyticsServiceUri + '/analytics/webresources/predictionjob/' + pid,
+                // body:JSON.stringify({
+                //     content_kind: 'deck',
+                //     content_id: String(targetDeckID),
+                //     activity_type: 'react',
+                //     user_id: String(params.userid),
+                //     all_revisions: true
+                // })
+            };
+            rp(options).then((res) => {
+                callback(null, {});
+                // console.log('success', res);
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
     }
 };

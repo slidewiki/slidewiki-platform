@@ -3,6 +3,7 @@ import { NavLink } from 'fluxible-router';
 import {formatDate} from '../../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import { Microservices } from '../../../../configs/microservices';
 import Thumbnail from '../../../common/Thumbnail';
+import deletePerformancePredictionJob from '../../../../actions/analytics/deletePerformancePredictionJob';
 
 class UserPerformancePredictionItem extends React.Component {
     componentDidUpdate() {
@@ -10,6 +11,24 @@ class UserPerformancePredictionItem extends React.Component {
     }
     componentDidMount() {
         $('#progressbar_result' + this.props.index).progress('set percent', this.props.prediction.result);
+    }
+
+    handleDeletePrediction() {
+        swal({
+            title: 'Delete prediction',
+            text: 'Are you sure you want to delete this prediction?',
+            type: 'warning',
+            showCloseButton: false,
+            showCancelButton: true,
+            allowEscapeKey: true,
+            showConfirmButton: true
+        })
+        .then(() => {
+            this.context.executeAction(deletePerformancePredictionJob, {
+                predictionId: this.props.prediction.id
+            });
+        }, (reason) => { // canceled
+        });
     }
 
     render() {
@@ -72,34 +91,43 @@ class UserPerformancePredictionItem extends React.Component {
                     <i className="dropdown icon"></i>
                     <div className="ui vertical segment" >
                         <div className="ui grid">
-                            <div className="four wide column ui header">
+                            <div className="five wide column ui header">
                                 {prediction.title}
                             </div>
                             <div className="four wide column">
                                 {(prediction.finished) ? 'Executed ' : 'Started '}
                                 {formatDate(prediction.started)}
                             </div>
-                            <div className="four wide column">
+                            <div className="three wide column">
                                 {(prediction.result) ? 'Predicted result: ' + Math.round(prediction.result * 100) / 100  + ' %': ''}
                             </div>
                             <div className="four wide column">
                                 {resultProgress}
                             </div>
+
                         </div>
                     </div>
                 </div>
                 <div className="content">
                     <div className="ui grid">
-                        <div className="eight wide column">
+                        <div className="nine wide column">
                             <NavLink className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + prediction.deckId}>
                                 {(prediction.deckId) ? 'Deck id: ' + prediction.deckId : ''}
                                 {thumbnail}
                             </NavLink>
                         </div>
-                        <div className="eight wide column">
+                        <div className="five wide column">
                             {additionalInfo}
                         </div>
-
+                        <div className="right aligned column">
+                            {(prediction.id !== undefined) ? (
+                                <div>
+                                    <button className="ui basic icon button" data-tooltip='Delete prediction job' aria-label='Delete prediction job' onClick={this.handleDeletePrediction.bind(this)} >
+                                        <i className="remove icon" name={'deletePrediction_' + prediction.id} ></i>
+                                    </button>
+                                </div>
+                            ) : ''}
+                        </div>
                     </div>
                 </div>
             </div>
