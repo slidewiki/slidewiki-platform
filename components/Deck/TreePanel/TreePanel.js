@@ -92,6 +92,9 @@ class TreePanel extends React.Component {
             window.open(this.getPresentationHref());
         }
     }
+    handleTranslations() {
+      $('#DeckTranslationsModalOpenButton').click();
+    }
     getPresentationHref(){
         let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
 
@@ -179,7 +182,6 @@ class TreePanel extends React.Component {
             'basic': true,
             'attached': true,
             //'disabled': (!this.props.PermissionsStore.permissions.fork),
-            'disabled': true,
             'button': true
         });
 
@@ -224,7 +226,7 @@ class TreePanel extends React.Component {
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
                             <i className="large blue fork icon"></i>
                         </div>
-                        <div className={classes_translatebtn} role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck" tabIndex="-1">
+                        <div className={classes_translatebtn} role="button" aria-label="Translations and languages of this deck" data-tooltip="Translations of this deck" tabIndex="-1" onClick={this.handleTranslations.bind(this)}>
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>

@@ -136,11 +136,6 @@ class ContentActionsHeader extends React.Component {
         }
     }
 
-    handleLanguageButtonClick() {
-        if (this.props.ContentStore.mode !== 'edit')
-            $('#DeckTranslationsModalOpenButton').click();
-    }
-
     handleMarkdownEditButton(selector) {
         const nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
@@ -199,7 +194,7 @@ class ContentActionsHeader extends React.Component {
         let languageMessage = this.props.TranslationStore.inTranslationMode ? this.messages.translation : this.messages.language;
         let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
         languageButton =
-          <button type="button" tabIndex="0" className={editClass} onClick={this.handleLanguageButtonClick.bind(this)} onChange={this.handleLanguageButtonClick.bind(this)}>
+          <button type="button" tabIndex="0" className={editClass} >
               {this.context.intl.formatMessage(languageMessage)}: {getLanguageName(language)}
           </button>;
 
