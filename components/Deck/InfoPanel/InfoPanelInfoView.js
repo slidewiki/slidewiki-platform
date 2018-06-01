@@ -8,9 +8,24 @@ import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/Contribu
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-
+import {getLanguageName, getLanguageNativeName} from '../../../configs/general.js';
+import TranslationStore from '../../../stores/TranslationStore';
+import {defineMessages} from 'react-intl';
 
 class InfoPanelInfoView extends React.Component {
+    constructor(props){
+        super(props);
+        this.messages = defineMessages({
+            language:{
+                id: 'ContentActionsHeader.language',
+                defaultMessage:'Language'
+            },
+            translation:{
+                id: 'ContentActionsHeader.translation',
+                defaultMessage:'Translation'
+            }
+        });
+    }
 
     getNameofNodes(tree, selector) {
         if(!selector.get('spath')){
@@ -85,6 +100,8 @@ class InfoPanelInfoView extends React.Component {
             titlediv = '';
 
         }
+        let languageMessage = this.props.TranslationStore.inTranslationMode ? this.messages.translation : this.messages.language;
+        let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
@@ -92,6 +109,12 @@ class InfoPanelInfoView extends React.Component {
                         Updated version available</NavLink>
                     </div>}
                     {titlediv}
+                <div className="ui attached segment">
+                  <h5 className="ui small header">
+                     <i className="translate blue small icon" aria-label="Slide title"></i>
+                     {this.context.intl.formatMessage(languageMessage)}: {getLanguageName(language)}
+                  </h5>
+                </div>
                 <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
@@ -120,12 +143,14 @@ class InfoPanelInfoView extends React.Component {
 }
 
 InfoPanelInfoView.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default InfoPanelInfoView;

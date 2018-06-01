@@ -189,14 +189,7 @@ class ContentActionsHeader extends React.Component {
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
-        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton, languageButton;
-
-        let languageMessage = this.props.TranslationStore.inTranslationMode ? this.messages.translation : this.messages.language;
-        let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
-        languageButton =
-          <button type="button" tabIndex="0" className={editClass} >
-              {this.context.intl.formatMessage(languageMessage)}: {getLanguageName(language)}
-          </button>;
+        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;      
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -308,7 +301,6 @@ class ContentActionsHeader extends React.Component {
                             {cancelButton}
                             {undoButton}
                             {redoButton}
-    												{languageButton}
                         </div>
                     </div>
                     <DeckTranslationsModal />
