@@ -93,7 +93,7 @@ class TreePanel extends React.Component {
         }
     }
     handleTranslations() {
-      $('#DeckTranslationsModalOpenButton').click();
+        $('#DeckTranslationsModalOpenButton').click();
     }
     getPresentationHref(){
         let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
