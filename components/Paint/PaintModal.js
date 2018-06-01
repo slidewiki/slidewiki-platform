@@ -512,7 +512,7 @@ class PaintModal extends React.Component {
         this.context.getUser().username;
         let submitButtonText = 'Add to Slide';
         let submitButtonIcon = 'arrow right';
-        let modePadding = 'padding-bottom: 1.5em; padding-top: 1.5em';
+        let modePadding = {'padding-bottom': '1.5em', 'padding-top': '1.5em'};
 
         let saveHandler= this.showLicense;
 
