@@ -63,7 +63,18 @@ class UserGroups extends React.Component {
         const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
 
-        this.context.executeAction(deleteUsergroup, {groupid: groupid});
+        swal({
+            title: 'Deleting this user group. Are you sure?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((accepted) => {
+            this.context.executeAction(deleteUsergroup, {groupid: groupid});
+            swal('User group successfully deleted');
+        }, (cancelled) => {/*do nothing*/})
+            .catch(swal.noop);
     }
 
     handleClickOnLeaveGroup(e) {
