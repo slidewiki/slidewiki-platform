@@ -6,48 +6,56 @@ import Footer from './Footer/Footer';
 import ApplicationStore from '../stores/ApplicationStore';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import { handleHistory } from 'fluxible-router';
-import pages from '../configs/routes';
 import ErrorStore from '../stores/ErrorStore';
 import Error from './Error/Error';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
+import cleanStore from '../actions/error/cleanStore';
+import CookieBanner from 'react-cookie-banner';
+import BannerContent from 'react-cookie-banner';
+import cookie from 'react-cookie';
+import {FormattedMessage} from 'react-intl';
 
 
 class Application extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
+    }
+
     render() {
+        let cookieBanner = '';
         let Handler = this.props.currentRoute.handler;
-        if (this.props.ErrorStore.error) {
-            return (
-
-                    <div className="slidewiki-page">
-                        <Header currentRoute={this.props.currentRoute} links={pages} />
-                        <Error error={this.props.ErrorStore.error} />
-                        <Footer />
-                    </div>
-
-            );
+        let header = null , footer = null, content = null;
+        const noHF_pages = ['presentation', 'neo4jguide', 'webrtc'];//NOTE add the route name to the following array if you don't want header and footer rendered on the page
+        if(!noHF_pages.includes(this.props.currentRoute.name)){
+            header = <Header />; footer = <Footer />;
         }
-        else {
-            //add the route name to the following array if you don;t want header and footer rendered there
-            const noHF_pages = ['presentation', 'neo4jguide'];
-            return (
-                  <div className="slidewiki-page">
-                      {noHF_pages.indexOf(this.props.currentRoute.name) === -1 ?
-                          <Header currentRoute={this.props.currentRoute} links={pages} />
-                      :
-                      null
-                      }
-                      <Handler />
-                      {noHF_pages.indexOf(this.props.currentRoute.name) === -1 ?
-                          <Footer />
-                      :
-                      null
-                      }
-                  </div>
+        content = (this.props.ErrorStore.error) ? <Error error={this.props.ErrorStore.error} /> : <Handler />;
 
-            );
+        if (!this.state.user_cookies) {
+            cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies to ensure you get the best experience on our website.'>
+                {(message) =>
+                  <CookieBanner message={message} cookie='user-has-accepted-cookies' dismissOnScroll={false} onAccept={() => {}}/>}
+                </FormattedMessage>;
         }
+
+        return (
+              <div className="slidewiki-page">
+                  {cookieBanner}
+                  {header}
+                  {content}
+                  {footer}
+              </div>
+        );
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if(this.props.ErrorStore.error && !nextProps.ErrorStore.error)
+            return false;
+        return true;
     }
 
     componentDidMount() {
@@ -55,11 +63,14 @@ class Application extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+
         const newProps = this.props;
         if (newProps.pageTitle === prevProps.pageTitle) {
             return;
         }
         document.title = newProps.pageTitle;
+        if(this.props.ErrorStore.error)
+            context.executeAction(cleanStore);
     }
 }
 Application.contextTypes = {
