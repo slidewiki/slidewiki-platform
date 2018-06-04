@@ -47,7 +47,7 @@ class TranslationStore extends BaseStore {
         this.nodeLanguage = revision.language.replace('_', '-') || 'en-GB';
 
         if (data.isRootDeck)
-            this.getAndSetOriginalLanguage(revision.variants, this.nodeLanguage);
+            this.getAndSetOriginalLanguage(revision.variants || [], this.nodeLanguage);
 
         this.emitChange();
         this.logState('deckGotLoaded');
@@ -103,7 +103,7 @@ class TranslationStore extends BaseStore {
             updateTranslationMode = true;
         }
 
-        this.getAndSetOriginalLanguage(data.deckTree.variants, this.treeLanguage);
+        this.getAndSetOriginalLanguage(data.deckTree.variants || [], this.treeLanguage);
 
         if (updateTranslationMode) {
             if (this.currentLang !== this.originLanguage)
@@ -127,7 +127,7 @@ class TranslationStore extends BaseStore {
         console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage, 'by', functionName);
     }
 
-    getAndSetOriginalLanguage(variants, fallback) {
+    getAndSetOriginalLanguage(variants = [], fallback) {
         let variant = variants.find((variant) => {
             return variant.original;
         });
