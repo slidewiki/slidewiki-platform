@@ -413,7 +413,7 @@ class PaintModal extends React.Component {
 
         this.canvas.getActiveObject().clone((cloned) => {
             this.clipboard = cloned;
-        })
+        });
         this.paste();
 
     }
