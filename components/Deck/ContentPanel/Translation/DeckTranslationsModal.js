@@ -140,7 +140,7 @@ class DeckTranslationsModal extends React.Component {
                 if (getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.originLanguage)
                     && getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.currentLang))
                     ac.push(current);
-                    return ac;
+                return ac;
             }, []).sort((a, b) => a > b);
         }
         let translations = translations0.reduce( (ac, current) => {
