@@ -52,8 +52,9 @@ class DeckTranslationsModal extends React.Component {
         }
     }
 
-    handleTranslationSelection(e, data) {
-        this.setState({ action: 'languageselect', languageCode: data.value });
+    handleTranslationSelection(code, e) {
+        this.handleClose();
+        this.redirectToLanguage(code);
     }
 
     handleLanguageSelection(e, data) {
@@ -66,12 +67,7 @@ class DeckTranslationsModal extends React.Component {
     }
 
     handleActionClick(e) {
-        if (this.state.action === 'languageselect') {
-            this.handleClose();
-
-            this.redirectToLanguage(this.state.languageCode);
-        }
-        else if (this.state.action === 'translate') {
+        if (this.state.action === 'translate') {
             this.handleClose();
 
             this.context.executeAction(addDeckTranslation, {
@@ -138,15 +134,19 @@ class DeckTranslationsModal extends React.Component {
 
         let message = this.props.TranslationStore.inTranslationMode ? messages.currentTranslation : messages.currentLanguage;
 
-        let translationOptions = [];
+        let translations0 = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
-            translationOptions = this.props.TranslationStore.translations.reduce((arr, current)  => {
+            translations0 = this.props.TranslationStore.translations.reduce((ac, current)  => {
                 if (getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.originLanguage)
                     && getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.currentLang))
-                    arr.push({key: current, value: current, text: getLanguageNativeName(current)});
-                return arr;
-            }, []).sort((a, b) => a.text > b.text);
+                    ac.push(current);
+                    return ac;
+            }, []).sort((a, b) => a > b);
         }
+        let translations = translations0.reduce( (ac, current) => {
+            ac.push(<Button key={'btnkey_languagecode_' + current} role="button" tabIndex="0" onClick={this.handleTranslationSelection.bind(this, current)} basic>{getLanguageNativeName(current)}</Button>);
+            return ac;
+        }, []);
 
         let languagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
@@ -159,17 +159,12 @@ class DeckTranslationsModal extends React.Component {
             }, []).sort((a, b) => a.text > b.text);
         }
 
-        let btnMessage = '<------>';
-        if (this.state.action === 'languageselect')
-            btnMessage = this.context.intl.formatMessage(messages.language);
-        else if (this.state.action === 'translate')
-            btnMessage = this.context.intl.formatMessage(messages.translate);
+        let btnMessage = this.context.intl.formatMessage(messages.translate);
 
         const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? (this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage) : this.props.TranslationStore.treeLanguage);
 
         let origin = this.props.TranslationStore.inTranslationMode ? <div>
-            {this.context.intl.formatMessage(messages.switchBack)} <br/> <Button onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.props.TranslationStore.nodeLanguage)}</Button>
-            <br/>
+            {this.context.intl.formatMessage(messages.switchBack)} <br/> <Button role="button" tabIndex="0" onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.props.TranslationStore.nodeLanguage)}</Button>
             <br/>
             </div>
           : '';
@@ -192,32 +187,22 @@ class DeckTranslationsModal extends React.Component {
                   active={this.state.activeTrap}
                   focusTrapOptions={{
                       onDeactivate: this.unmountTrap,
-                      clickOutsideDeactivates: false,
-                      initialFocus: '#DeckTranslationsModalTranslationsDropdown',
+                      clickOutsideDeactivates: false
                   }}>
                   <Modal.Header className="ui left aligned" as="h1" id="DeckTranslationsModalHeader">
                     {this.context.intl.formatMessage(messages.header)}
                   </Modal.Header>
                   <Modal.Content id="DeckTranslationsModalDescription">
                       <Divider />
-                      {this.context.intl.formatMessage(message)} <Segment compact>{language}</Segment>
+                      {this.context.intl.formatMessage(message)} <b>{language}</b>
                       <br/>
 
                       {origin}
+                      <br/>
 
                       {this.context.intl.formatMessage(messages.switch)}
                       <br/>
-                      <Dropdown
-                          placeholder={this.context.intl.formatMessage(messages.chooseTranslation)}
-                          fluid
-                          scrolling
-                          selection
-                          search
-                          options={translationOptions}
-                          onChange={this.handleTranslationSelection.bind(this)}
-                          id="DeckTranslationsModalTranslationsDropdown"
-                          name='translationSelection'
-                        />
+                      {translations}
                       <br/>
                       <br/>
 
@@ -235,8 +220,8 @@ class DeckTranslationsModal extends React.Component {
                         />
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
-                        <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} icon="save" labelPosition='left' content={btnMessage}/>
-                        <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)}/>
+                        <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} icon="save" labelPosition='left' content={btnMessage} disabled={this.state.action !== 'translate'} />
+                        <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)} />
                       </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>
