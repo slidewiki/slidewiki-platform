@@ -3,12 +3,21 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import deleteUsergroup from '../../../actions/user/userprofile/deleteUsergroup';
 import leaveUsergroup from '../../../actions/user/userprofile/leaveUsergroup';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class UserGroups extends React.Component {
     constructor(props){
         super(props);
 
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+
+        this.messages = defineMessages({
+            header: {
+                id: 'UserGroups.header',
+                defaultMessage: 'Translation selection',
+            },
+
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -149,7 +158,8 @@ class UserGroups extends React.Component {
 }
 
 UserGroups.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 export default UserGroups;
