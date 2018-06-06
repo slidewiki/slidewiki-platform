@@ -15,16 +15,19 @@ class UserPerformancePredictions extends React.Component {
         this.refreshAccordion();
     }
 
-    enableAccordion(status) {
+    enableAccordion() {
         let accordionDIV = this.refs.predictionsList;
         $(accordionDIV).find('.ui.accordion').accordion({
             exclusive: false
         });
     }
 
-    refreshAccordion(status) {
+    refreshAccordion() {
+        const noOfPredictions = this.props.UserPerformancePredictionsStore.predictions.length;
         let accordionDIV = this.refs.predictionsList;
-        $(accordionDIV).find('.ui.accordion').accordion('refresh');
+        for (let i = 0; i < noOfPredictions; i++) {
+            $(accordionDIV).find('.ui.accordion').accordion('close', i);
+        }
     }
 
     render() {
