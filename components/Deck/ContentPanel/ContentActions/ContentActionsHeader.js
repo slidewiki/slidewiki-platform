@@ -189,7 +189,7 @@ class ContentActionsHeader extends React.Component {
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
-        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;      
+        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -243,12 +243,10 @@ class ContentActionsHeader extends React.Component {
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
                         <i className="icons">
-                            <i className="large blue edit icon"></i>
+                            <i className={'large blue ' + this.props.TranslationStore.inTranslationMode ? 'translate' : 'edit' + ' icon'}></i>
                             <i className=""></i>
                         </i>
-                        {this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.originLanguage ?
-                          this.context.intl.formatMessage(this.messages.editButtonTextTranslation)
-                          : this.context.intl.formatMessage(this.messages.editButtonText)}
+                        {this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
 
