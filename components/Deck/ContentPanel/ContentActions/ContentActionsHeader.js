@@ -243,7 +243,7 @@ class ContentActionsHeader extends React.Component {
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
                         <i className="icons">
-                            <i className={'large blue ' + this.props.TranslationStore.inTranslationMode ? 'translate' : 'edit' + ' icon'}></i>
+                            <i className={'large blue ' + (this.props.TranslationStore.inTranslationMode ? 'translate' : 'edit') + ' icon'}></i>
                             <i className=""></i>
                         </i>
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
