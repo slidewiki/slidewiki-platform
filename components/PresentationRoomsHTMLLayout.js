@@ -38,6 +38,8 @@ class PresentationRoomsHTMLLayout extends React.Component {
                 }
                 <script src={ Microservices.webrtc.uri + '/socket.io/socket.io.js' }></script>
                 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+                {/* Run-time settings */}
+                <script src="/public/js/settings.js" defer></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
                 <script src="/sweetalert2/dist/sweetalert2.min.js" defer></script>
