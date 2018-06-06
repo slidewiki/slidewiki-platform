@@ -3,20 +3,12 @@ import DeckCard from './DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from './../../../common';
-import classNames from 'classnames/bind';
 
 class PublicUserDecks extends React.Component {
 
     render() {
         let size = 0;
         let content = this.props.decks;
-        let cardsClasses = classNames({
-            'ui': true,
-            'three': this.props.fourCards === undefined,
-            'four': this.props.fourCards,
-            'stackable': true,
-            'cards': true
-        });
         if(!isEmpty(content)){
             // if no sort property is given the order of decks is preserved
             if(this.props.sort){
@@ -37,7 +29,7 @@ class PublicUserDecks extends React.Component {
                 size = content.length;
             else
                 size = content.length < 3 ? content.length : this.props.size;
-            return (<div className={cardsClasses}>
+            return (<div className="ui three stackable cards">
                 {[...Array(size).keys()].map( (i) => <DeckCard userid={this.props.UserProfileStore.user.id} key={i} cardContent={content[i]} newTab={this.props.newTab}/>)}
                     </div>);
         } else {

@@ -5,10 +5,6 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {Button} from 'semantic-ui-react';
-import UserProfileStore from '../../stores/UserProfileStore';
-import { connectToStores } from 'fluxible-addons-react';
-import PopularDecks from '../User/UserProfile/PopularDecks';
-import fetchHomeUserDecks from '../../actions/user/userprofile/fetchHomeUserDecks';
 
 class Home extends React.Component {
 
@@ -17,12 +13,6 @@ class Home extends React.Component {
             url: '/featured'
         });
     };
-
-    componentDidMount() {
-        if(this.props.UserProfileStore.userid)
-            this.context.executeAction(fetchHomeUserDecks, {username: this.props.UserProfileStore.username, id: this.props.UserProfileStore.userid});
-    }
-
     render() {
         const heightStyle = {
             height: '100px'
@@ -34,21 +24,19 @@ class Home extends React.Component {
         const compMessageStyle = {
             background: '#1E78BB'
         };
-        let optionalCarousel = <div className="ui blue inverted segment" style={{borderRadius: '0px'}}><h1><FormattedMessage id='home.slogan' defaultMessage='SlideWiki...Create, Share and Enjoy Presentations'/></h1><Carousel /></div>;
-        let optionalUserDecks = '';
-        if(this.props.UserProfileStore.userid){
-            optionalCarousel = '';
-            optionalUserDecks = <div className="ui segments"><div className="ui segment top attached"><h3>Recently edited decks</h3></div><div className="ui segment"><PopularDecks size={8} decks={this.props.UserProfileStore.userDecks} fourCards={true}/></div><div className="ui segment bottom attached"><h5><NavLink href={'/user/' + this.props.UserProfileStore.username}>See More</NavLink></h5></div></div>;
-        }
+
 
         return (
             <div ref="home">
-                {optionalCarousel}
+                <div className="ui blue inverted segment" style={{borderRadius: '0px'}}>
+                    <h1><FormattedMessage id='home.slogan' defaultMessage='SlideWiki...Create, Share and Enjoy Presentations'/></h1>
+                    <Carousel />
+
+                </div>
                 <div className="ui fluid container">
                     <div className="ui padded stackable grid ">
                         <div className="one wide column"></div>
                         <div className="ten wide column">
-                            {optionalUserDecks}
                             <div className="ui segments">
                                 <div className="ui segment top attached">
                                     <h3><FormattedMessage id='home.welcome' defaultMessage='Welcome to SlideWiki'/>
@@ -258,10 +246,9 @@ Home.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-Home = connectToStores(Home, [UserProfileStore], (context, props) => {
-    return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
-    };
-});
 
 export default Home;
+
+
+
+//export default Home;
