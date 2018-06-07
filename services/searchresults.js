@@ -59,9 +59,9 @@ function parseSlide(slide){
 }
 
 function parseDeck(deck){
+    let deckSlug = buildSlug(deck);
     // different link if this is a root deck or a sub-deck
-    let deck_slug = deck.title? slug(deck.title) : '';
-    deck.link = (deck.isRoot || !deck.usage) ? `/deck${deck_slug ? '_' + deck_slug: ''}/${deck.db_id}-${deck.db_revision_id}` : `/deck${deck_slug ? '_' + deck_slug: ''}/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
+    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -72,6 +72,10 @@ function parseDeck(deck){
         username: '',
         link: ''
     };
+}
+
+function buildSlug(deck) {
+    return slug(deck.title || '').toLowerCase() || '_';
 }
 
 function getUsers(userIdsSet){
@@ -114,12 +118,26 @@ function getForks(deckIdsSet){
 
     for(let deckId of deckIdsSet){
         forkPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
-            forks[deckId] = deckForks;
+            forks[deckId] = deckForks.filter((f) => !f.hidden);
         }).catch( (err) => {
             forks[deckId] = [];
         }));
     }
     return Promise.all(forkPromises).then( () => { return forks; });
+}
+
+function getLikes(deckIdsSet){
+    let likes = {};
+    let likePromises = [];
+
+    for(let deckId of deckIdsSet){
+        likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
+            likes[deckId] = noOfLikes;
+        }).catch( (err) => {
+            likes[deckId] = 0;
+        }));
+    }
+    return Promise.all(likePromises).then( () => { return likes; });
 }
 
 export default {
@@ -191,8 +209,13 @@ export default {
                     forks = forksFromService;
                 });
 
+                // get number of likes for decks
+                let likes = {};
+                let likesPromise = getLikes(deckIds).then( (likesFromService) => {
+                    likes = likesFromService;
+                });
 
-                Promise.all([userPromise, deckPromise, forksPromise]).then( () => {
+                Promise.all([userPromise, deckPromise, forksPromise, likesPromise]).then( () => {
                     response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
@@ -214,10 +237,13 @@ export default {
                                     return {
                                         id: fork.id,
                                         title: fork.title,
-                                        link: `/deck/${fork.id}`
+                                        link: `/deck/${fork.id}/${buildSlug(fork)}`,
                                     };
                                 });
                             }
+
+                            //fill number of likes
+                            returnItem.noOfLikes = likes[returnItem.db_id];
                         }
                         else if(returnItem.kind === 'Slide'){
                             returnItem.subItems = returnItem.usage.filter( (usageItem) => {
@@ -227,13 +253,16 @@ export default {
                                 return {
                                     id: usageItem,
                                     title: deckRevisions[usageItem].title,
-                                    link: '/deck/' + usageItem + '/slide/' + returnItem.db_id + '-' + returnItem.db_revision_id
+                                    link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}`,
                                 };
                             });
 
                             // fill deck info
                             returnItem.deck.title = (deckRevisions[returnItem.deck.id]) ? deckRevisions[returnItem.deck.id].title : '';
-                            returnItem.deck.link = '/deck/' + returnItem.deck.id;
+                            let deckSlug = buildSlug(returnItem.deck);
+                            returnItem.deck.link = `/deck/${returnItem.deck.id}/${deckSlug}`;
+
+                            returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}`;
                         }
                     });
 
