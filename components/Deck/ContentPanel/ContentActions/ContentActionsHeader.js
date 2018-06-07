@@ -63,7 +63,9 @@ class ContentActionsHeader extends React.Component {
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "slide", id: "0"}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
+        const contentDetails = this.props.ContentStore;
+        //added mode to the navigate action
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec, mode: contentDetails.mode});
     }
 
     handleDeleteNode(selector) {
@@ -104,6 +106,16 @@ class ContentActionsHeader extends React.Component {
             });
         }
     }
+    handleMarkdownEditButton(selector) {
+        const nodeURL = ContentUtil.makeNodeURL(selector, 'markdownEdit');
+        if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
+            this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else {
+            this.context.executeAction(navigateAction, {
+                url: nodeURL
+            });
+        }
+    }
     render() {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
@@ -117,19 +129,19 @@ class ContentActionsHeader extends React.Component {
         });
         const addSlideClass = classNames({
             'ui basic button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit'
         });
         const addDeckClass = classNames({
             'ui basic button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit'
         });
         const duplicateItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         });
         const deleteItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         });
         const red = {
             backgroundColor: 'red'
@@ -141,16 +153,17 @@ class ContentActionsHeader extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'ui basic button':true,
-                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
             }),
             iconSize : 'large',
-            noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+            noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
-        let editButton, saveButton, cancelButton, undoButton, redoButton;
+        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
 
-        if (contentDetails.mode === 'edit' && this.props.UserProfileStore.username !== ''){
+        if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
             editButton = '';
+            markdownEditButton = '';
             //ref="" --> we can't use string refs as they are legacy. ref={(refName)=>{this.refName=refName}}
             if(contentDetails.selector.stype === 'slide'){
                 saveButton =
@@ -205,6 +218,22 @@ class ContentActionsHeader extends React.Component {
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
+                if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
+                    markdownEditButton =
+                        <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
+                            type="button"
+                            aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
+                            tabIndex = {contentDetails.mode ==='markdownEdit'?-1:0}
+                            >
+                            <i className="icons">
+                                <i className="large violet edit icon"></i>
+                                <i className=""></i>
+                            </i>
+                            Markdown
+
+                        </button>;
+                }
+
             }
             saveButton ='';
             cancelButton ='';
@@ -223,26 +252,33 @@ class ContentActionsHeader extends React.Component {
           <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
         </button>
         */
+        let mobileMessage = <div className="ui top attached warning message">
+          <p>You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use the desktop version.</p>
+        </div>;
 
         return (
-            <div className="ui two column grid">
-                <div className="column">
-                    <div className="ui left floated top attached buttons" >
-                        {editButton}
-                        {saveButton}
-                        {cancelButton}
-                        {undoButton}
-                        {redoButton}
+                <div className="ui two column grid">
+                    <div className="column computer tablet only">
+                        <div className="ui left floated top attached buttons" >
+                            {editButton}
+                            {markdownEditButton}
+                            {saveButton}
+                            {cancelButton}
+                            {undoButton}
+                            {redoButton}
+                        </div>
                     </div>
-                </div>
-                <div className="column">
+                    <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
+                        {mobileMessage}
+                    </div>
+                    <div className="column computer tablet only">
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui right floated basic top attached buttons" >
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
                             type="button"
                             aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="large icons">
                                 <i className="grey file text icon"></i>
                                 <i className="inverted corner plus icon"></i>
@@ -254,7 +290,7 @@ class ContentActionsHeader extends React.Component {
                             type="button"
                             aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="large icons">
                                 <i className="yellow folder icon"></i>
                                 <i className="inverted corner plus icon"></i>
@@ -265,7 +301,7 @@ class ContentActionsHeader extends React.Component {
                             type="button"
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="grey large copy icon"></i>
 
                         </button>
@@ -273,7 +309,7 @@ class ContentActionsHeader extends React.Component {
                             type="button"
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="red large trash icon"></i>
                         </button>
                         {/*

@@ -7,7 +7,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import ReactDOM from 'react-dom';
-import {hashPassword, ssoEnabled} from '../../configs/general';
+import {ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
@@ -37,9 +37,9 @@ class LoginModal extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
-        this.isLoading = false;
         this.state = {
             activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
+            isLoading: false
         };
 
         this.errorMessages = defineMessages({
@@ -59,10 +59,13 @@ class LoginModal extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps){
-        this.setState({
-            activeTrap: nextProps.LoginModalStore.activeTrap
-        });
+        this.setState({ activeTrap: nextProps.LoginModalStore.activeTrap });
 
+        if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
+            console.log('body intended', this.props.errorMessage.toString());
+            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
+            this.setState({ isLoading: false });
+        }
     }
     openModal() {
         this.context.executeAction(updateTrap,{activeTrap:true});
@@ -103,18 +106,17 @@ class LoginModal extends React.Component {
                 defaultMessage: 'Please use a valid email address',
             }) ]);
         } else {
+            this.setState({ isLoading: true });
+
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: hashPassword(this.refs.password1.value),
+                password: common.hashPassword(this.refs.password1.value),
                 errorMessages: {
                     error403: this.context.intl.formatMessage(this.errorMessages.error403),
                     error404: this.context.intl.formatMessage(this.errorMessages.error404),
                     error423: this.context.intl.formatMessage(this.errorMessages.error423)
                 }
             });
-
-            this.isLoading = true;
-            this.forceUpdate();
         }
         return false;
     }
@@ -132,15 +134,9 @@ class LoginModal extends React.Component {
     componentDidUpdate() {
         if (this.props.errorMessage.length > 2)
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-        // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
-        if ((this.props.errorMessage !== '') && this.isLoading) {
-            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-            this.isLoading = false;
-            this.forceUpdate();
-        }
-        else if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
-            this.isLoading = false;
-            this.forceUpdate();
+        console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
+        if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
+            this.setState({ isLoading: false });
             swal({
                 title: this.context.intl.formatMessage({
                     id: 'LoginModal.title.information',
@@ -193,7 +189,7 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.isLoading = false;
+            this.setState({ isLoading: false });
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
@@ -339,14 +335,13 @@ class LoginModal extends React.Component {
     }
 
     render() {
+
         let inputField_classes = classNames({
             'ui': true,
-            'five': true,
-            'wide': true,
             'icon': true,
-            'disabled': this.isLoading,
+            'disabled': this.state.isLoading,
             'input': true,
-            'loading': this.isLoading,
+            'loading': this.state.isLoading,
             'field': true
         });
 
@@ -364,6 +359,38 @@ class LoginModal extends React.Component {
                 defaultMessage:'Sign In'
             },
         });
+
+        let inputs =
+        <div className="ui one column grid">
+          <div className="ui center aligned column">
+            <textarea className="sr-only" id="signinModalDescription"
+            value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+            tabIndex ='-1'/>
+            <div className={inputField_classes}>
+              <div><label htmlFor="email1" hidden>
+                <FormattedMessage
+                  id='LoginModal.label.email'
+                  defaultMessage='E-Mail'
+                />
+              </label></div>
+              <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+            </div>
+          </div>
+          <br/>
+          <div className="ui center aligned column">
+            <div className={inputField_classes}>
+              <div>
+                <label htmlFor="password1" hidden>
+                  <FormattedMessage
+                    id='LoginModal.label.password'
+                    defaultMessage='Password'
+                  />
+                </label>
+              </div>
+              <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
+            </div>
+          </div>
+        </div>;
 
         return(
           <div>
@@ -387,28 +414,19 @@ class LoginModal extends React.Component {
                 <div className="ui container">
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
-                        <textarea className="sr-only" id="signinModalDescription"
-                        value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
-                        tabIndex ='-1'/>
-                        <div className={inputField_classes}>
-                          <div><label htmlFor="email1" hidden>
-                            <FormattedMessage
-                              id='LoginModal.label.email'
-                              defaultMessage='E-Mail'
-                            />
-                          </label></div>
-                          <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+                        <div className="ui one column centered grid">
+                          <MediaQuery minDeviceWidth={769} values={{deviceWidth: 1600}}>
+                            <div className="ui five wide column">
+                              {inputs}
+                            </div>
+                          </MediaQuery>
+                          <MediaQuery maxDeviceWidth={768}>
+                            <div className="ui twelve wide centered column">
+                              {inputs}
+                            </div>
+                          </MediaQuery>
                         </div>
-                        <br/>
-                        <div className={inputField_classes}>
-                          <div><label htmlFor="password1" hidden>
-                            <FormattedMessage
-                              id='LoginModal.label.password'
-                              defaultMessage='Password'
-                            />
-                          </label></div>
-                          <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
-                        </div>
+
                         <br/>
                         <div className="ui center aligned">
                             <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
