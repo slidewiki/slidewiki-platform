@@ -127,8 +127,7 @@ class DeckViewPanel extends React.Component {
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const deckSlug = slug(deckTitle || '').toLowerCase() || '_';
-        const deckURL = ['/deck', deckData._id, deckSlug].join('/');;
+        const deckURL = ['/deck', this.props.selector.id, this.props.deckSlug].join('/');;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
@@ -213,13 +212,13 @@ class DeckViewPanel extends React.Component {
                                 if (index < maxSlideThumbnails) {
                                     return (
                                         <div key={index} className="ui card">
-                                            <NavLink href={deckURL + '/slide/' + slide.id} className="ui image"
+                                            <a href={deckURL + '/slide/' + slide.id} className="ui image"
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
-                                            </NavLink>
+                                            </a>
                                             <div className="content" tabIndex="-1">
-                                                <NavLink href={deckURL + '/slide/' + slide.id}
-                                                   className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</NavLink>
+                                                <a href={deckURL + '/slide/' + slide.id}
+                                                   className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
                                                 <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
                                             </div>
                                         </div>

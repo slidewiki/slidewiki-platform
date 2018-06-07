@@ -83,6 +83,9 @@ export default {
         },
         'nlp': {
             uri: 'https://nlpservice.experimental.slidewiki.org'
+        },
+        'recommendation': {
+            uri: 'http://slidewiki.imp.bg.ac.rs'
         }
     }
 };

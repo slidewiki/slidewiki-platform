@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import { hashPassword } from '../../../configs/general';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changePassword from '../../../actions/user/userprofile/changePassword';
+import { hashPassword } from '../../../common';
 
 class ChangePassword extends React.Component {
     constructor(props) {
