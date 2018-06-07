@@ -37,9 +37,9 @@ class LoginModal extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
-        this.isLoading = false;
         this.state = {
             activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
+            isLoading: false
         };
 
         this.errorMessages = defineMessages({
@@ -59,10 +59,13 @@ class LoginModal extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps){
-        this.setState({
-            activeTrap: nextProps.LoginModalStore.activeTrap
-        });
+        this.setState({ activeTrap: nextProps.LoginModalStore.activeTrap });
 
+        if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
+            console.log('body intended', this.props.errorMessage.toString());
+            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
+            this.setState({ isLoading: false });
+        }
     }
     openModal() {
         this.context.executeAction(updateTrap,{activeTrap:true});
@@ -103,6 +106,8 @@ class LoginModal extends React.Component {
                 defaultMessage: 'Please use a valid email address',
             }) ]);
         } else {
+            this.setState({ isLoading: true });
+
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
                 password: common.hashPassword(this.refs.password1.value),
@@ -112,9 +117,6 @@ class LoginModal extends React.Component {
                     error423: this.context.intl.formatMessage(this.errorMessages.error423)
                 }
             });
-
-            this.isLoading = true;
-            this.forceUpdate();
         }
         return false;
     }
@@ -132,15 +134,9 @@ class LoginModal extends React.Component {
     componentDidUpdate() {
         if (this.props.errorMessage.length > 2)
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-        // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
-        if ((this.props.errorMessage !== '') && this.isLoading) {
-            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-            this.isLoading = false;
-            this.forceUpdate();
-        }
-        else if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
-            this.isLoading = false;
-            this.forceUpdate();
+        console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
+        if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
+            this.setState({ isLoading: false });
             swal({
                 title: this.context.intl.formatMessage({
                     id: 'LoginModal.title.information',
@@ -193,7 +189,7 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.isLoading = false;
+            this.setState({ isLoading: false });
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
@@ -343,9 +339,9 @@ class LoginModal extends React.Component {
         let inputField_classes = classNames({
             'ui': true,
             'icon': true,
-            'disabled': this.isLoading,
+            'disabled': this.state.isLoading,
             'input': true,
-            'loading': this.isLoading,
+            'loading': this.state.isLoading,
             'field': true
         });
 
