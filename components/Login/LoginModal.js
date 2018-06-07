@@ -7,7 +7,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import ReactDOM from 'react-dom';
-import {hashPassword, ssoEnabled} from '../../configs/general';
+import {ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
@@ -105,7 +105,7 @@ class LoginModal extends React.Component {
         } else {
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: hashPassword(this.refs.password1.value),
+                password: common.hashPassword(this.refs.password1.value),
                 errorMessages: {
                     error403: this.context.intl.formatMessage(this.errorMessages.error403),
                     error404: this.context.intl.formatMessage(this.errorMessages.error404),
