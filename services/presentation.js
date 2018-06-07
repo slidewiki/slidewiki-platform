@@ -24,9 +24,12 @@ export default {
                 isSubdeck = selector.id !== selector.subdeck;
             }
             let id = isSubdeck ? selector.subdeck : selector.id;
-            console.log( Microservices.deck.uri + '/deck/' + String(id) + '/slides');
+            let url = Microservices.deck.uri + '/deck/' + String(id) + '/slides';
+            if (args.language)
+                url += '?language=' + args.language;
+            console.log(url, params);
 
-            rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((res) => {
+            rp.get({uri: url}).then((res) => {
                 slideServiceRes = JSON.parse(res);
                 callback(null, {content: slideServiceRes.children, theme: slideServiceRes.theme, selector: selector});
 
