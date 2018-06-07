@@ -102,6 +102,10 @@ class InfoPanelInfoView extends React.Component {
         }
         let languageMessage = this.props.TranslationStore.inTranslationMode ? this.messages.translation : this.messages.language;
         let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
+        let iconName = 'comments blue small icon';
+        if (this.props.TranslationStore.currentLang.length === 5) {
+            iconName = this.props.TranslationStore.currentLang.substring(3).toLowerCase() + ' flag';
+        }
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
@@ -111,7 +115,7 @@ class InfoPanelInfoView extends React.Component {
                     {titlediv}
                 <div className="ui attached segment">
                   <h5 className="ui small header">
-                     <i className="translate blue small icon" aria-label="Slide title"></i>
+                     <i className={iconName} aria-label="Slide title"></i>
                      {this.context.intl.formatMessage(languageMessage)}: {getLanguageName(language)}
                   </h5>
                 </div>
