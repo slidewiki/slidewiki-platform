@@ -64,7 +64,7 @@ class UserGroups extends React.Component {
         const groupid = action.split('_')[1];
 
         swal({
-            title: 'Deleting this user group. Are you sure?',
+            titleText: 'Are you sure you want to delete this user group?',
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
