@@ -1,6 +1,6 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
-import ga from '../plugins/googleAnalytics/ga';
+//import ga from '../plugins/googleAnalytics/ga';
 
 let hook = require('css-modules-require-hook');
 
