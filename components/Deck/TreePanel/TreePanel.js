@@ -140,7 +140,7 @@ class TreePanel extends React.Component {
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
         //only when logged in and having rights
-        if (this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly && !this.props.TranslationStore.inTranslationMode)
+        if (this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly)
             this.context.executeAction(moveTreeNodeAndNavigate, {
                 selector: this.props.DeckTreeStore.selector.toJS(),
                 sourceNode: sourceNode,
