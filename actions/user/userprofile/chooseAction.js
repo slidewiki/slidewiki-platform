@@ -4,11 +4,12 @@ import { fetchUserDecks } from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
+import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
 import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    categories: ['settings', 'groups', 'playlists', 'decks'],
+    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations'],
     settings: ['profile', 'account', 'integrations'],
     groups: ['overview', 'edit'],
     decks: ['shared'],
@@ -93,6 +94,10 @@ export function chooseAction(context, payload, done) {
                     let deckListType = payload.params.item === categories.decks[0] ? 'shared' : undefined;
                     context.executeAction(fetchUserDecks, {deckListType, params: {username: payload.params.username}}, callback);
 
+                    break;
+                case categories.categories[4]:
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+                    context.executeAction(loadUserRecommendations, {}, callback);
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);
