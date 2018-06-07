@@ -18,6 +18,7 @@ import ContentLikeStore from '../../../../../stores/ContentLikeStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
+import Util from '../../../../common/Util';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -113,7 +114,6 @@ class DeckViewPanel extends React.Component {
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const deckURL = ['/deck', this.props.selector.id, this.props.deckSlug].join('/');;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
@@ -187,14 +187,19 @@ class DeckViewPanel extends React.Component {
                                     thumbnailURL += '/' + slide.theme;
                                 }
                                 if (index < maxSlideThumbnails) {
+                                    const slideURL = Util.makeNodeURL({
+                                        id: this.props.selector.id,
+                                        stype: 'slide',
+                                        sid: slide.id
+                                    }, 'deck', '', this.props.deckSlug);
                                     return (
                                         <div key={index} className="ui card">
-                                            <a href={deckURL + '/slide/' + slide.id} className="ui image"
+                                            <a href={slideURL} className="ui image"
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
                                             </a>
                                             <div className="content" tabIndex="-1">
-                                                <a href={deckURL + '/slide/' + slide.id}
+                                                <a href={slideURL}
                                                    className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
                                                 <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
                                             </div>
