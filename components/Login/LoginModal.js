@@ -59,16 +59,12 @@ class LoginModal extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps){
-        this.setState({
-            activeTrap: nextProps.LoginModalStore.activeTrap
-        });
+        this.setState({ activeTrap: nextProps.LoginModalStore.activeTrap });
 
         if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
             console.log('body intended', this.props.errorMessage.toString());
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-            this.setState({
-                isLoading: false
-            });
+            this.setState({ isLoading: false });
         }
     }
     openModal() {
@@ -110,9 +106,7 @@ class LoginModal extends React.Component {
                 defaultMessage: 'Please use a valid email address',
             }) ]);
         } else {
-            this.setState({
-                isLoading: true
-            });
+            this.setState({ isLoading: true });
 
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
@@ -142,9 +136,7 @@ class LoginModal extends React.Component {
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
         console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
         if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
-            this.setState({
-                isLoading: false
-            });
+            this.setState({ isLoading: false });
             swal({
                 title: this.context.intl.formatMessage({
                     id: 'LoginModal.title.information',
@@ -197,9 +189,7 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.setState({
-                isLoading: false
-            });
+            this.setState({ isLoading: false });
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
