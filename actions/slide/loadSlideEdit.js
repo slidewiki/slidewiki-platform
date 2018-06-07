@@ -4,6 +4,7 @@ import { AllowedPattern } from '../error/util/allowedPattern';
 import expandContentPanel from '../deckpagelayout/expandContentPanel';
 import serviceUnavailable from '../error/serviceUnavailable';
 const log = require('../log/clog');
+import DeckTreeStore from '../../stores/DeckTreeStore';
 
 export default function loadSlideEdit(context, payload, done) {
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
@@ -27,9 +28,19 @@ export default function loadSlideEdit(context, payload, done) {
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
 
+
+        let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
+        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title + ' | ' + 'edit';
+
+        // remove HTML tags and quotation marks from the title
+        let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
+        context.dispatch('UPDATE_PAGE_TITLE', {
+            pageTitle: cleanTitle,
+        });
         // I have absolutely no idea why, but without this fake dispatch,
         // going from view to edit mode messes with the UI
-        context.dispatch('');
+        //context.dispatch('');
+        //Klaas edit; this introduces an error
         done();
     });
 }

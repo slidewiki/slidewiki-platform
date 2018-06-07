@@ -13,6 +13,7 @@ import AttachSlides from '../ContentPanel/AttachSubdeck/AttachSlidesModal';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../stores/ContentStore';
 import {Button, Popup, Icon} from 'semantic-ui-react';
+import {Microservices} from '../../../configs/microservices';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -47,15 +48,10 @@ class TreeNode extends React.Component {
         ReactDOM.findDOMNode(this.nodeLink).focus();
     }
 
-    componentDidMount() {
-
-    }
-
     componentDidUpdate(prevProps, prevState) {
         //check if node was focused
-        if (this.props.item.get('focused') && !prevProps.item.get('focused')) {
+        if (this.props.item.get('focused') && !prevProps.item.get('focused'))
             this.focusNode();
-        }
     }
 
     handleExpandIconClick(selector, e) {
@@ -102,12 +98,22 @@ class TreeNode extends React.Component {
     }
 
     handleEditFocus(e) {
-        //select all content
         e.target.select();
     }
 
+    handleFocus(e) {
+        $(e.target).find('div.card:first').css('border','2px solid #1e78bb');
+    }
+
+    handleBlur(e) {
+        let target = $(e.target).find('div.card:first');
+        if(target.attr('data-selected') === 'false')
+            target.css('border','');
+        else
+            target.css('border','2px solid black');
+    }
+
     handleNameChange(e) {
-        //console.log(e.target.value);
     }
 
     handleKeyDown(selector, e) {
@@ -134,118 +140,68 @@ class TreeNode extends React.Component {
             sid: this.props.item.get('id'),
             spath: this.props.item.get('path')
         };
-        let canEdit = !this.props.permissions.readOnly && this.props.permissions.edit && this.props.ContentStore.mode !== 'edit';
-        let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, 'view');
+        let canEdit = !this.props.permissions.readOnly && this.props.permissions.edit && this.props.ContentStore.mode !== 'edit' && !this.props.showThumbnails;
+        let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, 'view', this.props.rootNode.slug);
         let childNodesDIV = '';
         let actionSigClass;
         let actionBtnsClass;
-        if (this.props.item.get('type') === 'deck') {
-            childNodesDIV = <TreeNodeList parentNode={self.props.item} onToggleNode={self.props.onToggleNode}
-                                          onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
-                                          onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
-                                          onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
-                                          onMoveNode={self.props.onMoveNode} mode={self.props.mode}
-                                          page={self.props.page} rootNode={self.props.rootNode}
-                                          username={self.props.username} permissions={self.props.permissions}/>;
-        }
-        /*
-        let actionSignifierStyle = {
-            display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none',
-            'backgroundColor': '#FFFFFF',
-            height: '0.5em'
-        };
-        let actionSignifier = <Button as='button' icon ui size='tiny' floated='right'
-                                      onClick={this.handleMenuClick.bind(this, nodeSelector)}
-                                      style={actionSignifierStyle} aria-label='open deck edit controls'
-                                      tabIndex={this.props.item.get('focused')}>
-                <Icon name='ellipsis horizontal'/>
-        </Button>;
-        actionBtnsClass = classNames({
-            'hide-element': !this.props.item.get('onAction'),
-            'ui right aligned': true
+        let iconClassImageMode = classNames({
+            'ui icon': true,
+            'large': true,
+            'yellow folder link': true,
+            'open': this.props.item.get('expanded')
         });
-
-        let buttonStyle = {
-            classNames : classNames({
-                'ui':true,
-                'disabled': !canEdit
-            }),
-            iconSize : 'small',
-            attached : '',
-            noTabIndex : !canEdit
-
-        };
-        let actionBtns = (
-            <div className={actionBtnsClass}>
-                <Button.Group basic size='small' fluid compact icon>
-                    <Popup trigger={<Button as='button' basic icon
-                                     disabled={!canEdit}
-                                     onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: '0'})}
-                                     aria-label="Add Slide"
-                                     tabIndex={!canEdit ? -1 : 0}>
-                        <Icon.Group>
-                            <Icon name='file text'/>
-                            <Icon corner inverted name='plus'/>
-                        </Icon.Group>
-                    </Button>}
-                    content='Add Slide'
-                    on='hover' />
-                    <AttachSlides buttonStyle={buttonStyle} selector={nodeSelector} />
-                    <Popup trigger={<Button as='button' basic icon
-                                            disabled={!canEdit}
-                                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: '0'})}
-                                            aria-label="Add deck"
-                                            tabIndex={!canEdit ? -1 : 0}>
-                        <Icon.Group size='medium'>
-                            <Icon color='yellow' name='folder'/>
-                            <Icon corner inverted name='plus'/>
-                        </Icon.Group>
-                    </Button>} content='Add deck' on='hover'/>
-                    <AttachSubdeck buttonStyle={buttonStyle} selector={nodeSelector}/>
-                    <Popup trigger={<Button as='button' basic icon
-                                            disabled={this.props.item.get('type') === 'deck' || !canEdit}
-                                            onClick={this.handleAddClick.bind(this, nodeSelector, {
-                                                type: this.props.item.get('type'),
-                                                id: this.props.item.get('id')
-                                            })}
-                                            title="Duplicate"
-                                            aria-label="Duplicate"
-                                            tabIndex={this.props.item.get('type') === 'deck' || !canEdit ? -1 : 0}>
-                        <Icon name='copy'/>
-                    </Button>} content='Duplicate' on='hover'/>
-                    <Popup trigger={<Button as='button' basic icon
-                                            disabled={!canEdit}
-                                            onClick={this.handleDeleteClick.bind(this, nodeSelector)}
-                                            aria-label="Delete"
-                                            tabIndex={!canEdit ? -1 : 0}>
-                        <Icon color='red' name='trash'/>
-                    </Button>} content='Delete' on='hover'/>
-                </Button.Group>
-            </div>
-        );*/
-        //change the node title style if it is selected
-        const nodeTitle = cheerio.load(this.props.item.get('title')).text();
-        let nodeTitleDIV = nodeTitle;
-        if (this.props.item.get('selected')) {
-            nodeTitleDIV = <strong> {nodeTitle} </strong>;
-        }
-        let nodeDIV = '';
-        if (this.props.item.get('editable')) {
-            nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
-                             onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
-            //actionSignifier = '';
-        } else {
-            nodeDIV = <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
-                {nodeTitleDIV}</NavLink>;
-        }
-        //change the node icon based on the type of node and its expanded state
-        let iconClass = classNames({
+        let iconClassTextMode = classNames({
             'ui icon': true,
             'grey file text': (this.props.item.get('type') === 'slide'),
             'yellow folder link': (this.props.item.get('type') === 'deck'),
             'open': this.props.item.get('expanded')
         });
-        //hide focused outline
+        let imgClass = {
+            'border': (this.props.item.get('selected')) ? '2px solid black' : '2px solid lightgrey'
+        };
+        let content = '';
+        let nodeTitle = '';
+        let divToInsert = '';
+
+        if (this.props.item.get('type') === 'deck')
+            childNodesDIV = <TreeNodeList parentNode={self.props.item} onToggleNode={self.props.onToggleNode}
+                                onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
+                                onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
+                                onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
+                                onMoveNode={self.props.onMoveNode} mode={self.props.mode}
+                                page={self.props.page} rootNode={self.props.rootNode}
+                                username={self.props.username} permissions={self.props.permissions}
+                                showThumbnails={this.props.showThumbnails}
+                            />;
+
+        if (this.props.item.get('type') === 'slide' && this.props.showThumbnails){
+            content = <div className="ui fluid card" data-selected={this.props.item.get('selected')} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + this.props.item.get('theme')} alt={this.props.item.get('title')} width='100%'/></div>;
+        } else {
+            content = cheerio.load(this.props.item.get('title')).text();
+            nodeTitle = content;
+        }
+        if (this.props.item.get('selected') && !this.props.showThumbnails)
+            content = <strong> {nodeTitle} </strong>;
+        if (this.props.item.get('editable')) {
+            divToInsert = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
+                             onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
+        } else {
+            if(!this.props.showThumbnails) {
+                divToInsert =
+                    <div>
+                        <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassTextMode} aria-hidden="true"> </i>
+                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{content}</NavLink>
+                    </div>;
+            } else {
+                divToInsert =
+                    <div onFocus={this.handleFocus} onBlur={this.handleBlur}>
+                        {(this.props.item.get('type') === 'deck') && this.props.showThumbnails ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassImageMode} aria-hidden="true"> </i> : ''}
+                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }}>{content}</NavLink>
+                        {(this.props.item.get('type') === 'deck'  && this.props.showThumbnails) ? <div className="ui fitted divider"/> : ''}
+                    </div>;
+            }
+        }
         let compStyle = {
             outline: 'none',
             opacity: isDragging ? '0.4' : '1',
@@ -257,11 +213,8 @@ class TreeNode extends React.Component {
                 {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
                                                onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true">  </i>
-                    {nodeDIV}
-                    {/*(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier*/}
+                    {divToInsert}
                 </div>
-                {/*actionBtns*/}
                 {childNodesDIV}
                 <TreeNodeTarget parentNode={self.props.parentNode} onMoveNode={self.props.onMoveNode}
                                 nodeIndex={nodeIndex + 1} isAfterNode={true}/>

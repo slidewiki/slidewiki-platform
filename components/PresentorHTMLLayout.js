@@ -1,6 +1,6 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
-import ga from '../plugins/googleAnalytics/ga';
+//import ga from '../plugins/googleAnalytics/ga';
 
 let hook = require('css-modules-require-hook');
 
@@ -20,6 +20,7 @@ class PresentorHTMLLayout extends React.Component {
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
+                <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />
                 { user ?
                   <link href="/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" type="text/css" />
                   : <meta name="placeholder" content="jquery-ui" />
@@ -70,9 +71,11 @@ class PresentorHTMLLayout extends React.Component {
                 <script src="/headjs/dist/1.0.0/head.min.js" defer></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js" defer></script>
+                {/* Run-time settings */}
+                <script src="/public/js/settings.js" defer></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
-                <script dangerouslySetInnerHTML={ {__html: ga} } />
+                {/* <script dangerouslySetInnerHTML={ {__html: ga} } />*/}
             </body>
             </html>
         );
