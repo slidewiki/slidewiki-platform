@@ -63,6 +63,8 @@ class UserRegistrationStore extends BaseStore {
         else
             this.socialError = true;
         this.emitChange();
+        if (this.socialError)
+            this.socialError = false;
     }
 
     extractMessage(raw) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
-import ga from '../plugins/googleAnalytics/ga';
+//import ga from '../plugins/googleAnalytics/ga';
 
 let hook = require('css-modules-require-hook');
 
@@ -74,9 +74,11 @@ class PresentorHTMLLayout extends React.Component {
                 <script src="/headjs/dist/1.0.0/head.min.js" defer></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js" defer></script>
+                {/* Run-time settings */}
+                <script src="/public/js/settings.js" defer></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
-                <script dangerouslySetInnerHTML={ {__html: ga} } />
+                {/* <script dangerouslySetInnerHTML={ {__html: ga} } />*/}
             </body>
             </html>
         );
