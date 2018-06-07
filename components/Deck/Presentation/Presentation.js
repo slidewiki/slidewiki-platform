@@ -7,6 +7,7 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
+import LinkToDeck from './LinkToDeck';
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
@@ -29,6 +30,7 @@ class Presentation extends React.Component{
         this.slides = [];
         this.startingSlide = this.props.PresentationStore.selector.sid;
         this.deck = this.props.PresentationStore.selector.id;
+        this.subdeck = this.props.PresentationStore.selector.subdeck;
         this.revealDiv = null;
 
     }
@@ -173,7 +175,7 @@ class Presentation extends React.Component{
 
     }
     render(){
-
+        console.log('selector: ', this.props.PresentationStore.selector);
         // Load the theme stylesheet
         let styleName = 'default';
         if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
@@ -195,6 +197,7 @@ class Presentation extends React.Component{
                     <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                         <div className={['slides', style.slides].join(' ')}>
             			     	{this.slides}
+
             			      </div>
                     </div>
                     <br style={clearStyle} />
@@ -216,7 +219,8 @@ class Presentation extends React.Component{
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content.replace(' src=', ' data-src=') + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
+                // We specify id= slide-n because of a bug in reveal.js where a parseable int will be used as an index in the deck
+                returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} deck={this.deck} subdeck={this.subdeck} />);
             }
             return returnList;
 
