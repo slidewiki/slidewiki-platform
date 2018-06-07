@@ -8,24 +8,15 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-import CookieBanner from 'react-cookie-banner';
-import BannerContent from 'react-cookie-banner';
-import cookie from 'react-cookie';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import updateTrap from '../../actions/loginModal/updateTrap';
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
-    }
     componentDidMount() {
-        $(this.refs.menubar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
-        $(this.refs.languagebar)
-            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+        $(this.refs.menubar).sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+        $(this.refs.languagebar).sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
 
         $('.ui.login.modal').modal({
             onHidden: () => {
@@ -36,13 +27,11 @@ class Header extends React.Component {
     }
 
     toggleSidebar() {
-        $(this.refs.menubar)
-            .sidebar('toggle');
+        $(this.refs.menubar).sidebar('toggle');
     }
 
     toggleLanguageBar() {
-        $(this.refs.languagebar)
-            .sidebar('toggle');
+        $(this.refs.languagebar).sidebar('toggle');
     }
 
     closeSidebar(event) {
@@ -56,9 +45,7 @@ class Header extends React.Component {
         $('#app').attr('aria-hidden','true');
         $('.ui.login.modal').modal('toggle');
 
-
         this.closeSidebar({target: '<a className="item"></a>'});
-
     }
 
     logout() {
@@ -67,13 +54,12 @@ class Header extends React.Component {
 
     render() {
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>
-        <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
-        </button>;
+            <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
+            </button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/>
-        <FormattedMessage id='header.signin.mobile' defaultMessage='Sign in'/>
-        </a>;
+            <FormattedMessage id='header.signin.mobile' defaultMessage='Sign in'/>
+            </a>;
         let notification_locale = '';
-        let cookieBanner = '';
 
         if (this.props.UserProfileStore.username !== '') {
             loginButton = <UserMenuDropdown/>;
@@ -96,29 +82,12 @@ class Header extends React.Component {
             </div>);
             notification_locale = '';
 
-        } else{
+        } else
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
-        }
-
-        if (!this.state.user_cookies) {
-
-            cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies to ensure you get the best experience on our website.'>
-                {
-                    (message) => <CookieBanner
-                        message={message}
-                        cookie='user-has-accepted-cookies'
-                        dismissOnScroll={false}
-                        onAccept={() => {}}
-                    />
-                }
-                </FormattedMessage>;
-        }
-
 
         return (
             <div>
-                {cookieBanner}
-                <MediaQuery minWidth={768} values={{deviceWidth: 1600}}>
+                <MediaQuery minWidth={768} values={{width: 1600}}>
                     <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                         <div className="ui fluid container">
                             <a className="item" href='/'>
@@ -140,7 +109,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </MediaQuery>
-                <MediaQuery maxWidth={768}>
+                <MediaQuery maxWidth={768} values={{width: 1600}}>
                     <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
                         <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
                           &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki Logo" style={{width: '9rem', paddingTop: '0.5rem'}}/>

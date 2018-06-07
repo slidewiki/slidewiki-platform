@@ -21,7 +21,8 @@ export default function addReply(context, payload, done) {
                 content_kind: comment.content_kind,
                 comment_info: {
                     comment_id: comment.id,
-                    text: comment.title
+                    text: comment.title,
+                    parent_comment_owner_id: String(payload.comment.user_id)
                 }
             };
             context.executeAction(addActivity, {activity: activity});
