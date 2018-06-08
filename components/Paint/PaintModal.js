@@ -549,7 +549,7 @@ class PaintModal extends React.Component {
                         <Button className="icon button" onClick={this.addArrow} data-tooltip="Add Arrow" aria-label="Add Arrow"><Icon name="arrow right"/></Button>
                         <br/>
                         <div className="ui slider checkbox" style={modePadding}>
-                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode} aria-label={"Mode: " + this.drawingMode}/>
+                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode} aria-label={'Mode: ' + this.drawingMode}/>
                             <label htmlFor="drawing">{mode}</label>
                             {/*<label htmlFor="drawing">{this.drawingMode ? '<Icon name="pencil alternate"/> Drawing Mode' : '<Icon name="mouse pointer"/> Select Mode'}</label>*/}
                         </div>
