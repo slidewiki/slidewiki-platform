@@ -172,7 +172,8 @@ class LoginModal extends React.Component {
                 let that = this;
                 async.series([
                     function(callback) {
-                        that.context.executeAction(newSocialData, {}, callback);
+                        that.context.executeAction(newSocialData, {});
+                        callback(null, 1);
                     }
                 ],
                 // optional callback
@@ -316,10 +317,12 @@ class LoginModal extends React.Component {
         let thatContext = this.context;
         async.series([
             function(callback) {
-                thatContext.executeAction(newSocialData, data, callback);
+                thatContext.executeAction(newSocialData, data);
+                callback(null, 1);
             },
             function(callback) {
-                thatContext.executeAction(userSocialSignIn, data, callback);
+                thatContext.executeAction(userSocialSignIn, data);
+                callback(null, 2);
             }
         ]);
     }
