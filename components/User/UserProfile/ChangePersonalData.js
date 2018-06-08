@@ -7,8 +7,8 @@ import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import Iso from 'iso-639-1';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
-import { locales } from '../../../configs/locales';
-import { Dropdown, Flag, Label } from 'semantic-ui-react';
+import { locales, flagForLocale }from '../../../configs/locales';
+import { Dropdown, Label } from 'semantic-ui-react';
 
 
 class ChangePersonalData extends React.Component {
@@ -46,14 +46,9 @@ class ChangePersonalData extends React.Component {
         return locales.map((locale) => {
             let options = {
                 key: locale,
-                text: '' + Iso.getName(locale),
+                text: <span><i className={`flag ${flagForLocale(locale)}`} />{Iso.getName(locale)}</span>,
                 value: locale,
             };
-
-            if (this.props.localeFlags){
-                options.flag = (locale === 'en') ? 'gb' : locale;
-            }
-
             return options;
         });
     }
@@ -119,7 +114,7 @@ class ChangePersonalData extends React.Component {
                                     defaultMessage='User Interface Language'
                                   />
                                 </label>
-                                <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="langauge" required={true}/>
+                                <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="language" required={true}/>
                             </div>
                         </div>
                     </div>

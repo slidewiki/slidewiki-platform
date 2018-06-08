@@ -2,9 +2,9 @@ import React from 'react';
 import Iso from 'iso-639-1';
 import { writeCookie } from '../../common';
 import IntlStore from '../../stores/IntlStore';
-import { locales } from '../../configs/locales';
+import { locales, flagForLocale } from '../../configs/locales';
 import { connectToStores } from 'fluxible-addons-react';
-import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+import { Dropdown, Menu } from 'semantic-ui-react';
 
 class LocaleSwitcher extends React.Component {
     //HACK This component is reused but also reimplemented in User/UserProfile/ChangePersonalData.js for better integration reasons.
@@ -24,13 +24,13 @@ class LocaleSwitcher extends React.Component {
     }
 
     renderLocaleLink(locale) {
-        let flag = (locale === 'en') ? 'gb' : locale;
+        let flag = flagForLocale(locale);
         let className = (locale === this.state.currentLocale) ? 'active' : '';
         switch (this.props.mode) {
             case 'sidebar':
                 return(
                   <div key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className="item">
-                    <Flag name={flag}/>
+                    <i className={`flag ${flag}`}/>
                     {Iso.getName(locale)}
                   </div>
                 );
@@ -38,7 +38,7 @@ class LocaleSwitcher extends React.Component {
             default:
                 return (
                     <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
-                      {(this.props.mode === 'icon') ? <Flag name={flag}/> : ''}
+                      <i className={`flag ${flag}`}/>
                       {Iso.getName(locale)}
                     </Dropdown.Item>
                 );
@@ -46,8 +46,8 @@ class LocaleSwitcher extends React.Component {
     }
 
     render() {
-        let currentFlag = (this.state.currentLocale === 'en') ? 'gb' : this.state.currentLocale;
-        let current_header = <Flag name={currentFlag}/>;
+        let currentFlag = flagForLocale(this.state.currentLocale);
+        let current_header = <i className={`${currentFlag} flag`}/>;
 
         switch (this.props.mode) {
             case 'icon':
@@ -72,7 +72,7 @@ class LocaleSwitcher extends React.Component {
                 );
                 break;
             default:
-                current_header = <span><i className='icon comments'/>{Iso.getName(this.state.currentLocale)}</span>;
+                current_header = <span>{current_header}{Iso.getName(this.state.currentLocale)}</span>;
                 return (
                     <Dropdown item trigger={current_header}>
                       <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>

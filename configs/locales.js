@@ -1,5 +1,6 @@
 // this file includes the UI locales supported
 // and some code supporting loading intl libraries and assets
+import debug from 'debug';
 import isIntlLocaleSupported from 'intl-locales-supported';
 
 // Returns a promise which is resolved when Intl has been polyfilled
@@ -50,6 +51,24 @@ function loadLocaleData(locale) {
     });
 }
 
+// this list helps with setting a flag for each language
+// using the semantic ui flags css classes
+const localeFlags = {
+    ca: '',
+    cy: 'gb wls',
+    de: 'de',
+    el: 'gr',
+    en: 'gb',
+    es: 'es',
+    fr: 'fr',
+    fy: '',
+    gd: 'gb sct',
+    it: 'it',
+    nl: 'nl',
+    ru: 'ru',
+    sr: 'rs',
+};
+
 // this lists the enabled locales, available to users, a subset of the supported ones
 // this list also defines the order they are presented in the UI
 const enabledLocales = [
@@ -71,5 +90,9 @@ export default {
         return loadIntlPolyfill(locale).then(() => {
             return loadLocaleData(locale);
         });
+    },
+
+    flagForLocale: function(locale) {
+        return localeFlags[locale] || 'icon'; // this will render a flag in most places :)
     },
 };
