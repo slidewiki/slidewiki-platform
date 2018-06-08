@@ -69,9 +69,9 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={2}>
                   <Grid.Row>
-                    <NavLink href='/deck/3971'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='folder open' />Open Deck</Button></NavLink><br/>
-                    <NavLink href='/presentation/3971'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='play circle' />Play SlideShow</Button></NavLink><br/>
-                    <NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' />Add to Playlist</Button></NavLink><br/>
+                    <NavLink href='/deck/3971'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink><br/>
+                    <NavLink href='/presentation/3971'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='play circle' color='grey'/>Play SlideShow</Button></NavLink><br/>
+                    <NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist</Button></NavLink><br/>
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
@@ -85,7 +85,7 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
-                    <Button basic fluid icon labelPosition='left' color='blue'><Icon name='exclamation circle' />Report Issue</Button>
+                    <Button basic fluid icon labelPosition='left' color='blue'><Icon name='exclamation circle' color='black'/>Report Issue</Button>
                   </Grid.Row>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={1} computer={3}>
