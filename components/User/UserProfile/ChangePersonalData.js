@@ -44,9 +44,10 @@ class ChangePersonalData extends React.Component {
 
     getLocaleOptions() {
         return locales.map((locale) => {
+            let flag = flagForLocale(locale) || 'icon';
             let options = {
                 key: locale,
-                text: <span><i className={`flag ${flagForLocale(locale)}`} />{Iso.getName(locale)}</span>,
+                text: <span><i className={`flag ${flag}`} />{Iso.getName(locale)}</span>,
                 value: locale,
             };
             return options;

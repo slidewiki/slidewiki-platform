@@ -30,7 +30,7 @@ class LocaleSwitcher extends React.Component {
             case 'sidebar':
                 return(
                   <div key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className="item">
-                    <i className={`flag ${flag}`}/>
+                    {flag ? <i className={`flag ${flag}`} /> : <span><i className='flag icon' /></span>}
                     {Iso.getName(locale)}
                   </div>
                 );
@@ -38,7 +38,7 @@ class LocaleSwitcher extends React.Component {
             default:
                 return (
                     <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
-                      <i className={`flag ${flag}`}/>
+                      <i className={`flag ${flag || 'icon'}`}/>
                       {Iso.getName(locale)}
                     </Dropdown.Item>
                 );
@@ -47,8 +47,7 @@ class LocaleSwitcher extends React.Component {
 
     render() {
         let currentFlag = flagForLocale(this.state.currentLocale);
-        let current_header = <i className={`${currentFlag} flag`}/>;
-
+        let current_header = <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>;
         switch (this.props.mode) {
             case 'icon':
                 return (

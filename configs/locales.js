@@ -93,6 +93,6 @@ export default {
     },
 
     flagForLocale: function(locale) {
-        return localeFlags[locale] || 'icon'; // this will render a flag in most places :)
+        return localeFlags[locale];
     },
 };
