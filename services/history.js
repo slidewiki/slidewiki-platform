@@ -11,10 +11,26 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'history.changes') {
-            let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes', json: true}) :
-                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes', qs:{root: args.deckId}, json: true});
-
-            changesPromise.then((changes) => {
+            Promise.resolve().then(() => {
+                if (args.slideId == null) {
+                    return rp.get({
+                        uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes',
+                        qs: {
+                            language: args.language,
+                        },
+                        json: true
+                    });
+                } else {
+                    return rp.get({
+                        uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes',
+                        qs: {
+                            language: args.language,
+                            root: args.deckId
+                        },
+                        json: true
+                    });
+                }
+            }).then((changes) => {
                 if (!changes.length){
                     return changes;
                 }

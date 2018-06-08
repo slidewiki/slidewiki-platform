@@ -44,7 +44,7 @@ class ContentChangeItem extends React.Component {
     render() {
         const change = this.props.change;
 
-        let description;
+        let description, actionText;
         let iconName = 'write';
 
         switch (change.action) {
@@ -65,7 +65,9 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'translate':
                 iconName = 'translate';
-                description = <span>created a translation of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink> into { getLanguageName(change.translatedTo.substring(0, 2)) } </span>;
+                description =
+                    <span>added { getLanguageName(change.translated.language) } translation for {change.translated.kind} <em>{change.translated.title}</em>
+                    </span>;
                 break;
             case 'revise':
                 iconName = 'save';
@@ -83,7 +85,8 @@ class ContentChangeItem extends React.Component {
                 description = <span>removed {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'edit':
-                description = <span>edited slide <em>{change.value.ref.title}</em></span>;
+                actionText = change.value.variant ? 'edited slide translation' : 'edited slide';
+                description = <span>{actionText} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'move':
                 iconName = 'move';
@@ -97,6 +100,9 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'update':
                 description = <span>updated deck <em>{change.path[change.path.length - 1].title}</em></span>;
+                break;
+            case 'translate':
+                
                 break;
             default:
                 description = <span>updated the deck</span>;
