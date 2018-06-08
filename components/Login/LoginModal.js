@@ -1,5 +1,4 @@
 import React from 'react';
-import async from 'async';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
@@ -169,18 +168,9 @@ class LoginModal extends React.Component {
             .catch((action) => {
                 // console.log('action after click', action);
                 //delete old data
-                let that = this;
-                async.series([
-                    function(callback) {
-                        that.context.executeAction(newSocialData, {});
-                        callback(null, 1);
-                    }
-                ],
-                // optional callback
-                (err, results) => {
-                    if (action !== 'close')
-                        that.handleLoginButton();
-                });
+                this.context.executeAction(newSocialData, {});
+                if (action !== 'close')
+                    this.handleLoginButton();
 
                 return true;
             });
@@ -314,17 +304,7 @@ class LoginModal extends React.Component {
             return;
         }
 
-        let thatContext = this.context;
-        async.series([
-            function(callback) {
-                thatContext.executeAction(newSocialData, data);
-                callback(null, 1);
-            },
-            function(callback) {
-                thatContext.executeAction(userSocialSignIn, data);
-                callback(null, 2);
-            }
-        ]);
+        this.context.executeAction(userSocialSignIn, data);
     }
 
     getProviderName() {
