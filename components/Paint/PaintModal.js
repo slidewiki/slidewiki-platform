@@ -62,7 +62,6 @@ class PaintModal extends React.Component {
         this.addRect = this.addRect.bind(this);
         this.addCircle = this.addCircle.bind(this);
         this.addTriangle = this.addTriangle.bind(this);
-        //this.getRandomInt = fabric.util.getRandomInt;
         this.addArrow = this.addArrow.bind(this);
         this.addText = this.addText.bind(this);
         this.downloadImg = this.downloadImg.bind(this);
@@ -530,39 +529,39 @@ class PaintModal extends React.Component {
                     <div className="four wide column">
                         <div className="ui grid">
                             <div className="eleven wide column">
-                                <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip="Undo"><Icon name="reply"/></Button>
-                                <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip="Redo"><Icon name="share"/></Button>
+                                <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip="Undo" aria-label="Undo"><Icon name="reply"/></Button>
+                                <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip="Redo" aria-label="Redo"><Icon name="share"/></Button>
                             </div>
                         </div>
                         <div className="ui grid">
                             <div className="sixteen wide column">
-                                <Button className="icon button" onClick={() => {$('#uploadImage').click();}} data-tooltip="Upload Image"><Icon name="upload"/></Button>
+                                <Button className="icon button" onClick={() => {$('#uploadImage').click();}} data-tooltip="Upload Image" aria-label="Upload Image"><Icon name="upload"/></Button>
                                 <input type="file" id="uploadImage" style={{ display: 'none' }} onChange={this.loadImg}/>
-                                <Button className="icon button" onClick={this.downloadImg} disabled={!this.state.canvasDirty} data-tooltip="Download Image"><Icon name="download"/></Button>
-                                <Button className="icon button" onClick={this.copyActiveObjects} data-tooltip="Clone Selected Objects"><Icon name="copy"/></Button>
-                                <Button className="icon button" onClick={this.deleteElement} data-tooltip="Delete selected objects"><Icon name="trash"/></Button>
+                                <Button className="icon button" onClick={this.downloadImg} disabled={!this.state.canvasDirty} data-tooltip="Download Image" aria-label="Download Image"><Icon name="download"/></Button>
+                                <Button className="icon button" onClick={this.copyActiveObjects} data-tooltip="Clone Selected Objects" aria-label="Clone Selected Objects"><Icon name="copy"/></Button>
+                                <Button className="icon button" onClick={this.deleteElement} data-tooltip="Delete selected objects" aria-label="Delete selected objects"><Icon name="trash"/></Button>
                             </div>
                         </div><br/>
-                        <Button className="icon button" onClick={this.addRect} data-tooltip="Add Rectangle"><Icon name="stop"/></Button>
-                        <Button className="icon button" onClick={this.addCircle} data-tooltip="Add Circle"><Icon name="circle"/></Button>
-                        <Button className="icon button" onClick={this.addTriangle} data-tooltip="Add Triangle"><Icon name="caret up"/></Button>
+                        <Button className="icon button" onClick={this.addRect} data-tooltip="Add Rectangle" aria-label="Add Rectangle"><Icon name="stop"/></Button>
+                        <Button className="icon button" onClick={this.addCircle} data-tooltip="Add Circle" aria-label="Add Circle"><Icon name="circle"/></Button>
+                        <Button className="icon button" onClick={this.addTriangle} data-tooltip="Add Triangle" aria-label="Add Triangle"><Icon name="caret up"/></Button>
                         {/*<button onClick={this.addText}>Add Text</button>*/}
-                        <Button className="icon button" onClick={this.addArrow} data-tooltip="Add Arrow"><Icon name="arrow right"/></Button>
+                        <Button className="icon button" onClick={this.addArrow} data-tooltip="Add Arrow" aria-label="Add Arrow"><Icon name="arrow right"/></Button>
                         <br/>
                         <div className="ui slider checkbox" style={modePadding}>
-                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode}/>
+                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode} aria-label={"Mode: " + this.drawingMode}/>
                             <label htmlFor="drawing">{mode}</label>
                             {/*<label htmlFor="drawing">{this.drawingMode ? '<Icon name="pencil alternate"/> Drawing Mode' : '<Icon name="mouse pointer"/> Select Mode'}</label>*/}
                         </div>
                         <br/>
                         <div>
-                            <p>Primary color: <input type="color" id="primaryColor"/></p>
-                            <p>Border color: <input type="color" id="secondaryColor"/></p>
+                            <p><label htmlFor="primaryColor">Primary colour:</label> <input type="color" id="primaryColor"/></p>
+                            <p><label htmlFor="secondaryColor">Border colour:</label> <input type="color" id="secondaryColor"/></p>
                         </div>
                         <br/>
                         <div>
-                            <p>Line/Border Width: </p>
-                            <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0}/>
+                            <p><label htmlFor="widthInput">Line/Border Width:</label> </p>
+                            <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0} id="widthInput"/>
                         </div>
 
 
