@@ -2,7 +2,7 @@ import React from 'react';
 import Iso from 'iso-639-1';
 import { writeCookie } from '../../common';
 import IntlStore from '../../stores/IntlStore';
-import { locales } from '../../configs/general';
+import { locales } from '../../configs/locales';
 import { connectToStores } from 'fluxible-addons-react';
 import { Dropdown, Menu, Flag } from 'semantic-ui-react';
 

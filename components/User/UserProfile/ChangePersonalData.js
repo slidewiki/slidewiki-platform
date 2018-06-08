@@ -7,7 +7,7 @@ import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import Iso from 'iso-639-1';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
-import { locales } from '../../../configs/general';
+import { locales } from '../../../configs/locales';
 import { Dropdown, Flag, Label } from 'semantic-ui-react';
 
 
