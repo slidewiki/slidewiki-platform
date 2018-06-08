@@ -407,6 +407,11 @@ export default {
             context.executeAction(loadLegacy, payload, done);
         }
     },
+    decklandingpage: {
+        path: '/deckpage/:id',
+        method: 'get',
+        handler: require('../components/Deck/DeckLandingPage')
+    },
     diffview: {
         path: '/diffview/:stype/:sid/:did',
         method: 'get',
