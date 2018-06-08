@@ -1,6 +1,6 @@
 import {BaseStore} from 'fluxible/addons';
 import Immutable from 'immutable';
-import slug from 'slug';
+import slugify from 'slugify';
 
 class DeckTreeStore extends BaseStore {
     constructor(dispatcher) {
@@ -62,7 +62,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.theme = payload.deckTree.theme;
-        this.slug = slug(payload.deckTree.title).toLowerCase() || '_';
+        this.slug = slugify(payload.deckTree.title).toLowerCase() || '_';
         this.allowMarkdown= payload.deckTree.allowMarkdown;
         this.emitChange();
     }

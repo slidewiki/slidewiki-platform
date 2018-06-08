@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import slug from 'slug';
+import slugify from 'slugify';
 import cheerio from 'cheerio';
 import Util from '../../common/Util';
 
@@ -11,7 +11,7 @@ class Breadcrumb extends React.Component {
         let list, output = '';
         let urlStandard = Util.makeNodeURL({
             id: self.props.selector.get('id')
-        }, 'plaindeck', '', slug(this.props.rootDeckName || '').toLowerCase() || '');
+        }, 'plaindeck', '', slugify(this.props.rootDeckName || '').toLowerCase() || '');
 
         if(this.props.selector.get('spath')){
             nodes = this.props.selector.get('spath').split(';');

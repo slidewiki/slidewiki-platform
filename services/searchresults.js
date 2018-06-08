@@ -1,7 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
-import slug from 'slug';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -75,7 +75,7 @@ function parseDeck(deck){
 }
 
 function buildSlug(deck) {
-    return slug(deck.title || '').toLowerCase() || '_';
+    return slugify(deck.title || '').toLowerCase() || '_';
 }
 
 function getUsers(userIdsSet){

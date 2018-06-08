@@ -1,6 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import slug from 'slug';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -477,7 +477,7 @@ function addSlugs(decks) {
 }
 
 function addSlug(deck) {
-    deck.slug = slug(deck.title || '').toLowerCase() || '_';
+    deck.slug = slugify(deck.title || '').toLowerCase() || '_';
     if (deck.origin) {
         addSlug(deck.origin);
     };

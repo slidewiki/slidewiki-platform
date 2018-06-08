@@ -10,7 +10,6 @@ import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
 import { Dropdown, Menu, Flag } from 'semantic-ui-react';
-import slug from 'slug';
 
 import {navigateAction} from 'fluxible-router';
 
