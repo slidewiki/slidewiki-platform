@@ -28,7 +28,7 @@ class Breadcrumb extends React.Component {
                         stype: 'deck',
                         sid: self.props.selector.get('sid'),
                         spath: (nodes[index - 1] ? (nodes[index - 1] + ';') : '') + node
-                    }, 'deck', '', slug(this.props.rootDeckName || '').toLowerCase() || '_');
+                    }, 'deck', '', slugify(this.props.rootDeckName || '').toLowerCase() || '_');
                     return (
                         <div key={index} className="section">
                             <NavLink href={url}>{this.props.pathNames[index]}</NavLink>
