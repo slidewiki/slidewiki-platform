@@ -4,6 +4,7 @@
     "production": {
       "plugins": [
           "add-module-exports",
+          "dynamic-import-webpack",
           "transform-object-rest-spread",
           "transform-class-properties",
           "syntax-decorators",
