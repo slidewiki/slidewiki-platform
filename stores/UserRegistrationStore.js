@@ -63,6 +63,8 @@ class UserRegistrationStore extends BaseStore {
         else
             this.socialError = true;
         this.emitChange();
+        if (this.socialError)
+            this.socialError = false;
     }
 
     extractMessage(raw) {
@@ -111,7 +113,7 @@ class UserRegistrationStore extends BaseStore {
     }
 
     newSocialData(data) {
-        console.log('UserRegistrationStore newSocialData', data);
+        // console.log('UserRegistrationStore newSocialData', data);
 
         this.socialuserdata = data || {};
         this.socialError = false;

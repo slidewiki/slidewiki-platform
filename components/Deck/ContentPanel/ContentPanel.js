@@ -18,13 +18,13 @@ class ContentPanel extends React.Component {
             case 'deck':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug} />;
                         break;
                     case 'edit':
                         targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     default:
-                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug} />;
                 }
                 break;
             case 'slide':
@@ -34,6 +34,9 @@ class ContentPanel extends React.Component {
                         break;
                     case 'edit':
                         targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
+                        break;
+                    case 'markdownEdit':
+                        targetComponent = <SlideEditPanel useMarkdown={true} selector={this.props.ContentStore.selector} />;
                         break;
                     default:
                         targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
@@ -49,7 +52,7 @@ class ContentPanel extends React.Component {
                     {targetComponent}
                 </div>
                 <div className="ui bottom attached">
-                    <ContentActionsFooter ContentStore={this.props.ContentStore} />
+                    <ContentActionsFooter ContentStore={this.props.ContentStore} deckSlug={this.props.deckSlug} />
                 </div>
                 <NoPermissionsModal selector={this.props.ContentStore.selector} />
              </div>

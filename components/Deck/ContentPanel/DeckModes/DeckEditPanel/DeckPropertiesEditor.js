@@ -4,7 +4,7 @@ import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
-import { TextArea, Dropdown } from 'semantic-ui-react';
+import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
@@ -42,6 +42,7 @@ class DeckPropertiesEditor extends React.Component {
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
+            allowMarkdown: props.deckProps.allowMarkdown || false,
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
@@ -50,6 +51,7 @@ class DeckPropertiesEditor extends React.Component {
             users: editors.users,
             groups: editors.groups,
             selectedCollection: '',
+            published: !props.deckProps.hidden,
         };
     }
 
@@ -225,6 +227,7 @@ class DeckPropertiesEditor extends React.Component {
             this.context.executeAction(saveAction, {
                 deckId: deckId,
                 title: this.state.title,
+                allowMarkdown: this.state.allowMarkdown,
                 language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
@@ -238,7 +241,8 @@ class DeckPropertiesEditor extends React.Component {
                         groups: groups
                     }
                 },
-                tags: TagsStore.tags
+                tags: TagsStore.tags,
+                hidden: !this.state.published,
             });
             this.context.executeAction(updateTheme, this.state.theme);
             this.context.executeAction(updateCollectionDecks, {
@@ -251,6 +255,15 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
+        this.setState(stateChange);
+    }
+    onChangeMarkdown(event) {
+        this.setState({allowMarkdown: !this.state.allowMarkdown});
+    }
+
+    handleChangeCheckbox(fieldName, event, data) {
+        let stateChange = {};
+        stateChange[fieldName] = data.checked;
         this.setState(stateChange);
     }
 
@@ -557,6 +570,21 @@ class DeckPropertiesEditor extends React.Component {
                 <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
             </div>
         </div>;
+        let markdownField = <div className="field">
+                <div className="ui checkbox">
+                    <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
+                    <label>Allow Markdown editing of slides</label>
+                </div>
+         </div>;
+
+        let titleAndLanguageAndPublished = <div className="fields">
+            <div className="fourteen wide field">{titleAndLanguage}</div>
+            <div className="two wide field">
+                <label id="published_label">Published</label>
+                <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
+                    checked={this.state.published} onChange={this.handleChangeCheckbox.bind(this, 'published')} />
+            </div>
+        </div>;
 
 
         let description = <div className="field">
@@ -606,10 +634,10 @@ class DeckPropertiesEditor extends React.Component {
                 <div className="ui grid">
                     <div className="sixteen wide column">
                         <form className="ui form">
-                            {titleAndLanguage}
+                            {titleAndLanguageAndPublished}
                             {description}
                             {themeAndLicence}
-
+                            {markdownField}
                             {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
                                 <div>
                                     <div className="two fields">

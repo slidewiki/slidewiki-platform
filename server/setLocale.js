@@ -1,6 +1,6 @@
 // Express middleware to overwrite the locale from cookie or querystring
 
-import {locales } from '../configs/general';
+import {locales } from '../configs/locales';
 import locale from 'locale';
 
 export default function setLocale(req, res, next) {

@@ -1,15 +1,17 @@
 class TreeUtil {
     //build node URL based on the context
-    static makeNodeURL(selector, page, mode) {
+    static makeNodeURL(selector, page, mode, slug) {
+        if (!slug) slug = '_';
+
         let nodeURL;
         //adapt URLs based on the current page
         switch (page) {
             case 'deck':
                 if (selector.spath) {
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
+                    nodeURL = '/' + page + '/' + selector.id + '/' + slug + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
                 } else {
                     //for root node
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode;
+                    nodeURL = '/' + page + '/' + selector.id + '/' + slug + '/' + selector.stype + '/' + selector.sid + '/' + mode;
                 }
                 break;
             default:
