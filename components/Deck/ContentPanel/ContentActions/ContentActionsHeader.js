@@ -301,7 +301,7 @@ class ContentActionsHeader extends React.Component {
                             {redoButton}
                         </div>
                     </div>
-                    <DeckTranslationsModal />
+                    <DeckTranslationsModal username={this.props.UserProfileStore.username} />
                     <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
                         {mobileMessage}
                     </div>

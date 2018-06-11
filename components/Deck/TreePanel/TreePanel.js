@@ -18,6 +18,7 @@ import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import TranslationStore from '../../../stores/TranslationStore';
+import updateTrap from '../../../actions/loginModal/updateTrap';
 
 class TreePanel extends React.Component {
 
@@ -85,7 +86,16 @@ class TreePanel extends React.Component {
     }
 
     handleFork() {
-        this.setState({isForkModalOpen: true});
+        if (this.props.UserProfileStore.username !== '')
+            this.setState({isForkModalOpen: true});
+        else {
+            //prepraring the modal
+            context.executeAction(updateTrap,{activeTrap: true});
+            //hidden the other page elements to readers
+            $('#app').attr('aria-hidden','true');
+
+            $('.ui.login.modal').modal('show');
+        }
     }
     handlePresentationClick(){
         if(process.env.BROWSER){
@@ -176,7 +186,7 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'disabled': (!this.props.PermissionsStore.permissions.fork && this.props.UserProfileStore.username !== ''),
             'button': true
         });
 
@@ -215,8 +225,7 @@ class TreePanel extends React.Component {
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
 
-                    {this.props.UserProfileStore.username === '' ? '' :
-                        <div className="ui icon fluid buttons">
+                    <div className="ui icon fluid buttons">
                         {/*                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
                                                     <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                                         <i className="circle play large icon"></i>
@@ -233,7 +242,6 @@ class TreePanel extends React.Component {
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>
-                    }
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
                             'wordBreak': 'break-all',

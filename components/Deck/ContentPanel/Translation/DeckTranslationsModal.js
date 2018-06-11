@@ -199,6 +199,7 @@ class DeckTranslationsModal extends React.Component {
                       <br/>
                       <br/>
 
+                      {this.props.username === '' ? '' : <div>
                       {this.context.intl.formatMessage(messages.startTranslation)}
                       <br/>
                       <Dropdown
@@ -209,9 +210,10 @@ class DeckTranslationsModal extends React.Component {
                           onChange={this.handleLanguageSelection.bind(this)}
                           name='languageSelection'
                         />
+                        </div>}
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
-                        <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} content={btnMessage} disabled={this.state.action !== 'translate'} />
+                        {this.props.username === '' ? '' : <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} content={btnMessage} disabled={this.state.action !== 'translate'} />}
                         <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)} />
                       </Modal.Actions>
                   </Modal.Content>
