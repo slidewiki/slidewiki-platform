@@ -36,5 +36,10 @@ export default {
         if (code.length === 5)
             return locale.getLanguageNativeName(code.replace('_', '-'));
         return '';
+    },
+    compareLanguageCodes: (a, b) => {
+        if (a.length === 5 && b.length === 5)
+            return a.replace('_', '-') === b.replace('_', '-');
+        return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
     }
 };

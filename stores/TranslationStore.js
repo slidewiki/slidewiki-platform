@@ -1,4 +1,5 @@
 import {BaseStore} from 'fluxible/addons';
+import {compareLanguageCodes} from '../configs/general.js';
 
 class TranslationStore extends BaseStore {
     constructor(dispatcher) {
@@ -62,10 +63,10 @@ class TranslationStore extends BaseStore {
             return;
         this.currentLang = language.replace('_', '-');
         if (this.originLanguage) {
-            if (this.currentLang !== this.originLanguage)
-                this.inTranslationMode = true;
-            else
+            if (compareLanguageCodes(this.currentLang, this.originLanguage))
                 this.inTranslationMode = false;
+            else
+                this.inTranslationMode = true;
         }
         else {
             this.inTranslationMode = this.translations.indexOf(this.currentLang) !== -1;
@@ -103,10 +104,10 @@ class TranslationStore extends BaseStore {
         this.getAndSetOriginalLanguage(data.deckTree.variants || [], this.treeLanguage);
 
         if (updateTranslationMode) {
-            if (this.currentLang !== this.originLanguage)
-                this.inTranslationMode = true;
-            else
+            if (compareLanguageCodes(this.currentLang, this.originLanguage))
                 this.inTranslationMode = false;
+            else
+                this.inTranslationMode = true;
         }
 
         this.emitChange();

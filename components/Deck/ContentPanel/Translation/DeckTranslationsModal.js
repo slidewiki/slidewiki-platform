@@ -4,7 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-react';
 import TranslationStore from '../../../../stores/TranslationStore';
-import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
+import {getLanguageNativeName, compareLanguageCodes} from '../../../../configs/general.js';
 import {navigateAction} from 'fluxible-router';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';
@@ -131,8 +131,8 @@ class DeckTranslationsModal extends React.Component {
         let translations0 = [];
         if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
             translations0 = this.props.TranslationStore.translations.reduce((ac, current)  => {
-                if (getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.originLanguage)
-                    && getLanguageNativeName(current.replace('_', '-'))  !== getLanguageNativeName(this.props.TranslationStore.currentLang))
+                if (!compareLanguageCodes(current, this.props.TranslationStore.originLanguage)
+                    && !compareLanguageCodes(current, this.props.TranslationStore.currentLang))
                     ac.push(current);
                 return ac;
             }, []).sort((a, b) => a > b);
@@ -145,9 +145,9 @@ class DeckTranslationsModal extends React.Component {
         let languagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
-                if (!this.props.TranslationStore.translations.find((t) => getLanguageNativeName(t.replace('_', '-') ) === getLanguageNativeName(current.replace('_', '-') )) //exclude transations and deck language
-                  && getLanguageNativeName(current.replace('_', '-')) !== getLanguageNativeName(this.props.TranslationStore.treeLanguage)
-                  && getLanguageNativeName(current.replace('_', '-')) !== getLanguageNativeName(this.props.TranslationStore.originLanguage))
+                if (!this.props.TranslationStore.translations.find((t) => compareLanguageCodes(t, current)) //exclude transations and deck language
+                  && !compareLanguageCodes(current, this.props.TranslationStore.treeLanguage)
+                  && !compareLanguageCodes(current, this.props.TranslationStore.originLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []).sort((a, b) => a.text > b.text);
