@@ -126,6 +126,20 @@ function getForks(deckIdsSet){
     return Promise.all(forkPromises).then( () => { return forks; });
 }
 
+function getLikes(deckIdsSet){
+    let likes = {};
+    let likePromises = [];
+
+    for(let deckId of deckIdsSet){
+        likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
+            likes[deckId] = noOfLikes;
+        }).catch( (err) => {
+            likes[deckId] = 0;
+        }));
+    }
+    return Promise.all(likePromises).then( () => { return likes; });
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -195,8 +209,13 @@ export default {
                     forks = forksFromService;
                 });
 
+                // get number of likes for decks
+                let likes = {};
+                let likesPromise = getLikes(deckIds).then( (likesFromService) => {
+                    likes = likesFromService;
+                });
 
-                Promise.all([userPromise, deckPromise, forksPromise]).then( () => {
+                Promise.all([userPromise, deckPromise, forksPromise, likesPromise]).then( () => {
                     response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
@@ -222,6 +241,9 @@ export default {
                                     };
                                 });
                             }
+
+                            //fill number of likes
+                            returnItem.noOfLikes = likes[returnItem.db_id];
                         }
                         else if(returnItem.kind === 'Slide'){
                             returnItem.subItems = returnItem.usage.filter( (usageItem) => {

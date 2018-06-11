@@ -7,6 +7,7 @@ let ReactIntlPlugin = require('react-intl-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 let webpackConfig = {
+    name: 'main',
     resolve: {
         extensions: ['.js'],
         alias: {
@@ -105,7 +106,20 @@ let webpackConfig = {
         }),
         new Visualizer()
     ],
-    devtool: 'source-map'
+    devtool: 'source-map',
+
+    // we do not include the javascript files that include ENV variables
+    // this way we can build the bundle, but also be able to read the ENV during runtime, not build-time
+    // these excluded files are in a separate bundle using `prod.settings.config.js` file
+    externals: [
+        (context, request, callback) => {
+            if (/\/configs\/(microservices|secrets|general|settings)/.test(request)) {
+                return callback(null, 'SlideWikiSettings');
+            }
+            callback();
+        },
+    ],
+
 };
 
-module.exports = webpackConfig;
+module.exports = [webpackConfig, require('./prod.settings.config')];

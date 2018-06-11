@@ -9,7 +9,7 @@ import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
-import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+import { Dropdown, Menu } from 'semantic-ui-react';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -119,7 +119,7 @@ class DeckViewPanel extends React.Component {
         const user = this.props.UserProfileStore.userid;
 
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
-                <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
+                <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
         </div> : '';
 
         return (

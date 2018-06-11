@@ -4,7 +4,7 @@ import {getLanguageName, getLanguageNativeName} from '../../../configs/general.j
 import {NavLink, navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
-import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
+import { Dropdown, Menu, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';

@@ -494,7 +494,7 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'TIBtitle':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="96004" style="position: relative; width: 960px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(1.03187, 1.03187); transform-origin: left top 0px;">';
+                pptx2htmlStartDiv = '<div class="pptx2html" id="96004" style="position: relative; width: 960px; height: 720px; border-style: double; border-color: rgb(218, 102, 25);">';
                 pptx2htmlcontent = '<div id="51108"></div>'+
                 '<div _id="2" _idx="undefined" _name="Title 1" _type="ctrTitle" class="block content v-down context-menu-disabled" id="7861" style="position: absolute; top: 117.833px; left: 120px; width: 720px; height: 250.667px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5302; cursor: auto;" tabindex="0">'+
                 '<div class="h-mid" id="75057">'+
@@ -535,6 +535,29 @@ class SlideContentEditor extends React.Component {
                 '<div class="h-mid" id="52795"><span class="text-block" id="12515" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
                 '</div>'+
                 '</div>';
+                pptx2htmlCloseDiv = '</div>';
+                this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
+                break;
+            case 'VMU':
+                pptx2htmlStartDiv = '<div class="pptx2html" id="42690" style="position: relative; width: 1280px; height: 720px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">';
+                pptx2htmlcontent = '<div id="32657" style="position: absolute; top: 512px; left: 71px; width: 587px; height: 44px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                    '<div class="h-mid" id="85086">'+
+                    '<p id="33865" style="margin-top:0pt; margin-bottom:0pt; margin-left:0in; text-align:left"><font id="13787" face="Georgia" color="#000000"><span id="12663" style="font-size: 26px;">Vardenis Pavardenis</span></font></p>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div id="24138" style="position: absolute; top: 341px; left: 74px; width: 1125px; height: 74.7398px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                    '<div class="h-mid" id="35713">'+
+                    '<p id="42359"><span style="font-size:48px;" id="68655"><span class="text-block" id="93031"><span id="89782"><span id="30011" style="font-family:Georgia,serif;">Pavadinimas</span></span></span></span></p>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div id="76884" style="position: absolute; top: 12px; left: 492px; z-index: 2147383647; cursor: auto; width: 306.302px; height: 276.129px;" tabindex="0">'+
+                    '<img alt="VDU logo" id="66624" src="https://fileservice.slidewiki.org/picture/7a57f4fb49ec1b94113f09c4dd617a0175fdab23340ea85d7819cd9c8d792998.png" style="width: 306.302px; height: 276.129px;">'+
+                    '</div>'+
+                    '<div id="89144" style="position: absolute; top: 628px; left: 74px; width: 400px; height: 72px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                    '<div class="h-mid" id="84724">'+
+                    '<p id="78600" style="text-align: left;"><span class="text-block" id="37616"><span id="61900" style="font-size:16px;"><span id="75966" style="font-family:Georgia,serif;">Vytauto Didžiojo universitetas</span></span></span></p>'+
+                    '</div>'+
+                    '</div>';
                 pptx2htmlCloseDiv = '</div>';
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;

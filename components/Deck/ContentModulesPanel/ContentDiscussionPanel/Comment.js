@@ -7,6 +7,7 @@ import {navigateAction} from 'fluxible-router';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import Util from '../../../common/Util';
+import UserPicture from '../../../common/UserPicture';
 
 class Comment extends React.Component {
     handleReply(e) {
@@ -57,7 +58,7 @@ class Comment extends React.Component {
         return (
             <div className="comment">
                 <a className="avatar">
-                    {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <img src='/assets/images/mock-avatars/user-alt-128.png' height={16} width={16}></img>}
+                    <UserPicture picture={ comment.author.avatar } username={ comment.author.username } avatar={ true } width= { 30 } />
                 </a>
                 <div className="content">
                     <a className="author" href={'/user/' + comment.author.username}>{comment.author.username}</a>
