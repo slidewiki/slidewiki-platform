@@ -4,7 +4,7 @@ import { AllowedPattern } from '../error/util/allowedPattern';
 import expandContentPanel from '../deckpagelayout/expandContentPanel';
 import serviceUnavailable from '../error/serviceUnavailable';
 const log = require('../log/clog');
-import DeckTreeStore from '../../stores/DeckTreeStore'; 
+import DeckTreeStore from '../../stores/DeckTreeStore';
 
 export default function loadSlideEdit(context, payload, done) {
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {

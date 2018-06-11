@@ -1,6 +1,6 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
-import ga from '../plugins/googleAnalytics/ga';
+//import ga from '../plugins/googleAnalytics/ga';
 import { Microservices } from '../configs/microservices';
 
 let hook = require('css-modules-require-hook');
@@ -87,6 +87,8 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/headjs/dist/1.0.0/head.min.js"></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js" defer></script>
+                {/* Main app settings */}
+                <script src="/public/js/settings.js" defer></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
                 <script type="text/javascript" src="https://slidewiki.atlassian.net/s/5e2fc7b2a8ba40bc00a09a4f81a301c8-T/rfg5q6/100012/c/1000.0.9/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=241c9e18" defer></script>
@@ -98,7 +100,7 @@ class DefaultHTMLLayout extends React.Component {
                 {/*<script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script src="/custom_modules/slide-edit-input-controls/lib/index.js"></script>*/}
                 {/*<script>hljs.initHighlightingOnLoad();</script>*/}
-                <script dangerouslySetInnerHTML={ {__html: ga} } />
+                {/*<script dangerouslySetInnerHTML={ {__html: ga} } />*/}
             </body>
             </html>
         );
