@@ -21,6 +21,8 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
 
+const contextMenuPrefix = 'context-menu-';
+
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -1324,7 +1326,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').each(function () {
             this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
-            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="context-menu-'+ $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;" class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="' + contextMenuPrefix + $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
             //let menuID = $(this).attr('id');
@@ -1925,6 +1927,10 @@ class SlideContentEditor extends React.Component {
                 }
                 //$(this).remove();
                 $('#'+id).remove();
+                if (id.startsWith(contextMenuPrefix)) {
+                    id = id.substring(contextMenuPrefix.length);
+                    $('#'+id).remove();
+                }
                 context.hasChanges = true;
 
                 //}
