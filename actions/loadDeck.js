@@ -201,7 +201,7 @@ export default function loadDeck(context, payload, done) {
                 return;
             }
             if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
-                console.log('loadDeck isSelectorValid=false, selector ', context.getStore(DeckTreeStore).getState().selector, '\npayload: ', payload);
+                // console.log('loadDeck isSelectorValid=false, selector ', context.getStore(DeckTreeStore).getState().selector, '\npayload: ', payload);
                 context.executeAction(notFoundError, payload, done);
                 return;
             }
