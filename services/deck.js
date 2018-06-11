@@ -51,7 +51,7 @@ export default {
         }
         if (resource === 'deck.content') {
             log.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            console.log('service deck.content', args);
+            // console.log('service deck.content', args);
             /* Create promise for deck data success */
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)

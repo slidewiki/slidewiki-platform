@@ -10,7 +10,7 @@ export default function addDeckTranslation(context, payload, done) {
 
     payload.jwt = context.getStore(UserProfileStore).getState().jwt;
     payload.id = context.getStore(DeckTreeStore).getState().selector.get('id');
-    console.log('action addDeckTranslation deck id', payload.id);
+    // console.log('action addDeckTranslation deck id', payload.id);
 
     context.service.update('deck.translations', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

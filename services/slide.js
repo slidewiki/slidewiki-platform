@@ -175,7 +175,7 @@ export default {
                 }else{
                     pathArr=[];
                 }
-                console.log('fetch service update slide.content: used id', args.id, ' and retuned id', newSlideID);
+                // console.log('fetch service update slide.content: used id', args.id, ' and retuned id', newSlideID);
                 callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
             }).catch((err) => {
                 console.log(err);

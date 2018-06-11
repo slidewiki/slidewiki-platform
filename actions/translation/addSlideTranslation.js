@@ -10,7 +10,7 @@ export default function addSlideTranslation(context, payload, done) {
 
     payload.jwt = context.getStore(UserProfileStore).getState().jwt;
 
-    console.log('action addSlideTranslation selector', payload.selector);
+    // console.log('action addSlideTranslation selector', payload.selector);
 
     context.service.create('decktree.nodetranslation', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

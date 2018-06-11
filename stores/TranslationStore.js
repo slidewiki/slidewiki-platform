@@ -41,7 +41,7 @@ class TranslationStore extends BaseStore {
 
     deckGotLoaded(data) {
         let deck = data.deckData;
-        console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
+        // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
         this.nodeLanguage = deck.language.replace('_', '-') || 'en-GB';
 
         if (data.isRootDeck)
@@ -52,7 +52,7 @@ class TranslationStore extends BaseStore {
     }
 
     deckPropsGotLoaded(data) {
-        console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
+        // console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
         this.nodeLanguage = data.deckProps.language.replace('_', '-') ;
         this.emitChange();
         this.logState('deckPropsGotLoaded');
@@ -77,7 +77,7 @@ class TranslationStore extends BaseStore {
     }
 
     slideLoaded(data) {
-        console.log('TranslationStore slideLoaded slide', data.slide);
+        // console.log('TranslationStore slideLoaded slide', data.slide);
         this.nodeLanguage = data.slide.language.replace('_', '-') ;
         this.emitChange();
         this.logState('slideLoaded');
@@ -93,7 +93,7 @@ class TranslationStore extends BaseStore {
     }
 
     deckTreeGotLoaded(data) {
-        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
+        // console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language.replace('_', '-') ;
 
         let updateTranslationMode = false;
