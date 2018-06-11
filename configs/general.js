@@ -2,10 +2,6 @@
 IMPORTANT NOTE:
 This file gets overridden by entrypoint.sh with the substitude of general.js.template
 */
-
-import ISO6391 from 'iso-639-1';
-import locale from 'locale-code';
-
 export default {
     //full page title
     fullTitle: ['SlideWiki -- Authoring platform for OpenCourseWare'],
@@ -16,24 +12,5 @@ export default {
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     loglevel: 'debug',
     ssoEnabled: true,
-    getLanguageName: (code) => {
-        if (code.length === 2)
-            return ISO6391.getName(code.toLowerCase());
-        if (code.length === 5)
-            return locale.getLanguageName(code.replace('_', '-'));
-        return '';
-    },
-    getLanguageNativeName: (code) => {
-        if (code.length === 2)
-            return ISO6391.getNativeName(code.toLowerCase());
-        if (code.length === 5)
-            return locale.getLanguageNativeName(code.replace('_', '-'));
-        return '';
-    },
-    compareLanguageCodes: (a, b) => {
-        if (a.length === 5 && b.length === 5)
-            return a.replace('_', '-') === b.replace('_', '-');
-        return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
-    },
-    translationLanguages: ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB', 'lt-LT', 'fr-FR']
+    translationLanguages: ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB', 'lt-LT', 'fr-FR'],
 };

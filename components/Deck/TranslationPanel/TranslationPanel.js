@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {getLanguageName, getLanguageNativeName} from '../../../configs/general.js';
+import {getLanguageName, getLanguageNativeName} from '../../../common';
 import {NavLink, navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 

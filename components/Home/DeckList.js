@@ -4,7 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckListStore from '../../stores/DeckListStore';
 import DeckViewPanel from '../Deck/ContentPanel/DeckModes/DeckViewPanel/DeckViewPanel';
 import CustomDate from '../Deck/util/CustomDate';
-import {getLanguageName, getLanguageNativeName} from '../../configs/general.js';
+import {getLanguageName, getLanguageNativeName} from '../../common';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';

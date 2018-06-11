@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import {getLanguageNativeName, translationLanguages} from '../../configs/general.js';
+import {translationLanguages} from '../../configs/general';
+import {getLanguageNativeName} from '../../common';
 
 /**
  * Properties:

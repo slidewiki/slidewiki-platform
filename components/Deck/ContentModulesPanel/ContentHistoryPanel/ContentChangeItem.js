@@ -6,7 +6,7 @@ import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO
 
 import {NavLink} from 'fluxible-router';
 
-import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
 
 class ContentChangeItem extends React.Component {
 

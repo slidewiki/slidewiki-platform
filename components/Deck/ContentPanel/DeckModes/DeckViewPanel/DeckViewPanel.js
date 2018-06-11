@@ -3,7 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
 import Thumbnail from '../../../../common/Thumbnail';
 import CustomDate from '../../../util/CustomDate';
-import {getLanguageName} from '../../../../../configs/general.js';
+import {getLanguageName} from '../../../../../common';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';

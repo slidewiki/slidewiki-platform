@@ -4,7 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-react';
 import TranslationStore from '../../../../stores/TranslationStore';
-import {getLanguageNativeName, compareLanguageCodes} from '../../../../configs/general.js';
+import {getLanguageNativeName, compareLanguageCodes} from '../../../../common';
 import {navigateAction} from 'fluxible-router';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';

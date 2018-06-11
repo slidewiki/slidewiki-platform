@@ -4,7 +4,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import {getLanguageName, getLanguageNativeName} from '../../../configs/general.js';
+import {getLanguageName, getLanguageNativeName} from '../../../common';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';

@@ -8,7 +8,7 @@ import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/Contribu
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-import {getLanguageName} from '../../../configs/general.js';
+import {getLanguageName} from '../../../common';
 import TranslationStore from '../../../stores/TranslationStore';
 import {defineMessages} from 'react-intl';
 

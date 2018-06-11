@@ -18,7 +18,7 @@ import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
 import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
-import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 import changeLoadingState from '../../../../actions/translation/changeLoadingState';

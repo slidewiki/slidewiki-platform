@@ -1,3 +1,5 @@
+import ISO6391 from 'iso-639-1';
+import locale from 'locale-code';
 import { sha512 } from 'js-sha512';
 import { hashingSalt } from './configs/general';
 
@@ -147,5 +149,29 @@ export default {
     isEmailAddress: (email) => {
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
-    }
+    },
+
+    // some locale support aux code
+    getLanguageName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageName(code.replace('_', '-'));
+        return '';
+    },
+
+    getLanguageNativeName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getNativeName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageNativeName(code.replace('_', '-'));
+        return '';
+    },
+
+    compareLanguageCodes: (a, b) => {
+        if (a.length === 5 && b.length === 5)
+            return a.replace('_', '-') === b.replace('_', '-');
+        return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
+    },
+
 };

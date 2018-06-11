@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import CustomDate from '../../util/CustomDate';
 import { Segment,Item,Icon,Label,Image, TextArea} from 'semantic-ui-react';
-import {getLanguageName, getLanguageNativeName} from '../../../../configs/general.js';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
 

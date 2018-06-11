@@ -5,23 +5,4 @@ export default {
     publicRecaptchaKey: '${SERVICE_USER_PUBLIC_RECAPTCHA_KEY}',
     loglevel: '${LOGGING_LEVEL}',
     ssoEnabled: ${SSO_ENABLED},
-    getLanguageName: (code) => {
-        if (code.length === 2)
-            return ISO6391.getName(code.toLowerCase());
-        if (code.length === 5)
-            return locale.getLanguageName(code.replace('_', '-'));
-        return '';
-    },
-    getLanguageNativeName: (code) => {
-        if (code.length === 2)
-            return ISO6391.getNativeName(code.toLowerCase());
-        if (code.length === 5)
-            return locale.getLanguageNativeName(code.replace('_', '-'));
-        return '';
-    },
-    compareLanguageCodes: (a, b) => {
-        if (a.length === 5 && b.length === 5)
-            return a.replace('_', '-') === b.replace('_', '-');
-        return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
-    }
 };
