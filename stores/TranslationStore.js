@@ -59,8 +59,13 @@ class TranslationStore extends BaseStore {
     }
 
     changeCurrentLanguage(language) {
-        if (!language)
+        if (!language) {
+            this.currentLang = '';
+            this.emitChange();
+            this.logState('changeCurrentLanguage');
             return;
+        }
+
         this.currentLang = language.replace('_', '-');
         if (this.originLanguage) {
             if (compareLanguageCodes(this.currentLang, this.originLanguage))
@@ -119,6 +124,16 @@ class TranslationStore extends BaseStore {
         this.emitChange();
     }
 
+    reset() {
+        this.translations = [];
+        this.currentLang = '';
+        this.inTranslationMode = false;
+        this.originLanguage = '';
+        this.nodeLanguage = '';
+        this.treeLanguage = '';
+        this.isLoading = false;
+    }
+
     //-- util functions --
 
     logState(functionName = '') {
@@ -147,7 +162,8 @@ TranslationStore.handlers = {
     'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
     'LOAD_DECK_TRANSLATIONS_SUCCESS': 'translationsLoaded',
     'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
-    'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState'
+    'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState',
+    'TRANSLATION_RESET': 'reset'
 };
 
 export default TranslationStore;

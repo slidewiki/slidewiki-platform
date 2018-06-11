@@ -62,7 +62,7 @@ export default function loadDeckTree(context, payload, done) {
                         let slideid = pathElements[currentDepth-1].split(':')[0];
                         let position = parseInt(pathElements[currentDepth-1].split(':')[1]);
                         let slide = children[position-1];
-                        console.log('getVariantChild got slideid', slideid, ', position', position, ' and slide', slide);
+                        // console.log('getVariantChild got slideid', slideid, ', position', position, ' and slide', slide);
                         return (slide.id === slideid) ? undefined : slide;
                     }
                     let newChild = getVariantChild(res.deckTree.children);
@@ -71,7 +71,7 @@ export default function loadDeckTree(context, payload, done) {
                         pathElements[currentDepth-1] = newChild.id + ':' + position;
                         res.selector.spath = pathElements.join(';');
                         res.selector.sid = newChild.id;
-                        console.log('getVariantChild new selector', res.selector);
+                        // console.log('getVariantChild new selector', res.selector);
 
                         let nodeURL = Util.makeNodeURL(res.selector, 'deck', res.mode, '', payload.params.language);
                         location.href = location.origin + nodeURL;

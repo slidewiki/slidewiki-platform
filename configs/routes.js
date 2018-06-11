@@ -35,6 +35,7 @@ import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
+import resetTranslationStore from '../actions/translation/resetTranslationStore';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -366,15 +367,14 @@ export default {
             }
             async.series([
                 (callback) => {
+                    context.executeAction(resetTranslationStore, {}, callback);
+                },
+                (callback) => {
                     context.executeAction(loadDeck, payload, callback);
                 },
                 (callback) => {
                     context.executeAction(loadPresentation, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadTranslations, payload, callback);
-                },
-
+                }
             ],
             (err, result) => {
                 if(err) console.log(err);

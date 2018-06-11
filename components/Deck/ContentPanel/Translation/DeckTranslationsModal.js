@@ -78,7 +78,7 @@ class DeckTranslationsModal extends React.Component {
 
     redirectToLanguage(language = '') {
         // console.log('redirectToLanguage language', language);
-        this.context.executeAction(changeCurrentLanguage, {language: language || this.props.TranslationStore.originLanguage});
+        this.context.executeAction(changeCurrentLanguage, {language: language});
         this.context.executeAction(loadDecktreeAndSwitchLanguage, {
             language: language
         });
@@ -125,6 +125,10 @@ class DeckTranslationsModal extends React.Component {
             switchSR: {
                 id: 'DeckTranslationsModal.switchSR',
                 defaultMessage: 'Switch to another language or create a new translation',
+            },
+            primaryLanguage: {
+                id: 'DeckTranslationsModal.primaryLanguage',
+                defaultMessage: 'Primary language',
             }
         });
 
@@ -188,7 +192,7 @@ class DeckTranslationsModal extends React.Component {
                       <br/>
 
                       <div>
-                        {this.context.intl.formatMessage(messages.originLanguage)} <Button role="button" tabIndex="0" onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.props.TranslationStore.nodeLanguage)}</Button>
+                        {this.context.intl.formatMessage(messages.originLanguage)} <Button role="button" tabIndex="0" onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.context.intl.formatMessage(messages.primaryLanguage))}</Button>
                         <br/>
                       </div>
                       <br/>
