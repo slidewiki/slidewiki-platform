@@ -4,6 +4,7 @@ import { Button, Icon,   Segment, Menu,Label,Input, Header,Form,Dropdown} from '
 import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
+import {getLanguageNativeName, translationLanguages} from '../../../../configs/general.js';
 
 class AttachSearchForm extends React.Component{
     constructor(props){
@@ -96,19 +97,10 @@ class AttachSearchForm extends React.Component{
 
         ];
 
-        let languageOptions =[
-          //{ value:'', text:'Select Language'},
-          { value: 'en_GB', text: 'English' },
-          { value: 'de_DE', text: 'German' },
-          { value: 'fr_FR', text: 'French' },
-          { value: 'it_IT', text: 'Italian' },
-          { value: 'es_ES', text: 'Spanish' },
-          { value: 'nl_NL', text: 'Dutch' },
-          { value: 'el_GR', text: 'Greek' },
-          { value: 'pt_PT', text: 'Portuguese' },
-          { value: 'sr_RS', text: 'Serbian' },
-          { value: 'lt_LT', text: 'Lithuanian' }
-        ];
+        let languageOptions = translationLanguages.sort().reduce((arr, curr) => {
+            arr.push({ value: curr, text: getLanguageNativeName(curr) });
+            return arr;
+        }, []);
 
         return (
           <Segment className='advancedSearch'>
@@ -133,7 +125,7 @@ class AttachSearchForm extends React.Component{
                               <Form.Field>
                                <Label htmlFor="language" className="sr-only">Language</Label>
                                <Dropdown selection  placeholder='Select Language' name='language'  id='language'  options={languageOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handleLanguageChange(value);}}/>
-                              </Form.Field>                  
+                              </Form.Field>
                             </Form.Group>
                             <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"
                                 data-tooltip="Search for Decks" onClick={this.handleRedirect.bind(this)}>

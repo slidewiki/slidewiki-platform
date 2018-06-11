@@ -1,12 +1,12 @@
 import {BaseStore} from 'fluxible/addons';
-import {compareLanguageCodes} from '../configs/general.js';
+import {compareLanguageCodes, translationLanguages} from '../configs/general.js';
 
 class TranslationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.translations = [];
         this.currentLang = '';
-        this.supportedLangs = ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB', 'lt-LT', 'fr-FR'];
+        this.supportedLangs = translationLanguages;
         this.inTranslationMode = false;
         this.originLanguage = '';
         this.nodeLanguage = '';

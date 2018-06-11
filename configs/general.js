@@ -34,5 +34,6 @@ export default {
         if (a.length === 5 && b.length === 5)
             return a.replace('_', '-') === b.replace('_', '-');
         return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
-    }
+    },
+    translationLanguages: ['sr-RS', 'es-ES', 'nl-NL', 'it-IT', 'pt-PT', 'el-GR', 'de-DE', 'en-GB', 'lt-LT', 'fr-FR']
 };
