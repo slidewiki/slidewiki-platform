@@ -13,7 +13,7 @@ import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
-import {hashPassword, ssoEnabled} from '../../../configs/general';
+import {ssoEnabled} from '../../../configs/general';
 import common from '../../../common';
 import openSSOModal from '../../../actions/user/openSSOModal';
 import {defineMessages} from 'react-intl';
@@ -490,7 +490,7 @@ class UserRegistration extends React.Component {
                 username: this.refs.username.value,
                 language: language,
                 email: this.refs.email.value,
-                password: hashPassword(this.refs.password.value),
+                password: common.hashPassword(this.refs.password.value),
                 grecaptcharesponse: this.state.grecaptcharesponse
             };
         } catch (e) {
