@@ -1370,23 +1370,29 @@ class SlideContentEditor extends React.Component {
                         callback: function(key, options) {
                             //console.log('context menu clicked: ' + key +  'on'  + id);
                             //console.log('context menu clicked: ' + key +  'on'  + $(this).attr('id')+ $(this).text());
-                            $('.'+$(this).attr('id')).show();
+                            let thisId = $(this).attr('id');
+                            $('.' + thisId).show();
+
+                            if (thisId.startsWith(contextMenuPrefix)) {
+                                thisId = thisId.substring(contextMenuPrefix.length);
+                            }
+
                             switch (key) {
                                 //case 'edit':
                                     //slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
                                     //slideEditorContext.setEditMode(false, slideEditorContext, slideEditorContext.menuFocus, slideEditorContext.previousCaretRange);
                                     //break;
                                 case 'front':
-                                    slideEditorContext.bringToFront(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.bringToFront(slideEditorContext, false, thisId);
                                     break;
                                 case 'back':
-                                    slideEditorContext.sendToBack(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.sendToBack(slideEditorContext, false, thisId);
                                     break;
                                 case 'duplicate':
-                                    slideEditorContext.duplicateNode(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.duplicateNode(slideEditorContext, false, thisId);
                                     break;
                                 case 'delete':
-                                    slideEditorContext.deleteNode(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.deleteNode(slideEditorContext, false, thisId);
                                     break;
                                 case 'quit':
                                     break;
