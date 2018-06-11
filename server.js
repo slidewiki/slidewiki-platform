@@ -19,7 +19,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import app from './app';
 import { createElementWithContext } from 'fluxible-addons-react';
-import { locales } from './configs/general'; //a list of supported locales, defines also the localeSwitcher component
+import { locales } from './configs/locales';
 import Cookie from 'js-cookie';
 import locale from 'locale';
 import handleServerRendering from './server/handleServerRendering'; //moved here the rendering part
@@ -105,6 +105,7 @@ fetchrPlugin.registerService(require('./services/media'));
 fetchrPlugin.registerService(require('./services/userreview'));
 fetchrPlugin.registerService(require('./services/nlp'));
 fetchrPlugin.registerService(require('./services/deckgroups'));
+fetchrPlugin.registerService(require('./services/recommendations'));
 
 // ************************** UI Internationalisation routines ***************************************
 

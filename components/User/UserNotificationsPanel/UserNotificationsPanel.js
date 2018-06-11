@@ -136,7 +136,7 @@ class UserNotificationsPanel extends React.Component {
         } else if (notifications.length === 0) {
             notificationsDiv = emptyDiv;
         } else {
-            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} items={notifications} selector={selector} />;
+            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} items={notifications} selector={selector} />;
         }
         return (
             <div ref="userNotificationsPanel">
