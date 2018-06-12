@@ -134,6 +134,21 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
+    handleSlideTransitionchange(slideTransition){
+        console.log(slideTransition);
+
+        if($('.pptx2html').length) {
+            //$('.pptx2html').append(pptx2htmlcontent);
+            $('.pptx2html').prop('data-transition', slideTransition);
+            /*if (width !== '0'){
+                $('.pptx2html').css('width', width);
+                $('.pptx2html').css('height', height);
+            }*/
+        } else {
+            this.refs.inlineContent.innerHTML = '<input type="hidden" data-transition="'+slideTransition+'">' + this.refs.inlineContent.innerHTML ;
+        }
+
+    }
     handleTemplatechange(template){
         /*
         if (this.showTemplates === false){
@@ -1821,6 +1836,10 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.slideSize !== '' && nextProps.SlideEditStore.slideSize !== this.props.SlideEditStore.slideSize)
         {
             this.handleSlideSizechange(nextProps.SlideEditStore.slideSize);
+        }
+        if (nextProps.SlideEditStore.slideTransition !== '' && nextProps.SlideEditStore.slideTransition !== this.props.SlideEditStore.slideTransition)
+        {
+            this.handleSlideTransitionchange(nextProps.SlideEditStore.slideTransition);
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {

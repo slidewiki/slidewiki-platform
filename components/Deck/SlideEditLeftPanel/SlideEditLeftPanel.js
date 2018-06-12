@@ -15,6 +15,7 @@ import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
+import changeSlideTransition from '../../../actions/slide/changeSlideTransition';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 class SlideEditLeftPanel extends React.Component {
@@ -34,6 +35,7 @@ class SlideEditLeftPanel extends React.Component {
             showProperties: false,
             showNameChange: false,
             showSize: false,
+            showTransition: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
             LeftPanelTitleChange: false,
@@ -47,6 +49,7 @@ class SlideEditLeftPanel extends React.Component {
             prevState.showProperties !== this.state.showProperties ||
             prevState.showTitleChange !== this.state.showTitleChange ||
             prevState.showSize !== this.state.showSize ||
+            prevState.showTransition !== this.state.showTransition ||
             prevState.showBackground !== this.state.showBackground)
         {
             //set focus on buttons depending on submenu navigation
@@ -165,6 +168,11 @@ class SlideEditLeftPanel extends React.Component {
         }
 
     }
+    changeSlideTransitionClick(){
+        this.setState({showTransition: true});
+        this.setState({showProperties: false});
+        this.forceUpdate();
+    }
     changeSlideSizeClick(){
         //console.log('change slide size button clicked');
         this.setState({showSize: true});
@@ -177,6 +185,17 @@ class SlideEditLeftPanel extends React.Component {
             this.context.executeAction(changeSlideSize, {
                 //slideSize: this.refs.template.slideSize
                 slideSize: slideSize
+            });
+            //this.forceUpdate();
+        }
+    }
+    handleSlideTransitionchange(slideTransition){
+        if(slideTransition !== ''){
+            this.setState({showTemplate: false});
+            this.setState({showProperties: true});
+            this.context.executeAction(changeSlideTransition, {
+                //slideSize: this.refs.template.slideSize
+                slideTransition: slideTransition
             });
             //this.forceUpdate();
         }
@@ -238,6 +257,7 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showEmbed: false});
         this.setState({showProperties: false});
         this.setState({showSize: false});
+        this.setState({showTransition: false});
         this.forceUpdate();
     }
     handleKeyPress = (event, param, template) => {
@@ -302,6 +322,9 @@ class SlideEditLeftPanel extends React.Component {
                     break;
                 case 'changeSlideSizeClick':
                     this.changeSlideSizeClick();
+                    break;
+                case 'changeSlideTransitionClick':
+                    this.changeSlideTransitionClick();
                     break;
                 case 'handleSlideSizechange':
                     this.handleSlideSizechange(slideSize);
@@ -488,6 +511,9 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                       <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
                   </a>
+                  <a className="item" id="changeSlideTransitionClick" role="button" onClick={this.changeSlideTransitionClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideTransitionClick')}>
+                      <i tabIndex="0" className="share square icon"></i><FormattedMessage id='editpanel.slideTransition' defaultMessage='Slide Transition' />
+                  </a>
                 </form>);
                 /*
                                   <a className="item" id="changeSlideBackgroundClick" role="button" onClick={this.changeSlideBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideBackgroundClick')}>
@@ -552,6 +578,34 @@ class SlideEditLeftPanel extends React.Component {
               </a>
             </div>);
 
+        // none, default, convex-in fade-out, zoom, slide, slide-in fade-out, fade-in slide-out, zoom-in fade-out, convex, convex-in concave-out, concave
+        // default, fast or slow
+        // TODO: make gif animations of transitions
+        let transitionContent = (
+            <div >
+              <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                  <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'none')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'none')}>
+                  <i tabIndex="0" className="eye slash outline icon"></i><FormattedMessage id='transitionpanel.none' defaultMessage='No slide transition' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'convex')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'convex')}>
+                  <i tabIndex="0" className="share square icon"></i><FormattedMessage id='transitionpanel.convex' defaultMessage='Convex' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'fade')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'fade')}>
+                  <i tabIndex="0" className="share square icon"></i><FormattedMessage id='transitionpanel.fade' defaultMessage='Fade' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'slide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'slide')}>
+                  <i tabIndex="0" className="share square icon"></i><FormattedMessage id='transitionpanel.slide' defaultMessage='Slide' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'zoom')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'zoom')}>
+                  <i tabIndex="0" className="share square icon"></i><FormattedMessage id='transitionpanel.zoom' defaultMessage='Zoom' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'concave')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'concave')}>
+                  <i tabIndex="0" className="share square icon"></i><FormattedMessage id='transitionpanel.concave' defaultMessage='Concave' />
+              </a>
+            </div>);
+
         let normalContent = (
           <div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
@@ -570,7 +624,7 @@ class SlideEditLeftPanel extends React.Component {
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
             <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
-                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
+                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Slide Properties' />
             </a>
             <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
                 <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
@@ -594,6 +648,8 @@ class SlideEditLeftPanel extends React.Component {
             panelcontent = titleChangeContent;
         } else if (this.state.showSize){
             panelcontent = sizeContent;
+        } else if (this.state.showTransition){
+            panelcontent = transitionContent;
         } else {
             panelcontent = normalContent;
         }

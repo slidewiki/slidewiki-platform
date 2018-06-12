@@ -14,6 +14,7 @@ class SlideEditStore extends BaseStore {
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
         this.slideSize = '';
+        this.slideTransition = '';
         this.saveSlideClick = 'false';
         this.cancelClick = 'false';
         this.selector = '';
@@ -74,6 +75,12 @@ class SlideEditStore extends BaseStore {
         this.slideSize = payload.slideSize;
         this.emitChange();
         this.slideSize = '';
+        this.emitChange();
+    }
+    changeSlideTransition(payload){
+        this.slideTransition = payload.slideTransition;
+        this.emitChange();
+        this.slideTransition = '';
         this.emitChange();
     }
     handleSaveSlideClick(){
@@ -182,6 +189,7 @@ class SlideEditStore extends BaseStore {
             redoClick: this.redoClick,
             template: this.template,
             slideSize: this.slideSize,
+            slideTransition: this.slideTransition,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
             uploadVideoClick: this.uploadVideoClick,
@@ -215,6 +223,7 @@ class SlideEditStore extends BaseStore {
         this.redoClick = state.redoClick;
         this.template = state.template;
         this.slideSize = state.slideSize;
+        this.slideTransition = state.slideTransition;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;
@@ -239,6 +248,7 @@ SlideEditStore.handlers = {
     'CANCEL_CLICK': 'handleCancelClick',
     'CHANGE_TEMPLATE': 'changeTemplate',
     'CHANGE_SLIDE_SIZE': 'changeSlideSize',
+    'CHANGE_SLIDE_TRANSITION': 'changeSlideTransition',
     'ADD_INPUT_BOX': 'handleAddInputBox',
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
     'UPLOAD_VIDEO_CLICK': 'handleuploadVideoClick',
