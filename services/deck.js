@@ -1,5 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+import {isEmpty, assignToAllById} from '../common';
 import slugify from 'slugify';
 
 const log = require('../configs/log').log;
@@ -190,33 +191,41 @@ export default {
                 }
                 return deck;
             });
-            let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors', json: true});
 
-            Promise.all([deckPromise, editorsPromise]).then(([deck, editors]) => {
-                let deckProps = {
-                    description: deck.description,
-                    language: deck.language,
-                    tags: deck.tags,
-                    title: deck.title,
-                    license: deck.license,
-                    theme: deck.theme,
-                    allowMarkdown: deck.allowMarkdown || false,
-                    editors: editors.editors || {
-                        users: [],
-                        groups: []
-                    },
-                    hidden: deck.hidden,
-                    deckOwner: deck.user,
-                    revisionOwner: deck.revisionUser,
-                    sid: args.sid,
-                    localRootDeck: args.id,
-                    translations: deck.translations || []
-                };
-                let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
-                // console.log('Returned editors of deck:', editors.editors);
-                callback(null, {
-                    deckProps: deckProps,
-                    editors: contributors
+            deckPromise.then((deck) => {
+                // prepare users and groups from editors object
+                let {users, groups} = deck.editors || {};
+                if (!users) users = [];
+                if (!groups) groups = [];
+
+                return Promise.all([
+                    // include users info from user service
+                    fetchUserInfo(users.map((e) => e.id))
+                    .then((userInfo) => assignToAllById(users, userInfo)),
+                    // include groups info from user service
+                    fetchGroupInfo(groups.map((g) => g.id))
+                    .then((groupInfo) => assignToAllById(groups, groupInfo))
+                ]).then(([users, groups]) => {
+                    let deckProps = {
+                        description: deck.description,
+                        language: deck.language,
+                        tags: deck.tags,
+                        title: deck.title,
+                        license: deck.license,
+                        theme: deck.theme,
+                        allowMarkdown: deck.allowMarkdown || false,
+                        editors: { users, groups },
+                        hidden: deck.hidden,
+                        deckOwner: deck.user,
+                        revisionOwner: deck.revisionUser,
+                        sid: args.sid,
+                        localRootDeck: args.id,
+                        translations: deck.translations || []
+                    };
+
+                    callback(null, {
+                        deckProps: deckProps,
+                    });
                 });
             }).catch((err) => {
                 callback(err);
@@ -465,6 +474,36 @@ export default {
     }
     // delete: (req, resource, params, config, callback) => {}
 };
+
+// TODO move these to lib files
+
+// promises user public info for a list of user ids
+function fetchUserInfo(userIds) {
+    // return empty list if nothing provided
+    if (isEmpty(userIds)) {
+        return Promise.resolve([]);
+    }
+
+    return rp.post({
+        uri: `${Microservices.user.uri}/users`,
+        json: true,
+        body: userIds,
+    }).then((users) => users.map((u) => ({id: u._id, username: u.username, picture: u.picture, country: u.country, organization: u.organization}) ) );
+}
+
+// promises group public info for a list of group ids (not the users in the groups)
+function fetchGroupInfo(groupIds) {
+    // return empty list if nothing provided
+    if (isEmpty(groupIds)) {
+        return Promise.resolve([]);
+    }
+
+    return rp.post({
+        uri: `${Microservices.user.uri}/usergroups`,
+        json: true,
+        body: groupIds,
+    }).then((groups) => groups.map((g) => ({id: g.id, name: g.name}) ));
+}
 
 function addSlugs(decks) {
     if (decks.forEach) {

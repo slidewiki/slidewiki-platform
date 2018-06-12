@@ -12,27 +12,20 @@ export default {
         let selector = {'sid': args.sid, 'stype': args.stype, 'spath': args.spath};
         if (resource === 'contributors.list') {
             //request specific content item from deck service
-            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let parsedRes = JSON.parse(res);
-                let userPromises = parsedRes.contributors.map((contributor) => {
-                    return rp.get({uri: Microservices.user.uri + '/user/' + contributor.user});
+            rp.get({
+                uri: `${Microservices.deck.uri}/${selector.stype}/${selector.sid}/contributors`,
+                json: true,
+            }).then((contributors) => Promise.all(contributors.map((contributor) => {
+                return rp.get({
+                    uri: `${Microservices.user.uri}/user/${contributor.id}`,
+                    json: true,
+                }).then((user) => {
+                    // fill in other contribution data
+                    return Object.assign(user, contributor);
                 });
-                //when all user data is fetched successfully return from service
-                Promise.all(userPromises).then((responses) => {
-                    let contributors = responses.map((res) => {
-                        let user = JSON.parse(res);
-                        user.id = user._id;
-                        //if user is the creator of an item
-                        user.type = user.id === parsedRes.user ? 'creator' : 'contributor';
-                        //fill in user's contribution
-                        user.count = parsedRes.contributors.count;
-                        return user;
-                    });
-                    callback(null, {contributors: contributors, selector: selector});
-                }).catch((err) => {
-                    console.log(err);
-                    callback(err);
-                });
+            }))).then((contributors) => {
+                // when all user data is fetched successfully return from service
+                callback(null, {contributors: contributors, selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(err);

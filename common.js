@@ -45,6 +45,14 @@ export default {
             (toTest instanceof Array && toTest.length === 0));
     },
 
+    assignToAllById(original, update) {
+        original.forEach((val) => {
+            // if not found does nothing :)
+            Object.assign(val, update.find((el) => el.id === val.id) );
+        });
+        return original;
+    },
+
     timeSince: function(date) {
         let seconds = Math.floor((new Date() - date) / 1000);
         let interval = Math.floor(seconds / 31536000);
