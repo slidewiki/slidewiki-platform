@@ -1,5 +1,8 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+
+import {fillInUserInfo} from '../lib/services/user';
+
 const log = require('../configs/log').log;
 
 export default {
@@ -15,15 +18,7 @@ export default {
             rp.get({
                 uri: `${Microservices.deck.uri}/${selector.stype}/${selector.sid}/contributors`,
                 json: true,
-            }).then((contributors) => Promise.all(contributors.map((contributor) => {
-                return rp.get({
-                    uri: `${Microservices.user.uri}/user/${contributor.id}`,
-                    json: true,
-                }).then((user) => {
-                    // fill in other contribution data
-                    return Object.assign(user, contributor);
-                });
-            }))).then((contributors) => {
+            }).then(fillInUserInfo).then((contributors) => {
                 // when all user data is fetched successfully return from service
                 callback(null, {contributors: contributors, selector: selector});
             }).catch((err) => {

@@ -1,7 +1,8 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import {isEmpty, assignToAllById} from '../common';
 import slugify from 'slugify';
+
+import {fillInUserInfo, fillInGroupInfo} from '../lib/services/user';
 
 const log = require('../configs/log').log;
 
@@ -200,11 +201,9 @@ export default {
 
                 return Promise.all([
                     // include users info from user service
-                    fetchUserInfo(users.map((e) => e.id))
-                    .then((userInfo) => assignToAllById(users, userInfo)),
+                    fillInUserInfo(users),
                     // include groups info from user service
-                    fetchGroupInfo(groups.map((g) => g.id))
-                    .then((groupInfo) => assignToAllById(groups, groupInfo))
+                    fillInGroupInfo(groups),
                 ]).then(([users, groups]) => {
                     let deckProps = {
                         description: deck.description,
@@ -474,36 +473,6 @@ export default {
     }
     // delete: (req, resource, params, config, callback) => {}
 };
-
-// TODO move these to lib files
-
-// promises user public info for a list of user ids
-function fetchUserInfo(userIds) {
-    // return empty list if nothing provided
-    if (isEmpty(userIds)) {
-        return Promise.resolve([]);
-    }
-
-    return rp.post({
-        uri: `${Microservices.user.uri}/users`,
-        json: true,
-        body: userIds,
-    }).then((users) => users.map((u) => ({id: u._id, username: u.username, picture: u.picture, country: u.country, organization: u.organization}) ) );
-}
-
-// promises group public info for a list of group ids (not the users in the groups)
-function fetchGroupInfo(groupIds) {
-    // return empty list if nothing provided
-    if (isEmpty(groupIds)) {
-        return Promise.resolve([]);
-    }
-
-    return rp.post({
-        uri: `${Microservices.user.uri}/usergroups`,
-        json: true,
-        body: groupIds,
-    }).then((groups) => groups.map((g) => ({id: g.id, name: g.name}) ));
-}
 
 function addSlugs(decks) {
     if (decks.forEach) {
