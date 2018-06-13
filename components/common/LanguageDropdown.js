@@ -64,7 +64,7 @@ class LanguageDropdown extends React.Component {
             'required': this.props.required
         });
 
-        let languageOptions = translationLanguages.sort().reduce((arr, curr) => {
+        let languageOptions = translationLanguages.reduce((arr, curr) => {
             arr.push(<div className="item" data-value={curr} key={curr} >
                     {getLanguageNativeName(curr)}
                 </div>);

@@ -98,7 +98,7 @@ class AttachSearchForm extends React.Component{
 
         ];
 
-        let languageOptions = translationLanguages.sort().reduce((arr, curr) => {
+        let languageOptions = translationLanguages.reduce((arr, curr) => {
             arr.push({ value: curr, text: getLanguageNativeName(curr) });
             return arr;
         }, []);

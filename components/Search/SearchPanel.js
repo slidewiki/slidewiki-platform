@@ -315,7 +315,7 @@ class SearchPanel extends React.Component {
                 <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
                 <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                   <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
-                  {translationLanguages.sort().reduce((arr, curr) => { //<div className="menu">
+                  {translationLanguages.reduce((arr, curr) => { //<div className="menu">
                       arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
                       return arr;
                   }, [])}
