@@ -25,6 +25,7 @@ import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
 import changeCurrentLanguage from './translation/changeCurrentLanguage';
 import loadDeckTranslations from './translation/loadDeckTranslations';
+import validateUsedLanguage from './translation/validateUsedLanguage';
 
 const log = require('./log/clog');
 
@@ -63,7 +64,7 @@ export default function loadDeck(context, payload, done) {
         payload.params.language = payload.params.language.substring(1);
     }
     if (payload.params.language && payload.params.language.length > 5)
-        payload.params.language = payload.params.language.substring(0,5);//TODO check if its in the ISO?
+        payload.params.language = payload.params.language.substring(0,5);
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
@@ -208,6 +209,7 @@ export default function loadDeck(context, payload, done) {
             // context.dispatch('UPDATE_PAGE_TITLE', {
             //     pageTitle: pageTitle
             // });
+            context.executeAction(validateUsedLanguage, {language: payload.params.language});
             if (payload.query.interestedUser)
                 context.executeAction(fetchUser, {
                     params: {

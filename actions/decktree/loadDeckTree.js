@@ -31,7 +31,7 @@ export default function loadDeckTree(context, payload, done) {
     if (!payload.navigate.runFetchTree && currentSelector.id === payload.params.id) {
         runFetchTree = 0;
     }
-    console.log('loadDeckTree runFetchTree', runFetchTree);
+    // console.log('loadDeckTree runFetchTree', runFetchTree);
     if (runFetchTree) {
         //we need to load the whole tree for the first time
         payload.params.jwt = context.getStore(UserProfileStore).jwt;
