@@ -107,7 +107,7 @@ class InfoPanelInfoView extends React.Component {
             iconName = this.props.TranslationStore.currentLang.substring(3).toLowerCase() + ' flag';
         }
         else if (!this.props.TranslationStore.currentLang && this.props.TranslationStore.originLanguage.length === 5) {
-              iconName = this.props.TranslationStore.originLanguage.substring(3).toLowerCase() + ' flag';
+            iconName = this.props.TranslationStore.originLanguage.substring(3).toLowerCase() + ' flag';
         }
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
