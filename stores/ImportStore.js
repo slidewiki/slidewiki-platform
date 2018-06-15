@@ -15,6 +15,11 @@ class ImportStore extends BaseStore {
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
         this.slides = [];
+        this.title = '';
+        this.language = '';
+        this.description = '';
+        this.theme = '';
+        this.license = '';
     }
     destructor()
     {
@@ -30,6 +35,11 @@ class ImportStore extends BaseStore {
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
         this.slides = [];
+        this.title = '';
+        this.language = '';
+        this.description = '';
+        this.theme = '';
+        this.license = '';
     }
     cancel() {
         this.destructor();
@@ -48,7 +58,12 @@ class ImportStore extends BaseStore {
             noOfSlides: this.noOfSlides,
             totalNoOfSlides: this.totalNoOfSlides,
             safetyCounter: this.safetyCounter,
-            slides: this.slides
+            slides: this.slides,
+            title: this.title,
+            language: this.language,
+            description: this.description,
+            theme: this.theme,
+            license: this.license
         };
     }
     dehydrate() {
@@ -67,6 +82,11 @@ class ImportStore extends BaseStore {
         this.totalNoOfSlides = state.totalNoOfSlides;
         this.safetyCounter = state.safetyCounter;
         this.slides = state.slides;
+        this.title = state.title;
+        this.language = state.language;
+        this.description = state.description;
+        this.theme = state.theme;
+        this.license = state.license;
     }
 
     storeFile(payload) {
@@ -90,13 +110,21 @@ class ImportStore extends BaseStore {
 
         this.emitChange();
     }
-    uploadSuccess(headers) {
+    uploadSuccess(data) {
+        let headers = data.headers;
+        let payload = data.payload;
         // console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         // this.uploadProgress = 100;
         this.uploadProgress = 65;
         this.deckId = headers.deckid;
         this.totalNoOfSlides = parseInt(headers.noofslides);
+
+        this.title = payload.title;
+        this.language = payload.language;
+        this.description = payload.description;
+        this.theme = payload.theme;
+        this.license = payload.license;
 
         this.file = null;
         this.base64 = null;
@@ -157,7 +185,7 @@ ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
     'STORE_FILE': 'storeFile',
     'IMPORT_CANCELED': 'cancel',
-    'IMPORT_FINISHED': 'destructor',
+    'IMPORT_FINISHED': 'cancel',
     'UPLOAD_FAILED': 'uploadFailed',
     'UPLOAD_SUCCESS': 'uploadSuccess',
     'UPLOAD_STARTED': 'uploadStarted',
