@@ -69,6 +69,8 @@ RUN npm run build:nostart
 
 # added here to keep image small after building
 RUN npm prune --production
+# this is needed for napa files being removed from the previous command
+RUN npm run install
 
 # -------- #
 #   Run!   #
