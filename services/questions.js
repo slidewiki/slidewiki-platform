@@ -9,7 +9,7 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
-
+        
         if(resource === 'questions.list') {
             rp.get({
                 // uri: 'https://questionservice.experimental.slidewiki.org/questions',

@@ -8,6 +8,7 @@ class ContentQuestionsStore extends BaseStore {
         this.selector = {};
         this.questionsCount = 0;
         this.showAddBox = false;
+        this.showCorrectExamAnswers = false;
     }
     addQuestion(payload) {
         this.questions.push(payload.question);
@@ -37,6 +38,7 @@ class ContentQuestionsStore extends BaseStore {
         this.question = null;
         this.selector = payload.selector;
         this.questionsCount = this.questions.length;
+        this.showCorrectExamAnswers = false;
         this.emitChange();
     }
     loadQuestion(payload) {
@@ -62,13 +64,21 @@ class ContentQuestionsStore extends BaseStore {
         this.showAddBox = !this.showAddBox;
         this.emitChange();
     }
+    updateSelectedAnswer(payload) {
+        this.questions[payload.questionIndex].answers[payload.answerIndex].selectedAnswer = payload.selected;
+    }
+    displayCorrectExamAnswers(payload) {
+        this.showCorrectExamAnswers = true;
+        this.emitChange();
+    }
     getState() {
         return {
             questions: this.questions,
             question: this.question,
             selector: this.selector,
             questionsCount: this.questionsCount,
-            showAddBox: this.showAddBox
+            showAddBox: this.showAddBox,
+            showCorrectExamAnswers: this.showCorrectExamAnswers
         };
     }
     dehydrate() {
@@ -80,6 +90,7 @@ class ContentQuestionsStore extends BaseStore {
         this.selector = state.selector;
         this.questionsCount = state.questionsCount;
         this.showAddBox = state.showAddBox;
+        this.showCorrectExamAnswers = state.showCorrectExamAnswers;
     }
 }
 
@@ -92,7 +103,9 @@ ContentQuestionsStore.handlers = {
     'UPDATE_QUESTION': 'updateQuestion',
     'ADD_QUESTION': 'addQuestion',
     'DELETE_QUESTION': 'deleteQuestion',
-    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag'
+    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag',
+    'QUESTION_ANSWER_SELECTED': 'updateSelectedAnswer',
+    'SHOW_CORRECT_EXAM_ANSWERS': 'displayCorrectExamAnswers'
 };
 
 export default ContentQuestionsStore;
