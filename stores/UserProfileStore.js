@@ -260,6 +260,8 @@ class UserProfileStore extends BaseStore {
     handleSignInError(err) {
         this.errorMessage = err.message;
         this.emitChange();
+        this.errorMessage = '';
+        this.emitChange();
     }
 
     handleSocialSignInError(err) {

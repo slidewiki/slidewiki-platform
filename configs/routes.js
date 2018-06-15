@@ -22,7 +22,7 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
-import loadNotFound from '../actions/loadNotFound';
+import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
@@ -397,7 +397,7 @@ export default {
                 payload.params.theme,
             ];
             urlParts = urlParts.filter((u) => !!u);
-            
+
             done({statusCode: '301', redirectURL: urlParts.join('/')});
         },
     },
@@ -619,7 +619,7 @@ export default {
                 payload.params.sid,
             ];
             urlParts = urlParts.filter((u) => !!u);
-            
+
             done({statusCode: '301', redirectURL: urlParts.join('/')});
         },
     },
@@ -644,7 +644,7 @@ export default {
                 payload.params.sid,
             ];
             urlParts = urlParts.filter((u) => !!u);
-            
+
             done({statusCode: '301', redirectURL: urlParts.join('/')});
         },
     },
@@ -717,7 +717,7 @@ export default {
         method: 'get',
         handler: require('../components/Error/Dummy'),
         action: (context, payload, done) => {
-            context.executeAction(loadNotFound, payload, done);
+            context.executeAction(notFoundError, payload, done);
         }
     }
     /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/
