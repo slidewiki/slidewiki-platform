@@ -34,7 +34,6 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 import resetTranslationStore from '../actions/translation/resetTranslationStore';
 
 export default {
