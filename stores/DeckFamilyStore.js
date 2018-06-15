@@ -35,6 +35,7 @@ class DeckFamilyStore extends BaseStore {
                 updated: deck.updated,
                 description: deck.description,
                 creationDate: deck.timestamp,
+                noOfLikes: deck.noOfLikes,
             };
         });
 

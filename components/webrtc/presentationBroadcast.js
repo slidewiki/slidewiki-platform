@@ -64,8 +64,8 @@ class presentationBroadcast extends React.Component {
             return;
         }
         //Remove menus as they shouldn't appear
-        $('.menu:first').remove();
-        $('.footer:first').remove();
+        //$('.menu:first').remove();
+        //$('.footer:first').remove();
 
         that.socket = io(Microservices.webrtc.uri);
 
