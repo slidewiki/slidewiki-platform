@@ -13,6 +13,7 @@ import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
+import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
@@ -245,7 +246,20 @@ class AddDeck extends React.Component {
                     success_confirm_text:{
                         id: 'AddDeck.swal.success_confirm_text',
                         defaultMessage: 'View deck',
+                    },
+                    success_reject_text:{
+                        id: 'AddDeck.swal.success_reject_text',
+                        defaultMessage: 'Try again',
+                    },
+                    success_imported_slides_text:{
+                        id: 'AddDeck.swal.success_imported_slides_text',
+                        defaultMessage: 'Imported slides:',
+                    },
+                    success_publish_deck_text:{
+                        id: 'AddDeck.swal.success_publish_deck_text',
+                        defaultMessage: 'Publish this deck',
                     }
+
                 });
                 // swal({
                 //     title: this.context.intl.formatMessage(success_messages.success_title_text),
@@ -265,65 +279,92 @@ class AddDeck extends React.Component {
 
 
                 let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:50%;"';
-                let borderStyle = 'border:1px solid black;border-radius:5px;';
+                // let borderStyle = 'border:1px solid black;border-radius:5px;';
                 let html = '<div style="height: 400px;overflow: auto;" />' +
-                    '<h3>Imported slides:</h3>';
+                    '<h3>' + this.context.intl.formatMessage(success_messages.success_imported_slides_text) + '</h3>';
                 let slides = this.props.ImportStore.slides;
 
                 //EXTRACT WIDTH AND HEIGHT
-                let firstSlideContent = slides[0].content;
-                let indexOfWidth = firstSlideContent.indexOf('width:');
-                let indexOfendOfWidth = firstSlideContent.indexOf('px;', indexOfWidth);
-                let widthString = firstSlideContent.substring(indexOfWidth + 6, indexOfendOfWidth);
-                let indexOfHeight = firstSlideContent.indexOf('height:');
-                let indexOfendOfHeight = firstSlideContent.indexOf('px;', indexOfHeight);
-                let heightString = firstSlideContent.substring(indexOfHeight + 7, indexOfendOfHeight);
+                // let firstSlideContent = slides[0].content;
+                // let indexOfWidth = firstSlideContent.indexOf('width:');
+                // let indexOfendOfWidth = firstSlideContent.indexOf('px;', indexOfWidth);
+                // let widthString = firstSlideContent.substring(indexOfWidth + 6, indexOfendOfWidth);
+                // let indexOfHeight = firstSlideContent.indexOf('height:');
+                // let indexOfendOfHeight = firstSlideContent.indexOf('px;', indexOfHeight);
+                // let heightString = firstSlideContent.substring(indexOfHeight + 7, indexOfendOfHeight);
 
                 // let width = 1058.33;
                 // let height = 793.66;
-                let width = parseFloat(widthString);
-                let height = parseFloat(heightString);
-                let scaledWidth = 400;
-                let scale = scaledWidth / width;
-                let translate_x = (width - scaledWidth) / 2;
-                let translate_y = (height - height * scale) / 2;
+                // let width = parseFloat(widthString);
+                // let height = parseFloat(heightString);
+                // let scaledWidth = 400;
+                // let scale = scaledWidth / width;
+                // let translate_x = (width - scaledWidth) / 2;
+                // let translate_y = (height - height * scale) / 2;
                 for(let i = 0; i < slides.length; i++) {
                     let slide = slides[i];
-                    let slideContent = slide.content;
+                    // let slideContent = slide.content;
                     //find a place to incect border
-                    indexOfWidth = slideContent.indexOf('width:');
-                    let contentFirstPart = slideContent.substring(0, indexOfWidth);
-                    let contentSecondPart = slideContent.substring(indexOfWidth);
-                    html += '<div >' + (i+1) + '. ' + slide.title + '<img style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default /></div>'; //THUMBNAIL
+                    // indexOfWidth = slideContent.indexOf('width:');
+                    // let contentFirstPart = slideContent.substring(0, indexOfWidth);
+                    // let contentSecondPart = slideContent.substring(indexOfWidth);
                     // html += '<h4>' + (i+1) + '. ' + slide.title + '</h4>' +
                     //     '<div style="height:70%;transform: scale(' + scale + ') translate(-' + translate_x + 'px,-' + translate_y + 'px);" >' +
                     //     contentFirstPart + borderStyle + contentSecondPart + '</div>';
+                    let thumbnailAlt = 'Slide ' + (i+1) + ': ';
+                    if (slide.title !== undefined)
+                        thumbnailAlt += slide.title ;
+                    html += '<div >' + (i+1) + '. ' + slide.title + '<img style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt + '"/></div>'; //THUMBNAIL
                 }
                 html += '</div>';
+                html += '<div><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish">' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div>';
 
                 swal({
                     title: this.context.intl.formatMessage(success_messages.success_title_text),
-                    text: this.context.intl.formatMessage(success_messages.success_text)
-                        + '\n' + this.context.intl.formatMessage(success_messages.success_text_extra),
+                    text: this.context.intl.formatMessage(success_messages.success_text) +
+                        '\n' + this.context.intl.formatMessage(success_messages.success_text_extra),
                     html: html,
                     type: 'success',
                     showCloseButton: true,
                     showCancelButton: true,
                     confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
                     confirmButtonClass: 'positive ui button',
-                    cancelButtonText: 'Discard',
+                    cancelButtonText: this.context.intl.formatMessage(success_messages.success_reject_text),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false
                 }).then((accepted) => {
-                    console.log('accepted', accepted);
+                    let checkboxPublish = $('#checkbox_publish')[0].checked;
+                    if (checkboxPublish) {
+                        //Publish the deck (set hidden to false)
+                        let deckId = this.props.ImportStore.deckId;
+                        let selector = {
+                            id: deckId
+                        };
 
-
+                        this.context.executeAction(publishDeck, {
+                            deckId: deckId,
+                            title: this.props.ImportStore.title,
+                            language: this.props.ImportStore.language,
+                            description: this.props.ImportStore.description,
+                            theme: this.props.ImportStore.theme,
+                            license: this.props.ImportStore.license,
+                            selector: selector,
+                            hidden: false,
+                                          // allowMarkdown: deck.allowMarkdown,
+                                          // editors: deck.editors,
+                                          // tags: deck.tags,
+                        });
+                    }
                     this.handleImportRedirect();
+
                     return true;
-                    //this.applyTemplate(template);
                 }, (reason) => {
-                    console.log('reason', reason);
-                    //done(reason);
+                    //Reset form
+                    this.context.executeAction(importFinished, {});  // destroy import components state
+                    this.context.executeAction(addDeckDestruct, {});
+                    this.initializeProgressBar();
+                    this.refs.checkbox_conditions.checked = false;
+                    this.refs.checkbox_imageslicense.checked = false;
                 }).catch(() => {
                     return true;
                 });
