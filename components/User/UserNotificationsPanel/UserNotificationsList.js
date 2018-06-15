@@ -8,7 +8,7 @@ class UserNotificationsList extends React.Component {
         const list = this.props.items.map((notification, index) => {
             if (notification.visible) {
                 return (
-                    <UserNotificationsItem username={this.props.username} notification={notification} key={index} selector={selector} />
+                    <UserNotificationsItem username={this.props.username} userid={this.props.userid} notification={notification} key={index} selector={selector} />
                 );
             }
         });

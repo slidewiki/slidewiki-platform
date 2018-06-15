@@ -167,7 +167,8 @@ class Presentation extends React.Component{
             //console.log('slidechanged dimensions: ' + pptxheight + ' by ' + pptxwidth);
             Reveal.configure({
                 width: pptxwidth,
-                height: pptxheight
+                height: pptxheight,
+                slideNumber: true
             });
 
         }

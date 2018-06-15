@@ -1,5 +1,4 @@
 import React from 'react';
-import async from 'async';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
@@ -62,7 +61,7 @@ class LoginModal extends React.Component {
         this.setState({ activeTrap: nextProps.LoginModalStore.activeTrap });
 
         if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
-            console.log('body intended', this.props.errorMessage.toString());
+            // console.log('body intended', this.props.errorMessage.toString());
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
             this.setState({ isLoading: false });
         }
@@ -134,8 +133,9 @@ class LoginModal extends React.Component {
     componentDidUpdate() {
         if (this.props.errorMessage.length > 2)
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-        console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
+        // console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
         if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
+            localStorage.setItem(MODI, 'login_failed');
             this.setState({ isLoading: false });
             swal({
                 title: this.context.intl.formatMessage({
@@ -167,21 +167,10 @@ class LoginModal extends React.Component {
             })
             .catch((action) => {
                 // console.log('action after click', action);
-                localStorage.setItem(MODI, 'login_failed');
-
                 //delete old data
-                let that = this;
-                async.series([
-                    function(callback) {
-                        that.context.executeAction(newSocialData, {});
-                        callback(null, 'one');
-                    }
-                ],
-                // optional callback
-                (err, results) => {
-                    if (action !== 'close')
-                        that.handleLoginButton();
-                });
+                this.context.executeAction(newSocialData, {});
+                if (action !== 'close')
+                    this.handleLoginButton();
 
                 return true;
             });
@@ -220,7 +209,7 @@ class LoginModal extends React.Component {
 
     socialLogin(provider, e) {
         e.preventDefault();
-        console.log('Hit on social login icon', provider);
+        // console.log('Hit on social login icon', provider);
         this.provider = provider;
 
         $('.ui.login.modal').modal('hide');
@@ -255,7 +244,7 @@ class LoginModal extends React.Component {
     }
 
     handleStorageEvent(e) {
-        console.log('storage event', e.key, localStorage.getItem(e.key));
+        // console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
 
         if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
@@ -315,17 +304,7 @@ class LoginModal extends React.Component {
             return;
         }
 
-        let thatContext = this.context;
-        async.series([
-            function(callback) {
-                thatContext.executeAction(newSocialData, data);
-                callback(null, 'two');
-            },
-            function(callback) {
-                thatContext.executeAction(userSocialSignIn, data);
-                callback(null, 'two');
-            }
-        ]);
+        this.context.executeAction(userSocialSignIn, data);
     }
 
     getProviderName() {
