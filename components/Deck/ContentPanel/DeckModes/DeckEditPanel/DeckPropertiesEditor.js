@@ -4,7 +4,7 @@ import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
-import { TextArea, Dropdown } from 'semantic-ui-react';
+import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
@@ -23,6 +23,7 @@ import NewCollectionModal from '../../../../DeckCollection/Modals/NewCollectionM
 import addSelectedCollection from '../../../../../actions/collections/addSelectedCollection';
 import removeSelectedCollection from '../../../../../actions/collections/removeSelectedCollection';
 import updateCollectionDecks from '../../../../../actions/collections/updateCollectionDecks';
+import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -41,6 +42,7 @@ class DeckPropertiesEditor extends React.Component {
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
+            allowMarkdown: props.deckProps.allowMarkdown || false,
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
@@ -49,15 +51,16 @@ class DeckPropertiesEditor extends React.Component {
             users: editors.users,
             groups: editors.groups,
             selectedCollection: '',
+            published: !props.deckProps.hidden,
         };
     }
 
     componentWillReceiveProps(newProps) {
+        // console.log('DeckPropertiesEditor componentWillReceiveProps');
         //check if props have changed to reinitialize state (for handling route changes)
         if (newProps.deckProps !== this.props.deckProps) {
             this.setState(this.getStateFromProps(newProps));
         }
-
         if (this.props.DeckEditStore.viewstate === 'loading') {
             if (newProps.DeckEditStore.viewstate === 'error') {
                 swal({
@@ -96,7 +99,7 @@ class DeckPropertiesEditor extends React.Component {
     addCollection(event, data){
         this.context.executeAction(addSelectedCollection, parseInt(data.value));
         this.setState({
-            selectedCollection: '' 
+            selectedCollection: ''
         });
     }
     removeCollection(removedValue, event){
@@ -104,11 +107,8 @@ class DeckPropertiesEditor extends React.Component {
         this.context.executeAction(removeSelectedCollection, parseInt(removedValue));
     }
     componentDidUpdate() {
+        // console.log('DeckPropertiesEditor componentDidUpdate', this.props.DeckEditStore.showGroupModal);
         this.handleDropboxes();
-        
-        if (this.props.DeckEditStore.showGroupModal) {
-            $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
-        }
     }
 
     componentDidMount() {
@@ -227,6 +227,7 @@ class DeckPropertiesEditor extends React.Component {
             this.context.executeAction(saveAction, {
                 deckId: deckId,
                 title: this.state.title,
+                allowMarkdown: this.state.allowMarkdown,
                 language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
@@ -240,11 +241,12 @@ class DeckPropertiesEditor extends React.Component {
                         groups: groups
                     }
                 },
-                tags: TagsStore.tags
+                tags: TagsStore.tags,
+                hidden: !this.state.published,
             });
             this.context.executeAction(updateTheme, this.state.theme);
             this.context.executeAction(updateCollectionDecks, {
-                deckId : deckId, 
+                deckId : deckId,
                 collections: this.props.DeckEditStore.selectedCollections
             });
         }
@@ -253,6 +255,15 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
+        this.setState(stateChange);
+    }
+    onChangeMarkdown(event) {
+        this.setState({allowMarkdown: !this.state.allowMarkdown});
+    }
+
+    handleChangeCheckbox(fieldName, event, data) {
+        let stateChange = {};
+        stateChange[fieldName] = data.checked;
         this.setState(stateChange);
     }
 
@@ -285,7 +296,7 @@ class DeckPropertiesEditor extends React.Component {
     handleClickShowGroupDetails(groupid, event) {
         event.preventDefault();
         // console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
-
+        $('#app').attr('aria-hidden','true');
         //call service
         this.context.executeAction(loadUsergroup, {groupid: groupid});
     }
@@ -317,7 +328,7 @@ class DeckPropertiesEditor extends React.Component {
                                 </div>
                                 <div className="ten wide column">
                                     <div className="content">
-                                        <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                                        <TextArea className="sr-only" id={'usernameIsALinkHint' + key} value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
                                         <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
                                         <div className="description">
                                             {optionalElement}{optionalText}
@@ -391,31 +402,31 @@ class DeckPropertiesEditor extends React.Component {
         let details = {};
 
         // transform collection details from array to json
-        details = collectionDetails.reduce((details, value, key) => { 
-            details[value._id] = value; return details; 
+        details = collectionDetails.reduce((details, value, key) => {
+            details[value._id] = value; return details;
         }, {});
 
-        let items = selectedCollections.map( (colId) => { 
-            let col = details[colId]; 
+        let items = selectedCollections.map( (colId) => {
+            let col = details[colId];
             let description = `${col.description} ${(col.description) ? '\u00b7' : ''} Created ${timeSince((new Date(col.timestamp)))} ago`;
 
-            return ( 
-                <div className="item" key={'group_' + col._id } > 
-                    <div className="ui grid"> 
-                        <div className="one wide column">                            
-                            <i className="large grid layout middle aligned icon"></i> 
-                        </div> 
+            return (
+                <div className="item" key={'group_' + col._id } >
+                    <div className="ui grid">
+                        <div className="one wide column">
+                            <i className="large grid layout middle aligned icon"></i>
+                        </div>
                         <div className="ten wide column">
-                            <div className="content"> 
-                                <a className="header" href={`/collection/${col._id}?sort=order`} target='_blank'>{col.title}</a> 
-                                <div className="description">{description}</div> 
-                            </div> 
-                        </div> 
-                        <div className="four wide column middle aligned"> 
-                            <button className="ui tiny compact borderless black basic button" onClick={this.removeCollection.bind(this, col._id)} >Remove</button> 
-                        </div> 
-                    </div> 
-                </div>             
+                            <div className="content">
+                                <a className="header" href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a>
+                                <div className="description">{description}</div>
+                            </div>
+                        </div>
+                        <div className="four wide column middle aligned">
+                            <button className="ui tiny compact borderless black basic button" onClick={this.removeCollection.bind(this, col._id)} >Remove</button>
+                        </div>
+                    </div>
+                </div>
             );
         });
 
@@ -530,55 +541,103 @@ class DeckPropertiesEditor extends React.Component {
             return !selectedCollections.includes(collection._id);
         }).map( (collection) => {
             return {
-                key: collection._id, 
-                value: collection._id, 
+                key: collection._id,
+                value: collection._id,
                 text: collection.title
             };
         });
 
         let selectedCollectionsList = this.getSelectedCollections(collectionOptions, selectedCollections);
-        
-        //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
-        //<div className={licenseFieldClass}>
+
+        // Now parts oh JAX in variables
+
+        let listOfAuthorized = this.getListOfAuthorized();
+
+        let titleAndLanguage = <div className="two fields">
+            <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
+                <label htmlFor="title_input">
+                    Title
+                </label>
+                <input type="text" name="deck-title" value={this.state.title}
+                    onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
+                    aria-required="true" id="title_input"/>
+
+            </div>
+            <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
+                <label htmlFor="language" id="language_label">
+                    Language
+                </label>
+                <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
+            </div>
+        </div>;
+        let markdownField = <div className="field">
+                <div className="ui checkbox">
+                    <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
+                    <label>Allow Markdown editing of slides</label>
+                </div>
+         </div>;
+
+        let titleAndLanguageAndPublished = <div className="fields">
+            <div className="fourteen wide field">{titleAndLanguage}</div>
+            <div className="two wide field">
+                <label id="published_label">Published</label>
+                <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
+                    checked={this.state.published} onChange={this.handleChangeCheckbox.bind(this, 'published')} />
+            </div>
+        </div>;
+
+
+        let description = <div className="field">
+            <label htmlFor="description_input" id="deck-description">Description</label>
+            <textarea rows="4" aria-labelledby="deck-description" id="description_input"
+                value={this.state.description}
+                onChange={this.handleChange.bind(this, 'description')}/>
+        </div>;
+
+        let themeAndLicence = <div className="two fields">
+            <div className="field">
+                <label htmlFor="theme" id="theme">Choose deck theme</label>
+                {themeOptions}
+            </div>
+            <div className="field">
+                <label htmlFor="license" id="license_label">License</label>
+                {licenseOptions}
+            </div>
+        </div>;
+
+        let deckCollectionsHtml = <div className="field">
+            <label htmlFor="deck_collections">Playlists</label>
+            <div className="two fields">
+                <div className="field">
+                    <Dropdown value={this.state.selectedCollection} placeholder='Select Playlists' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this)} />
+                </div>
+                <div className="field">
+                    <button className="ui borderless black basic button"
+                            onClick={this.showNewCollectionModal.bind(this)}>Create
+                    </button>
+                </div>
+            </div>
+            <div className="field">
+                {(this.props.DeckEditStore.collectionsLoading) ?
+                    <div className="ui active centered inline text loader">Loading Playlists</div>
+                    :
+                    <div className="ui very relaxed  list">
+                        {selectedCollectionsList}
+                    </div>
+                }
+            </div>
+            <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />
+        </div>;
+
         return (
             <div className="ui container">
                 <div className="ui grid">
                     <div className="sixteen wide column">
                         <form className="ui form">
-                            <div className="two fields">
-                                <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
-                                    <label htmlFor="title_input">
-                                        Title
-                                    </label>
-                                    <input type="text" name="deck-title" value={this.state.title}
-                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                        aria-required="true" id="title_input"/>
-
-                                </div>
-                                <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
-                                    <label htmlFor="language" id="language_label">
-                                        Language
-                                    </label>
-                                    <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <label htmlFor="description_input" id="deck-description">Description</label>
-                                <textarea rows="4" aria-labelledby="deck-description" id="description_input"
-                                    value={this.state.description}
-                                    onChange={this.handleChange.bind(this, 'description')}/>
-                            </div>
-                            <div className="two fields">
-                                <div className="field">
-                                    <label htmlFor="theme" id="theme">Choose deck theme</label>
-                                    {themeOptions}
-                                </div>
-                                <div className="field">
-                                    <label htmlFor="license" id="license_label">License</label>
-                                    {licenseOptions}
-                                </div>
-                            </div>
-
+                            {titleAndLanguageAndPublished}
+                            {description}
+                            {themeAndLicence}
+                            {markdownField}
                             {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
                                 <div>
                                     <div className="two fields">
@@ -597,39 +656,18 @@ class DeckPropertiesEditor extends React.Component {
                                             Authorized:
                                         </div>
                                         <div className="ui very relaxed  list">
-                                            {this.getListOfAuthorized()}
+                                            {listOfAuthorized}
                                         </div>
                                         <div className="ui hidden divider">
                                         </div>
-                                        <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
+                                        <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} show={this.props.DeckEditStore.showGroupModal} />
                                     </div>
                                 </div>
                             ) : ''}
-                            
-                            <div className="field">
-                                <label htmlFor="deck_collections">Deck Collections</label>
-                                <div className="two fields">
-                                    <div className="field">
-                                        <Dropdown value={this.state.selectedCollection} placeholder='Select Deck Collections' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this)} />
-                                    </div>
-                                    <div className="field">
-                                        <button className="ui borderless black basic button"
-                                                onClick={this.showNewCollectionModal.bind(this)}>Create
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="field">
-                                    {(this.props.DeckEditStore.collectionsLoading) ? 
-                                        <div className="ui active centered inline text loader">Loading Deck Collections</div>
-                                        :
-                                        <div className="ui very relaxed  list">
-                                            {selectedCollectionsList}
-                                        </div>
-                                    }
-                                </div>
-                                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />
-                            </div>
-                            <div className="ui hidden divider"></div>                        
+
+                            {deckCollectionsHtml}
+
+                            <div className="ui hidden divider"></div>
 
                             {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 

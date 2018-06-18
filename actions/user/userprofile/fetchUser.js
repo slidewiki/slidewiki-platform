@@ -46,8 +46,8 @@ export default function fetchUser(context, payload, done) {
             }
         } else {
             if(!isEmpty(payload.params.category)){
-                if(context.getStore(UserProfileStore).username === payload.params.username 
-                    || payload.params.category === 'collections')  // allow route /{username}/collections
+                if(context.getStore(UserProfileStore).username === payload.params.username
+                    || payload.params.category === 'playlists')  // allow route /{username}/playlists
                     res.category = isEmpty(payload.params.category) ? '' : payload.params.category;
                 else{
                     context.executeAction(notFoundError, {}, done);

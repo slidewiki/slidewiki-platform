@@ -1,6 +1,8 @@
 import {BaseStore} from 'fluxible/addons';
 import { isLocalStorageOn } from '../common.js';
 
+const activity_types_to_display = ['translate', 'share', 'add', 'edit', 'move', 'comment', 'reply', 'use', 'attach', 'react', 'rate', 'download', 'fork', 'delete', 'joined', 'left'];
+
 class ActivityFeedStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
@@ -59,8 +61,8 @@ class ActivityFeedStore extends BaseStore {
     // }
     addActivity(payload) {
         const activity = payload.activity;
-        if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id ||
-            activity.activity_type === 'move' && this.selector.stype === 'deck' && this.selector.sid === activity.move_info.source_id) {
+        if (activity_types_to_display.includes(activity.activity_type) && (this.selector.stype === activity.content_kind && this.selector.sid.split('-')[0] === activity.content_id.split('-')[0] ||
+            activity.activity_type === 'move' && this.selector.stype === 'deck' && this.selector.sid.split('-')[0] === activity.move_info.source_id.split('-')[0])) {
             this.activities.unshift(activity);//add to the beginning
             if (isLocalStorageOn()) {
                 localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
@@ -71,7 +73,7 @@ class ActivityFeedStore extends BaseStore {
     }
     addActivities(payload) {
         payload.activities.forEach((activity) => {
-            if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id) {
+            if (activity_types_to_display.includes(activity.activity_type) && (this.selector.stype === activity.content_kind && this.selector.sid.split('-')[0] === activity.content_id.split('-')[0])) {
                 this.activities.unshift(activity);//add to the beginning
             }
         });

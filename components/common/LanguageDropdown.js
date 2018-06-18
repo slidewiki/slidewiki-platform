@@ -41,27 +41,27 @@ class LanguageDropdown extends React.Component {
             english: {
                 id: 'LanguageDropdown.english',
                 defaultMessage: 'English'
-            }, 
+            },
             german: {
                 id: 'LanguageDropdown.german',
                 defaultMessage: 'German'
-            }, 
+            },
             dutch: {
                 id: 'LanguageDropdown.dutch',
                 defaultMessage: 'Dutch'
-            }, 
+            },
             greek: {
                 id: 'LanguageDropdown.greek',
                 defaultMessage: 'Greek'
-            }, 
+            },
             italian: {
                 id: 'LanguageDropdown.italian',
                 defaultMessage: 'Italian'
-            }, 
+            },
             portuguese: {
                 id: 'LanguageDropdown.portuguese',
                 defaultMessage: 'Portuguese'
-            }, 
+            },
             serbian: {
                 id: 'LanguageDropdown.serbian',
                 defaultMessage: 'Serbian'
@@ -70,10 +70,18 @@ class LanguageDropdown extends React.Component {
                 id: 'LanguageDropdown.spanish',
                 defaultMessage: 'Spanish'
             },
+            lithuanian: {
+                id: 'LanguageDropdown.lithuanian',
+                defaultMessage: 'Lithuanian'
+            },
+            french: {
+                id: 'LanguageDropdown.french',
+                defaultMessage: 'French'
+            },
             tooltip: {
                 id: 'LanguageDropdown.tooltip',
                 defaultMessage: 'There will be more in the future'
-            }, 
+            },
             placeholder: {
                 id: 'LanguageDropdown.placeholder',
                 defaultMessage: 'Select your language'
@@ -94,28 +102,34 @@ class LanguageDropdown extends React.Component {
         let languageOptions = <div className="menu">
 
             <div className="item" data-value="en_GB" >
-                <FormattedMessage {...this.messages.english} />
+                {this.context.intl.formatMessage(this.messages.english)}
             </div>
             <div className="item" data-value="de_DE" >
-                <FormattedMessage {...this.messages.german} />
+                {this.context.intl.formatMessage(this.messages.german)}
             </div>
-            <div className="item" data-value="nl_NL" >
-                <FormattedMessage {...this.messages.dutch} />
-            </div>
-            <div className="item" data-value="el_GR" >
-                <FormattedMessage {...this.messages.greek} />
+            <div className="item" data-value="fr_FR" >
+                {this.context.intl.formatMessage(this.messages.french)}
             </div>
             <div className="item" data-value="it_IT" >
-                <FormattedMessage {...this.messages.italian} />
-            </div>
-            <div className="item" data-value="pt_PT" >
-                <FormattedMessage {...this.messages.portuguese} />
-            </div>
-            <div className="item" data-value="sr_RS" >
-                <FormattedMessage {...this.messages.serbian} />
+                {this.context.intl.formatMessage(this.messages.italian)}
             </div>
             <div className="item" data-value="es_ES" >
-                <FormattedMessage {...this.messages.spanish} />
+                {this.context.intl.formatMessage(this.messages.spanish)}
+            </div>
+            <div className="item" data-value="nl_NL" >
+                {this.context.intl.formatMessage(this.messages.dutch)}
+            </div>
+            <div className="item" data-value="el_GR" >
+                {this.context.intl.formatMessage(this.messages.greek)}
+            </div>
+            <div className="item" data-value="pt_PT" >
+                {this.context.intl.formatMessage(this.messages.portuguese)}
+            </div>
+            <div className="item" data-value="sr_RS" >
+                {this.context.intl.formatMessage(this.messages.serbian)}
+            </div>
+            <div className="item" data-value="lt_LT" >
+                {this.context.intl.formatMessage(this.messages.lithuanian)}
             </div>
         </div>;
         let languageOptionsUI = <div className="menu">
@@ -133,7 +147,7 @@ class LanguageDropdown extends React.Component {
                     :
                     <input type="hidden" value={this.props.value} name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
-                <div className="default text"><FormattedMessage {...this.messages.placeholder} /></div>
+                <div className="default text">{this.context.intl.formatMessage(this.messages.placeholder)}</div>
                 {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}
             </div>
         );

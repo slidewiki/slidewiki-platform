@@ -1,5 +1,4 @@
 import React from 'react';
-import async from 'async';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
@@ -7,7 +6,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import ReactDOM from 'react-dom';
-import {hashPassword, ssoEnabled} from '../../configs/general';
+import {ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
@@ -15,6 +14,9 @@ let MediaQuery = require ('react-responsive');
 import {FormattedMessage, defineMessages} from 'react-intl';
 import SelectInstanceModal from '../User/SelectInstanceModal.js';
 import openSSOModal from '../../actions/user/openSSOModal';
+import FocusTrap from 'focus-trap-react';
+import LoginModalStore from '../../stores/LoginModalStore';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -31,11 +33,16 @@ class LoginModal extends React.Component {
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
-        this.isLoading = false;
+        this.state = {
+            activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
+            isLoading: false
+        };
 
         this.errorMessages = defineMessages({
+
             error403: {
                 id: 'userSignIn.errormessage.isSPAM',
                 defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
@@ -50,17 +57,42 @@ class LoginModal extends React.Component {
             }
         });
     }
+    componentWillReceiveProps(nextProps){
+        this.setState({ activeTrap: nextProps.LoginModalStore.activeTrap });
 
+        if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
+            // console.log('body intended', this.props.errorMessage.toString());
+            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
+            this.setState({ isLoading: false });
+        }
+    }
+    openModal() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('show');
+    }
+    unmountTrap(){
+        if(this.state.activeTrap){
+            this.context.executeAction(updateTrap,{activeTrap:false});
+        };
+        $('#app').attr('aria-hidden','false');
+
+
+    }
     isModalShown() {
         const classes = $('.ui.login.modal').attr('class');
         return classes.indexOf('hidden') === -1;
     }
 
     handleLoginButton() {
-        $('.ui.login.modal').modal('toggle');
+        this.openModal();
+
+
         setTimeout(() => {
             ReactDOM.findDOMNode(this.refs.email1).focus();
         }, 0);
+
     }
 
     signin(e) {
@@ -73,18 +105,17 @@ class LoginModal extends React.Component {
                 defaultMessage: 'Please use a valid email address',
             }) ]);
         } else {
+            this.setState({ isLoading: true });
+
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: hashPassword(this.refs.password1.value),
+                password: common.hashPassword(this.refs.password1.value),
                 errorMessages: {
                     error403: this.context.intl.formatMessage(this.errorMessages.error403),
                     error404: this.context.intl.formatMessage(this.errorMessages.error404),
                     error423: this.context.intl.formatMessage(this.errorMessages.error423)
                 }
             });
-
-            this.isLoading = true;
-            this.forceUpdate();
         }
         return false;
     }
@@ -102,15 +133,10 @@ class LoginModal extends React.Component {
     componentDidUpdate() {
         if (this.props.errorMessage.length > 2)
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-        // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
-        if ((this.props.errorMessage !== '') && this.isLoading) {
-            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-            this.isLoading = false;
-            this.forceUpdate();
-        }
-        else if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
-            this.isLoading = false;
-            this.forceUpdate();
+        // console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
+        if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
+            localStorage.setItem(MODI, 'login_failed');
+            this.setState({ isLoading: false });
             swal({
                 title: this.context.intl.formatMessage({
                     id: 'LoginModal.title.information',
@@ -118,7 +144,7 @@ class LoginModal extends React.Component {
                 }),
                 text: this.context.intl.formatMessage({
                     id: 'LoginModal.hint.noAccountForTheProviderData',
-                    defaultMessage: 'You haven&apos;t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
+                    defaultMessage: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
                 }),
                 type: 'question',
                 showCloseButton: true,
@@ -136,27 +162,15 @@ class LoginModal extends React.Component {
                 buttonsStyling: false
             })
             .then((dismiss) => {
-                // console.log('action after dismiss', dismiss);
                 $('.ui.login.modal').modal('hide');
                 return this.handleRegisterFirst(dismiss);
             })
             .catch((action) => {
                 // console.log('action after click', action);
-                localStorage.setItem(MODI, 'login_failed');
-
                 //delete old data
-                let that = this;
-                async.series([
-                    function(callback) {
-                        that.context.executeAction(newSocialData, {});
-                        callback(null, 'one');
-                    }
-                ],
-                // optional callback
-                (err, results) => {
-                    if (action !== 'close')
-                        that.handleLoginButton();
-                });
+                this.context.executeAction(newSocialData, {});
+                if (action !== 'close')
+                    this.handleLoginButton();
 
                 return true;
             });
@@ -164,7 +178,7 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.isLoading = false;
+            this.setState({ isLoading: false });
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
@@ -178,7 +192,7 @@ class LoginModal extends React.Component {
 
     handleSignupClick(e) {
         e.preventDefault();
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/signup'
         });
@@ -187,7 +201,7 @@ class LoginModal extends React.Component {
 
     handleNoAccessClick(e) {
         e.preventDefault();
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/resetpassword'
         });
@@ -195,10 +209,10 @@ class LoginModal extends React.Component {
 
     socialLogin(provider, e) {
         e.preventDefault();
-        console.log('Hit on social login icon', provider);
+        // console.log('Hit on social login icon', provider);
         this.provider = provider;
 
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
 
         //prepare localStorage
         localStorage.setItem(MODI, 'login');
@@ -224,13 +238,13 @@ class LoginModal extends React.Component {
     doSSO(e) {
         e.preventDefault();
 
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal').modal('hide');
 
         this.context.executeAction(openSSOModal, {register: false});
     }
 
     handleStorageEvent(e) {
-        console.log('storage event', e.key, localStorage.getItem(e.key));
+        // console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
 
         if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
@@ -290,17 +304,7 @@ class LoginModal extends React.Component {
             return;
         }
 
-        let thatContext = this.context;
-        async.series([
-            function(callback) {
-                thatContext.executeAction(newSocialData, data);
-                callback(null, 'two');
-            },
-            function(callback) {
-                thatContext.executeAction(userSocialSignIn, data);
-                callback(null, 'two');
-            }
-        ]);
+        this.context.executeAction(userSocialSignIn, data);
     }
 
     getProviderName() {
@@ -310,14 +314,13 @@ class LoginModal extends React.Component {
     }
 
     render() {
+
         let inputField_classes = classNames({
             'ui': true,
-            'five': true,
-            'wide': true,
             'icon': true,
-            'disabled': this.isLoading,
+            'disabled': this.state.isLoading,
             'input': true,
-            'loading': this.isLoading,
+            'loading': this.state.isLoading,
             'field': true
         });
 
@@ -329,44 +332,80 @@ class LoginModal extends React.Component {
             placeholder_password: {
                 id: 'LoginModal.placeholder.password',
                 defaultMessage: 'Password',
-            }
+            },
+            headerText:{
+                id:'userSignIn.headerText',
+                defaultMessage:'Sign In'
+            },
         });
+
+        let inputs =
+        <div className="ui one column grid">
+          <div className="ui center aligned column">
+            <textarea className="sr-only" id="signinModalDescription"
+            value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+            tabIndex ='-1'/>
+            <div className={inputField_classes}>
+              <div><label htmlFor="email1" hidden>
+                <FormattedMessage
+                  id='LoginModal.label.email'
+                  defaultMessage='E-Mail'
+                />
+              </label></div>
+              <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+            </div>
+          </div>
+          <br/>
+          <div className="ui center aligned column">
+            <div className={inputField_classes}>
+              <div>
+                <label htmlFor="password1" hidden>
+                  <FormattedMessage
+                    id='LoginModal.label.password'
+                    defaultMessage='Password'
+                  />
+                </label>
+              </div>
+              <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
+            </div>
+          </div>
+        </div>;
 
         return(
           <div>
-            <div className="ui login modal" id='signinModal' style={modalStyle}>
+            <div className="ui login modal" id='signinModal' role="dialog" aria-labelledby="siginModal_header" aria-describedby="signinModalDescription" style={modalStyle}>
+            <FocusTrap
+                    id="focus-trap-signinModal"
+                    focusTrapOptions={{
+                        onDeactivate: this.unmountTrap,
+                        clickOutsideDeactivates: true,
+                        initialFocus: '#email1'
+                    }}
+                    active={this.state.activeTrap}
+                    className = "header">
               <div className="header">
-                  <h1 style={headerStyle}>
-                    <FormattedMessage
-                      id='LoginModal.header.signIn'
-                      defaultMessage='Sign In'
-                    />
+                  <h1 id="siginModal_header" style={headerStyle}>
+                     {this.context.intl.formatMessage(messages.headerText)}
+
                   </h1>
               </div>
               <div className="content">
                 <div className="ui container">
-
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
-                        <div className={inputField_classes}>
-                          <div><label htmlFor="email1" hidden>
-                            <FormattedMessage
-                              id='LoginModal.label.email'
-                              defaultMessage='E-Mail'
-                            />
-                          </label></div>
-                          <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+                        <div className="ui one column centered grid">
+                          <MediaQuery minDeviceWidth={769} values={{deviceWidth: 1600}}>
+                            <div className="ui five wide column">
+                              {inputs}
+                            </div>
+                          </MediaQuery>
+                          <MediaQuery maxDeviceWidth={768}>
+                            <div className="ui twelve wide centered column">
+                              {inputs}
+                            </div>
+                          </MediaQuery>
                         </div>
-                        <br/>
-                        <div className={inputField_classes}>
-                          <div><label htmlFor="password1" hidden>
-                            <FormattedMessage
-                              id='LoginModal.label.password'
-                              defaultMessage='Password'
-                            />
-                          </label></div>
-                          <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
-                        </div>
+
                         <br/>
                         <div className="ui center aligned">
                             <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
@@ -420,6 +459,7 @@ class LoginModal extends React.Component {
                   />
                 </button>
               </div>
+             </FocusTrap>
             </div>
             <SelectInstanceModal />
           </div>
@@ -431,4 +471,10 @@ LoginModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
+LoginModal = connectToStores(LoginModal,[LoginModalStore],(context,props) => {
+    return {
+        LoginModalStore: context.getStore(LoginModalStore).getState(),
+
+    };
+});
 export default LoginModal;

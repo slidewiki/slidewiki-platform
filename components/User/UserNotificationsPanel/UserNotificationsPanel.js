@@ -11,6 +11,8 @@ import loadUserNotifications from '../../../actions/user/notifications/loadUserN
 import selectAllActivityTypes from '../../../actions/user/notifications/selectAllActivityTypes';
 import {Button} from 'semantic-ui-react';
 
+let MediaQuery = require ('react-responsive');
+
 class UserNotificationsPanel extends React.Component {
 
     componentWillMount() {
@@ -21,6 +23,10 @@ class UserNotificationsPanel extends React.Component {
         } else {
             this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
         }
+    }
+
+    componentDidMount() {
+        $('.ui.accordion').accordion();
     }
 
     handleChangeToggle(type, id) {
@@ -130,7 +136,7 @@ class UserNotificationsPanel extends React.Component {
         } else if (notifications.length === 0) {
             notificationsDiv = emptyDiv;
         } else {
-            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} items={notifications} selector={selector} />;
+            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} items={notifications} selector={selector} />;
         }
         return (
             <div ref="userNotificationsPanel">
@@ -142,7 +148,20 @@ class UserNotificationsPanel extends React.Component {
                       </div>
                       {buttons}
                       <div className="ui basic segment">
-                          {filters}
+                          <MediaQuery minDeviceWidth={768}>
+                              {filters}
+                          </MediaQuery>
+                          <MediaQuery maxDeviceWidth={767}>
+                          <div className="ui accordion">
+                              <div className="title active">
+                                <i className="icon dropdown"></i>
+                                Filters
+                              </div>
+                              <div className="content field">
+                                  {filters}
+                              </div>
+                          </div>
+                          </MediaQuery>
                       </div>
                     </div>
                     <div className="column ten wide">

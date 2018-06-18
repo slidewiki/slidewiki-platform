@@ -15,6 +15,8 @@ import Integrations from './Integrations';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
+let MediaQuery = require ('react-responsive');
+
 class UserProfile extends React.Component {
     componentDidMount() {}
 
@@ -123,9 +125,22 @@ class UserProfile extends React.Component {
                     <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
-                <div className = "twelve wide column" >
-                    {toInsert()}
-                </div>
+                <MediaQuery minDeviceWidth={1024} values={{deviceWidth: 1600}}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={768} maxDeviceWidth={1023}>
+                    <div className = "eleven wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery maxDeviceWidth={767}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+
             </div>
         );
     }
@@ -159,7 +174,7 @@ class UserProfile extends React.Component {
                       </h3>
                   </div>
                   <div className="ui segment">
-                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
+                      <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
                   </div>
 
               </div>
@@ -204,7 +219,7 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} decksMeta={this.props.UserProfileStore.userDecksMeta} loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading} loadMoreError={this.props.UserProfileStore.nextUserDecksError} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} categoryItem={this.props.UserProfileStore.categoryItem} />);
     }
 
     displayIntegrations() {

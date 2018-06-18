@@ -65,7 +65,7 @@ class UserRegistrationSocial extends React.Component {
             mailprompt3: {
                 id: 'UserRegistrationSocial.mailprompt3',
                 defaultMessage: 'The email address is already in use',
-            },
+            }
         });
         //Form validation
         const validationRules = {
@@ -135,6 +135,31 @@ class UserRegistrationSocial extends React.Component {
         if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'register') {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) && (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
+        } else if (nextProps.UserRegistrationStore.socialError && !this.props.UserRegistrationStore.socialError) {
+            const messages = defineMessages({
+                genericError: {
+                    id: 'UserRegistrationSocial.genericError',
+                    defaultMessage: 'An error occured. Please try again later.',
+                },
+                error: {
+                    id: 'UserRegistrationSocial.error',
+                    defaultMessage: 'Social Login Error',
+                },
+                confirm: {
+                    id: 'UserRegistrationSocial.confirm',
+                    defaultMessage: 'OK',
+                }
+            });
+
+            swal({
+                titleText: this.context.intl.formatMessage(messages.error),
+                text: this.context.intl.formatMessage(messages.genericError),
+                type: 'error',
+                showCancelButton: false,
+                confirmButtonText: this.context.intl.formatMessage(messages.confirm),
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            });
         }
     }
 
@@ -262,8 +287,12 @@ class UserRegistrationSocial extends React.Component {
         }
         return (
           <div>
-            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal" >
-              <div className="header">
+            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal"
+              role='dialog'
+              aria-labelledby='socialsignupsmodal_header'
+			        aria-describedby='socialsignupsmodal_content'
+              tabIndex="0" >
+              <div className="header" id="socialsignupsmodal_header">
                   <h1 style={headerStyle}>
                     <FormattedMessage
                       id='UserRegistrationSocial.validate'
@@ -271,7 +300,7 @@ class UserRegistrationSocial extends React.Component {
                     />
                   </h1>
               </div>
-              <div className="content">
+              <div className="content" id="socialsignupsmodal_content">
                   <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
                       <div className="ui inline field">
                           <label style={signUpLabelStyle}>
@@ -310,7 +339,7 @@ class UserRegistrationSocial extends React.Component {
                           <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                       </div>
                       <div className="ui error message"></div>
-                      <button type="submit" className="ui blue labeled submit icon button" >
+                      <button type="submit" className="ui blue labeled submit icon button" role="button" tabIndex="0" >
                           <i className="icon add user"/>
                           <FormattedMessage
                             id='UserRegistrationSocial.signup'
@@ -327,12 +356,12 @@ class UserRegistrationSocial extends React.Component {
                   </a>
               </div>
               <div className="actions">
-                  <div className="ui cancel button" onClick={this.handleCancelClick.bind(this)}>
+                  <button type="button" className="ui cancel button" onClick={this.handleCancelClick.bind(this)} role="button" tabIndex="0">
                     <FormattedMessage
                       id='UserRegistrationSocial.cancel'
                       defaultMessage='Cancel'
                     />
-                  </div>
+                  </button>
               </div>
             </div>
           </div>

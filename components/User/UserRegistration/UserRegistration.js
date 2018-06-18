@@ -13,10 +13,12 @@ import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
-import {hashPassword, ssoEnabled} from '../../../configs/general';
+import {ssoEnabled} from '../../../configs/general';
 import common from '../../../common';
 import openSSOModal from '../../../actions/user/openSSOModal';
 import {defineMessages} from 'react-intl';
+import updateTrap from '../../../actions/loginModal/updateTrap';
+let MediaQuery = require ('react-responsive');
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
@@ -384,7 +386,10 @@ class UserRegistration extends React.Component {
                     this.context.executeAction(navigateAction, {
                         url: '/'
                     });
-
+                    //prepraring the modal
+                    this.context.executeAction(updateTrap,{activeTrap:true});
+                    //hidden the other page elements to readers
+                    $('#app').attr('aria-hidden','true');
                     $('.ui.login.modal').modal('show');
 
                     return true;
@@ -485,7 +490,7 @@ class UserRegistration extends React.Component {
                 username: this.refs.username.value,
                 language: language,
                 email: this.refs.email.value,
-                password: hashPassword(this.refs.password.value),
+                password: common.hashPassword(this.refs.password.value),
                 grecaptcharesponse: this.state.grecaptcharesponse
             };
         } catch (e) {
@@ -683,68 +688,77 @@ class UserRegistration extends React.Component {
         if (this.props.UserRegistrationStore.suggestedUsernames.length > 0) {
             usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
         }
+
+        let content = <div className="ui blue padded center aligned segment">
+            <h2 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_title)}</h2>
+            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h3>
+
+            {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
+            {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title='Sign up with an account of another SlideWiki instance' aria-label="Sign up with another SlideWiki instance"><i className="big user icon"></i></button> : ''}
+            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label={this.context.intl.formatMessage(this.messages.modal_googleButton)}><i className="big google plus lnk icon"></i></button>
+            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label={this.context.intl.formatMessage(this.messages.modal_githubButton)}><i className="big github icon"></i></button>
+
+            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/terms" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
+            <div className="ui dividing header" ></div>
+
+            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h3>
+            <form className="ui form" ref="UserRegistration_form" >
+                <div className="ui inline required field">
+                    <label style={signUpLabelStyle} htmlFor="FirstName_label">{this.context.intl.formatMessage(this.messages.form_firstName)}</label>
+                    <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" placeholder={this.context.intl.formatMessage(this.messages.form_firstName)} autoFocus aria-required="true"/></div>
+                </div>
+                <div className="ui inline required field">
+                    <label style={signUpLabelStyle} htmlFor="LastName_label">{this.context.intl.formatMessage(this.messages.form_lastName)}</label>
+                    <div className="ui icon input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" placeholder={this.context.intl.formatMessage(this.messages.form_lastName)} /></div>
+                </div>
+                <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
+                    <label style={signUpLabelStyle} htmlFor="username_label">{this.context.intl.formatMessage(this.messages.form_userName)}</label>
+                    <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username_label" name="username" ref="username" placeholder={this.context.intl.formatMessage(this.messages.form_userName)} aria-required="true"/></div>
+                </div>
+                <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
+                    <label style={signUpLabelStyle} htmlFor="email_label">{this.context.intl.formatMessage(this.messages.form_email)}</label>
+                    <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email_label" name="email" ref="email" placeholder={this.context.intl.formatMessage(this.messages.form_email)} aria-required="true"/></div>
+                </div>
+                <div className="ui inline required field">
+                    <label style={signUpLabelStyle} htmlFor="reenteremail">{this.context.intl.formatMessage(this.messages.form_reenterEmail)}</label>
+                    <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder={this.context.intl.formatMessage(this.messages.form_reenterEmail)} aria-required="true"/></div>
+                </div>
+                <div className="ui inline required field">
+                    <label style={signUpLabelStyle} htmlFor="password_label">{this.context.intl.formatMessage(this.messages.form_password)}</label>
+                    <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder={this.context.intl.formatMessage(this.messages.form_password)} aria-required="true"/></div>
+                </div>
+                <div className="ui inline field">
+                    <label style={signUpLabelStyle} htmlFor="reenterpassword_label">{this.context.intl.formatMessage(this.messages.form_reenterPassword)}</label>
+                    <div className="ui icon input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder={this.context.intl.formatMessage(this.messages.form_reenterPassword)} aria-required="true"/></div>
+                </div>
+                <div >
+                    <input type="hidden" id="recaptcha" name="recaptcha"></input>
+                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                </div>
+                <div className="ui error message" ></div>
+                <br/>
+                <button type="submit" className="ui blue labeled submit icon button" >
+                    <i className="icon add user"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
+                </button>
+            </form>
+            <div className="ui dividing header" ></div>
+          {this.context.intl.formatMessage(this.messages.form_terms)} <a href="/terms">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
+            <br/><br/>
+            <a href="#" onClick={this.handleNoAccessClick}>{this.context.intl.formatMessage(this.messages.form_noAccess)}</a>
+        </div>;
         return (
             <div>
                 <div className="ui vertically padded centered grid container" >
-                    <div className="ten wide column">
-                        <div className="ui blue padded center aligned segment">
-                            <h2 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_title)}</h2>
-                            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h3>
-
-                            {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
-                            {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title='Sign up with an account of another SlideWiki instance' aria-label="Sign up with another SlideWiki instance"><i className="big user icon"></i></button> : ''}
-                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label={this.context.intl.formatMessage(this.messages.modal_googleButton)}><i className="big google plus lnk icon"></i></button>
-                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label={this.context.intl.formatMessage(this.messages.modal_githubButton)}><i className="big github icon"></i></button>
-
-                            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/imprint" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
-                            <div className="ui dividing header" ></div>
-
-                            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h3>
-                            <form className="ui form" ref="UserRegistration_form" >
-                                <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="FirstName_label">{this.context.intl.formatMessage(this.messages.form_firstName)}</label>
-                                    <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" placeholder={this.context.intl.formatMessage(this.messages.form_firstName)} autoFocus aria-required="true"/></div>
-                                </div>
-                                <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="LastName_label">{this.context.intl.formatMessage(this.messages.form_lastName)}</label>
-                                    <div className="ui icon input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" placeholder={this.context.intl.formatMessage(this.messages.form_lastName)} /></div>
-                                </div>
-                                <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                                    <label style={signUpLabelStyle} htmlFor="username_label">{this.context.intl.formatMessage(this.messages.form_userName)}</label>
-                                    <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username_label" name="username" ref="username" placeholder={this.context.intl.formatMessage(this.messages.form_userName)} aria-required="true"/></div>
-                                </div>
-                                <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                                    <label style={signUpLabelStyle} htmlFor="email_label">{this.context.intl.formatMessage(this.messages.form_email)}</label>
-                                    <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email_label" name="email" ref="email" placeholder={this.context.intl.formatMessage(this.messages.form_email)} aria-required="true"/></div>
-                                </div>
-                                <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="reenteremail">{this.context.intl.formatMessage(this.messages.form_reenterEmail)}</label>
-                                    <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder={this.context.intl.formatMessage(this.messages.form_reenterEmail)} aria-required="true"/></div>
-                                </div>
-                                <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="password_label">{this.context.intl.formatMessage(this.messages.form_password)}</label>
-                                    <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder={this.context.intl.formatMessage(this.messages.form_password)} aria-required="true"/></div>
-                                </div>
-                                <div className="ui inline field">
-                                    <label style={signUpLabelStyle} htmlFor="reenterpassword_label">{this.context.intl.formatMessage(this.messages.form_reenterPassword)}</label>
-                                    <div className="ui icon input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder={this.context.intl.formatMessage(this.messages.form_reenterPassword)} aria-required="true"/></div>
-                                </div>
-                                <div >
-                                    <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
-                                </div>
-                                <div className="ui error message" ></div>
-                                <br/>
-                                <button type="submit" className="ui blue labeled submit icon button" >
-                                    <i className="icon add user"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
-                                </button>
-                            </form>
-                            <div className="ui dividing header" ></div>
-                          {this.context.intl.formatMessage(this.messages.form_terms)}<a href="/imprint">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
-                            <br/><br/>
-                            <a href="#" onClick={this.handleNoAccessClick}>{this.context.intl.formatMessage(this.messages.form_noAccess)}</a>
+                    <MediaQuery minDeviceWidth={768}>
+                        <div className="ten wide column">
+                            {content}
                         </div>
-                    </div>
+                    </MediaQuery>
+                    <MediaQuery maxDeviceWidth={767}>
+                        <div className="sixteen wide column">
+                            {content}
+                        </div>
+                    </MediaQuery>
 
                 </div>
 
