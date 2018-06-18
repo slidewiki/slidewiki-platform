@@ -16,7 +16,7 @@ import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
 import AttachSearchForm from './AttachSearchForm';
-
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 
 
@@ -201,7 +201,7 @@ class AttachSubdeckModal extends React.Component{
                 role="dialog"
                 id="attachSubDeckModal"
                 aria-labelledby="attachSubdeckHeader"
-                aria-describedby="attachSubdeckModalDescription"
+                aria-describedby="slidesModal.attachSubdeckModalDescription"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
@@ -219,10 +219,11 @@ class AttachSubdeckModal extends React.Component{
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
+                         <FormattedMessage id='slidesModal.attachSubdeckModalDescription' defaultMessage='Select deck to attach from your My Decks list or search SlideWiki. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.'  tabIndex ='-1' />
+                         {/*<TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>*/}
                          <Segment color="blue" textAlign="center" padded>
                             <AttachMenu activeItem={this.state.activeItem}/>
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>
                                {searchForm}
                                {segmentPanelContent}
                             </Segment>
