@@ -219,7 +219,7 @@ class AttachSubdeckModal extends React.Component{
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
-                         <FormattedMessage id='slidesModal.attachSubdeckModalDescription' defaultMessage='Select deck to attach from your My Decks list or search SlideWiki. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.'  tabIndex ='-1' />
+                         <FormattedMessage id='attachSubdeckModalDescription' defaultMessage='Select a deck to attach from your My Decks list or search SlideWiki. We recommend that decks have a maximum of 50 slides per (sub)deck for optimum performance when viewing your presentation. If you wish to collate lots of decks then we recommend creating a playlist.'  tabIndex ='-1' />
                          {/*<TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>*/}
                          <Segment color="blue" textAlign="center" padded>
                             <AttachMenu activeItem={this.state.activeItem}/>
