@@ -24,7 +24,7 @@ let ReactDOM = require('react-dom');
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.currentcontent;
+        this.currentContent;
         this.refresh = 'false';
         this.CKEDitor_loaded = false;
         this.scaleratio = 1;
@@ -938,7 +938,7 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         }); //leave all buttons
-        //this.currentcontent = this.props.content;
+        //this.currentContent = this.props.content;
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
@@ -1499,6 +1499,11 @@ class SlideContentEditor extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps) {
+        if (this.currentContent !== this.props.content) {
+            this.currentContent = this.props.content;
+            //this.initialScale = 1;
+            this.scaleratio = 1;
+        }
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
             if (this.finishLoading === true){
@@ -2052,30 +2057,36 @@ class SlideContentEditor extends React.Component {
     resize() {
         if($('.pptx2html').length)  //if slide is in canvas mode
         {
-            let containerwidth = document.getElementById('container').offsetWidth;
-            let containerheight = document.getElementById('container').offsetHeight;
-            //reset scaling of pptx2html element to get original size
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            //Function to fit contents in edit and view component
-            let pptxwidth = $('.pptx2html').width();
-            let pptxheight = $('.pptx2html').height();
-            //TODO - change to get right!
-            this.scaleratio = containerwidth / (pptxwidth+50);
-            //this.scaleratio = containerwidth / (pptxwidth+120);
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-            //$('.pptx2html').animate({
-            //    transform: 'scale(2)'
-            //});
-            //console.log('scale with ratio: ' + this.scaleratio);
+            if (this.scaleratio === 1) {
+                let containerwidth = document.getElementById('container').offsetWidth;
+                let containerheight = document.getElementById('container').offsetHeight;
+                //reset scaling of pptx2html element to get original size
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                //Function to fit contents in edit and view component
+                let pptxwidth = $('.pptx2html').width();
+                let pptxheight = $('.pptx2html').height();
+                //TODO - change to get right!
+                this.scaleratio = containerwidth / (pptxwidth+50);
+                //this.scaleratio = containerwidth / (pptxwidth+120);
+                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+                //$('.pptx2html').animate({
+                //    transform: 'scale(2)'
+                //});
+                //console.log('scale with ratio: ' + this.scaleratio);
 
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+                //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
+                this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
+                this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            } else {
+                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+                let pptxheight = $('.pptx2html').outerHeight();
+                const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+                this.refs.slideEditPanel.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
+            }
             this.refs.inlineContent.style.overflowY = 'auto';
             this.refs.present.style.overflowY = 'hidden';
-        }
-        else {
+        } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.present.style.overflowY = 'scroll';
             this.refs.inlineContent.style.height = '100%';
@@ -2091,7 +2102,7 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
+//        window.removeEventListener('resize', this.handleResize);
         // Remove the warning window.
         window.onbeforeunload = () => {};
         if (CKEDITOR.instances.inlineContent != null) {
@@ -2103,9 +2114,26 @@ class SlideContentEditor extends React.Component {
             CKEDITOR.instances.inlineSpeakerNotes.destroy();
         }
     }
+
     emitChange(context){
         //context.hasChanges = true;
     }
+
+    zoomIn(){
+        this.scaleratio += 0.25;
+        this.resize();
+    }
+
+    resetZoom(){
+        this.scaleratio = 1;
+        this.resize();
+    }
+
+    zoomOut(){
+        this.scaleratio -= 0.25;
+        this.resize();
+    }
+
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
@@ -2204,11 +2232,12 @@ class SlideContentEditor extends React.Component {
             minHeight: 50,
             overflowY: 'auto',
             position: 'relative',
-            resize: 'vertical'
+            resize: 'vertical',
+            paddingLeft: '5px'
         };
         const speakernotesStyle = {
             minWidth: '100%',
-            minHeight: 60,
+            minHeight: 85,
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
@@ -2299,10 +2328,45 @@ class SlideContentEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                    <b>Speaker notes:</b><br />
-                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
-                    </div>
+                <div className="ui horizontal segments">
+                    {
+                        this.props.hideSpeakerNotes ?  null :
+                        <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
+                                style={compSpeakerStyle}>
+                            <b>Speaker notes:</b><br />
+                            <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
+                                    ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
+                                    dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                            </div>
+                        </div>
+                    }
+                    {
+                        this.props.hideSpeakerNotes ?  null :
+                        <div className="ui segment vertical attached left icon buttons">
+                            <button className="ui button" onClick={this.zoomIn.bind(this)} type="button"
+                                    aria-label="Zoom in" data-tooltip="Zoom in">
+                                <i className="stacked icons">
+                                    <i className="small plus icon"></i>
+                                    <i className="large search icon"></i>
+                                </i>
+                            </button>
+                            <button className="ui button" onClick={this.resetZoom.bind(this)} type="button"
+                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                <i className="stacked icons">
+                                    <i className="small compress icon"></i>
+                                    <i className="large search icon"></i>
+                                </i>
+                            </button>
+                            <button className="ui button" onClick={this.zoomOut.bind(this)} type="button"
+                                    aria-label="Zoom out" data-tooltip="Zoom out">
+                                <i className="stacked icons">
+                                    <i className="small minus icon"></i>
+                                    <i className="large search icon"></i>
+                                </i>
+                            </button>
+                        </div>
+                    }
+
                 </div>
             </div>
         );
