@@ -2183,50 +2183,26 @@ class SlideContentEditor extends React.Component {
             //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
         const headerStyle = {
-            //minWidth: '100%',
             height: '0px',
             overflowY: 'auto',
-            //borderStyle: 'dashed dashed none dashed',
-            //borderColor: '#e7e7e7',
             position: 'relative'
         };
         const compStyle = {
-            // maxHeight: 450,
-            //minHeight: 450,
-            //overflowY: 'auto',
-            //position: 'relative'
-            //minWidth: '100%',
-            // maxHeight: 450,
-            //padding: 20,
             minHeight: 600,
-            //minHeight: '100%',
             overflowY: 'auto',
-            //overflowX: 'hidden',
             overflowX: 'auto',
-            //overflowY: 'visible',
-            //overflow: 'hidden,'
             position: 'relative'
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
-            //padding: 10,
-            //paddingTop: 40,
             height: '100%'
         };
         const contentStyle = {
             minWidth: '100%',
-            // maxHeight: 450,
-            //padding: 10,
-            /*paddingLeft: 50,
-            paddingRight: 50,
-            paddingTop: 10,
-            xpaddingBottom: 10,*/
             minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
-            //borderStyle: 'dashed',
-            //borderColor: '#e7e7e7',
         };
         const compSpeakerStyle = {
             minHeight: 50,
