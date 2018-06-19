@@ -31,7 +31,6 @@ class SearchResultsStore extends BaseStore {
         this.numFound = payload.res1.numFound;
         this.docs1 = payload.res1.docs;
         this.docs2 = payload.res2.docs;
-    // console.log(JSON.stringify(this.docs2, null, 4));
         this.spellcheck = payload.res1.spellcheck;
         this.facets = payload.res1.facets;
         this.error = payload.res1.error;
@@ -45,15 +44,15 @@ class SearchResultsStore extends BaseStore {
         this.emitChange();
     }
     loadMoreResults(payload){
-        this.numFound = payload.numFound;
-    console.log(JSON.stringify(payload, null, 4));
-        this.docs1 = this.docs1.concat(payload.docs1);     // append more results
-        this.docs2 = this.docs2.concat(payload.docs2);     // append more results
-        this.spellcheck = payload.spellcheck;
-        this.facets = payload.facets;
-        this.error = payload.error;
-        this.hasMore = payload.hasMore;
-        this.page = payload.page;
+        this.numFound = payload.res1.numFound;
+        this.docs1 = this.docs1.concat(payload.res1.docs || []);     // append more results
+        this.docs2 = this.docs2.concat(payload.res2.docs || []);     // append more results
+
+        this.spellcheck = payload.res1.spellcheck;
+        this.facets = payload.res1.facets;
+        this.error = payload.res1.error;
+        this.hasMore = payload.res1.hasMore;
+        this.page = payload.res1.page;
 
         // hide loading
         this.loading = false;
