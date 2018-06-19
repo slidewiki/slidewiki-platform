@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
+import loadPresentation from '../../../actions/loadPresentation';
 
 let playerCss = {
     height: '100%',
@@ -23,7 +24,7 @@ if(process.env.BROWSER){
 }
 
 
-class PresentationPrint extends React.Component{
+class Presentation extends React.Component{
     constructor(props){
         super(props);
         this.playerCss = playerCss;
@@ -111,15 +112,15 @@ class PresentationPrint extends React.Component{
 
 }
 
-PresentationPrint.contextTypes = {
+Presentation.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-PresentationPrint = connectToStores(PresentationPrint, [PresentationStore], (context, props) => {
+PresentationPrint = connectToStores(Presentation, [PresentationStore], (context, props) => {
     return {
         PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
 
 
-export default PresentationPrint;
+export default Presentation;
