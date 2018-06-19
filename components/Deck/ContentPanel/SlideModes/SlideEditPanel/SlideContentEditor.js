@@ -245,27 +245,6 @@ class SlideContentEditor extends React.Component {
                     '<p>&nbsp;</p>'+
                     '<p>&nbsp;</p>'+
                     '<p>&nbsp;</p>'+
-                    '<table cellpadding="15" cellspacing="0" style="width: 100%; top: 404px; left: -11px;">'+
-                    '	<thead>'+
-                    '		<tr>'+
-                    '			<th colspan="2" scope="col" style="background-color:#f2f9ff; text-align:center">Saturday, July 14</th>'+
-                    '		</tr>'+
-                    '	</thead>'+
-                    '	<tbody>'+
-                    '		<tr>'+
-                    '			<td style="white-space:nowrap">9:30 AM - 11:30 AM</td>'+
-                    '			<td>Americano vs. Brewed - &ldquo;know your coffee&rdquo; session with <strong>Stefano Garau</strong></td>'+
-                    '		</tr>'+
-                    '		<tr>'+
-                    '			<td style="white-space:nowrap">1:00 PM - 3:00 PM</td>'+
-                    '			<td>Pappardelle al pomodoro - live cooking session with <strong>Rita Fresco</strong></td>'+
-                    '		</tr>'+
-                    '		<tr>'+
-                    '			<td style="white-space:nowrap">5:00 PM - 8:00 PM</td>'+
-                    '			<td>Tuscan vineyards at a glance - wine-tasting session with <strong>Frederico Riscoli</strong></td>'+
-                    '		</tr>'+
-                    '	</tbody>'+
-                    '</table>'+
                     '<blockquote>'+
                     '<p>The annual Flavorful Tuscany meetups are always a culinary discovery. You get the best of Tuscan flavors during an intense one-day stay at one of the top hotels of the region. All the sessions are lead by top chefs passionate about their profession. I would certainly recommend to save the date in your calendar for this one!</p>'+
                     '<p>Angelina Calvino, food journalist</p>'+

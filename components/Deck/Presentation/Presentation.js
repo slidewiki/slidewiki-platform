@@ -138,25 +138,31 @@ class Presentation extends React.Component{
                 pptxwidth = $('.present > .pptx2html').width();
                 pptxheight = $('.present > .pptx2html').height();
             } else {
+
                 pptxwidth = '100%';
                 pptxheight = '100%';
+
                 //resize non-pptx2html slide content based on current height of window
                 //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
-                let presentwidth = $('.present').width();
+                //let presentwidth = $('.present').width();
                 let presentheight = $('.present').height();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
-                let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                //let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                //let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                //let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                let screenheight = document.getElementsByClassName('reveal')[0].offsetHeight;
                 //console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
                 let heightratio = screenheight / presentheight ;
-                let widthratio = screenwidth / presentwidth;
+                //let widthratio = screenwidth / presentwidth;
                 let scaleratio = 1;
-                if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                //if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                if (presentheight > screenheight){scaleratio = heightratio;}
                 //console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
                 //console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
 
                 $('.present').css({'transform': '', 'transform-origin': ''});
-                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'center top'});
+
             }
             // event.previousSlide, event.currentSlide, event.indexh, event.indexv
             //let state = Reveal.getState();
