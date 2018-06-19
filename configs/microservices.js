@@ -35,7 +35,7 @@ STEP 3: Verify that in STEP 2, you have correct operation mentioned. If you see 
 export default {
     Microservices: {
         'deck': {
-            uri: 'http://slidewiki.imis.athena-innovation.gr/deckservice/'
+            uri: 'http://slidewiki.imis.athena-innovation.gr/deckservice'
         },
         'discussion': {
             uri: 'https://discussionservice.experimental.slidewiki.org'
