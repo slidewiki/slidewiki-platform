@@ -11,6 +11,7 @@ export default function loadMoreResults(context, payload, done) {
         if (err) {
             context.dispatch('LOAD_RESULTS_FAILURE', err);
         } else {
+        	// console.log(res);
             context.dispatch('LOAD_MORE_RESULTS_SUCCESS', res);
         }
 

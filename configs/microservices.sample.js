@@ -35,7 +35,7 @@ STEP 3: Verify that in STEP 2, you have correct operation mentioned. If you see 
 export default {
     Microservices: {
         'deck': {
-            uri: 'https://deckservice.experimental.slidewiki.org'
+            uri: 'http://slidewiki.imis.athena-innovation.gr/deckservice/'
         },
         'discussion': {
             uri: 'https://discussionservice.experimental.slidewiki.org'
@@ -57,7 +57,8 @@ export default {
             port: 443
         },
         'search': {
-            uri: 'https://searchservice.experimental.slidewiki.org'
+            uri1: 'http://slidewiki.imis.athena-innovation.gr/searchservice/', 
+            uri2: 'http://slidewiki.imis.athena-innovation.gr/searchservice2/'
         },
         'file': {
             uri: 'https://fileservice.experimental.slidewiki.org'

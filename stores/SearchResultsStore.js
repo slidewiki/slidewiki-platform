@@ -7,7 +7,8 @@ class SearchResultsStore extends BaseStore {
 
         // solr results
         this.numFound = '';
-        this.docs = [];
+        this.docs1 = [];
+        this.docs2 = [];
         this.spellcheck = [];
         this.facets = {}; 
 
@@ -27,13 +28,15 @@ class SearchResultsStore extends BaseStore {
         this.emitChange();
     }
     updateResults(payload){
-        this.numFound = payload.numFound;
-        this.docs = payload.docs;
-        this.spellcheck = payload.spellcheck;
-        this.facets = payload.facets;
-        this.error = payload.error;
-        this.hasMore = payload.hasMore;
-        this.page = payload.page;
+        this.numFound = payload.res1.numFound;
+        this.docs1 = payload.res1.docs;
+        this.docs2 = payload.res2.docs;
+    // console.log(JSON.stringify(this.docs2, null, 4));
+        this.spellcheck = payload.res1.spellcheck;
+        this.facets = payload.res1.facets;
+        this.error = payload.res1.error;
+        this.hasMore = payload.res1.hasMore;
+        this.page = payload.res1.page;
 
         // hide loading
         this.loading = false;
@@ -43,7 +46,9 @@ class SearchResultsStore extends BaseStore {
     }
     loadMoreResults(payload){
         this.numFound = payload.numFound;
-        this.docs = this.docs.concat(payload.docs);     // append more results
+    console.log(JSON.stringify(payload, null, 4));
+        this.docs1 = this.docs1.concat(payload.docs1);     // append more results
+        this.docs2 = this.docs2.concat(payload.docs2);     // append more results
         this.spellcheck = payload.spellcheck;
         this.facets = payload.facets;
         this.error = payload.error;
@@ -59,7 +64,8 @@ class SearchResultsStore extends BaseStore {
     resetParams(payload){
         // solr results
         this.numFound= '' ;
-        this.docs = [];
+        this.docs1 = [];
+        this.docs2 = [];
         this.spellcheck = [];
         this.facets = {};
         this.loading = false;
@@ -79,7 +85,8 @@ class SearchResultsStore extends BaseStore {
     getState() {
         return {
             numFound: this.numFound,
-            docs: this.docs,
+            docs1: this.docs1,
+            docs2: this.docs2,
             spellcheck: this.spellcheck,
             facets: this.facets,
             loading: this.loading,
@@ -94,7 +101,8 @@ class SearchResultsStore extends BaseStore {
     }
     rehydrate(state) {
         this.numFound = state.numFound;
-        this.docs = state.docs;
+        this.docs1 = state.docs1;
+        this.docs2 = state.docs2;
         this.spellcheck = state.spellcheck;
         this.facets = state.facets;
         this.loading = state.loading;

@@ -75,6 +75,7 @@ class SearchResultsPanel extends React.Component {
     }
     render() {
         const results = this.props.results;
+        const results2 = this.props.results2;
         const numFound = this.props.numFound;
 
         // define results div
@@ -97,10 +98,15 @@ class SearchResultsPanel extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="ui centered grid" key="searchResults">
-                <div className="twelve wide column">
+            <div className="ui grid" key="searchResults">
+                <div className="eight wide column">
                     <SearchResultsList items={results} ></SearchResultsList>
                 </div>
+                
+                <div className="eight wide column">
+                    <SearchResultsList items={results2} ></SearchResultsList>
+                </div>
+                
             </div>
         </div>;
 

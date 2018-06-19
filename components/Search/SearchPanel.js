@@ -274,7 +274,8 @@ class SearchPanel extends React.Component {
         }
         else if(this.props.SearchParamsStore.queryparams){
             searchResultsDiv = <SearchResultsPanel
-                results={this.props.SearchResultsStore.docs}
+                results={this.props.SearchResultsStore.docs1}
+                results2={this.props.SearchResultsStore.docs2}
                 spellcheck={this.props.SearchResultsStore.spellcheck}
                 numFound={this.props.SearchResultsStore.numFound}
                 sort={this.props.SearchParamsStore.sort}

@@ -12,21 +12,21 @@ export default {
 
         switch (resource) {
             case 'suggester.users':
-                rp.get({uri: `${Microservices.search.uri}/suggest/users?q=${args.query}`}).then((res) => {
+                rp.get({uri: `${Microservices.search.uri2}/suggest/users?q=${args.query}`}).then((res) => {
                     callback(null, { success: true, results: JSON.parse(res) });
                 }).catch((err) => {
                     callback(null, {success: false, results: {}});
                 });
                 break;
             case 'suggester.keywords':
-                rp.get({uri: `${Microservices.search.uri}/suggest/keywords?q=${args.query}`}).then((res) => {
+                rp.get({uri: `${Microservices.search.uri2}/suggest/keywords?q=${args.query}`}).then((res) => {
                     callback(null, { success: true, results: JSON.parse(res).response.docs });
                 }).catch((err) => {
                     callback(null, {success: false, results: {}});
                 });
                 break;
             case 'suggester.tags':
-                rp.get({uri: `${Microservices.tag.uri}/tag/suggest/${args.query}`}).then((res) => {
+                rp.get({uri: `${Microservices.tag.uri2}/tag/suggest/${args.query}`}).then((res) => {
                     callback(null, { success: true, results: JSON.parse(res) });
                 }).catch((err) => {
                     callback(null, {success: false, results: {}});
