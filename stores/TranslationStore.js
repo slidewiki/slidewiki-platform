@@ -50,6 +50,11 @@ class TranslationStore extends BaseStore {
         if (data.isRootDeck)
             this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
 
+        // update translations
+        this.translations = deck.variants.filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
+        // also recompute translation mode based on current language
+        this.inTranslationMode = this.recomputeTranslationMode();
+
         this.invalidLanguage = false;
 
         this.emitChange();
@@ -73,18 +78,28 @@ class TranslationStore extends BaseStore {
         }
 
         this.currentLang = language.replace('_', '-');
-        if (this.originLanguage) {
-            if (compareLanguageCodes(this.currentLang, this.originLanguage))
-                this.inTranslationMode = false;
-            else
-                this.inTranslationMode = true;
-        }
-        else {
-            this.inTranslationMode = this.translations.indexOf(this.currentLang) !== -1;
-        }
+        this.inTranslationMode = this.recomputeTranslationMode();
 
         this.emitChange();
         this.logState('changeCurrentLanguage');
+    }
+
+    recomputeTranslationMode() {
+        if (!this.currentLang) return false;
+
+        if (this.originLanguage) {
+            if (compareLanguageCodes(this.currentLang, this.originLanguage))
+                return false;
+            else
+                return true;
+        }
+        else if (this.translations.length) {
+            let translation = this.translations.find(this.current);
+            return this.translations.indexOf(this.currentLang) !== -1;
+        }
+        else {
+            return false;
+        }
     }
 
     slideLoaded(data) {
@@ -96,10 +111,11 @@ class TranslationStore extends BaseStore {
     }
 
     translationsLoaded(translations) {
-        this.translations = translations.reduce((arr, cur) => {
-            arr.push(cur.replace('_', '-'));
-            return arr;
-        }, []);
+        // update translations
+        this.translations = translations.map((cur) => cur.replace('_', '-'));
+        // always recompute translation mode based on current language
+        this.inTranslationMode = this.recomputeTranslationMode();
+
         this.emitChange();
         this.logState('translationsLoaded');
     }
@@ -108,19 +124,15 @@ class TranslationStore extends BaseStore {
         // console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language.replace('_', '-') ;
 
-        let updateTranslationMode = false;
-        if (!this.originLanguage && this.currentLang) {
-            updateTranslationMode = true;
-        }
-
         this.getAndSetOriginalLanguage(data.deckTree.variants || [], this.treeLanguage);
 
-        if (updateTranslationMode) {
-            if (compareLanguageCodes(this.currentLang, this.originLanguage))
-                this.inTranslationMode = false;
-            else
-                this.inTranslationMode = true;
+        // also set the translations, if they are empty
+        if (!this.translations || !this.translations.length) {
+            this.translations = data.deckTree.variants.filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
         }
+
+        // always recompute translation mode based on current language
+        this.recomputeTranslationMode();
 
         this.invalidLanguage = false;
 

@@ -117,9 +117,6 @@ export default function loadDeck(context, payload, done) {
     //load translation stuff first
     async.series([
         (callback) => {
-            context.executeAction(loadDeckTranslations, payload.params, callback);
-        },
-        (callback) => {
             context.executeAction(changeCurrentLanguage, {language: payload.params.language}, callback);
         }
     ],

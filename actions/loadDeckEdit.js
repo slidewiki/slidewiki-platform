@@ -25,7 +25,6 @@ export default function loadDeckEdit(context, payload, done) {
 
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     if (!payload.params.language) payload.params.language = context.getStore(TranslationStore).currentLang;
-    if (!context.getStore(TranslationStore).inTranslationMode) payload.params.language = undefined;
 
     context.service.read('deck.properties', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
