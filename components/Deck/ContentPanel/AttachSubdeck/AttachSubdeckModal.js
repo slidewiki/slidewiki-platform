@@ -184,7 +184,7 @@ class AttachSubdeckModal extends React.Component{
 
         let attachDeckBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
                                                     type="button"
-                                                    aria-label="Attach Deck"
+                                                    aria-label="Attach Sub-Deck"
                                                     aria-hidden={this.state.modalOpen}
                                                     basic icon onClick={this.handleOpen}
                                                     tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
@@ -192,7 +192,7 @@ class AttachSubdeckModal extends React.Component{
                 <Icon className="yellow" name="folder" />
                 <Icon className="corner" name="attach" />
             </Icon.Group>
-        </Button>} content='Attach Deck' on='hover'/>;
+        </Button>} content='Attach Sub-Deck' on='hover'/>;
 
         return (
            <Modal trigger={attachDeckBtn}
@@ -215,7 +215,7 @@ class AttachSubdeckModal extends React.Component{
                         className = "header">
 
                 <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModalHeader">
-                     Attach Deck
+                     Attach Sub-Deck
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>

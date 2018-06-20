@@ -6,7 +6,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
-import loadPresentation from '../../../actions/loadPresentation';
+
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
@@ -164,7 +164,8 @@ class Presentation extends React.Component{
             //console.log('slidechanged dimensions: ' + pptxheight + ' by ' + pptxwidth);
             Reveal.configure({
                 width: pptxwidth,
-                height: pptxheight
+                height: pptxheight,
+                slideNumber: true
             });
 
         }
