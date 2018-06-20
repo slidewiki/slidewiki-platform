@@ -2057,33 +2057,33 @@ class SlideContentEditor extends React.Component {
     resize() {
         if($('.pptx2html').length)  //if slide is in canvas mode
         {
-            if (this.scaleratio === 1) {
-                let containerwidth = document.getElementById('container').offsetWidth;
-                let containerheight = document.getElementById('container').offsetHeight;
-                //reset scaling of pptx2html element to get original size
-                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-                //Function to fit contents in edit and view component
-                let pptxwidth = $('.pptx2html').width();
-                let pptxheight = $('.pptx2html').height();
-                //TODO - change to get right!
-                this.scaleratio = containerwidth / (pptxwidth+50);
-                //this.scaleratio = containerwidth / (pptxwidth+120);
-                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+//            if (this.scaleratio === 1) {
+//                let containerwidth = document.getElementById('container').offsetWidth;
+//                let containerheight = document.getElementById('container').offsetHeight;
+//                //reset scaling of pptx2html element to get original size
+//                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+//                //Function to fit contents in edit and view component
+//                let pptxwidth = $('.pptx2html').width();
+//                let pptxheight = $('.pptx2html').height();
+//                //TODO - change to get right!
+//                this.scaleratio = containerwidth / (pptxwidth+50);
+//                //this.scaleratio = containerwidth / (pptxwidth+120);
+//                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+//                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+//                //$('.pptx2html').animate({
+//                //    transform: 'scale(2)'
+//                //});
+//                //console.log('scale with ratio: ' + this.scaleratio);
+//
+//                //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
+//                this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
+//                this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+//            } else {
                 $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-                //$('.pptx2html').animate({
-                //    transform: 'scale(2)'
-                //});
-                //console.log('scale with ratio: ' + this.scaleratio);
-
-                //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-                this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-                this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-            } else {
-                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-                let pptxheight = $('.pptx2html').outerHeight();
+                const pptxheight = $('.pptx2html').outerHeight();
                 const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-                this.refs.slideEditPanel.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
-            }
+                this.refs.slideEditPanel.style.height = (pptxheight + scrollbarHeight) + 'px';
+//            }
             this.refs.inlineContent.style.overflowY = 'auto';
             this.refs.present.style.overflowY = 'hidden';
         } else {
@@ -2196,13 +2196,15 @@ class SlideContentEditor extends React.Component {
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
-            height: '100%'
+            height: '100%',
+            padding: '0',
         };
         const contentStyle = {
             minWidth: '100%',
-            minHeight: 610,
-            overflowY: 'auto',
+            height: '720px',
+            overflowY: 'hidden',
             overflowX: 'auto',
+            padding: '0px',
         };
         const compSpeakerStyle = {
             minHeight: 50,
