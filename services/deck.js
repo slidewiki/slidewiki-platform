@@ -66,8 +66,11 @@ export default {
                         return rev.id === deck.active;
                     });
                     if (!deck.id) deck.id = deck._id;
+
+                    currentRevision.revisionUser = currentRevision.user;
+                    delete currentRevision.user;
+
                     deck.revision = currentRevision.id;
-                    deck.revisionUser = currentRevision.user;
                     delete deck.revisions;
 
                     // override everything else
@@ -183,8 +186,11 @@ export default {
                         return rev.id === deck.active;
                     });
                     if (!deck.id) deck.id = deck._id;
+
+                    currentRevision.revisionUser = currentRevision.user;
+                    delete currentRevision.user;
+
                     deck.revision = currentRevision.id;
-                    deck.revisionUser = currentRevision.user;
                     delete deck.revisions;
 
                     // override everything else
