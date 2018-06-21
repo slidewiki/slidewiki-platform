@@ -110,7 +110,7 @@ class ActivityFeedStore extends BaseStore {
             let i = 0;
             for(; i < this.activities.length; i++) {
                 const activity = this.activities[i];
-                if (activity.activity_type === 'react' && activity.user_id === payload.userid && activity.content_id === payload.selector.sid && activity.content_kind === 'deck') {
+                if (activity.activity_type === 'react' && activity.user_id === payload.userid && activity.content_id.split('-')[0] === payload.selector.sid.split('-')[0] && activity.content_kind === 'deck') {
                     break;
                 }
             }
