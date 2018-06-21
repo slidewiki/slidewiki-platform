@@ -47,13 +47,14 @@ class TranslationStore extends BaseStore {
         // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
         this.nodeLanguage = deck.language.replace('_', '-') || 'en-GB';
 
-        if (data.isRootDeck)
-            this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
+        // if (data.isRootDeck) {
+        //     this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
 
-        // update translations
-        this.translations = deck.variants.filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
-        // also recompute translation mode based on current language
-        this.inTranslationMode = this.recomputeTranslationMode();
+        //     // update translations
+        //     this.translations = deck.variants.filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
+        //     // also recompute translation mode based on current language
+        //     this.inTranslationMode = this.recomputeTranslationMode();
+        // }
 
         this.invalidLanguage = false;
 
@@ -85,6 +86,7 @@ class TranslationStore extends BaseStore {
     }
 
     recomputeTranslationMode() {
+        return false;
         if (!this.currentLang) return false;
 
         if (this.originLanguage) {
@@ -126,12 +128,9 @@ class TranslationStore extends BaseStore {
 
         this.getAndSetOriginalLanguage(data.deckTree.variants || [], this.treeLanguage);
 
-        // also set the translations, if they are empty
-        if (!this.translations || !this.translations.length) {
-            this.translations = data.deckTree.variants.filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
-        }
-
-        // always recompute translation mode based on current language
+        // also set the translations
+        this.translations = (data.deckTree.variants || []).filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
+        // also recompute translation mode based on current language
         this.recomputeTranslationMode();
 
         this.invalidLanguage = false;
@@ -157,7 +156,7 @@ class TranslationStore extends BaseStore {
     }
 
     validateLanguage(language) {
-        // console.log('validateLanguage got', language, 'and has', this.originLanguage, this.translations);
+        console.log('validateLanguage got', language, 'and has', this.originLanguage, this.translations);
         if (!language)
             language = this.currentLang;
         if (language && language !== this.originLanguage && this.translations.indexOf(language) === -1) {

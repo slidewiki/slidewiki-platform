@@ -101,14 +101,12 @@ class InfoPanelInfoView extends React.Component {
 
         }
         let languageMessage = this.props.TranslationStore.inTranslationMode ? this.messages.translation : this.messages.language;
-        let language = this.props.TranslationStore.currentLang ? this.props.TranslationStore.currentLang : this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
-        let iconName = 'comments blue small icon';
-        if (this.props.TranslationStore.currentLang.length === 5) {
-            iconName = this.props.TranslationStore.currentLang.substring(3).toLowerCase() + ' flag';
+        let language = this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
+        let iconName = 'flag icon';
+        if (language && language.length === 5) {
+            iconName = language.substring(3).toLowerCase() + ' flag';
         }
-        else if (!this.props.TranslationStore.currentLang && this.props.TranslationStore.originLanguage.length === 5) {
-            iconName = this.props.TranslationStore.originLanguage.substring(3).toLowerCase() + ' flag';
-        }
+
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
