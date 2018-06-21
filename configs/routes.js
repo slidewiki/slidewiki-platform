@@ -371,9 +371,6 @@ export default {
                 (callback) => {
                     context.executeAction(loadDeck, payload, callback);
                 },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                }
             ],
             (err, result) => {
                 if(err) console.log(err);
