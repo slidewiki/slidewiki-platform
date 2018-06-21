@@ -1,5 +1,6 @@
 import UserProfileStore from '../stores/UserProfileStore';
 import PermissionsStore from '../stores/PermissionsStore';
+import TranslationStore from '../stores/TranslationStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from './error/serviceUnavailable';
@@ -56,11 +57,13 @@ export default function saveDeckEdit(context, payload, done) {
     } else {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
+        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
-                log.error(context, {filepath: __filename});
+                log.error(context, {filepath: __filename, message: err.message});
                 // context.executeAction(serviceUnavailable, payload, done);
                 done();
             } else {

@@ -159,7 +159,7 @@ class DeckTranslationsModal extends React.Component {
 
         let btnMessage = this.context.intl.formatMessage(messages.translate);
 
-        const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? (this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage) : this.props.TranslationStore.treeLanguage);
+        const language = getLanguageNativeName(this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage);
 
         const showCreateTranslation = this.props.username !== '' && this.props.editPermissions;
 

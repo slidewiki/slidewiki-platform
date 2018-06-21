@@ -141,7 +141,7 @@ class TreeNode extends React.Component {
             spath: this.props.item.get('path')
         };
         let canEdit = !this.props.permissions.readOnly && this.props.permissions.edit && this.props.ContentStore.mode !== 'edit' && !this.props.showThumbnails;
-        let nodeURL = Util.makeNodeURL(nodeSelector, this.props.page, 'view', this.props.rootNode.slug, undefined, true);
+        let nodeURL = Util.makeNodeURL(nodeSelector, this.props.page, 'view', this.props.rootNode.slug, this.props.item.get('language'), true);
         let childNodesDIV = '';
         let actionSigClass;
         let actionBtnsClass;
