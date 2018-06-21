@@ -317,7 +317,7 @@ class AddDeck extends React.Component {
                     html += '<div >' + (i+1) + '. ' + slide.title + '<img style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt + '"/></div>'; //THUMBNAIL
                 }
                 html += '</div>';
-                html += '<div><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish">' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div>';
+                html += '<br><h3><div><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
 
                 swal({
                     title: this.context.intl.formatMessage(success_messages.success_title_text),
