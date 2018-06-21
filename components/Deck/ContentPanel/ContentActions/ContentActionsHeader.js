@@ -54,11 +54,11 @@ class ContentActionsHeader extends React.Component {
             },
             addDeckButtonAriaText:{
                 id: 'ContentActionsHeader.addDeckButtonAriaText',
-                defaultMessage:'Add Deck'
+                defaultMessage:'Add sub-deck'
             },
             duplicateAriaText:{
                 id: 'ContentActionsHeader.duplicateAriaText',
-                defaultMessage:'Duplicate'
+                defaultMessage:'Duplicate slide'
             },
             deleteAriaText:{
                 id: 'ContentActionsHeader.deleteAriaText',
