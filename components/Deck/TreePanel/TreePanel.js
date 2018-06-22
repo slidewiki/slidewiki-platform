@@ -145,6 +145,21 @@ class TreePanel extends React.Component {
             });
     }
 
+    handleKeyPress = (event, param, template) => {
+        if(event.key === 'Enter'){
+            switch (param) {
+                case 'handlePresentation':
+                    this.handlePresentationClick();
+                    break;
+                case 'handleFork':
+                    this.handleFork();
+                    break;
+                default:
+
+            }
+        }
+    }
+
     render() {
         const rootNodeStyles = {
             fontSize: '1.06em'
@@ -216,10 +231,10 @@ class TreePanel extends React.Component {
                                                     </button>
                                                 </NavLink>
                         */}
-                        <div className={classes_playbtn} aria-label="Open slideshow in new tab" tabIndex="0" role="button" data-tooltip="Open slideshow in new tab" onClick={this.handlePresentationClick.bind(this)}>
+                        <div className={classes_playbtn} aria-label="Open slideshow in new tab" tabIndex="0" role="button" data-tooltip="Open slideshow in new tab" onClick={this.handlePresentationClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePresentation')}>
                             <i className="circle play large icon"></i>
                         </div>
-                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
+                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
                             <i className="large blue fork icon"></i>
                         </div>
                         <div className={classes_translatebtn} role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck" tabIndex="-1">
