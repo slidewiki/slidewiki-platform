@@ -9,7 +9,7 @@ import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations'],
+    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats'],
     settings: ['profile', 'account', 'integrations'],
     groups: ['overview', 'edit'],
     decks: ['shared'],
@@ -63,6 +63,9 @@ export function chooseAction(context, payload, done) {
                     break;
             };
             break;
+        case categories.categories[5]:
+            title += 'User Stats';
+            break;
         default:
             title = shortTitle;
     };
@@ -98,6 +101,9 @@ export function chooseAction(context, payload, done) {
                 case categories.categories[4]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     context.executeAction(loadUserRecommendations, {}, callback);
+                    break;
+                case categories.categories[5]:
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category});
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);

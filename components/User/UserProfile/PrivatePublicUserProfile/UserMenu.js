@@ -34,7 +34,11 @@ class UserMenu extends React.Component {
             recommendedDecks: {
                 id: 'UserMenu.recommendedDecks',
                 defaultMessage: 'Recommended Decks'
-            }
+            },
+            stats: {
+                id: 'UserMenu.stats',
+                defaultMessage: 'User Stats'
+            },
         });
     }
     render() {
@@ -51,6 +55,7 @@ class UserMenu extends React.Component {
         let decksMsg = this.context.intl.formatMessage(this.messages.myDecks);
         let sharedDecksMsg = this.context.intl.formatMessage(this.messages.sharedDecks);
         let deckCollectionsMsg = this.context.intl.formatMessage(this.messages.collections);
+        let userStatsMsg = this.context.intl.formatMessage(this.messages.stats);
 
         //Remove link if it's not user's own page //Until recommendation service is properly integrated into the system, show only on experimental
         if(this.props.user.uname !== this.props.loggedinuser || Microservices.recommendation === undefined || Microservices.recommendation.uri !== 'http://slidewiki.imp.bg.ac.rs') {
@@ -77,6 +82,9 @@ class UserMenu extends React.Component {
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
                   {deckRecommendationNavLink}
+                  <NavLink className="item" href={'/user/' + this.props.user.uname + '/stats'} activeStyle={this.styles} role="menuitem">
+                      <p><i className="icon grid layout"/> {userStatsMsg}</p>
+                  </NavLink>
               </div>
 
           </div>
