@@ -12,18 +12,4 @@ export default {
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     loglevel: 'debug',
     ssoEnabled: true,
-
-    translationLanguages: [
-        'de-DE',
-        'el-GR',
-        'en-GB',
-        'es-ES',
-        'fr-FR',
-        'it-IT',
-        'lt-LT',
-        'nl-NL',
-        'pt-PT',
-        'sr-RS',
-    ],
-
 };

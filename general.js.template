@@ -8,18 +8,4 @@ export default {
     publicRecaptchaKey: '${SERVICE_USER_PUBLIC_RECAPTCHA_KEY}',
     loglevel: '${LOGGING_LEVEL}',
     ssoEnabled: ${SSO_ENABLED},
-
-    translationLanguages: [
-        'de-DE',
-        'el-GR',
-        'en-GB',
-        'es-ES',
-        'fr-FR',
-        'it-IT',
-        'lt-LT',
-        'nl-NL',
-        'pt-PT',
-        'sr-RS',
-    ],
-
 };

@@ -4,8 +4,7 @@ import { Button, Icon,   Segment, Menu,Label,Input, Header,Form,Dropdown} from '
 import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
-import {translationLanguages} from '../../../../configs/general';
-import {getLanguageNativeName} from '../../../../common';
+import {translationLanguages, getLanguageNativeName} from '../../../../common';
 
 class AttachSearchForm extends React.Component{
     constructor(props){

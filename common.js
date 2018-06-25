@@ -174,4 +174,17 @@ export default {
         return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
     },
 
+    translationLanguages: [
+        'de',
+        'el',
+        'en',
+        'es',
+        'fr',
+        'it',
+        'lt',
+        'nl',
+        'pt',
+        'sr',
+    ],
+
 };

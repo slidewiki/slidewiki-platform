@@ -1,6 +1,5 @@
 import {BaseStore} from 'fluxible/addons';
-import {translationLanguages} from '../configs/general';
-import {compareLanguageCodes} from '../common';
+import {translationLanguages, compareLanguageCodes} from '../common';
 
 class TranslationStore extends BaseStore {
     constructor(dispatcher) {

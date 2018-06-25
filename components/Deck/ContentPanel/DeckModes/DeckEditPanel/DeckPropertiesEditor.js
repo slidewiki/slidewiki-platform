@@ -200,7 +200,7 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
-        if (this.state.language == null || this.state.language.length !== 5) {
+        if (this.state.language == null || this.state.language.length < 2) {
             validationErrors.language = 'Please select a language.';
             isValid = false;
         }

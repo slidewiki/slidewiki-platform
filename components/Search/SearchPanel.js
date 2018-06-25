@@ -12,8 +12,7 @@ import TagsInput from './AutocompleteComponents/TagsInput';
 import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import {translationLanguages} from '../../configs/general';
-import {getLanguageNativeName} from '../../common';
+import {translationLanguages, getLanguageNativeName} from '../../common';
 
 let MediaQuery = require ('react-responsive');
 
