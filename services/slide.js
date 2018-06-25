@@ -143,9 +143,7 @@ export default {
                         revision: content_id
                     },
                     position: content_id,
-                    language: 'EN',
                     dataSources: args.dataSources,
-                    license: 'CC BY-SA',
                     tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []
                 })
             }).then((res) => {
