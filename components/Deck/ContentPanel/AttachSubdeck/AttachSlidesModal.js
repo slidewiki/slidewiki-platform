@@ -224,8 +224,8 @@ class AttachSubdeckModal extends React.Component{
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
 
-            modalDescription =  <FormattedMessage id='slidesModal.attachSlidesDescriptionStep1' defaultMessage='You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.' />;
-            //<TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck." tabIndex ='-1'/>;
+            modalDescription = <p><FormattedMessage id='slidesModal.attachSlidesDescriptionStep1' defaultMessage='You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.' />
+            <TextArea className="sr-only" id="attachSlidesDescriptionSR" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection." tabIndex ='-1'/></p>;
 
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
@@ -246,7 +246,8 @@ class AttachSubdeckModal extends React.Component{
         } else{ //deck selected, diplay its slides, previous and attach button
             attachMenu ='';
             searchForm ='';
-            modalDescription= <FormattedMessage id='slidesModal.attachSlidesDescriptionStep2' defaultMessage='Select slides to attach. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.' />;
+            modalDescription= <p><FormattedMessage id='slidesModal.attachSlidesDescriptionStep2' defaultMessage='Select slides to attach. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.' />
+            <TextArea className="sr-only" id="attachSlidesDescriptionSR" value="Select slides to attach. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection." tabIndex ='-1'/></p>;
             //<TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
 
             segmentPanelContent = <AttachSlides numColumns="3" />;
@@ -284,7 +285,7 @@ class AttachSubdeckModal extends React.Component{
                 role="dialog"
                 id="attachSubDeckModal"
                 aria-labelledby="attachModalHeader"
-                aria-describedby="slidesModal.attachSlidesDescriptionStep1"
+                aria-describedby="attachSlidesDescriptionSR"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
