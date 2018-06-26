@@ -82,7 +82,7 @@ class UserPerformancePredictionItem extends React.Component {
                 duration = Math.round(elapsed/msPerMinute) + ' minutes';
             }
 
-            additionalInfo = ((prediction.accuracy < 0) ? 'Prediction was not possible due to insufficient data' : ((prediction.noOfDecks === 0 && prediction.noOfUsers === 0) ? 'Prediction is based on DEMO DATA' : 'Prediction is based on data for ' + prediction.noOfDecks + ' decks and ' + prediction.noOfUsers + ' users') + '; calculation lasted ' + duration);
+            additionalInfo = ((prediction.accuracy < 0) ? '' : ((prediction.noOfDecks === 0 && prediction.noOfUsers === 0) ? 'Prediction is based on DEMO DATA' : 'Prediction is based on data for ' + prediction.noOfDecks + ' decks and ' + prediction.noOfUsers + ' users') + '; calculation lasted ' + duration);
         }
 
         return (
@@ -103,6 +103,7 @@ class UserPerformancePredictionItem extends React.Component {
                             </div>
                             <div className="four wide column">
                                 {resultProgress}
+                                {(prediction.accuracy < 0) ? 'Prediction was not possible due to insufficient data' : ''} 
                             </div>
 
                         </div>

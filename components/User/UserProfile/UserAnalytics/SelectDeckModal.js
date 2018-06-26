@@ -50,6 +50,9 @@ class SelectDeckModal extends React.Component{
     }
 
     handleCLickNewPrediction(e) {
+
+        let useDummyData = true;//if there are no data available for the prediction, use the dummy data (for demonstration purpose)
+
         e.preventDefault();
 
         let deckId =  this.props.AttachSubdeckModalStore.selectedDeckId.split('-')[0];
@@ -62,7 +65,7 @@ class SelectDeckModal extends React.Component{
             deckId: deckId,
             title: deckTitle,
             started: started,
-            useDummyData: false
+            useDummyData: useDummyData
         };
         this.context.executeAction(addPerformancePredictionJob, {prediction: prediction});
 
