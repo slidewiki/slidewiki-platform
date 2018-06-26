@@ -364,22 +364,7 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
-            async.series([
-                (callback) => {
-                    context.executeAction(loadDeck, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadTranslations, payload, callback);
-                },
-
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
+            context.executeAction(loadDeck, payload, done);
         }
     },
     oldSlugDeck: {
@@ -645,7 +630,6 @@ export default {
         handler: require('../actions/loadImportFile'),
         action: (context, payload, done) => {
             context.executeAction(loadImportFile, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
         }
     },
