@@ -61,7 +61,8 @@ class SelectDeckModal extends React.Component{
             userId: userId,
             deckId: deckId,
             title: deckTitle,
-            started: started
+            started: started,
+            useDummyData: false
         };
         this.context.executeAction(addPerformancePredictionJob, {prediction: prediction});
 

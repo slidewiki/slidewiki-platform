@@ -81,6 +81,7 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
         let deckId = args.prediction.deckId;
+        let dummy = args.prediction.useDummyData;
         let uid = args.prediction.userId;
         if (uid === undefined) {
             uid = 0;
@@ -92,7 +93,8 @@ export default {
                 proxy: '',
                 body:JSON.stringify({
                     user_id: uid,
-                    deck_id: deckId
+                    deck_id: deckId,
+                    dummy: dummy
                 }),
                 timeout: body.timeout
             }).then((res) => {
