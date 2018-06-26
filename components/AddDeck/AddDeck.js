@@ -93,7 +93,7 @@ class AddDeck extends React.Component {
         else {
             wrongFields.title = false;
         }
-        if (language === null || language === undefined || language.length !== 5) {
+        if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
             everythingIsFine = false;
         }
