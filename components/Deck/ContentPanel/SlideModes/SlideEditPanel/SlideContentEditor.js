@@ -585,9 +585,26 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
 
+
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
+                CKEDITOR.instances.inlineContent.on('beforeCommandExec', (evt) => {
+                    if(evt.data.name === 'undo') {
+                        // handle before undo
+                        console.log('undo pressed');
+                        setTimeout(() => {
+                            this.resizeDrag();
+                        }, 500);
+                    }
+                    if(evt.data.name === 'redo') {
+                        // handle before redo
+                        console.log('redo pressed');
+                        setTimeout(() => {
+                            this.resizeDrag();
+                        }, 500);
+                    }
+                });
                 //this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
@@ -944,7 +961,22 @@ class SlideContentEditor extends React.Component {
         //});
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-
+            CKEDITOR.instances.inlineContent.on('beforeCommandExec', (evt) => {
+                if(evt.data.name === 'undo') {
+                    // handle before undo
+                    console.log('undo pressed');
+                    setTimeout(() => {
+                        this.resizeDrag();
+                    }, 1000);
+                }
+                if(evt.data.name === 'redo') {
+                    // handle before redo
+                    console.log('redo pressed');
+                    setTimeout(() => {
+                        this.resizeDrag();
+                    }, 1000);
+                }
+            });
             this.finishLoading = true;
             //console.log('test');
             CKEDITOR.instances.inlineContent.on( 'key', () => {
