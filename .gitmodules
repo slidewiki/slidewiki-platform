@@ -1,6 +1,3 @@
 [submodule "custom_modules/reveal.js"]
 	path = custom_modules/reveal.js
 	url = https://github.com/slidewiki/reveal.js.git
-[submodule "custom_modules/custom-semantic-ui"]
-	path = custom_modules/custom-semantic-ui
-	url = https://github.com/slidewiki/slidewiki-semantic-ui.git
