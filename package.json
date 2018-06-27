@@ -31,7 +31,7 @@
     "dev": "node ./webpack/dev-server.js",
     "dev:windows": "set HOST=127.0.0.1&& set PORT=3000&& node ./webpack/dev-server.js",
     "langs": "babel plugins/intl/translate.js | node",
-    "lint": "eslint --ignore-path .gitignore -c .eslintrc \"./**/*.js\"",
+    "lint": "eslint -c .eslintrc \"./**/*.js\"",
     "test:components": "mocha test/setup.js test/components/**/*.js",
     "test:unit": "mocha test/setup.js test/unit/**/*.js",
     "coverage": "istanbul cover _mocha -- --require babel-register test/setup.js test/components/*.js",
