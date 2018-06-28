@@ -517,7 +517,7 @@ class PaintModal extends React.Component {
 
         let saveHandler= this.showLicense;
 
-        let mode = this.drawingMode ? (<div><Icon name="pencil"/> Drawing Mode</div>) : (<div><Icon name="hand outline up"/> Select Mode</div>);
+        let mode = this.drawingMode ? (<div><Icon name="pencil"/> Drawing Mode</div>) : (<div><Icon name="hand point up outline"/> Select Mode</div>);
 
         let heading = 'Draw and Paint';
         let licenseBoxes = '';
