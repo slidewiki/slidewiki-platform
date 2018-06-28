@@ -35,8 +35,8 @@ class UploadMediaModal extends React.Component {
                 id: 'uploadMediaModal.swal_error_title',
                 defaultMessage:'Error'
             },
-            swal_error_title :{
-                id: 'uploadMediaModal.swal_error_title',
+            swal_error_text :{
+                id: 'uploadMediaModal.swal_error_text',
                 defaultMessage:'Reading the selected file failed. Check you privileges and try again'
             },
             drop_message1:{
