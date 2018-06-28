@@ -9,9 +9,10 @@ import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageL
 import TreePanel from './TreePanel/TreePanel';
 import SlideEditLeftPanel from './SlideEditLeftPanel/SlideEditLeftPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
+import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
-import ServiceUnavailable from '../Error/ServiceUnavailable';
+//import ServiceUnavailable from '../Error/ServiceUnavailable';//NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory
 import InfoPanel from './InfoPanel/InfoPanel';
 
 class Deck extends React.Component {
@@ -38,7 +39,7 @@ class Deck extends React.Component {
             'twelve':  status.TreePanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
             'sixteen':  status.TreePanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
             'wide column': status.TreePanel.visible || status.ActivityFeedPanel.visible,
-            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible
+            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible,
         });
         let treePanelClass = classNames({
             'hide-element': !status.TreePanel.visible
@@ -151,10 +152,8 @@ class Deck extends React.Component {
                     </div>
             );
         }
-        else {
-            //for makrdown editor
-            if(this.props.DeckPageStore.mode === 'markdownEdit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '')
-            {
+        else {//for makrdown editor
+            if(this.props.DeckPageStore.mode === 'markdownEdit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '') {
                 leftPanel = '';
                 centerPanel = (
                         <div className="sixteen wide column">
@@ -169,7 +168,8 @@ class Deck extends React.Component {
             } else {
               //if we view something else - show decktree
                 leftPanel =     <div className={leftColClass}>
-                                  <div className="row">
+                                  <div className="ui stackable grid">
+                                    <div className="computer tablet only sixteen wide column">
                                       <div className={treePanelClass}>
                                           <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page} deckSlug={this.props.DeckPageStore.deckSlug} />
                                       </div>
@@ -181,9 +181,13 @@ class Deck extends React.Component {
                                           </div>
                                       </div>*/}
                                       <div className="ui hidden divider"></div>
+                                    </div>
+                                    <div className="mobile only sixteen wide column">
+                                          <NavigationPanel/>
+                                          <div className="ui hidden divider"></div>
+                                    </div>
                                   </div>
-                              </div>;
-
+                                </div>;
 
                 centerPanel = (
                       <div className={centerColClass}>
@@ -230,7 +234,7 @@ class Deck extends React.Component {
                 {rightPanel}
 
                 </div>
-                {/*error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''*/}
+                {/*error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''*/}{/*NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory*/}
             </div>
 
         );
