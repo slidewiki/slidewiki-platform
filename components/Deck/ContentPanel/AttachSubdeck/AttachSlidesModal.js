@@ -268,7 +268,7 @@ class AttachSubdeckModal extends React.Component{
                                                      basic icon onClick={this.handleOpen}
                                                      tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
             <Icon.Group size={this.props.buttonStyle.iconSize}>
-                <Icon className="grey" name="file text outline"/>
+                <Icon className="grey" name="file text"/>
                 <Icon className="corner black" name="attach"/>
             </Icon.Group>
         </Button>} content='Attach Slides' on='hover'/>;

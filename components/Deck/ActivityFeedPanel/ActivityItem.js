@@ -229,7 +229,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'delete':
-                IconNode = (<i className="ui large remove circle outline icon"></i>);
+                IconNode = (<i className="ui large trash circle icon"></i>);
                 const cheerioDeletedName = (node.delete_info.content_name) ? cheerio.load(node.delete_info.content_name).text() : '';
 
                 SummaryNode = (
@@ -246,7 +246,7 @@ class ActivityItem extends React.Component {
 
                 break;
             default:
-                
+
         }
 
         return (
