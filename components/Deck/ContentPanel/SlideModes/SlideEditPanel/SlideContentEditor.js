@@ -2058,6 +2058,7 @@ class SlideContentEditor extends React.Component {
         if($('.pptx2html').length)  //if slide is in canvas mode
         {
             $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             this.refs.inlineContent.style.overflowY = 'auto';
             this.refs.present.style.overflowY = 'hidden';
         } else {

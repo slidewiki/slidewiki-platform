@@ -39,6 +39,7 @@ class SlideContentView extends React.Component {
         if ($('.pptx2html').length)
         {
             $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             this.refs.inlineContent.style.overflowY = 'auto';
         }
         else {
