@@ -41,57 +41,72 @@ export default {
                 let recommendation = JSON.parse(res);
 
                 let recDecks = recommendation.items;
-                console.log('Service similar');
-                console.log(recDecks);
-/*
-                  //GET DATA FOR DECKS FROM DECK SERVICE
-                  let deckPromises = [];
-                  let likesPromises = [];//get the number of deck likes
-                  // get details for the decks
-                  for(let deck of recDecks){
-                      let deckId = deck.deckid;
-                      deckPromises.push(
-                          rp.get({
-                              uri: Microservices.deck.uri+'/deck/'+deckId,
-                              json: true
-                          }).catch((err) => { //error, no results
-                              callback(err, []);
-                          })
-                      );
 
-                      likesPromises.push(
+                //GET DATA FOR DECKS FROM DECK SERVICE
+                let deckPromises = [];
+                let decksDetails = [];
+                let likesPromises = [];//get the number of deck likes
+                // get details for the decks
+                for(let deck of recDecks){
+                    rp.get({
+                        uri: Microservices.deck.uri+'/deck/'+deck.deckId,
+                        json: true
+                    }).then((res) => {
+                        deckDetails.push(JSON.parse(res));
+                        console.log(deckDetails);                       
+
+                    }).catch((err) => { //error, no results
+                        callback(err, []);
+                    });
+
+              /*      console.log('likes call');
+                    console.log(Microservices.activities.uri + '/activities/deck/' + deck.deckId + '?metaonly=true&activity_type=react&all_revisions=true');
+
+                    likesPromises.push(
                           rp.get({
-                              uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
+                              uri: Microservices.activities.uri + '/activities/deck/' + deck.deckId + '?metaonly=true&activity_type=react&all_revisions=true'
                           }).catch((err) => { //error, no results
                               callback(err, []);
                           })
                       );
-                  }
-                  let userPromises = [];
-                  let deckPromise = Promise.all(deckPromises).then((decksDetails) => {
-                      for(let deck of decksDetails){
-                        //retrieve users details
-                          userPromises.push(
+*/
+                }
+  //              Promise.all([likesPromises]).tap( console.log);
+
+                /*
+                Promise.all([likesPromises]).then( (deckLikes) => {
+                    console.log('Data collected likes');
+                    console.log(JSON.parse(deckLikes));
+                });
+*/
+                let userPromises = [];
+                let deckPromise = Promise.all(deckPromises).then((decksDetails) => {
+                    console.log('Deck details');
+                    console.log(decksDetails);
+
+                    for(let deck of decksDetails){
+                      //retrieve users details
+                        userPromises.push(
                             rp.get({
                                 uri: Microservices.user.uri+'/user/'+deck.user
                             }).catch((err) => { //error, no results
                                 callback(err, []);
                             })
                           );
+                    }
 
-                      }
+                    let uP = Promise.all([userPromises]).then((recDeckUsers) => {
+                        console.log('Data collected users');
+                        console.log(recDeckUsers);
 
-                  });
+                    });
 
-                  let likesPromise = Promise.all(likesPromises);
-                  let userPromise = Promise.all(userPromises);
-                  //Build the final response
-                  Promise.all([deckPromise, userPromises, likesPromise]).then((collectedData) => {
-                      console.log('Respuesta compuesta');
-                      console.log();
+                });
 
-                  });
-*/
+              //Build the final response
+
+
+
                 let contents = [
                     {'deckId': '718', 'title': 'final test' , 'firstSlideId': '6398', 'author': 'txwkx' , 'authorId':'47' , 'date':'27/01/2017' ,'liked': '0', 'downloaded': '0'},
                     {'deckId': '617', 'title': 'Usability 3', 'firstSlideId': '5144','author': 'abijames1', 'authorId':'6' , 'date':'20/01/2017' ,'liked': '1', 'downloaded': '0'},
