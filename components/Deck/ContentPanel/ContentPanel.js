@@ -18,13 +18,13 @@ class ContentPanel extends React.Component {
             case 'deck':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug} />;
                         break;
                     case 'edit':
                         targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     default:
-                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug} />;
                 }
                 break;
             case 'slide':
