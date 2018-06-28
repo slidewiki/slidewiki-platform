@@ -869,7 +869,7 @@ class SlideContentEditor extends React.Component {
     }
     getAbsoluteDiv(zindex, id){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        return '<div id=\"' + id + '\" style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
+        return '<div id=\"' + id + '\" style="position: absolute; top: 300px; left: 250px; width: 300px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
     componentDidMount() {
         window.onbeforeunload = () => {
@@ -1602,7 +1602,7 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length)  //if slide is in canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                     this.refreshCKeditor();
                     //this.resize();
                     this.resizeDrag();
@@ -1670,7 +1670,7 @@ class SlideContentEditor extends React.Component {
             let uniqueID = this.getuniqueID();
             if($('.pptx2html').length) //if slide is in canvas mode
             {
-                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px;  width: 400px; height: 300px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  width: 400px; height: 300px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
@@ -1752,7 +1752,7 @@ class SlideContentEditor extends React.Component {
             if(nextProps.SlideEditStore.embedCode !== '') {
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
+                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
                     this.correctDimensionsBoxesIframe();
 
                 } else { //if slide is in non-canvas mode
@@ -1764,7 +1764,7 @@ class SlideContentEditor extends React.Component {
                 let iframe = '<iframe src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'" height="'+nextProps.SlideEditStore.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
                     this.hasChanges = true;
                     //this.correctDimensionsBoxes('iframe');
                 } else { //if slide is in non-canvas mode

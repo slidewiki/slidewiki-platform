@@ -195,7 +195,9 @@ class UserGroupEdit extends React.Component {
                           </div>
                         </div>
                         <div className="one wide column middle aligned">
-                          <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                          <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member">
+                            <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                          </button>
                         </div>
                       </div>
                     </div>

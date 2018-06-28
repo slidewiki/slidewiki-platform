@@ -17,7 +17,7 @@ class PresentorHTMLLayout extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
-                <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />
@@ -66,8 +66,6 @@ class PresentorHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/api.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
-                {/*<script src="/custom_modules/nvd3/d3.v3.min.js" defer></script>*/}
-                {/*<script src="/custom_modules/nvd3/nv.d3.min.js" defer></script>*/}
                 {/* All external vendors bundle*/
                     this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'} defer></script> : ''
                 }

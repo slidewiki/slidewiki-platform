@@ -99,7 +99,6 @@ class Presentation extends React.Component{
             });
 
 
-
             Reveal.addEventListener( 'ready', ( event ) => {
                 //$('.accessibilityWrapper').attr('tabindex', '');
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
@@ -113,6 +112,7 @@ class Presentation extends React.Component{
                 //console.log('slidechanged: ' + $('.present > .accessibilityWrapper > .pptx2html div:first').html());
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
+                ChartRender.renderCharts(true);
                 this.resize();
             } );
 

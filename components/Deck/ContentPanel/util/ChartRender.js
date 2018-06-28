@@ -16,7 +16,7 @@ class ChartRender {
             let id = charts[i].getAttribute('id');
 
             if ($('#' + id).has('svg').length) { // case when some svg is already created inside the chart.
-                continue;
+                $('#' + id).children('svg').remove(); // re-render just in case for resizing.
             }
 
             let data = null;
