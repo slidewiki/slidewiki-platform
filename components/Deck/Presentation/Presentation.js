@@ -87,7 +87,8 @@ class Presentation extends React.Component{
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
-                    { src: '/custom_modules/reveal.js/plugin/reveal.js-toolbar/toolbar.js', async: true},
+                    // { src: '/custom_modules/reveal.js/plugin/reveal.js-toolbar/toolbar.js', async: true},
+                    { src: '/custom_modules/reveal.js/plugin/reveal.js-menu/menu.js', async: true},
                     { src: '/custom_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
                     //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
@@ -98,9 +99,48 @@ class Presentation extends React.Component{
                 },
                 toolbar: {
                     captureMenu: false,  // set to false so it doesn't crash the plugin
+                    deckUrl: ['/deck', this.props.PresentationStore.selector.id, this.props.PresentationStore.deckSlug].join('/')
+                },
+                menu: {
                     deckUrl: ['/deck', this.props.PresentationStore.selector.id, this.props.PresentationStore.deckSlug].join('/'),
-                    contactUsUrl: '/contactus'
-                }
+                    speakerNotes: '/custom_modules/reveal.js/plugin/notes/notes.html',
+                    overview: true,
+                    side: 'left',
+                    width: 'normal',
+                    numbers: false,
+                    titleSelector: 'h1, h2, h3, h4, h5, h6',
+                    useTextContentForMissingTitles: true,
+                    hideMissingTitles: false,
+                    markers: true,
+
+                    // Specify custom panels to be included in the menu, by
+                    // providing an array of objects with 'title', 'icon'
+                    // properties, and either a 'src' or 'content' property.
+                    custom: false,
+
+                    // Specifies the themes that will be available in the themes
+                    // menu panel. Set to 'true' to show the themes menu panel
+                    // with the default themes list. Alternatively, provide an
+                    // array to specify the themes to make available in the
+                    // themes menu panel, for example...
+                    // [
+                    //     { name: 'Black', theme: 'css/theme/black.css' },
+                    //     { name: 'White', theme: 'css/theme/white.css' },
+                    //     { name: 'League', theme: 'css/theme/league.css' }
+                    // ]
+                    themes: false,
+
+                    themesPath: 'css/theme/',
+                    transitions: false,
+                    openButton: true,
+                    openSlideNumber: false,
+                    keyboard: true,
+                    sticky: false,
+                    autoOpen: true,
+                    delayInit: false,
+                    openOnInit: false,
+                    loadIcons: true
+                },
             });
 
 
