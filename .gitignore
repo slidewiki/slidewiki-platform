@@ -1,7 +1,6 @@
 node_modules
 bower_components
 build
-custom_modules
 *.log
 *.lock
 logs/*.log
@@ -13,3 +12,4 @@ slidewiki
 migrate
 .idea/
 package-lock.json
+custom_modules
