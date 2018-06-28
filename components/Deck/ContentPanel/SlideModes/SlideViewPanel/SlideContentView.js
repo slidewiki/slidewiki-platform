@@ -39,15 +39,10 @@ class SlideContentView extends React.Component {
         if ($('.pptx2html').length)
         {
             $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
-            const pptxheight = $('.pptx2html').outerHeight();
-            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-            this.refs.slideContentView.style.height = (pptxheight + scrollbarHeight) + 'px';
             this.refs.inlineContent.style.overflowY = 'auto';
-            this.refs.inlineContent.style.height = '';
         }
         else {
             this.refs.inlineContent.style.overflowY = 'scroll';
-            this.refs.inlineContent.style.height = '100%';
         }
     }
     zoomIn(){
@@ -70,7 +65,7 @@ class SlideContentView extends React.Component {
             position: 'relative'
         };
         const compStyle = {
-            minHeight: 610,
+            height: '720px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'

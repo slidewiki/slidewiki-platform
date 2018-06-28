@@ -2058,15 +2058,11 @@ class SlideContentEditor extends React.Component {
         if($('.pptx2html').length)  //if slide is in canvas mode
         {
             $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-            const pptxheight = $('.pptx2html').outerHeight();
-            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-            this.refs.slideEditPanel.style.height = (pptxheight + scrollbarHeight) + 'px';
             this.refs.inlineContent.style.overflowY = 'auto';
             this.refs.present.style.overflowY = 'hidden';
         } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.present.style.overflowY = 'scroll';
-            this.refs.inlineContent.style.height = '100%';
         }
         //$('.cke_float').width( $('.pptx2html').width());
         //$('.cke_top').css('maxwidth', $('.pptx2html').width());
@@ -2165,7 +2161,7 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
         const compStyle = {
-            minHeight: 600,
+            height: '720px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
