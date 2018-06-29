@@ -46,7 +46,8 @@
     "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "napa": {
-    "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git"
+    "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git",
+    "reveal.js-menu": "https://github.com/slidewiki/reveal.js-menu"
   },
   "dependencies": {
     "async": "^2.1.5",
