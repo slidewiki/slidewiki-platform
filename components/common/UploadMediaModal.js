@@ -258,7 +258,7 @@ class UploadMediaModal extends React.Component {
         reader.onerror = (err) => {
             swal({
                 title: this.context.intl.formatMessage(this.messages.swal_error_title),
-                text: this.context.intl.formatMessage(this.messages.send_swal_error_text),
+                text: this.context.intl.formatMessage(this.messages.swal_error_text),
                 type: 'error',
                 confirmButtonText: 'Close',
                 confirmButtonClass: 'negative ui button',
@@ -303,7 +303,7 @@ class UploadMediaModal extends React.Component {
         //let heading = 'Upload a media file';
         let heading = this.context.intl.formatMessage(this.messages.modal_heading1);
         let content = <div>
-          <TextArea className="sr-only" id="UploadMediaModalDescription" value={this.context.intl.formatMessage(this.messages.modal_description)} />
+          <TextArea className="sr-only" id="UploadMediaModalDescription" value={this.context.intl.formatMessage(this.messages.modal_description1)} />
           {dropzone}
           </div>;
         let saveHandler= this.showLicense;
@@ -356,9 +356,9 @@ class UploadMediaModal extends React.Component {
                        aria-label={this.context.intl.formatMessage(this.messages.media_terms_aria)}
                        aria-required="true" required/>
                     <label htmlFor="terms">{this.context.intl.formatMessage(this.messages.media_terms_label1)}
-                      <a href="/terms">{this.context.intl.formatMessage(this.messages.media_terms_label2)}</a>
+                      <a href="/terms"> {this.context.intl.formatMessage(this.messages.media_terms_label2)} </a>
                       {this.context.intl.formatMessage(this.messages.media_terms_label3)}
-                      <a href="/license">{this.context.intl.formatMessage(this.messages.media_terms_label4)}</a>
+                      <a href="/license"> {this.context.intl.formatMessage(this.messages.media_terms_label4)} </a>
                       {this.context.intl.formatMessage(this.messages.media_terms_label5)}
                     </label>
                   </div>
