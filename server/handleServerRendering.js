@@ -22,6 +22,11 @@ const uuidV4 = require('uuid/v4');
 const log = require('../configs/log').log;
 const env = process.env.NODE_ENV;
 
+// metrics collection
+const prom_client = require('prom-client');
+metrics_freq = 5000;    //TODO make this configurable via ENV!
+prom_client.collectDefaultMetrics({timeout: metrics_freq});
+
 let renderApp = function(req, res, context){
     debug('Exposing context state');
     const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -114,12 +119,17 @@ export default function handleServerRendering(req, res, next){
                     }
 
                 } else {
-                    let html = renderApp(req, res, context);
-                    debug('Sending markup');
-                    res.type('html');
-                    res.write('<!DOCTYPE html>' + html);
-                    log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
-                    res.end();
+                    if (req.url.endsWidth('/metrics')) {
+                        res.set('Content-Type', prom_client.register.contentType);
+                        res.end(prom_client.register.metrics());
+                    } else {
+                        let html = renderApp(req, res, context);
+                        debug('Sending markup');
+                        res.type('html');
+                        res.write('<!DOCTYPE html>' + html);
+                        log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
+                        res.end();
+                    }
                 }
             });
         }
