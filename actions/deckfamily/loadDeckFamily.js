@@ -37,7 +37,7 @@ export default function loadDeckFamily(context, payload, done) {
 
             let pageTitle = shortTitle + ' | Tag | ' + defaultName;
             context.dispatch('UPDATE_PAGE_TITLE', {
-               pageTitle: pageTitle
+                pageTitle: pageTitle
             });
 
             done();
