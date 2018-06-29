@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
@@ -128,7 +129,7 @@ class EditDataSource extends React.Component {
 }
 
 EditDataSource.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 EditDataSource = connectToStores(EditDataSource, [DataSourceStore], (context, props) => {

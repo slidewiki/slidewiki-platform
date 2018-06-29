@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -77,7 +78,7 @@ class DeckFamily extends React.Component {
 }
 
 DeckFamily.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 DeckFamily = connectToStores(DeckFamily, [DeckFamilyStore], (context, props) => {
     return {
