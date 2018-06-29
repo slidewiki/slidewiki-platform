@@ -106,6 +106,8 @@ fetchrPlugin.registerService(require('./services/userreview'));
 fetchrPlugin.registerService(require('./services/nlp'));
 fetchrPlugin.registerService(require('./services/deckgroups'));
 fetchrPlugin.registerService(require('./services/recommendations'));
+fetchrPlugin.registerService(require('./services/tags'));
+
 
 // ************************** UI Internationalisation routines ***************************************
 
