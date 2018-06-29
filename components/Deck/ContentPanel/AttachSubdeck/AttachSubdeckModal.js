@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
@@ -251,7 +252,7 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {

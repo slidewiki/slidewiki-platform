@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import UserPicture from '../../common/UserPicture';
 import ChangePictureModal from './ChangePictureModal';
@@ -129,8 +130,8 @@ class ChangePicture extends React.Component {
 }
 
 ChangePicture.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default ChangePicture;

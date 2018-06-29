@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import UserPicture from '../../common/UserPicture';
@@ -70,7 +71,7 @@ class PublicUserData extends React.Component {
 }
 
 PublicUserData.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default PublicUserData;

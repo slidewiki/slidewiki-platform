@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
@@ -74,6 +75,6 @@ class KeywordsInput extends React.Component {
 }
 
 KeywordsInput.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 export default KeywordsInput;

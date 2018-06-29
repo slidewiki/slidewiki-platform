@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic-ui-react';
@@ -268,7 +269,7 @@ class AttachSubdeckModal extends React.Component{
                                                      basic icon onClick={this.handleOpen}
                                                      tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
             <Icon.Group size={this.props.buttonStyle.iconSize}>
-                <Icon className="grey" name="file text outline"/>
+                <Icon className="grey" name="file text"/>
                 <Icon className="corner black" name="attach"/>
             </Icon.Group>
         </Button>} content='Attach Slides' on='hover'/>;
@@ -327,7 +328,7 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {

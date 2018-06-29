@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
-import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
@@ -16,6 +16,7 @@ import SlideEditStore from '../../../stores/SlideEditStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import PaintModal from '../../Paint/PaintModal';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -347,6 +348,7 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
                   </a>
+                  <PaintModal/>
                 </div>);
 
         let embedOptions = (
@@ -613,8 +615,8 @@ class SlideEditLeftPanel extends React.Component {
 }
 
 SlideEditLeftPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
     return {
