@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 
@@ -149,7 +150,7 @@ class TranslationModal extends React.Component {
 }
 
 TranslationModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 TranslationModal = connectToStores(TranslationModal, [TranslationStore, UserProfileStore], (context, props) => {
     return {

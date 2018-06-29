@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
@@ -614,8 +615,8 @@ class SlideEditLeftPanel extends React.Component {
 }
 
 SlideEditLeftPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
     return {

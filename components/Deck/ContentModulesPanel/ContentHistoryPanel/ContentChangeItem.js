@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {List, Icon, Button} from 'semantic-ui-react';
 //import moment from 'moment';
@@ -146,7 +147,7 @@ class ContentChangeItem extends React.Component {
 }
 
 ContentChangeItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentChangeItem;

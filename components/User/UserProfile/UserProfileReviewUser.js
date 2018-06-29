@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { getIntlLanguage } from '../../../common.js';
 import CategoryBox from './CategoryBox';
@@ -105,7 +106,7 @@ class UserProfileReviewUser extends React.Component {
 }
 
 UserProfileReviewUser.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserProfileReviewUser = connectToStores(UserProfileReviewUser, [UserProfileStore,UserReviewStore], (context, props) => {

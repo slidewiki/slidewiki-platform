@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {formatDate} from '../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import {List, Icon, Button} from 'semantic-ui-react';
@@ -267,7 +268,7 @@ class UserNotificationsItem extends React.Component {
     }
 }
 UserNotificationsItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default UserNotificationsItem;
