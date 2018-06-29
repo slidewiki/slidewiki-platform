@@ -563,13 +563,6 @@ class SlideEditLeftPanel extends React.Component {
             </div>);
         let normalContent = (
           <div>
-            <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
-                <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
-            </a>
-            <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
-                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
-            </a>
-            <div className="ui divider"></div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
                 <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
@@ -582,6 +575,12 @@ class SlideEditLeftPanel extends React.Component {
             </a>
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Other' />
+            </a>
+            <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
+                <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
+            </a>
+            <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
+                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
             </a>
             <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
                 <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
