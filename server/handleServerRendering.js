@@ -24,7 +24,7 @@ const env = process.env.NODE_ENV;
 
 // metrics collection
 const prom_client = require('prom-client');
-metrics_freq = 5000;    //TODO make this configurable via ENV!
+const metrics_freq = 5000;    //TODO make this configurable via ENV!
 prom_client.collectDefaultMetrics({timeout: metrics_freq});
 
 let renderApp = function(req, res, context){
