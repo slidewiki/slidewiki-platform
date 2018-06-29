@@ -283,12 +283,16 @@ class UploadMediaModal extends React.Component {
             dropzone = <div className="dropzone">
               <Dropzone ref="initialDropzone" onDrop={this.onDrop.bind(this)} accept="image/*" multiple={false} className="ui grey inverted center aligned padded raised segment">
                 <Icon name="cloud upload" size="massive"/>
+<<<<<<< HEAD
                 <p>{this.context.intl.formatMessage(this.messages.drop_message1)}</p>
                 <p>{this.context.intl.formatMessage(this.messages.drop_message2)}
                 <button id="upload" className="ui button" aria-label={this.context.intl.formatMessage(this.messages.upload_button_aria)}>
                 <i className="outline upload icon large black"></i>
                 <label htmlFor="upload">{this.context.intl.formatMessage(this.messages.upload_button_label)}</label></button>
                 {this.context.intl.formatMessage(this.messages.drop_message3)}</p>
+=======
+                <p>Drop a file directly from your filebrowser here to upload it.</p><p>Alternatively, click <button id="upload" className="ui button" aria-label='select file to upload'><i className="upload icon large black"></i><label htmlFor="upload">choose file</label></button> or anywhere around this text to select a file to upload.</p>
+>>>>>>> d464f4dcf18c152cf5f5dcfc248aa4603fb480a7
               </Dropzone>
             </div>;
         } else { //TODO Implement a switch-case statement for other media files. Currently only works for images.
@@ -378,7 +382,7 @@ class UploadMediaModal extends React.Component {
         };
         /*trigger={
                 <Button className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
-                  <i className="outline upload icon large black"></i>
+                  <i className="upload icon large black"></i>
                   <a style={buttonColorBlack}>Add Image</a>
                 </Button>
                }
