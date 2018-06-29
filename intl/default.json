@@ -341,7 +341,7 @@
   "ContentActionsHeader.addSlideButtonAriaText": "Add Slide",
   "ContentActionsHeader.addDeckButtonAriaText": "Add sub-deck",
   "ContentActionsHeader.duplicateAriaText": "Duplicate slide",
-  "ContentActionsHeader.deleteAriaText": "Delete",
+  "ContentActionsHeader.deleteAriaText": "Delete slide",
   "downloadModal.downloadModal_header": "Download this deck",
   "downloadModal.downloadModal_description": "Select the download file format:",
   "downloadModal.downloadModal_downloadButton": "Download",
