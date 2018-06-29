@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import PopularDecks from './PopularDecks';
 import PublicUserData from './PublicUserData';
@@ -116,7 +117,7 @@ class UserProfileReviewDecks extends React.Component {
 }
 
 UserProfileReviewDecks.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserProfileReviewDecks = connectToStores(UserProfileReviewDecks, [UserReviewStore], (context, props) => {

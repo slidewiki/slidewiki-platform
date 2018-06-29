@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 //import ResizeAware from 'react-resize-aware';
@@ -230,7 +231,7 @@ class Presentation extends React.Component{
 }
 
 Presentation.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 Presentation = connectToStores(Presentation, [PresentationStore], (context, props) => {
