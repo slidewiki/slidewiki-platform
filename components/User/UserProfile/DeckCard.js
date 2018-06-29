@@ -68,10 +68,10 @@ class DeckCard extends React.Component {
                     </div>
                 </div>
                 <div className="bottom attached menu ui basic buttons">
-                    <NavLink href={viewUrl} data-tooltip="Open deck" type="button" role="button" className="ui icon button" aria-label="Open deck">
+                    <NavLink href={viewUrl} data-tooltip="Open deck" role="button" className="ui icon button" aria-label="Open deck">
                         <i className="yellow open folder large icon" aria-hidden="true" ></i>
                     </NavLink>
-                    <a href={presentationUrl} target="_blank" className="ui icon button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                    <a href={presentationUrl} target="_blank" className="ui icon button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                         <i className="grey circle play large icon" aria-hidden="true" ></i>
                     </a>
                 </div>
