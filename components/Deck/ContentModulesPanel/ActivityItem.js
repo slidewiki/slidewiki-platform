@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import likeActivity from '../../../actions/activityfeed/likeActivity';
 import {formatDate} from './util/ActivityFeedUtil';
@@ -196,7 +197,7 @@ class ActivityItem extends React.Component {
 }
 
 ActivityItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ActivityItem;

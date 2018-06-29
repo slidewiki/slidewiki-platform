@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
@@ -448,10 +449,9 @@ class UploadMediaModal extends React.Component {
 }
 
 UploadMediaModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func,
-    intl: React.PropTypes.object.isRequired
-
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func,
+    intl: PropTypes.object.isRequired
 };
 
 export default UploadMediaModal;
