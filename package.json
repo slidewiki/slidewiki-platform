@@ -49,6 +49,9 @@
     "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git",
     "reveal.js-menu": "https://github.com/slidewiki/reveal.js-menu"
   },
+  "napa-config": {
+    "cache": false
+  },
   "dependencies": {
     "async": "^2.1.5",
     "babel-cli": "^6.24.1",
