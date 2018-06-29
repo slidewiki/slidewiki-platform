@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import PopularDecks from '../PopularDecks';
 import { navigateAction } from 'fluxible-router';
@@ -133,8 +134,8 @@ class UserDecks extends React.Component {
 }
 
 UserDecks.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default UserDecks;

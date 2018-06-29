@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 

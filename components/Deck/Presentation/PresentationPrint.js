@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
@@ -112,7 +113,7 @@ class PresentationPrint extends React.Component{
 }
 
 PresentationPrint.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 PresentationPrint = connectToStores(PresentationPrint, [PresentationStore], (context, props) => {

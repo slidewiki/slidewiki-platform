@@ -160,7 +160,7 @@ export default {
                 }else{
                     pathArr=[];
                 }
-                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';'), theme: resParse.theme ? resParse.theme : 'default'}, selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(err);

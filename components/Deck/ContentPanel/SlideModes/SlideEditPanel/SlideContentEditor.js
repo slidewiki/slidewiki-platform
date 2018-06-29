@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -2243,7 +2244,7 @@ class SlideContentEditor extends React.Component {
                 .find((node) => node.get('id') === this.props.SlideEditStore.slideId && node.get('type') === 'slide');
 
             if (treeNode) {
-                styleName = treeNode.get('theme');
+                styleName = treeNode.get('theme') ? treeNode.get('theme') : 'default';
             } else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined') {
                 styleName = this.props.DeckTreeStore.theme;
             }
@@ -2319,8 +2320,8 @@ class SlideContentEditor extends React.Component {
 }
 
 SlideContentEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
