@@ -307,7 +307,7 @@
   "ContentActionsHeader.viewButtonAriaText": "View Mode",
   "ContentActionsHeader.editButtonText": "Edit",
   "ContentActionsHeader.editButtonAriaText": "Edit Mode",
-  "ContentActionsHeader.addSlideButtonAriaText": "Add Slide",
+  "ContentActionsHeader.addSlideButtonAriaText": "Add slide",
   "ContentActionsHeader.addDeckButtonAriaText": "Add sub-deck",
   "ContentActionsHeader.duplicateAriaText": "Duplicate slide",
   "ContentActionsHeader.deleteAriaText": "Delete",
