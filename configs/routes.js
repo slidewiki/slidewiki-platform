@@ -152,6 +152,19 @@ export default {
             done();
         }
     },
+    help: {
+        path: '/help', // /playlist/26?sort=order
+        method: 'get',
+        page: 'about',
+        title: 'SlideWiki -- Guides and Help',
+        handler: require('../components/Home/GuidesHelp'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Guides and Help'
+            });
+            done();
+        }
+    },
     license: {
         path: '/license',
         method: 'get',
