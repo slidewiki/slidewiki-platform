@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import ErrorStore from '../../stores/ErrorStore';
@@ -40,7 +41,7 @@ class Error extends React.Component {
 }
 
 Error.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 Error = connectToStores(Error, [ErrorStore], (context, props) => {
     return {

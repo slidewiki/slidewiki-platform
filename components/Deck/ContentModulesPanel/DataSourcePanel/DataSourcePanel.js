@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
@@ -61,7 +62,7 @@ class DataSourcePanel extends React.Component {
 }
 
 DataSourcePanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore, PermissionsStore], (context, props) => {

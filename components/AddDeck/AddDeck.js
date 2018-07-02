@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -93,7 +94,7 @@ class AddDeck extends React.Component {
         else {
             wrongFields.title = false;
         }
-        if (language === null || language === undefined || language.length !== 5) {
+        if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
             everythingIsFine = false;
         }
@@ -600,8 +601,8 @@ class AddDeck extends React.Component {
 
 
 AddDeck.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore, ImportStore], (context, props) => {
     return {
