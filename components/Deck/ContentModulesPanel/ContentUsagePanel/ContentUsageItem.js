@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 
@@ -26,7 +27,7 @@ class ContentUsageItem extends React.Component {
 }
 
 ContentUsageItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentUsageItem;

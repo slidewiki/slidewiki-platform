@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Microservices } from '../../../configs/microservices';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -195,7 +196,9 @@ class UserGroupEdit extends React.Component {
                           </div>
                         </div>
                         <div className="one wide column middle aligned">
-                          <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                          <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member">
+                            <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -259,7 +262,7 @@ class UserGroupEdit extends React.Component {
 }
 
 UserGroupEdit.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default UserGroupEdit;
