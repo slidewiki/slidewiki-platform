@@ -1,12 +1,9 @@
 import React from 'react';
 
 class GuidesHelp extends React.Component {
-    render() {
-        return (
-            this.context.executeAction(navigateAction, {
-                url: '/playlist/26?sort=order'
-            })
-        );
+    constructor(props) {
+      super(props);
+      window.location = '/playlist/26?sort=order';
     }
 }
 

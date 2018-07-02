@@ -155,13 +155,11 @@ export default {
     help: {
         path: '/help', // /playlist/26?sort=order
         method: 'get',
-        page: 'about',
+        page: 'help',
         title: 'SlideWiki -- Guides and Help',
         handler: require('../components/Home/GuidesHelp'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Guides and Help'
-            });
+            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
             done();
         }
     },
