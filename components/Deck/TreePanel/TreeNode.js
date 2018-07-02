@@ -163,6 +163,7 @@ class TreeNode extends React.Component {
         let content = '';
         let nodeTitle = '';
         let divToInsert = '';
+        let activeSlide = '';
 
         if (this.props.item.get('type') === 'deck')
             childNodesDIV = <TreeNodeList parentNode={self.props.item} onToggleNode={self.props.onToggleNode}
@@ -176,13 +177,14 @@ class TreeNode extends React.Component {
                             />;
 
         if (this.props.item.get('type') === 'slide' && this.props.showThumbnails){
-            content = <div className="ui fluid card" data-selected={this.props.item.get('selected')} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + (this.props.item.get('theme') ? this.props.item.get('theme') : 'default')} alt={this.props.item.get('title')} width='100%'/></div>;
+            if (this.props.item.get('selected')){activeSlide = 'activeSlide';} else{activeSlide = '';}
+            content = <div className="ui fluid card" data-selected={this.props.item.get('selected')} id={activeSlide} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + (this.props.item.get('theme') ? this.props.item.get('theme') : 'default')} alt={this.props.item.get('title')} width='100%'/></div>;
         } else {
             content = cheerio.load(this.props.item.get('title')).text();
             nodeTitle = content;
         }
         if (this.props.item.get('selected') && !this.props.showThumbnails)
-            content = <strong> {nodeTitle} </strong>;
+            content = <strong id='activeSlide'> {nodeTitle} </strong>;
         if (this.props.item.get('editable')) {
             divToInsert = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;

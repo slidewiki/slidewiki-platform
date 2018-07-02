@@ -28,9 +28,22 @@ class TreePanel extends React.Component {
             isTranslationModalOpen: false,
             showThumbnails: false
         };
+        this.initialScroll = false;
     }
 
     componentDidMount() {
+
+        document.onreadystatechange = function () {
+            if(document.readyState === 'complete'){
+                //wait for all images in thumbnail decktree to be loaded
+                console.log('loaded');
+                if($('#activeSlide') !== undefined)
+                {
+                    $('#decktree').animate({ scrollTop: $('#decktree #activeSlide').offset().top}, 1500);
+                }
+            }
+        };
+
         $('#showThumbnails').checkbox();
         if(window.sessionStorage){
             let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
@@ -40,9 +53,31 @@ class TreePanel extends React.Component {
                 window.sessionStorage.setItem('DeckTree.ShowThumbnails', this.state.showThumbnails);
             }
         }
+        if($('#activeSlide') !== undefined)
+        {
+            setTimeout(() => {
+                $('#decktree').animate({ scrollTop: $('#decktree #activeSlide').offset().top}, 100);
+            }, 0);
+        }
     }
-
+    componentDidUpdate(){
+        document.onreadystatechange = function () {
+            if(document.readyState === 'complete'){
+                //wait for all images in thumbnail decktree to be loaded
+                console.log('loaded');
+                if($('#activeSlide') !== undefined)
+                {
+                    $('#decktree').animate({ scrollTop: $('#decktree #activeSlide').offset().top}, 1500);
+                }
+            }
+        };
+    }
     toggleShowThumbnails() {
+        if($('#activeSlide') !== undefined){
+            //setTimeout(() => {
+            $('#decktree').animate({ scrollTop: $('#decktree #activeSlide').offset().top}, 100);
+            //}, 1000);
+        }
         if(window.sessionStorage)
             window.sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
         this.setState({showThumbnails: !this.state.showThumbnails});
@@ -243,7 +278,7 @@ class TreePanel extends React.Component {
                         </div>
                     </div>
                     }
-                    <div className="ui attached segment" style={treeDIVStyles}>
+                    <div className="ui attached segment" style={treeDIVStyles} id="decktree" ref="decktree">
                         {decktreeError ? <div className="ui error message" style={{
                             'wordBreak': 'break-all',
                             'wordWrap': 'break-word'
