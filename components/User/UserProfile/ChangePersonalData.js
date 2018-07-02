@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { connectToStores } from 'fluxible-addons-react';
@@ -169,8 +170,8 @@ class ChangePersonalData extends React.Component {
 }
 
 ChangePersonalData.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 ChangePersonalData = connectToStores(ChangePersonalData, [IntlStore], (context, props) => {

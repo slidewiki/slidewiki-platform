@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import newTag from '../../../../actions/tags/newTag';
 import { defineMessages } from 'react-intl';
@@ -127,8 +128,8 @@ class RecommendedTags extends React.Component {
 }
 
 RecommendedTags.contextTypes = {
-    intl: React.PropTypes.object.isRequired,
-    executeAction: React.PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired,
 };
 
 export default RecommendedTags;
