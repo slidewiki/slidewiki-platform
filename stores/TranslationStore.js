@@ -180,6 +180,9 @@ class TranslationStore extends BaseStore {
         else
             this.originLanguage = fallback.replace('_', '-')  || 'en-GB';
 
+        // also reset the invalid flag
+        this.invalidLanguage = false;
+
         return this.originLanguage;
     }
 }

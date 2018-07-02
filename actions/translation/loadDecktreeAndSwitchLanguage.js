@@ -2,6 +2,7 @@ const log = require('../log/clog');
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import loadDeckTree from '../decktree/loadDeckTree';
 import Util from '../../components/common/Util';
+import {navigateAction} from 'fluxible-router';
 
 export default function loadDecktreeAndSwitchLanguage(context, payload, done) {
     log.info(context);
@@ -15,25 +16,36 @@ export default function loadDecktreeAndSwitchLanguage(context, payload, done) {
     };
 
     if (selector.stype === 'slide')
-        context.executeAction(loadDeckTree, {
-            params: {
-                id: selector.id,
-                spath: selector.spath,
-                sid: selector.sid,
-                stype: selector.stype,
-                language: payload.language,
-                mode: location ? (location.pathname.split('/').pop() === 'edit' ? 'edit' : 'view') : 'view'
-            },
-            navigate: {
-                runFetchTree: true
-            },
-            page: 'deck',
-            instantNavigation: true
-        }, done);
-    else {
-        const nodeURL = Util.makeNodeURL(selector, 'deck', location ? (location.pathname.split('/').pop() === 'edit' ? 'edit' : 'view') : 'view', undefined, payload.language);
-        location.href = location.origin + nodeURL;
+        context.service.read('decktree.nodetranslation', {params: selector}, {timeout: 20 * 1000}, (err, res) => {
+            if (err) {
+                log.error(context, {filepath: __filename});
+                context.executeAction(serviceUnavailable, payload, done);//TODO improve
+                return;
+            } else {
+                console.log('getSLideTranslation service returned', res);
 
-        done();
+                // match the language
+                let newNode = res.nodes.find((t) => t.language === payload.language);
+                if (!newNode) {
+                    // match the primary
+                    newNode = res.nodes.find((t) => t.original);
+                    // should have one, but language is different
+                } 
+
+                let newSlideId = newNode.id + '-' + newNode.revision;
+                let newPath = location.pathname.toString().replace(new RegExp(selector.sid, 'g'), newSlideId);
+
+                // replace language in search params
+                let params = new URLSearchParams(location.search);
+                params.set('language', payload.language);
+
+                context.executeAction(navigateAction, { url: newPath + '?' + params.toString() }, done);
+            }
+        });
+    else {
+        let params = new URLSearchParams(location.search);
+        params.set('language', payload.language);
+
+        context.executeAction(navigateAction, { url: location.pathname + '?' + params.toString() }, done);
     }
 }

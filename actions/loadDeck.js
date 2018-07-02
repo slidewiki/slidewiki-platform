@@ -17,6 +17,7 @@ import fetchUser from './user/userprofile/fetchUser';
 import UserProfileStore from '../stores/UserProfileStore';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
+import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
@@ -114,6 +115,8 @@ export default function loadDeck(context, payload, done) {
         runNonContentActions = 0;
     }
 
+    let languageWillChange = context.getStore(TranslationStore).getState().currentLang !== payload.params.language;
+
     //load translation stuff first
     async.series([
         (callback) => {
@@ -144,7 +147,7 @@ export default function loadDeck(context, payload, done) {
                 });
             },
             (callback) => {
-                if(runNonContentActions){
+                if(runNonContentActions || languageWillChange){
                     context.executeAction(loadDeckTree, payloadCustom, callback);
                 }else{
                     callback();
@@ -172,7 +175,7 @@ export default function loadDeck(context, payload, done) {
                 }
             },
             (callback) => {
-                if(runNonContentActions){
+                if(runNonContentActions || languageWillChange){
                     //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
                     context.executeAction(loadContributors, payloadCustom, callback);
                 }else{

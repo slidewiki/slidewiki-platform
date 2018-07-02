@@ -19,6 +19,9 @@ import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import TranslationStore from '../../../stores/TranslationStore';
 import updateTrap from '../../../actions/loginModal/updateTrap';
+import {getLanguageName} from '../../../common';
+import loadDecktreeAndSwitchLanguage from '../../../actions/translation/loadDecktreeAndSwitchLanguage';
+import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
 
 class TreePanel extends React.Component {
 
@@ -162,6 +165,10 @@ class TreePanel extends React.Component {
             });
     }
 
+    changeCurrentLanguage(e, { value: language }) {
+        this.context.executeAction(loadDecktreeAndSwitchLanguage, { language });
+    }
+
     render() {
         const rootNodeStyles = {
             fontSize: '1.06em'
@@ -218,20 +225,18 @@ class TreePanel extends React.Component {
             'checkbox': true,
             'checked': this.state.showThumbnails
         });
+
+        let language = this.props.TranslationStore.nodeLanguage || this.props.TranslationStore.originLanguage;
+        let languageOptions = [this.props.TranslationStore.originLanguage].concat(this.props.TranslationStore.translations)
+            .map((t) => ({ text: getLanguageName(t), value: t }));
+
         return (
             <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
-                <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
 
-                    <div className="ui icon fluid buttons">
-                        {/*                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
-                                                    <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                                                        <i className="circle play large icon"></i>
-                                                    </button>
-                                                </NavLink>
-                        */}
+                    <div className="ui attached icon buttons menu">
                         <div className={classes_playbtn} aria-label="Open slideshow in new tab" tabIndex="0" role="button" data-tooltip="Open slideshow in new tab" onClick={this.handlePresentationClick.bind(this)}>
                             <i className="circle play large icon"></i>
                         </div>
@@ -241,6 +246,12 @@ class TreePanel extends React.Component {
                         <div className={classes_translatebtn} role="button" aria-label="Translations and languages of this deck" data-tooltip="Translations of this deck" tabIndex="0" onClick={this.handleTranslations.bind(this)}>
                             <i className="translate blue large icon"></i>
                         </div>
+                    </div>
+                    <div className="ui attached buttons segment menu">
+                            <Dropdown selection fluid options={languageOptions}
+                                defaultValue={this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage}
+                                onChange={this.changeCurrentLanguage.bind(this)}
+                                aria-label="Select a preferred language" aria-required="true" />
                     </div>
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
@@ -270,7 +281,7 @@ class TreePanel extends React.Component {
                             <label htmlFor="ShowThumbnails">Show Thumbnails</label>
                         </div>
                     </div>
-                </div>
+
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
                 <TranslationModal selector={selector.toJS()} isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
             </div>

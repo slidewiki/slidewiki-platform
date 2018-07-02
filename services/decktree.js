@@ -21,7 +21,20 @@ export default {
                 //we should report the error to the action creator
                 callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', details: err});
             });
+        } else if (resource === 'decktree.nodetranslation') {
+            /*********connect to microservices*************/
+            rp.get({
+                uri: Microservices.deck.uri + '/decktree/node/translations',
+                qs: selector,
+                json: true
+            }).then((res) => {
+                callback(null, {nodes: res, selector: args.selector, language: args.language});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {nodes: [], selector: args.selector, language: args.language});
+            });
         }
+
     },
     create: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;

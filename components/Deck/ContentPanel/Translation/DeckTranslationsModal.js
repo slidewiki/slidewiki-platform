@@ -194,7 +194,7 @@ class DeckTranslationsModal extends React.Component {
                       <br/>
 
                       <div>
-                        {this.context.intl.formatMessage(messages.originLanguage)} <Button role="button" tabIndex="0" onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.context.intl.formatMessage(messages.primaryLanguage))}</Button>
+                        {this.context.intl.formatMessage(messages.primaryLanguage)} <Button role="button" tabIndex="0" onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.props.TranslationStore.nodeLanguage)}</Button>
                         <br/>
                       </div>
                       <br/>
