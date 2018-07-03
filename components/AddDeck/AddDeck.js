@@ -95,7 +95,7 @@ class AddDeck extends React.Component {
         else {
             wrongFields.title = false;
         }
-        if (language === null || language === undefined || language.length !== 5) {
+        if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
             everythingIsFine = false;
         }
@@ -265,7 +265,7 @@ class AddDeck extends React.Component {
                     if (slide.title !== undefined)
                         thumbnailAlt += slide.title ;
                     html += '<td style="padding: 15px;"><div style="width: 250px;">' +
-                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt + '"/>' +
+                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt +  '" aria-hidden="true" / +
                         '</div></td>'; //THUMBNAIL
                 }
                 html += '</tr></table></div>';

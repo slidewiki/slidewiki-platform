@@ -123,6 +123,14 @@ class SearchPanel extends React.Component {
                 id: 'SearchPanel.filters.language.option.spanish',
                 defaultMessage: 'Spanish'
             },
+            languageFilterOptionFrench: {
+                id: 'SearchPanel.filters.language.option.french',
+                defaultMessage: 'French'
+            },
+            languageFilterOptionLithuanian: {
+                id: 'SearchPanel.filters.language.option.lithuanian',
+                defaultMessage: 'Lithuanian'
+            },
             usersFilterTitle: {
                 id: 'SearchPanel.filters.users.title',
                 defaultMessage: 'User'
@@ -305,14 +313,16 @@ class SearchPanel extends React.Component {
                 <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
                 <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                   <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
-                  <option value='nl_NL'>{this.context.intl.formatMessage(this.messages.languageFilterOptionDutch)}</option>
                   <option value='en_GB'>{this.context.intl.formatMessage(this.messages.languageFilterOptionEnglish)}</option>
                   <option value='de_DE'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGerman)}</option>
-                  <option value='el_GR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGreek)}</option>
+                  <option value='fr_FR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionFrench)}</option>
                   <option value='it_IT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionItalian)}</option>
+                  <option value='es_ES'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSpanish)}</option>
+                  <option value='nl_NL'>{this.context.intl.formatMessage(this.messages.languageFilterOptionDutch)}</option>
+                  <option value='el_GR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGreek)}</option>
                   <option value='pt_PT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionPortuguese)}</option>
                   <option value='sr_RS'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSerbian)}</option>
-                  <option value='es_ES'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSpanish)}</option>
+                  <option value='lt_LT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionLithuanian)}</option>
                 </select>
             </div>
         </div>

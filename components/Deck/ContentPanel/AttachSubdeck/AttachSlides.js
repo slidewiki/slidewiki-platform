@@ -248,14 +248,14 @@ class AttachSlides extends React.Component{
                                     <Grid.Row columns={1}>
                                       <Grid.Column>
                                         <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right" content='Selected Deck'/>
-                                        <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue" tabIndex="0"/>
+                                        <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic tabIndex="0"/>
                                         <TextArea className="sr-only" id="attachSlidesDescription2" value="Select slides to attach" tabIndex ='-1'/>
                                       </Grid.Column>
                                     </Grid.Row>
                                     <Grid.Row columns={2}>
                                       <Grid.Column textAlign="left">
                                       <Label htmlFor="slidesContentId"  color='blue'  pointing="right"  content="Selected slides:"/>
-                                      <Label  id="slidesContentId" content={this.state.selectedSlidesLabel} basic color="blue"/>
+                                      <Label  id="slidesContentId" content={this.state.selectedSlidesLabel} basic/>
 
                                       </Grid.Column>
                                       <Grid.Column textAlign="right" >
