@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -102,7 +103,7 @@ class UserNotificationsBadge extends React.Component {
 }
 
 UserNotificationsBadge.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 UserNotificationsBadge = connectToStores(UserNotificationsBadge, [UserNotificationsStore, UserProfileStore], (context, props) => {
     return {

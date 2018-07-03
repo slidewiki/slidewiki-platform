@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Thumbnail from '../../common/Thumbnail';
 import { NavLink } from 'fluxible-router';
@@ -81,7 +82,7 @@ class DeckCard extends React.Component {
 }
 
 DeckCard.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default DeckCard;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
@@ -66,7 +67,7 @@ class AddComment extends React.Component {
 }
 
 AddComment.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 AddComment = connectToStores(AddComment, [UserProfileStore], (context, props) => {

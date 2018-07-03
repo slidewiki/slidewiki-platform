@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames/bind';
 import { NavLink } from 'fluxible-router';
@@ -152,7 +153,7 @@ class SearchResultsItem extends React.Component {
 }
 
 SearchResultsItem.contextTypes = {
-    intl: React.PropTypes.object.isRequired,
+    intl: PropTypes.object.isRequired,
 };
 
 export default SearchResultsItem;
