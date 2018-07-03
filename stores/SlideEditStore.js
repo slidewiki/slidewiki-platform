@@ -7,9 +7,7 @@ class SlideEditStore extends BaseStore {
         this.id = '';
         this.slideId = '';
         this.title = '';
-        this.LeftPanelTitleChange = false;
         this.content = '';
-        this.markdown = '';
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
@@ -30,6 +28,11 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+        this.ltiClick = 'false';
+        this.ltiWidth = '';
+        this.ltiHeight = '';
+        this.ltiURL = '';
+        this.ltiCode = '';
         this.HTMLEditorClick = 'false';
     }
     updateContent(payload) {
@@ -43,7 +46,6 @@ class SlideEditStore extends BaseStore {
             let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
             this.title = lastRevision.title? lastRevision.title: ' ';
             this.content = lastRevision.content? lastRevision.content: ' ';
-            this.markdown = lastRevision.markdown? lastRevision.markdown: ' ';
             this.speakernotes = lastRevision.speakernotes? lastRevision.speakernotes: ' ';
 
             this.emitChange();
@@ -53,7 +55,6 @@ class SlideEditStore extends BaseStore {
             this.slideId = '';
             this.title = 'title not found';
             this.content = 'content not found';
-            this.markdown = 'content not found';
             this.speakernotes = 'speaker notes not found';
             this.emitChange();
         }
@@ -151,9 +152,24 @@ class SlideEditStore extends BaseStore {
         this.embedCode = '';
         this.emitChange();
     }
+
+    handleLTIClick(payload){
+        this.ltiClick = 'true';
+        this.ltiWidth = payload.ltiWidth;
+        this.ltiHeight = payload.ltiHeight;
+        this.ltiURL = payload.ltiURL;
+        this.ltiCode = payload.ltiCode;
+        this.emitChange();
+        this.ltiClick = 'false';
+        this.ltiWidth = '';
+        this.ltiHeight = '';
+        this.ltiURL = '';
+        this.ltiCode = '';
+        this.emitChange();
+    }
+
     changeTitle(payload){
         this.title = payload.title;
-        this.LeftPanelTitleChange = payload.LeftPanelTitleChange;
         this.emitChange();
         //this.title = '';
         //this.emitChange();
@@ -170,9 +186,7 @@ class SlideEditStore extends BaseStore {
             id: this.id,
             slideId: this.slideId,
             title: this.title,
-            LeftPanelTitleChange: this.LeftPanelTitleChange,
             content: this.content,
-            markdown: this.markdown,
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
             saveSlideClick: this.saveSlideClick,
@@ -193,6 +207,11 @@ class SlideEditStore extends BaseStore {
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
+            ltiClick: this.ltiClick,
+            ltiURL: this.ltiURL,
+            ltiCode: this.ltiCode,
+            ltiWidth: this.ltiWidth,
+            ltiHeight: this.ltiHeight,
             HTMLEditorClick: this.HTMLEditorClick
         };
     }
@@ -203,9 +222,7 @@ class SlideEditStore extends BaseStore {
         this.id = state.id;
         this.slideId = state.slideId;
         this.title = state.title;
-        this.LeftPanelTitleChange = state.LeftPanelTitleChange;
         this.content = state.content;
-        this.markdown = state.markdown;
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
         this.saveSlideClick = state.saveSlideClick;
@@ -226,6 +243,11 @@ class SlideEditStore extends BaseStore {
         this.embedCode = state.embedCode;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
+        this.ltiClick = state.ltiClick;
+        this.ltiURL = state.ltiURL;
+        this.ltiCode = state.ltiCode;
+        this.ltiWidth = state.ltiWidth;
+        this.ltiHeight = state.ltiHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
     }
 }
@@ -246,6 +268,8 @@ SlideEditStore.handlers = {
     'MATHS_CLICK': 'handleMathsClick',
     'CODE_CLICK': 'handleCodeClick',
     'EMBED_CLICK': 'handleEmbedClick',
+    'LTI_CLICK': 'handleLTIClick',
+    'LTI_ADD_SUCCESS': 'handleLTIAddClick',
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
     'UNDO_CLICK': 'handleUndoClick',

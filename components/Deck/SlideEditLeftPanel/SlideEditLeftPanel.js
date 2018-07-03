@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
+import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
@@ -10,13 +10,14 @@ import tableClick from '../../../actions/slide/tableClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
 import embedClick from '../../../actions/slide/embedClick';
+//import ltiClick from '../../../actions/slide/ltiClick';
+import addLTI from '../../../actions/slide/addLTI';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import PaintModal from '../../Paint/PaintModal';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -27,42 +28,48 @@ class SlideEditLeftPanel extends React.Component {
             embedCode: '',
             embedWidth: '400',
             embedHeight: '300',
+            ltiURL: '',
+            ltiCode: '',
+            ltiWidth: '400',
+            ltiHeight: '300',
             URLMissingError: false,
             embedCodeMissingError: false,
+            ltiCodeMissingError: false,
             showOther: false,
             showTemplate: false,
             showEmbed: false,
+            showLTI: false,
             showProperties: false,
             showNameChange: false,
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
-            LeftPanelTitleChange: false,
-            titleMissingError: false,
-            paintButton: (<a className="item" id="paintModalTrigger" role="button" >
-                                <i tabIndex="0" className="paint brush icon"></i> Paint
-                               </a>)
+            titleMissingError: false
         };
     }
     componentDidUpdate(prevProps, prevState){
         if (prevState.showTemplate !== this.state.showTemplate ||
             prevState.showOther !== this.state.showOther ||
             prevState.showEmbed !== this.state.showEmbed ||
+            prevState.showLTI !== this.state.showLTI ||
             prevState.showProperties !== this.state.showProperties ||
             prevState.showTitleChange !== this.state.showTitleChange ||
             prevState.showSize !== this.state.showSize ||
             prevState.showBackground !== this.state.showBackground)
         {
-            //set focus on buttons depending on submenu navigation
             if (this.state.showTitleChange === true)
             {
                 $('#slideTitle').focus();
             } else if (this.state.showEmbed === true)
             {
                 $('#embedCode').focus();
+            } else if (this.state.showLTI === true)
+            {
+                $('#ltiCode').focus();
             } else {
                 $('#handleBackLink').focus();
             }
+            //$('#handleAddInputBox').focus(); //if back at root menu
         }
     }
     handleAddInputBox(){
@@ -124,6 +131,124 @@ class SlideEditLeftPanel extends React.Component {
             this.setState({showEmbed: false});
         }
     }
+
+    handleLTIClick(){
+        this.setState({showLTI: true});
+        this.setState({showOther: false});
+        this.forceUpdate();
+        //this.context.executeAction(ltiClick, {});
+    }
+    handleLTIAddClick(){
+        //if(this.state.ltiURL === '' && this.state.ltiCode === ''){
+        if(this.state.ltiURL === ''){
+            this.setState({ URLMissingError: true });
+            this.setState({ ltiCodeMissingError: true });
+            //console.log('errormissing');
+            this.forceUpdate();
+        }
+        else {
+
+
+          console.log('post request');
+
+          var oauth = require('oauth-sign');
+          var ltiURL1 = "http://localhost:8888/moodle35/enrol/lti/cartridge.php/1/985df831239c963c4442533678d4a248/cartridge.xml";
+          var secret = "A5qDB88mg7pnBXOYSz3rzdhYVtxHu2B6";
+          var key = "A5qDB88mg7pnBXOYSz3rzdhYVtxHu2B6";
+          var timestamp = Math.round(Date.now() / 1000);
+
+          var method = 'POST';
+          var params ={
+                "oauth_consumer_key": key,
+                "oauth_timestamp": timestamp,
+                "oauth_signature_method": "HMAC-SHA1",
+                "oauth_version": "1.0",
+                "ext_user_username": "umar",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "resourceLinkId",
+              };
+          //Prepare oauth signature
+          let signature = oauth.hmacsign(method, ltiURL1, params, secret);
+          params.oauth_signature = signature;
+          console.log("params.oauth_signature="+params.oauth_signature);
+
+            this.context.executeAction(addLTI, {
+                ltiURL1: ltiURL1,
+                params: params
+
+            });
+
+
+/*
+          let post_data = querystring.stringify(params);
+          console.log("post_data="+post_data);
+
+          // An object of options to indicate where to post to
+          let post_options = {
+              host: ltiURL1,
+              port: '8888',
+              method: method,
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Content-Length': Buffer.byteLength(post_data)
+              }
+          };
+
+
+          // Set up the request
+          var post_req = http.request(post_options, function(res) {
+              res.setEncoding('utf8');
+              res.on('data', function (chunk) {
+                  console.log('Response: ' + chunk);
+              });
+          });
+
+          // post the data
+          post_req.write(post_data);
+          post_req.end();
+
+          ltiCode: this.state.ltiCode;
+          ltiWidth: this.state.ltiWidth;
+          ltiHeight: this.state.ltiHeight;
+          ltiURL: this.state.ltiURL;
+
+
+          this.context.executeAction(ltiClick, {
+              ltiWidth: this.state.ltiWidth,
+              ltiHeight: this.state.ltiHeight,
+              ltiURL: this.state.ltiURL,
+              ltiCode: ''
+          });
+
+            this.setState({showTemplate: false});
+            this.setState({showOther: true});
+            this.setState({showLTI: false});
+*/
+
+                      /*
+                        if (this.state.ltiCode !== ''){
+                            this.context.executeAction(ltiClick, {
+                                ltiWidth: '',
+                                ltiHeight: '',
+                                iframe: '',
+                                ltiCode: this.state.ltiCode
+                            });
+
+                        }
+                        else{
+                            this.context.executeAction(ltiClick, {
+                                ltiWidth: this.state.ltiWidth,
+                                ltiHeight: this.state.ltiHeight,
+                                ltiURL: this.state.ltiURL,
+                                ltiCode: ''
+                            });
+                        }
+                        */
+
+        }//end else
+    }
+
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -158,8 +283,7 @@ class SlideEditLeftPanel extends React.Component {
         } else {
             console.log(this.state.slideTitle);
             this.context.executeAction(changeTitle, {
-                title: this.state.slideTitle,
-                LeftPanelTitleChange: true
+                title: this.state.slideTitle
             });
             this.setState({showProperties: true});
             this.setState({showTitleChange: false});
@@ -198,7 +322,7 @@ class SlideEditLeftPanel extends React.Component {
         swal({
             title: this.context.intl.formatMessage({
                 id: 'editpanel.KeyboardShortcutsModal.title',
-                defaultMessage: 'Information on slide editor controls and keyboard shortcuts',
+                defaultMessage: 'Keyboard shortcuts',
             }),
             html: this.context.intl.formatMessage({
                 id: 'editpanel.KeyboardShortcutsModal.html',
@@ -207,10 +331,9 @@ class SlideEditLeftPanel extends React.Component {
                 '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
                 '&#8226; Duplicate an input box: control + d <br/>'+
                 '&#8226; Delete an input box: control + delete <br/>'+
-                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/> <br/>' +
-                '&#8226; <b>Tip:</b> press the "shift" keyboard button while resizing an image to maintain the width-to-heigth ratio/dimensions of the image <br/>'
+                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>' +
+                '&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>'
             }),
-            //'&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>' +
             type: 'question',
             showCloseButton: true,
             showCancelButton: false,
@@ -231,6 +354,11 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showEmbed: false});
         this.forceUpdate();
     }
+    handleBackLTI(){
+        this.setState({showOther: true});
+        this.setState({showLTI: false});
+        this.forceUpdate();
+    }
     handleTitleBack(){
         this.setState({showProperties: true});
         this.setState({showTitleChange: false});
@@ -240,6 +368,7 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showTemplate: false});
         this.setState({showOther: false});
         this.setState({showEmbed: false});
+        this.setState({showLTI: false});
         this.setState({showProperties: false});
         this.setState({showSize: false});
         this.forceUpdate();
@@ -283,6 +412,15 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleEmbedAddClick':
                     this.handleEmbedAddClick();
                     break;
+                case 'handleBackLTI':
+                    this.handleBackLTI();
+                    break;
+                case 'handleLTIClick':
+                    this.handleLTIClick();
+                    break;
+                case 'handleLTIAddClick':
+                    this.handleLTIAddClick();
+                    break;
                 case 'handleTemplateClick':
                     this.handleTemplateClick();
                     break;
@@ -323,9 +461,6 @@ class SlideEditLeftPanel extends React.Component {
             }
         }
     }
-    componentDidMount(){
-        this.paintButton = (<PaintModal/>);
-    }
 
     render() {
         const dropDownItemStyle = {
@@ -345,6 +480,9 @@ class SlideEditLeftPanel extends React.Component {
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
                   </a>
+                  <a  className="item" id="handleLTIClick" role="button" onClick={this.handleLTIClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleLTIClick')}>
+                      <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.lti' defaultMessage='LTI' />
+                  </a>
                   <a className="item" id="handleTableClick" role="button" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
                       <i tabIndex="0" className="table icon"></i><FormattedMessage id='editpanel.table' defaultMessage='Table' />
                   </a>
@@ -353,9 +491,6 @@ class SlideEditLeftPanel extends React.Component {
                   </a>
                   <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
-                  </a>
-                  <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
-                      <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
                   </a>
                 </div>);
 
@@ -405,29 +540,65 @@ class SlideEditLeftPanel extends React.Component {
                   </label>
                 </form>);
 
-        const templateListStyle = {
-            maxHeight: 600,
-            minHeight: 320,
-            padding: 5,
-            overflowY: 'auto'
-        };
+                let ltiOptions = (
+                        <form className="ui form">
+                          <a className="item" id="handleBack" role="button" onClick={this.handleBackLTI.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackLTI')}>
+                              <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                          </a>
+                          <label htmlFor="ltiCode">
+                            <FormattedMessage id='editpanel.ltiCode' defaultMessage='LTI Key:' />
+                          </label>
+                          <div className="field">
+                            <i className="error">
+                                {this.state.ltiCodeMissingError === false ? '' : <FormattedMessage id='editpanel.ltiCodeMissingError' defaultMessage='missing LTI key' />}
+                            </i>
+                            <Input onChange={this.handleChange.bind(this)} id="ltiCode" ref="ltiCode" name="ltiCode" aria-label="LTI Key" autoFocus />
+                          </div>
+                          <div>
+                            <i>and</i>
+                          </div>
+                          <label htmlFor="ltiURL">
+                            <FormattedMessage id='editpanel.ltiURL' defaultMessage='URL/Link to LTI content:' />
+                          </label>
+                          <div className="field">
+                            <i className="error">
+                                {this.state.URLMissingError === false ? '' : <FormattedMessage id='editpanel.URLMissingError' defaultMessage='missing URL/link to content' />}
+                            </i>
+                            <Input onChange={this.handleChange.bind(this)} id="ltiURL" ref="ltiURL" name="ltiURL" aria-label="URL (Link) to LTI content" autoFocus/>
+                          </div>
+                          <label htmlFor="ltiWidth">
+                            <FormattedMessage id='editpanel.ltiWidth' defaultMessage='Width of LTI content:' />
+                          </label>
+                          <div className="required field">
+                            <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="ltiWidth" ref="ltiWidth" name="ltiWidth" aria-label="Width of LTI content" aria-required="true" required />
+                          </div>
+                          <label htmlFor="ltiHeight">
+                            <FormattedMessage id='editpanel.ltiHeight' defaultMessage='Height of LTI content:' />
+                          </label>
+                          <div className="required field">
+                            <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="ltiHeight" ref="ltiHeight" name="ltiHeight" aria-label="Height of LTI content" aria-required="true" required />
+                          </div>
+                          <a className="item" id="handleLTIAddClick" role="button" onClick={this.handleLTIAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleLTIAddClick')}>
+                              <i tabIndex="0" className="add square icon"></i><FormattedMessage id='editpanel.ltiAdd' defaultMessage='Add to Slide' />
+                          </a>
+                          <label htmlFor="handleLTIAddClick">
+                            <FormattedMessage id='editpanel.ltiNote' defaultMessage='Use an LTI URL and key.' />
+                          </label>
+                        </form>);
+
+
+
+
+
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
-                <div style={templateListStyle}>
+                <div >
                   <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
                       <i tabIndex="0" aria-label="Empty document"><FormattedMessage id='editpanel.template2' defaultMessage='Empty document - Document-mode (non-canvas)' /></i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
-                  </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '3')}>
-                      <i tabIndex="0" aria-label="Document with title"><FormattedMessage id='editpanel.template3' defaultMessage='Document with title - Document-mode (non-canvas)' /></i> <br/><br/>
-                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
-                  </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '31')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '31')}>
-                      <i tabIndex="0" aria-label="Document with rich text example"><FormattedMessage id='editpanel.template31' defaultMessage='Document with rich text example - Document-mode (non-canvas)' /></i> <br/><br/>
-                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - Document with rich text example" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
                       <i tabIndex="0" aria-label="Title and bullets"><FormattedMessage id='editpanel.template1' defaultMessage='Title and bullets' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /> </i> <br/><br/>
@@ -452,6 +623,10 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11img')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11img')}>
                       <i tabIndex="0" aria-label="1 row 1 column image"><FormattedMessage id='editpanel.template11img' defaultMessage='1 row 1 column image' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /></i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
+                  </a>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '3')}>
+                      <i tabIndex="0" aria-label="Document with title"><FormattedMessage id='editpanel.template3' defaultMessage='Document with title' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /></i> <br/><br/>
+                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'outitleslide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'outitleslide')}>
                       <i tabIndex="0" aria-label="Open University Theme Title Page"><FormattedMessage id='editpanel.templateoutitleslide' defaultMessage='Open University Theme Title Page' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /></i> <br/><br/>
@@ -480,10 +655,6 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'TIBtitle')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'TIBtitle')}>
                       <i tabIndex="0" aria-label="TIB template - title page"><FormattedMessage id='editpanel.templateTIBtitle' defaultMessage='TIB template - Title page' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /></i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/TIBtitle.png" alt="template - TIB template title page - English" />
-                  </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'VMU')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'VMU')}>
-                      <i tabIndex="0" aria-label="VMU template - title page"><FormattedMessage id='editpanel.templateVMU' defaultMessage='VMU template - Title page' /><br/> <FormattedMessage id='editpanel.template1280px' defaultMessage='1280 * 720 pixels (720p 16:9)' /></i> <br/><br/>
-                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/VMU.png" alt="template - VMU template title page - English" />
                   </a>
                 </div>);
 
@@ -561,26 +732,29 @@ class SlideEditLeftPanel extends React.Component {
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1080p.png" alt="template - Title and bullets" />
               </a>
             </div>);
+
         let normalContent = (
           <div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
                 <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
             <a  className="item" id="handleUploadMediaClick" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
-                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Add image' />
+                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Image' />
             </a>
-            {this.paintButton}
             <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
-                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Add video' />
+                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Video' />
             </a>
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
-                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
+                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Other' />
             </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
             <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
                 <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
+            </a>
+            <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
+                <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
             </a>
             <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
                 <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
@@ -595,6 +769,8 @@ class SlideEditLeftPanel extends React.Component {
             panelcontent = otherList;
         } else if (this.state.showEmbed) {
             panelcontent = embedOptions;
+        } else if (this.state.showLTI) {
+            panelcontent = ltiOptions;
         } else if (this.state.showProperties){
             panelcontent = propertiesContent;
         } else if (this.state.showTitleChange){
@@ -620,8 +796,8 @@ class SlideEditLeftPanel extends React.Component {
 }
 
 SlideEditLeftPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
     return {
