@@ -102,13 +102,6 @@ class AddDeck extends React.Component {
         else {
             wrongFields.language = false;
         }
-        // if (license === null || license === undefined || license.length < 2) {
-        //     wrongFields.license = true;
-        //     everythingIsFine = false;
-        // }
-        // else {
-        //     wrongFields.license = false;
-        // }
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
             everythingIsFine = false;
@@ -148,11 +141,6 @@ class AddDeck extends React.Component {
             });
         }
     }
-    /* moved to the imporModal
-    handleCancelSelectFile() {
-        this.context.executeAction(importCanceled, {});
-    }
-    */
     handleCancel(x) {
         //console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
@@ -239,6 +227,10 @@ class AddDeck extends React.Component {
                         id: 'AddDeck.swal.success_text',
                         defaultMessage: 'The selected file has been imported and a new deck has been created.',
                     },
+                    preview_text:{
+                        id: 'AddDeck.swal.preview_text',
+                        defaultMessage: 'This is a preview of how your imported slides will look on SlideWiki.',
+                    },
                     success_text_extra:{
                         id: 'AddDeck.swal.success_text_extra',
                         defaultMessage: 'This new deck will not be visible to others in your decks page or in search results until published.',
@@ -259,64 +251,24 @@ class AddDeck extends React.Component {
                         id: 'AddDeck.swal.success_publish_deck_text',
                         defaultMessage: 'Publish this deck',
                     }
-
                 });
-                // swal({
-                //     title: this.context.intl.formatMessage(success_messages.success_title_text),
-                //     text: this.context.intl.formatMessage(success_messages.success_text),
-                //     type: 'success',
-                //     confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
-                //     confirmButtonClass: 'positive ui button',
-                //     buttonsStyling: false
-                // })
-                //     .then((dismiss) => {
-                //         this.handleImportRedirect();
-                //         return true;
-                //     })
-                //     .catch(() => {
-                //         return true;
-                //     });
 
-
-                let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:50%;"';
+                let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:100%;"';
                 // let borderStyle = 'border:1px solid black;border-radius:5px;';
-                let html = '<div style="height: 400px;overflow: auto;" />' +
-                    '<h3>' + this.context.intl.formatMessage(success_messages.success_imported_slides_text) + '</h3>';
+                let html = this.context.intl.formatMessage(success_messages.success_text) + ' ' + this.context.intl.formatMessage(success_messages.preview_text) + '<br><br>' +
+                    '<div style="height: 260px;overflow: auto;" >' +
+                    '<table><tr>';
                 let slides = this.props.ImportStore.slides;
-
-                //EXTRACT WIDTH AND HEIGHT
-                // let firstSlideContent = slides[0].content;
-                // let indexOfWidth = firstSlideContent.indexOf('width:');
-                // let indexOfendOfWidth = firstSlideContent.indexOf('px;', indexOfWidth);
-                // let widthString = firstSlideContent.substring(indexOfWidth + 6, indexOfendOfWidth);
-                // let indexOfHeight = firstSlideContent.indexOf('height:');
-                // let indexOfendOfHeight = firstSlideContent.indexOf('px;', indexOfHeight);
-                // let heightString = firstSlideContent.substring(indexOfHeight + 7, indexOfendOfHeight);
-
-                // let width = 1058.33;
-                // let height = 793.66;
-                // let width = parseFloat(widthString);
-                // let height = parseFloat(heightString);
-                // let scaledWidth = 400;
-                // let scale = scaledWidth / width;
-                // let translate_x = (width - scaledWidth) / 2;
-                // let translate_y = (height - height * scale) / 2;
                 for(let i = 0; i < slides.length; i++) {
                     let slide = slides[i];
-                    // let slideContent = slide.content;
-                    //find a place to incect border
-                    // indexOfWidth = slideContent.indexOf('width:');
-                    // let contentFirstPart = slideContent.substring(0, indexOfWidth);
-                    // let contentSecondPart = slideContent.substring(indexOfWidth);
-                    // html += '<h4>' + (i+1) + '. ' + slide.title + '</h4>' +
-                    //     '<div style="height:70%;transform: scale(' + scale + ') translate(-' + translate_x + 'px,-' + translate_y + 'px);" >' +
-                    //     contentFirstPart + borderStyle + contentSecondPart + '</div>';
                     let thumbnailAlt = 'Slide ' + (i+1) + ': ';
                     if (slide.title !== undefined)
                         thumbnailAlt += slide.title ;
-                    html += '<div >' + (i+1) + '. ' + slide.title + '<img style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt + '"/></div>'; //THUMBNAIL
+                    html += '<td style="padding: 15px;"><div style="width: 250px;">' +
+                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt + '"/>' +
+                        '</div></td>'; //THUMBNAIL
                 }
-                html += '</div>';
+                html += '</tr></table></div>';
                 html += '<br><h3><div><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
 
                 swal({
@@ -350,9 +302,6 @@ class AddDeck extends React.Component {
                             license: this.props.ImportStore.license,
                             selector: selector,
                             hidden: false,
-                                          // allowMarkdown: deck.allowMarkdown,
-                                          // editors: deck.editors,
-                                          // tags: deck.tags,
                         });
                     }
                     this.handleImportRedirect();
