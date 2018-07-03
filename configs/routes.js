@@ -34,7 +34,6 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
-import resetTranslationStore from '../actions/translation/resetTranslationStore';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -364,19 +363,7 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
-            async.series([
-                (callback) => {
-                    context.executeAction(resetTranslationStore, {}, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadDeck, payload, callback);
-                },
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
-
+            context.executeAction(loadDeck, payload, done);
         }
     },
     oldSlugDeck: {

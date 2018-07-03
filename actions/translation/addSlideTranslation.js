@@ -14,22 +14,23 @@ export default function addSlideTranslation(context, payload, done) {
 
     context.service.create('decktree.nodetranslation', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename});
+            log.error(context, {filepath: __filename, message: err.message });
             context.executeAction(serviceUnavailable, payload, done);//TODO improve
-            return;
         } else {
             console.log('addSlideTranslation service returned', res);
 
             //update selector
-            payload.selector.sid = res.node.id + '-' + res.node.revision;
-            let pathElements = res.selector.spath.split(';');
-            let position = parseInt(pathElements[pathElements.length-1].split(':')[1]);
-            pathElements[pathElements.length-1] = payload.selector.sid + ':' + position;
-            payload.selector.spath = pathElements.join(';');
+            let newSlideId = res.node.id + '-' + res.node.revision;
+            let newPath = location.pathname.toString().replace(new RegExp(payload.selector.sid, 'g'), newSlideId);
+            // also replace view with edit
+            // remove it first if it exists, then append it
+            newPath = newPath.replace(/\/view$/, '');
+            newPath = newPath + '/edit';
 
-            const nodeURL = Util.makeNodeURL(payload.selector, 'deck', 'edit', undefined, payload.language);
-            location.pathname = nodeURL.split('?')[0];
+            let params = new URLSearchParams(location.search);
+            params.set('language', payload.language);
+
+            context.executeAction(navigateAction, { url: newPath + '?' + params.toString() }, done);
         }
-        done();
     });
 }

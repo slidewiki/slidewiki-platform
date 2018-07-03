@@ -17,6 +17,7 @@ import fetchUser from './user/userprofile/fetchUser';
 import UserProfileStore from '../stores/UserProfileStore';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
+import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
@@ -26,6 +27,7 @@ import loadForks from './permissions/loadForks';
 import changeCurrentLanguage from './translation/changeCurrentLanguage';
 import loadDeckTranslations from './translation/loadDeckTranslations';
 import validateUsedLanguage from './translation/validateUsedLanguage';
+import loadNodeTranslations from './translation/loadNodeTranslations';
 
 const log = require('./log/clog');
 
@@ -114,16 +116,10 @@ export default function loadDeck(context, payload, done) {
         runNonContentActions = 0;
     }
 
-    //load translation stuff first
-    async.series([
-        (callback) => {
-            context.executeAction(loadDeckTranslations, payload.params, callback);
-        },
-        (callback) => {
-            context.executeAction(changeCurrentLanguage, {language: payload.params.language}, callback);
-        }
-    ],
-    (err, results) => {
+    let languageWillChange = context.getStore(TranslationStore).getState().currentLang !== payload.params.language;
+
+    // load translation stuff
+    context.executeAction(loadNodeTranslations, payload.params, (err, results) => {
         //load all required actions in parallel
         async.parallel([
             (callback) => {
@@ -147,7 +143,7 @@ export default function loadDeck(context, payload, done) {
                 });
             },
             (callback) => {
-                if(runNonContentActions){
+                if(runNonContentActions || languageWillChange){
                     context.executeAction(loadDeckTree, payloadCustom, callback);
                 }else{
                     callback();
@@ -175,7 +171,7 @@ export default function loadDeck(context, payload, done) {
                 }
             },
             (callback) => {
-                if(runNonContentActions){
+                if(runNonContentActions || languageWillChange){
                     //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
                     context.executeAction(loadContributors, payloadCustom, callback);
                 }else{
@@ -209,7 +205,7 @@ export default function loadDeck(context, payload, done) {
             // context.dispatch('UPDATE_PAGE_TITLE', {
             //     pageTitle: pageTitle
             // });
-            context.executeAction(validateUsedLanguage, {language: payload.params.language});
+            // context.executeAction(validateUsedLanguage, {language: payload.params.language});
             if (payload.query.interestedUser)
                 context.executeAction(fetchUser, {
                     params: {

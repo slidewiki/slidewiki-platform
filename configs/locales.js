@@ -64,7 +64,9 @@ const localeFlags = {
     fy: '',
     gd: 'gb sct',
     it: 'it',
+    lt: 'lt',
     nl: 'nl',
+    pt: 'pt',
     ru: 'ru',
     sr: 'rs',
 };

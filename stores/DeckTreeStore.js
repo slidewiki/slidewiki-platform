@@ -19,6 +19,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = null;
         this.latestRevisionId = null;
         this.theme = null;
+        this.language = null;
         this.slug = null;
         this.allowMarkdown = false;
     }
@@ -62,6 +63,7 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.theme = payload.deckTree.theme;
+        this.language = payload.deckTree.language;
         this.slug = slugify(payload.deckTree.title).toLowerCase() || '_';
         this.allowMarkdown= payload.deckTree.allowMarkdown;
         this.emitChange();
@@ -80,6 +82,7 @@ class DeckTreeStore extends BaseStore {
             type: deckTree.type,
             path: nodePath,
             theme: deckTree.theme,
+            language: deckTree.language,
             selected: false,
             editable: false,
             onAction: 0
@@ -119,6 +122,7 @@ class DeckTreeStore extends BaseStore {
             title: deckTree.get('title'),
             type: deckTree.get('type'),
             path: deckTree.get('path'),
+            language: deckTree.get('language'),
             theme: theme
         });
 

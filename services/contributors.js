@@ -17,6 +17,7 @@ export default {
             //request specific content item from deck service
             rp.get({
                 uri: `${Microservices.deck.uri}/${selector.stype}/${selector.sid}/contributors`,
+                qs: { language: args.language },
                 json: true,
             }).then(fillInUserInfo).then((contributors) => {
                 // when all user data is fetched successfully return from service

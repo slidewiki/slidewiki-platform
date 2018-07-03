@@ -28,14 +28,14 @@ export default function loadDeckTree(context, payload, done) {
     let runFetchTree = 1;
 
     //runFetchTree flag may be passed through the navigate action to force deck tree fetch
-    if (!payload.navigate.runFetchTree && currentSelector.id === payload.params.id) {
-        runFetchTree = 0;
-    }
+    // if (!payload.navigate.runFetchTree && currentSelector.id === payload.params.id) {
+    //     runFetchTree = 0;
+    // }
     // console.log('loadDeckTree runFetchTree', runFetchTree);
     if (runFetchTree) {
         //we need to load the whole tree for the first time
         payload.params.jwt = context.getStore(UserProfileStore).jwt;
-        payload.params.language = context.getStore(TranslationStore).currentLang;
+        payload.params.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
         context.service.read('decktree.nodes', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});

@@ -121,18 +121,9 @@ class ContentActionsHeader extends React.Component {
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
-            if (selector.stype === 'slide' && this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage !== this.props.TranslationStore.treeLanguage) {
-                this.context.executeAction(changeLoadingState, {isLoading: true});
-                this.context.executeAction(addSlideTranslation, {
-                    language: this.props.TranslationStore.treeLanguage,
-                    selector: selector
-                });
-            }
-            else {
-                this.context.executeAction(navigateAction, {
-                    url: nodeURL
-                });
-            }
+            this.context.executeAction(navigateAction, {
+                url: nodeURL
+            });
         }
     }
 

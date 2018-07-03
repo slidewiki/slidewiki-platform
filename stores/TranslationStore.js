@@ -5,6 +5,7 @@ class TranslationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.translations = [];
+        this.variants = [];
         this.currentLang = '';
         this.supportedLangs = translationLanguages;
         this.inTranslationMode = false;
@@ -17,6 +18,7 @@ class TranslationStore extends BaseStore {
     getState() {
         return {
             translations: this.translations,
+            variants: this.variants,
             currentLang: this.currentLang,
             supportedLangs: this.supportedLangs,
             inTranslationMode: this.inTranslationMode,
@@ -32,6 +34,7 @@ class TranslationStore extends BaseStore {
     }
     rehydrate(state) {
         this.translations = state.translations;
+        this.variants = state.variants;
         this.currentLang = state.currentLang;
         this.supportedLangs = state.supportedLangs;
         this.inTranslationMode = state.inTranslationMode;
@@ -42,13 +45,14 @@ class TranslationStore extends BaseStore {
         this.invalidLanguage = state.invalidLanguage;
     }
 
+    // TODO remove this
     deckGotLoaded(data) {
         let deck = data.deckData;
         // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
-        this.nodeLanguage = deck.language.replace('_', '-') || 'en-GB';
+        this.nodeLanguage = deck.language.replace('_', '-');        
 
-        if (data.isRootDeck)
-            this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
+        // if (data.isRootDeck)
+        //     this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
 
         this.invalidLanguage = false;
 
@@ -56,14 +60,16 @@ class TranslationStore extends BaseStore {
         this.logState('deckGotLoaded');
     }
 
+    // TODO remove this
     deckPropsGotLoaded(data) {
-        // console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
-        this.nodeLanguage = data.deckProps.language.replace('_', '-') ;
+        console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
+        this.nodeLanguage = data.deckProps.language.replace('_', '-');
         this.invalidLanguage = false;
         this.emitChange();
-        this.logState('deckPropsGotLoaded');
+        // this.logState('deckPropsGotLoaded');
     }
 
+    // TODO remove this
     changeCurrentLanguage(language) {
         if (!language) {
             this.currentLang = '';
@@ -73,20 +79,31 @@ class TranslationStore extends BaseStore {
         }
 
         this.currentLang = language.replace('_', '-');
-        if (this.originLanguage) {
-            if (compareLanguageCodes(this.currentLang, this.originLanguage))
-                this.inTranslationMode = false;
-            else
-                this.inTranslationMode = true;
-        }
-        else {
-            this.inTranslationMode = this.translations.indexOf(this.currentLang) !== -1;
-        }
+        this.inTranslationMode = this.recomputeTranslationMode();
 
         this.emitChange();
         this.logState('changeCurrentLanguage');
     }
 
+    recomputeTranslationMode() {
+        if (!this.currentLang) return false;
+
+        if (this.originLanguage) {
+            if (compareLanguageCodes(this.currentLang, this.originLanguage))
+                return false;
+            else
+                return true;
+        }
+        else if (this.translations.length) {
+            let translation = this.translations.find(this.current);
+            return this.translations.indexOf(this.currentLang) > -1;
+        }
+        else {
+            return false;
+        }
+    }
+
+    // TODO remove this
     slideLoaded(data) {
         // console.log('TranslationStore slideLoaded slide', data.slide);
         this.nodeLanguage = data.slide.language.replace('_', '-') ;
@@ -95,32 +112,59 @@ class TranslationStore extends BaseStore {
         this.logState('slideLoaded');
     }
 
-    translationsLoaded(translations) {
-        this.translations = translations.reduce((arr, cur) => {
-            arr.push(cur.replace('_', '-'));
-            return arr;
-        }, []);
+    translationsLoaded(payload) {
+        // console.log('TranslationStore translationsLoaded node', payload);
+
+        // get selected language (if any)
+        if (!payload.language) {
+            this.currentLang = '';
+        } else {
+            this.currentLang = payload.language.replace('_', '-');
+        }
+
+        // set primary language
+        let primaryVariant = payload.translations.find((v) => !!v.original);
+        if (primaryVariant) {
+            this.originLanguage = primaryVariant.language.replace('_', '-');
+        } else {
+            this.originLanguage = 'en';
+        }
+
+        // update translations
+        this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
+        this.variants = payload.translations;
+
+        // check if current language is part of translations...
+        if (!this.currentLang || this.translations.indexOf(this.currentLang) < 0) {
+            // set to original if not
+            this.nodeLanguage = this.originLanguage;
+        } else {
+            console.log(this.translations.indexOf(this.currentLang));
+            // otherwise it's it
+            this.nodeLanguage = this.currentLang;
+        }
+
+        // also reset the invalid flag
+        this.invalidLanguage = false;
+
+        // always recompute translation mode based on current language
+        this.inTranslationMode = this.recomputeTranslationMode();
+
         this.emitChange();
         this.logState('translationsLoaded');
     }
 
+    // TODO remove this
     deckTreeGotLoaded(data) {
         // console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
-        this.treeLanguage = data.deckTree.language.replace('_', '-') ;
-
-        let updateTranslationMode = false;
-        if (!this.originLanguage && this.currentLang) {
-            updateTranslationMode = true;
-        }
+        this.treeLanguage = data.deckTree.language.replace('_', '-');
 
         this.getAndSetOriginalLanguage(data.deckTree.variants || [], this.treeLanguage);
 
-        if (updateTranslationMode) {
-            if (compareLanguageCodes(this.currentLang, this.originLanguage))
-                this.inTranslationMode = false;
-            else
-                this.inTranslationMode = true;
-        }
+        // also set the translations
+        this.translations = (data.deckTree.variants || []).filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
+        // also recompute translation mode based on current language
+        this.recomputeTranslationMode();
 
         this.invalidLanguage = false;
 
@@ -128,13 +172,16 @@ class TranslationStore extends BaseStore {
         this.logState('deckTreeGotLoaded');
     }
 
+    // TODO remove this
     newLoadingState(state) {
         this.isLoading = state;
         this.emitChange();
     }
 
+    // TODO remove this
     reset() {
         this.translations = [];
+        this.variants = [];
         this.currentLang = '';
         this.inTranslationMode = false;
         this.originLanguage = '';
@@ -144,6 +191,7 @@ class TranslationStore extends BaseStore {
         this.invalidLanguage = false;
     }
 
+    // TODO remove this
     validateLanguage(language) {
         // console.log('validateLanguage got', language, 'and has', this.originLanguage, this.translations);
         if (!language)
@@ -157,34 +205,37 @@ class TranslationStore extends BaseStore {
     //-- util functions --
 
     logState(functionName = '') {
-        console.log('TranslationStore state (this.translations, this.currentLang, this.inTranslationMode, this.originLanguage, this.nodeLanguage, this.treeLanguage):', this.translations, ',', this.currentLang, ',', this.inTranslationMode, ',', this.originLanguage, ',', this.nodeLanguage, ',', this.treeLanguage, 'by', functionName);
+        console.log(functionName, this.getState());
     }
 
+    // TODO remove this
     getAndSetOriginalLanguage(variants = [], fallback) {
         let variant = variants.find((variant) => {
             return variant.original;
         });
         if (variant && variant.language)
-            this.originLanguage = variant.language.replace('_', '-') ;
+            this.originLanguage = variant.language.replace('_', '-');
         else
-            this.originLanguage = fallback.replace('_', '-')  || 'en-GB';
+            this.originLanguage = fallback.replace('_', '-');
 
-        return this.originLanguage;
+        // also reset the invalid flag
+        this.invalidLanguage = false;
     }
+
 }
 
 TranslationStore.storeName = 'TranslationStore';
 TranslationStore.handlers = {
-    'LOAD_DECK_CONTENT_SUCCESS': 'deckGotLoaded',
-    'TRANSLATION_CHANGE_CURRENT_LANGUAGE': 'changeCurrentLanguage',
-    'LOAD_DECK_PROPS_SUCCESS': 'deckPropsGotLoaded',
-    'LOAD_SLIDE_CONTENT_SUCCESS': 'slideLoaded',
-    'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
-    'LOAD_DECK_TRANSLATIONS_SUCCESS': 'translationsLoaded',
-    'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
-    'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState',
-    'TRANSLATION_RESET': 'reset',
-    'TRANSLATION_VALIDATE_LANGUAGE': 'validateLanguage'
+    // 'LOAD_DECK_CONTENT_SUCCESS': 'deckGotLoaded',
+    // 'TRANSLATION_CHANGE_CURRENT_LANGUAGE': 'changeCurrentLanguage',
+    // 'LOAD_DECK_PROPS_SUCCESS': 'deckPropsGotLoaded',
+    // 'LOAD_SLIDE_CONTENT_SUCCESS': 'slideLoaded',
+    // 'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
+    'LOAD_TRANSLATIONS_SUCCESS': 'translationsLoaded',
+    // 'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
+    // 'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState',
+    // 'TRANSLATION_RESET': 'reset',
+    // 'TRANSLATION_VALIDATE_LANGUAGE': 'validateLanguage'
 };
 
 export default TranslationStore;

@@ -221,11 +221,9 @@ class TreePanel extends React.Component {
         return (
             <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
-                <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
-
-                    <div className="ui icon fluid buttons">
+                    <div className="ui attached icon buttons menu">
                         {/*                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
                                                     <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                                         <i className="circle play large icon"></i>
@@ -242,6 +240,7 @@ class TreePanel extends React.Component {
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>
+
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
                             'wordBreak': 'break-all',
@@ -270,7 +269,7 @@ class TreePanel extends React.Component {
                             <label htmlFor="ShowThumbnails">Show Thumbnails</label>
                         </div>
                     </div>
-                </div>
+
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
                 <TranslationModal selector={selector.toJS()} isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
             </div>
