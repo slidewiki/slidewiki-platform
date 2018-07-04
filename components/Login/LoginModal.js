@@ -1,5 +1,5 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import async from 'async';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
@@ -7,7 +7,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import ReactDOM from 'react-dom';
-import {hashPassword, ssoEnabled} from '../../configs/general';
+import {ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
@@ -37,9 +37,9 @@ class LoginModal extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
-        this.isLoading = false;
         this.state = {
             activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
+            isLoading: false
         };
 
         this.errorMessages = defineMessages({
@@ -59,10 +59,13 @@ class LoginModal extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps){
-        this.setState({
-            activeTrap: nextProps.LoginModalStore.activeTrap
-        });
+        this.setState({ activeTrap: nextProps.LoginModalStore.activeTrap });
 
+        if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
+            // console.log('body intended', this.props.errorMessage.toString());
+            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
+            this.setState({ isLoading: false });
+        }
     }
     openModal() {
         this.context.executeAction(updateTrap,{activeTrap:true});
@@ -103,18 +106,17 @@ class LoginModal extends React.Component {
                 defaultMessage: 'Please use a valid email address',
             }) ]);
         } else {
+            this.setState({ isLoading: true });
+
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: hashPassword(this.refs.password1.value),
+                password: common.hashPassword(this.refs.password1.value),
                 errorMessages: {
                     error403: this.context.intl.formatMessage(this.errorMessages.error403),
                     error404: this.context.intl.formatMessage(this.errorMessages.error404),
                     error423: this.context.intl.formatMessage(this.errorMessages.error423)
                 }
             });
-
-            this.isLoading = true;
-            this.forceUpdate();
         }
         return false;
     }
@@ -132,15 +134,10 @@ class LoginModal extends React.Component {
     componentDidUpdate() {
         if (this.props.errorMessage.length > 2)
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-        // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
-        if ((this.props.errorMessage !== '') && this.isLoading) {
-            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
-            this.isLoading = false;
-            this.forceUpdate();
-        }
-        else if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
-            this.isLoading = false;
-            this.forceUpdate();
+        // console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
+        if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
+            localStorage.setItem(MODI, 'login_failed');
+            this.setState({ isLoading: false });
             swal({
                 title: this.context.intl.formatMessage({
                     id: 'LoginModal.title.information',
@@ -171,21 +168,10 @@ class LoginModal extends React.Component {
             })
             .catch((action) => {
                 // console.log('action after click', action);
-                localStorage.setItem(MODI, 'login_failed');
-
                 //delete old data
-                let that = this;
-                async.series([
-                    function(callback) {
-                        that.context.executeAction(newSocialData, {});
-                        callback(null, 'one');
-                    }
-                ],
-                // optional callback
-                (err, results) => {
-                    if (action !== 'close')
-                        that.handleLoginButton();
-                });
+                this.context.executeAction(newSocialData, {});
+                if (action !== 'close')
+                    this.handleLoginButton();
 
                 return true;
             });
@@ -193,7 +179,7 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.isLoading = false;
+            this.setState({ isLoading: false });
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
@@ -224,7 +210,7 @@ class LoginModal extends React.Component {
 
     socialLogin(provider, e) {
         e.preventDefault();
-        console.log('Hit on social login icon', provider);
+        // console.log('Hit on social login icon', provider);
         this.provider = provider;
 
         $('.ui.login.modal').modal('hide');
@@ -259,7 +245,7 @@ class LoginModal extends React.Component {
     }
 
     handleStorageEvent(e) {
-        console.log('storage event', e.key, localStorage.getItem(e.key));
+        // console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
 
         if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
@@ -319,17 +305,7 @@ class LoginModal extends React.Component {
             return;
         }
 
-        let thatContext = this.context;
-        async.series([
-            function(callback) {
-                thatContext.executeAction(newSocialData, data);
-                callback(null, 'two');
-            },
-            function(callback) {
-                thatContext.executeAction(userSocialSignIn, data);
-                callback(null, 'two');
-            }
-        ]);
+        this.context.executeAction(userSocialSignIn, data);
     }
 
     getProviderName() {
@@ -343,9 +319,9 @@ class LoginModal extends React.Component {
         let inputField_classes = classNames({
             'ui': true,
             'icon': true,
-            'disabled': this.isLoading,
+            'disabled': this.state.isLoading,
             'input': true,
-            'loading': this.isLoading,
+            'loading': this.state.isLoading,
             'field': true
         });
 
@@ -493,8 +469,8 @@ class LoginModal extends React.Component {
 }
 
 LoginModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 LoginModal = connectToStores(LoginModal,[LoginModalStore],(context,props) => {
     return {

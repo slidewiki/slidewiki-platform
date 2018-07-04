@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import { Button, Icon,   Segment, Menu,Label,Input, Header,Form,Dropdown} from 'semantic-ui-react';
@@ -98,14 +99,16 @@ class AttachSearchForm extends React.Component{
 
         let languageOptions =[
           //{ value:'', text:'Select Language'},
+          { value: 'en_GB', text: 'English' },
+          { value: 'de_DE', text: 'German' },
+          { value: 'fr_FR', text: 'French' },
+          { value: 'it_IT', text: 'Italian' },
+          { value: 'es_ES', text: 'Spanish' },
           { value: 'nl_NL', text: 'Dutch' },
-          { value:'en_GB', text:'English' },
-          {value:'de_DE', text: 'German' },
-          { value:'el_GR', text:'Greek'},
-          {value:'it_IT', text:'Italian'},
-          {value:'pt_PT',text:'Portuguese'},
-          {value:'sr_RS', text:'Serbian'},
-          {value:'es_ES', text:'Spanish'}
+          { value: 'el_GR', text: 'Greek' },
+          { value: 'pt_PT', text: 'Portuguese' },
+          { value: 'sr_RS', text: 'Serbian' },
+          { value: 'lt_LT', text: 'Lithuanian' }
         ];
 
         return (
@@ -152,7 +155,7 @@ class AttachSearchForm extends React.Component{
 }
 
 AttachSearchForm.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 

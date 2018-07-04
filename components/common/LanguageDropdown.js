@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -70,6 +71,14 @@ class LanguageDropdown extends React.Component {
                 id: 'LanguageDropdown.spanish',
                 defaultMessage: 'Spanish'
             },
+            lithuanian: {
+                id: 'LanguageDropdown.lithuanian',
+                defaultMessage: 'Lithuanian'
+            },
+            french: {
+                id: 'LanguageDropdown.french',
+                defaultMessage: 'French'
+            },
             tooltip: {
                 id: 'LanguageDropdown.tooltip',
                 defaultMessage: 'There will be more in the future'
@@ -99,14 +108,20 @@ class LanguageDropdown extends React.Component {
             <div className="item" data-value="de_DE" >
                 {this.context.intl.formatMessage(this.messages.german)}
             </div>
+            <div className="item" data-value="fr_FR" >
+                {this.context.intl.formatMessage(this.messages.french)}
+            </div>
+            <div className="item" data-value="it_IT" >
+                {this.context.intl.formatMessage(this.messages.italian)}
+            </div>
+            <div className="item" data-value="es_ES" >
+                {this.context.intl.formatMessage(this.messages.spanish)}
+            </div>
             <div className="item" data-value="nl_NL" >
                 {this.context.intl.formatMessage(this.messages.dutch)}
             </div>
             <div className="item" data-value="el_GR" >
                 {this.context.intl.formatMessage(this.messages.greek)}
-            </div>
-            <div className="item" data-value="it_IT" >
-                {this.context.intl.formatMessage(this.messages.italian)}
             </div>
             <div className="item" data-value="pt_PT" >
                 {this.context.intl.formatMessage(this.messages.portuguese)}
@@ -114,8 +129,8 @@ class LanguageDropdown extends React.Component {
             <div className="item" data-value="sr_RS" >
                 {this.context.intl.formatMessage(this.messages.serbian)}
             </div>
-            <div className="item" data-value="es_ES" >
-                {this.context.intl.formatMessage(this.messages.spanish)}
+            <div className="item" data-value="lt_LT" >
+                {this.context.intl.formatMessage(this.messages.lithuanian)}
             </div>
         </div>;
         let languageOptionsUI = <div className="menu">
@@ -141,8 +156,8 @@ class LanguageDropdown extends React.Component {
 }
 
 LanguageDropdown.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default LanguageDropdown;

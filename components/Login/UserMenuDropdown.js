@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink, navigateAction } from 'fluxible-router';
 import UserPicture from '../common/UserPicture';
@@ -126,7 +127,7 @@ class UserMenuDropdown extends React.Component {
 }
 
 UserMenuDropdown.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserMenuDropdown = connectToStores(UserMenuDropdown, [UserProfileStore, UserNotificationsStore], (context, props) => {

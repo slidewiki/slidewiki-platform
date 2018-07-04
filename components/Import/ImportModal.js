@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -307,8 +308,8 @@ class Import extends React.Component {
 
 
 Import.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 Import = connectToStores(Import, [ImportStore], (context, props) => {
     return {

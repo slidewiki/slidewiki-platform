@@ -19,7 +19,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import app from './app';
 import { createElementWithContext } from 'fluxible-addons-react';
-import { locales } from './configs/general'; //a list of supported locales, defines also the localeSwitcher component
+import { locales } from './configs/locales';
 import Cookie from 'js-cookie';
 import locale from 'locale';
 import handleServerRendering from './server/handleServerRendering'; //moved here the rendering part
@@ -63,6 +63,7 @@ server.use('/glidejs', express.static(path.join(__dirname, '/node_modules/glidej
 server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckeditor')));
 server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
 server.use('/ckeditor-plugins/lineheight', express.static(path.join(__dirname, 'node_modules/ckeditor-lineheight-plugin')));
+server.use('/reveal.js-menu', express.static(path.join(__dirname, 'node_modules/reveal.js-menu')));
 server.use('/mathjax', express.static(path.join(__dirname, 'node_modules/mathjax')));
 server.use('/jquery-ui-dist', express.static(path.join(__dirname, 'node_modules/jquery-ui-dist')));
 server.use('/jquery-contextmenu', express.static(path.join(__dirname, 'node_modules/jquery-contextmenu')));
@@ -106,6 +107,7 @@ fetchrPlugin.registerService(require('./services/userreview'));
 fetchrPlugin.registerService(require('./services/nlp'));
 fetchrPlugin.registerService(require('./services/deckgroups'));
 fetchrPlugin.registerService(require('./services/analytics'));
+fetchrPlugin.registerService(require('./services/recommendations'));
 
 // ************************** UI Internationalisation routines ***************************************
 

@@ -4,8 +4,8 @@ import { fetchUserDecks } from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
-// import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
 import loadUserPerformancePredictions from '../../analytics/loadUserPerformancePredictions';
+import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
 import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
@@ -99,7 +99,7 @@ export function chooseAction(context, payload, done) {
                     break;
                 case categories.categories[4]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
-                    // context.executeAction(loadUserRecommendations, {}, callback);
+                    context.executeAction(loadUserRecommendations, {}, callback);
                     break;
                 case categories.categories[5]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});

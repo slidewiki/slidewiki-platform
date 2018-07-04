@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import classNames from 'classnames/bind';
@@ -44,15 +45,15 @@ class ContentActionsHeader extends React.Component {
             },
             addDeckButtonAriaText:{
                 id: 'ContentActionsHeader.addDeckButtonAriaText',
-                defaultMessage:'Add Deck'
+                defaultMessage:'Add sub-deck'
             },
             duplicateAriaText:{
                 id: 'ContentActionsHeader.duplicateAriaText',
-                defaultMessage:'Duplicate'
+                defaultMessage:'Duplicate slide'
             },
             deleteAriaText:{
                 id: 'ContentActionsHeader.deleteAriaText',
-                defaultMessage:'Delete'
+                defaultMessage:'Delete slide'
             },
 
         });
@@ -327,8 +328,8 @@ class ContentActionsHeader extends React.Component {
     }
 }
 ContentActionsHeader.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
 ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore], (context, props) => {

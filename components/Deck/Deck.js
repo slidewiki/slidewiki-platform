@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
@@ -12,7 +13,7 @@ import ContentPanel from './ContentPanel/ContentPanel';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
-import ServiceUnavailable from '../Error/ServiceUnavailable';
+//import ServiceUnavailable from '../Error/ServiceUnavailable';//NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory
 import InfoPanel from './InfoPanel/InfoPanel';
 
 class Deck extends React.Component {
@@ -234,7 +235,7 @@ class Deck extends React.Component {
                 {rightPanel}
 
                 </div>
-                {/*error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''*/}
+                {/*error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''*/}{/*NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory*/}
             </div>
 
         );
@@ -242,7 +243,7 @@ class Deck extends React.Component {
 }
 
 Deck.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore, UserProfileStore], (context, props) => {
     return {

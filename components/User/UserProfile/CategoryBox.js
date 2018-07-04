@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -97,7 +98,7 @@ class CategoryBox extends React.Component {
 }
 
 CategoryBox.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default CategoryBox;

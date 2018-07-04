@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -39,6 +40,8 @@ class MarkdownEditor extends React.Component {
     handleChange(event) {
         if(event.target.value.trim()){
             let html = converter.makeHtml(event.target.value);
+            //add especial classes for Neo4j Cypher language
+            html = html.replace(/<pre>(.*?)<code class="cypher language-cypher">/g, '<pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">');
             this.setState({markdownContent: event.target.value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
         }
     }
@@ -108,7 +111,7 @@ class MarkdownEditor extends React.Component {
 }
 
 MarkdownEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 MarkdownEditor = connectToStores(MarkdownEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {

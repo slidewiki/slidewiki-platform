@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import PopularDecks from '../PopularDecks';
 import { navigateAction } from 'fluxible-router';
@@ -21,13 +22,13 @@ class UserDecks extends React.Component {
         this.context.executeAction(fetchUserDecks, {
             deckListType: this.props.deckListType,
             params: {
-                username: this.props.user.uname, 
+                username: this.props.user.uname,
                 sort: value,
                 status: this.props.decksMeta.status,
             }
         });
     }
-    loadMore(nextLink){       
+    loadMore(nextLink){
         this.context.executeAction(fetchNextUserDecks, {
             nextLink: nextLink
         });
@@ -35,23 +36,23 @@ class UserDecks extends React.Component {
     getIntlMessages(){
         return defineMessages({
             sortLastUpdated: {
-                id: 'UserDecks.sort.lastUpdated', 
+                id: 'UserDecks.sort.lastUpdated',
                 defaultMessage: 'Last updated'
-            }, 
+            },
             sortCreationDate: {
-                id: 'UserDecks.sort.date', 
+                id: 'UserDecks.sort.date',
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'UserDecks.sort.title', 
+                id: 'UserDecks.sort.title',
                 defaultMessage: 'Title'
-            }, 
+            },
             myDecks: {
-                id: 'UserDecks.header.myDecks', 
+                id: 'UserDecks.header.myDecks',
                 defaultMessage: 'My Decks'
-            }, 
+            },
             ownedDecks: {
-                id: 'UserDecks.header.ownedDecks', 
+                id: 'UserDecks.header.ownedDecks',
                 defaultMessage: 'Owned Decks'
             },
             sharedDecks: {
@@ -62,12 +63,12 @@ class UserDecks extends React.Component {
     }
     getSelectedSort(sortBy){
         switch(sortBy){
-            case 'timestamp': 
+            case 'timestamp':
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
                 return this.context.intl.formatMessage(this.messages.sortTitle);
-            case 'lastUpdate': 
-            default: 
+            case 'lastUpdate':
+            default:
                 return this.context.intl.formatMessage(this.messages.sortLastUpdated);
         }
     }
@@ -122,7 +123,7 @@ class UserDecks extends React.Component {
                 </div>
             </div>
             <div className="ui segment">
-                { (this.props.decks) && 
+                { (this.props.decks) &&
                     <PopularDecks size={0} decks={this.props.decks} />
                 }
             </div>
@@ -133,8 +134,8 @@ class UserDecks extends React.Component {
 }
 
 UserDecks.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default UserDecks;
