@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ActivityItem from './ActivityItem';
 import ReactList from 'react-list';
@@ -54,7 +55,7 @@ class ActivityList extends React.Component {
 }
 
 ActivityList.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 ActivityList = connectToStores(ActivityList, [ActivityFeedStore], (context, props) => {
     return {

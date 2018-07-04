@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 import ChartRender from '../../util/ChartRender';
@@ -201,7 +202,7 @@ class SlideContentView extends React.Component {
 }
 
 SlideContentView.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SlideContentView;

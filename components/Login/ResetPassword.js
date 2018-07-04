@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -300,8 +301,8 @@ class ResetPassword extends React.Component {
 }
 
 ResetPassword.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ResetPassword = connectToStores(ResetPassword, [ResetPasswordStore], (context, props) => {
     return {

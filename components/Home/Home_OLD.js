@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import DeckList from './DeckList';
 import {NavLink} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
@@ -96,8 +97,8 @@ class Home extends React.Component {
 }
 
 Home.contextTypes = {
-    intl: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.func
+    intl: PropTypes.object.isRequired,
+    getUser: PropTypes.func
 };
 
 

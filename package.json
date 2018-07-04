@@ -46,7 +46,11 @@
     "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "napa": {
-    "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git"
+    "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git",
+    "reveal.js-menu": "https://github.com/slidewiki/reveal.js-menu"
+  },
+  "napa-config": {
+    "cache": false
   },
   "dependencies": {
     "async": "^2.1.5",
@@ -122,6 +126,7 @@
     "npm": "^5.5.1",
     "nvd3": "^1.8.6",
     "pre-commit": "^1.2.2",
+    "prop-types": "^15.6.2",
     "react": "^15.4.2",
     "react-aria-menubutton": "^5.1.1",
     "react-async-script": "^0.7.0",

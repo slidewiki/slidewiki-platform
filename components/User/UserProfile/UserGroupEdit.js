@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Microservices } from '../../../configs/microservices';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -261,7 +262,7 @@ class UserGroupEdit extends React.Component {
 }
 
 UserGroupEdit.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default UserGroupEdit;

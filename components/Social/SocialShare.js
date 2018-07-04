@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
 import addActivity from '../../actions/activityfeed/addActivity';
@@ -147,7 +148,7 @@ class SocialShare extends React.Component {
 }
 
 SocialShare.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SocialShare;
