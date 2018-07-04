@@ -78,7 +78,6 @@ class DeckTranslationsModal extends React.Component {
 
     redirectToLanguage(language = '') {
         // console.log('redirectToLanguage language', language);
-        this.context.executeAction(changeCurrentLanguage, {language: language});
         this.context.executeAction(loadDecktreeAndSwitchLanguage, {
             language: language
         });

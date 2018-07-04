@@ -1,4 +1,6 @@
-const log = require('../log/clog');
+import {navigateAction} from 'fluxible-router';
+
+import log from '../log/clog';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import loadDeckTree from '../decktree/loadDeckTree';
 import Util from '../../components/common/Util';
@@ -31,9 +33,7 @@ export default function loadDecktreeAndSwitchLanguage(context, payload, done) {
             instantNavigation: true
         }, done);
     else {
-        const nodeURL = Util.makeNodeURL(selector, 'deck', location ? (location.pathname.split('/').pop() === 'edit' ? 'edit' : 'view') : 'view', undefined, payload.language);
-        location.href = location.origin + nodeURL;
-
-        done();
+        let nodeURL = Util.makeNodeURL(selector, 'deck', '', undefined, payload.language);
+        context.executeAction(navigateAction, { url: nodeURL }, done);
     }
 }
