@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
@@ -279,7 +280,7 @@ class TreePanel extends React.Component {
 }
 
 TreePanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore], (context, props) => {
     return {

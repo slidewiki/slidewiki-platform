@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
@@ -160,7 +161,7 @@ class UserGroups extends React.Component {
 }
 
 UserGroups.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default UserGroups;

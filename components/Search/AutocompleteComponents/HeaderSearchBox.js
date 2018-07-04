@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { navigateAction } from 'fluxible-router';
@@ -100,8 +101,8 @@ class HeaderSearchBox extends React.Component {
     }
 }
 HeaderSearchBox.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default HeaderSearchBox;

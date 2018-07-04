@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import suggestUsers from '../../../actions/search/suggestTags';
@@ -58,6 +59,6 @@ class TagsInput extends React.Component {
 }
 
 TagsInput.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 export default TagsInput;

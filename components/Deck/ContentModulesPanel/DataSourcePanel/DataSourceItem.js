@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -193,7 +194,7 @@ class DataSourceItem extends React.Component {
 }
 
 DataSourceItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 DataSourceItem = connectToStores(DataSourceItem, [DeckTreeStore], (context, props) => {
     return {
