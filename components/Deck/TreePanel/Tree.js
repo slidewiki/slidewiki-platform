@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {HotKeys} from 'react-hotkeys';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -198,7 +199,7 @@ class Tree extends React.Component {
     }
 }
 Tree.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default Tree;

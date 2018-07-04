@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import forkDeck from '../../../actions/decktree/forkDeck';
@@ -67,7 +68,7 @@ class ForkModal extends React.Component {
 }
 
 ForkModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ForkModal;

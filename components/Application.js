@@ -1,5 +1,7 @@
 /*globals document*/
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -72,13 +74,13 @@ class Application extends React.Component {
     }
 }
 Application.contextTypes = {
-    getStore: React.PropTypes.func,
-    executeAction: React.PropTypes.func,
-    getUser: React.PropTypes.func
+    getStore: PropTypes.func,
+    executeAction: PropTypes.func,
+    getUser: PropTypes.func
 };
 
 Application = provideContext(Application, { //jshint ignore:line
-    getUser: React.PropTypes.func
+    getUser: PropTypes.func
 });
 
 export default provideContext(handleHistory(connectToStores(

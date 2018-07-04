@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 const ReactDOM = require('react-dom');
@@ -194,7 +195,7 @@ class SlideContentView extends React.Component {
 }
 
 SlideContentView.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SlideContentView;

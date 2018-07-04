@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Microservices } from '../../../../../configs/microservices';
@@ -42,7 +43,7 @@ class DeckPropertiesEditor extends React.Component {
             validationErrors: {},
             title: props.deckProps.title || '',
             allowMarkdown: props.deckProps.allowMarkdown || false,
-            language: props.deckProps.language || '',
+            language: (props.deckProps.language && props.deckProps.language.replace('-', '_')) || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             //license: props.deckProps.license || '',
@@ -253,6 +254,7 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
+        if (fieldName === 'language') stateChange[fieldName] = stateChange[fieldName].replace('-', '_');
         this.setState(stateChange);
     }
     onChangeMarkdown(event) {
@@ -496,6 +498,21 @@ class DeckPropertiesEditor extends React.Component {
         //
         */
 
+        // TODO remove this once language codes have been fixed in code and database
+        const fixedLanguageCodes = {
+            'en': 'en_GB',
+            'de': 'de_DE',
+            'fr': 'fr_FR',
+            'it': 'it_IT',
+            'es': 'es_ES',
+            'nl': 'nl_NL',
+            'el': 'el_GR',
+            'pt': 'pt_PT',
+            'sr': 'sr_RS',
+            'lt': 'lt_LT',
+        };
+        let simpleLanguage = this.state.language && fixedLanguageCodes[this.state.language.substring(0, 2)];
+
         let groupsArray = [];
         if (this.props.groups) {
             this.props.groups.forEach((group) => {
@@ -566,7 +583,7 @@ class DeckPropertiesEditor extends React.Component {
                 <label htmlFor="language" id="language_label">
                     Language
                 </label>
-                <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
+                <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
             </div>
         </div>;
         let markdownField = <div className="field">
@@ -682,7 +699,7 @@ class DeckPropertiesEditor extends React.Component {
 }
 
 DeckPropertiesEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore], (context, props) => {

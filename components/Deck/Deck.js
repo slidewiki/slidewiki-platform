@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
@@ -280,8 +281,8 @@ class Deck extends React.Component {
 }
 
 Deck.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
 };
 Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore, UserProfileStore, TranslationStore], (context, props) => {
     return {

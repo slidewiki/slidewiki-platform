@@ -29,7 +29,7 @@ export default function saveSlide(context, payload, done) {
                 context.dispatch('SAVE_SLIDE_EDIT_SUCCESS', res);
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
                     selector: payload.selector,
-                    nodeSpec: {title: striptags(payload.title), id: res.slide.id, path: res.slide.path}
+                    nodeSpec: {title: striptags(payload.title), id: res.slide.id, path: res.slide.path, theme: res.slide.theme}
                 });
 
                 //update the URL: redirect to view after edit

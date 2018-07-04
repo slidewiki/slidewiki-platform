@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import likeActivity from '../../../actions/activityfeed/likeActivity';
 import {formatDate} from './util/ActivityFeedUtil';
@@ -229,7 +230,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'delete':
-                IconNode = (<i className="ui large remove circle outline icon"></i>);
+                IconNode = (<i className="ui large trash circle icon"></i>);
                 const cheerioDeletedName = (node.delete_info.content_name) ? cheerio.load(node.delete_info.content_name).text() : '';
 
                 SummaryNode = (
@@ -265,7 +266,7 @@ class ActivityItem extends React.Component {
 }
 
 ActivityItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 ActivityItem = connectToStores(ActivityItem, [DeckTreeStore], (context, props) => {
     return {

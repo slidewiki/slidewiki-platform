@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { List, Segment, Checkbox, Header } from 'semantic-ui-react';
 
@@ -103,7 +104,7 @@ class PrivatePublicUserProfile extends React.Component {
 }
 
 PrivatePublicUserProfile.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default PrivatePublicUserProfile;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
@@ -184,7 +185,7 @@ class AttachSubdeckModal extends React.Component{
 
         let attachDeckBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
                                                     type="button"
-                                                    aria-label="Attach Sub-Deck"
+                                                    aria-label="Attach sub-deck"
                                                     aria-hidden={this.state.modalOpen}
                                                     basic icon onClick={this.handleOpen}
                                                     tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
@@ -192,7 +193,7 @@ class AttachSubdeckModal extends React.Component{
                 <Icon className="yellow" name="folder" />
                 <Icon className="corner" name="attach" />
             </Icon.Group>
-        </Button>} content='Attach Sub-Deck' on='hover'/>;
+        </Button>} content='Attach sub-deck' on='hover'/>;
 
         return (
            <Modal trigger={attachDeckBtn}
@@ -215,7 +216,7 @@ class AttachSubdeckModal extends React.Component{
                         className = "header">
 
                 <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModalHeader">
-                     Attach Sub-Deck
+                     Attach sub-deck
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
@@ -251,7 +252,7 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {

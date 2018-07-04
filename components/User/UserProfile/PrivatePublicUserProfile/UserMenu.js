@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -85,8 +86,8 @@ class UserMenu extends React.Component {
 }
 
 UserMenu.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default UserMenu;

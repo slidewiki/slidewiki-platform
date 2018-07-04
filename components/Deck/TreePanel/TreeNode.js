@@ -176,7 +176,7 @@ class TreeNode extends React.Component {
                             />;
 
         if (this.props.item.get('type') === 'slide' && this.props.showThumbnails){
-            content = <div className="ui fluid card" data-selected={this.props.item.get('selected')} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + this.props.item.get('theme')} alt={this.props.item.get('title')} width='100%'/></div>;
+            content = <div className="ui fluid card" data-selected={this.props.item.get('selected')} style={imgClass}><img src={Microservices.file.uri+'/thumbnail/slide/'+this.props.item.get('id')+'/' + (this.props.item.get('theme') ? this.props.item.get('theme') : 'default')} alt={this.props.item.get('title')} width='100%'/></div>;
         } else {
             content = cheerio.load(this.props.item.get('title')).text();
             nodeTitle = content;

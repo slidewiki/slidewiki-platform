@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertReplyBoxFlag';
@@ -80,7 +81,7 @@ class Comment extends React.Component {
 }
 
 Comment.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 Comment = connectToStores(Comment, [DeckTreeStore], (context, props) => {
     return {

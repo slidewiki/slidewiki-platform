@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import PermissionsStore from '../../../stores/PermissionsStore';
@@ -233,8 +234,8 @@ class NoPermissionsModal extends React.Component {
 }
 
 NoPermissionsModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 NoPermissionsModal = connectToStores(NoPermissionsModal, [PermissionsStore, DeckTreeStore, EditRightsStore], (context, props) => {

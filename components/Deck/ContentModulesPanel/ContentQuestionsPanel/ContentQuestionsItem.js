@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
@@ -126,7 +127,7 @@ class ContentQuestionsItem extends React.Component {
 }
 
 ContentQuestionsItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 ContentQuestionsItem = connectToStores(ContentQuestionsItem, [DeckTreeStore], (context, props) => {
     return {
