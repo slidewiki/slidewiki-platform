@@ -13,13 +13,15 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         //TODO get real content name
         let args = params.params? params.params : params;
+        console.log('test');
 
 
         //let selector= args.selector;
         //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
         if(resource === 'lti'){
-                        const content_id = '112233445566778899000000';
+            const content_id = '112233445566778899000000';
+            console.log(params);
             /*********connect to microservices*************/
             /*
             rp.post({

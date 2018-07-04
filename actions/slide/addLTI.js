@@ -19,7 +19,7 @@ export default function ltiClick(context, payload, done) {
     console.log('ltiClick file');
     console.log('payload='+JSON.stringify(payload));
     //enrich with user id
-    var userid = context.getStore(UserProfileStore).userid;
+    let userid = context.getStore(UserProfileStore).userid;
     console.log('payload.ltiURL1='+payload.ltiURL1);
     console.log('payload.oauth_consumer_key='+payload.params.oauth_consumer_key);
 
