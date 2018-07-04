@@ -147,10 +147,11 @@ class InfoPanelInfoView extends React.Component {
 
         let language = this.props.TranslationStore.nodeLanguage;
         let primaryLanguage = this.props.TranslationStore.originLanguage;
+        let activeLanguage = this.props.TranslationStore.currentLang || language;
 
         // let's see if the user wants something we don't have
         let translationMissing = this.props.TranslationStore.currentLang && this.props.TranslationStore.currentLang !== language;
-        let currentLangIconName = (flagForLocale(this.props.TranslationStore.currentLang) || 'icon') + ' flag';
+        let currentLangIconName = (flagForLocale(activeLanguage) || 'icon') + ' flag';
 
         let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
 
@@ -170,29 +171,39 @@ class InfoPanelInfoView extends React.Component {
 
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
-                {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
-                    <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
-                        Updated version available</NavLink>
-                    </div>}
-                    {titlediv}
-                <div className="ui attached segment">
-                    { !canEdit && this.props.TranslationStore.translations.length ?
-                        <div>
-                            <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
-                            <Dropdown fluid selection
-                                defaultValue={this.props.TranslationStore.currentLang || this.props.TranslationStore.nodeLanguage}
-                                options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
+                <div className="ui top attached icon buttons menu">
 
-                            { translationMissing ? 
-                                <div className="ui message">
-                                    Translation to {getLanguageName(this.props.TranslationStore.currentLang)} is missing.
-                                    Actual content is in {getLanguageName(this.props.TranslationStore.originLanguage)}.
-                                </div>
-                              : ''
-                            }
-                        </div>
-                        : ''
-                    }
+                    <Dropdown pointing="top left" disabled={languageOptions.length < 2}
+                        button basic className="attached" style={{textAlign: 'center'}}
+                        trigger={<i className={currentLangIconName} style={{marginRight: 0, verticalAlign: 'middle'}}></i>} icon={null}
+                        aria-label="Select language" data-tooltip="Select language"
+                        defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
+
+                    <button className="ui basic attached button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                        <i className="stacked icons">
+                            <i className="small compress icon"></i>
+                            <i className="large search icon "></i>
+                        </i>
+                    </button>
+                    <button className="ui basic attached button" aria-label="Zoom out" data-tooltip="Zoom out">
+                        <i className="large search minus icon"></i>
+                    </button>
+                    <button className="ui basic attached button" aria-label="Zoom in" data-tooltip="Zoom in">
+                        <i className="large search plus icon"></i>
+                    </button>
+
+                </div>
+
+                { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
+                    <div className="ui attached segment">
+                        <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
+                            <i className='warning sign icon'></i>
+                            Updated version available
+                        </NavLink>
+                    </div>
+                }
+
+                <div className="ui attached segment">
 
                     { translationMissing && canEdit ? 
                         <div className="ui selection list">
@@ -205,16 +216,20 @@ class InfoPanelInfoView extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        : ''
+                        : null
                     }
 
-                    { canEdit || this.props.TranslationStore.translations.length === 0 ?
-                        <div className="ui selection list">
-                            <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
-                            <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
-                                selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
+                    <div className="ui selection list">
+                        <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
+                        <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
+                            selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
+                    </div>
+
+                    { translationMissing  && !canEdit ?
+                        <div className="ui info message">
+                            Translation to {getLanguageName(this.props.TranslationStore.currentLang)} is missing.
                         </div>
-                        : ''
+                        : null
                     }
 
                     { canEdit && this.props.TranslationStore.translations.length ? 
@@ -241,7 +256,7 @@ class InfoPanelInfoView extends React.Component {
                                     })
                                 }
                             </div>
-                        : ''
+                        : null
                     }
 
                 </div>
