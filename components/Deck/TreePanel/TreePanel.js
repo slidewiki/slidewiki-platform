@@ -172,6 +172,9 @@ class TreePanel extends React.Component {
                 case 'handleFork':
                     this.handleFork();
                     break;
+                case 'handleTranslations':
+                    this.handleTranslations();
+                    break;
                 default:
 
             }
@@ -252,7 +255,7 @@ class TreePanel extends React.Component {
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
                             <i className="large blue fork icon"></i>
                         </div>
-                        <div className={classes_translatebtn} role="button" aria-label="Translations and languages of this deck" data-tooltip="Translations of this deck" tabIndex="0" onClick={this.handleTranslations.bind(this)}>
+                        <div className={classes_translatebtn} aria-label="Translations and languages of this deck" tabIndex="0" role="button" data-tooltip="Translations of this deck" onClick={this.handleTranslations.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTranslations')} >
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>
