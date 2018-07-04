@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 //import ActivityList from '../ActivityFeedPanel/ActivityList';
@@ -11,8 +11,10 @@ import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import {getLanguageName} from '../../../common';
 import TranslationStore from '../../../stores/TranslationStore';
+import PermissionsStore from '../../../stores/PermissionsStore';
 import {defineMessages} from 'react-intl';
 import {flagForLocale} from '../../../configs/locales';
+import Util from '../../common/Util';
 import TranslationItem from './TranslationItem';
 import loadDecktreeAndSwitchLanguage from '../../../actions/translation/loadDecktreeAndSwitchLanguage';
 import addDeckTranslation from '../../../actions/translation/addDeckTranslation';
@@ -53,7 +55,22 @@ class InfoPanelInfoView extends React.Component {
     }
 
     changeCurrentLanguage(e, { value: language }) {
-        this.context.executeAction(loadDecktreeAndSwitchLanguage, { language });
+        let variant = this.props.TranslationStore.variants.find((v) => v.language === language);
+        if (!variant) return;
+
+        // we need to create the href to navigate to
+        let selector = this.props.DeckTreeStore.selector.toJS();
+        // first, check selector type
+        if (selector.stype === 'slide') {
+            let oldSlideId = selector.sid;
+            selector.sid = `${variant.id}-${variant.revision}`;
+            // replace current slide id with translation slide id in spath as well
+            selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
+        } // else it's a deck, no spath replacing needed
+
+        let href = Util.makeNodeURL(selector, 'deck', '', this.props.DeckTreeStore.slug, language);
+
+        this.context.executeAction(navigateAction, { url: href });
     }
 
     addNodeTranslation() {
@@ -137,16 +154,19 @@ class InfoPanelInfoView extends React.Component {
 
         let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
 
-        let languageOptions = Array.from(new Set([
-            this.props.TranslationStore.currentLang,
-            primaryLanguage,
-            ...this.props.TranslationStore.translations,
-        ])).map((t) => ({
-            text: getLanguageName(t),
+        let languages = this.props.TranslationStore.variants.map((v) => v.language);
+        if (languages.indexOf(this.props.TranslationStore.currentLang) < 0) {
+            // put the current (but unavailable) language first
+            languages.unshift(this.props.TranslationStore.currentLang);
+        }
+        let languageOptions = languages.map((t) => ({
+            text: getLanguageName(t) + (t === primaryLanguage ? ' (primary)' : ''),
             value: t,
             flag: flagForLocale(t),
             icon: !flagForLocale(t) && 'flag',
         }));
+
+        let canEdit = this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly;
 
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
@@ -156,7 +176,22 @@ class InfoPanelInfoView extends React.Component {
                     </div>}
                     {titlediv}
                 <div className="ui attached segment">
-                    { translationMissing ? 
+                    { !canEdit && this.props.TranslationStore.translations.length ?
+                        <div>
+                            <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
+                            <Dropdown fluid selection defaultValue={this.props.TranslationStore.currentLang} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
+                            { translationMissing ? 
+                                <div className="ui message">
+                                    Translation to {getLanguageName(this.props.TranslationStore.currentLang)} is missing.
+                                    Actual content is in {getLanguageName(this.props.TranslationStore.originLanguage)}.
+                                </div>
+                              : ''
+                            }
+                        </div>
+                        : ''
+                    }
+
+                    { translationMissing && canEdit ? 
                         <div>
                             <h5 className="ui small header">Translation missing:</h5>
                             <div className="ui selection list">
@@ -172,41 +207,42 @@ class InfoPanelInfoView extends React.Component {
                         : ''
                     }
 
-                    <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
-                    <div className="ui selection list">
-                        <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
-                            selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
-                    </div>
-
-                    { this.props.TranslationStore.translations.length ? <h5 className="ui small header">Also available in:</h5> : '' }
-
-                    { false && this.props.TranslationStore.translations.length ?
-                        <Dropdown selection defaultValue={language} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-                        : ''
+                    { canEdit || this.props.TranslationStore.translations.length === 0 ?
+                        <div>
+                            <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
+                            <div className="ui selection list">
+                                <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
+                                    selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
+                            </div>
+                        </div>
+                      : ''
                     }
 
-                    { this.props.TranslationStore.translations.length ? 
-                        <div className="ui selection list">
-                            {
-                                this.props.TranslationStore.variants.map((variant, index) => {
-                                    // skip same language
-                                    if (variant.language === language) return '';
+                    { canEdit && this.props.TranslationStore.translations.length ? 
+                        <div>
+                            <h5 className="ui small header">Also available in:</h5>
+                            <div className="ui selection list">
+                                {
+                                    this.props.TranslationStore.variants.map((variant, index) => {
+                                        // skip same language
+                                        if (variant.language === language) return '';
 
-                                    // we need to create the href for the translation link item
-                                    let selector = this.props.DeckTreeStore.selector.toJS();
-                                    // first, check selector type
-                                    if (selector.stype === 'slide') {
-                                        let oldSlideId = selector.sid;
-                                        selector.sid = `${variant.id}-${variant.revision}`;
-                                        // replace current slide id with translation slide id in spath as well
-                                        selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
-                                    } // else it's a deck, no spath replacing needed
+                                        // we need to create the href for the translation link item
+                                        let selector = this.props.DeckTreeStore.selector.toJS();
+                                        // first, check selector type
+                                        if (selector.stype === 'slide') {
+                                            let oldSlideId = selector.sid;
+                                            selector.sid = `${variant.id}-${variant.revision}`;
+                                            // replace current slide id with translation slide id in spath as well
+                                            selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
+                                        } // else it's a deck, no spath replacing needed
 
-                                    return (<TranslationItem key={index} language={variant.language} primary={variant.language === primaryLanguage}
-                                        selector={selector} slug={this.props.DeckTreeStore.slug} />
-                                    );
-                                })
-                            }
+                                        return (<TranslationItem key={index} language={variant.language} primary={variant.language === primaryLanguage}
+                                            selector={selector} slug={this.props.DeckTreeStore.slug} />
+                                        );
+                                    })
+                                }
+                            </div>
                         </div>
                         : ''
                     }
@@ -243,11 +279,12 @@ InfoPanelInfoView.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
     };
 });
 export default InfoPanelInfoView;
