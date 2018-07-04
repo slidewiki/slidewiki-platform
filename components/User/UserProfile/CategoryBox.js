@@ -74,12 +74,20 @@ class CategoryBox extends React.Component {
 
             <div className="ui vertical menu">
               <div className="item" style={ this.headerStyle }>
-                <h3>
-                  <FormattedMessage
-                    id='CategoryBox.analytics'
-                    defaultMessage='Analytics'
-                  />
-                </h3>
+                <table><tr><td>
+                  <h3>
+                    <FormattedMessage
+                      id='CategoryBox.analytics'
+                      defaultMessage='Analytics'
+                    />
+                  </h3>
+                </td><td style={{'textAlign':'center'}}>
+                  <h5 className="ui small header" >
+                    Beta feature
+                  </h5>
+                </td><td style={{'textAlign':'center'}}>
+                  <i className="yellow warning sign icon" />
+                </td></tr></table>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
                 <p>

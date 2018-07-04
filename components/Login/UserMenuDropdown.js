@@ -100,7 +100,7 @@ class UserMenuDropdown extends React.Component {
                    <i className={alarmClassName} aria-hidden={true} />Notifications
                    </span>
                   </AriaMenuButton.MenuItem>
-                  <AriaMenuButton.MenuItem
+                  {/* <AriaMenuButton.MenuItem
                    className="item"
                    key= {4}
                    tag='li'
@@ -109,7 +109,7 @@ class UserMenuDropdown extends React.Component {
                    <span style={{color:'black'}}>
                    <i className="icon chart bar" aria-hidden={true} /> My Analytics
                    </span>
-                  </AriaMenuButton.MenuItem>
+                  </AriaMenuButton.MenuItem> */}
                   <AriaMenuButton.MenuItem
                    className="item"
                    key= {5}

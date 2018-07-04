@@ -23,7 +23,7 @@ class UserPerformancePredictions extends React.Component {
     }
 
     refreshAccordion() {
-        const noOfPredictions = this.props.UserPerformancePredictionsStore.predictions.length;
+        const noOfPredictions = (this.props.UserPerformancePredictionsStore.predictions) ? this.props.UserPerformancePredictionsStore.predictions.length : 0;
         let accordionDIV = this.refs.predictionsList;
         for (let i = 0; i < noOfPredictions; i++) {
             $(accordionDIV).find('.ui.accordion').accordion('close', i);
