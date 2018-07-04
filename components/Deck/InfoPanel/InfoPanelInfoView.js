@@ -155,7 +155,7 @@ class InfoPanelInfoView extends React.Component {
         let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
 
         let languages = this.props.TranslationStore.variants.map((v) => v.language);
-        if (languages.indexOf(this.props.TranslationStore.currentLang) < 0) {
+        if (this.props.TranslationStore.currentLang && languages.indexOf(this.props.TranslationStore.currentLang) < 0) {
             // put the current (but unavailable) language first
             languages.unshift(this.props.TranslationStore.currentLang);
         }
@@ -179,7 +179,10 @@ class InfoPanelInfoView extends React.Component {
                     { !canEdit && this.props.TranslationStore.translations.length ?
                         <div>
                             <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
-                            <Dropdown fluid selection defaultValue={this.props.TranslationStore.currentLang} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
+                            <Dropdown fluid selection
+                                defaultValue={this.props.TranslationStore.currentLang || this.props.TranslationStore.nodeLanguage}
+                                options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
+
                             { translationMissing ? 
                                 <div className="ui message">
                                     Translation to {getLanguageName(this.props.TranslationStore.currentLang)} is missing.
