@@ -192,15 +192,13 @@ class InfoPanelInfoView extends React.Component {
                     }
 
                     { translationMissing && canEdit ? 
-                        <div>
+                        <div className="ui selection list">
                             <h5 className="ui small header">Translation missing:</h5>
-                            <div className="ui selection list">
-                                <div className="item">
-                                    <div role="button" className="header" data-tooltip="Add translation"
-                                        onClick={this.addNodeTranslation.bind(this)}
-                                        aria-label="Add translation" aria-required >
-                                        <i className={currentLangIconName}></i>{getLanguageName(this.props.TranslationStore.currentLang)}
-                                    </div>
+                            <div className="item">
+                                <div role="button" className="header" data-tooltip="Add translation"
+                                    onClick={this.addNodeTranslation.bind(this)}
+                                    aria-label="Add translation" aria-required >
+                                    <i className={currentLangIconName}></i>{getLanguageName(this.props.TranslationStore.currentLang)}
                                 </div>
                             </div>
                         </div>
@@ -208,20 +206,17 @@ class InfoPanelInfoView extends React.Component {
                     }
 
                     { canEdit || this.props.TranslationStore.translations.length === 0 ?
-                        <div>
+                        <div className="ui selection list">
                             <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
-                            <div className="ui selection list">
-                                <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
-                                    selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
-                            </div>
+                            <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
+                                selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
                         </div>
-                      : ''
+                        : ''
                     }
 
                     { canEdit && this.props.TranslationStore.translations.length ? 
-                        <div>
-                            <h5 className="ui small header">Also available in:</h5>
                             <div className="ui selection list">
+                                <h5 className="ui small header">Also available in:</h5>
                                 {
                                     this.props.TranslationStore.variants.map((variant, index) => {
                                         // skip same language
@@ -243,7 +238,6 @@ class InfoPanelInfoView extends React.Component {
                                     })
                                 }
                             </div>
-                        </div>
                         : ''
                     }
 
