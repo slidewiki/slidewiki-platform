@@ -233,7 +233,7 @@ class UserGroups extends React.Component {
 }
 
 UserGroups.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
 

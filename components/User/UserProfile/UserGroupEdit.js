@@ -336,7 +336,7 @@ class UserGroupEdit extends React.Component {
 }
 
 UserGroupEdit.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
 
