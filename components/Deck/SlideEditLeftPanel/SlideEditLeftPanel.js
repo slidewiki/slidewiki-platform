@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
+import {Button, Icon, Input, TextArea, Divider} from 'semantic-ui-react';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
@@ -23,10 +23,12 @@ class SlideEditLeftPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            embedTitle: '',
             embedURL: '',
             embedCode: '',
             embedWidth: '400',
             embedHeight: '300',
+            EmbedTitleMissingError: false,
             URLMissingError: false,
             embedCodeMissingError: false,
             showOther: false,
@@ -100,10 +102,13 @@ class SlideEditLeftPanel extends React.Component {
             this.setState({ embedCodeMissingError: true });
             //console.log('errormissing');
             this.forceUpdate();
+        } else if(this.state.embedTitle === '' && this.state.embedURL !== ''){
+            this.setState({ EmbedTitleMissingError: true });
         }
         else {
             if (this.state.embedCode !== ''){
                 this.context.executeAction(embedClick, {
+                    embedTitle: this.state.embedTitle,
                     embedWidth: '',
                     embedHeight: '',
                     iframe: '',
@@ -113,10 +118,11 @@ class SlideEditLeftPanel extends React.Component {
             }
             else{
                 this.context.executeAction(embedClick, {
-                    embedWidth: this.state.embedWidth,
-                    embedHeight: this.state.embedHeight,
+                    embedTitle: this.state.embedTitle,
                     embedURL: this.state.embedURL,
-                    embedCode: ''
+                    embedCode: '',
+                    embedWidth: this.state.embedWidth,
+                    embedHeight: this.state.embedHeight
                 });
             }
             this.setState({showTemplate: false});
@@ -376,6 +382,18 @@ class SlideEditLeftPanel extends React.Component {
                   <div>
                     <i>or</i>
                   </div>
+                  <label htmlFor="embedTitle">
+                    <FormattedMessage id='editpanel.embedTitle' defaultMessage='Title of embedded content:' />
+                  </label>
+                  <div className="field">
+                  <i className="error">
+                      {this.state.EmbedTitleMissingError === false ? '' : <FormattedMessage id='editpanel.EmbedTitleMissingError' defaultMessage='Missing title of embedded content' />}
+                  </i>
+                    <Input onChange={this.handleChange.bind(this)} id="embedTitle" ref="embedTitle" name="embedTitle" aria-label="Title of embedded content" autoFocus/>
+                  </div>
+                  <div>
+                    <i>and</i>
+                  </div>
                   <label htmlFor="embedURL">
                     <FormattedMessage id='editpanel.embedURL' defaultMessage='URL/Link to embedded content:' />
                   </label>
@@ -385,6 +403,8 @@ class SlideEditLeftPanel extends React.Component {
                     </i>
                     <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" autoFocus/>
                   </div>
+                  <Divider/>
+                  <Divider/>
                   <label htmlFor="embedWidth">
                     <FormattedMessage id='editpanel.embedWidth' defaultMessage='Width of embedded content:' />
                   </label>

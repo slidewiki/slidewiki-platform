@@ -1737,7 +1737,7 @@ class SlideContentEditor extends React.Component {
                 this.hasChanges = true;
             }
             else {
-                let iframe = '<iframe src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'" height="'+nextProps.SlideEditStore.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
+                let iframe = '<iframe title="'+nextProps.SlideEditStore.embedTitle+'" src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'" height="'+nextProps.SlideEditStore.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');

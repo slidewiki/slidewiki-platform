@@ -30,6 +30,7 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+        this.embedTitle = '';
         this.HTMLEditorClick = 'false';
     }
     updateContent(payload) {
@@ -143,12 +144,14 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = payload.embedHeight;
         this.embedURL = payload.embedURL;
         this.embedCode = payload.embedCode;
+        this.embedTitle = payload.embedTitle;
         this.emitChange();
         this.embedClick = 'false';
         this.embedWidth = '';
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+        this.embedTitle = '';
         this.emitChange();
     }
     changeTitle(payload){
@@ -191,6 +194,7 @@ class SlideEditStore extends BaseStore {
             embedClick: this.embedClick,
             embedURL: this.embedURL,
             embedCode: this.embedCode,
+            embedTitle: this.embedTitle,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
             HTMLEditorClick: this.HTMLEditorClick
@@ -224,6 +228,7 @@ class SlideEditStore extends BaseStore {
         this.embedClick = state.embedClick;
         this.embedURL = state.embedURL;
         this.embedCode = state.embedCode;
+        this.embedTitle = state.embedTitle;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
