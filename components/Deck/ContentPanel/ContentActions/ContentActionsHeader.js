@@ -53,7 +53,7 @@ class ContentActionsHeader extends React.Component {
             },
             deleteAriaText:{
                 id: 'ContentActionsHeader.deleteAriaText',
-                defaultMessage:'Delete'
+                defaultMessage:'Delete slide'
             },
 
         });

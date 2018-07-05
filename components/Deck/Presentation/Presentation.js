@@ -88,6 +88,8 @@ class Presentation extends React.Component{
                 dependencies: [
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    // { src: '/custom_modules/reveal.js/plugin/reveal.js-toolbar/toolbar.js', async: true},
+                    { src: '/reveal.js-menu/menu.js', async: true},
                     { src: '/custom_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
                     //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
@@ -95,7 +97,51 @@ class Presentation extends React.Component{
                 keyboard: {
                     72: null,
                     78: null
-                }
+                },
+                toolbar: {
+                    captureMenu: false,  // set to false so it doesn't crash the plugin
+                    deckUrl: ['/deck', this.props.PresentationStore.selector.id, this.props.PresentationStore.deckSlug].join('/')
+                },
+                menu: {
+                    deckUrl: ['/deck', this.props.PresentationStore.selector.id, this.props.PresentationStore.deckSlug].join('/'),
+                    speakerNotes: '/custom_modules/reveal.js/plugin/notes/notes.html',
+                    overview: true,
+                    side: 'left',
+                    width: 'normal',
+                    numbers: false,
+                    titleSelector: 'h1, h2, h3, h4, h5, h6',
+                    useTextContentForMissingTitles: true,
+                    hideMissingTitles: false,
+                    markers: true,
+
+                    // Specify custom panels to be included in the menu, by
+                    // providing an array of objects with 'title', 'icon'
+                    // properties, and either a 'src' or 'content' property.
+                    custom: false,
+
+                    // Specifies the themes that will be available in the themes
+                    // menu panel. Set to 'true' to show the themes menu panel
+                    // with the default themes list. Alternatively, provide an
+                    // array to specify the themes to make available in the
+                    // themes menu panel, for example...
+                    // [
+                    //     { name: 'Black', theme: 'css/theme/black.css' },
+                    //     { name: 'White', theme: 'css/theme/white.css' },
+                    //     { name: 'League', theme: 'css/theme/league.css' }
+                    // ]
+                    themes: false,
+
+                    themesPath: 'css/theme/',
+                    transitions: false,
+                    openButton: true,
+                    openSlideNumber: false,
+                    keyboard: true,
+                    sticky: false,
+                    autoOpen: true,
+                    delayInit: false,
+                    openOnInit: false,
+                    loadIcons: true
+                },
             });
 
 
@@ -139,25 +185,31 @@ class Presentation extends React.Component{
                 pptxwidth = $('.present > .pptx2html').width();
                 pptxheight = $('.present > .pptx2html').height();
             } else {
+
                 pptxwidth = '100%';
                 pptxheight = '100%';
+
                 //resize non-pptx2html slide content based on current height of window
                 //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
-                let presentwidth = $('.present').width();
+                //let presentwidth = $('.present').width();
                 let presentheight = $('.present').height();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
-                let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                //let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                //let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                //let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                let screenheight = document.getElementsByClassName('reveal')[0].offsetHeight;
                 //console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
                 let heightratio = screenheight / presentheight ;
-                let widthratio = screenwidth / presentwidth;
+                //let widthratio = screenwidth / presentwidth;
                 let scaleratio = 1;
-                if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                //if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                if (presentheight > screenheight){scaleratio = heightratio;}
                 //console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
                 //console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
 
                 $('.present').css({'transform': '', 'transform-origin': ''});
-                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'center top'});
+
             }
             // event.previousSlide, event.currentSlide, event.indexh, event.indexv
             //let state = Reveal.getState();
