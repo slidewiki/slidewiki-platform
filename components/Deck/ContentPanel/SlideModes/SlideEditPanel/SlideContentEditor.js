@@ -1019,6 +1019,10 @@ class SlideContentEditor extends React.Component {
 
         this.correctDimensionsBoxesImg();
         //('img');
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(true);
+
     }
     handleResize = () => {
         this.forceUpdate();
@@ -1027,7 +1031,11 @@ class SlideContentEditor extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize(false);
+        this.resize();
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(false);
+
     }
     correctDimensionsBoxesIframe()
     {
@@ -1090,8 +1098,8 @@ class SlideContentEditor extends React.Component {
         let slideEditorContext = this; //set slideEditorContext inside doubleclick callbacks
 
         //$('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'move');
-        $('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'auto');
-        $('.pptx2html [style*="absolute"]').not('.drawing').hover(function() { //no dragging of SVG - makes them go away
+        $('.pptx2html [style*="absolute"]').not('.drawing').not($('[id^=chart]')).css('cursor', 'auto');
+        $('.pptx2html [style*="absolute"]').not('.drawing').not($('[id^=chart]')).hover(function() { //no dragging of SVG - makes them go away
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
                 if (!(
@@ -1191,7 +1199,7 @@ class SlideContentEditor extends React.Component {
             }
             //$(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
         });
-        $('.pptx2html [style*="absolute"]').not('.drawing').keyup((event) => {
+        $('.pptx2html [style*="absolute"]').not('.drawing').not($('[id^=chart]')).keyup((event) => {
             if( event.which === 9 ) { //if tabkey
                 //console.log( event.target.id );
                 //console.log('tabFocus');
@@ -1221,12 +1229,12 @@ class SlideContentEditor extends React.Component {
         //give each input element a tab index
         //$('.pptx2html [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         //$('.pptx2html [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
-        $('.pptx2html [style*="absolute"]').not('.drawing').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+        $('.pptx2html [style*="absolute"]').not('.drawing').not($('[id^=chart]')).each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+
+
         //give each input box element a context menu (hide/overlap CKeditor context menu)
         this.contextMenuAll();
 
-        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
-        ChartRender.renderCharts();
 
         //***************content mode//***************
         //TODO: on undo (ctr-l Z) - restore resize/drag elements previously removed
@@ -1393,7 +1401,7 @@ class SlideContentEditor extends React.Component {
         let slideEditorContext = this;
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
-        $('.pptx2html [style*="absolute"]').each(function () {
+        $('.pptx2html [style*="absolute"]').not($('[id^=chart]')).each(function () {
             this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
             this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
