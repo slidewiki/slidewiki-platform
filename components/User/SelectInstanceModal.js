@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Form, Button, Input, Modal, Divider, Message, Icon} from 'semantic-ui-react';
@@ -245,8 +246,8 @@ class SelectInstanceModal extends React.Component {
 }
 
 SelectInstanceModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 SelectInstanceModal = connectToStores(SelectInstanceModal, [SSOStore], (context,props) => {

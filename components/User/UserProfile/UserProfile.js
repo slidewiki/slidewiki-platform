@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { getIntlLanguage } from '../../../common.js';
 import CategoryBox from './CategoryBox';
@@ -174,7 +175,7 @@ class UserProfile extends React.Component {
                       </h3>
                   </div>
                   <div className="ui segment">
-                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
+                      <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
                   </div>
 
               </div>
@@ -251,8 +252,8 @@ class UserProfile extends React.Component {
 }
 
 UserProfile.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {

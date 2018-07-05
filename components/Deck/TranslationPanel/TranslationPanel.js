@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ISO6391 from 'iso-639-1';
 import {NavLink, navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
-import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
+import { Dropdown, Menu, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -123,7 +124,7 @@ class TranslationPanel extends React.Component {
 }
 
 TranslationPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 TranslationPanel = connectToStores(TranslationPanel, [TranslationStore, UserProfileStore], (context, props) => {
     return {

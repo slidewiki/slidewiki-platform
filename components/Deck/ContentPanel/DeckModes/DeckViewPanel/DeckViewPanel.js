@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
@@ -9,7 +10,7 @@ import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
-import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+import { Dropdown, Menu } from 'semantic-ui-react';
 import slug from 'slug';
 
 import {navigateAction} from 'fluxible-router';
@@ -112,6 +113,7 @@ class DeckViewPanel extends React.Component {
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
+        if (deckData.language) deckData.language = deckData.language.substring(0, 2);
 
         let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
@@ -234,7 +236,7 @@ class DeckViewPanel extends React.Component {
 }
 
 DeckViewPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore, TranslationStore], (context, props) => {
