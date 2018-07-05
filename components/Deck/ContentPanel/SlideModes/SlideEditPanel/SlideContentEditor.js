@@ -1578,10 +1578,18 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length)  //if slide is in canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
-                    this.refreshCKeditor();
-                    //this.resize();
-                    this.resizeDrag();
+                    if (nextProps.MediaStore.file.checkbox_backgroundImage)
+                    {
+                        $('.pptx2html').css('background-image', 'url("'+nextProps.MediaStore.file.url+'")');
+                        $('.pptx2html').css('background-repeat', 'no-repeat');
+                        $('.pptx2html').css('background-position', 'center');
+                        $('.pptx2html').css('background-size', 'cover');
+                    } else{
+                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                        this.refreshCKeditor();
+                        //this.resize();
+                        this.resizeDrag();
+                    }
                     this.hasChanges = true;
 
                     //this.forceUpdate();
