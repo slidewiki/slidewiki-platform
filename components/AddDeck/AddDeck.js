@@ -230,7 +230,7 @@ class AddDeck extends React.Component {
                     },
                     preview_text:{
                         id: 'AddDeck.swal.preview_text',
-                        defaultMessage: 'This is a preview of how your imported slides will look on SlideWiki.',
+                        defaultMessage: 'This is a preview of how your imported slides will look on SlideWiki. Showing the preview of each slide below might take a while as they are now processed on our server.',
                     },
                     success_text_extra:{
                         id: 'AddDeck.swal.success_text_extra',
