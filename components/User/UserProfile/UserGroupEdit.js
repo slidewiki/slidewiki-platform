@@ -125,7 +125,7 @@ class UserGroupEdit extends React.Component {
                         group.members = [];
 
                     let data = JSON.parse(decodeURIComponent(value));
-                    console.log('trying to add', name, 'to', group.members, ' with ', data);
+                    //console.log('trying to add', name, 'to', group.members, ' with ', data);
                     if (group.members.findIndex((member) => {
                         return member.userid === parseInt(data.userid);
                     }) === -1 && data.username !== this.props.username) {
@@ -173,7 +173,7 @@ class UserGroupEdit extends React.Component {
 
         let group = this.getGroup(this.props.currentUsergroup.members);
 
-        console.log('handleSave:', group);
+        //console.log('handleSave:', group);
 
         if (group.name === '') {
             swal({

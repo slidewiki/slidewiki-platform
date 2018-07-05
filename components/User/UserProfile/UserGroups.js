@@ -119,7 +119,7 @@ class UserGroups extends React.Component {
 
     handleClickOnRemoveGroup(e) {
         e.preventDefault();
-        console.log('handleClickOnRemoveGroup:', e.target.attributes.name.value);
+        //console.log('handleClickOnRemoveGroup:', e.target.attributes.name.value);
 
         const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
@@ -140,7 +140,7 @@ class UserGroups extends React.Component {
 
     handleClickOnLeaveGroup(e) {
         e.preventDefault();
-        console.log('handleClickOnLeaveGroup:', e.target.attributes.name.value);
+        //console.log('handleClickOnLeaveGroup:', e.target.attributes.name.value);
 
         const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
