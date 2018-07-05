@@ -230,7 +230,7 @@ class AddDeck extends React.Component {
                     },
                     preview_text:{
                         id: 'AddDeck.swal.preview_text',
-                        defaultMessage: 'This is a preview of how your imported slides will look on SlideWiki. Showing the preview of each slide below might take a while as they are now processed on our server.',
+                        defaultMessage: 'This is a preview of how your imported slides will look on SlideWiki. Loading the preview of each slide takes a while due to server processing. Use the arrow keys and tab key to navigate between slide previews below.',
                     },
                     success_text_extra:{
                         id: 'AddDeck.swal.success_text_extra',
@@ -238,7 +238,7 @@ class AddDeck extends React.Component {
                     },
                     success_confirm_text:{
                         id: 'AddDeck.swal.success_confirm_text',
-                        defaultMessage: 'View deck',
+                        defaultMessage: 'Complete import',
                     },
                     success_reject_text:{
                         id: 'AddDeck.swal.success_reject_text',
@@ -250,7 +250,7 @@ class AddDeck extends React.Component {
                     },
                     success_publish_deck_text:{
                         id: 'AddDeck.swal.success_publish_deck_text',
-                        defaultMessage: 'Publish this deck',
+                        defaultMessage: 'Publish your deck for it to show in search results immediately (publishing occurs after a few seconds)',
                     }
                 });
 
