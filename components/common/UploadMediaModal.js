@@ -287,7 +287,7 @@ class UploadMediaModal extends React.Component {
                 <p>{this.context.intl.formatMessage(this.messages.drop_message1)}</p>
                 <p>{this.context.intl.formatMessage(this.messages.drop_message2)}
                 <button id="upload" className="ui button" aria-label={this.context.intl.formatMessage(this.messages.upload_button_aria)}>
-                <i className="outline upload icon large black"></i>
+                <i className="upload icon large"></i>
                 <label htmlFor="upload">{this.context.intl.formatMessage(this.messages.upload_button_label)}</label></button>
                 {this.context.intl.formatMessage(this.messages.drop_message3)}</p>
 
