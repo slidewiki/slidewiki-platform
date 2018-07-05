@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -137,8 +138,8 @@ class ChangePassword extends React.Component {
 }
 
 ChangePassword.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default ChangePassword;

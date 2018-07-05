@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import addQuestion from '../../../../actions/questions/addQuestion';
@@ -232,7 +233,7 @@ class ContentQuestionAdd extends React.Component {
 }
 
 ContentQuestionAdd.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentQuestionAdd;
