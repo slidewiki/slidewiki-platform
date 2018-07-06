@@ -213,7 +213,7 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            //'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'disabled': true, //(!(this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)),
             'button': true
         });
 

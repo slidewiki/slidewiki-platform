@@ -61,11 +61,6 @@ class DeckTranslationsModal extends React.Component {
         this.setState({ action: 'translate', languageCode: data.value });
     }
 
-    handleSwitchBackClick(e) {
-        this.handleClose();
-        this.redirectToLanguage('');
-    }
-
     handleActionClick(e) {
         if (this.state.action === 'translate') {
             this.handleClose();
@@ -87,15 +82,7 @@ class DeckTranslationsModal extends React.Component {
         const messages = defineMessages({
             header: {
                 id: 'DeckTranslationsModal.header',
-                defaultMessage: 'Select translation',
-            },
-            currentLanguage: {
-                id: 'DeckTranslationsModal.currentLanguage',
-                defaultMessage: 'Current Language:',
-            },
-            otherTranslations: {
-                id: 'DeckTranslationsModal.otherTranslations',
-                defaultMessage: 'Other translations available:',
+                defaultMessage: 'Start new deck translations',
             },
             chooseLanguage: {
                 id: 'DeckTranslationsModal.chooseLanguage',
@@ -103,7 +90,7 @@ class DeckTranslationsModal extends React.Component {
             },
             startTranslation: {
                 id: 'DeckTranslationsModal.startTranslation',
-                defaultMessage: 'Create new translation:',
+                defaultMessage: 'Create a new translation:',
             },
             cancel: {
                 id: 'DeckTranslationsModal.cancel',
@@ -113,21 +100,13 @@ class DeckTranslationsModal extends React.Component {
                 id: 'DeckTranslationsModal.translate',
                 defaultMessage: 'Create translation',
             },
-            language: {
-                id: 'DeckTranslationsModal.language',
-                defaultMessage: 'Switch to language',
-            },
             originLanguage: {
                 id: 'DeckTranslationsModal.originLanguage',
                 defaultMessage: 'Original Language:',
             },
             switchSR: {
                 id: 'DeckTranslationsModal.switchSR',
-                defaultMessage: 'Switch to another language or create a new translation',
-            },
-            primaryLanguage: {
-                id: 'DeckTranslationsModal.primaryLanguage',
-                defaultMessage: 'Primary language',
+                defaultMessage: 'Create a new deck translation',
             }
         });
 
@@ -160,8 +139,6 @@ class DeckTranslationsModal extends React.Component {
 
         const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? (this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage) : this.props.TranslationStore.treeLanguage);
 
-        const showCreateTranslation = this.props.username !== '' && this.props.editPermissions;
-
         return (
           <Modal trigger={
                   <Button tabIndex='-1' id="DeckTranslationsModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} style={{'display': 'none'}}/>
@@ -188,23 +165,8 @@ class DeckTranslationsModal extends React.Component {
                   <Modal.Content id="DeckTranslationsModalDescription">
                       <div className="sr-only" id="DeckTranslationsModalDescription2">{this.context.intl.formatMessage(messages.switchSR)}</div>
                       <Divider />
-                      {this.context.intl.formatMessage(messages.currentLanguage)} <b>{language}</b>
-                      <br/>
-                      <br/>
 
                       <div>
-                        {this.context.intl.formatMessage(messages.originLanguage)} <Button role="button" tabIndex="0" onClick={this.handleSwitchBackClick.bind(this)} basic>{getLanguageNativeName(this.props.TranslationStore.originLanguage || this.context.intl.formatMessage(messages.primaryLanguage))}</Button>
-                        <br/>
-                      </div>
-                      <br/>
-
-                      {this.context.intl.formatMessage(messages.otherTranslations)}
-                      <br/>
-                      {translations}
-                      <br/>
-                      <br/>
-
-                      {showCreateTranslation ? <div>
                       {this.context.intl.formatMessage(messages.startTranslation)}
                       <br/>
                       <Dropdown
@@ -215,10 +177,10 @@ class DeckTranslationsModal extends React.Component {
                           onChange={this.handleLanguageSelection.bind(this)}
                           name='languageSelection'
                         />
-                        </div> : ''}
+                        </div>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
-                        {showCreateTranslation ? <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} content={btnMessage} disabled={this.state.action !== 'translate'} /> : ''}
+                        <Button id="DeckTranslationsModalActionButton" color="green" tabIndex="0" type="button" aria-label={btnMessage} onClick={this.handleActionClick.bind(this)} content={btnMessage} disabled={this.state.action !== 'translate'} />
                         <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)} />
                       </Modal.Actions>
                   </Modal.Content>

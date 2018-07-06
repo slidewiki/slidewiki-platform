@@ -20,6 +20,7 @@ import loadDecktreeAndSwitchLanguage from '../../../actions/translation/loadDeck
 import addDeckTranslation from '../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../actions/translation/addSlideTranslation';
 import {Dropdown} from 'semantic-ui-react';
+import qs from 'querystring';
 
 class InfoPanelInfoView extends React.Component {
     constructor(props){
@@ -55,6 +56,15 @@ class InfoPanelInfoView extends React.Component {
     }
 
     changeCurrentLanguage(e, { value: language }) {
+        //exclude keyboard events except Enter
+        if (!(e.code && e.code === 'Enter' || !e.code))
+            return;
+
+        if (!language) {
+            $('#DeckTranslationsModalOpenButton').click();
+            return;
+        }
+
         let variant = this.props.TranslationStore.variants.find((v) => v.language === language);
         if (!variant) return;
 
@@ -69,6 +79,23 @@ class InfoPanelInfoView extends React.Component {
         } // else it's a deck, no spath replacing needed
 
         let href = Util.makeNodeURL(selector, 'deck', '', this.props.DeckTreeStore.slug, language);
+
+        this.context.executeAction(navigateAction, { url: href });
+    }
+
+    changeTranslation(e, { value: data }) {
+        //exclude keyboard events except Enter
+        if (!(e.code && e.code === 'Enter' || !e.code))
+            return;
+
+        data = JSON.parse(data);
+        // build the href!
+        let routeName = 'deck';
+        let navParams = Object.assign({ slug: this.props.DeckTreeStore.slug || '_' }, data.selector);
+        let queryParams = { language: data.language };
+
+        let href = ['', routeName, navParams.id, navParams.slug, navParams.stype, navParams.sid, navParams.spath].join('/');
+        href += '?' + qs.stringify(queryParams);
 
         this.context.executeAction(navigateAction, { url: href });
     }
@@ -152,6 +179,7 @@ class InfoPanelInfoView extends React.Component {
         // let's see if the user wants something we don't have
         let translationMissing = this.props.TranslationStore.currentLang && this.props.TranslationStore.currentLang !== language;
         let currentLangIconName = (flagForLocale(activeLanguage) || 'icon') + ' flag';
+        let canEdit = this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly;
 
         let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
 
@@ -166,8 +194,38 @@ class InfoPanelInfoView extends React.Component {
             flag: flagForLocale(t),
             icon: !flagForLocale(t) && 'flag',
         }));
+        if (canEdit)
+            languageOptions.push({
+                text: 'Add a new translation',
+                icon: 'translate',
+                key: 'placeholderForAddANewTranslation'
+            });
+        let translationOptions = this.props.TranslationStore.variants.map((t) => {
+            // skip same language
+            if (t.language === language) return;
 
-        let canEdit = this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly;
+            // we need to create the href for the translation link item
+            let selector = this.props.DeckTreeStore.selector.toJS();
+            // first, check selector type
+            if (selector.stype === 'slide') {
+                let oldSlideId = selector.sid;
+                selector.sid = `${t.id}-${t.revision}`;
+                // replace current slide id with translation slide id in spath as well
+                selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
+            } // else it's a deck, no spath replacing needed
+
+            return {
+                text: getLanguageName(t.language) + (t.language === primaryLanguage ? ' (primary)' : ''),
+                value: JSON.stringify({
+                    language: t.language,
+                    selector: selector
+                }),
+                flag: flagForLocale(t.language),
+                icon: !flagForLocale(t.language) && 'flag',
+                key: 'translation' + t.id + t.language
+            };
+        });
+        translationOptions = translationOptions.filter((a) => a !== undefined);
 
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
@@ -205,9 +263,12 @@ class InfoPanelInfoView extends React.Component {
 
                 <div className="ui attached segment">
 
-                    { translationMissing && canEdit ? 
+                    { translationMissing && canEdit ?
                         <div className="ui selection list">
-                            <h5 className="ui small header">Translation missing:</h5>
+                            <h5 className="ui small header">
+                                <i className='warning sign icon' style={{'font-size' : '1em!important', 'vertical-align': 'baseline'}} ></i>
+                                Translation missing:
+                            </h5>
                             <div className="item">
                                 <div role="button" className="header" data-tooltip="Add translation"
                                     onClick={this.addNodeTranslation.bind(this)}
@@ -232,30 +293,13 @@ class InfoPanelInfoView extends React.Component {
                         : null
                     }
 
-                    { canEdit && this.props.TranslationStore.translations.length ? 
-                            <div className="ui selection list">
-                                <h5 className="ui small header">Also available in:</h5>
-                                {
-                                    this.props.TranslationStore.variants.map((variant, index) => {
-                                        // skip same language
-                                        if (variant.language === language) return '';
+                    { canEdit && this.props.TranslationStore.translations.length ?
+                            <Dropdown pointing="top left" disabled={false}
+                                    className="attached" style={{textAlign: 'center'}}
+                                    trigger={<h5 className="ui small header" role="button">Also available in:</h5>} icon={null}
+                                    aria-label="Select translation" data-tooltip="Select translation"
+                                    options={translationOptions} onChange={this.changeTranslation.bind(this)} />
 
-                                        // we need to create the href for the translation link item
-                                        let selector = this.props.DeckTreeStore.selector.toJS();
-                                        // first, check selector type
-                                        if (selector.stype === 'slide') {
-                                            let oldSlideId = selector.sid;
-                                            selector.sid = `${variant.id}-${variant.revision}`;
-                                            // replace current slide id with translation slide id in spath as well
-                                            selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
-                                        } // else it's a deck, no spath replacing needed
-
-                                        return (<TranslationItem key={index} language={variant.language} primary={variant.language === primaryLanguage}
-                                            selector={selector} slug={this.props.DeckTreeStore.slug} />
-                                        );
-                                    })
-                                }
-                            </div>
                         : null
                     }
 
