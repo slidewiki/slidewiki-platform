@@ -14,6 +14,7 @@ class TranslationStore extends BaseStore {
         this.treeLanguage = '';
         this.isLoading = false;
         this.invalidLanguage = false;
+        this.treeTranslations = [];
     }
     getState() {
         return {
@@ -26,7 +27,8 @@ class TranslationStore extends BaseStore {
             nodeLanguage: this.nodeLanguage,
             treeLanguage: this.treeLanguage,
             isLoading: this.isLoading,
-            invalidLanguage: this.invalidLanguage
+            invalidLanguage: this.invalidLanguage,
+            treeTranslations: this.treeTranslations
         };
     }
     dehydrate() {
@@ -43,13 +45,14 @@ class TranslationStore extends BaseStore {
         this.treeLanguage = state.treeLanguage;
         this.isLoading = state.isLoading;
         this.invalidLanguage = state.invalidLanguage;
+        this.treeTranslations = state.treeTranslations
     }
 
     // TODO remove this
     deckGotLoaded(data) {
         let deck = data.deckData;
         // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
-        this.nodeLanguage = deck.language.replace('_', '-');        
+        this.nodeLanguage = deck.language.replace('_', '-');
 
         // if (data.isRootDeck)
         //     this.getAndSetOriginalLanguage(deck.variants || [], this.nodeLanguage);
@@ -154,19 +157,11 @@ class TranslationStore extends BaseStore {
         this.logState('translationsLoaded');
     }
 
-    // TODO remove this
     deckTreeGotLoaded(data) {
-        // console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
+        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language.replace('_', '-');
 
-        this.getAndSetOriginalLanguage(data.deckTree.variants || [], this.treeLanguage);
-
-        // also set the translations
-        this.translations = (data.deckTree.variants || []).filter((v) => !v.original).map((v) => v.language.replace('_', '-'));
-        // also recompute translation mode based on current language
-        this.recomputeTranslationMode();
-
-        this.invalidLanguage = false;
+        this.treeTranslations = data.deckTree.variants.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
 
         this.emitChange();
         this.logState('deckTreeGotLoaded');
@@ -232,7 +227,7 @@ TranslationStore.handlers = {
     // 'LOAD_SLIDE_CONTENT_SUCCESS': 'slideLoaded',
     // 'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
     'LOAD_TRANSLATIONS_SUCCESS': 'translationsLoaded',
-    // 'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
+    'LOAD_DECK_TREE_SUCCESS': 'deckTreeGotLoaded',
     // 'TRANSLATION_NEW_LOADING_STATE': 'newLoadingState',
     // 'TRANSLATION_RESET': 'reset',
     // 'TRANSLATION_VALIDATE_LANGUAGE': 'validateLanguage'

@@ -183,7 +183,7 @@ class InfoPanelInfoView extends React.Component {
 
         let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
 
-        let languages = this.props.TranslationStore.variants.map((v) => v.language);
+        let languages = this.props.TranslationStore.treeTranslations;
         if (this.props.TranslationStore.currentLang && languages.indexOf(this.props.TranslationStore.currentLang) < 0) {
             // put the current (but unavailable) language first
             languages.unshift(this.props.TranslationStore.currentLang);
@@ -266,7 +266,7 @@ class InfoPanelInfoView extends React.Component {
                     { translationMissing && canEdit ?
                         <div className="ui selection list">
                             <h5 className="ui small header">
-                                <i className='warning sign icon' style={{'font-size' : '1em!important', 'vertical-align': 'baseline'}} ></i>
+                                <i className='warning sign icon' style={{fontSize : '1em!important', verticalAlign: 'baseline'}} ></i>
                                 Translation missing:
                             </h5>
                             <div className="item">
@@ -294,12 +294,29 @@ class InfoPanelInfoView extends React.Component {
                     }
 
                     { canEdit && this.props.TranslationStore.translations.length ?
-                            <Dropdown pointing="top left" disabled={false}
-                                    className="attached" style={{textAlign: 'center'}}
-                                    trigger={<h5 className="ui small header" role="button">Also available in:</h5>} icon={null}
-                                    aria-label="Select translation" data-tooltip="Select translation"
-                                    options={translationOptions} onChange={this.changeTranslation.bind(this)} />
+                            <div className="ui selection list">
+                                <h5 className="ui small header">Also available in:</h5>
+                                {
+                                    this.props.TranslationStore.variants.map((variant, index) => {
+                                        // skip same language
+                                        if (variant.language === language) return '';
 
+                                        // we need to create the href for the translation link item
+                                        let selector = this.props.DeckTreeStore.selector.toJS();
+                                        // first, check selector type
+                                        if (selector.stype === 'slide') {
+                                            let oldSlideId = selector.sid;
+                                            selector.sid = `${variant.id}-${variant.revision}`;
+                                            // replace current slide id with translation slide id in spath as well
+                                            selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
+                                        } // else it's a deck, no spath replacing needed
+
+                                        return (<TranslationItem key={index} language={variant.language} primary={variant.language === primaryLanguage}
+                                            selector={selector} slug={this.props.DeckTreeStore.slug} />
+                                        );
+                                    })
+                                }
+                            </div>
                         : null
                     }
 
