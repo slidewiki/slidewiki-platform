@@ -27,28 +27,16 @@ export default function addLTI(context, payload, done) {
         //payload.jwt = context.getStore(UserProfileStore).jwt;
         context.service.create('lti', payload, {timeout: 20 * 1000}, (err, res) => {
           if (err) {
+               console.log(err);
               console.log('ADD_LTI_FAILURE');
               //context.dispatch('ADD_LTI_FAILURE', err);
           } else {
+             console.log(res);
               console.log('LTI_ADD_SUCCESS');
               //context.dispatch('LTI_ADD_SUCCESS', res);
           }
           done();
         });
-
-        /*
-        context.service.create('lti', payload, {timeout: 20 * 1000}, (err, res) => {
-            if (err) {
-                context.dispatch('SAVE_SLIDE_EDIT_FAILURE', err);
-            } else {
-
-                console.log('ltiClick.js response');
-
-            }
-
-            done();
-        });
-        */
     } //end if (userid != null && userid !== '')
     else
         done();

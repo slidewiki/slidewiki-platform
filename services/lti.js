@@ -17,11 +17,7 @@ export default {
         // LTI paramters
         var args = params.params? params.params : params;
 
-        //let selector= args.selector;
-        //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
-        //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
         if(resource === 'lti'){
-
             /*********connect to LTI Provider*************/
             rp.post({
               uri: url,
@@ -29,15 +25,12 @@ export default {
               body:JSON.stringify(args)
           }).then((res) => {
               console.log("lti.res=");
-              console.log(res);
+              //console.log(res);
               //console.log(JSON.stringify(res));
-              //callback(res);
-              //console.log("res="+JSON.parse(res));
-              //callback(null, {slide: JSON.parse(res), selector: args.selector});
+              callback(null, res);
           }).catch((err) => {
-              console.error(err);
-              //callback(null, {slide: {}, selector: args.selector});
-              //callback(err);
+              //console.error(err);
+              callback(err);
           });
 
         }
