@@ -151,13 +151,14 @@ class SlideEditLeftPanel extends React.Component {
 
           console.log('post request');
 
+
           var oauth = require('oauth-sign');
-          var ltiURL1 = "http://localhost:8888/moodle35/enrol/lti/cartridge.php/1/985df831239c963c4442533678d4a248/cartridge.xml";
+          var timestamp = Math.round(Date.now() / 1000);
+          var method = 'POST';
+/*
+          var ltiURL = "http://localhost:8888/moodle35/enrol/lti/cartridge.php/1/985df831239c963c4442533678d4a248/cartridge.xml";
           var secret = "A5qDB88mg7pnBXOYSz3rzdhYVtxHu2B6";
           var key = "A5qDB88mg7pnBXOYSz3rzdhYVtxHu2B6";
-          var timestamp = Math.round(Date.now() / 1000);
-
-          var method = 'POST';
           var params ={
                 "oauth_consumer_key": key,
                 "oauth_timestamp": timestamp,
@@ -168,13 +169,34 @@ class SlideEditLeftPanel extends React.Component {
                 "lti_version": "LTI-1p0",
                 "resource_link_id": "resourceLinkId",
               };
+
+              */
+
+          var ltiURL = 'https://lti.tools/saltire/tp';
+          var secret = 'jisc.ac.uk';
+          var params = {
+                  // LTI Required Parameters
+                  lti_message_type: 'basic-lti-launch-request',
+                  lti_version: 'LTI-1p0',
+                  resource_link_id: 'resourceLinkId',
+                  // OAuth 1.0a Required Parameters
+                  oauth_consumer_key: secret,
+                  oauth_nonce: btoa(timestamp),
+                  oauth_signature_method: 'HMAC-SHA1',
+                  oauth_timestamp: timestamp,
+                  oauth_version: '1.0'
+              };
+
           //Prepare oauth signature
-          let signature = oauth.hmacsign(method, ltiURL1, params, secret);
+          let signature = oauth.hmacsign(method, ltiURL, params, secret);
           params.oauth_signature = signature;
           console.log("params.oauth_signature="+params.oauth_signature);
 
+          var method = 'POST';
+
+
             this.context.executeAction(addLTI, {
-                ltiURL1: ltiURL1,
+                ltiURL: ltiURL,
                 params: params
 
             });
