@@ -45,7 +45,7 @@ class TranslationStore extends BaseStore {
         this.treeLanguage = state.treeLanguage;
         this.isLoading = state.isLoading;
         this.invalidLanguage = state.invalidLanguage;
-        this.treeTranslations = state.treeTranslations
+        this.treeTranslations = state.treeTranslations;
     }
 
     // TODO remove this
@@ -158,13 +158,13 @@ class TranslationStore extends BaseStore {
     }
 
     deckTreeGotLoaded(data) {
-        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
+        // console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language.replace('_', '-');
 
         this.treeTranslations = data.deckTree.variants.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
 
         this.emitChange();
-        this.logState('deckTreeGotLoaded');
+        // this.logState('deckTreeGotLoaded');
     }
 
     // TODO remove this
