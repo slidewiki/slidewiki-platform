@@ -116,7 +116,16 @@ export default function loadDeck(context, payload, done) {
         runNonContentActions = 0;
     }
 
-    let languageWillChange = context.getStore(TranslationStore).getState().currentLang !== payload.params.language;
+    let currentLang = context.getStore(TranslationStore).getState().currentLang;
+    let languageWillChange = (currentLang || '') !== (payload.params.language || '');
+    // need to set this for some reason otherwise deck tree does not reload on language change
+    if (languageWillChange) {
+        if (payloadCustom.navigate) {
+            payloadCustom.navigate.runFetchTree = true;  
+        } else {
+            payloadCustom.navigate = { runFetchTree : true };
+        }
+    }
 
     // load translation stuff
     context.executeAction(loadNodeTranslations, payload.params, (err, results) => {
