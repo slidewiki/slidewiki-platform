@@ -323,6 +323,8 @@
   "uploadMediaModal.submit_button_text2": "Upload",
   "uploadMediaModal.loading_text": "Loading",
   "uploadMediaModal.cancel_button": "Cancel",
+  "uploadMediaModal.background_aria": "Use as background image?",
+  "uploadMediaModal.background_message1": "Use as background image?",
   "RecommendedTags.header": "Recommended Tags",
   "RecommendedTags.aria.add": "Add recommended tag",
   "RecommendedTags.aria.dismiss": "Dismiss recommendation",
