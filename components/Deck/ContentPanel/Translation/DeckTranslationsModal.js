@@ -110,24 +110,10 @@ class DeckTranslationsModal extends React.Component {
             }
         });
 
-        let translations0 = [];
-        if (this.props.TranslationStore.translations && this.props.TranslationStore.translations.length > 0) {
-            translations0 = this.props.TranslationStore.translations.reduce((ac, current)  => {
-                if (!compareLanguageCodes(current, this.props.TranslationStore.originLanguage)
-                    && !compareLanguageCodes(current, this.props.TranslationStore.currentLang))
-                    ac.push(current);
-                return ac;
-            }, []).sort((a, b) => a > b);
-        }
-        let translations = translations0.reduce( (ac, current) => {
-            ac.push(<Button key={'btnkey_languagecode_' + current} role="button" tabIndex="0" onClick={this.handleTranslationSelection.bind(this, current)} basic>{getLanguageNativeName(current)}</Button>);
-            return ac;
-        }, []);
-
         let languagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
-                if (!this.props.TranslationStore.translations.find((t) => compareLanguageCodes(t, current)) //exclude transations and deck language
+                if (!this.props.TranslationStore.treeTranslations.find((t) => compareLanguageCodes(t, current)) //exclude transations and deck language
                   && !compareLanguageCodes(current, this.props.TranslationStore.treeLanguage)
                   && !compareLanguageCodes(current, this.props.TranslationStore.originLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});

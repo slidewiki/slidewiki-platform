@@ -19,7 +19,7 @@ import TranslationItem from './TranslationItem';
 import loadDecktreeAndSwitchLanguage from '../../../actions/translation/loadDecktreeAndSwitchLanguage';
 import addDeckTranslation from '../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../actions/translation/addSlideTranslation';
-import {Dropdown} from 'semantic-ui-react';
+import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';
 import qs from 'querystring';
 
 class InfoPanelInfoView extends React.Component {
@@ -65,13 +65,23 @@ class InfoPanelInfoView extends React.Component {
             return;
         }
 
-        let variant = this.props.TranslationStore.variants.find((v) => v.language === language);
+        // console.log('trying to find variant with language', language, 'in treeTranslations and variants', this.props.TranslationStore.treeTranslations, this.props.TranslationStore.variants);
+        let variant = (this.props.TranslationStore.treeTranslations.concat([this.props.TranslationStore.originLanguage])).find((l) => l === language);
         if (!variant) return;
 
         // we need to create the href to navigate to
         let selector = this.props.DeckTreeStore.selector.toJS();
         // first, check selector type
         if (selector.stype === 'slide') {
+            variant = this.props.TranslationStore.variants.find((v) => v.language === language);
+            if (!variant) {
+              let href = Util.makeNodeURL({id: selector.id}, 'plaindeck', '', this.props.DeckTreeStore.slug, language);
+
+              this.context.executeAction(navigateAction, { url: href });
+
+              return;
+            }
+
             let oldSlideId = selector.sid;
             selector.sid = `${variant.id}-${variant.revision}`;
             // replace current slide id with translation slide id in spath as well
@@ -178,12 +188,13 @@ class InfoPanelInfoView extends React.Component {
 
         // let's see if the user wants something we don't have
         let translationMissing = this.props.TranslationStore.currentLang && this.props.TranslationStore.currentLang !== language;
-        let currentLangIconName = (flagForLocale(activeLanguage) || 'icon') + ' flag';
+        let currentLangIconName = (flagForLocale(activeLanguage) || 'icon');
         let canEdit = this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly;
 
         let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
 
-        let languages = this.props.TranslationStore.treeTranslations;
+        let languages = [primaryLanguage];
+        languages = languages.concat(this.props.TranslationStore.treeTranslations);
         if (this.props.TranslationStore.currentLang && languages.indexOf(this.props.TranslationStore.currentLang) < 0) {
             // put the current (but unavailable) language first
             languages.unshift(this.props.TranslationStore.currentLang);
@@ -231,9 +242,9 @@ class InfoPanelInfoView extends React.Component {
             <div className="ui container" ref="infoPanel" role="complementary">
                 <div className="ui top attached icon buttons menu">
 
-                    <Dropdown pointing="top left" disabled={languageOptions.length < 2}
+                    <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
                         button basic className="attached" style={{textAlign: 'center'}}
-                        trigger={<i className={currentLangIconName} style={{marginRight: 0, verticalAlign: 'middle'}}></i>} icon={null}
+                        trigger={<i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i>} icon={null}
                         aria-label="Select language" data-tooltip="Select language"
                         defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
 
@@ -270,21 +281,25 @@ class InfoPanelInfoView extends React.Component {
                                 Translation missing:
                             </h5>
                             <div className="item">
-                                <div role="button" className="header" data-tooltip="Add translation"
-                                    onClick={this.addNodeTranslation.bind(this)}
-                                    aria-label="Add translation" aria-required >
-                                    <i className={currentLangIconName}></i>{getLanguageName(this.props.TranslationStore.currentLang)}
-                                </div>
+                                <Button role="button" data-tooltip="Add translation"
+                                  onClick={this.addNodeTranslation.bind(this)}
+                                  aria-label="Add translation" aria-required
+                                  tabIndex="0" >
+                                    {currentLangIconName === 'icon' ? <Icon name='flag' /> : <Flag name={currentLangIconName} />}
+                                    {getLanguageName(this.props.TranslationStore.currentLang)}
+                                </Button>
                             </div>
                         </div>
                         : null
                     }
 
-                    <div className="ui selection list">
-                        <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
-                        <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
-                            selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} />
-                    </div>
+                    {(language !== activeLanguage) ?
+                      <div className="ui selection list">
+                          <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
+                          <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
+                              selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} clickable={language !== activeLanguage} />
+                      </div>
+                    : ''}
 
                     { translationMissing  && !canEdit ?
                         <div className="ui info message">
@@ -312,7 +327,7 @@ class InfoPanelInfoView extends React.Component {
                                         } // else it's a deck, no spath replacing needed
 
                                         return (<TranslationItem key={index} language={variant.language} primary={variant.language === primaryLanguage}
-                                            selector={selector} slug={this.props.DeckTreeStore.slug} />
+                                            selector={selector} slug={this.props.DeckTreeStore.slug} clickable={true} />
                                         );
                                     })
                                 }
