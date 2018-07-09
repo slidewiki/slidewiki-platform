@@ -75,11 +75,11 @@ class InfoPanelInfoView extends React.Component {
         if (selector.stype === 'slide') {
             variant = this.props.TranslationStore.variants.find((v) => v.language === language);
             if (!variant) {
-              let href = Util.makeNodeURL({id: selector.id}, 'plaindeck', '', this.props.DeckTreeStore.slug, language);
+                let href = Util.makeNodeURL({id: selector.id}, 'plaindeck', '', this.props.DeckTreeStore.slug, language);
 
-              this.context.executeAction(navigateAction, { url: href });
+                this.context.executeAction(navigateAction, { url: href });
 
-              return;
+                return;
             }
 
             let oldSlideId = selector.sid;

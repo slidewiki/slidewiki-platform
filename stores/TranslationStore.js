@@ -158,7 +158,7 @@ class TranslationStore extends BaseStore {
     }
 
     deckTreeGotLoaded(data) {
-        console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
+        // console.log('TranslationStore deckTreeGotLoaded decktreedata', data.deckTree, '\n', data.deckTree.children[1]);
         this.treeLanguage = data.deckTree.language.replace('_', '-');
 
         this.treeTranslations = data.deckTree.variants.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
