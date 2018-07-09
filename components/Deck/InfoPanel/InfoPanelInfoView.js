@@ -297,7 +297,7 @@ class InfoPanelInfoView extends React.Component {
                       <div className="ui selection list">
                           <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
                           <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
-                              selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} clickable={language !== activeLanguage} />
+                              selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} clickable={language !== primaryLanguage} />
                       </div>
                     : ''}
 
