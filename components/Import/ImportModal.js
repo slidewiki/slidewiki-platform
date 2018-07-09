@@ -146,7 +146,8 @@ class Import extends React.Component {
         const size = file.size;
         isCorrect = ( filetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
                       filetype === 'application/wps-office.pptx' ||
-                      filetype === 'application/vnd.oasis.opendocument.presentation' ) && ( size < MAX_FILESIZE );
+                      filetype === 'application/vnd.oasis.opendocument.presentation' ||
+                      filetype === 'application/zip' ) && ( size < MAX_FILESIZE );
 
         if (isCorrect) {
             let reader = new FileReader();
@@ -227,7 +228,7 @@ class Import extends React.Component {
         //variable for intermediate storage of output
         let outputDIV = '';
 
-        let acceptedFormats = '.key, .odp, .pps, .ppsx, .ppt, .pptm, .pptx,  ';
+        let acceptedFormats = '.key, .odp, .pps, .ppsx, .ppt, .pptm, .pptx, .zip,  ';
         let btnClasses_upload = classNames({
             'ui': true,
             'primary': true,
