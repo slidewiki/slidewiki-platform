@@ -198,7 +198,7 @@ export default {
                         roles: params.roles, 
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        status: params.status || 'public',
+                        status: params.status || 'any',
                         page: params.page, 
                         pageSize: 30
                     },

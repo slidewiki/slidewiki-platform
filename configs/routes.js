@@ -151,6 +151,17 @@ export default {
             done();
         }
     },
+    help: {
+        path: '/help', // /playlist/26?sort=order
+        method: 'get',
+        page: 'help',
+        title: 'SlideWiki -- Guides and Help',
+        handler: require('../components/Home/GuidesHelp'),
+        action: (context, payload, done) => {
+            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
+            done();
+        }
+    },
     license: {
         path: '/license',
         method: 'get',

@@ -78,10 +78,11 @@ const enabledLocales = [
     'de',
     'it',
     'es',
-    'nl',
+    'fr',
     'el',
-    'ca',
     'sr',
+    'nl',
+    'ca',
 ];
 
 export default {

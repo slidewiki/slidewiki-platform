@@ -9,6 +9,7 @@ import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
 import tableClick from '../../../actions/slide/tableClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
+import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
@@ -87,6 +88,9 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleCodeClick(){
         this.context.executeAction(codeClick, {});
+    }
+    handleRemoveBackgroundClick(){
+        this.context.executeAction(removeBackgroundClick, {});
     }
     handleEmbedClick(){
         this.setState({showEmbed: true});
@@ -353,6 +357,10 @@ class SlideEditLeftPanel extends React.Component {
                   </a>
                   <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
+                  </a>
+                  <a className="item" id="handleRemoveBackgroundClick" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
+                      <i tabIndex="0"  className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
+                      {/*eraser*/}
                   </a>
                   <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
                       <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
