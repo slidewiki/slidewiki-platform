@@ -74,10 +74,10 @@ class UserMenu extends React.Component {
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
                   }
+                  {deckRecommendationNavLink}
                   <NavLink className="item" href={'/user/' + this.props.user.uname + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
-                  {deckRecommendationNavLink}
               </div>
 
           </div>

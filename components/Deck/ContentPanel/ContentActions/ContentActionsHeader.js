@@ -53,7 +53,7 @@ class ContentActionsHeader extends React.Component {
             },
             deleteAriaText:{
                 id: 'ContentActionsHeader.deleteAriaText',
-                defaultMessage:'Delete'
+                defaultMessage:'Delete slide'
             },
 
         });
@@ -281,7 +281,7 @@ class ContentActionsHeader extends React.Component {
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="large icons">
-                                <i className="grey file text icon"></i>
+                                <i className=" file text icon"></i>
                                 <i className="inverted corner plus icon"></i>
                             </i>
 
@@ -303,7 +303,7 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="grey large copy icon"></i>
+                            <i className="grey large copy outline horizontally flipped icon"></i>
 
                         </button>
                         <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
@@ -311,7 +311,7 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="red large trash icon"></i>
+                            <i className="red large trash alternate icon"></i>
                         </button>
                         {/*
                           <button className="item ui small basic right attached disabled button">

@@ -246,27 +246,6 @@ class SlideContentEditor extends React.Component {
                     '<p>&nbsp;</p>'+
                     '<p>&nbsp;</p>'+
                     '<p>&nbsp;</p>'+
-                    '<table cellpadding="15" cellspacing="0" style="width: 100%; top: 404px; left: -11px;">'+
-                    '	<thead>'+
-                    '		<tr>'+
-                    '			<th colspan="2" scope="col" style="background-color:#f2f9ff; text-align:center">Saturday, July 14</th>'+
-                    '		</tr>'+
-                    '	</thead>'+
-                    '	<tbody>'+
-                    '		<tr>'+
-                    '			<td style="white-space:nowrap">9:30 AM - 11:30 AM</td>'+
-                    '			<td>Americano vs. Brewed - &ldquo;know your coffee&rdquo; session with <strong>Stefano Garau</strong></td>'+
-                    '		</tr>'+
-                    '		<tr>'+
-                    '			<td style="white-space:nowrap">1:00 PM - 3:00 PM</td>'+
-                    '			<td>Pappardelle al pomodoro - live cooking session with <strong>Rita Fresco</strong></td>'+
-                    '		</tr>'+
-                    '		<tr>'+
-                    '			<td style="white-space:nowrap">5:00 PM - 8:00 PM</td>'+
-                    '			<td>Tuscan vineyards at a glance - wine-tasting session with <strong>Frederico Riscoli</strong></td>'+
-                    '		</tr>'+
-                    '	</tbody>'+
-                    '</table>'+
                     '<blockquote>'+
                     '<p>The annual Flavorful Tuscany meetups are always a culinary discovery. You get the best of Tuscan flavors during an intense one-day stay at one of the top hotels of the region. All the sessions are lead by top chefs passionate about their profession. I would certainly recommend to save the date in your calendar for this one!</p>'+
                     '<p>Angelina Calvino, food journalist</p>'+
@@ -1587,6 +1566,14 @@ class SlideContentEditor extends React.Component {
             this.addAbsoluteDiv();
             //}
         }
+        if (nextProps.SlideEditStore.removeBackgroundClick === 'true' && nextProps.SlideEditStore.removeBackgroundClick !== this.props.SlideEditStore.removeBackgroundClick)
+        {
+            $('.pptx2html').css('background-image', '');
+            $('.pptx2html').css('background-repeat', '');
+            $('.pptx2html').css('background-position', '');
+            $('.pptx2html').css('background-size', '');
+            $('.pptx2html').attr('aria-hidden','');
+        }
         if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
         {
             this.refs.uploadMediaModal.handleOpen();
@@ -1599,10 +1586,20 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length)  //if slide is in canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
-                    this.refreshCKeditor();
-                    //this.resize();
-                    this.resizeDrag();
+                    if (nextProps.MediaStore.file.checkbox_backgroundImage)
+                    {
+                        $('.pptx2html').css('background-image', 'url("'+nextProps.MediaStore.file.url+'")');
+                        $('.pptx2html').css('background-repeat', 'no-repeat');
+                        $('.pptx2html').css('background-position', 'center');
+                        $('.pptx2html').css('background-size', 'cover');
+                        $('.pptx2html').attr('aria-hidden','true');
+                        $('.pptx2html').attr('alt',' ');
+                    } else{
+                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                        this.refreshCKeditor();
+                        //this.resize();
+                        this.resizeDrag();
+                    }
                     this.hasChanges = true;
 
                     //this.forceUpdate();
