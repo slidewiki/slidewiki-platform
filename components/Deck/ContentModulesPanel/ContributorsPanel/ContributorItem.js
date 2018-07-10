@@ -18,7 +18,7 @@ class ContributorItem extends React.Component {
                     </div>
                     <div className="content">
                         <div className="description">
-                            {this.props.data.username}
+                            {this.props.data.displayName || this.props.data.username}
                         </div>
 
                         <div className="extra">{this.props.data.organization}</div>
