@@ -616,6 +616,12 @@ class SlideContentEditor extends React.Component {
             });
         });
     }
+    resetZIndexSpeakerNotes()
+    {
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
+    }
     getuniqueID(){
         let allElements = document.getElementsByTagName('*');
         let random = Math.floor((Math.random() * 100000) + 1);
@@ -1017,6 +1023,7 @@ class SlideContentEditor extends React.Component {
         });*/
 
         this.correctDimensionsBoxesImg();
+        this.resetZIndexSpeakerNotes();
         //('img');
     }
     handleResize = () => {
