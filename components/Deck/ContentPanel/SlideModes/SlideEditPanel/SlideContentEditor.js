@@ -618,6 +618,8 @@ class SlideContentEditor extends React.Component {
     }
     resetZIndexSpeakerNotes()
     {
+        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832 and newer: 2355
+        //old SWIK 832 solution: $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
         $('#inlineSpeakerNotes').each(function () {
             $(this).css('z-index', 0);
         });
@@ -998,8 +1000,6 @@ class SlideContentEditor extends React.Component {
                 }, 500);
             });
         });
-        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
         if(!document.domain in ['localhost', '0.0.0.0'])
         {
