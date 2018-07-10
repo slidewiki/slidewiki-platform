@@ -17,7 +17,7 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
@@ -1523,7 +1523,7 @@ class SlideContentEditor extends React.Component {
                     buttonsStyling: false,
                     allowEnterKey: true
                 }).then((accepted) => {
-                    const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+                    const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
                     this.context.executeAction(navigateAction, {
                         url: nodeURL
                     });
@@ -1536,7 +1536,7 @@ class SlideContentEditor extends React.Component {
 
             }
             else{
-                const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+                const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
                 this.context.executeAction(navigateAction, {
                     url: nodeURL
                 });

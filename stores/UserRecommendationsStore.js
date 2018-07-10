@@ -1,5 +1,5 @@
 import {BaseStore} from 'fluxible/addons';
-import slug from 'slug';
+import slugify from 'slugify';
 
 class UserRecommendationsStore extends BaseStore {
     constructor(dispatcher) {
@@ -27,7 +27,7 @@ class UserRecommendationsStore extends BaseStore {
                 creationDate: deck.timestamp,
                 noOfLikes: deck.noOfLikes,
                 recommendationWeight: deck.recommendationWeight,
-                slug: slug(activeRevision.title).toLowerCase() || '_'
+                slug: activeRevision.title && slugify(activeRevision.title).toLowerCase() || '_',
             };
         });
 

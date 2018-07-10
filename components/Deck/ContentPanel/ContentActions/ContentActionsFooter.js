@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import ContentUtil from '../util/ContentUtil';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
@@ -20,6 +19,7 @@ import ContentLikeStore from '../../../../stores/ContentLikeStore';
 import DownloadModal from './DownloadModal';
 import MobileDetect from 'mobile-detect';
 import AriaMenuButton from 'react-aria-menubutton';
+import TranslationStore from '../../../../stores/TranslationStore';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -57,6 +57,9 @@ class ContentActionsFooter extends React.Component {
         if(this.props.ContentStore.selector.stype === 'slide'){
             presLocation += this.props.ContentStore.selector.sid + '/';
             //presLocation = presLocation+ '#' + this.props.ContentStore.selector.sid;// + '/';
+        }
+        if (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.currentLang) {
+            presLocation += '?language=' + this.props.TranslationStore.currentLang;
         }
         return presLocation;
     }
@@ -218,11 +221,12 @@ ContentActionsFooter.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore], (context, props) => {
     return {
         ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentLikeStore: context.getStore(ContentLikeStore).getState()
+        ContentLikeStore: context.getStore(ContentLikeStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default ContentActionsFooter;
