@@ -4,7 +4,7 @@ import addTreeNode from './addTreeNode';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import {navigateAction} from 'fluxible-router';
-import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
+import Util from '../../components/common/Util';
 
 export default function addTreeNodeAndNavigate(context, payload, done) {
     log.info(context);
@@ -26,10 +26,10 @@ export default function addTreeNodeAndNavigate(context, payload, done) {
                 sid: currentState.selector.get('sid'),
                 spath: currentState.selector.get('spath')
             };
-            let targetURL = TreeUtil.makeNodeURL(selector, 'deck', 'edit');
+            let targetURL = Util.makeNodeURL(selector, 'deck', 'edit', undefined, undefined, true);
             //we can change the redirect link based on a given mode
             if(payload.mode && payload.mode ==='markdownEdit'){
-                targetURL = TreeUtil.makeNodeURL(selector, 'deck', 'markdownEdit');
+                targetURL = Util.makeNodeURL(selector, 'deck', 'markdownEdit', undefined, undefined, true);
             }
             context.executeAction(navigateAction, {
                 url: targetURL

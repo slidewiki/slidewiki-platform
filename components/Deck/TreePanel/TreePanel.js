@@ -18,6 +18,8 @@ import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
+import TranslationStore from '../../../stores/TranslationStore';
+import updateTrap from '../../../actions/loginModal/updateTrap';
 
 class TreePanel extends React.Component {
 
@@ -85,12 +87,24 @@ class TreePanel extends React.Component {
     }
 
     handleFork() {
-        this.setState({isForkModalOpen: true});
+        if (this.props.UserProfileStore.username !== '')
+            this.setState({isForkModalOpen: true});
+        else {
+            //prepraring the modal
+            context.executeAction(updateTrap,{activeTrap: true});
+            //hidden the other page elements to readers
+            $('#app').attr('aria-hidden','true');
+
+            $('.ui.login.modal').modal('show');
+        }
     }
     handlePresentationClick(){
         if(process.env.BROWSER){
             window.open(this.getPresentationHref());
         }
+    }
+    handleTranslations() {
+        $('#DeckTranslationsModalOpenButton').click();
     }
     getPresentationHref(){
         let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
@@ -106,6 +120,9 @@ class TreePanel extends React.Component {
         if(this.props.DeckTreeStore.selector.toJS().stype === 'slide'){
             //if it is a slide, also add ID of slide
             presLocation += this.props.DeckTreeStore.selector.toJS().sid;// + '/';
+        }
+        if (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.currentLang) {
+            presLocation += '?language=' + this.props.TranslationStore.currentLang;
         }
         return presLocation;
     }
@@ -155,6 +172,9 @@ class TreePanel extends React.Component {
                 case 'handleFork':
                     this.handleFork();
                     break;
+                case 'handleTranslations':
+                    this.handleTranslations();
+                    break;
                 default:
 
             }
@@ -185,7 +205,7 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'disabled': (!this.props.PermissionsStore.permissions.fork && this.props.UserProfileStore.username !== ''),
             'button': true
         });
 
@@ -193,8 +213,7 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            //'disabled': (!this.props.PermissionsStore.permissions.fork),
-            'disabled': true,
+            'disabled': true, //(!(this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)),
             'button': true
         });
 
@@ -204,6 +223,7 @@ class TreePanel extends React.Component {
         let nextSelector = this.props.DeckTreeStore.nextSelector;
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id'), 'slug': this.props.DeckTreeStore.slug};
         let rootNodeTitle = <strong>{rootNode.title} </strong>;
+        // console.log('TreePanel render decktree infos (decktree, selector)', deckTree, '!!!\n!!!', selector);
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         /*                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
                                     onClick={this.handleTranslation.bind(this)} tabIndex="1">
@@ -220,12 +240,9 @@ class TreePanel extends React.Component {
         return (
             <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
-                <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
-
-                    {this.props.UserProfileStore.username === '' ? '' :
-                        <div className="ui icon fluid buttons">
+                    <div className="ui attached icon buttons menu">
                         {/*                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
                                                     <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                                         <i className="circle play large icon"></i>
@@ -238,11 +255,11 @@ class TreePanel extends React.Component {
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
                             <i className="large blue fork icon"></i>
                         </div>
-                        <div className={classes_translatebtn} role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck" tabIndex="-1">
+                        <div className={classes_translatebtn} aria-label="Translations and languages of this deck" tabIndex="0" role="button" data-tooltip="Translations of this deck" onClick={this.handleTranslations.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTranslations')} >
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>
-                    }
+
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
                             'wordBreak': 'break-all',
@@ -271,7 +288,7 @@ class TreePanel extends React.Component {
                             <label htmlFor="ShowThumbnails">Show Thumbnails</label>
                         </div>
                     </div>
-                </div>
+
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
                 <TranslationModal selector={selector.toJS()} isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
             </div>
@@ -282,11 +299,12 @@ class TreePanel extends React.Component {
 TreePanel.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
-TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore], (context, props) => {
+TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore, TranslationStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default TreePanel;

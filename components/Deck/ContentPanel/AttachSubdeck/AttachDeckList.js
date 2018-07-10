@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import CustomDate from '../../util/CustomDate';
 import { Segment,Item,Icon,Label,Image, TextArea} from 'semantic-ui-react';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
 
@@ -127,7 +127,7 @@ class AttachDeckList extends React.Component {
                 let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
                 let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
                 let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
-                let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+                let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
                 // default English
                 deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
                 //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;

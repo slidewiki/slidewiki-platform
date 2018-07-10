@@ -2,7 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
-import slug from 'slug';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -333,5 +333,5 @@ function transform(deck){
 }
 
 function buildSlug(deck) {
-    return slug(deck.title || '').toLowerCase() || '_';
+    return slugify(deck.title || '').toLowerCase() || '_';
 }

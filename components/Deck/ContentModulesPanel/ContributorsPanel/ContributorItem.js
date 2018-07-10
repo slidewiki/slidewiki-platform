@@ -5,12 +5,8 @@ import UserPicture from '../../../common/UserPicture';
 
 class ContributorItem extends React.Component {
     render() {
-        let link = '/user/' + this.props.data.id;
-        let func = () => {
-            window.open(link);return false;
-        };
         return (
-            <a className="item" href="#" onClick={func}>
+            <a className="item" href={'/user/' + this.props.data.username} target='_blank'>
                     <div className="ui image">
                         <UserPicture picture={ this.props.data.picture }
                             username={ this.props.data.username } link={ false }

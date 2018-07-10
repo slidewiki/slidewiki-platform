@@ -3,7 +3,8 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
-const log = require('./log/clog');
+import log from './log/clog';
+import TranslationStore from '../stores/TranslationStore';
 
 export default function loadContributors(context, payload, done) {
     log.info(context);
@@ -16,6 +17,8 @@ export default function loadContributors(context, payload, done) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
     }
+
+    if (!payload.params.language) payload.params.language = context.getStore(TranslationStore).currentLang;
 
     context.service.read('contributors.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
