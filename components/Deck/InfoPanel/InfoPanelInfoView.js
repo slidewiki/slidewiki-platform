@@ -30,6 +30,10 @@ class InfoPanelInfoView extends React.Component {
                 id: 'ContentActionsHeader.language',
                 defaultMessage:'Language'
             },
+            selectLanguage:{
+                id: 'ContentActionsHeader.selectLanguage',
+                defaultMessage:'Select language'
+            },
             viewLanguage:{
                 id: 'ContentActionsHeader.viewLanguage',
                 defaultMessage:'You are viewing this in language'
@@ -37,6 +41,10 @@ class InfoPanelInfoView extends React.Component {
             translation:{
                 id: 'ContentActionsHeader.translation',
                 defaultMessage:'Translation'
+            },
+            current:{
+                id: 'ContentActionsHeader.current',
+                defaultMessage:'Current'
             },
             alsoAvailableIn:{
                 id: 'ContentActionsHeader.alsoAvailableIn',
@@ -251,7 +259,7 @@ class InfoPanelInfoView extends React.Component {
                 <div className="ui top attached icon buttons menu">
                     <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
                         button basic className="attached" style={{textAlign: 'center'}}
-                        trigger={<h5 className='ui small header'>Select language:  <i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i></h5>} icon={null}
+                        trigger={<h5 className='ui small header'>{this.context.intl.formatMessage(this.messages.selectLanguage)}:  <i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i> ({getLanguageName(this.props.TranslationStore.currentLang)}) </h5>} icon={null}
                         aria-label="Select language" data-tooltip="Select language"
                         defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
                         {/*
