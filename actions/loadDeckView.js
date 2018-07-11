@@ -3,6 +3,7 @@ import slideIdTypeError from './error/slideIdTypeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
 const log = require('./log/clog');
+import TranslationStore from '../stores/TranslationStore';
 
 export default function loadDeckView(context, payload, done) {
     log.info(context);
@@ -11,12 +12,19 @@ export default function loadDeckView(context, payload, done) {
         return;
     }
 
+    if (!payload.params.language) {
+        payload.params.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+    }
+
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
+            console.log(err);
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
+            // console.log('loadDeckView params', payload.params, '\n', payload);
+            res.isRootDeck = payload.params.spath === '';
             context.dispatch('LOAD_DECK_CONTENT_SUCCESS', res);
         }
         let pageTitle = shortTitle + ' | ' + res.slidesData.title;

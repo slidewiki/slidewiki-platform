@@ -1,7 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
-import slug from 'slug';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -40,7 +40,7 @@ function parseDeck(deck){
 }
 
 function buildSlug(deck) {
-    return slug(deck.title || '').toLowerCase() || '_';
+    return slugify(deck.title || '').toLowerCase() || '_';
 }
 
 function getUsers(userIdsSet){
@@ -189,7 +189,7 @@ export default {
 
                         if(returnItem.kind === 'Deck'){
 
-                            returnItem.revisionsCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
+                            returnItem.revisionCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
                             returnItem.theme = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
                                                         deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].theme : '';
 
@@ -218,7 +218,7 @@ export default {
                                 return {
                                     id: usageItem,
                                     title: deckRevisions[usageItem].title,
-                                    link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}`,
+                                    link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`,
                                 };
                             });
 
@@ -227,7 +227,7 @@ export default {
                             let deckSlug = buildSlug(returnItem.deck);
                             returnItem.deck.link = `/deck/${returnItem.deck.id}/${deckSlug}`;
 
-                            returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}`;
+                            returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`;
                         }
                     });
 

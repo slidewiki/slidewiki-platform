@@ -6,10 +6,9 @@ import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
-import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import GroupDetailsModal from './GroupDetailsModal';
@@ -189,13 +188,12 @@ class DeckPropertiesEditor extends React.Component {
         event.preventDefault();
 
         this.context.executeAction(navigateAction, {
-            url: ContentUtil.makeNodeURL(this.props.selector, 'view')
+            url: Util.makeNodeURL(this.props.selector, this.props.selector.page, 'view')
         });
     }
 
-    handleSave(withNewRevision = false, event) {
+    handleSave(event) {
         event.preventDefault();
-        const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
         if (this.state.title == null || this.state.title.length === 0) {
@@ -225,7 +223,7 @@ class DeckPropertiesEditor extends React.Component {
             let deckId = this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id;
 
             this.context.executeAction(updateDeckEditViewState, 'loading');
-            this.context.executeAction(saveAction, {
+            this.context.executeAction(saveDeckEdit, {
                 deckId: deckId,
                 title: this.state.title,
                 allowMarkdown: this.state.allowMarkdown,
@@ -451,7 +449,9 @@ class DeckPropertiesEditor extends React.Component {
         let langFieldClass = classNames({
             'required': true,
             'field': true,
-            'error': this.state.validationErrors.language != null
+            'error': this.state.validationErrors.language != null,
+            'disabled': true,
+            'hidden': true
         });
         /*
         let licenseFieldClass = classNames({
@@ -539,7 +539,7 @@ class DeckPropertiesEditor extends React.Component {
         let buttons = (
             <div>
                 <button className='ui primary button'
-                    onClick={this.handleSave.bind(this, false)}>Save
+                    onClick={this.handleSave.bind(this)}>Save
                 </button>
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>
@@ -570,7 +570,8 @@ class DeckPropertiesEditor extends React.Component {
 
         let listOfAuthorized = this.getListOfAuthorized();
 
-        let titleAndLanguage = <div className="two fields">
+        //let titleAndLanguage = <div className="two fields">
+        let titleAndLanguage = <div className="field">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
                 <label htmlFor="title_input">
                     Title
@@ -580,12 +581,12 @@ class DeckPropertiesEditor extends React.Component {
                     aria-required="true" id="title_input"/>
 
             </div>
-            <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
+            {/*<div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
                 <label htmlFor="language" id="language_label">
                     Language
                 </label>
                 <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-            </div>
+            </div>*/}
         </div>;
         let markdownField = <div className="field">
                 <div className="ui checkbox">

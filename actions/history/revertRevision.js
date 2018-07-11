@@ -14,7 +14,7 @@ export default function revertRevision(context, payload, done) {
             //context.dispatch('REVERT_REVISION_FAILURE', err);
         } else {
             context.dispatch('REVERT_REVISION_SUCCESS', res);
-            let newSid = res._id + '-' + res.revisions[0].id;
+            let newSid = `${res.id}-${res.revision}`;
             let newPath = '';
             if (payload.selector.spath !== '') {
                 let pathArr = payload.selector.spath.split(';');
@@ -27,7 +27,7 @@ export default function revertRevision(context, payload, done) {
             if (payload.selector.stype === 'slide') {
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
                     selector: payload.selector,
-                    nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
+                    nodeSpec: {title: striptags(res.title), id: newSid, path: newPath}
                 });
                 //update the URL
                 context.executeAction(navigateAction, {

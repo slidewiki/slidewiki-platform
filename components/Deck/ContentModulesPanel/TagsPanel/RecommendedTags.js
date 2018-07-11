@@ -58,6 +58,9 @@ class RecommendedTags extends React.Component {
         e.preventDefault();
         this.replaceCard(index);
     }
+    handleShowDeckFamily(tagname) {
+        window.open(`/deckfamily/${tagname}`, '_blank');
+    }
     replaceCard(index){
         // hide current card
         $(`#${index}`).transition({
@@ -94,7 +97,9 @@ class RecommendedTags extends React.Component {
                 <div className="bottom attached menu">
                     <div className="ui tiny basic icon fluid buttons">
                         <button className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaAdd)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaAdd)} data-position='bottom center' onClick={this.handleAdd.bind(this, t.name, index)}><i className="plus icon"></i></button>
-                        <a href={'/deckfamily/' + t.name} target="_blank" type="button" role="button" className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaViewDecksWithTag)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaViewDecksWithTag)} data-position='bottom center'><i className="unhide icon"></i></a>
+                        <button className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaViewDecksWithTag)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaViewDecksWithTag)} data-position='bottom center' onClick={this.handleShowDeckFamily.bind(this, t.name)}>
+                            <i className="unhide icon"></i>
+                        </button>
                         <button className="ui button" aria-label={this.context.intl.formatMessage(this.messages.ariaDismiss)} data-tooltip={this.context.intl.formatMessage(this.messages.ariaDismiss)} data-position='bottom center' onClick={this.handleDismiss.bind(this, t.name, index)}><i className="remove icon"></i></button>
                     </div>
                 </div>

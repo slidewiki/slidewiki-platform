@@ -12,10 +12,13 @@ export default {
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
 
         if (resource === 'datasource.count') {
+            let uri = Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources';
+            if (selector.stype === 'deck' && args.language)
+                uri += '?language=' + args.language;
             rp.get({
-                uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources',
+                uri: uri,
                 qs: { countOnly: true },
-                json: true,
+                json: true
             }).then((res) => {
                 callback(null, {'count' : res.totalCount, 'selector': selector, 'mode': args.mode});
             }).catch((err) => {
@@ -26,8 +29,11 @@ export default {
 
         if (resource === 'datasource.list') {
             //request specific content item from deck service
+            let uri = Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources';
+            if (selector.stype === 'deck' && args.language)
+                uri += '?language=' + args.language;
             rp.get({
-                uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources',
+                uri: uri,
                 json: true,
             }).then((res) => {
                 callback(null, {dataSources: res.items, selector: selector});
