@@ -252,12 +252,12 @@ class TreePanel extends React.Component {
                         <div className={classes_playbtn} aria-label="Open slideshow in new tab" tabIndex="0" role="button" data-tooltip="Open slideshow in new tab" onClick={this.handlePresentationClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePresentation')}>
                             <i className="circle play large icon"></i>
                         </div>
-                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
+                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck (create a copy)" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
                             <i className="large blue fork icon"></i>
                         </div>
-                        <div className={classes_translatebtn} aria-label="Translations and languages of this deck" tabIndex="0" role="button" data-tooltip="Translations of this deck" onClick={this.handleTranslations.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTranslations')} >
+                        {/*<div className={classes_translatebtn} aria-label="Translations and languages of this deck" tabIndex="0" role="button" data-tooltip="Translations of this deck" onClick={this.handleTranslations.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTranslations')} >
                             <i className="translate blue large icon"></i>
-                        </div>
+                        </div>*/}
                     </div>
 
                     <div className="ui attached segment" style={treeDIVStyles}>
