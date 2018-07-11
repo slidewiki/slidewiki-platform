@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
@@ -149,8 +150,8 @@ class TagsPanel extends React.Component {
 }
 
 TagsPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired, 
+    intl: PropTypes.object.isRequired
 };
 
 TagsPanel = connectToStores(TagsPanel, [TagsStore, PermissionsStore], (context, props) => {

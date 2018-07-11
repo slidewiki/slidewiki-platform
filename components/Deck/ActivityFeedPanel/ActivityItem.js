@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import likeActivity from '../../../actions/activityfeed/likeActivity';
 import {formatDate} from './util/ActivityFeedUtil';
@@ -5,7 +6,7 @@ import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
-import TreeUtil from '../TreePanel/util/TreeUtil';
+import Util from '../../common/Util';
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -22,7 +23,7 @@ class ActivityItem extends React.Component {
             if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
-                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+                let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
 
                 return nodeURL;
             }
@@ -62,7 +63,7 @@ class ActivityItem extends React.Component {
         }
         switch (node.activity_type) {
             case 'translate':
-                IconNode = (<i className="ui large translate icon"></i>);
+                IconNode = (<i className="ui translate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -76,7 +77,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'share':
-                IconNode = (<i className="ui large share alternate icon"></i>);
+                IconNode = (<i className="ui share alternate icon"></i>);
                 const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 SummaryNode = (
                     <div className="description">
@@ -89,7 +90,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'add':
-                IconNode = (<i className="ui large write icon"></i>);
+                IconNode = (<i className="ui pencil alternate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -101,7 +102,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'edit':
-                IconNode = (<i className="ui large edit icon"></i>);
+                IconNode = (<i className="ui edit icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -113,7 +114,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'move':
-                IconNode = (<i className="ui large move icon"></i>);
+                IconNode = (<i className="ui arrows alternate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -125,7 +126,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'comment':
-                IconNode = (<i className="ui large comment outline icon"></i>);
+                IconNode = (<i className="ui comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -139,7 +140,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'reply':
-                IconNode = (<i className="ui big comments outline icon"></i>);
+                IconNode = (<i className="ui comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -154,7 +155,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui large repeat icon"></i>);
+                IconNode = (<i className="ui clone outline icon"></i>);
                 const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 SummaryNode = (
                     <div className="summary">
@@ -168,7 +169,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'attach':
-                IconNode = (<i className="ui large attach icon"></i>);
+                IconNode = (<i className="ui attach icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -180,7 +181,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'rate'://TODO modify rate display
-                IconNode = (<i className="ui large empty star icon"></i>);
+                IconNode = (<i className="ui star outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -192,7 +193,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'react'://TODO modify react display
-                IconNode = (<i className="ui large thumbs outline up icon"></i>);
+                IconNode = (<i className="ui thumbs outline up icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -204,7 +205,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'download':
-                IconNode = (<i className="ui large download icon"></i>);
+                IconNode = (<i className="ui download icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
@@ -216,7 +217,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'fork':
-                IconNode = (<i className="ui large fork icon"></i>);
+                IconNode = (<i className="ui fork icon"></i>);
                 const forkRef = (node.fork_info) ? (<span>, creating a <a href={'/deck/' + node.fork_info.content_id}>new deck</a></span>) : '';
                 SummaryNode = (
                     <div className="summary">
@@ -229,7 +230,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'delete':
-                IconNode = (<i className="ui large remove circle outline icon"></i>);
+                IconNode = (<i className="ui trash alternate icon"></i>);
                 const cheerioDeletedName = (node.delete_info.content_name) ? cheerio.load(node.delete_info.content_name).text() : '';
 
                 SummaryNode = (
@@ -246,7 +247,7 @@ class ActivityItem extends React.Component {
 
                 break;
             default:
-                
+
         }
 
         return (
@@ -265,7 +266,7 @@ class ActivityItem extends React.Component {
 }
 
 ActivityItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 ActivityItem = connectToStores(ActivityItem, [DeckTreeStore], (context, props) => {
     return {

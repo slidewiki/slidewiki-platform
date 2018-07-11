@@ -26,7 +26,7 @@ export default function loadSlideView(context, payload, done) {
             context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
         }
         let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
-        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title;
+        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.title;
 
         // remove HTML tags and quotation marks from the title
         let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');

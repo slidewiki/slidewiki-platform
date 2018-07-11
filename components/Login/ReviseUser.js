@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -207,8 +208,8 @@ class ReviseUser extends React.Component {
 }
 
 ReviseUser.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ReviseUser = connectToStores(ReviseUser, [UserRegistrationStore, SSOStore], (context, props) => {
     return {

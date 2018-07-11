@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {HotKeys} from 'react-hotkeys';
 //import ReactDOM from 'react-dom';
@@ -101,7 +102,7 @@ class SlideControl extends React.Component {
 }
 
 SlideControl.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 SlideControl = connectToStores(SlideControl, [DeckTreeStore], (context, props) => {
     return {

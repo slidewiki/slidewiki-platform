@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import cancelQuestion from '../../../../actions/questions/cancelQuestion';
 
@@ -33,7 +34,7 @@ class ContentQuestionForm extends React.Component {
 }
 
 ContentQuestionForm.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentQuestionForm;

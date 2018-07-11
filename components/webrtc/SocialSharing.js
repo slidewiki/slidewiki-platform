@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Dropdown, Icon, Button } from 'semantic-ui-react';
 import {ShareButtons, generateShareIcon} from 'react-share';
@@ -142,7 +143,7 @@ class SocialSharing extends React.Component {
 }
 
 SocialSharing.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SocialSharing;
