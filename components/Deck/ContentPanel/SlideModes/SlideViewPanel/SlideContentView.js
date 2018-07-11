@@ -50,7 +50,7 @@ class SlideContentView extends React.Component {
             }
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
-                    'transform-origin': 'top left'});
+                'transform-origin': 'top left'});
             $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
 
             const pptxheight = $('.pptx2html').outerHeight();
