@@ -5,14 +5,16 @@ const ReactDOM = require('react-dom');
 class SlideContentView extends React.Component {
     constructor(props) {
         super(props);
-        this.scaleRatio;
+        this.scaleRatio = null;
         this.currentContent;
+
+        this.resize = this.resize.bind(this);
     }
     componentWillReceiveProps(nextProps){
         if (this.currentContent !== this.props.content)
         {
             this.currentContent = this.props.content;
-            this.scaleRatio = 1;
+            this.scaleRatio = null;
         }
     }
     componentWillUnmount(){
@@ -36,14 +38,34 @@ class SlideContentView extends React.Component {
 
     resize()
     {
-        if ($('.pptx2html').length)
-        {
-            $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
+        if ($('.pptx2html').length) {
+            const containerwidth = document.getElementById('container').offsetWidth;
+
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+
+            const pptxwidth = $('.pptx2html').outerWidth();
+
+            if (!this.scaleRatio) {
+                this.scaleRatio = containerwidth / pptxwidth;
+            }
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
+                    'transform-origin': 'top left'});
             $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
-            this.refs.inlineContent.style.overflowY = 'auto';
-        }
-        else {
+
+            const pptxheight = $('.pptx2html').outerHeight();
+            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+            const contentHeight = pptxheight * this.scaleRatio;
+            const contentWidth = pptxwidth * this.scaleRatio;
+
+            this.refs.slideContentView.style.height = contentHeight + 'px';
+            this.refs.inlineContent.style.overflowY = 'hidden';
+            this.refs.inlineContent.style.overflowX = 'scroll';
+            this.refs.inlineContent.style.height = contentHeight + 'px';
+            this.refs.inlineContent.style.width = contentWidth + 'px';
+        } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
+            this.refs.inlineContent.style.height = '100%';
         }
     }
     zoomIn(){
@@ -61,25 +83,21 @@ class SlideContentView extends React.Component {
     render() {
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
-            minWidth: '100%',
             overflowY: 'auto',
             position: 'relative'
         };
         const compStyle = {
-            height: '720px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
-            overflowX: 'hidden',
+            overflowX: 'auto',
             height: '100%',
             padding: 0,
         };
         const contentStyle = {
-            minWidth: '100%',
-            height: '720px',
             overflowY: 'hidden',
             overflowX: 'auto',
         };
@@ -89,8 +107,7 @@ class SlideContentView extends React.Component {
             paddingLeft: '5px'
         };
         const SpeakerStyle = {
-            minWidth: '100%',
-            minHeight: 85,
+            minHeight: '85px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',

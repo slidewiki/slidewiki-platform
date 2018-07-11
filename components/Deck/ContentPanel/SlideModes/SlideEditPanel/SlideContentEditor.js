@@ -27,7 +27,7 @@ class SlideContentEditor extends React.Component {
         this.currentContent;
         this.refresh = 'false';
         this.CKEDitor_loaded = false;
-        this.scaleratio = 1;
+        this.scaleRatio = null;
         //this.refs.template;
         this.menuFocus;
         this.previousCaretRange;
@@ -1027,7 +1027,7 @@ class SlideContentEditor extends React.Component {
         }
 
         if(process.env.BROWSER){
-            window.addEventListener('resize', this.handleResize);
+            this.resize();
         }
         /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
@@ -1037,17 +1037,15 @@ class SlideContentEditor extends React.Component {
         });*/
 
         this.correctDimensionsBoxesImg();
-        //('img');
     }
-    handleResize = () => {
-        this.forceUpdate();
-    }
+
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
         this.resize();
     }
+
     correctDimensionsBoxesIframe()
     {
         //le.log('correct iframe');
@@ -1142,9 +1140,9 @@ class SlideContentEditor extends React.Component {
                         },
                         drag: function(event, ui) {
                             let changeLeft = ui.position.left - ui.originalPosition.left; // find change in left
-                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleratio)); // adjust new left by our zoomScale
+                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleRatio)); // adjust new left by our zoomScale
                             let changeTop = ui.position.top - ui.originalPosition.top; // find change in top
-                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleratio; // adjust new top by our zoomScale
+                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleRatio; // adjust new top by our zoomScale
                             ui.position.left = newLeft;
                             ui.position.top = newTop;
                         },
@@ -1169,9 +1167,9 @@ class SlideContentEditor extends React.Component {
                         },
                         resize: function(event, ui) {
                             let changeWidth = ui.size.width - ui.originalSize.width; // find change in width
-                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleratio; // adjust new width by our zoomScale
+                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleRatio; // adjust new width by our zoomScale
                             let changeHeight = ui.size.height - ui.originalSize.height; // find change in height
-                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleratio; // adjust new height by our zoomScale
+                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleRatio; // adjust new height by our zoomScale
                             //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
@@ -1502,7 +1500,7 @@ class SlideContentEditor extends React.Component {
         if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
             //this.initialScale = 1;
-            this.scaleratio = 1;
+            this.scaleRatio = null;
         }
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
@@ -2055,28 +2053,58 @@ class SlideContentEditor extends React.Component {
     }
     */
     resize() {
-        if($('.pptx2html').length)  //if slide is in canvas mode
-        {
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
-            this.refs.inlineContent.style.overflowY = 'auto';
-            this.refs.present.style.overflowY = 'hidden';
-        } else {
-            this.refs.inlineContent.style.overflowY = 'scroll';
-            this.refs.present.style.overflowY = 'scroll';
-        }
+//        if($('.pptx2html').length)  //if slide is in canvas mode
+//        {
+//            $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
+//            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+//            this.refs.inlineContent.style.overflowY = 'auto';
+//            this.refs.present.style.overflowY = 'hidden';
+//        } else {
+//            this.refs.inlineContent.style.overflowY = 'scroll';
+//            this.refs.present.style.overflowY = 'scroll';
+//        }
+
         //$('.cke_float').width( $('.pptx2html').width());
         //$('.cke_top').css('maxwidth', $('.pptx2html').width());
         //$('.cke_float').css('maxwidth', $('.pptx2html').width());
         //$('.cke_toolbox').css('maxwidth', $('.pptx2html').width());
-        let twentypercent = $('#container').width() * 0.2;
-        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
-        $('.cke_float').css('width', $('#container').width() - twentypercent);
-        $('.cke_top').css('width', $('#container').width() - twentypercent);
+
+//        let twentypercent = $('#container').width() * 0.2;
+//        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
+//        $('.cke_float').css('width', $('#container').width() - twentypercent);
+//        $('.cke_top').css('width', $('#container').width() - twentypercent);
+
+        if ($('.pptx2html').length) {
+            const containerwidth = document.getElementById('container').offsetWidth;
+
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+
+            const pptxwidth = $('.pptx2html').outerWidth();
+
+            if (!this.scaleRatio) {
+                this.scaleRatio = containerwidth / pptxwidth;
+            }
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
+                    'transform-origin': 'top left'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+
+            const pptxheight = $('.pptx2html').outerHeight();
+            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+            const contentHeight = pptxheight * this.scaleRatio;
+            const contentWidth = pptxwidth * this.scaleRatio;
+
+            this.refs.inlineContent.style.overflowY = 'hidden';
+            this.refs.inlineContent.style.overflowX = 'scroll';
+            this.refs.inlineContent.style.height = contentHeight + 'px';
+            this.refs.inlineContent.style.width = contentWidth + 'px';
+        } else {
+            this.refs.inlineContent.style.overflowY = 'scroll';
+            this.refs.inlineContent.style.height = '100%';
+        }
     }
 
     componentWillUnmount() {
-//        window.removeEventListener('resize', this.handleResize);
         // Remove the warning window.
         window.onbeforeunload = () => {};
         if (CKEDITOR.instances.inlineContent != null) {
@@ -2094,17 +2122,17 @@ class SlideContentEditor extends React.Component {
     }
 
     zoomIn(){
-        this.scaleratio += 0.25;
+        this.scaleRatio += 0.25;
         this.resize();
     }
 
     resetZoom(){
-        this.scaleratio = 1;
+        this.scaleRatio = 1;
         this.resize();
     }
 
     zoomOut(){
-        this.scaleratio -= 0.25;
+        this.scaleRatio -= 0.25;
         this.resize();
     }
 
@@ -2189,7 +2217,7 @@ class SlideContentEditor extends React.Component {
         };
         const speakernotesStyle = {
             minWidth: '100%',
-            minHeight: 85,
+            minHeight: '85px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
