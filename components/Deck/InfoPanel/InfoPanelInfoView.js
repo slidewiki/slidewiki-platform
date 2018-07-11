@@ -30,10 +30,18 @@ class InfoPanelInfoView extends React.Component {
                 id: 'ContentActionsHeader.language',
                 defaultMessage:'Language'
             },
+            viewLanguage:{
+                id: 'ContentActionsHeader.viewLanguage',
+                defaultMessage:'You are viewing this in language'
+            },
             translation:{
                 id: 'ContentActionsHeader.translation',
                 defaultMessage:'Translation'
-            }
+            },
+            alsoAvailableIn:{
+                id: 'ContentActionsHeader.alsoAvailableIn',
+                defaultMessage:'Also available in'
+            },
         });
     }
 
@@ -241,28 +249,26 @@ class InfoPanelInfoView extends React.Component {
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 <div className="ui top attached icon buttons menu">
-
                     <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
                         button basic className="attached" style={{textAlign: 'center'}}
-                        trigger={<i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i>} icon={null}
+                        trigger={<h5 className='ui small header'>Select language:  <i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i></h5>} icon={null}
                         aria-label="Select language" data-tooltip="Select language"
                         defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-
-                    <button className="ui basic attached button" aria-label="Reset zoom" data-tooltip="Reset zoom">
-                        <i className="stacked icons">
-                            <i className="small compress icon"></i>
-                            <i className="large search icon "></i>
-                        </i>
-                    </button>
-                    <button className="ui basic attached button" aria-label="Zoom out" data-tooltip="Zoom out">
-                        <i className="large search minus icon"></i>
-                    </button>
-                    <button className="ui basic attached button" aria-label="Zoom in" data-tooltip="Zoom in">
-                        <i className="large search plus icon"></i>
-                    </button>
-
+                        {/*
+                            <button className="ui basic attached button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                <i className="stacked icons">
+                                    <i className="small compress icon"></i>
+                                    <i className="large search icon "></i>
+                                </i>
+                            </button>
+                            <button className="ui basic attached button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                <i className="large search minus icon"></i>
+                            </button>
+                            <button className="ui basic attached button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                <i className="large search plus icon"></i>
+                            </button>
+                        */}
                 </div>
-
                 { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
                         <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
@@ -271,9 +277,7 @@ class InfoPanelInfoView extends React.Component {
                         </NavLink>
                     </div>
                 }
-
                 <div className="ui attached segment">
-
                     { translationMissing && canEdit ?
                         <div className="ui selection list">
                             <h5 className="ui small header">
@@ -292,25 +296,22 @@ class InfoPanelInfoView extends React.Component {
                         </div>
                         : null
                     }
-
                     {(language !== activeLanguage) ?
                       <div className="ui selection list">
-                          <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.language)}:</h5>
+                          <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.viewLanguage)}:</h5>
                           <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
                               selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} clickable={language !== primaryLanguage} />
                       </div>
                     : ''}
-
                     { translationMissing  && !canEdit ?
                         <div className="ui info message">
                             Translation to {getLanguageName(this.props.TranslationStore.currentLang)} is missing.
                         </div>
                         : null
                     }
-
                     { canEdit && this.props.TranslationStore.translations.length ?
                             <div className="ui selection list">
-                                <h5 className="ui small header">Also available in:</h5>
+                                <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.alsoAvailableIn)}:</h5>
                                 {
                                     this.props.TranslationStore.variants.map((variant, index) => {
                                         // skip same language
@@ -334,7 +335,6 @@ class InfoPanelInfoView extends React.Component {
                             </div>
                         : null
                     }
-
                 </div>
                 <div className="ui attached segment">
                     <ContributorsPanel />
