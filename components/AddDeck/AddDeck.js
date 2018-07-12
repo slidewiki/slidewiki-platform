@@ -11,7 +11,7 @@ import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
-import importFinished from '../../actions/import/importFinished';
+import importCanceled from '../../actions/import/importCanceled';
 import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
@@ -310,7 +310,7 @@ class AddDeck extends React.Component {
                     return true;
                 }, (reason) => {
                     //Reset form
-                    this.context.executeAction(importFinished, {});  // destroy import components state
+                    this.context.executeAction(importCanceled, {});  // destroy import components state
                     this.context.executeAction(addDeckDestruct, {});
                     this.initializeProgressBar();
                     this.refs.checkbox_conditions.checked = false;
