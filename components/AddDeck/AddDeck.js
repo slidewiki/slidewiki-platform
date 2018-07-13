@@ -230,7 +230,7 @@ class AddDeck extends React.Component {
                     },
                     preview_text:{
                         id: 'AddDeck.swal.preview_text',
-                        defaultMessage: 'This is a preview of how your imported slides will look on SlideWiki. Loading the preview of each slide takes a while due to server processing. Use the arrow keys and tab key to navigate between slide previews below.',
+                        defaultMessage: 'Here is a preview of your slides. It may take a few seconds for the images to be created. You can use the tab key to move through the images.',
                     },
                     success_text_extra:{
                         id: 'AddDeck.swal.success_text_extra',
@@ -256,7 +256,8 @@ class AddDeck extends React.Component {
 
                 let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:100%;"';
                 // let borderStyle = 'border:1px solid black;border-radius:5px;';
-                let html = this.context.intl.formatMessage(success_messages.success_text) + ' ' + this.context.intl.formatMessage(success_messages.preview_text) + '<br><br>' +
+                //let html = this.context.intl.formatMessage(success_messages.success_text) + ' ' + this.context.intl.formatMessage(success_messages.preview_text) + '<br><br>' +
+                let html = '<p style="text-align:left;">' + this.context.intl.formatMessage(success_messages.preview_text) + '</p><br><br>' +
                     '<div style="height: 260px;overflow: auto;" >' +
                     '<table><tr>';
                 let slides = this.props.ImportStore.slides;
