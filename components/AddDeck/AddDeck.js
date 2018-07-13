@@ -265,8 +265,9 @@ class AddDeck extends React.Component {
                     let thumbnailAlt = 'Slide ' + (i+1) + ': ';
                     if (slide.title !== undefined)
                         thumbnailAlt += slide.title ;
+                    let thumbnailSrc = Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/' + (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
                     html += '<td style="padding: 15px;"><div style="width: 250px;" tabIndex="0">' +
-                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/default alt="' + thumbnailAlt + '" aria-hidden="true" />' +
+                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + thumbnailSrc + ' alt="' + thumbnailAlt + '" aria-hidden="true" />' +
                         '</div></td>'; //THUMBNAIL
                 }
                 html += '</tr></table></div>';
