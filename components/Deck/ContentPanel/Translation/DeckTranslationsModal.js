@@ -92,6 +92,10 @@ class DeckTranslationsModal extends React.Component {
                 id: 'DeckTranslationsModal.startTranslation',
                 defaultMessage: 'Create a new translation:',
             },
+            startTranslationSearchOptions: {
+                id: 'DeckTranslationsModal.startTranslationSearchOptions',
+                defaultMessage: ' (start typing to find your language in its native name)',
+            },
             cancel: {
                 id: 'DeckTranslationsModal.cancel',
                 defaultMessage: 'Cancel',
@@ -162,7 +166,7 @@ class DeckTranslationsModal extends React.Component {
                           options={languagesOptions}
                           onChange={this.handleLanguageSelection.bind(this)}
                           name='languageSelection'
-                        />
+                        /> {this.context.intl.formatMessage(messages.startTranslationSearchOptions)}
                         </div>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>

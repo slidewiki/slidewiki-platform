@@ -451,7 +451,8 @@ class DeckPropertiesEditor extends React.Component {
             'required': true,
             'field': true,
             'error': this.state.validationErrors.language != null,
-            'disabled': true
+            'disabled': true,
+            'hidden': true
         });
         /*
         let licenseFieldClass = classNames({
@@ -570,7 +571,8 @@ class DeckPropertiesEditor extends React.Component {
 
         let listOfAuthorized = this.getListOfAuthorized();
 
-        let titleAndLanguage = <div className="two fields">
+        //let titleAndLanguage = <div className="two fields">
+        let titleAndLanguage = <div className="field">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
                 <label htmlFor="title_input">
                     Title
@@ -580,12 +582,12 @@ class DeckPropertiesEditor extends React.Component {
                     aria-required="true" id="title_input"/>
 
             </div>
-            <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
+            {/*<div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
                 <label htmlFor="language" id="language_label">
                     Language
                 </label>
                 <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-            </div>
+            </div>*/}
         </div>;
         let markdownField = <div className="field">
                 <div className="ui checkbox">
