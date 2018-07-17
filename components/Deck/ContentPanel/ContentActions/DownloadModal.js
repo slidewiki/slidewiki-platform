@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Container, Form, Modal, Radio, Icon, Segment, Grid } from 'semantic-ui-react';
@@ -144,6 +145,11 @@ class DownloadModal extends React.Component{
         this.handleClose();
 
 
+    }
+    componentDidMount(){
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
     }
 
     render() {
@@ -340,8 +346,8 @@ class DownloadModal extends React.Component{
 }
 
 DownloadModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DownloadModal = connectToStores(DownloadModal,[ContentStore,UserProfileStore],(context,props) => {
     return{

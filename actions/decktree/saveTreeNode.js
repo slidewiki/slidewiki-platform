@@ -3,6 +3,8 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import {navigateAction} from 'fluxible-router';
 import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
+import Util from '../../components/common/Util';
+import TranslationStore from '../../stores/TranslationStore';
 
 export default function saveTreeNode(context, payload, done) {
     log.info(context);
@@ -10,6 +12,8 @@ export default function saveTreeNode(context, payload, done) {
     if (userid != null && userid !== '') {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
+        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+
         context.service.update('decktree.nodeTitle', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
@@ -18,7 +22,7 @@ export default function saveTreeNode(context, payload, done) {
             } else {
                 let newSid = payload.selector.sid, newPath = payload.selector.spath;
                 if (payload.selector.stype === 'slide') {
-                    newSid = res._id + '-' + res.revisions[0].id;
+                    newSid = `${res.id}-${res.revision}`;
                     if (payload.selector.spath !== '') {
                         let pathArr = payload.selector.spath.split(';');
                         let lastPath = pathArr[pathArr.length - 1];
@@ -31,7 +35,12 @@ export default function saveTreeNode(context, payload, done) {
                 context.dispatch('SAVE_TREE_NODE_SUCCESS', {selector: payload.selector, newValue: payload.newValue, newSid: newSid, newPath: newPath});
 
                 //update the URL
-                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + newSid + '/' + newPath;
+                let newURL = Util.makeNodeURL({
+                    id: payload.selector.id,
+                    stype: payload.selector.stype,
+                    sid: newSid,
+                    spath: newPath
+                }, 'deck');
                 context.executeAction(navigateAction, {
                     url: newURL
                 });

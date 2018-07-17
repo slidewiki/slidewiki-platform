@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
 import addActivity from '../../actions/activityfeed/addActivity';
@@ -118,7 +119,7 @@ class SocialShare extends React.Component {
                                 round />
                         </TwitterShareButton>
                     </div>
-                    <div className="item" data-value="Facebook" role="menuitem" aria-label="Facebook" data-tooltip="Facebook" tabIndex="0" onClick={this.handleFacebookClick.bind(this)}>
+                    {/*}<div className="item" data-value="Facebook" role="menuitem" aria-label="Facebook" data-tooltip="Facebook" tabIndex="0" onClick={this.handleFacebookClick.bind(this)}>
                         <FacebookShareButton
                             url={shareUrl}
                             quote={shareMessage}
@@ -127,7 +128,7 @@ class SocialShare extends React.Component {
                                 size={iconSize}
                                 round />
                         </FacebookShareButton>
-                    </div>
+                    </div>*/}
                     <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" tabIndex="0" onClick={this.handleGooglePlusClick.bind(this)}>
                         <GooglePlusShareButton
                             url={shareUrl}
@@ -157,7 +158,7 @@ class SocialShare extends React.Component {
 }
 
 SocialShare.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SocialShare;
