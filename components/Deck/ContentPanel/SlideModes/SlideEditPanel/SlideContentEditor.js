@@ -2089,9 +2089,10 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
             const pptxwidth = $('.pptx2html').outerWidth();
+            const padding = 12;
 
             if (!this.scaleRatio) {
-                this.scaleRatio = containerwidth / pptxwidth;
+                this.scaleRatio = containerwidth / (pptxwidth + padding);
             }
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
@@ -2103,10 +2104,13 @@ class SlideContentEditor extends React.Component {
             const contentHeight = pptxheight * this.scaleRatio;
             const contentWidth = pptxwidth * this.scaleRatio;
 
+            this.refs.slideEditPanel.style.height = contentHeight + padding + 'px';
             this.refs.inlineContent.style.overflowY = 'hidden';
-            this.refs.inlineContent.style.overflowX = 'scroll';
-            this.refs.inlineContent.style.height = contentHeight + 'px';
-            this.refs.inlineContent.style.width = contentWidth + 'px';
+            this.refs.inlineContent.style.overflowX = 'hidden';
+
+            /* Some extra padding is added to ensure that the borderline is visible. */
+            this.refs.inlineContent.style.height = contentHeight + padding + 'px';
+            this.refs.inlineContent.style.width = contentWidth + padding + 'px';
         } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.inlineContent.style.height = '100%';
@@ -2199,7 +2203,7 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
         const compStyle = {
-            height: '720px',
+//            height: '720px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
@@ -2214,7 +2218,7 @@ class SlideContentEditor extends React.Component {
             minWidth: '100%',
             height: '720px',
             overflowY: 'hidden',
-            overflowX: 'auto',
+            overflowX: 'hidden',
             padding: '0px',
         };
         const compSpeakerStyle = {

@@ -45,9 +45,10 @@ class SlideContentView extends React.Component {
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
             const pptxwidth = $('.pptx2html').outerWidth();
+            const padding = 12;
 
             if (!this.scaleRatio) {
-                this.scaleRatio = containerwidth / pptxwidth;
+                this.scaleRatio = containerwidth / (pptxwidth + padding);
             }
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
@@ -59,11 +60,13 @@ class SlideContentView extends React.Component {
             const contentHeight = pptxheight * this.scaleRatio;
             const contentWidth = pptxwidth * this.scaleRatio;
 
-            this.refs.slideContentView.style.height = contentHeight + 'px';
+            this.refs.slideContentView.style.height = contentHeight + padding + 'px';
             this.refs.inlineContent.style.overflowY = 'hidden';
-            this.refs.inlineContent.style.overflowX = 'scroll';
-            this.refs.inlineContent.style.height = contentHeight + 'px';
-            this.refs.inlineContent.style.width = contentWidth + 'px';
+            this.refs.inlineContent.style.overflowX = 'hidden';
+
+            /* Some extra padding is added to ensure that the borderline is visible. */
+            this.refs.inlineContent.style.height = contentHeight + padding + 'px';
+            this.refs.inlineContent.style.width = contentWidth + padding + 'px';
         } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.inlineContent.style.height = '100%';
@@ -100,7 +103,7 @@ class SlideContentView extends React.Component {
         };
         const contentStyle = {
             overflowY: 'hidden',
-            overflowX: 'auto',
+            overflowX: 'hidden',
         };
         const compSpeakerStyle = {
             overflowY: 'auto',
@@ -113,9 +116,6 @@ class SlideContentView extends React.Component {
             overflowX: 'auto',
             position: 'relative',
             resize: 'vertical'
-        };
-        const containerMinHeight = {
-
         };
 
         // Add the CSS dependency for the theme
