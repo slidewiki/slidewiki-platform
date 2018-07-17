@@ -31,7 +31,9 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
+        this.scaleRatio = 1;
     }
+
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
         //console.log('test' + payload.slide.revisions[0].title + ' id: ' + payload.slide.id);
@@ -58,30 +60,36 @@ class SlideEditStore extends BaseStore {
             this.emitChange();
         }
     }
+
     saveSlide() {
         this.emitChange();
     }
+
     addSlide() {
         this.emitChange();
     }
+
     changeTemplate(payload){
         this.template = payload.template;
         this.emitChange();
         this.template = '';
         this.emitChange();
     }
+
     changeSlideSize(payload){
         this.slideSize = payload.slideSize;
         this.emitChange();
         this.slideSize = '';
         this.emitChange();
     }
+
     handleSaveSlideClick(){
         this.saveSlideClick = 'true';
         this.emitChange();
         this.saveSlideClick = 'false';
         this.emitChange();
     }
+
     handleCancelClick(payload){
         this.selector = payload.selector;
         this.cancelClick = 'true';
@@ -89,54 +97,63 @@ class SlideEditStore extends BaseStore {
         this.cancelClick = 'false';
         this.emitChange();
     }
+
     handleUndoClick(){
         this.undoClick = 'true';
         this.emitChange();
         this.undoClick = 'false';
         this.emitChange();
     }
+
     handleRedoClick(){
         this.redoClick = 'true';
         this.emitChange();
         this.redoClick = 'false';
         this.emitChange();
     }
+
     handleAddInputBox(){
         this.addInputBox = 'true';
         this.emitChange();
         this.addInputBox = 'false';
         this.emitChange();
     }
+
     handleUploadMedia(){
         this.uploadMediaClick = 'true';
         this.emitChange();
         this.uploadMediaClick = 'false';
         this.emitChange();
     }
+
     handleuploadVideoClick(){
         this.uploadVideoClick = 'true';
         this.emitChange();
         this.uploadVideoClick = 'false';
         this.emitChange();
     }
+
     handleTableClick(){
         this.tableClick = 'true';
         this.emitChange();
         this.tableClick = 'false';
         this.emitChange();
     }
+
     handleMathsClick(){
         this.mathsClick = 'true';
         this.emitChange();
         this.mathsClick = 'false';
         this.emitChange();
     }
+
     handleCodeClick(){
         this.codeClick = 'true';
         this.emitChange();
         this.codeClick = 'false';
         this.emitChange();
     }
+
     handleEmbedClick(payload){
         this.embedClick = 'true';
         this.embedWidth = payload.embedWidth;
@@ -151,13 +168,13 @@ class SlideEditStore extends BaseStore {
         this.embedCode = '';
         this.emitChange();
     }
+
     changeTitle(payload){
         this.title = payload.title;
         this.LeftPanelTitleChange = payload.LeftPanelTitleChange;
         this.emitChange();
-        //this.title = '';
-        //this.emitChange();
     }
+
     handleHTMLEditorClick(){
         this.HTMLEditorClick = 'true';
         this.emitChange();
@@ -193,12 +210,15 @@ class SlideEditStore extends BaseStore {
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
-            HTMLEditorClick: this.HTMLEditorClick
+            HTMLEditorClick: this.HTMLEditorClick,
+            scaleRatio: this.scaleRatio
         };
     }
+
     dehydrate() {
         return this.getState();
     }
+
     rehydrate(state) {
         this.id = state.id;
         this.slideId = state.slideId;
@@ -227,6 +247,26 @@ class SlideEditStore extends BaseStore {
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
+        this.scaleRatio = state.scaleRatio = 1;
+    }
+
+    zoomContent(payload) {
+        if (payload.mode === 'edit') {
+            switch (payload.direction) {
+                case 'in':
+                    this.scaleRatio += 0.25;
+                    break;
+
+                case 'out':
+                    this.scaleRatio -= 0.25;
+                    break;
+
+                case 'reset':
+                    this.scaleRatio = 1;
+                    break;
+            }
+        }
+        this.emitChange();
     }
 }
 
@@ -250,6 +290,7 @@ SlideEditStore.handlers = {
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
+    'ZOOM': 'zoomContent',
 };
 
 export default SlideEditStore;

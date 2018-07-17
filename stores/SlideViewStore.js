@@ -10,7 +10,9 @@ class SlideViewStore extends BaseStore {
         this.content = '';
         this.speakernotes = '';
         this.tags = [];
+        this.scaleRatio = 1;
     }
+
     updateContent(payload) {
         if (payload.slide.revisions !== undefined)
         {
@@ -32,6 +34,7 @@ class SlideViewStore extends BaseStore {
             this.emitChange();
         }
     }
+
     getState() {
         return {
             id: this.id,
@@ -40,11 +43,14 @@ class SlideViewStore extends BaseStore {
             content: this.content,
             tags: this.tags,
             speakernotes: this.speakernotes,
+            scaleRatio: this.scaleRatio
         };
     }
+
     dehydrate() {
         return this.getState();
     }
+
     rehydrate(state) {
         this.id = state.id;
         this.slideId = state.slideId;
@@ -52,12 +58,33 @@ class SlideViewStore extends BaseStore {
         this.content = state.content;
         this.tags = state.tags;
         this.speakernotes = state.speakernotes;
+        this.scaleRatio = state.scaleRatio;
+    }
+
+    zoomContent(payload) {
+        if (payload.mode === 'view') {
+            switch (payload.direction) {
+                case 'in':
+                    this.scaleRatio += 0.25;
+                    break;
+
+                case 'out':
+                    this.scaleRatio -= 0.25;
+                    break;
+
+                case 'reset':
+                    this.scaleRatio = 1;
+                    break;
+            }
+        }
+        this.emitChange();
     }
 }
 
 SlideViewStore.storeName = 'SlideViewStore';
 SlideViewStore.handlers = {
-    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent'
+    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent',
+    'ZOOM': 'zoomContent'
 };
 
 export default SlideViewStore;

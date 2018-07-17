@@ -27,7 +27,7 @@ class SlideContentEditor extends React.Component {
         this.currentcontent;
         this.refresh = 'false';
         this.CKEDitor_loaded = false;
-        this.scaleratio = 1;
+        this.scaleRatio = 1;
         //this.refs.template;
         this.menuFocus;
         this.previousCaretRange;
@@ -1142,9 +1142,9 @@ class SlideContentEditor extends React.Component {
                         },
                         drag: function(event, ui) {
                             let changeLeft = ui.position.left - ui.originalPosition.left; // find change in left
-                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleratio)); // adjust new left by our zoomScale
+                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleRatio)); // adjust new left by our zoomScale
                             let changeTop = ui.position.top - ui.originalPosition.top; // find change in top
-                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleratio; // adjust new top by our zoomScale
+                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleRatio; // adjust new top by our zoomScale
                             ui.position.left = newLeft;
                             ui.position.top = newTop;
                         },
@@ -1169,9 +1169,9 @@ class SlideContentEditor extends React.Component {
                         },
                         resize: function(event, ui) {
                             let changeWidth = ui.size.width - ui.originalSize.width; // find change in width
-                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleratio; // adjust new width by our zoomScale
+                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleRatio; // adjust new width by our zoomScale
                             let changeHeight = ui.size.height - ui.originalSize.height; // find change in height
-                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleratio; // adjust new height by our zoomScale
+                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleRatio; // adjust new height by our zoomScale
                             //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
@@ -1855,6 +1855,10 @@ class SlideContentEditor extends React.Component {
                 }, 1000);
             }
         }
+        if (nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideEditStore.scaleRatio;
+            this.resize();
+        }
     }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
@@ -2060,18 +2064,18 @@ class SlideContentEditor extends React.Component {
             let pptxwidth = $('.pptx2html').width();
             let pptxheight = $('.pptx2html').height();
             //TODO - change to get right!
-            this.scaleratio = containerwidth / (pptxwidth+50);
-            //this.scaleratio = containerwidth / (pptxwidth+120);
+            this.scaleRatio = containerwidth / (pptxwidth+50);
+            //this.scaleRatio = containerwidth / (pptxwidth+120);
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
             //$('.pptx2html').animate({
             //    transform: 'scale(2)'
             //});
-            //console.log('scale with ratio: ' + this.scaleratio);
+            //console.log('scale with ratio: ' + this.scaleRatio);
 
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            //set height of content panel to at least size of pptx2html + (100 pixels * scaleRatio).
+            this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleRatio) + 'px';
+            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleRatio) + 'px';
             this.refs.inlineContent.style.overflowY = 'auto';
             this.refs.present.style.overflowY = 'hidden';
         }

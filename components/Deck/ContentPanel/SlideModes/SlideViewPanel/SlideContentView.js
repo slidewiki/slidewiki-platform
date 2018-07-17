@@ -1,20 +1,24 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
+import {connectToStores} from 'fluxible-addons-react';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
 const ReactDOM = require('react-dom');
 
 class SlideContentView extends React.Component {
     constructor(props) {
         super(props);
-        this.scaleratio;
-        //this.initialScale;
+        this.scaleRatio;
         this.currentContent;
     }
     componentWillReceiveProps(nextProps){
         if (this.currentContent !== this.props.content)
         {
             this.currentContent = this.props.content;
-            //this.initialScale = 1;
-            this.scaleratio = 1;
+            this.scaleRatio = 1;
+        }
+        if (nextProps.SlideViewStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideViewStore.scaleRatio;
+            this.resize();
         }
     }
     componentWillUnmount(){
@@ -29,10 +33,6 @@ class SlideContentView extends React.Component {
         this.forceUpdate();
     }
 
-    //handleResize = () => {
-        //this.forceUpdate();
-    //}
-
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
@@ -45,7 +45,7 @@ class SlideContentView extends React.Component {
         if ($('.pptx2html').length)
         {
             //if (this.initialScale === 1)
-            if (this.scaleratio === 1)
+            if (this.scaleRatio === 1)
             {
                 //Function to fit canvas/pptx2html contents in edit and view component
                 let containerwidth = document.getElementById('container').offsetWidth;
@@ -57,27 +57,27 @@ class SlideContentView extends React.Component {
                 //let pptxheight = $('.pptx2html').outerHeight();
                 let pptxwidth = $('.pptx2html').width();
                 //let pptxheight = $('.pptx2html').height();
-                this.scaleratio = containerwidth / (pptxwidth + 10);
+                this.scaleRatio = containerwidth / (pptxwidth + 10);
                 $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+                $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
 
                 let pptxheight = $('.pptx2html').outerHeight();
 
                 const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-                this.refs.slideContentView.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
+                this.refs.slideContentView.style.height = (pptxheight * this.scaleRatio + scrollbarHeight) + 'px';
 
                 //$('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
 
                 //set vars for zoom
-                //this.initialScale = this.scaleratio;
+                //this.initialScale = this.scaleRatio;
             }
             else
             {
-                $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+                $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
                 let pptxheight = $('.pptx2html').outerHeight();
                 const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-                this.refs.slideContentView.style.height = (pptxheight * this.scaleratio + scrollbarHeight) + 'px';
+                this.refs.slideContentView.style.height = (pptxheight * this.scaleRatio + scrollbarHeight) + 'px';
             }
             this.refs.inlineContent.style.overflowY = 'auto';
             this.refs.inlineContent.style.height = '';
@@ -88,17 +88,17 @@ class SlideContentView extends React.Component {
         }
     }
     zoomIn(){
-        this.scaleratio += 0.25;
+        this.scaleRatio += 0.25;
         this.resize();
     }
     resetZoom(){
         //this.zoom = 1;
-        //this.scaleratio = this.initialScale;
-        this.scaleratio = 1;
+        //this.scaleRatio = this.initialScale;
+        this.scaleRatio = 1;
         this.resize();
     }
     zoomOut(){
-        this.scaleratio -= 0.25;
+        this.scaleRatio -= 0.25;
         this.resize();
     }
     render() {
@@ -196,5 +196,11 @@ class SlideContentView extends React.Component {
 SlideContentView.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+SlideContentView = connectToStores(SlideContentView, [SlideViewStore], (context, props) => {
+    return {
+        SlideViewStore: context.getStore(SlideViewStore).getState(),
+    };
+});
 
 export default SlideContentView;
