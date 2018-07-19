@@ -60,6 +60,26 @@ class ContentDiscussionStore extends BaseStore {
 
         this.emitChange();
     }
+    findAndDelete(array, id) {
+        for(let i = 0; i < array.length; i++) {
+            let comment = array[i];
+            if (comment.id === id) {
+                array.splice(i, 1);
+                return true;
+            } else if (comment.replies !== undefined) {
+                let commentFound = this.findAndDelete(comment.replies, id);
+                return commentFound;
+            }
+        }
+    }
+    deleteComment(payload) {
+        let commentDeleted = this.findAndDelete(this.discussion, payload.id);
+        if (commentDeleted) {
+            this.emitChange();
+        } else {
+            console.log('Delete comment failed', payload);
+        }
+    }
     invertReplyBoxFlag(payload) {
         let comment = payload.comment;
         if (comment.replyBoxOpened) {
@@ -77,6 +97,7 @@ class ContentDiscussionStore extends BaseStore {
         this.showCommentBox = !this.showCommentBox;
         this.emitChange();
     }
+
     getState() {
         return {
             discussion: this.discussion,
@@ -102,7 +123,8 @@ ContentDiscussionStore.handlers = {
     'INVERT_REPLY_BOX_FLAG': 'invertReplyBoxFlag',
     'INVERT_COMMENT_BOX_FLAG': 'invertCommentBoxFlag',
     'ADD_COMMENT_SUCCESS': 'addComment',
-    'ADD_REPLY_SUCCESS': 'addReply'
+    'ADD_REPLY_SUCCESS': 'addReply',
+    'DELETE_COMMENT_SUCCESS': 'deleteComment'
 };
 
 export default ContentDiscussionStore;

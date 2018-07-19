@@ -73,8 +73,30 @@ export default {
                 callback(err, {comment: {}, selector: args.selector});
             });
         }
-    }
+    },
+    delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'discussion.item'){
+            /*********connect to microservices*************/
+            const id = args.id;
+            let options = {
+                method: 'DELETE',
+                uri: Microservices.discussion.uri + '/comment/delete',
+                body:JSON.stringify({
+                    id: id
+                })
+            };
+            rp(options).then((res) => {
+                callback(null, {id: id});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, params);
+            });
+        }
+    },
     // other methods
     // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
 };
