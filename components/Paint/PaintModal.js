@@ -456,14 +456,13 @@ class PaintModal extends React.Component {
         };
 
         for (let i = 0; i < objects.length; i++){
-            let maxX = objects[i].aCoords['br'].x;
-            let maxY = objects[i].aCoords['br'].y;
-            let minX = objects[i].aCoords['tl'].x;
-            let minY = objects[i].aCoords['tl'].y;
-            if (maxX > coordinates.maxX) coordinates.maxX = maxX;
-            if (maxY > coordinates.maxY) coordinates.maxY = maxY;
-            if (minX < coordinates.minX) coordinates.minX = minX;
-            if (minY < coordinates.minY) coordinates.minY = minY;
+            let coords = objects[i].aCoords;
+            for (let coord in coords) {
+                if (coords[coord].x > coordinates.maxX) coordinates.maxX = coords[coord].x;
+                if (coords[coord].y > coordinates.maxY) coordinates.maxY = coords[coord].y;
+                if (coords[coord].x < coordinates.minX) coordinates.minX = coords[coord].x;
+                if (coords[coord].y < coordinates.minY) coordinates.minY = coords[coord].y;
+            }
         }
 
         return coordinates;
