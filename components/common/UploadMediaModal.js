@@ -156,9 +156,15 @@ class UploadMediaModal extends React.Component {
             cancel_button:{
                 id:'uploadMediaModal.cancel_button',
                 defaultMessage:'Cancel'
+            },
+            background_aria:{
+                id:'uploadMediaModal.background_aria',
+                defaultMessage:'Use as background image?'
+            },
+            background_message1:{
+                id:'uploadMediaModal.background_message1',
+                defaultMessage:'Use as background image?'
             }
-
-
         });
     }
 
@@ -228,7 +234,8 @@ class UploadMediaModal extends React.Component {
         e.preventDefault();
         let that = this;
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
-        console.log('copyrighthodler: ' + this.state.copyrightHolder);
+        console.log('copyrightholder: ' + this.state.copyrightHolder);
+        console.log('checkbox_backgroundImage: ' + $('#checkbox_backgroundImage')[0].checked);
         let payload = {
             type: this.state.files[0].type,
             license: this.state.licenseValue,
@@ -237,10 +244,10 @@ class UploadMediaModal extends React.Component {
             text: this.state.alt,
             filesize: this.state.files[0].size,
             filename: this.state.files[0].name,
+            checkbox_backgroundImage: $('#checkbox_backgroundImage')[0].checked,
             bytes: null
         };
         console.log(this.state, payload);
-
         let reader = new FileReader();
 
         reader.onloadend = function (evt) {
@@ -362,6 +369,15 @@ class UploadMediaModal extends React.Component {
                       <a href="/license"> {this.context.intl.formatMessage(this.messages.media_terms_label4)} </a>
                       {this.context.intl.formatMessage(this.messages.media_terms_label5)}
                     </label>
+                  </div>
+                  <div className="field">
+                    <div className="ui checkbox">
+                      <input id="checkbox_backgroundImage" type="checkbox" tabIndex="0" id="checkbox_backgroundImage" ref="checkbox_backgroundImage"
+                         aria-label={this.context.intl.formatMessage(this.messages.background_aria)}
+                         aria-required="false"/>
+                      <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)} (beta feature <i className="yellow warning sign icon"></i>)
+                      </label>
+                    </div>
                   </div>
                 </div>
                 <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}

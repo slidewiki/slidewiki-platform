@@ -26,7 +26,7 @@ class ActivityItem extends React.Component {
         const viewPath = ((node.content_kind === 'slide') ? '/slideview/' : '/deckview/') + node.content_id;
         switch (node.activity_type) {
             case 'translate':
-                IconNode = (<i className="ui big translate icon"></i>);
+                IconNode = (<i className="ui translate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -41,7 +41,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'share':
-                IconNode = (<i className="ui big slideshare icon"></i>);
+                IconNode = (<i className="ui share alternate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -55,7 +55,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'add':
-                IconNode = (<i className="ui big write icon"></i>);
+                IconNode = (<i className="ui pencil alternate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -68,7 +68,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'edit':
-                IconNode = (<i className="ui big edit icon"></i>);
+                IconNode = (<i className="ui edit icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -81,7 +81,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'comment':
-                IconNode = (<i className="ui big comment outline icon"></i>);
+                IconNode = (<i className="ui comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -96,7 +96,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'reply':
-                IconNode = (<i className="ui big comments outline icon"></i>);
+                IconNode = (<i className="ui comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -112,7 +112,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui big copy icon"></i>);
+                IconNode = (<i className="ui clone outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -126,7 +126,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'rate'://TODO modify rate display
-                IconNode = (<i className="ui big empty star icon"></i>);
+                IconNode = (<i className="ui star outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -139,7 +139,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'react'://TODO modify react display
-                IconNode = (<i className="ui big thumbs outline up icon"></i>);
+                IconNode = (<i className="ui thumbs outline up icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -152,7 +152,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'download':
-                IconNode = (<i className="ui big download icon"></i>);
+                IconNode = (<i className="ui download icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
@@ -165,7 +165,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             default:
-                IconNode = (<i className="ui big warning icon"></i>);
+                IconNode = (<i className="ui exclamation circle icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         Unknown type of activity - {node.activity_type}

@@ -2,12 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
+import { debounce } from 'lodash';
+
 /**
  * Properties:
  *  placeholder: placeholder text
  */
 
 class KeywordsInput extends React.Component {
+    constructor(props) {
+        super(props);
+        this.autocomplete = debounce(this.autocomplete, 300);
+    }
     initAutocomplete(){
         $('#keywords_search_div').search({
             fields: {
@@ -19,16 +25,17 @@ class KeywordsInput extends React.Component {
             cache: false,
             onSelect: this.onSelect.bind(this),
             apiSettings:{
-                responseAsync: function(settings, callback) {
-                    const query = settings.urlData.query;
-
-                    context.executeAction(suggestKeywords, {
-                        query: encodeURIComponent(query)
-                    }).then( (response) => {
-                        callback(response);
-                    });
-                }
+                responseAsync: this.autocomplete.bind(this)
             }
+        });
+    }
+    autocomplete(settings, callback) {
+        const query = settings.urlData.query;
+
+        context.executeAction(suggestKeywords, {
+            query: encodeURIComponent(query)
+        }).then( (response) => {
+            callback(response);
         });
     }
     componentDidMount(){
