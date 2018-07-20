@@ -166,7 +166,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	//config.removeButtons = 'Underline,Subscript,Superscript';
 
-
+    config.disableNativeSpellChecker = false;
 
     //#####Image upload via CKeditor - TODO//
     //config.uploadUrl;
