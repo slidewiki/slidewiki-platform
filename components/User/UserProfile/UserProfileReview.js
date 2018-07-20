@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -59,7 +60,7 @@ class UserProfileReview extends React.Component {
 }
 
 UserProfileReview.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserProfileReview = connectToStores(UserProfileReview, [UserProfileStore,UserReviewStore], (context, props) => {

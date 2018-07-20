@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import removeUser from '../../../actions/user/userprofile/removeUser';
@@ -107,8 +108,8 @@ class DeactivateAccount extends React.Component {
 }
 
 DeactivateAccount.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default DeactivateAccount;

@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { navigateAction } from 'fluxible-router';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import { debounce } from 'lodash';
 
 class HeaderSearchBox extends React.Component {
     constructor(props){
@@ -11,6 +13,7 @@ class HeaderSearchBox extends React.Component {
             searchstring: ''
         };
         this.messages = this.getIntlMessages();
+        this.autocomplete = debounce(this.autocomplete, 300);
     }
     getIntlMessages(){
         return defineMessages({
@@ -31,16 +34,17 @@ class HeaderSearchBox extends React.Component {
             cache: false,
             onSelect: this.onSelect.bind(this),
             apiSettings:{
-                responseAsync: function(settings, callback) {
-                    const query = settings.urlData.query;
-
-                    context.executeAction(suggestKeywords, {
-                        query: encodeURIComponent(query)
-                    }).then( (response) => {
-                        callback(response);
-                    });
-                }
+                responseAsync: this.autocomplete.bind(this)
             }
+        });
+    }
+    autocomplete(settings, callback) {
+        const query = settings.urlData.query;
+
+        context.executeAction(suggestKeywords, {
+            query: encodeURIComponent(query)
+        }).then( (response) => {
+            callback(response);
         });
     }
     componentDidMount(){
@@ -100,8 +104,8 @@ class HeaderSearchBox extends React.Component {
     }
 }
 HeaderSearchBox.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default HeaderSearchBox;

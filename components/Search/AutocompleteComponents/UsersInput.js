@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import suggestUsers from '../../../actions/search/suggestUsers';
@@ -62,6 +63,6 @@ class UsersInput extends React.Component {
 }
 
 UsersInput.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 export default UsersInput;

@@ -64,7 +64,9 @@ const localeFlags = {
     fy: '',
     gd: 'gb sct',
     it: 'it',
+    lt: 'lt',
     nl: 'nl',
+    pt: 'pt',
     ru: 'ru',
     sr: 'rs',
 };
@@ -76,10 +78,11 @@ const enabledLocales = [
     'de',
     'it',
     'es',
-    'nl',
+    'fr',
     'el',
-    'ca',
     'sr',
+    'nl',
+    'ca',
 ];
 
 export default {

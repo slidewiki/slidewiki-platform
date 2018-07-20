@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
@@ -216,8 +217,8 @@ class SSO extends React.Component {
 }
 
 SSO.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 SSO = connectToStores(SSO, [SSOStore], (context, props) => {
     return {
