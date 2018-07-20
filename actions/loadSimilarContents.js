@@ -19,6 +19,8 @@ export default function loadSimilarContents(context, payload, done) {
 
     context.service.read('similarcontent.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
+            console.log('error en la action');
+            console.log(err);
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', err);

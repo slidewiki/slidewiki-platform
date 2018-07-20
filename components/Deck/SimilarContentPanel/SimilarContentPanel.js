@@ -10,7 +10,7 @@ class SimilarContentPanel extends React.Component {
         this.messages = defineMessages({
             panel_header:{
                 id: 'similarContentPanel.panel_header',
-                defaultMessage:'Recomended Decks'
+                defaultMessage:'Recommended Decks'
             },
             panel_loading:{
                 id: 'similarContentPanel.panel_loading',
@@ -34,8 +34,8 @@ class SimilarContentPanel extends React.Component {
     }
     render() {
         const panelDIVStyles = {
-            maxHeight: this.props.maxHeight?this.props.maxHeight:800,
-            minHeight: 80,
+            maxHeight: this.props.maxHeight?this.props.maxHeight:'800px',
+            minHeight: '80px',
             overflowY: 'auto'
         };
         let header = this.props.inPanel?<h5 className="ui small header">
