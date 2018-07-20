@@ -139,7 +139,7 @@ class DeckViewPanel extends React.Component {
                                             <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
                                         </h2>
                                         <div className="meta"><strong>Creator:&nbsp;</strong>
-                                            <NavLink href={creatorProfileURL}>{deckCreator}</NavLink>
+                                            <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
                                         </div>
                                         {originInfo}
                                         <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
