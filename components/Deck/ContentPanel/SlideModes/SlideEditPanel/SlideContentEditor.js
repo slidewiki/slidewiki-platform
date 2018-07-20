@@ -17,7 +17,7 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
@@ -616,6 +616,14 @@ class SlideContentEditor extends React.Component {
             });
         });
     }
+    resetZIndexSpeakerNotes()
+    {
+        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832 and newer: 2355
+        //old SWIK 832 solution: $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
+    }
     getuniqueID(){
         let allElements = document.getElementsByTagName('*');
         let random = Math.floor((Math.random() * 100000) + 1);
@@ -992,8 +1000,6 @@ class SlideContentEditor extends React.Component {
                 }, 500);
             });
         });
-        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
         if(!document.domain in ['localhost', '0.0.0.0'])
         {
@@ -1017,6 +1023,7 @@ class SlideContentEditor extends React.Component {
         });*/
 
         this.correctDimensionsBoxesImg();
+        this.resetZIndexSpeakerNotes();
         //('img');
     }
     handleResize = () => {
@@ -1523,7 +1530,7 @@ class SlideContentEditor extends React.Component {
                     buttonsStyling: false,
                     allowEnterKey: true
                 }).then((accepted) => {
-                    const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+                    const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
                     this.context.executeAction(navigateAction, {
                         url: nodeURL
                     });
@@ -1536,7 +1543,7 @@ class SlideContentEditor extends React.Component {
 
             }
             else{
-                const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+                const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
                 this.context.executeAction(navigateAction, {
                     url: nodeURL
                 });
@@ -1566,6 +1573,14 @@ class SlideContentEditor extends React.Component {
             this.addAbsoluteDiv();
             //}
         }
+        if (nextProps.SlideEditStore.removeBackgroundClick === 'true' && nextProps.SlideEditStore.removeBackgroundClick !== this.props.SlideEditStore.removeBackgroundClick)
+        {
+            $('.pptx2html').css('background-image', '');
+            $('.pptx2html').css('background-repeat', '');
+            $('.pptx2html').css('background-position', '');
+            $('.pptx2html').css('background-size', '');
+            $('.pptx2html').attr('aria-hidden','');
+        }
         if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
         {
             this.refs.uploadMediaModal.handleOpen();
@@ -1578,10 +1593,20 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length)  //if slide is in canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
-                    this.refreshCKeditor();
-                    //this.resize();
-                    this.resizeDrag();
+                    if (nextProps.MediaStore.file.checkbox_backgroundImage)
+                    {
+                        $('.pptx2html').css('background-image', 'url("'+nextProps.MediaStore.file.url+'")');
+                        $('.pptx2html').css('background-repeat', 'no-repeat');
+                        $('.pptx2html').css('background-position', 'center');
+                        $('.pptx2html').css('background-size', 'cover');
+                        $('.pptx2html').attr('aria-hidden','true');
+                        $('.pptx2html').attr('alt',' ');
+                    } else{
+                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                        this.refreshCKeditor();
+                        //this.resize();
+                        this.resizeDrag();
+                    }
                     this.hasChanges = true;
 
                     //this.forceUpdate();

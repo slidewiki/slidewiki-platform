@@ -270,10 +270,10 @@ class AttachSubdeckModal extends React.Component{
         let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
                                                      type="button" aria-label="Attach slides"
                                                      aria-hidden={this.state.modalOpen}
-                                                     basic icon onClick={this.handleOpen}
+                                                     basic onClick={this.handleOpen}
                                                      tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
             <Icon.Group size={this.props.buttonStyle.iconSize}>
-                <Icon className="grey" name="file text"/>
+                <Icon className="grey" name="file alternate outline"/>
                 <Icon className="corner black" name="attach"/>
             </Icon.Group>
         </Button>} content='Attach slides' on='hover'/>;

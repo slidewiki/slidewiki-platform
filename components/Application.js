@@ -12,7 +12,6 @@ import ErrorStore from '../stores/ErrorStore';
 import Error from './Error/Error';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 import cleanStore from '../actions/error/cleanStore';
 import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
@@ -61,7 +60,6 @@ class Application extends React.Component {
     }
 
     componentDidMount() {
-        context.executeAction(loadSupportedLanguages, {}, () => {return;});
     }
 
     componentDidUpdate(prevProps, prevState) {

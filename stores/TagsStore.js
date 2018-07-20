@@ -16,8 +16,7 @@ class TagsStore extends BaseStore {
     }
     loadTagsSlide(payload) {
         this.tags = [];
-        let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
-        this.tags = lastRevision.tags? lastRevision.tags: [];
+        this.tags = payload.slide.tags || [];
         this.oldTags = JSON.parse(JSON.stringify(this.tags));
         this.tagsHaveChanged = false;
         this.selector = payload.selector;
@@ -28,8 +27,7 @@ class TagsStore extends BaseStore {
     }
     loadTagsDeck(payload) {
         this.tags = [];
-        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
-        this.tags = lastRevision.tags? lastRevision.tags: [];
+        this.tags = payload.deckData.tags || [];
         this.oldTags = JSON.parse(JSON.stringify(this.tags));
         this.tagsHaveChanged = false;
         this.selector = {
