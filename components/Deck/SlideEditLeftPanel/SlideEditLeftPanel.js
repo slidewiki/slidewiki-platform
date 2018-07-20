@@ -101,16 +101,19 @@ class SlideEditLeftPanel extends React.Component {
         //this.context.executeAction(embedClick, {});
     }
     handleEmbedAddClick(){
-        if(this.state.embedURL === '' && this.state.embedCode === ''){
+        if(this.state.embedTitle === '' ){
+            this.setState({ EmbedTitleMissingError: true });
+        }
+        else if (this.state.embedURL === '' && this.state.embedCode === ''){
             this.setState({ URLMissingError: true });
             this.setState({ embedCodeMissingError: true });
             //console.log('errormissing');
             this.forceUpdate();
-        } else if(this.state.embedTitle === '' && this.state.embedURL !== ''){
-            this.setState({ EmbedTitleMissingError: true });
         }
         else {
             if (this.state.embedCode !== ''){
+                //check if embed title is in iframe code, otherwise add it from properties of embedTitle 
+
                 this.context.executeAction(embedClick, {
                     embedTitle: this.state.embedTitle,
                     embedWidth: '',
@@ -378,6 +381,29 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleBack" role="button" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
+                  <label htmlFor="embedTitle">
+                    <FormattedMessage id='editpanel.embedTitle' defaultMessage='Title of embedded content:' />
+                  </label>
+                  <div className="field">
+                  <i className="error">
+                      {this.state.EmbedTitleMissingError === false ? '' : <FormattedMessage id='editpanel.EmbedTitleMissingError' defaultMessage='Missing title of embedded content' />}
+                  </i>
+                    <Input onChange={this.handleChange.bind(this)} id="embedTitle" ref="embedTitle" name="embedTitle" aria-label="Title of embedded content" autoFocus/>
+                  </div>
+                  <label htmlFor="embedWidth">
+                    <FormattedMessage id='editpanel.embedWidth' defaultMessage='Width of embedded content:' />
+                  </label>
+                  <div className="required field">
+                    <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="embedWidth" ref="embedWidth" name="embedWidth" aria-label="Width of embedded content" aria-required="true" required />
+                  </div>
+                  <label htmlFor="embedHeight">
+                    <FormattedMessage id='editpanel.embedHeight' defaultMessage='Height of embedded content:' />
+                  </label>
+                  <div className="required field">
+                    <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="embedHeight" ref="embedHeight" name="embedHeight" aria-label="Height of embedded content" aria-required="true" required />
+                  </div>
+                  <Divider/>
+                  <Divider/>
                   <label htmlFor="embedCode">
                     <FormattedMessage id='editpanel.embedCode' defaultMessage='Code to embed content:' />
                   </label>
@@ -390,18 +416,6 @@ class SlideEditLeftPanel extends React.Component {
                   <div>
                     <i>or</i>
                   </div>
-                  <label htmlFor="embedTitle">
-                    <FormattedMessage id='editpanel.embedTitle' defaultMessage='Title of embedded content:' />
-                  </label>
-                  <div className="field">
-                  <i className="error">
-                      {this.state.EmbedTitleMissingError === false ? '' : <FormattedMessage id='editpanel.EmbedTitleMissingError' defaultMessage='Missing title of embedded content' />}
-                  </i>
-                    <Input onChange={this.handleChange.bind(this)} id="embedTitle" ref="embedTitle" name="embedTitle" aria-label="Title of embedded content" autoFocus/>
-                  </div>
-                  <div>
-                    <i>and</i>
-                  </div>
                   <label htmlFor="embedURL">
                     <FormattedMessage id='editpanel.embedURL' defaultMessage='URL/Link to embedded content:' />
                   </label>
@@ -410,20 +424,6 @@ class SlideEditLeftPanel extends React.Component {
                         {this.state.URLMissingError === false ? '' : <FormattedMessage id='editpanel.URLMissingError' defaultMessage='missing URL/link to content' />}
                     </i>
                     <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" autoFocus/>
-                  </div>
-                  <Divider/>
-                  <Divider/>
-                  <label htmlFor="embedWidth">
-                    <FormattedMessage id='editpanel.embedWidth' defaultMessage='Width of embedded content:' />
-                  </label>
-                  <div className="required field">
-                    <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="embedWidth" ref="embedWidth" name="embedWidth" aria-label="Width of embedded content" aria-required="true" required />
-                  </div>
-                  <label htmlFor="embedHeight">
-                    <FormattedMessage id='editpanel.embedHeight' defaultMessage='Height of embedded content:' />
-                  </label>
-                  <div className="required field">
-                    <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="embedHeight" ref="embedHeight" name="embedHeight" aria-label="Height of embedded content" aria-required="true" required />
                   </div>
                   <a className="item" id="handleEmbedAddClick" role="button" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
                       <i tabIndex="0" className="add square icon"></i><FormattedMessage id='editpanel.embedAdd' defaultMessage='Add to Slide' />
