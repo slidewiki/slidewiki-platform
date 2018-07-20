@@ -18,6 +18,7 @@ import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import PaintModal from '../../Paint/PaintModal';
+import { parse } from 'node-html-parser';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -100,6 +101,7 @@ class SlideEditLeftPanel extends React.Component {
         this.forceUpdate();
         //this.context.executeAction(embedClick, {});
     }
+
     handleEmbedAddClick(){
         if(this.state.embedTitle === '' ){
             this.setState({ EmbedTitleMissingError: true });
@@ -110,14 +112,22 @@ class SlideEditLeftPanel extends React.Component {
             //console.log('errormissing');
             this.forceUpdate();
         }
+        else if (this.state.embedWidth === '' || this.state.embedHeight === ''){
+            this.setState({ embedWidth: '640' });
+            this.setState({ embedHeight: '480' });
+            //console.log('errormissing');
+            this.forceUpdate();
+        }
         else {
             if (this.state.embedCode !== ''){
-                //check if embed title is in iframe code, otherwise add it from properties of embedTitle 
+                //check if embed title is in iframe code, otherwise add it from properties of embedTitle
+                let embedCodeHTML = parse(this.state.embedCode);
+                console.log(embedCodeHTML.toString());
 
                 this.context.executeAction(embedClick, {
                     embedTitle: this.state.embedTitle,
-                    embedWidth: '',
-                    embedHeight: '',
+                    embedWidth: this.state.embedWidth,
+                    embedHeight: this.state.embedHeight,
                     iframe: '',
                     embedCode: this.state.embedCode
                 });
@@ -350,6 +360,9 @@ class SlideEditLeftPanel extends React.Component {
         const whiteText = {
             fontColor: 'white',
         };
+        const error = {
+            fontColor: 'red',
+        };
         let otherList = (
                 <div>
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
@@ -386,7 +399,7 @@ class SlideEditLeftPanel extends React.Component {
                   </label>
                   <div className="field">
                   <i className="error">
-                      {this.state.EmbedTitleMissingError === false ? '' : <FormattedMessage id='editpanel.EmbedTitleMissingError' defaultMessage='Missing title of embedded content' />}
+                      {this.state.EmbedTitleMissingError === false ? '' : <FormattedMessage id='editpanel.EmbedTitleMissingError' style={error} defaultMessage='Missing title of embedded content' />}
                   </i>
                     <Input onChange={this.handleChange.bind(this)} id="embedTitle" ref="embedTitle" name="embedTitle" aria-label="Title of embedded content" autoFocus/>
                   </div>
@@ -409,7 +422,7 @@ class SlideEditLeftPanel extends React.Component {
                   </label>
                   <div className="field">
                     <i className="error">
-                        {this.state.embedCodeMissingError === false ? '' : <FormattedMessage id='editpanel.embedCodeMissingError' defaultMessage='missing embed code' />}
+                        {this.state.embedCodeMissingError === false ? '' : <FormattedMessage id='editpanel.embedCodeMissingError' style={error} defaultMessage='missing embed code' />}
                     </i>
                     <textarea rows="4" onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-label="Code to embed content" autoFocus ></textarea>
                   </div>
@@ -548,7 +561,7 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <i className="error">
-                      {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
+                      {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' style={error} defaultMessage='Error: Slide name can not be empty' />}
                       <br />
                   </i>
                   <label htmlFor="slideTitle">
