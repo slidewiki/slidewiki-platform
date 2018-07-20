@@ -27,27 +27,27 @@ class InfoPanelInfoView extends React.Component {
         super(props);
         this.messages = defineMessages({
             language:{
-                id: 'ContentActionsHeader.language',
+                id: 'InfoPanelInfoView.language',
                 defaultMessage:'Language'
             },
             selectLanguage:{
-                id: 'ContentActionsHeader.selectLanguage',
+                id: 'InfoPanelInfoView.selectLanguage',
                 defaultMessage:'Select language'
             },
             viewLanguage:{
-                id: 'ContentActionsHeader.viewLanguage',
+                id: 'InfoPanelInfoView.viewLanguage',
                 defaultMessage:'You are viewing this in language'
             },
             translation:{
-                id: 'ContentActionsHeader.translation',
+                id: 'InfoPanelInfoView.translation',
                 defaultMessage:'Translation'
             },
             current:{
-                id: 'ContentActionsHeader.current',
+                id: 'InfoPanelInfoView.current',
                 defaultMessage:'Current'
             },
             alsoAvailableIn:{
-                id: 'ContentActionsHeader.alsoAvailableIn',
+                id: 'InfoPanelInfoView.alsoAvailableIn',
                 defaultMessage:'Also available in'
             },
         });
