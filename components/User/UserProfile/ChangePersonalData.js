@@ -1,14 +1,15 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import Iso from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../common';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
-import { locales } from '../../../configs/general';
-import { Dropdown, Flag, Label } from 'semantic-ui-react';
+import { locales, flagForLocale }from '../../../configs/locales';
+import { Dropdown, Label } from 'semantic-ui-react';
 
 
 class ChangePersonalData extends React.Component {
@@ -44,16 +45,12 @@ class ChangePersonalData extends React.Component {
 
     getLocaleOptions() {
         return locales.map((locale) => {
+            let flag = flagForLocale(locale) || 'icon';
             let options = {
                 key: locale,
-                text: '' + Iso.getName(locale),
+                text: <span><i className={`flag ${flag}`} />{getLanguageName(locale)}</span>,
                 value: locale,
             };
-
-            if (this.props.localeFlags){
-                options.flag = (locale === 'en') ? 'gb' : locale;
-            }
-
             return options;
         });
     }
@@ -119,7 +116,7 @@ class ChangePersonalData extends React.Component {
                                     defaultMessage='User Interface Language'
                                   />
                                 </label>
-                                <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="langauge" required={true}/>
+                                <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="language" required={true}/>
                             </div>
                         </div>
                     </div>
@@ -173,8 +170,8 @@ class ChangePersonalData extends React.Component {
 }
 
 ChangePersonalData.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 ChangePersonalData = connectToStores(ChangePersonalData, [IntlStore], (context, props) => {

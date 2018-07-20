@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ContentQuestionAnswersItem from './ContentQuestionAnswersItem';
 import {connectToStores} from 'fluxible-addons-react';
@@ -107,7 +108,7 @@ class ContentQuestionAnswersList extends React.Component {
 }
 
 ContentQuestionAnswersList.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 ContentQuestionAnswersList = connectToStores(ContentQuestionAnswersList, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {

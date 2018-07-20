@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {formatDate} from '../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import {List, Icon, Button} from 'semantic-ui-react';
@@ -118,12 +119,13 @@ class UserNotificationsItem extends React.Component {
                 break;
             case 'reply':
                 iconNotification = 'comments outline';
+                let connectingWord = (String(this.props.userid) === notification.comment_info.parent_comment_owner_id) ? 'your' : 'a';
                 summaryNotification = (
                     <div className="summary">
                         <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
                             {notification.author ? notification.author.username : 'unknown'}
                         </a>
-                        <span> replied to a comment </span>{'on ' + notification.content_kind + ' '}
+                        <span> replied to {connectingWord} comment </span>{'on ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         <span style={commentStyles}>{'"' + notification.comment_info.text + '"'}</span>
@@ -266,7 +268,7 @@ class UserNotificationsItem extends React.Component {
     }
 }
 UserNotificationsItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default UserNotificationsItem;

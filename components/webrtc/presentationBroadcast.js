@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { handleRoute, navigateAction} from 'fluxible-router';
@@ -1054,8 +1055,8 @@ class presentationBroadcast extends React.Component {
 }
 
 presentationBroadcast.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 presentationBroadcast = handleRoute(presentationBroadcast);

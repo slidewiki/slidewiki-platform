@@ -18,7 +18,7 @@ class PresentationRoomsHTMLLayout extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
-                <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 {/* Vendors css bundle */
@@ -28,9 +28,9 @@ class PresentationRoomsHTMLLayout extends React.Component {
             <body>
                 <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/*Following libs need to be included*/}
-                <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/transition.min.js" defer></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
                 {/* All external vendors bundle*/

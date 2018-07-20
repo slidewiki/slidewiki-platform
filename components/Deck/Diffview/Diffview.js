@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {Radio, Checkbox} from 'semantic-ui-react';
 import diff from 'virtual-dom/diff';
 import {connectToStores} from 'fluxible-addons-react';

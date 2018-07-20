@@ -1,26 +1,24 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
 import Thumbnail from '../../../../common/Thumbnail';
 import CustomDate from '../../../util/CustomDate';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName} from '../../../../../common';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
-import { Dropdown, Menu, Flag } from 'semantic-ui-react';
-import slug from 'slug';
+import { Dropdown, Menu } from 'semantic-ui-react';
 
 import {navigateAction} from 'fluxible-router';
 
 import ContentLikeStore from '../../../../../stores/ContentLikeStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
-import TranslationStore from '../../../../../stores/TranslationStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
-
-import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
+import Util from '../../../../common/Util';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -43,23 +41,13 @@ class DeckViewPanel extends React.Component {
         if (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children) {
             slidesArr = this.props.DeckViewStore.slidesData.children;
         }
-        let tags = [];
-        if (deckData && deckData.tags){
-            tags = deckData.tags;
-        }
-        let currentRevision = 1;
-        if(deckData.revisions){
-            currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
-                return rev.id === deckData.active;
-            });
-        }
 
         const forkCount = deckData.forkCount;
         const shareCount = deckData.shareCount;
         const downloadCount = deckData.downloadCount;
 
         //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
-        let deckTheme = currentRevision.theme;
+        let deckTheme = deckData.theme;
         switch (deckTheme) {
             case 'default':
                 deckTheme = 'White - Default';
@@ -106,35 +94,34 @@ class DeckViewPanel extends React.Component {
             default:
         }
         const deckLicense = deckData.license;
-        const deckTitle = currentRevision.title;
+        const deckTitle = deckData.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
+        if (deckData.language) deckData.language = deckData.language.substring(0, 2);
 
         let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
-        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+        let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
         // default English
         deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
         //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
         //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
         // //const countryFlag = 'gb';
-        //let translations = this.props.TranslationStore.translations;
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const deckURL = ['/deck', this.props.selector.id, this.props.deckSlug].join('/');;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
         const user = this.props.UserProfileStore.userid;
 
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
-                <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
+                <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
         </div> : '';
 
         return (
@@ -142,7 +129,6 @@ class DeckViewPanel extends React.Component {
 
                 <main role="main">
                     <div className="ui segment" style={heightStyle}>
-                        {(this.props.TranslationStore.inProgress) ? <div className="ui active dimmer"><div className="ui text loader">Translating</div></div> : ''}
                         <div className="ui two column grid container">
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
@@ -173,7 +159,6 @@ class DeckViewPanel extends React.Component {
                                         <div className="ui label" tabIndex="0">
                                             <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
                                         </div>
-                                        {/* <TranslationPanel/>*/}
                                         <div className="ui label" tabIndex="0">
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                         </div>
@@ -191,13 +176,6 @@ class DeckViewPanel extends React.Component {
                                             <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
                                     </div>
                                 </div>
-                                {tags.length > 0 ? <div className="ui divider"></div> : ''}
-                                <div className="ui tag labels large meta">
-                                    {tags.map((tag, index) => {
-                                        return <a className="ui label" key={index} tabIndex="0">{tag}</a>;
-                                    })}
-                                </div>
-
                             </div>
                         </div>
                         <div className="ui divider"></div>
@@ -210,14 +188,19 @@ class DeckViewPanel extends React.Component {
                                     thumbnailURL += '/' + slide.theme;
                                 }
                                 if (index < maxSlideThumbnails) {
+                                    const slideURL = Util.makeNodeURL({
+                                        id: this.props.selector.id,
+                                        stype: 'slide',
+                                        sid: slide.id
+                                    }, 'deck', '', this.props.deckSlug);
                                     return (
                                         <div key={index} className="ui card">
-                                            <a href={deckURL + '/slide/' + slide.id} className="ui image"
+                                            <a href={slideURL} className="ui image"
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
                                             </a>
                                             <div className="content" tabIndex="-1">
-                                                <a href={deckURL + '/slide/' + slide.id}
+                                                <a href={slideURL}
                                                    className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
                                                 <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
                                             </div>
@@ -234,16 +217,15 @@ class DeckViewPanel extends React.Component {
 }
 
 DeckViewPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore, TranslationStore], (context, props) => {
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {
     return {
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 export default DeckViewPanel;
