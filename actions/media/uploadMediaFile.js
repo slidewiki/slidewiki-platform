@@ -34,8 +34,9 @@ export default function uploadMediaFile(context, payload, done) {
             }
         }
         else {
-            payload.url = Microservices.file.uri + '/picture/' + res.fileName;
-            payload.thumbnailUrl = Microservices.file.uri + '/picture/' + res.thumbnailName;
+            let subPath = res.type === 'image/svg+xml' ? '/graphic/' : '/picture/';
+            payload.url = Microservices.file.uri + subPath + res.fileName;
+            payload.thumbnailUrl = Microservices.file.uri + subPath + res.thumbnailName;
             context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
         }
         done();
