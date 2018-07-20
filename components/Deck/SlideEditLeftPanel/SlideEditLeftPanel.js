@@ -123,6 +123,7 @@ class SlideEditLeftPanel extends React.Component {
                 //check if embed title is in iframe code, otherwise add it from properties of embedTitle
                 let embedCodeHTML = parse(this.state.embedCode);
                 console.log(embedCodeHTML.toString());
+                //make sure width and height is assigned - remove Iframe correction method in slidecontentditor
 
                 this.context.executeAction(embedClick, {
                     embedTitle: this.state.embedTitle,
