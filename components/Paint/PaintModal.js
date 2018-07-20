@@ -74,6 +74,7 @@ class PaintModal extends React.Component {
         this.redo = this.redo.bind(this);
         this.copyActiveObjects = this.copyActiveObjects.bind(this);
         this.paste = this.paste.bind(this);
+        this.getDrawedCoordinates = this.getDrawedCoordinates.bind(this);
         this.showLicense = this.showLicense.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
     }
@@ -446,9 +447,42 @@ class PaintModal extends React.Component {
         });
     }
 
+    getDrawedCoordinates(objects) {
+        let coordinates = {
+            minX: 10000,
+            minY: 10000,
+            maxX: 0,
+            maxY: 0
+        };
+
+        for (let i = 0; i < objects.length; i++){
+            let maxX = objects[i].aCoords['br'].x;
+            let maxY = objects[i].aCoords['br'].y;
+            let minX = objects[i].aCoords['tl'].x;
+            let minY = objects[i].aCoords['tl'].y;
+            if (maxX > coordinates.maxX) coordinates.maxX = maxX;
+            if (maxY > coordinates.maxY) coordinates.maxY = maxY;
+            if (minX < coordinates.minX) coordinates.minX = minX;
+            if (minY < coordinates.minY) coordinates.minY = minY;
+        }
+
+        return coordinates;
+    }
+
     showLicense() {
 
-        let href = this.canvas.toSVG({suppressPreamble: true});
+        let coordinates = this.getDrawedCoordinates(this.canvas.getObjects());
+        let href = this.canvas.toSVG({
+            suppressPreamble: true,
+            width: coordinates.maxX - coordinates.minX,
+            height: coordinates.maxY - coordinates.minY,
+            viewBox: {
+                x: coordinates.minX,
+                y: coordinates.minY,
+                width: coordinates.maxX - coordinates.minX,
+                height: coordinates.maxY - coordinates.minY
+            }
+        });
 
         this.setState({
             license: true,
