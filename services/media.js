@@ -33,9 +33,10 @@ export default {
                 '----jwt----': params.jwt,
                 'content-type': params.type
             };
+            let body = params.type === 'image/svg+xml' ? params.bytes : new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64');
             rp.post({
                 uri: url,
-                body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
+                body: body,
                 headers: headers,
                 json: false
             })
