@@ -448,20 +448,15 @@ class PaintModal extends React.Component {
 
     showLicense() {
 
-        let href = this.canvas.toDataURL({
-            format: 'png',
-            quality: 1
-        });
-
-        let file = this.dataURLtoBlob(href);
+        let href = this.canvas.toSVG({suppressPreamble: true});
 
         this.setState({
             license: true,
             file: {
                 url: href,
-                format: 'png',
+                format: 'svg+xml',
                 name: 'Image',
-                size: file.size
+                size: href.length
             }
         });
     }
@@ -477,7 +472,7 @@ class PaintModal extends React.Component {
         });
     }
 
-    dataURLtoBlob(dataURL) {
+    /*dataURLtoBlob(dataURL) {
         //http://mitgux.com/send-canvas-to-server-as-file-using-ajax
         // Decode the dataURL
         let binary = atob(dataURL.split(',')[1]);
@@ -487,21 +482,21 @@ class PaintModal extends React.Component {
             array.push(binary.charCodeAt(i));
         }
         // Return our Blob object
-        return new Blob([new Uint8Array(array)], {type: 'image/png'});
-    }
+        return new Blob([new Uint8Array(array)], {type: 'image/svg+xml'});
+    }*/
 
     submitPressed(e) {
         e.preventDefault();
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
 
         let payload = {
-            type: 'image/png',
+            type: 'image/svg+xml',
             license: this.state.licenseValue,
             copyrightHolder: this.state.copyrightHolder,
             title: this.state.title || 'Image',
             text: this.state.alt,
             filesize: this.state.file.size,
-            filename: 'Image.png',
+            filename: 'Image.svg',
             bytes: this.state.file.url
         };
 
@@ -578,10 +573,12 @@ class PaintModal extends React.Component {
 
         if(this.state.license){
             heading = 'License information';
+            let innerSvg = '<svg' + this.state.file.url.split('<svg')[1];
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
-                <Img src={this.state.file.url} size="large" centered={true}/>
+                {/*<Img src={this.state.file.url} size="large" centered={true}/>*/}
+                <div style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: innerSvg }} />
                 <Divider/>
                 <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                     <div className="required field">
