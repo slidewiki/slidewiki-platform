@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'slidewiki-react-image-cropper';
@@ -146,8 +147,8 @@ class ChangePictureModal extends React.Component {
 }
 
 ChangePictureModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default ChangePictureModal;

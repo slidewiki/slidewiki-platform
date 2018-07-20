@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import revertRevision from '../../../../actions/history/revertRevision';
 import showRevisionChanges from '../../../../actions/history/showRevisionChanges';
@@ -96,7 +97,7 @@ class DeckRevision extends React.Component {
 }
 
 DeckRevision.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default DeckRevision;

@@ -1,5 +1,7 @@
 /*globals document*/
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
@@ -10,7 +12,6 @@ import ErrorStore from '../stores/ErrorStore';
 import Error from './Error/Error';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 import cleanStore from '../actions/error/cleanStore';
 import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
@@ -59,7 +60,6 @@ class Application extends React.Component {
     }
 
     componentDidMount() {
-        context.executeAction(loadSupportedLanguages, {}, () => {return;});
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -74,13 +74,13 @@ class Application extends React.Component {
     }
 }
 Application.contextTypes = {
-    getStore: React.PropTypes.func,
-    executeAction: React.PropTypes.func,
-    getUser: React.PropTypes.func
+    getStore: PropTypes.func,
+    executeAction: PropTypes.func,
+    getUser: PropTypes.func
 };
 
 Application = provideContext(Application, { //jshint ignore:line
-    getUser: React.PropTypes.func
+    getUser: PropTypes.func
 });
 
 export default provideContext(handleHistory(connectToStores(
