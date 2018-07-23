@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DeckCard from '../../User/UserProfile/DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
@@ -73,8 +74,8 @@ class CollectionDecksReorder extends React.Component {
 }
 
 CollectionDecksReorder.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired, 
+    intl: PropTypes.object.isRequired
 };
 
 CollectionDecksReorder = connectToStores(CollectionDecksReorder, [UserProfileStore], (context, props) => {

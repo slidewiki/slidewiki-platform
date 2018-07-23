@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -78,10 +79,10 @@ class UserMenu extends React.Component {
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
                   }
+                  {deckRecommendationNavLink}
                   <NavLink className="item" href={'/user/' + this.props.user.uname + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
-                  {deckRecommendationNavLink}
                   <NavLink className="item" href={'/user/' + this.props.user.uname + '/stats'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {userStatsMsg}</p>
                   </NavLink>
@@ -93,8 +94,8 @@ class UserMenu extends React.Component {
 }
 
 UserMenu.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default UserMenu;
