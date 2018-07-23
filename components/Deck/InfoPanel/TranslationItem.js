@@ -41,7 +41,7 @@ class TranslationItem extends React.Component {
               <div className="header">
                   {iconName === 'flag icon' ? <Icon name='flag' /> : <Flag name={flagName} />}{text}
               </div>
-          </div>
+          </div>;
 
         return (
             <div className="item">
