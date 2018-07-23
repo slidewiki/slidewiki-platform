@@ -102,7 +102,7 @@ class DeckViewPanel extends React.Component {
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
         if (deckData.language) deckData.language = deckData.language.substring(0, 2);
 
-        let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
+        let deckLanguageCode = deckData.language;
         let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
         // default English
         deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);

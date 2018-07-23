@@ -1,11 +1,17 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import PropTypes from 'prop-types';
+import {Button, Icon, Flag} from 'semantic-ui-react';
+import {navigateAction} from 'fluxible-router';
 import qs from 'querystring';
-
 import {getLanguageName} from '../../../common';
 import {flagForLocale} from '../../../configs/locales';
 
 class TranslationItem extends React.Component {
+    directToTranslation(href, e) {
+        e.preventDefault();
+        this.context.executeAction(navigateAction, { url: href });
+    }
+
     render() {
         let href = '';
         if (this.props.clickable) {
@@ -20,24 +26,33 @@ class TranslationItem extends React.Component {
 
         let flagName = flagForLocale(this.props.language);
         let iconName = flagName ? flagName + ' flag': 'flag icon';
+        let text = getLanguageName(this.props.language) + (this.props.primary ? ' (primary)' : '');
 
-        return (this.props.clickable === true) ?
-          <NavLink className="item" href={href} activeElement='div'>
-              <div className="content">
-                  <div className="header">
-                      <i className={iconName}></i>{getLanguageName(this.props.language)} { this.props.primary ? '(primary)' : ''}
-                  </div>
-              </div>
-          </NavLink>
+        let node = (this.props.clickable === true) ?
+
+          <Button role="button" data-tooltip={text}
+            onClick={this.directToTranslation.bind(this, href)}
+            aria-label={text} aria-required
+            tabIndex="0" attached basic >
+              {iconName === 'flag icon' ? <Icon name='flag' /> : <Flag name={flagName} />}{text}
+          </Button>
           :
-          <div className="item">
-              <div className="content">
-                  <div className="header">
-                      <i className={iconName}></i>{getLanguageName(this.props.language)} { this.props.primary ? '(primary)' : ''}
-                  </div>
+          <div className="content">
+              <div className="header">
+                  {iconName === 'flag icon' ? <Icon name='flag' /> : <Flag name={flagName} />}{text}
               </div>
           </div>;
+
+        return (
+            <div className="item">
+              {node}
+            </div>
+        );
     }
 }
+
+TranslationItem.contextTypes = {
+    executeAction: PropTypes.func.isRequired
+};
 
 export default TranslationItem;
