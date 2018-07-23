@@ -1204,5 +1204,19 @@
   "UserRegistrationSocial.email": "Email *",
   "UserRegistrationSocial.signup": "Sign Up",
   "UserRegistrationSocial.account": "I can not access my account",
-  "UserRegistrationSocial.cancel": "Cancel"
+  "UserRegistrationSocial.cancel": "Cancel",
+  "DeckTranslationsModal.header": "Start new deck translations",
+  "DeckTranslationsModal.chooseLanguage": "Choose the target language...",
+  "DeckTranslationsModal.startTranslation": "Create a new translation:",
+  "DeckTranslationsModal.startTranslationSearchOptions": " (start typing to find your language in its native name)",
+  "DeckTranslationsModal.cancel": "Cancel",
+  "DeckTranslationsModal.translate": "Create translation",
+  "DeckTranslationsModal.originLanguage": "Original Language:",
+  "DeckTranslationsModal.switchSR": "Create a new deck translation",
+  "InfoPanelInfoView.language": "Language",
+  "InfoPanelInfoView.selectLanguage": "Select language",
+  "InfoPanelInfoView.viewLanguage": "You are viewing this in language",
+  "InfoPanelInfoView.translation": "Translation",
+  "InfoPanelInfoView.current": "Current",
+  "InfoPanelInfoView.alsoAvailableIn": "Also available in"
 }
