@@ -22,6 +22,11 @@ const uuidV4 = require('uuid/v4');
 const log = require('../configs/log').log;
 const env = process.env.NODE_ENV;
 
+// metrics collection
+const prom_client = require('prom-client');
+const metrics_freq = 5000;    //TODO make this configurable via ENV!
+prom_client.collectDefaultMetrics({timeout: metrics_freq});
+
 let renderApp = function(req, res, context){
     debug('Exposing context state');
     const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -86,42 +91,48 @@ export default function handleServerRendering(req, res, next){
         }
         else{
             debug('Executing navigate action');
-            context.getActionContext().executeAction(navigateAction, {
-                url: req.url,
-                reqId: req.reqId
-            }, (err) => {
-                if (err) {
-                    if (err.statusCode && err.statusCode === '301') {
-                        //console.log('REDIRECTING to '+ JSON.stringify(err));
-                        res.redirect(301, err.redirectURL);
-                    }else
-                    if (err.statusCode && err.statusCode === '404') {
-                        let html = renderApp(req, res, context);
-                        debug('Sending markup');
-                        res.type('html');
-                        res.status(err.statusCode);
-                        log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
-                        res.end();
-                        return;
-                    }else{
+            if (req.url.endsWith('/metrics')) {
+                console.log('Metrics requested!');
+                res.set('Content-Type', prom_client.register.contentType);
+                res.end(prom_client.register.metrics());
+            } else {
+                context.getActionContext().executeAction(navigateAction, {
+                    url: req.url,
+                    reqId: req.reqId
+                }, (err) => {
+                    if (err) {
+                        if (err.statusCode && err.statusCode === '301') {
+                            //console.log('REDIRECTING to '+ JSON.stringify(err));
+                            res.redirect(301, err.redirectURL);
+                        }else
+                        if (err.statusCode && err.statusCode === '404') {
+                            let html = renderApp(req, res, context);
+                            debug('Sending markup');
+                            res.type('html');
+                            res.status(err.statusCode);
+                            log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                            res.end();
+                            return;
+                        }else{
+                            let html = renderApp(req, res, context);
+                            debug('Sending markup');
+                            res.type('html');
+                            res.write('<!DOCTYPE html>' + html);
+                            log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                            res.end();
+                            return;
+                        }
+
+                    } else {
                         let html = renderApp(req, res, context);
                         debug('Sending markup');
                         res.type('html');
                         res.write('<!DOCTYPE html>' + html);
-                        log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                        log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
                         res.end();
-                        return;
                     }
-
-                } else {
-                    let html = renderApp(req, res, context);
-                    debug('Sending markup');
-                    res.type('html');
-                    res.write('<!DOCTYPE html>' + html);
-                    log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
-                    res.end();
-                }
-            });
+                });
+            }
         }
     });
 }
