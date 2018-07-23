@@ -27,27 +27,27 @@ class InfoPanelInfoView extends React.Component {
         super(props);
         this.messages = defineMessages({
             language:{
-                id: 'ContentActionsHeader.language',
+                id: 'InfoPanelInfoView.language',
                 defaultMessage:'Language'
             },
             selectLanguage:{
-                id: 'ContentActionsHeader.selectLanguage',
+                id: 'InfoPanelInfoView.selectLanguage',
                 defaultMessage:'Select language'
             },
             viewLanguage:{
-                id: 'ContentActionsHeader.viewLanguage',
+                id: 'InfoPanelInfoView.viewLanguage',
                 defaultMessage:'You are viewing this in language'
             },
             translation:{
-                id: 'ContentActionsHeader.translation',
+                id: 'InfoPanelInfoView.translation',
                 defaultMessage:'Translation'
             },
             current:{
-                id: 'ContentActionsHeader.current',
+                id: 'InfoPanelInfoView.current',
                 defaultMessage:'Current'
             },
             alsoAvailableIn:{
-                id: 'ContentActionsHeader.alsoAvailableIn',
+                id: 'InfoPanelInfoView.alsoAvailableIn',
                 defaultMessage:'Also available in'
             },
         });
@@ -215,6 +215,9 @@ class InfoPanelInfoView extends React.Component {
             // put the current (but unavailable) language first
             languages.unshift(this.props.TranslationStore.currentLang);
         }
+        languages = languages.filter((elem, pos) => {
+            return languages.indexOf(elem) === pos;
+        });
         let languageOptions = languages.map((t) => ({
             text: getLanguageName(t) + (t === primaryLanguage ? ' (primary)' : ''),
             value: t,
@@ -254,12 +257,15 @@ class InfoPanelInfoView extends React.Component {
         });
         translationOptions = translationOptions.filter((a) => a !== undefined);
 
+        let currentLanguageName = getLanguageName(this.props.TranslationStore.currentLang);
+
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 <div className="ui top attached icon buttons menu">
                     <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
                         button basic className="attached" style={{textAlign: 'center'}}
-                        trigger={<h5 className='ui small header'>{this.context.intl.formatMessage(this.messages.selectLanguage)}:  <i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i> ({getLanguageName(this.props.TranslationStore.currentLang)}) </h5>} icon={null}
+                        trigger={<h5 className='ui small header'>{this.context.intl.formatMessage(this.messages.selectLanguage)}: <i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i> {currentLanguageName ? ('(' + currentLanguageName + ')') : ''}</h5>}
+                        icon={null}
                         aria-label="Select language" data-tooltip="Select language"
                         defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
                         {/*
@@ -296,7 +302,7 @@ class InfoPanelInfoView extends React.Component {
                                 <Button role="button" data-tooltip="Add translation"
                                   onClick={this.addNodeTranslation.bind(this)}
                                   aria-label="Add translation" aria-required
-                                  tabIndex="0" >
+                                  tabIndex="0" attached basic >
                                     {currentLangIconName === 'icon' ? <Icon name='flag' /> : <Flag name={currentLangIconName} />}
                                     {getLanguageName(this.props.TranslationStore.currentLang)}
                                 </Button>
@@ -305,7 +311,7 @@ class InfoPanelInfoView extends React.Component {
                         : null
                     }
                     {(language !== activeLanguage) ?
-                      <div className="ui selection list">
+                      <div className="ui list">
                           <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.viewLanguage)}:</h5>
                           <TranslationItem language={language} primary={this.props.TranslationStore.translations.length && language === primaryLanguage}
                               selector={this.props.DeckTreeStore.selector.toJS()} slug={this.props.DeckTreeStore.slug} clickable={language !== primaryLanguage} />

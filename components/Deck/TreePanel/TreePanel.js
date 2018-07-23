@@ -121,8 +121,8 @@ class TreePanel extends React.Component {
             //if it is a slide, also add ID of slide
             presLocation += this.props.DeckTreeStore.selector.toJS().sid;// + '/';
         }
-        if (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.currentLang) {
-            presLocation += '?language=' + this.props.TranslationStore.currentLang;
+        if (this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage) {
+            presLocation += '?language=' + (this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage);
         }
         return presLocation;
     }
