@@ -122,7 +122,7 @@ class DeckTranslationsModal extends React.Component {
                   && !compareLanguageCodes(current, this.props.TranslationStore.originLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
-            }, []).sort((a, b) => a.text > b.text);
+            }, []).sort((a, b) => (a.text > b.text) ? 1 : -1);
         }
 
         let btnMessage = this.context.intl.formatMessage(messages.translate);
