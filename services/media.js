@@ -70,5 +70,13 @@ export default {
                     callback(err, null);
                 });
         }
+    },
+    read: (req, resource, params, config, callback) => {
+        if (resource === 'media.readCSV') {
+            rp.get({uri: params.url, proxy: ''}).then((res) => {
+               callback(null, res);
+            });
+        }
+
     }
 };

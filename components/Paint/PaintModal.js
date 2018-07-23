@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Divider, Dropdown, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import { Image as Img}  from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFile';
+import PaintModalStore from '../../stores/PaintModalStore';
 import { fabric } from 'fabric';
+//import rp from 'request-promise';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -206,6 +209,8 @@ class PaintModal extends React.Component {
             undoDisabled            : true,
             redoDisabled            : true
         };
+
+
 
     }
 
@@ -538,6 +543,18 @@ class PaintModal extends React.Component {
         return false;
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.PaintModalStore.toEdit){
+            this.handleOpen();
+            let str = nextProps.PaintModalStore.svg;
+            fabric.loadSVGFromString(str, (objects) => {
+                for (let i = 0; i < objects.length; i++){
+                    this.canvas.add(objects[i]).renderAll();
+                }
+            });
+        }
+    }
+
     render() {
         this.context.getUser().username;
         let submitButtonText = 'Add to Slide';
@@ -700,4 +717,9 @@ PaintModal.contextTypes = {
     getUser: PropTypes.func
 };
 
+PaintModal = connectToStores(PaintModal, [PaintModalStore], (context, props) => {
+    return {
+        PaintModalStore: context.getStore(PaintModalStore).getState()
+    };
+});
 export default PaintModal;
