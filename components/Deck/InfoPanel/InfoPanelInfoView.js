@@ -215,6 +215,9 @@ class InfoPanelInfoView extends React.Component {
             // put the current (but unavailable) language first
             languages.unshift(this.props.TranslationStore.currentLang);
         }
+        languages = languages.filter((elem, pos) => {
+            return languages.indexOf(elem) === pos;
+        });
         let languageOptions = languages.map((t) => ({
             text: getLanguageName(t) + (t === primaryLanguage ? ' (primary)' : ''),
             value: t,
