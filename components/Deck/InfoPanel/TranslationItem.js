@@ -32,7 +32,7 @@ class TranslationItem extends React.Component {
 
           <Button role="button" data-tooltip={text}
             onClick={this.directToTranslation.bind(this, href)}
-            aria-label={text} aria-required
+            aria-label={text}
             tabIndex="0" attached basic >
               {iconName === 'flag icon' ? <Icon name='flag' /> : <Flag name={flagName} />}{text}
           </Button>

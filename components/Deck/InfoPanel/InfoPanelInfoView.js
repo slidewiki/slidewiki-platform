@@ -301,7 +301,7 @@ class InfoPanelInfoView extends React.Component {
                             <div className="item">
                                 <Button role="button" data-tooltip="Add translation"
                                   onClick={this.addNodeTranslation.bind(this)}
-                                  aria-label="Add translation" aria-required
+                                  aria-label="Add translation"
                                   tabIndex="0" attached basic >
                                     {currentLangIconName === 'icon' ? <Icon name='flag' /> : <Flag name={currentLangIconName} />}
                                     {getLanguageName(this.props.TranslationStore.currentLang)}
