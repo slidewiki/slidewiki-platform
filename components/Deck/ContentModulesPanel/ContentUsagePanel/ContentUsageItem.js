@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 
@@ -8,7 +9,7 @@ class ContentUsageItem extends React.Component {
         const usingDeckLink = <NavLink
         href={'/deck/' + usingDeckId}>{this.props.usageItem.title} </NavLink>;
         const userLink = <NavLink
-        href={'/user/' + this.props.usageItem.user}>{this.props.usageItem.username} </NavLink>;
+        href={'/user/' + this.props.usageItem.user}>{this.props.usageItem.displayName || this.props.usageItem.username} </NavLink>;
         return (
         <div className="item">
             <div className="content">
@@ -26,7 +27,7 @@ class ContentUsageItem extends React.Component {
 }
 
 ContentUsageItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentUsageItem;

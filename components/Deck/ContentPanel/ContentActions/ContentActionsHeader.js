@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
-import ContentUtil from '../util/ContentUtil';
+import Util from '../../../common/Util';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
@@ -17,6 +18,12 @@ import cancelClick from '../../../../actions/slide/cancelClick';
 import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
 import {defineMessages} from 'react-intl';
+import TranslationStore from '../../../../stores/TranslationStore';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
+import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
+import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
+import changeLoadingState from '../../../../actions/translation/changeLoadingState';
+
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -33,6 +40,10 @@ class ContentActionsHeader extends React.Component {
             editButtonText:{
                 id: 'ContentActionsHeader.editButtonText',
                 defaultMessage:'Edit'
+            },
+            editButtonTextTranslation:{
+                id: 'ContentActionsHeader.editButtonTextTranslation',
+                defaultMessage:'Edit node translation'
             },
             editButtonAriaText:{
                 id: 'ContentActionsHeader.editButtonAriaText',
@@ -52,11 +63,21 @@ class ContentActionsHeader extends React.Component {
             },
             deleteAriaText:{
                 id: 'ContentActionsHeader.deleteAriaText',
-                defaultMessage:'Delete'
+                defaultMessage:'Delete slide'
             },
-
+            language:{
+                id: 'ContentActionsHeader.language',
+                defaultMessage:'Language'
+            },
+            translation:{
+                id: 'ContentActionsHeader.translation',
+                defaultMessage:'Translation'
+            },
+            loading:{
+                id: 'ContentActionsHeader.loading',
+                defaultMessage:'Loading'
+            },
         });
-
     }
 
 
@@ -89,7 +110,7 @@ class ContentActionsHeader extends React.Component {
         });
     }
     handleViewButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'view');
         this.context.executeAction(navigateAction, {
             url: nodeURL
         });
@@ -97,7 +118,7 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleEditButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
@@ -106,8 +127,9 @@ class ContentActionsHeader extends React.Component {
             });
         }
     }
+
     handleMarkdownEditButton(selector) {
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'markdownEdit');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
@@ -116,6 +138,7 @@ class ContentActionsHeader extends React.Component {
             });
         }
     }
+
     render() {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
@@ -129,19 +152,19 @@ class ContentActionsHeader extends React.Component {
         });
         const addSlideClass = classNames({
             'ui basic button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit'
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
         });
         const addDeckClass = classNames({
             'ui basic button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit'
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
         });
         const duplicateItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
         });
         const deleteItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
         });
         const red = {
             backgroundColor: 'red'
@@ -153,12 +176,13 @@ class ContentActionsHeader extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'ui basic button':true,
-                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
+                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
             }),
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
         let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
+        let currentlyEditingTranslation = (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage === this.props.TranslationStore.currentLang);
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -172,7 +196,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save
+                        Save{currentlyEditingTranslation ? ' translation' : ''}
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
@@ -212,12 +236,13 @@ class ContentActionsHeader extends React.Component {
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
                         <i className="icons">
-                            <i className="large blue edit icon"></i>
+                            <i className={'large blue ' + (currentlyEditingTranslation ? 'translate' : 'edit') + ' icon'}></i>
                             <i className=""></i>
                         </i>
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
 
                     </button>;
+
                 if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
                     markdownEditButton =
                         <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
@@ -258,6 +283,7 @@ class ContentActionsHeader extends React.Component {
 
         return (
                 <div className="ui two column grid">
+                    {this.props.TranslationStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
                     <div className="column computer tablet only">
                         <div className="ui left floated top attached buttons" >
                             {editButton}
@@ -268,6 +294,7 @@ class ContentActionsHeader extends React.Component {
                             {redoButton}
                         </div>
                     </div>
+                    <DeckTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
                     <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
                         {mobileMessage}
                     </div>
@@ -280,7 +307,7 @@ class ContentActionsHeader extends React.Component {
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="large icons">
-                                <i className="grey file text icon"></i>
+                                <i className=" file text icon"></i>
                                 <i className="inverted corner plus icon"></i>
                             </i>
 
@@ -302,7 +329,7 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="grey large copy icon"></i>
+                            <i className="grey large copy outline horizontally flipped icon"></i>
 
                         </button>
                         <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
@@ -310,7 +337,7 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="red large trash icon"></i>
+                            <i className="red large trash alternate icon"></i>
                         </button>
                         {/*
                           <button className="item ui small basic right attached disabled button">
@@ -327,16 +354,17 @@ class ContentActionsHeader extends React.Component {
     }
 }
 ContentActionsHeader.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default ContentActionsHeader;

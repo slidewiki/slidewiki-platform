@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { handleRoute, navigateAction} from 'fluxible-router';
@@ -851,8 +852,8 @@ class presentationBroadcast extends React.Component {
     }
 
     sendUsername() {
-        if (this.context && this.context.getUser() && this.context.getUser().username)
-            this.sendRTCMessage('newUsername', this.context.getUser().username, this.presenterID);
+        if (this.context && this.context.getUser() && (this.context.getUser().displayName || this.context.getUser().username))
+            this.sendRTCMessage('newUsername', (this.context.getUser().displayName || this.context.getUser().username), this.presenterID);
         else
             this.sendRTCMessage('newUsername', 'undefined');
     }
@@ -1038,8 +1039,8 @@ class presentationBroadcast extends React.Component {
 }
 
 presentationBroadcast.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 presentationBroadcast = handleRoute(presentationBroadcast);

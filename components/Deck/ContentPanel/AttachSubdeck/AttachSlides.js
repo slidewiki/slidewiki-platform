@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
@@ -297,7 +298,7 @@ class AttachSlides extends React.Component{
 }
 
 AttachSlides.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 AttachSlides = connectToStores(AttachSlides,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
     return {

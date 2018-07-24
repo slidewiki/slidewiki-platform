@@ -4,7 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckListStore from '../../stores/DeckListStore';
 import DeckViewPanel from '../Deck/ContentPanel/DeckModes/DeckViewPanel/DeckViewPanel';
 import CustomDate from '../Deck/util/CustomDate';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../common';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';
@@ -19,7 +19,7 @@ class DeckList extends React.Component {
             result =
                 decks_to_show.map((deck) => {
                     let deckDate = CustomDate.format(deck.timestamp, 'Do MMMM YYYY');
-                    let deckLanguage = ISO6391.getName(deck.language || 'en') || 'English';
+                    let deckLanguage = getLanguageName(deck.language || 'en') || 'English';
                     return (
                         <div className="ui vertical segment " key={'deck_meta' + deck._id}>
                             <div className="ui two column stackable grid">

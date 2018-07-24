@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic-ui-react';
@@ -263,15 +264,15 @@ class AttachSubdeckModal extends React.Component{
         }
 
         let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
-                                                     type="button" aria-label="Attach Slides"
+                                                     type="button" aria-label="Attach slides"
                                                      aria-hidden={this.state.modalOpen}
-                                                     basic icon onClick={this.handleOpen}
+                                                     basic onClick={this.handleOpen}
                                                      tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
             <Icon.Group size={this.props.buttonStyle.iconSize}>
-                <Icon className="grey" name="file text"/>
+                <Icon className="grey" name="file alternate outline"/>
                 <Icon className="corner black" name="attach"/>
             </Icon.Group>
-        </Button>} content='Attach Slides' on='hover'/>;
+        </Button>} content='Attach slides' on='hover'/>;
 
 
         return (
@@ -295,7 +296,7 @@ class AttachSubdeckModal extends React.Component{
                         className = "header">
 
                 <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
-                     Attach Slides
+                     Attach slides
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
@@ -327,7 +328,7 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DeckCard from './DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
@@ -39,7 +40,7 @@ class PublicUserDecks extends React.Component {
 }
 
 PublicUserDecks.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 PublicUserDecks = connectToStores(PublicUserDecks, [UserProfileStore], (context, props) => {
     return {
