@@ -1459,8 +1459,6 @@ class SlideContentEditor extends React.Component {
 
                     }
 
-                    console.log(contextMenuItems);
-
                     return {
                         // define the elements + functions of the menu
                         callback: function(key, options) {
@@ -1946,7 +1944,8 @@ class SlideContentEditor extends React.Component {
     }
     editImage(context, event, idContext){
         if ($('#' + idContext).find('img').length === 0) return;
-        this.context.executeAction(editImageWithSrc, $('#' + idContext).find('img')[0].src);
+        let src = $('#' + idContext).find('img')[0].src;
+        this.context.executeAction(editImageWithSrc, src);
 
     }
     bringToFront(context, event, idContext){
