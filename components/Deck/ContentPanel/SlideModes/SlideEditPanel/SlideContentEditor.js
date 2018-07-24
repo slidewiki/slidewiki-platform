@@ -1621,7 +1621,7 @@ class SlideContentEditor extends React.Component {
                         // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
                         let d = new Date();
                         let time = d.getTime();
-                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '?' + time.toString() + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + /* '?' + time.toString() +*/ '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                         this.refreshCKeditor();
                         //this.resize();
                         this.resizeDrag();
