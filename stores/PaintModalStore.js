@@ -23,7 +23,6 @@ class PaintModalStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.svg = state.svg;
         this.svg = state.toEdit;
         this.url = state.url;
     }
@@ -36,9 +35,15 @@ class PaintModalStore extends BaseStore {
     }
 
     finishEdition() {
-        this.svg = '';
         this.toEdit = false;
         this.url = '';
+        this.emitChange();
+    }
+
+    openPicture(params) {
+        this.svg = '';
+        this.toEdit = false;
+        this.url = params.url;
         this.emitChange();
     }
 
@@ -48,7 +53,8 @@ PaintModalStore.storeName = 'PaintModalStore';
 
 PaintModalStore.handlers =  {
     'OPEN_WITH_SRC': 'openWithSrc',
-    'FINISH_EDITION': 'finishEdition'
+    'FINISH_EDITION': 'finishEdition',
+    'OPEN_PICTURE': 'openPicture'
 };
 
 export default PaintModalStore;

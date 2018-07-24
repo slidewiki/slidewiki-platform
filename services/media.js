@@ -74,10 +74,9 @@ export default {
     read: (req, resource, params, config, callback) => {
         if (resource === 'media.readCSV') {
             rp.get({uri: params.url, proxy: ''}).then((res) => {
-               callback(null, res);
+                callback(null, res);
             });
         }
-
     },
     update: (req, resource, params, body, config, callback) => {
         if(resource === 'media.updateGraphic') {
