@@ -10,5 +10,8 @@ export default function editImageWithSrc(context, src, done) {
             context.dispatch('OPEN_WITH_SRC', {url: url, svg: res});
             done();
         });
+    } else {
+        context.dispatch('OPEN_PICTURE', {url: url});
+        done();
     }
 }

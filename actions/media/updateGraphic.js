@@ -34,8 +34,11 @@ export default function updateGraphic(context, payload, done) {
             }
         }
         else {
-            context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+            context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                payload.svg = res;
+                context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                done();
+            });
         }
-        done();
     });
 }
