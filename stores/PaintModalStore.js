@@ -5,14 +5,18 @@ class PaintModalStore extends BaseStore {
         super(dispatcher);
         this.svg = '';
         this.toEdit = false;
+        this.url = '';
     }
     destructor() {
         this.svg = '';
+        this.toEdit = false;
+        this.url = '';
     }
     getState() {
         return {
             svg: this.svg,
-            toEdit: this.toEdit
+            toEdit: this.toEdit,
+            url: this.url
         };
     }
     dehydrate() {
@@ -21,11 +25,20 @@ class PaintModalStore extends BaseStore {
     rehydrate(state) {
         this.svg = state.svg;
         this.svg = state.toEdit;
+        this.url = state.url;
     }
 
-    openWithSrc(svg) {
-        this.svg = svg;
+    openWithSrc(params) {
+        this.svg = params.svg;
         this.toEdit = true;
+        this.url = params.url;
+        this.emitChange();
+    }
+
+    finishEdition() {
+        this.svg = '';
+        this.toEdit = false;
+        this.url = '';
         this.emitChange();
     }
 
@@ -34,7 +47,8 @@ class PaintModalStore extends BaseStore {
 PaintModalStore.storeName = 'PaintModalStore';
 
 PaintModalStore.handlers =  {
-    'OPEN_WITH_SRC': 'openWithSrc'
+    'OPEN_WITH_SRC': 'openWithSrc',
+    'FINISH_EDITION': 'finishEdition'
 };
 
 export default PaintModalStore;
