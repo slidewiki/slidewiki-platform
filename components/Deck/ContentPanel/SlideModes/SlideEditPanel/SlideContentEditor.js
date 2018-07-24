@@ -1453,9 +1453,9 @@ class SlideContentEditor extends React.Component {
                     };
 
                     // In case there is an image, provide option to edit it.
-                    let imgChildren = $('#' + id.toString()).has('img').length;
+                    let imgChildren = $('#' + id.toString()).has('img').length || $('#' + id.toString()).has('svg').length;
                     if (imgChildren) {
-                        contextMenuItems['editImage'] = {name: 'Edit Image', icon: 'edit'};
+                        contextMenuItems.editImage = {name: 'Edit Image', icon: 'edit'};
 
                     }
 
@@ -1615,13 +1615,20 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('aria-hidden','true');
                         $('.pptx2html').attr('alt',' ');
                     } else{
-                        let str = 'img[src="'+ nextProps.MediaStore.file.url +'"]';
-                        let oldElems = $(str);
-                        oldElems.remove();
-                        // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
-                        let d = new Date();
-                        let time = d.getTime();
-                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + /* '?' + time.toString() +*/ '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                        if(nextProps.MediaStore.file.svg) {
+                            let str = 'div[svg-source="'+ nextProps.MediaStore.file.url +'"]';
+                            let oldElems = $(str);
+                            oldElems.remove();
+                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+                        } else {
+                            console.log(nextProps.MediaStore.file);
+                            // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
+                            let d = new Date();
+                            let time = d.getTime();
+                            if (nextProps.MediaStore.file.url){
+                                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '?' + time.toString() + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                            }
+                        }
                         this.refreshCKeditor();
                         //this.resize();
                         this.resizeDrag();
@@ -1943,9 +1950,15 @@ class SlideContentEditor extends React.Component {
         }
     }
     editImage(context, event, idContext){
-        if ($('#' + idContext).find('img').length === 0) return;
-        let src = $('#' + idContext).find('img')[0].src;
-        this.context.executeAction(editImageWithSrc, src);
+        let contains_img = $('#' + idContext).find('img').length;
+        if (contains_img) {
+            let src = $('#' + idContext).find('img')[0].src;
+            this.context.executeAction(editImageWithSrc, src);
+        } else {
+            let src = $('#' + idContext).attr('svg-source');
+            this.context.executeAction(editImageWithSrc, src);
+        }
+
 
     }
     bringToFront(context, event, idContext){

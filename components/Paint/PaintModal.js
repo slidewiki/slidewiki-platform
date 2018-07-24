@@ -565,13 +565,23 @@ class PaintModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        let src = nextProps.PaintModalStore.url;
+        let ext = null;
+        if (src) ext = src.split('.')[src.split('.').length - 1];
         if(nextProps.PaintModalStore.toEdit){
             this.handleOpen();
             let str = nextProps.PaintModalStore.svg;
             fabric.loadSVGFromString(str, (objects) => {
                 for (let i = 0; i < objects.length; i++){
-                    this.canvas.add(objects[i]).renderAll();
+                    this.canvas.add(objects[i]);
                 }
+                this.canvas.renderAll();
+            });
+        } else if ( ext === 'png' || ext === 'jpg' || ext === 'jpeg' ) {
+            this.handleOpen();
+            fabric.Image.fromURL(nextProps.PaintModalStore.url, (oImg) => {
+                this.canvas.add(oImg);
+                this.canvas.renderAll();
             });
         }
     }
