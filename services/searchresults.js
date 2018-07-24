@@ -50,7 +50,10 @@ function getUsers(userIdsSet){
     // request usernames of user ids found
     for(let userId of userIdsSet){
         userPromises.push(rp.get({uri: `${Microservices.user.uri}/user/${userId}`, json: true}).then((userRes) => {
-            usernames[userId] = userRes.username;
+            usernames[userId] = { 
+                displayName: userRes.displayName || userRes.username, 
+                username: userRes.username
+            };
         }).catch( (err) => {
             usernames[userId] = 'Unknown user';
         }));
@@ -184,8 +187,9 @@ export default {
                     response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
-                        returnItem.user.username = usernames[returnItem.user.id];
-                        returnItem.user.link = '/user/' + returnItem.user.username;
+                        let user = usernames[returnItem.user.id];
+                        returnItem.user.username = user.displayName;
+                        returnItem.user.link = '/user/' + user.username;
 
                         if(returnItem.kind === 'Deck'){
 
