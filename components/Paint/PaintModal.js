@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Divider, Dropdown, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import { Image as Img}  from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFile';
+import updateGraphic from '../../actions/media/updateGraphic';
+import finishPaintEdition from '../../actions/paint/finishPaintEdition';
+import PaintModalStore from '../../stores/PaintModalStore';
 import { fabric } from 'fabric';
+//import rp from 'request-promise';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -206,6 +211,8 @@ class PaintModal extends React.Component {
             undoDisabled            : true,
             redoDisabled            : true
         };
+
+        this.context.executeAction(finishPaintEdition);
 
     }
 
@@ -522,20 +529,61 @@ class PaintModal extends React.Component {
         e.preventDefault();
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
 
-        let payload = {
-            type: 'image/svg+xml',
-            license: this.state.licenseValue,
-            copyrightHolder: this.state.copyrightHolder,
-            title: this.state.title || 'Image',
-            text: this.state.alt,
-            filesize: this.state.file.size,
-            filename: 'Image.svg',
-            bytes: this.state.file.url
-        };
+        let paintModalState = this.props.PaintModalStore;
 
-        this.context.executeAction(uploadMediaFiles, payload);
+        if(!paintModalState.toEdit) {
+            let payload = {
+                type: 'image/svg+xml',
+                license: this.state.licenseValue,
+                copyrightHolder: this.state.copyrightHolder,
+                title: this.state.title || 'Image',
+                text: this.state.alt,
+                filesize: this.state.file.size,
+                filename: 'Image.svg',
+                bytes: this.state.file.url
+            };
+
+            this.context.executeAction(uploadMediaFiles, payload);
+        } else {
+            let payload = {
+                url: this.props.PaintModalStore.url,
+                type: 'image/svg+xml',
+                license: this.state.licenseValue,
+                copyrightHolder: this.state.copyrightHolder,
+                title: this.state.title || 'Image',
+                text: this.state.alt,
+                filesize: this.state.file.size,
+                filename: 'Image.svg',
+                bytes: this.state.file.url
+            };
+
+            this.context.executeAction(updateGraphic, payload);
+        }
+
         this.handleClose();
         return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let src = nextProps.PaintModalStore.url;
+        let ext = null;
+        if (src) ext = src.split('.')[src.split('.').length - 1];
+        if(nextProps.PaintModalStore.toEdit){
+            this.handleOpen();
+            let str = nextProps.PaintModalStore.svg;
+            fabric.loadSVGFromString(str, (objects) => {
+                for (let i = 0; i < objects.length; i++){
+                    this.canvas.add(objects[i]);
+                }
+                this.canvas.renderAll();
+            });
+        } else if ( ext === 'png' || ext === 'jpg' || ext === 'jpeg' ) {
+            this.handleOpen();
+            fabric.Image.fromURL(nextProps.PaintModalStore.url, (oImg) => {
+                this.canvas.add(oImg);
+                this.canvas.renderAll();
+            });
+        }
     }
 
     render() {
@@ -700,4 +748,9 @@ PaintModal.contextTypes = {
     getUser: PropTypes.func
 };
 
+PaintModal = connectToStores(PaintModal, [PaintModalStore], (context, props) => {
+    return {
+        PaintModalStore: context.getStore(PaintModalStore).getState()
+    };
+});
 export default PaintModal;
