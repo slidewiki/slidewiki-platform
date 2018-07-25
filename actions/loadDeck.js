@@ -190,6 +190,20 @@ export default function loadDeck(context, payload, done) {
                 }
             },
             (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadSimilarContentsSelector, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadSimilarContents, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
                 //if user is logged is and root deck changed load forks of this deck owned by the user
                 if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
                     context.executeAction(loadForks, {
