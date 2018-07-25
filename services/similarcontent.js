@@ -22,12 +22,12 @@ export default {
                     contents.push({
                         'deckId': deck.id,
                         'title': deck.title,
-                        'firstSlideId': '1111',   //TODO deck.firstSlide,
-                        'author': 'not_provided', //TODO deck.displayName,
-                        'authorId': '1', //TODO deck.authorId,
-                        'date':'27/01/2017' , //TODO deck.date
-                        'liked': '0', //TODO deck.likes
-                        'downloaded': '0' //TODO deck.downloads
+                        'firstSlideId': deck.firstSlide,   //TODO deck.firstSlide,
+                        'author': deck.author, //TODO deck.displayName,
+                        'authorId': deck.authorId, //TODO deck.authorId,
+                        'date': deck.date , //TODO deck.date
+                        'liked': deck.likes, //TODO deck.likes
+                        'downloaded': deck.downloads //TODO deck.downloads
                     });
                 }
 
