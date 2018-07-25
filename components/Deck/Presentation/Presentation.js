@@ -1,37 +1,24 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
-//import ResizeAware from 'react-resize-aware';
-import {NavLink} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
+import PropTypes from 'prop-types';
+import { handleRoute } from 'fluxible-router';
 import PresentationSlide from './PresentationSlide';
-import DeckTreeStore from '../../../stores/DeckTreeStore';
+import { connectToStores } from 'fluxible-addons-react';
+import { Microservices } from '../../../configs/microservices';
 import PresentationStore from '../../../stores/PresentationStore';
 
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
 
-let playerCss = {
-    height: '100%',
-    position: 'absolute',
-    top: '0',
-};
-
-let clearStyle = {
-    clear: 'both'
-};
-
-
 class Presentation extends React.Component{
     constructor(props){
         super(props);
-        this.playerCss = playerCss;
-        this.slides = [];
+        this.playerCss = { height: '100%', position: 'absolute', top: '0' };
+        this.clearStyle = { clear: 'both' };
         this.startingSlide = this.props.PresentationStore.selector.sid;
-        this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
-
+        this.secret = props.currentRoute.query.secret;
+        this.id = props.currentRoute.query.id;
     }
 
     componentDidMount(){
@@ -40,10 +27,9 @@ class Presentation extends React.Component{
 
             //remove existing tabindices
             $('[style*="absolute"]').each(function () {
-                if($(this).attr('tabindex') !== 0)
-                {
-                    $(this).attr('tabindex', 0);
-                }
+                let el = $(this);
+                if(el.attr('tabindex') !== 0)
+                    el.attr('tabindex', 0);
             });
             //add tabindices to all children in absolute elements
             $('[style*="absolute"]').each(function () {
@@ -77,15 +63,24 @@ class Presentation extends React.Component{
             }
 
             window.location.hash = '#slide-' + this.startingSlide;
+
+            let multiplexFileToLoad = (this.secret) ? '/custom_modules/reveal_multiplex/master.js' : '/custom_modules/reveal_multiplex/client.js' ;
+            multiplexFileToLoad = (this.id) ? multiplexFileToLoad : '' ;
+            let multiplexConfig = (this.secret) ? {secret: this.secret, id: this.id} : {secret: null, id: this.id};
+            multiplexConfig.url = Microservices.webrtc.uri;
+            multiplexConfig = (this.id) ? multiplexConfig : {};
+            let dependencySocketIO = (this.id) ? Microservices.webrtc.uri.replace('http:','').replace('https:','') + '/socket.io/socket.io.js' : '' ;
             Reveal.initialize({
                 width: pptxwidth,
-			         height: pptxheight,
+                height: pptxheight,
                 // margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
                 viewDistance: 2,
                 dependencies: [
+                    { src: dependencySocketIO, async: true },
+                    { src: multiplexFileToLoad, async: true },
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
                     // { src: '/custom_modules/reveal.js/plugin/reveal.js-toolbar/toolbar.js', async: true},
@@ -142,6 +137,7 @@ class Presentation extends React.Component{
                     openOnInit: false,
                     loadIcons: true
                 },
+                multiplex: multiplexConfig
             });
 
 
@@ -181,7 +177,7 @@ class Presentation extends React.Component{
         if(process.env.BROWSER){
             let pptxwidth;
             let pptxheight;
-            if($('.present > .pptx2html').html()){
+            if( $('.present > .pptx2html').html() ){
                 pptxwidth = $('.present > .pptx2html').width();
                 pptxheight = $('.present > .pptx2html').height();
             } else {
@@ -223,36 +219,26 @@ class Presentation extends React.Component{
 
         }
     }
-    componentDidUpdate(){
 
-    }
     render(){
 
         // Load the theme stylesheet
         let styleName = 'default';
-        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined')
             styleName = this.props.PresentationStore.theme;
-        }
-        //console.log('styleName', styleName);
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme they will be legacy decks:
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')//if none of above yield a theme they will be legacy decks:
             styleName = 'white';
-        }
         let style = require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        //console.log(style);
-        this.slides = this.getSlides();
+        let slides = this.getSlides();
         return(
             //<ResizeAware ref='container' id='container'>
             <div ref='container' id='container'>
-                <div>
-                    <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                        <div className={['slides', style.slides].join(' ')}>
-            			     	{this.slides}
-            			      </div>
-                    </div>
-                    <br style={clearStyle} />
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                    <div className={['slides', style.slides].join(' ')}>
+      			     	     {slides}
+        			      </div>
                 </div>
+                <br style={this.clearStyle} />
             </div>
             //</ResizeAware>
         );
@@ -261,36 +247,23 @@ class Presentation extends React.Component{
     getSlides(){
         let slides = this.props.PresentationStore.content;
 
-        let returnList = [];
+        let html = <section />;
         if(slides){
-            for (let i = 0; i < slides.length; i++) {
-                let slide = slides[i];
-                let notes = '';
-                if(slide.speakernotes){
-                    notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
-                }
-                let content = slide.content.replace(' src=', ' data-src=') + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
-            }
-            return returnList;
-
+            html = slides.map((slide) => {
+                let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
+                return <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+            });
         }
-        else{
-            return (<section />);
-        }
+        return html;
     }
 
 }
-
-Presentation.contextTypes = {
-    executeAction: PropTypes.func.isRequired
-};
 
 Presentation = connectToStores(Presentation, [PresentationStore], (context, props) => {
     return {
         PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
-
+Presentation = handleRoute(Presentation);//NOTE add currentRoute attribute to constructor props
 
 export default Presentation;
