@@ -19,6 +19,38 @@ import { categories } from '../../../actions/user/userprofile/chooseAction';
 let MediaQuery = require ('react-responsive');
 
 class UserProfile extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.messages = defineMessages({
+            exchangePicture: {
+                id: 'UserProfile.exchangePicture',
+                defaultMessage: 'Exchange picture'
+            },
+            alterData: {
+                id: 'UserProfile.alterData',
+                defaultMessage: 'Alter my personal data'
+            },
+            changePassword: {
+                id: 'UserProfile.changePassword',
+                defaultMessage: 'Change password'
+            },
+            deactivateAccount: {
+                id: 'UserProfile.deactivateAccount',
+                defaultMessage: 'Deactivate Account'
+            },
+            notImplemented: {
+                id: 'UserProfile.notImplemented',
+                defaultMessage: 'This feature is curently not implemented. Please wait for future releases of SlideWiki'
+            },
+            exchangePicture: {
+                id: 'UserProfile.exchangePicture',
+                defaultMessage: 'Exchange picture'
+            },
+
+        });
+    }
+
     componentDidMount() {}
 
     componentDidUpdate() {
@@ -153,10 +185,7 @@ class UserProfile extends React.Component {
 
                   <div className="ui secondary segment">
                       <h3>
-                        <FormattedMessage
-                          id='UserProfile.exchangePicture'
-                          defaultMessage='Exchange picture'
-                        />
+                        {this.context.intl.formatMessage(this.messages.exchangePicture)}
                       </h3>
                   </div>
                   <div className="ui segment">
@@ -168,10 +197,7 @@ class UserProfile extends React.Component {
 
                   <div className="ui secondary segment">
                       <h3>
-                        <FormattedMessage
-                          id='UserProfile.alterData'
-                          defaultMessage='Alter my personal data'
-                        />
+                        {this.context.intl.formatMessage(this.messages.alterData)}
                       </h3>
                   </div>
                   <div className="ui segment">
@@ -187,10 +213,7 @@ class UserProfile extends React.Component {
                 <div className="ui segments">
                   <div className="ui secondary segment">
                     <h3>
-                      <FormattedMessage
-                        id='UserProfile.changePassword'
-                        defaultMessage='Change password'
-                      />
+                      {this.context.intl.formatMessage(this.messages.changePassword)}
                     </h3>
                   </div>
 
@@ -205,10 +228,7 @@ class UserProfile extends React.Component {
             <div className="ui segments">
               <div className="ui red inverted segment">
                 <h3>
-                  <FormattedMessage
-                    id='UserProfile.deactivateAccount'
-                    defaultMessage='Deactivate Account'
-                  />
+                  {this.context.intl.formatMessage(this.messages.deactivateAccount)}
                 </h3>
               </div>
 
@@ -230,7 +250,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroups() {
-        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} currentUsergroup={this.props.UserProfileStore.currentUsergroup} />);
     }
 
     displayGroupedit() {
@@ -239,10 +259,7 @@ class UserProfile extends React.Component {
 
     notImplemented() {
         return (<h3>
-          <FormattedMessage
-            id='UserProfile.notImplemented'
-            defaultMessage='This feature is curently not implemented. Please wait for future releases of SlideWiki'
-          />
+          {this.context.intl.formatMessage(this.messages.notImplemented)}
         </h3>);
     }
 

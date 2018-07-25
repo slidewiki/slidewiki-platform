@@ -15,6 +15,53 @@ import updateTrap from '../../actions/loginModal/updateTrap';
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
 
+    constructor(props){
+        super(props);
+
+        this.messages = defineMessages({
+            signin: {
+                id: 'header.signin',
+                defaultMessage: 'Sign In'
+            },
+            mobile: {
+                id: 'header.signin.mobile',
+                defaultMessage: 'Sign in'
+            },
+            mydecksMobile: {
+                id: 'header.mydecks.mobile',
+                defaultMessage: 'Decks'
+            },
+            mygroupsMobile: {
+                id: 'header.mygroups.mobile',
+                defaultMessage: 'Groups'
+            },
+            mysettingsMobile: {
+                id: 'header.mysettings.mobile',
+                defaultMessage: 'Settings'
+            },
+            mynotificationsMobile: {
+                id: 'header.mynotifications.mobile',
+                defaultMessage: 'Notifications'
+            },
+            logoutMobile: {
+                id: 'header.logout.mobile',
+                defaultMessage: 'Logout'
+            },
+            addDeck: {
+                id: 'header.addDeck',
+                defaultMessage: 'Add deck'
+            },
+            menuHomepage: {
+                id: 'header.menu.homepage',
+                defaultMessage: 'Homepage'
+            },
+            menuAddDeck: {
+                id: 'header.menu.addDeck',
+                defaultMessage: 'Add Deck'
+            }
+        });
+    }
+
     componentDidMount() {
         $(this.refs.menubar).sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
         $(this.refs.languagebar).sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
@@ -55,10 +102,10 @@ class Header extends React.Component {
 
     render() {
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>
-            <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
+            {this.context.intl.formatMessage(this.messages.signin)}
             </button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/>
-            <FormattedMessage id='header.signin.mobile' defaultMessage='Sign in'/>
+            {this.context.intl.formatMessage(this.messages.mobile)}
             </a>;
         let notification_locale = '';
 
@@ -66,19 +113,19 @@ class Header extends React.Component {
             loginButton = <UserMenuDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
-              <FormattedMessage id='header.mydecks.mobile' defaultMessage='Decks'/>
+              {this.context.intl.formatMessage(this.messages.mydecksMobile)}
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>
-              <FormattedMessage id='header.mygroups.mobile' defaultMessage='Groups'/>
+              {this.context.intl.formatMessage(this.messages.mygroupsMobile)}
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>
-              <FormattedMessage id='header.mysettings.mobile' defaultMessage='Settings'/>
+              {this.context.intl.formatMessage(this.messages.mysettingsMobile)}
               </NavLink>
               <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>
-              <FormattedMessage id='header.mynotifications.mobile' defaultMessage='Notifications'/>
+              {this.context.intl.formatMessage(this.messages.mynotificationsMobile)}
               </NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>
-              <FormattedMessage id='header.logout.mobile' defaultMessage='Logout'/>
+              {this.context.intl.formatMessage(this.messages.logoutMobile)}
               </a>
             </div>);
             notification_locale = '';
@@ -101,7 +148,7 @@ class Header extends React.Component {
                                 <div className="item">
                                   <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button" role="button">
                                       <i className="right plus icon"></i>
-                                      <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
+                                      {this.context.intl.formatMessage(this.messages.addDeck)}
                                   </NavLink>
                                 </div>
                                 {notification_locale}
@@ -118,10 +165,10 @@ class Header extends React.Component {
                     </div>
                     <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                         <NavLink className="item" href='/'>
-                            <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
+                            <i className="home icon"/>{this.context.intl.formatMessage(this.messages.menuHomepage)}
                         </NavLink>
                         <NavLink className="item" routeName="addDeck">
-                            <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
+                            <i className="add icon"/>{this.context.intl.formatMessage(this.messages.menuAddDeck)}
                         </NavLink>
                         <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
                             <i className="caret right icon"/>
@@ -145,7 +192,8 @@ class Header extends React.Component {
 
 Header.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    getUser: PropTypes.func
+    getUser: PropTypes.func,
+    intl: React.PropTypes.object.isRequired
 };
 
 Header = connectToStores(Header, [UserProfileStore], (context, props) => {

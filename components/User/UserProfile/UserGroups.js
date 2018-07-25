@@ -5,6 +5,7 @@ import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import deleteUsergroup from '../../../actions/user/userprofile/deleteUsergroup';
 import leaveUsergroup from '../../../actions/user/userprofile/leaveUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import GroupDetailsModal from '../../Deck/ContentPanel/DeckModes/DeckEditPanel/GroupDetailsModal';
 
 class UserGroups extends React.Component {
     constructor(props){
@@ -44,6 +45,10 @@ class UserGroups extends React.Component {
             groupDeletion: {
                 id: 'UserGroups.groupDeletion',
                 defaultMessage: 'Group deletion',
+            },
+            groupDetails: {
+              id: 'UserGroups.groupDetails',
+              defaultMessage: 'Group details',
             },
             groupSettings: {
                 id: 'UserGroups.groupSettings',
@@ -99,7 +104,7 @@ class UserGroups extends React.Component {
 
     handleClickOnEditGroup(e) {
         e.preventDefault();
-        // console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
+        console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
 
         const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
@@ -108,7 +113,7 @@ class UserGroups extends React.Component {
             return group._id.toString() === groupid;
         });
 
-        // console.log('handleClickOnEditGroup: use group', group);
+        console.log('handleClickOnEditGroup: use group', group);
 
         this.context.executeAction(updateUsergroup, {group: group, offline: false});
 
@@ -156,6 +161,21 @@ class UserGroups extends React.Component {
         });
     }
 
+    handleClickOnGroupDetails(e) {
+        e.preventDefault();
+
+        const action = e.target.attributes.name.value;  //eg. viewGroup_2
+        const groupid = action.split('_')[1];
+
+        let group = this.props.groups.find((group) => {
+            return group._id.toString() === groupid;
+        });
+
+        console.log('handleClickOnGroupDetails: use group', group);
+
+        this.context.executeAction(updateUsergroup, {group: group, offline: false, showDetails: true});
+    }
+
     render() {
         let items = [];
         // console.log('render userGroups:', this.props.userid, this.props.groups);
@@ -189,13 +209,23 @@ class UserGroups extends React.Component {
                                   </button>
                               </div>
                             ) : (
-                              <button className="ui large basic icon button"
-                                  data-tooltip={this.context.intl.formatMessage(this.messages.groupLeave)}
-                                  aria-label={this.context.intl.formatMessage(this.messages.groupLeave)}
-                                  name={'leaveGroup_' + group._id}
-                                  onClick={this.handleClickOnLeaveGroup.bind(this)} >
-                                <i className="remove icon" name={'leaveGroup_' + group._id} ></i>
-                              </button>
+                              <div>
+                                <button className="ui large basic icon button"
+                                    data-tooltip={this.context.intl.formatMessage(this.messages.groupLeave)}
+                                    aria-label={this.context.intl.formatMessage(this.messages.groupLeave)}
+                                    name={'leaveGroup_' + group._id}
+                                    onClick={this.handleClickOnLeaveGroup.bind(this)} >
+                                  <i className="remove icon" name={'leaveGroup_' + group._id} ></i>
+                                </button>
+
+                                <button className="ui large basic icon button"
+                                    data-tooltip={this.context.intl.formatMessage(this.messages.groupDetails)}
+                                    aria-label={this.context.intl.formatMessage(this.messages.groupDetails)}
+                                    name={'viewGroup_' + group._id}
+                                    onClick={this.handleClickOnGroupDetails.bind(this)} >
+                                  <i className="eye icon" name={'viewGroup_' + group._id} ></i>
+                                </button>
+                              </div>
                             )}
 
                         </div>
@@ -227,6 +257,8 @@ class UserGroups extends React.Component {
               {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
 
               {items}
+
+              <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.currentUsergroup} show={this.props.status === 'details'} />
             </div>
         );
     }

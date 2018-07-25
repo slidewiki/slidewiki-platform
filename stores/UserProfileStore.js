@@ -331,10 +331,16 @@ class UserProfileStore extends BaseStore {
 
     updateUsergroup(group) {
         this.currentUsergroup = group;
-        // console.log('UserProfileStore: updateUsergroup', group);
+        console.log('UserProfileStore: updateUsergroup', group);
         this.saveUsergroupError = '';
         this.deleteUsergroupError = '';
+        if (group.details) {
+            this.usergroupsViewStatus = 'details';
+        }
         this.emitChange();
+        if (group.details) {
+            this.usergroupsViewStatus = '';
+        }
     }
 
     saveUsergroupFailed(error) {
@@ -426,6 +432,11 @@ class UserProfileStore extends BaseStore {
         this.showDeactivateAccountModal = false;
         this.emitChange();
     }
+
+    hideUserGroupModal() {
+        this.usergroupsViewStatus = '';
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -472,7 +483,8 @@ UserProfileStore.handlers = {
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
     'SAVE_USERPROFILE_START': 'saveProfileStart',
     'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
-    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal'
+    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal',
+    'HIDE_GROUP_DETAILS_MODAL': 'hideUserGroupModal'
 };
 
 export default UserProfileStore;

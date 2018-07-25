@@ -51,6 +51,9 @@ class GroupDetailsModal extends React.Component {
     }
 
     render() {
+        if (!this.props.group || !this.props.group.creator)
+            return <div></div>;
+
         let members = [];
         //first the creator
         let optionalText = (this.props.group.creator.organization || this.props.group.creator.country) ?
