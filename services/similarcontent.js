@@ -14,6 +14,7 @@ export default {
         if(resource === 'similarcontent.list'){
             /*********connect to microservices*************/
             let numberReco = 5; //Number of recommendations to be retrieved from the service
+            console.log('similarcontent.list:'+Microservices.recommender.uri+'/deckRecommendation/'+args.sid+'?numberReco='+numberReco);
             rp.get({uri: Microservices.recommender.uri+'/deckRecommendation/'+args.sid+'?numberReco='+numberReco}).then((res) => {
 
                 let recommendations = JSON.parse(res);
