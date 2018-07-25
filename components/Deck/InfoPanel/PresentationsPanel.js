@@ -7,9 +7,12 @@ import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ContentStore from '../../../stores/ContentStore';
 import {isLocalStorageOn} from '../../../common.js';
 import ReactList from 'react-list';
-import { Icon, Button, Popup, Grid, Divider} from 'semantic-ui-react';
+import { Icon, Button, Popup, Grid, Divider, Input} from 'semantic-ui-react';
+import { Microservices } from '../../../configs/microservices';
+import {isEmpty} from '../../../common';
 
 class PresentationsPanel extends React.Component {
+
     getPresentationHref(){
         let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
         if(!this.props.ContentStore.selector.subdeck){
@@ -30,12 +33,13 @@ class PresentationsPanel extends React.Component {
           <Grid.Column width={8}>
             <Button icon labelPosition="left" onClick={this.openPRModal.bind(this)} aria-label="Create a presentation room, beta"><Icon name="record" size="large"/> Presentation Room</Button>
             <br/><br/>
-            <p>This will immediately create a presentation room, redirect you to the room and hand you a link to invite other people. Attendees will hear your voice, have a one way chat as well as a live subtitle. Such rooms are always public and listed at the deck.</p>
+            <p style={{textAlign: 'justify'}}>This will immediately create a <i>Presentation Room</i>, open the room as a new tab and hand you a link to invite attendees. Partcipants will hear your voice, have a one way chat as well as a live subtitle. <i>Presentation Rooms</i> are always public and listed at the deck.</p>
+            <p style={{textAlign: 'justify'}}>Please test that a <i>Presentation Room</i> is working for you, as we encountered that <i>Presentation Rooms</i> are currently not working on strange network setups.</p>
           </Grid.Column>
           <Grid.Column width={8}>
             <Button icon labelPosition="left" onClick={this.openFAModal.bind(this)} aria-label="Create a follow along, beta"><Icon name="share alternate" size="large"/> Follow Along</Button>
             <br/><br/>
-            <p>This will create a link and a pin with wich you can schedule a live session and invite attendees before hand. Follow alongs only support to share the presentation progress, but not your voice. A follow along may be only used if everyone is in the same room.</p>
+            <p style={{textAlign: 'justify'}}>This will create two links with wich you can schedule a <i>Follow Along</i> and invite attendees before hand. <i>Follow Alongs</i> only support to share the presentation progress, but not your voice. A follow along may only be used if everyone is in the same room.</p>
           </Grid.Column>
         </Grid>;
         if(process.env.BROWSER){
@@ -44,6 +48,7 @@ class PresentationsPanel extends React.Component {
                 titleText: 'Choose a session type',
                 html: '<div id="session-modal"></div>',
                 showCancelButton: true,
+                cancelButtonText: 'Close',
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 width: '40rem',
@@ -61,29 +66,90 @@ class PresentationsPanel extends React.Component {
             showCancelButton: true,
             confirmButtonText: 'Next',
             allowOutsideClick: false
-        }).then((roomName) => {
-            window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
+        }).then((result) => {
+            if(!isEmpty(result.dismiss)){
+                return;
+            } else if (!isEmpty(result.value))
+                window.open('/presentationbroadcast?room=' + result.value + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
+            else
+              swal({title: 'Please enter a valid room name', showConfirmButton: false, timer: 2000});
         }).catch((e) => {return true;});
     }
 
     openFAModal(){
         swal({
-            titleText: 'Follow Along credentials & instructions',
-            text: '',
-            showCancelButton: true,
+            titleText: 'Follow Along links & instructions',
+            html: '<div id="session-modal"></div>',
             confirmButtonText: 'Okay',
             allowOutsideClick: false,
             width: '50rem',
             onOpen: () => {
                 swal.showLoading();
-                $.getJSON('https://reveal-js-multiplex-ccjbegmaii.now.sh/token').done((data) => {
+                $.get(Microservices.webrtc.uri + '/token').done((data) => {
                     console.log(data);
+                    let masterLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId + '&secret=' + data.secret;
+                    let slaveLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId;
+                    let modalContent = <div id='masterSlaveText'>
+                      <p>This is the URL for the presenter of the <i>Follow Along</i>. Only the presenter should use this URL and keep it secret.</p>
+                      <Input id='masterLinkInput' fluid defaultValue={masterLink} labelPosition='right' label={<Button id='masterLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, masterLink, '#masterLink')}> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#masterLinkInput').select()}/>
+                      <br/>
+                      <p>This is the URL intended for sharing the <i>Follow Along</i> with others. This URL may be published.</p>
+                      <Input id='slaveLinkInput' fluid defaultValue={slaveLink} labelPosition='right' label={<Button id='slaveLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, slaveLink, '#slaveLink')}> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#slaveLinkInput').select()}/>
+                      <br/>
+                      <p>Please keep both URLs safe until you finished your session. If a URL is lost you must create a new URL pair, as these URLs must match each other.</p>
+                    </div>;
+                    ReactDOM.render(modalContent, document.getElementById('session-modal'));
+                    swal.hideLoading();
                 }).fail((jqXHR, textStatus, error) => {
                     console.log(textStatus);
                 });
             }
         }).catch((e) => {return true;});
+
+        function copyURLToClipboardAndIndicate(link, selector) {
+            let text = 'Copied!';
+            if(!copyURLToClipboard(link))
+                text = 'Please copy manually!';
+            $(selector).popup({content: text, movePopup: false, on: 'manual', hoverable: true, closable: false, hideOnScroll: false, boundary: '#masterSlaveText', position: 'left center'});
+            $(selector).popup('show');
+            this.timeout = setTimeout(() => {
+                $(selector).popup('hide');
+            }, 2000);
+        }
+
+        function copyURLToClipboard(href) {
+            let toCopy = document.createElement('input');
+            toCopy.style.position = 'fixed';
+            toCopy.style.top = 0;
+            toCopy.style.left = 0;
+            toCopy.style.width = '2em';
+            toCopy.style.height = '2em';
+            toCopy.style.padding = 0;
+            toCopy.style.border = 'none';
+            toCopy.style.outline = 'none';
+            toCopy.style.boxShadow = 'none';
+            toCopy.style.background = 'transparent';
+            toCopy.value = href;
+            document.body.appendChild(toCopy);
+            toCopy.value = href;
+            toCopy.select();
+
+            try {
+                let successful = document.execCommand('copy');
+                if(!successful)
+                    return false;
+                else
+                    return true;
+            } catch (err) {
+                console.log('Oops, unable to copy');
+                return false;
+            } finally {
+                document.body.removeChild(toCopy);
+            }
+        }
     }
+
+
 
     renderItem(index, key) {
         let url = '/presentationbroadcast?room='+this.props.ActivityFeedStore.presentations[index].roomName+'&presentation=/Presentation/'+this.props.ActivityFeedStore.selector.sid;
