@@ -1100,6 +1100,12 @@ class SlideContentEditor extends React.Component {
         //$('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'move');
         $('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'auto');
         $('.pptx2html [style*="absolute"]').not('.drawing').hover(function() { //no dragging of SVG - makes them go away
+
+            // Make SVG resizable as soon as it is selected the first time.
+            if ($(this).find('svg').length) {
+                $(this).children('svg').attr('width', '100%');
+                $(this).children('svg').attr('height', '100%');
+            }
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
                 if (!(
