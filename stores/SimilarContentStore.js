@@ -13,6 +13,7 @@ class SimilarContentStore extends BaseStore {
     }
     updateSelector(payload){
         this.selector =  payload.selector;
+        this.contents = []; //previuos contents are nor related with new selector, so we clean the variable
         this.emitChange();
 
     }
