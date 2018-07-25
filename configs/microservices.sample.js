@@ -86,6 +86,9 @@ export default {
         },
         'recommendation': {
             uri: 'http://slidewiki.imp.bg.ac.rs'
+        },
+        'recommender':{ //UPV version
+            uri: 'http://slidewiki.gti-ia.upv.es'
         }
     }
 };
