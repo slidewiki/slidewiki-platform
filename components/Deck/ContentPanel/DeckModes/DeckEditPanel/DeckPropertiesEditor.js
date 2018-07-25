@@ -173,7 +173,8 @@ class DeckPropertiesEditor extends React.Component {
                             joined: data.joined || (new Date()).toISOString(),
                             picture: data.picture,
                             country: data.country,
-                            organization: data.organization
+                            organization: data.organization,
+                            displayName: data.displayName
                         });
                     }
 
