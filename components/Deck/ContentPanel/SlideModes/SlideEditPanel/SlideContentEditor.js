@@ -1414,6 +1414,10 @@ class SlideContentEditor extends React.Component {
             //if(!$(this).draggable( 'instance' )){
             //console.log('menu for: ' + $(this).attr('id'));
             const messagesContextMenu = defineMessages({
+                contextMenuEditImage:{
+                    id: 'SlideContentEditor.contextMenuEditImage',
+                    defaultMessage: 'Edit Image',
+                },
                 contextMenuBringToFront:{
                     id: 'SlideContentEditor.contextMenuBringToFront',
                     defaultMessage: 'Bring to front (Ctrl shift +)',
@@ -1461,8 +1465,18 @@ class SlideContentEditor extends React.Component {
                     // In case there is an image, provide option to edit it.
                     let imgChildren = $('#' + id.toString()).has('img').length || $('#' + id.toString()).has('svg').length;
                     if (imgChildren) {
-                        contextMenuItems.editImage = {name: 'Edit Image', icon: 'edit'};
-
+                        contextMenuItems = {
+                            //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
+                            //'move': {name: 'Move around', icon: 'fa-arrows',},
+                            'editImage': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuEditImage), icon: 'edit'},
+                            'front': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuBringToFront), icon: 'fa-arrow-circle-up'},
+                            'back': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuSendToBack), icon: 'fa-arrow-circle-o-down'},
+                            'duplicate': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDuplicate), icon: 'copy'},
+                            'delete': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDelete), icon: 'delete'},
+                            //'sep1': '---------',
+                            'quit': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuClose), icon: 'quit', accesskey: 'esc'}
+                            //'quit': {name: 'Send to back', icon: 'quit'},
+                        };
                     }
 
                     return {
