@@ -125,7 +125,8 @@ class PaintModal extends React.Component {
                 let image = new fabric.Image(imgObj);
                 image.set({
                     angle: 0,
-                    padding: 0
+                    padding: 0,
+                    opacity: this.transparency
                 });
                 this.canvas.centerObject(image);
                 this.canvas.add(image);
