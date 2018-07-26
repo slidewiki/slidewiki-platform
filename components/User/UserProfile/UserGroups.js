@@ -47,8 +47,8 @@ class UserGroups extends React.Component {
                 defaultMessage: 'Group deletion',
             },
             groupDetails: {
-              id: 'UserGroups.groupDetails',
-              defaultMessage: 'Group details',
+                id: 'UserGroups.groupDetails',
+                defaultMessage: 'Group details',
             },
             groupSettings: {
                 id: 'UserGroups.groupSettings',
@@ -104,7 +104,7 @@ class UserGroups extends React.Component {
 
     handleClickOnEditGroup(e) {
         e.preventDefault();
-        console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
+        // console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
 
         const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
@@ -113,7 +113,7 @@ class UserGroups extends React.Component {
             return group._id.toString() === groupid;
         });
 
-        console.log('handleClickOnEditGroup: use group', group);
+        // console.log('handleClickOnEditGroup: use group', group);
 
         this.context.executeAction(updateUsergroup, {group: group, offline: false});
 
@@ -171,7 +171,7 @@ class UserGroups extends React.Component {
             return group._id.toString() === groupid;
         });
 
-        console.log('handleClickOnGroupDetails: use group', group);
+        // console.log('handleClickOnGroupDetails: use group', group);
 
         this.context.executeAction(updateUsergroup, {group: group, offline: false, showDetails: true});
     }

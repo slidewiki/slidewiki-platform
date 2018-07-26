@@ -18,7 +18,7 @@ export default function updateUsergroup(context, payload, done) {
     };
 
     context.service.read('usergroup.read', payload2, { timeout: 20 * 1000 }, (err, res) => {
-        console.log('usergroup.read returned', err, res);
+        // console.log('usergroup.read returned', err, res);
         if (err) {
             if (payload.showDetails)
                 payload.group.details = true;
