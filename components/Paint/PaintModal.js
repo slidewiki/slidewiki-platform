@@ -39,6 +39,7 @@ class PaintModal extends React.Component {
         this.reader = new FileReader();
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
+        this.transparency = 1;
         this.drawingMode = false;
         this.canvas = null;
 
@@ -74,6 +75,7 @@ class PaintModal extends React.Component {
         this.deleteElement = this.deleteElement.bind(this);
         this.setDrawingMode = this.setDrawingMode.bind(this);
         this.setLineWidth = this.setLineWidth.bind(this);
+        this.setTransparency = this.setTransparency.bind(this);
         this.loadImg = this.loadImg.bind(this);
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
@@ -231,7 +233,7 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1,
+            opacity: this.transparency,
             stroke: this.secondaryColor,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
@@ -245,7 +247,7 @@ class PaintModal extends React.Component {
             top: coord.top,
             fill: this.primaryColor,
             radius: 50,
-            opacity: 1,
+            opacity: this.transparency,
             stroke: this.secondaryColor,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
@@ -260,7 +262,7 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1,
+            opacity: this.transparency,
             stroke: this.secondaryColor,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
@@ -305,7 +307,7 @@ class PaintModal extends React.Component {
             top: 30,
             fill: this.primaryColor,
             stroke: this.secondaryColor,
-            opacity: 1,
+            opacity: this.transparency,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
     }
@@ -327,6 +329,16 @@ class PaintModal extends React.Component {
     setLineWidth(event) {
         let value = parseInt(event.target.value, 10) || 1;
         this.canvas.freeDrawingBrush.width = value;
+        this.forceUpdate();
+    }
+
+    setTransparency(event) {
+        let value = parseInt(event.target.value, 10) || 1;
+        if( value !== 0 ) {
+            this.transparency = 1 - value/100;
+        } else {
+            this.transparency = 1;
+        }
         this.forceUpdate();
     }
 
@@ -639,6 +651,10 @@ class PaintModal extends React.Component {
                         <div>
                             <p><label htmlFor="widthInput">Line/Border Width:</label> </p>
                             <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0} id="widthInput"/>
+                        </div>
+                        <div>
+                            <p><label htmlFor="widthInput">Object Transparency:</label> </p>
+                            <input type="range" min="0" max="100" step="5" onChange={this.setTransparency} defaultValue={0} id="widthInput"/>
                         </div>
 
 
