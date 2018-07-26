@@ -40,6 +40,7 @@ class PaintModal extends React.Component {
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
         this.transparency = 1;
+        this.noActiveObject = true;
         this.drawingMode = false;
         this.canvas = null;
 
@@ -76,6 +77,8 @@ class PaintModal extends React.Component {
         this.setDrawingMode = this.setDrawingMode.bind(this);
         this.setLineWidth = this.setLineWidth.bind(this);
         this.setTransparency = this.setTransparency.bind(this);
+        this.sendBackwards = this.sendBackwards.bind(this);
+        this.bringForwards= this.bringForwards.bind(this);
         this.loadImg = this.loadImg.bind(this);
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
@@ -146,6 +149,16 @@ class PaintModal extends React.Component {
 
         this.canvas.on('object:removed', (e) => {
             this.updateCanvasState();
+        });
+
+        this.canvas.on('selection:created', (e) => {
+            this.noActiveObject = false;
+            this.forceUpdate();
+        });
+
+        this.canvas.on('selection:cleared', (e) => {
+            this.noActiveObject = true;
+            this.forceUpdate();
         });
     }
 
@@ -341,6 +354,20 @@ class PaintModal extends React.Component {
             this.transparency = 1;
         }
         this.forceUpdate();
+    }
+
+    sendBackwards() {
+        let actObjects = this.canvas.getActiveObject();
+        if (actObjects) {
+            this.canvas.sendBackwards(actObjects);
+        }
+    }
+
+    bringForwards(){
+        let actObjects = this.canvas.getActiveObject();
+        if (actObjects) {
+            this.canvas.bringForward(actObjects);
+        }
     }
 
     loadImg(event) {
@@ -618,9 +645,11 @@ class PaintModal extends React.Component {
                 <div className="ui padded grid">
                     <div className="four wide column">
                         <div className="ui grid">
-                            <div className="eleven wide column">
+                            <div className="sixteen wide column">
                                 <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip="Undo" aria-label="Undo"><Icon name="reply"/></Button>
                                 <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip="Redo" aria-label="Redo"><Icon name="share"/></Button>
+                                <Button className="icon button" onClick={this.bringForwards} disabled={this.noActiveObject} data-tooltip="Bring Forwards" aria-label="Bring Forwards"><Icon name="arrow up"/></Button>
+                                <Button className="icon button" onClick={this.sendBackwards} disabled={this.noActiveObject} data-tooltip="Send Backwards" aria-label="Send Backwards"><Icon name="arrow down"/></Button>
                             </div>
                         </div>
                         <div className="ui grid">
