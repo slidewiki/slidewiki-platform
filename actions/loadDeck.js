@@ -198,6 +198,10 @@ export default function loadDeck(context, payload, done) {
             },
             (callback) => {
                 if(runNonContentActions){
+
+                    if (payload.params.jwt){  //if user is logged
+                        payloadCustom.userid = context.getStore(UserProfileStore).getState().userid;
+                    }
                     context.executeAction(loadSimilarContents, payloadCustom, callback);
                 }else{
                     callback();

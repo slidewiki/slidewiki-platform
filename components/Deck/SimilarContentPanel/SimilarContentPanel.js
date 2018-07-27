@@ -1,6 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import SimilarContentStore from '../../../stores/SimilarContentStore';
+import UserProfileStore from '../../../stores/UserProfileStore';
 import SimilarContentList from './SimilarContentList';
 import {defineMessages} from 'react-intl';
 
@@ -19,7 +20,8 @@ class SimilarContentPanel extends React.Component {
         });
         this.state = {
             similarContents: this.props.SimilarContentStore.contents,
-            selector: this.props.SimilarContentStore.selector
+            selector: this.props.SimilarContentStore.selector,
+            userid: this.props.UserProfileStore.userid
 
         };
     }
@@ -27,7 +29,8 @@ class SimilarContentPanel extends React.Component {
 
         this.setState({
             similarContents: nextProps.SimilarContentStore.contents,
-            selector: nextProps.SimilarContentStore.selector
+            selector: nextProps.SimilarContentStore.selector,
+            userid : nextProps.UserProfileStore.userid
 
         });
 
@@ -38,8 +41,13 @@ class SimilarContentPanel extends React.Component {
             minHeight: '80px',
             overflowY: 'auto'
         };
+        let similarContentUrl = '/similarcontent/' + this.state.selector.stype + '/' + this.state.selector.sid;
+
+        if(this.state.userid){
+            similarContentUrl = similarContentUrl + '/'+this.state.userid;
+        }
         let header = this.props.inPanel?<h5 className="ui small header">
-                                          <a href={'/similarcontent/' + this.state.selector.stype + '/' + this.state.selector.sid}>
+                                          <a href={similarContentUrl}>
                                             {this.context.intl.formatMessage(this.messages.panel_header)}
                                           </a>
                                         </h5>
@@ -78,7 +86,8 @@ SimilarContentPanel.contextTypes = {
 };
 SimilarContentPanel = connectToStores(SimilarContentPanel, [SimilarContentStore], (context, props) => {
     return {
-        SimilarContentStore: context.getStore(SimilarContentStore).getState()
+        SimilarContentStore: context.getStore(SimilarContentStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default SimilarContentPanel;
