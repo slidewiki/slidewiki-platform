@@ -66,13 +66,11 @@ class PresentationsPanel extends React.Component {
             showCancelButton: true,
             confirmButtonText: 'Next',
             allowOutsideClick: false
-        }).then((result) => {
-            if(!isEmpty(result.dismiss)){
-                return;
-            } else if (!isEmpty(result.value))
-                window.open('/presentationbroadcast?room=' + result.value + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
+        }).then((roomName) => {
+            if (!isEmpty(roomName))
+                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
             else
-              swal({title: 'Please enter a valid room name', showConfirmButton: false, timer: 2000});
+              swal({title: 'Please enter a valid room name', showConfirmButton: false, timer: 2000}).catch(() => {return true;});
         }).catch((e) => {return true;});
     }
 
