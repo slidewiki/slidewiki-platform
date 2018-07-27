@@ -38,6 +38,20 @@ class SlideContentEditor extends React.Component {
         this.finishLoading = false;
         //this.oldContent = '';
         //this.redoContent = '';
+        CKEDITOR.on('instanceReady', (ev) => {
+
+            ev.editor.document.on('drop', (ev2) => {
+                if (ev2.data.$.dataTransfer.files) {
+                    let file = ev2.data.$.dataTransfer.files[0];
+                    let params = {};
+                    let url = URL.createObjectURL(file);
+                    file.preview = url;
+                    params.file = file;
+                    this.refs.uploadMediaModal.receiveDroppedFile(params);
+                }
+            });
+        });
+
     }
 
     handleSlideSizechange(slideSize){

@@ -30,6 +30,7 @@ class UploadMediaModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.showLicense = this.showLicense.bind(this);
+        this.receiveDroppedFile = this.receiveDroppedFile.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
         this.messages = defineMessages({
             swal_error_title : {
@@ -222,6 +223,14 @@ class UploadMediaModal extends React.Component {
         this.setState({
             files
         });
+    }
+
+    /* Method Called from drop on CKEDITOR in SlideContentEditor */
+    receiveDroppedFile(params) {
+        if (params.file) {
+            this.handleOpen();
+            this.onDrop([params.file]);
+        }
     }
 
     changeLicense(event, data) {
