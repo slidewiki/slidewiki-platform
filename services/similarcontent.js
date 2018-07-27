@@ -15,20 +15,13 @@ export default {
             /*********connect to microservices*************/
             let numberReco = 5; //Number of recommendations to be retrieved from the service
             let serviceUri = Microservices.recommender.uri;
-            console.log('DEBUG similarContent');
-            console.log(params);
             let userId = params.userid?params.userid :args.userid;
             if(userId){ //user logged
                 serviceUri= serviceUri+'/deckUserRecommendation/'+args.sid+'?user_id='+userId+'&numberReco='+numberReco;
-                console.log('Hay usuario');
-                console.log(serviceUri);
             }else{
                 serviceUri= serviceUri+'/deckRecommendation/'+args.sid+'?numberReco='+numberReco;
-                console.log('No hay');
-                console.log(serviceUri);
             }
-
-            console.log(serviceUri);
+            
             rp.get({uri: serviceUri}).then((res) => {
 
                 let recommendations = JSON.parse(res);
