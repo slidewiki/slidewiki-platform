@@ -31,6 +31,20 @@ export default {
                 uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset,
                 json: true,
             }).then((res) => {
+                // get unique creator ids
+                let userIds = new Set(res.map((deck) => deck.user));
+                return rp.post({
+                    uri: Microservices.user.uri + '/users',
+                    json: true,
+                    body: [...userIds],
+                }).then((users) => {
+                    let usernames = users.reduce((acc, user) => ({...acc, [user._id]: user.username}), {});
+                    res.forEach((deck) => {
+                        deck.username = usernames[deck.user] || 'Unknown User';
+                    });
+                    return res;
+                });
+            }).then((res) => {
                 callback(null, {featured: addSlugs(res)});
             }).catch((err) => {
                 callback(err, {featured: []});
@@ -45,6 +59,20 @@ export default {
             rp.get({
                 uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset,
                 json: true,
+            }).then((res) => {
+                // get unique creator ids
+                let userIds = new Set(res.map((deck) => deck.user));
+                return rp.post({
+                    uri: Microservices.user.uri + '/users',
+                    json: true,
+                    body: [...userIds],
+                }).then((users) => {
+                    let usernames = users.reduce((acc, user) => ({...acc, [user._id]: user.username}), {});
+                    res.forEach((deck) => {
+                        deck.username = usernames[deck.user] || 'Unknown User';
+                    });
+                    return res;
+                });
             }).then((res) => {
                 callback(null, {recent: addSlugs(res)});
             }).catch((err) => {
