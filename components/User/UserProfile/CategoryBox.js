@@ -8,33 +8,6 @@ class CategoryBox extends React.Component {
         super(props);
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
         this.headerStyle = {'backgroundColor': 'rgb(243, 244, 245)', 'color': 'rgba(0,0,0,.6)'};
-
-        this.messages = defineMessages({
-            personalSettings: {
-                id: 'CategoryBox.personalSettings',
-                defaultMessage: 'Personal settings',
-            },
-            profile: {
-                id: 'CategoryBox.profile',
-                defaultMessage: ' Profile',
-            },
-            account: {
-                id: 'CategoryBox.account',
-                defaultMessage: ' Account',
-            },
-            authorizedAccounts: {
-                id: 'CategoryBox.authorizedAccounts',
-                defaultMessage: ' Authorized Accounts',
-            },
-            groups: {
-                id: 'CategoryBox.groups',
-                defaultMessage: 'Groups',
-            },
-            myGroups: {
-                id: 'CategoryBox.myGroups',
-                defaultMessage: ' My Groups'
-            }
-        });
     }
 
     render() {
@@ -44,25 +17,37 @@ class CategoryBox extends React.Component {
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
                 <h3>
-                  {this.context.intl.formatMessage(this.messages.personalSettings)}
+                  <FormattedMessage
+                    id='CategoryBox.personalSettings'
+                    defaultMessage='Personal settings'
+                  />
                 </h3>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                 <p>
                   <i className="icon user"/>
-                  {this.context.intl.formatMessage(this.messages.profile)}
+                  <FormattedMessage
+                    id='CategoryBox.profile'
+                    defaultMessage=' Profile'
+                  />
                 </p>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/account'} activeStyle={this.styles}>
                 <p>
                   <i className="icon lock"/>
-                  {this.context.intl.formatMessage(this.messages.account)}
+                  <FormattedMessage
+                    id='CategoryBox.account'
+                    defaultMessage=' Account'
+                  />
                 </p>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/integrations'} activeStyle={this.styles}>
                 <p>
                   <i className="icon cloud"/>
-                  {this.context.intl.formatMessage(this.messages.authorizedAccounts)}
+                  <FormattedMessage
+                    id='CategoryBox.authorizedAccounts'
+                    defaultMessage=' Authorized Accounts'
+                  />
                 </p>
               </NavLink>
             </div>
@@ -70,13 +55,19 @@ class CategoryBox extends React.Component {
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
                 <h3>
-                  {this.context.intl.formatMessage(this.messages.groups)}
+                  <FormattedMessage
+                    id='CategoryBox.groups'
+                    defaultMessage='Groups'
+                  />
                 </h3>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/groups/overview'} activeStyle={this.styles}>
                 <p>
                   <i className="icon users"/>
-                  {this.context.intl.formatMessage(this.messages.myGroups)}
+                  <FormattedMessage
+                    id='CategoryBox.myGroups'
+                    defaultMessage=' My Groups'
+                  />
                 </p>
               </NavLink>
             </div>
@@ -87,8 +78,7 @@ class CategoryBox extends React.Component {
 }
 
 CategoryBox.contextTypes = {
-    executeAction: PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default CategoryBox;
