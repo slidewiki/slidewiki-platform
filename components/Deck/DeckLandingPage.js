@@ -2,6 +2,8 @@ import React from 'react';
 import { Grid, Divider, Button, Label, Image, Icon } from 'semantic-ui-react';
 import { NavLink } from 'fluxible-router';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
+import {connectToStores} from 'fluxible-addons-react';
+import DeckPageStore from '../../stores/DeckPageStore';
 
 class DeckLandingPage extends React.Component {
 
@@ -69,9 +71,10 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={2}>
                   <Grid.Row>
-                    <NavLink href='/deck/3971'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink><br/>
-                    <NavLink href='/presentation/3971'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='play circle' color='grey'/>Play SlideShow</Button></NavLink><br/>
+                    <NavLink href='/deck/294'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink><br/>
+                    <NavLink href='/presentation/294'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='play circle' color='grey'/>Play SlideShow</Button></NavLink><br/>
                     <NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist</Button></NavLink><br/>
+                    <NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='sitemap' color='grey'/>Live Session</Button></NavLink><br/>
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
@@ -95,5 +98,11 @@ class DeckLandingPage extends React.Component {
         );
     }
 }
+
+DeckLandingPage = connectToStores(DeckLandingPage, [DeckPageStore], (context, props) => {
+    return {
+        DeckPageStore: context.getStore(DeckPageStore).getState()
+    };
+});
 
 export default DeckLandingPage;

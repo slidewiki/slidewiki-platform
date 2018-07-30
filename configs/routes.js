@@ -580,7 +580,7 @@ export default {
         path: '/infopanel/:id/:spath?',
         method: 'get',
         page: 'decktree',
-        handler: require('../components/Deck/InfoPanel/InfoPanel'),
+        handler: require('../components/Deck/InfoPanel/InfoPanelInfoView'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }
