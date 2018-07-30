@@ -39,7 +39,8 @@ export default {
                     callback(null, {
                         username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
-                        jwt: res.headers['----jwt----']
+                        jwt: res.headers['----jwt----'],
+                        displayName: JSON.parse(res.body).displayName
                     });
                 })
                 .catch((err) => {
@@ -100,7 +101,8 @@ export default {
                     callback(null, {
                         username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
-                        jwt: res.headers['----jwt----']
+                        jwt: res.headers['----jwt----'],
+                        displayName: JSON.parse(res.body).displayName
                     });
                 })
                 .catch((err) => {

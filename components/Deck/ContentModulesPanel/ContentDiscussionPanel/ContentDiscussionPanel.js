@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -47,7 +48,7 @@ class ContentDiscussionPanel extends React.Component {
 }
 
 ContentDiscussionPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 ContentDiscussionPanel = connectToStores(ContentDiscussionPanel, [ContentDiscussionStore, UserProfileStore], (context, props) => {

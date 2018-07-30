@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../../stores/DeckCollectionStore';
@@ -174,7 +175,7 @@ class CollectionPanel extends React.Component {
                         <h2>{data.title}</h2>
                         <h4>{data.description}</h4>
                         <div className = "ui divider" />
-                            <b><FormattedMessage {...this.messages.collectionCreator} />:</b> <NavLink href={`/user/${data.user.username}`}>{data.user.username}</NavLink><br/>
+                            <b><FormattedMessage {...this.messages.collectionCreator} />:</b> <NavLink href={`/user/${data.user.username}`}>{data.user.displayName}</NavLink><br/>
                             <b><FormattedMessage {...this.messages.collectionDate} />:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
 
                         <div className = "ui divider" />
@@ -220,8 +221,8 @@ class CollectionPanel extends React.Component {
 }
 
 CollectionPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore], (context, props) => {

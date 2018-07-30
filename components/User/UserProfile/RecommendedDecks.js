@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DeckCard from './DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
@@ -36,7 +37,7 @@ class RecommendedDecks extends React.Component {
 }
 
 RecommendedDecks.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 RecommendedDecks = connectToStores(RecommendedDecks, [UserProfileStore], (context, props) => {
     return {
