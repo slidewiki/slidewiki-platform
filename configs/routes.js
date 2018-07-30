@@ -374,6 +374,7 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
+            console.log(payload);
             context.executeAction(loadDeck, payload, done);
         }
     },
@@ -405,7 +406,28 @@ export default {
     decklandingpage: {
         path: '/deckpage/:id',
         method: 'get',
-        handler: require('../components/Deck/DeckLandingPage')
+        handler: require('../components/Deck/DeckLandingPage'),
+        page: 'decklandingpage',
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
+                },
+                (callback) => {
+                    payload.params.stype = undefined;
+                    payload.params.slug = undefined;
+                    payload.params.sid = undefined;
+                    payload.params.spath = undefined;
+                    payload.params.mode = undefined;
+                    payload.params.theme = undefined;
+                    context.executeAction(loadDeck, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
     },
     diffview: {
         path: '/diffview/:stype/:sid/:did',

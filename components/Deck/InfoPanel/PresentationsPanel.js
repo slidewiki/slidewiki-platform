@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Button, Icon } from 'semantic-ui-react';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -8,6 +9,7 @@ import {isLocalStorageOn} from '../../../common.js';
 import ReactList from 'react-list';
 
 class PresentationsPanel extends React.Component {
+
     getPresentationHref(){
         let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
         if(!this.props.ContentStore.selector.subdeck){
@@ -23,6 +25,7 @@ class PresentationsPanel extends React.Component {
         }
         return presLocation;
     }
+
     handlePresentationRoomClick(e){
         if(process.env.BROWSER){
             e.preventDefault();
@@ -68,8 +71,11 @@ class PresentationsPanel extends React.Component {
             overflowY: 'auto'
         };
 
-        return (
-            <div ref="presentationPanel">
+        let toReturn;
+        if(this.props.deckPage)
+            toReturn = <Button basic fluid icon labelPosition='left' color='blue' onClick={this.handlePresentationRoomClick.bind(this)}><Icon name='sitemap' color='grey'/>Live Session</Button>;
+        else
+            toReturn = <div ref="presentationPanel">
                 <h5 className="ui small header" tabIndex="0">Beta features
                     <i className="yellow warning sign icon"></i>
                 </h5>
@@ -98,6 +104,10 @@ class PresentationsPanel extends React.Component {
                         }
                     </div>
                 </div>
+            </div>;
+
+        return (<div>
+            {toReturn}
             </div>
         );
     }

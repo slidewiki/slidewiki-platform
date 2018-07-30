@@ -289,18 +289,22 @@ class ReportModal extends React.Component {
                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
             </div>;
 
+        let trigger;
+        if(this.props.deckpage)
+            trigger = <Button basic fluid icon labelPosition='left' color='blue' aria-hidden="false" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen}><Icon name='exclamation circle' color='black'/>Report Issue</Button>;
+        else if (!this.props.textOnly)
+            trigger = <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+                  <Icon name="warning circle" size='large' />
+            </Button>;
+        else
+            trigger = <div aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+                  <Icon name="warning circle" size='large' /> Report
+            </div>;
+
         return(
 
                 <Modal
-                    trigger={ !this.props.textOnly ?
-                          <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
-                                <Icon name="warning circle" size='large' />
-                          </Button>
-                          :
-                          <div aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
-                                <Icon name="warning circle" size='large' /> Report
-                          </div>
-                        }
+                    trigger={ trigger }
                     open={this.state.modalOpen}
                     onOpen={this.handleOpen}
                     onClose={this.handleClose}
