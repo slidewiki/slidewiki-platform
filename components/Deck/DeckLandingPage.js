@@ -21,15 +21,18 @@ class DeckLandingPage extends React.Component {
 
     render() {
         const deckData = this.props.DeckViewStore.deckData;
-        console.log(deckData);
+        if(!deckData.variants)
+            deckData.variants = [];
 
         const owner = this.props.DeckViewStore.ownerData;
         const creator = this.props.DeckViewStore.creatorData;
 
-        let interestedInDecks = this.props.DeckListStore.featured.map((deck, i) => {
-            return <Grid.Column key={i} width={5}><NavLink href={`/deck/${deck._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}`} bordered /><h3>{deck.title}</h3></NavLink></Grid.Column>;
-        });
-        interestedInDecks = (isEmpty(interestedInDecks)) ? 'No decks to show' : <Grid stackable> {interestedInDecks} </Grid>;
+        let interestedInDecks = 'No decks to show';
+        if(this.props.DeckListStore.featured && this.props.DeckListStore.featured.length >= 1)
+            interestedInDecks =  this.props.DeckListStore.featured.map((deck, i) => {
+                return <Grid.Column key={i} width={5}><NavLink href={`/deck/${deck._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}`} bordered /><h3>{deck.title}</h3></NavLink></Grid.Column>;
+            });
+        interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
 
         return (
             <div className="ui fluid container">
