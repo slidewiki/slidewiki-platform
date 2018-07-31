@@ -38,7 +38,12 @@ class SlideContentEditor extends React.Component {
         this.finishLoading = false;
         //this.oldContent = '';
         //this.redoContent = '';
+
         CKEDITOR.on('instanceReady', (ev) => {
+
+            ev.editor.on('fileUploadRequest', (ev2) => {
+                ev2.cancel();
+            });
 
             ev.editor.document.on('drop', (ev2) => {
                 if (ev2.data.$.dataTransfer.files) {
@@ -47,7 +52,9 @@ class SlideContentEditor extends React.Component {
                     let url = URL.createObjectURL(file);
                     file.preview = url;
                     params.file = file;
-                    this.refs.uploadMediaModal.receiveDroppedFile(params);
+
+                    // TODO change by an action...
+                    //this.refs.uploadMediaModal.receiveDroppedFile(params);
                 }
             });
         });
@@ -1595,13 +1602,8 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').css('background-size', '');
             $('.pptx2html').attr('aria-hidden','');
         }
-        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
-        {
-            this.refs.uploadMediaModal.handleOpen();
-        }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
-                this.refs.uploadMediaModal.handleClose();
                 //TODO code which inserts the file into the slide
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)  //if slide is in canvas mode
@@ -1649,7 +1651,6 @@ class SlideContentEditor extends React.Component {
 
             }
             else if (nextProps.MediaStore.status === 'error') {
-                this.refs.uploadMediaModal.handleClose();
                 const messagesimageUploadError = defineMessages({
                     swal_title:{
                         id: 'SlideContentEditor.imageUploadErrorTitle',

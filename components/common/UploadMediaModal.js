@@ -6,6 +6,8 @@ import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} f
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import {isEmpty} from '../../common';
+import SlideEditStore from '../../stores/SlideEditStore';
+import MediaStore from '../../stores/MediaStore';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 class UploadMediaModal extends React.Component {
@@ -293,6 +295,20 @@ class UploadMediaModal extends React.Component {
         return false;
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick) {
+            this.handleOpen();
+        }
+
+        if (this.props.MediaStore.status === 'uploading') {
+            if (nextProps.MediaStore.status === 'success') {
+                this.handleClose();
+            } else if (nextProps.MediaStore.status === 'error') {
+                this.handleClose();
+            }
+        }
+    }
+
     render() {
         this.context.getUser().username;
         let dropzone = '';
@@ -478,5 +494,13 @@ UploadMediaModal.contextTypes = {
     getUser: PropTypes.func,
     intl: PropTypes.object.isRequired
 };
+
+UploadMediaModal = connectToStores(UploadMediaModal, [SlideEditStore, MediaStore], (context, props) => {
+
+    return {
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
+    };
+});
 
 export default UploadMediaModal;
