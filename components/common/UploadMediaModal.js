@@ -227,12 +227,9 @@ class UploadMediaModal extends React.Component {
         });
     }
 
-    /* Method Called from drop on CKEDITOR in SlideContentEditor */
-    receiveDroppedFile(params) {
-        if (params.file) {
-            this.handleOpen();
-            this.onDrop([params.file]);
-        }
+    receiveDroppedFile(file) {
+        this.handleOpen();
+        this.onDrop([file]);
     }
 
     changeLicense(event, data) {
@@ -306,6 +303,10 @@ class UploadMediaModal extends React.Component {
             } else if (nextProps.MediaStore.status === 'error') {
                 this.handleClose();
             }
+        }
+
+        if (nextProps.MediaStore.status === 'dropped') {
+            this.receiveDroppedFile(nextProps.MediaStore.file);
         }
     }
 

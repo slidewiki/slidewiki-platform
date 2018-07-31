@@ -9,6 +9,7 @@ import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -53,8 +54,7 @@ class SlideContentEditor extends React.Component {
                     file.preview = url;
                     params.file = file;
 
-                    // TODO change by an action...
-                    //this.refs.uploadMediaModal.receiveDroppedFile(params);
+                    this.context.executeAction(handleDroppedFile, file);
                 }
             });
         });
