@@ -291,7 +291,7 @@ class ReportModal extends React.Component {
 
         let trigger;
         if(this.props.deckpage)
-            trigger = <Button basic fluid icon labelPosition='left' color='blue' aria-hidden="false" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen}><Icon name='exclamation circle' color='black'/>Report Issue</Button>;
+            trigger = <Button basic fluid icon labelPosition='left' color='grey' aria-hidden="false" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen}><Icon name='exclamation circle' color='black'/>Report Issue</Button>;
         else if (!this.props.textOnly)
             trigger = <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
                   <Icon name="warning circle" size='large' />
