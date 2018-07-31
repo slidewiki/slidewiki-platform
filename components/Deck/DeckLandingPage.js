@@ -35,9 +35,9 @@ class DeckLandingPage extends React.Component {
             <div className="ui fluid container">
               <Divider hidden/>
               <Grid divided='vertically' stackable>
-                <Grid.Column mobile={16} tablet={1} computer={3}>
+                <Grid.Column mobile={16} tablet={1} computer={2}>
                 </Grid.Column>
-                <Grid.Column mobile={16} tablet={10} computer={8}>
+                <Grid.Column mobile={16} tablet={10} computer={9}>
                   <Grid.Row>
                   <Grid stackable>
                     <Grid.Column width={5}>
@@ -102,7 +102,7 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
                 </Grid.Column>
 
-                <Grid.Column mobile={16} tablet={4} computer={2}>
+                <Grid.Column mobile={16} tablet={4} computer={3}>
                   <Grid.Row>
                     <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button basic fluid icon labelPosition='left' color='grey'><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink><br/>
                     <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' color='grey'><Icon name='play circle' color='grey'/>Play SlideShow</Button></a><br/>
@@ -124,7 +124,7 @@ class DeckLandingPage extends React.Component {
                     <ReportModal id="reportModal" deckpage={true}/>
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column mobile={16} tablet={1} computer={3}>
+                <Grid.Column mobile={16} tablet={1} computer={2}>
                 </Grid.Column>
               </Grid>
             </div>
