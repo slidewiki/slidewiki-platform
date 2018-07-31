@@ -6,6 +6,7 @@ import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} f
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import {isEmpty} from '../../common';
+import cancelUploadMediaFile from '../../actions/media/cancelUploadMediaFile';
 import SlideEditStore from '../../stores/SlideEditStore';
 import MediaStore from '../../stores/MediaStore';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -194,6 +195,7 @@ class UploadMediaModal extends React.Component {
     }
 
     handleClose(){
+        this.context.executeAction(cancelUploadMediaFile, {});
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,

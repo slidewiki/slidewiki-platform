@@ -69,6 +69,11 @@ class MediaStore extends BaseStore {
         this.emitChange();
     }
 
+    cancelUploading(data) {
+        this.destructor();
+        this.emitChange();
+    }
+
     successUpload(data) {
         console.log('MediaStore: successUpload()', data);
         this.status = 'success';
@@ -82,7 +87,8 @@ MediaStore.handlers = {
     'START_UPLOADING_MEDIA_FILE': 'startUploading',
     'FAILURE_UPLOADING_MEDIA_FILE': 'failureUpload',
     'SUCCESS_UPLOADING_MEDIA_FILE': 'successUpload',
-    'HANDLE_DROPPED': 'handleDroppedFile'
+    'HANDLE_DROPPED': 'handleDroppedFile',
+    'CANCEL_UPLOADING_MEDIA_FILE': 'cancelUploading'
 };
 
 export default MediaStore;
