@@ -1,58 +1,35 @@
-import React from 'react';
-import { Grid, Divider, Button, Label, Image, Icon } from 'semantic-ui-react';
+import React from 'react';;
 import { NavLink } from 'fluxible-router';
-import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
-import {connectToStores} from 'fluxible-addons-react';
-import DeckPageStore from '../../stores/DeckPageStore';
-import ContributorsStore from '../../stores/ContributorsStore';
-import TranslationStore from '../../stores/TranslationStore';
-import ContentLikeStore from '../../stores/ContentLikeStore';
-import DeckViewStore from '../../stores/DeckViewStore';
-import ContentModulesStore from '../../stores/ContentModulesStore';
-import TagsStore from '../../stores/TagsStore';
+import { Grid, Divider, Button, Image, Icon } from 'semantic-ui-react';
+
+import { connectToStores } from 'fluxible-addons-react';
 import DeckListStore from '../../stores/DeckListStore';
-import { getLanguageName } from '../../common';
-import lodash from 'lodash';
+import DeckViewStore from '../../stores/DeckViewStore';
+import ContentLikeStore from '../../stores/ContentLikeStore';
+import ContentModulesStore from '../../stores/ContentModulesStore';
+
 import CustomDate from './util/CustomDate';
-import {Microservices} from '../../configs/microservices';
-import TagList from './ContentModulesPanel/TagsPanel/TagList';
+import { getLanguageName, isEmpty } from '../../common';
+import { Microservices } from '../../configs/microservices';
+
 import ReportModal from '../Report/ReportModal';
+import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationPanel from './InfoPanel/PresentationsPanel';
+import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 class DeckLandingPage extends React.Component {
 
     render() {
-        const creator = this.props.DeckViewStore.creatorData;
-        const owner = this.props.DeckViewStore.ownerData;
-        const contributors = this.props.ContributorsStore.contributors;
-        const language = getLanguageName(this.props.TranslationStore.originLanguage);
-        const translations = this.props.TranslationStore.translations;
-        const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
-        const deckCreator = this.props.DeckViewStore.creatorData;
-        const deckOwner = this.props.DeckViewStore.ownerData;
         const deckData = this.props.DeckViewStore.deckData;
-        const creationDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
-        const lastUpdateDate = CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY');
-        const description = lodash.get(deckData, 'description', '');
-        const shareCount = deckData.shareCount;
-        const downloadCount = deckData.downloadCount;
-        let slidesArr = [];
-        if (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children) {
-            slidesArr = this.props.DeckViewStore.slidesData.children;
-        }
-        const deckPicture = (slidesArr.length >= 1) ? <Image src={`${Microservices.file.uri}/thumbnail/slide/${slidesArr[0].id}`} bordered size='medium' spaced as='a' href={'/deck/' + this.props.DeckPageStore.selector.id}/> : '';
+        console.log(deckData);
 
-        const listOfTags = (this.props.TagsStore.tags.length === 0) ? <div>There are currently no tags.</div> : <div><TagList items={this.props.TagsStore.tags} editable={false}/></div>;
-        const featuredDecks = this.props.DeckListStore.featured;
-        let interestedInDecks;
-        if(featuredDecks.length >= 1) {
-            interestedInDecks = <Grid stackable>
-                <Grid.Column width={5}><NavLink href={`/deck/${featuredDecks[0]._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${featuredDecks[0].firstSlide}`} bordered /><h3>{featuredDecks[0].title}</h3></NavLink></Grid.Column>
-                <Grid.Column width={5}><NavLink href={`/deck/${featuredDecks[1]._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${featuredDecks[1].firstSlide}`} bordered /><h3>{featuredDecks[1].title}</h3></NavLink></Grid.Column>
-                <Grid.Column width={5}><NavLink href={`/deck/${featuredDecks[2]._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${featuredDecks[2].firstSlide}`} bordered /><h3>{featuredDecks[2].title}</h3></NavLink></Grid.Column>
-                </Grid>;
-        } else
-            interestedInDecks = 'No decks to show';
+        const owner = this.props.DeckViewStore.ownerData;
+        const creator = this.props.DeckViewStore.creatorData;
+
+        let interestedInDecks = this.props.DeckListStore.featured.map((deck, i) => {
+            return <Grid.Column key={i} width={5}><NavLink href={`/deck/${deck._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}`} bordered /><h3>{deck.title}</h3></NavLink></Grid.Column>;
+        });
+        interestedInDecks = (isEmpty(interestedInDecks)) ? 'No decks to show' : <Grid stackable> {interestedInDecks} </Grid>;
 
         return (
             <div className="ui fluid container">
@@ -64,16 +41,16 @@ class DeckLandingPage extends React.Component {
                   <Grid.Row>
                   <Grid stackable>
                     <Grid.Column width={5}>
-                      {deckPicture}
+                      <Image src={`${Microservices.file.uri}/thumbnail/slide/${deckData.firstSlide}`} bordered size='medium' spaced as='a' href={'/deck/' + deckData._id + '-' + deckData.revision}/>
                     </Grid.Column>
                     <Grid.Column width={11}>
                       <span>
-                        <h2>SlideWiki Quick Start Guide</h2>
+                        <h2>{deckData.title}</h2>
                         <strong>Owner:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink><br/>
                         <strong>Original Author:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink> (in ???)<br/>
-                        <strong>Last modified:</strong> {lastUpdateDate}<br/>
-                        <strong>Description:</strong> {description}<br/>
-                        <strong>Language:</strong> {language}<br/>
+                        <strong>Last modified:</strong> {CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}<br/>
+                        <strong>Description:</strong> {deckData.description}<br/>
+                        <strong>Language:</strong> {getLanguageName(deckData.language)}<br/>
                         <strong>Topic:</strong> <NavLink href='#'>???</NavLink> / <NavLink href='#'>???</NavLink><br/>
                       </span>
                     </Grid.Column>
@@ -85,29 +62,29 @@ class DeckLandingPage extends React.Component {
                     <Grid stackable divided>
                       <Grid.Column width={8}>
                       <h4>More Information</h4>
-                      <strong>Aduience:</strong> <NavLink href='#'>???</NavLink><br/>
-                      <strong>Created:</strong> {creationDate}<br/>
-                      <strong>Accessibility Information:</strong> ???
-                        {/*<Icon name='star'/>
+                      <strong>Audience:</strong> <NavLink href='#'>???</NavLink><br/>
+                      <strong>Resource Type:</strong> ???<br/>
+                      <strong>Created:</strong> {CustomDate.format(deckData.timestamp, 'Do MMMM YYYY')}<br/>
+                      <strong>Accessibility Information:</strong>
+                        <Icon name='star'/>
                         <Icon name='star'/>
                         <Icon name='star half'/>
                         <Icon name='star outline'/>
-                        <Icon name='star outline'/>*/}
+                        <Icon name='star outline'/> ???
                         <br/>
                       <strong>Other languages available:</strong> {
-                        translations.map((lang, key) => {
-                            return <span key={key}><NavLink href={'/deck/' + this.props.DeckPageStore.selector.id + '?language=' + lang}>{getLanguageName(lang)}</NavLink> (???%),</span>;
+                        deckData.variants.map((variant, key) => {
+                            return <span key={key}><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + variant.language}>{getLanguageName(variant.language)}</NavLink> (???%),</span>;
                         })
                       }<br/>
-                      <strong>Resource Type:</strong> ???<br/>
                       </Grid.Column>
                       <Grid.Column width={8}>
-                        <h4>Contains:</h4>
-                        {contributors.length} contributors<br/>
-                        {totalSlides} slides<br/>
-                        {this.props.ContentModulesStore.moduleCount.datasource} sources<br/>
-                        {this.props.ContentModulesStore.moduleCount.questions} questions<br/>
-                        {this.props.ContentModulesStore.moduleCount.comments} comments<br/>
+                        <h4>Contains</h4>
+                        Slides: {this.props.DeckViewStore.slidesData.children.length} <br/>
+                        Sources: {this.props.ContentModulesStore.moduleCount.datasource} <br/>
+                        Questions: {this.props.ContentModulesStore.moduleCount.questions} <br/>
+                        Comments: {this.props.ContentModulesStore.moduleCount.comments} <br/>
+                        Contributors: {deckData.contributors.length - 1} <br/>
                         <NavLink href='#'><h4>Other versions available ???</h4></NavLink>
                       </Grid.Column>
                     </Grid>
@@ -115,7 +92,7 @@ class DeckLandingPage extends React.Component {
                   <Divider />
                   <Grid.Row>
                     <h4>Tags:</h4>
-                    {listOfTags}
+                    {(deckData.tags.length === 0) ? <div>There are currently no tags.</div> : <TagList items={deckData.tags} editable={false}/>}
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
@@ -127,16 +104,16 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={2}>
                   <Grid.Row>
-                    <NavLink href={'/deck/' + this.props.DeckPageStore.selector.id}><Button basic fluid icon labelPosition='left' color='blue'><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink><br/>
-                    <NavLink href={'/presentation/' + this.props.DeckPageStore.selector.id}><Button basic fluid icon labelPosition='left' color='blue'><Icon name='play circle' color='grey'/>Play SlideShow</Button></NavLink><br/>
-                    <NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>
+                    <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button basic fluid icon labelPosition='left' color='grey'><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink><br/>
+                    <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' color='grey'><Icon name='play circle' color='grey'/>Play SlideShow</Button></a><br/>
+                    {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
                     <PresentationPanel deckPage={true}/><b/>
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
                     <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
-                    <Button compact color='grey' disabled><Icon name='share alternate' /> {shareCount}</Button>
-                    <Button compact color='grey' disabled><Icon name='download' /> {downloadCount}</Button>
+                    <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
+                    <Button compact color='grey' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
@@ -155,15 +132,11 @@ class DeckLandingPage extends React.Component {
     }
 }
 
-DeckLandingPage = connectToStores(DeckLandingPage, [DeckPageStore, ContributorsStore, TranslationStore, ContentLikeStore, DeckViewStore, ContentModulesStore, TagsStore, DeckListStore], (context, props) => {
+DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckViewStore, ContentModulesStore, DeckListStore], (context, props) => {
     return {
-        DeckPageStore: context.getStore(DeckPageStore).getState(),
-        ContributorsStore: context.getStore(ContributorsStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         ContentModulesStore: context.getStore(ContentModulesStore).getState(),
-        TagsStore: context.getStore(TagsStore).getState(),
         DeckListStore : context.getStore(DeckListStore).getState(),
     };
 });
