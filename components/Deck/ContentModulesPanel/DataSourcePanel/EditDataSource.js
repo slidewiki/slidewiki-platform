@@ -7,10 +7,40 @@ import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataS
 
 class EditDataSource extends React.Component {
     componentDidMount() {
+
+        $.fn.form.settings.rules.yearRule = (year) => {
+            let currDate = new Date();
+            let currYear = currDate.getYear() + 1900;;
+            let intYear = parseInt(year);
+            if (!intYear || intYear > currYear) {
+                return false;
+            }
+            return true;
+        };
         const dataSourceValidation = {
             fields: {
                 title: {
-                    identifier: 'title'
+                    identifier: 'title',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'This field cannot be empty.'
+                    }]
+                },
+                url: {
+                    identifier: 'url',
+                    optional: true,
+                    rules: [{
+                        type: 'url',
+                        prompt: 'The URL must be a valid one.'
+                    }]
+                },
+                year: {
+                    identifier: 'year',
+                    optional: true,
+                    rules: [{
+                        type: 'yearRule[year]',
+                        prompt: 'Enter a valid number for a Year, which is less or equal the current one.'
+                    }]
                 }
             },
             onSuccess: this.handleSave.bind(this)
@@ -94,7 +124,7 @@ class EditDataSource extends React.Component {
                     </div>
                     <div className="ui required field">
                         <label htmlFor="title">Title</label>
-                        <input type="text" ref="title" id="title" name="title" placeholder="Title" defaultValue={dataSource.title} autoFocus required />
+                        <input type="text" ref="title" id="title" name="title" placeholder="Title" defaultValue={dataSource.title} autoFocus />
                     </div>
                     <div className="ui field">
                         <label htmlFor="url">URL</label>
