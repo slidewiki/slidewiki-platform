@@ -96,6 +96,7 @@ class DeckViewPanel extends React.Component {
         const deckLicense = deckData.license;
         const deckTitle = deckData.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
+        const lastUpdate = CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
@@ -142,7 +143,8 @@ class DeckViewPanel extends React.Component {
                                             <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
                                         </div>
                                         {originInfo}
-                                        <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
+                                        <div className="meta"><strong>Creation Date:&nbsp;</strong>{deckDate}</div>
+                                        <div className="meta"><strong>Last Update:&nbsp;</strong>{lastUpdate}</div>
                                         {deckDescription &&
                                             <div className="meta"><strong>Description:</strong>
                                                 <div className="description" tabIndex="0" >{deckDescription}</div>
