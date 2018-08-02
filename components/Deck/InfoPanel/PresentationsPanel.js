@@ -7,7 +7,7 @@ import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ContentStore from '../../../stores/ContentStore';
 import {isLocalStorageOn} from '../../../common.js';
 import ReactList from 'react-list';
-import { Icon, Button, Popup, Grid, Divider, Input} from 'semantic-ui-react';
+import { Icon, Button, Popup, Grid, Divider, Input, Segment} from 'semantic-ui-react';
 import { Microservices } from '../../../configs/microservices';
 import {isEmpty} from '../../../common';
 
@@ -29,18 +29,18 @@ class PresentationsPanel extends React.Component {
         return presLocation;
     }
     openChooseASessionModal(e){
-        let modalContent = <Grid columns={2} divided padded>
-          <Grid.Column width={8}>
-            <Button icon labelPosition="left" onClick={this.openPRModal.bind(this)} aria-label="Create a presentation room, beta"><Icon name="record" size="large"/> Presentation Room</Button>
-            <br/><br/>
-            <p style={{textAlign: 'justify'}}>This will immediately create a <i>Presentation Room</i>, open the room as a new tab and hand you a link to invite attendees. Partcipants will hear your voice, have a one way chat as well as a live subtitle. <i>Presentation Rooms</i> are always public and listed at the deck.</p>
-            <p style={{textAlign: 'justify'}}>Please test that a <i>Presentation Room</i> is working for you, as we encountered that <i>Presentation Rooms</i> are currently not working on strange network setups.</p>
-          </Grid.Column>
-          <Grid.Column width={8}>
-            <Button icon labelPosition="left" onClick={this.openFAModal.bind(this)} aria-label="Create a follow along, beta"><Icon name="share alternate" size="large"/> Follow Along</Button>
-            <br/><br/>
-            <p style={{textAlign: 'justify'}}>This will create two links with wich you can schedule a <i>Follow Along</i> and invite attendees before hand. <i>Follow Alongs</i> only support to share the presentation progress, but not your voice. A follow along may only be used if everyone is in the same room.</p>
-          </Grid.Column>
+        let modalContent = <Grid columns={1} divided="vertically" padded>
+          <Grid.Row>
+            <h3>Presentation Room</h3>
+            <p style={{textAlign: 'left'}}>Broadcast your slides to attendees in other locations. Attendees will hear your voice and be able to send you messages.</p>
+            <p style={{textAlign: 'left'}}>The Presentation Room will open a new tab. Presentation Rooms are public and listed on the deck. You will also see an link to invite attendees. You should test this feature before sharing your room as network security may prevent others from accessing it.</p>
+            <div style={{width: '100%'}}><Button icon labelPosition="left" floated='right' size='large' onClick={this.openPRModal.bind(this)} aria-label="Create a presentation room, beta"><Icon name="record" size="large"/> Presentation Room</Button></div>
+          </Grid.Row>
+          <Grid.Row>
+            <h3>Follow Along</h3>
+            <p style={{textAlign: 'left'}}>Attendees can Follow Along with your slides on their own device when on the same network as slides will be synced to the presenter’s display. You will be provided with two links - a Presenters Link and an Attendees link to share beforehand.</p>
+            <div style={{width: '100%'}}><Button icon labelPosition="left" floated='right' size='large' onClick={this.openFAModal.bind(this)} aria-label="Create a follow along, beta"><Icon name="share alternate" size="large"/> Follow Along</Button></div>
+          </Grid.Row>
         </Grid>;
         if(process.env.BROWSER){
             e.preventDefault();
@@ -76,25 +76,24 @@ class PresentationsPanel extends React.Component {
 
     openFAModal(){
         swal({
-            titleText: 'Follow Along links & instructions',
+            titleText: 'Follow Along links',
             html: '<div id="session-modal"></div>',
-            confirmButtonText: 'Okay',
+            confirmButtonText: 'Done',
             allowOutsideClick: false,
             width: '50rem',
             onOpen: () => {
                 swal.showLoading();
                 $.get(Microservices.webrtc.uri + '/token').done((data) => {
-                    console.log(data);
                     let masterLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId + '&secret=' + data.secret;
                     let slaveLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId;
                     let modalContent = <div id='masterSlaveText'>
-                      <p>This is the URL for the presenter of the <i>Follow Along</i>. Only the presenter should use this URL and keep it secret.</p>
+                      <Segment color='grey' inverted style={{textAlign: 'left'}}><h3>Presenter Link</h3></Segment>
                       <Input id='masterLinkInput' fluid defaultValue={masterLink} labelPosition='right' label={<Button id='masterLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, masterLink, '#masterLink')}> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#masterLinkInput').select()}/>
                       <br/>
-                      <p>This is the URL intended for sharing the <i>Follow Along</i> with others. This URL may be published.</p>
+                      <Segment color='grey' inverted style={{textAlign: 'left'}}><h3>Attendees Link</h3></Segment>
                       <Input id='slaveLinkInput' fluid defaultValue={slaveLink} labelPosition='right' label={<Button id='slaveLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, slaveLink, '#slaveLink')}> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#slaveLinkInput').select()}/>
                       <br/>
-                      <p>Please keep both URLs safe until you finished your session. If a URL is lost you must create a new URL pair, as these URLs must match each other.</p>
+                      <Segment color='red' inverted tertiary style={{textAlign: 'left', color: 'black !important'}}>Keep a copy of both links until you have finished your session. If you loose either links, you must create a new pair of links.</Segment>
                     </div>;
                     ReactDOM.render(modalContent, document.getElementById('session-modal'));
                     swal.hideLoading();
