@@ -75,14 +75,18 @@ export default {
                     uri: `${Microservices.user.uri}/user/${group.user}`,
                     json: true
                 }).then( (user) => {
-                    return user.username;
+                    return {
+                        username: user.username, 
+                        displayName: user.displayName || user.username
+                    };
                 });
 
-                return Promise.all([deckPromise, userPromise]).then( (data) => {
-                    group.decks = data[0];
+                return Promise.all([deckPromise, userPromise]).then( ([decks, user]) => {
+                    group.decks = decks;
                     group.user = {
                         id: group.user,
-                        username: data[1]
+                        username: user.username, 
+                        displayName: user.displayName
                     };
 
                     callback(null, group);

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Input, Button, Label } from 'semantic-ui-react';
 import ISO6391 from 'iso-639-1';
@@ -226,7 +227,7 @@ class SpeechRecognition extends React.Component {
 }
 
 SpeechRecognition.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SpeechRecognition;

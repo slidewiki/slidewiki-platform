@@ -21,7 +21,7 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
-import loadNotFound from '../actions/loadNotFound';
+import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
@@ -34,7 +34,6 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -149,6 +148,17 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Contact Us'
             });
+            done();
+        }
+    },
+    help: {
+        path: '/help', // /playlist/26?sort=order
+        method: 'get',
+        page: 'help',
+        title: 'SlideWiki -- Guides and Help',
+        handler: require('../components/Home/GuidesHelp'),
+        action: (context, payload, done) => {
+            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
             done();
         }
     },
@@ -364,22 +374,7 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
-            async.series([
-                (callback) => {
-                    context.executeAction(loadDeck, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadTranslations, payload, callback);
-                },
-
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
+            context.executeAction(loadDeck, payload, done);
         }
     },
     oldSlugDeck: {
@@ -396,7 +391,7 @@ export default {
                 payload.params.theme,
             ];
             urlParts = urlParts.filter((u) => !!u);
-            
+
             done({statusCode: '301', redirectURL: urlParts.join('/')});
         },
     },
@@ -585,9 +580,14 @@ export default {
                 (callback) => {
                     // add missing sid in order to load the deck's title
                     payload.params.sid = payload.params.id;
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
                     context.executeAction(loadDeckView, payload, callback);
                 },
                 (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
                 },
                 (err, result) => {
@@ -609,7 +609,7 @@ export default {
                 payload.params.sid,
             ];
             urlParts = urlParts.filter((u) => !!u);
-            
+
             done({statusCode: '301', redirectURL: urlParts.join('/')});
         },
     },
@@ -634,7 +634,7 @@ export default {
                 payload.params.sid,
             ];
             urlParts = urlParts.filter((u) => !!u);
-            
+
             done({statusCode: '301', redirectURL: urlParts.join('/')});
         },
     },
@@ -645,7 +645,6 @@ export default {
         handler: require('../actions/loadImportFile'),
         action: (context, payload, done) => {
             context.executeAction(loadImportFile, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
         }
     },
@@ -707,7 +706,7 @@ export default {
         method: 'get',
         handler: require('../components/Error/Dummy'),
         action: (context, payload, done) => {
-            context.executeAction(loadNotFound, payload, done);
+            context.executeAction(notFoundError, payload, done);
         }
     }
     /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/

@@ -17,8 +17,8 @@ class PresentationRoomsHTMLLayout extends React.Component {
             <head>
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
-                <meta name="viewport" content="width=device-width, user-scalable=no" />
-                <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+                <meta name="viewport" content="width=device-width" />
+                <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 {/* Vendors css bundle */
@@ -27,15 +27,10 @@ class PresentationRoomsHTMLLayout extends React.Component {
             </head>
             <body>
                 <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
-                {/*TODO The following libs were included due to the header bar (that is included but is removed internally) --> don't load the headerbar at all and remove these two libs*/}
-                <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
                 {/*Following libs need to be included*/}
-                <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/dimmer.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/transition.min.js" defer></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
                 {/* All external vendors bundle*/
@@ -43,6 +38,8 @@ class PresentationRoomsHTMLLayout extends React.Component {
                 }
                 <script src={ Microservices.webrtc.uri + '/socket.io/socket.io.js' }></script>
                 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+                {/* Run-time settings */}
+                <script src="/public/js/settings.js" defer></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
                 <script src="/sweetalert2/dist/sweetalert2.min.js" defer></script>

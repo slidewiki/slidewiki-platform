@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import TweetEmbed from 'react-tweet-embed';
 import { Grid, Divider, Form, Button, Label, Popup, Message, Comment, Checkbox } from 'semantic-ui-react';
@@ -162,7 +163,7 @@ class Chat extends React.Component {
 }
 
 Chat.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default Chat;

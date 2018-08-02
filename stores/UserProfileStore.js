@@ -23,7 +23,8 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: ''
+            description: '',
+            displayName: ''
         };
         this.userDecks = undefined;
         this.userDecksMeta = {};
@@ -81,7 +82,8 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: ''
+            description: '',
+            displayName: ''
         };
         this.lastUser = '';
         this.userpicture = undefined;
@@ -115,7 +117,7 @@ class UserProfileStore extends BaseStore {
             user: this.user,
             userDecks: this.userDecks,
             userDecksMeta: this.userDecksMeta,
-            nextUserDecksLoading: this.nextUserDecksLoading, 
+            nextUserDecksLoading: this.nextUserDecksLoading,
             nextUserDecksError: this.nextUserDecksError,
             dimmer: this.dimmer,
             username: this.username,
@@ -259,6 +261,8 @@ class UserProfileStore extends BaseStore {
 
     handleSignInError(err) {
         this.errorMessage = err.message;
+        this.emitChange();
+        this.errorMessage = '';
         this.emitChange();
     }
 
@@ -433,10 +437,10 @@ UserProfileStore.handlers = {
     'NEW_EDITED_USER_DATA': 'fillInEditedUser',
     'NEW_USER_DECKS': 'fillInUserDecks',
     'NEW_USER_DECKS_LOADING': 'setUserDecksLoading',
-    
+
     // loading more decks
     'FETCH_NEXT_USER_DECKS_LOADING': 'setNextUserDecksLoading',
-    'FETCH_NEXT_USER_DECKS': 'fetchNextUserDecks', 
+    'FETCH_NEXT_USER_DECKS': 'fetchNextUserDecks',
     'FETCH_NEXT_USER_DECKS_FAILED': 'fetchNextUserDecksFailed',
 
     'FETCH_USER_FAILED': 'actionFailed',

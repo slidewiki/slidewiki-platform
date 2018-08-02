@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Microservices } from '../../../../../configs/microservices';
@@ -5,10 +6,9 @@ import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
-import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import GroupDetailsModal from './GroupDetailsModal';
@@ -43,7 +43,7 @@ class DeckPropertiesEditor extends React.Component {
             validationErrors: {},
             title: props.deckProps.title || '',
             allowMarkdown: props.deckProps.allowMarkdown || false,
-            language: props.deckProps.language || '',
+            language: (props.deckProps.language && props.deckProps.language.replace('-', '_')) || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             //license: props.deckProps.license || '',
@@ -173,7 +173,8 @@ class DeckPropertiesEditor extends React.Component {
                             joined: data.joined || (new Date()).toISOString(),
                             picture: data.picture,
                             country: data.country,
-                            organization: data.organization
+                            organization: data.organization,
+                            displayName: data.displayName
                         });
                     }
 
@@ -188,13 +189,12 @@ class DeckPropertiesEditor extends React.Component {
         event.preventDefault();
 
         this.context.executeAction(navigateAction, {
-            url: ContentUtil.makeNodeURL(this.props.selector, 'view')
+            url: Util.makeNodeURL(this.props.selector, this.props.selector.page, 'view')
         });
     }
 
-    handleSave(withNewRevision = false, event) {
+    handleSave(event) {
         event.preventDefault();
-        const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
         if (this.state.title == null || this.state.title.length === 0) {
@@ -202,7 +202,7 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
-        if (this.state.language == null || this.state.language.length !== 5) {
+        if (this.state.language == null || this.state.language.length < 2) {
             validationErrors.language = 'Please select a language.';
             isValid = false;
         }
@@ -224,7 +224,7 @@ class DeckPropertiesEditor extends React.Component {
             let deckId = this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id;
 
             this.context.executeAction(updateDeckEditViewState, 'loading');
-            this.context.executeAction(saveAction, {
+            this.context.executeAction(saveDeckEdit, {
                 deckId: deckId,
                 title: this.state.title,
                 allowMarkdown: this.state.allowMarkdown,
@@ -255,6 +255,7 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
+        if (fieldName === 'language') stateChange[fieldName] = stateChange[fieldName].replace('-', '_');
         this.setState(stateChange);
     }
     onChangeMarkdown(event) {
@@ -329,7 +330,7 @@ class DeckPropertiesEditor extends React.Component {
                                 <div className="ten wide column">
                                     <div className="content">
                                         <TextArea className="sr-only" id={'usernameIsALinkHint' + key} value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
-                                        <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
+                                        <a className="header" href={'/user/' + user.username} target="_blank">{user.displayName || user.username}</a>
                                         <div className="description">
                                             {optionalElement}{optionalText}
                                         </div>
@@ -449,7 +450,9 @@ class DeckPropertiesEditor extends React.Component {
         let langFieldClass = classNames({
             'required': true,
             'field': true,
-            'error': this.state.validationErrors.language != null
+            'error': this.state.validationErrors.language != null,
+            'disabled': true,
+            'hidden': true
         });
         /*
         let licenseFieldClass = classNames({
@@ -497,6 +500,21 @@ class DeckPropertiesEditor extends React.Component {
         //
         */
 
+        // TODO remove this once language codes have been fixed in code and database
+        const fixedLanguageCodes = {
+            'en': 'en_GB',
+            'de': 'de_DE',
+            'fr': 'fr_FR',
+            'it': 'it_IT',
+            'es': 'es_ES',
+            'nl': 'nl_NL',
+            'el': 'el_GR',
+            'pt': 'pt_PT',
+            'sr': 'sr_RS',
+            'lt': 'lt_LT',
+        };
+        let simpleLanguage = this.state.language && fixedLanguageCodes[this.state.language.substring(0, 2)];
+
         let groupsArray = [];
         if (this.props.groups) {
             this.props.groups.forEach((group) => {
@@ -522,7 +540,7 @@ class DeckPropertiesEditor extends React.Component {
         let buttons = (
             <div>
                 <button className='ui primary button'
-                    onClick={this.handleSave.bind(this, false)}>Save
+                    onClick={this.handleSave.bind(this)}>Save
                 </button>
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>
@@ -553,7 +571,8 @@ class DeckPropertiesEditor extends React.Component {
 
         let listOfAuthorized = this.getListOfAuthorized();
 
-        let titleAndLanguage = <div className="two fields">
+        //let titleAndLanguage = <div className="two fields">
+        let titleAndLanguage = <div className="field">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
                 <label htmlFor="title_input">
                     Title
@@ -563,12 +582,12 @@ class DeckPropertiesEditor extends React.Component {
                     aria-required="true" id="title_input"/>
 
             </div>
-            <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
+            {/*<div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
                 <label htmlFor="language" id="language_label">
                     Language
                 </label>
-                <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-            </div>
+                <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
+            </div>*/}
         </div>;
         let markdownField = <div className="field">
                 <div className="ui checkbox">
@@ -683,7 +702,7 @@ class DeckPropertiesEditor extends React.Component {
 }
 
 DeckPropertiesEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore], (context, props) => {

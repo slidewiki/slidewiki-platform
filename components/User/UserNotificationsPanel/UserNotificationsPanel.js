@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
@@ -136,7 +137,7 @@ class UserNotificationsPanel extends React.Component {
         } else if (notifications.length === 0) {
             notificationsDiv = emptyDiv;
         } else {
-            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} items={notifications} selector={selector} />;
+            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} items={notifications} selector={selector} />;
         }
         return (
             <div ref="userNotificationsPanel">
@@ -176,7 +177,7 @@ class UserNotificationsPanel extends React.Component {
 }
 
 UserNotificationsPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 UserNotificationsPanel = connectToStores(UserNotificationsPanel, [UserNotificationsStore, UserProfileStore], (context, props) => {
     return {

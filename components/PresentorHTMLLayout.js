@@ -16,8 +16,8 @@ class PresentorHTMLLayout extends React.Component {
             <head>
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
-                <meta name="viewport" content="width=device-width, user-scalable=no" />
-                <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+                <meta name="viewport" content="width=device-width" />
+                <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />
@@ -52,25 +52,27 @@ class PresentorHTMLLayout extends React.Component {
                 {/* Above are added only to support IE browser */}
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/progress.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/popup.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/checkbox.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/dimmer.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/form.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/tab.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/api.min.js" defer></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/progress.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/transition.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/popup.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/checkbox.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/dimmer.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/modal.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/form.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/tab.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/search.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/api.min.js" defer></script>
+                <script src="/assets/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
                 {/* All external vendors bundle*/
                     this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'} defer></script> : ''
                 }
                 <script src="/headjs/dist/1.0.0/head.min.js" defer></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js" defer></script>
+                {/* Run-time settings */}
+                <script src="/public/js/settings.js" defer></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
                 {/* <script dangerouslySetInnerHTML={ {__html: ga} } />*/}
