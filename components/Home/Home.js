@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -253,9 +254,9 @@ class Home extends React.Component {
 }
 
 Home.contextTypes = {
-    intl: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.func.isRequired,
-    executeAction: React.PropTypes.func.isRequired
+    intl: PropTypes.object.isRequired,
+    getUser: PropTypes.func.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 Home = connectToStores(Home, [UserProfileStore], (context, props) => {

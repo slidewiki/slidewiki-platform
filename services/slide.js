@@ -15,7 +15,18 @@ export default {
             rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
             //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
                 //console.log('From slide Service:', res);
-                callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
+
+                // TODO remove this
+                let slide = JSON.parse(res);
+                if (slide.revisions) {
+                    // we always expect the sid to include a revision, so no multiple slides here
+                    Object.assign(slide, slide.revisions[0]);
+                    slide.id = slide._id;
+                    slide.revision = slide.revisions[0].id;
+
+                    delete slide.revisions;
+                }
+                callback(null, {slide: slide, selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 //console.log(err);
                 callback(null, {slide: {}, selector: selector, 'page': params.page, 'mode': args.mode});
@@ -143,14 +154,17 @@ export default {
                         revision: content_id
                     },
                     position: content_id,
-                    language: 'EN',
                     dataSources: args.dataSources,
                     license: 'CC BY-SA',
                     tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []
                 })
             }).then((res) => {
                 let resParse = JSON.parse(res);
-                let newSlideID = resParse._id + '-'+resParse.revisions[0].id;
+                if (resParse.revisions) {
+                    resParse.id = resParse._id;
+                    resParse.revision = resParse.revisions[0].id;
+                }
+                let newSlideID = resParse.id + '-'+resParse.revision;
                 //update the path for new slide revision
                 let path = selector.spath;
                 let pathArr = path.split(';');
@@ -161,7 +175,7 @@ export default {
                 }else{
                     pathArr=[];
                 }
-                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';'), theme: resParse.theme ? resParse.theme : 'default'}, selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(err);
@@ -181,31 +195,3 @@ export default {
         }
     }
 };
-/*
-getSlide: function(request, reply) {
-  //NOTE shall the response be cleaned or enhanced with values?
-  slideDB.get(encodeURIComponent(request.params.id)).then((slide) => {
-    if (co.isEmpty(slide))
-      reply(boom.notFound());
-    else
-      reply(co.rewriteID(slide));
-  }).catch((error) => {
-    request.log('error', error);
-    reply(boom.badImplementation());
-  });
-},
-
-newSlide: function(request, reply) {
-  //NOTE shall the response be cleaned or enhanced with values?
-  slideDB.insert(request.payload).then((inserted) => {
-    //console.log('inserted: ', inserted);
-    if (co.isEmpty(inserted.ops) || co.isEmpty(inserted.ops[0]))
-      throw inserted;
-    else
-      reply(co.rewriteID(inserted.ops[0]));
-  }).catch((error) => {
-    request.log('error', error);
-    reply(boom.badImplementation());
-  });
-},
-*/

@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import Iso from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../common';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
@@ -32,6 +33,7 @@ class ChangePersonalData extends React.Component {
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
+        payload.displayName = this.refs.displayName.value;
 
         console.log(payload.language);
 
@@ -47,7 +49,7 @@ class ChangePersonalData extends React.Component {
             let flag = flagForLocale(locale) || 'icon';
             let options = {
                 key: locale,
-                text: <span><i className={`flag ${flag}`} />{Iso.getName(locale)}</span>,
+                text: <span><i className={`flag ${flag}`} />{getLanguageName(locale)}</span>,
                 value: locale,
             };
             return options;
@@ -95,6 +97,16 @@ class ChangePersonalData extends React.Component {
                             </label>
                             <input type="text" placeholder="Doe" name="lname" id="lname" defaultValue={this.props.user.lname} ref="lname" required/>
                         </div>
+                    </div>
+
+                    <div className="ui field">
+                        <label htmlFor="displayName">
+                          <FormattedMessage
+                            id='ChangePersonalData.displayName'
+                            defaultMessage='Display name'
+                          />
+                        </label>
+                        <input type="text" placeholder={this.props.user.uname} id="displayName" name="displayName" defaultValue={this.props.user.displayName} ref="displayName"/>
                     </div>
 
                     <div className="two fields">
@@ -169,8 +181,8 @@ class ChangePersonalData extends React.Component {
 }
 
 ChangePersonalData.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 ChangePersonalData = connectToStores(ChangePersonalData, [IntlStore], (context, props) => {

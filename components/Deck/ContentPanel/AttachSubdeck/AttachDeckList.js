@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import CustomDate from '../../util/CustomDate';
 import { Segment,Item,Icon,Label,Image, TextArea} from 'semantic-ui-react';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
 
@@ -125,8 +126,8 @@ class AttachDeckList extends React.Component {
                 let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
                 let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
                 let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
-                let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
-                let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+                let deckLanguageCode = deck.language;
+                let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
                 // default English
                 deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
                 //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
@@ -186,7 +187,7 @@ class AttachDeckList extends React.Component {
 }
 
 AttachDeckList.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default AttachDeckList;

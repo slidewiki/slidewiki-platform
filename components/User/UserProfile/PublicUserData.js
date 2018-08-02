@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import UserPicture from '../../common/UserPicture';
@@ -7,12 +8,12 @@ class PublicUserData extends React.Component {
 
     render() {
         let content1 = <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ false } width={ 150 } centered={ false } size={ 'small' } aria-hidden={ 'true' } />;
-        let content2 = <div><h2>{ this.props.user.fname } { this.props.user.lname }</h2>
+        let content2 = <div><h2>{ this.props.user.displayName }</h2>
         <div className="ui item">
             <div className="item">
                 <div className="content">
                     <div className="header">
-                        <i className="icon user" aria-label="user name"></i>
+                        <i className="icon user" aria-label="users name"></i>
                         { this.props.user.uname }
                         {(this.props.user.uname === this.props.loggedinuser) ? (
                             <NavLink href={ '/user/' + this.props.user.uname + '/settings/profile' } role="button" aria-label="open my settings" className="ui right floated basic icon button">
@@ -70,7 +71,7 @@ class PublicUserData extends React.Component {
 }
 
 PublicUserData.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default PublicUserData;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
@@ -52,7 +53,7 @@ class PresentationNeo4J extends React.Component{
 }
 
 PresentationNeo4J.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 PresentationNeo4J = connectToStores(PresentationNeo4J, [PresentationStore], (context, props) => {
