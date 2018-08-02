@@ -95,6 +95,12 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
              <Divider />
 */}
+                    <Divider />
+                  <Grid.Row>
+                    <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
+                    <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
+                    <Button compact color='grey' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
+                  </Grid.Row>
                     <Divider hidden />
                   <Grid.Row>
                     <h4>Tags:</h4>
@@ -124,12 +130,7 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
                                 
                   </Grid.Row>
-                  <Divider />
-                  <Grid.Row>
-                    <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
-                    <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
-                    <Button compact color='grey' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
-                  </Grid.Row>
+                  
                   <Divider />
                   <Grid.Row>
                     <ActivityFeedPanel />
