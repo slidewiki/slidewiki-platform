@@ -88,10 +88,10 @@ class PresentationsPanel extends React.Component {
                     let slaveLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId;
                     let modalContent = <div id='masterSlaveText'>
                       <Segment color='grey' inverted style={{textAlign: 'left'}}><h3>Presenter Link</h3></Segment>
-                      <Input id='masterLinkInput' fluid defaultValue={masterLink} labelPosition='right' label={<Button id='masterLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, masterLink, '#masterLink')}> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#masterLinkInput').select()}/>
+                      <Input id='masterLinkInput' fluid defaultValue={masterLink} labelPosition='right' label={<Button id='masterLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, masterLink, '#masterLink')} aria-label="Copy presenter link to clipboard"> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#masterLinkInput').select()}/>
                       <br/>
                       <Segment color='grey' inverted style={{textAlign: 'left'}}><h3>Attendees Link</h3></Segment>
-                      <Input id='slaveLinkInput' fluid defaultValue={slaveLink} labelPosition='right' label={<Button id='slaveLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, slaveLink, '#slaveLink')}> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#slaveLinkInput').select()}/>
+                      <Input id='slaveLinkInput' fluid defaultValue={slaveLink} labelPosition='right' label={<Button id='slaveLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, slaveLink, '#slaveLink')} aria-label="Copy attendees link to clipboard"> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#slaveLinkInput').select()}/>
                       <br/>
                       <Segment color='red' inverted tertiary style={{textAlign: 'left', color: 'black !important'}}>Keep a copy of both links until you have finished your session. If you loose either links, you must create a new pair of links.</Segment>
                     </div>;
