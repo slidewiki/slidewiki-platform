@@ -852,8 +852,8 @@ class presentationBroadcast extends React.Component {
     }
 
     sendUsername() {
-        if (this.context && this.context.getUser() && this.context.getUser().username)
-            this.sendRTCMessage('newUsername', this.context.getUser().username, this.presenterID);
+        if (this.context && this.context.getUser() && (this.context.getUser().displayName || this.context.getUser().username))
+            this.sendRTCMessage('newUsername', (this.context.getUser().displayName || this.context.getUser().username), this.presenterID);
         else
             this.sendRTCMessage('newUsername', 'undefined');
     }
