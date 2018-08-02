@@ -142,7 +142,7 @@ class DeckViewPanel extends React.Component {
                                             <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
                                         </div>
                                         {originInfo}
-                                        <div className="meta"><strong>Last Update:&nbsp;</strong>{lastUpdate}</div>
+                                        <div className="meta"><strong>Last Modified:&nbsp;</strong>{lastUpdate}</div>
                                         {deckDescription &&
                                             <div className="meta"><strong>Description:</strong>
                                                 <div className="description" tabIndex="0" >{deckDescription}</div>
