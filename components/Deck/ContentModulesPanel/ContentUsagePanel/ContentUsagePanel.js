@@ -2,19 +2,16 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentUsageStore from '../../../../stores/ContentUsageStore';
 import ContentUsageList from './ContentUsageList';
+import DeckCollectionsList from './DeckCollectionsList';
 
 class ContentUsagePanel extends React.Component {
 
     render() {
-        const noUsageMessage = <div>There is currently no usage of
-            this {this.props.ContentUsageStore.selector.stype}.</div>;
-        const usageListComp = <div>
-            <ContentUsageList usage={this.props.ContentUsageStore.usage}
-                              selector={this.props.ContentUsageStore.selector}/></div>;
         return (
-        <div ref="contentUsagePanel" className="ui">
-            <div> {(this.props.ContentUsageStore.usage.length === 0) ? noUsageMessage : usageListComp}</div>
-        </div>
+            <div ref="contentUsagePanel" className="ui">
+                <ContentUsageList usage={this.props.ContentUsageStore.usage} selector={this.props.ContentUsageStore.selector} />
+                <DeckCollectionsList collections={this.props.ContentUsageStore.collections} />
+            </div>
         );
     }
 }

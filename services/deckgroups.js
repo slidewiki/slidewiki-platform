@@ -38,15 +38,22 @@ export default {
         // get deck collections assigned to a specified deck
         } else if (resource === 'deckgroups.forDeck'){
 
-            let uri = `${Microservices.deck.uri}/deck/${args.sid}/groups?user=${args.userId}`;
-            if(usergroups !== ''){
-                uri += `&usergroup=${usergroups}`;
+            let deckId = args.sid;
+            // check if it's a slide
+            if (args.stype !== 'deck') {
+                // TODO define what this service will do with slides
+                deckId = args.id;
             }
 
+            let uri = `${Microservices.deck.uri}/deck/${deckId}/groups`;
             rp({
                 method: 'GET',
                 uri: uri,
-                json: true
+                qs: {
+                    user: args.userId || undefined,
+                    usergroup: usergroups || undefined,
+                },
+                json: true,
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
 
