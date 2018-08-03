@@ -1,33 +1,20 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {NavLink} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
-import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-import ContentStore from '../../../stores/ContentStore';
-import {isLocalStorageOn} from '../../../common.js';
 import ReactList from 'react-list';
+import { NavLink } from 'fluxible-router';
 import { Icon, Button, Popup, Grid, Divider, Input, Segment} from 'semantic-ui-react';
+
+import { connectToStores } from 'fluxible-addons-react';
+import ContentStore from '../../../stores/ContentStore';
+import ActivityFeedStore from '../../../stores/ActivityFeedStore';
+
+import { isEmpty } from '../../../common';
+import { makeNodeURL } from '../../common/Util';
+import { isLocalStorageOn } from '../../../common.js';
 import { Microservices } from '../../../configs/microservices';
-import {isEmpty} from '../../../common';
 
 class PresentationsPanel extends React.Component {
 
-    getPresentationHref(){
-        let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
-        if(!this.props.ContentStore.selector.subdeck){
-
-            presLocation += this.props.ContentStore.selector.id + '/';
-        }
-        else{
-            presLocation += this.props.ContentStore.selector.subdeck + '/';
-        }
-        if(this.props.ContentStore.selector.stype === 'slide'){
-            // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += this.props.ContentStore.selector.sid;// + '/';
-        }
-        return presLocation;
-    }
     openChooseASessionModal(e){
         let modalContent = <Grid columns={1} divided="vertically" padded>
           <Grid.Row>
@@ -67,9 +54,10 @@ class PresentationsPanel extends React.Component {
             confirmButtonText: 'Next',
             allowOutsideClick: false
         }).then((roomName) => {
-            if (!isEmpty(roomName))
-                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
-            else
+            if (!isEmpty(roomName)){
+                let presentationURL = makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, undefined, undefined);
+                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + presentationURL.replace('#', '%23'));
+            } else
               swal({title: 'Please enter a valid room name', showConfirmButton: false, timer: 2000}).catch(() => {return true;});
         }).catch((e) => {return true;});
     }
@@ -84,8 +72,9 @@ class PresentationsPanel extends React.Component {
             onOpen: () => {
                 swal.showLoading();
                 $.get(Microservices.webrtc.uri + '/token').done((data) => {
-                    let masterLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId + '&secret=' + data.secret;
-                    let slaveLink = window.location.origin + this.getPresentationHref() + '?id=' + data.socketId;
+                    let presentationURL = makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, undefined, undefined);
+                    let masterLink = window.location.origin + presentationURL + '?id=' + data.socketId + '&secret=' + data.secret;
+                    let slaveLink = window.location.origin + presentationURL + '?id=' + data.socketId;
                     let modalContent = <div id='masterSlaveText'>
                       <Segment color='grey' inverted style={{textAlign: 'left'}}><h3>Presenter Link</h3></Segment>
                       <Input id='masterLinkInput' fluid defaultValue={masterLink} labelPosition='right' label={<Button id='masterLink' icon onClick={copyURLToClipboardAndIndicate.bind(this, masterLink, '#masterLink')} aria-label="Copy presenter link to clipboard"> <Icon.Group> <Icon name='clipboard outline' /><Icon corner name='arrow left' /></Icon.Group></Button>} onClick={() => $('#masterLinkInput').select()}/>
@@ -146,8 +135,6 @@ class PresentationsPanel extends React.Component {
         }
     }
 
-
-
     renderItem(index, key) {
         let url = '/presentationbroadcast?room='+this.props.ActivityFeedStore.presentations[index].roomName+'&presentation=/Presentation/'+this.props.ActivityFeedStore.selector.sid;
         return (
@@ -196,13 +183,11 @@ class PresentationsPanel extends React.Component {
     }
 }
 
-PresentationsPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
-};
 PresentationsPanel = connectToStores(PresentationsPanel, [ActivityFeedStore, ContentStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
     };
 });
+
 export default PresentationsPanel;
