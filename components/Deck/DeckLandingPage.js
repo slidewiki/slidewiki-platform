@@ -96,6 +96,12 @@ class DeckLandingPage extends React.Component {
 */}
                   <Divider />
                   <Grid.Row>
+                    <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
+                    <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
+                    <Button compact color='grey' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
+                  </Grid.Row>
+                  <Divider hidden />
+                  <Grid.Row>
                     <h4>Available in the following languages:</h4>
                     {<span><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + deckData.language}>{getLanguageName(deckData.language)} <Flag name={flagForLocale(deckData.language)}/></NavLink>{(deckData.variants.length > 0) ? ', ' : ''}</span>}
                     {deckData.variants.map((variant, key) => {
@@ -122,12 +128,7 @@ class DeckLandingPage extends React.Component {
                     {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
                     <PresentationPanel deckPage={true}/>
                   </Grid.Row>
-                  <Divider />
-                  <Grid.Row>
-                    <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
-                    <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
-                    <Button compact color='grey' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
-                  </Grid.Row>
+
                   <Divider />
                   <Grid.Row>
                     <ActivityFeedPanel />
