@@ -1,6 +1,6 @@
 import React from 'react';;
 import { NavLink } from 'fluxible-router';
-import { Grid, Divider, Button, Image, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { Grid, Divider, Button, Image, Icon, Item, Label, Flag } from 'semantic-ui-react';
 
 import { connectToStores } from 'fluxible-addons-react';
 import DeckListStore from '../../stores/DeckListStore';
@@ -10,6 +10,7 @@ import ContentModulesStore from '../../stores/ContentModulesStore';
 
 import CustomDate from './util/CustomDate';
 import { getLanguageName, isEmpty } from '../../common';
+import { flagForLocale } from '../../configs/locales';
 import { Microservices } from '../../configs/microservices';
 
 import ReportModal from '../Report/ReportModal';
@@ -42,25 +43,23 @@ class DeckLandingPage extends React.Component {
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={10} computer={9}>
                   <Grid.Row>
-                  <Grid stackable>
-                        <Grid.Column width={5}>
-                            <Image src={`${Microservices.file.uri}/thumbnail/slide/${deckData.firstSlide}`} bordered size='medium' spaced as='a' href={'/deck/' + deckData._id + '-' + deckData.revision} aria-hidden='true'/>
-                        </Grid.Column>
-                        <Grid.Column width={11}>
-                         <Item>
-                             <Item.Content>
-                            <Item.Header as="h2">{deckData.title + ' '}
-                                <Label color='green'>Published                             
-                            </Label></Item.Header>
+                    <Grid stackable>
+                      <Grid.Column width={5}>
+                        <Image src={`${Microservices.file.uri}/thumbnail/slide/${deckData.firstSlide}`} bordered size='medium' spaced as='a' href={'/deck/' + deckData._id + '-' + deckData.revision} aria-hidden='true'/>
+                      </Grid.Column>
+                      <Grid.Column width={11}>
+                        <Item>
+                          <Item.Content>
+                            <Item.Header as="h2">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : ''}</Item.Header>
                             <Item.Meta><strong>Owner:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink></Item.Meta>
                             <Item.Meta><strong>Original Author:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></Item.Meta>
                             <Item.Meta><strong>Last modified:</strong> {CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</Item.Meta>
-                            <Item.Meta><strong>Description:</strong></Item.Meta> 
-                            <Item.Description>{deckData.description}></Item.Description>
-                        </Item.Content>
-                      </Item>
-                     </Grid.Column>
-                  </Grid>
+                            <Item.Meta><strong>Description:</strong></Item.Meta>
+                            <Item.Description>{deckData.description}</Item.Description>
+                          </Item.Content>
+                        </Item>
+                      </Grid.Column>
+                    </Grid>
                   </Grid.Row>
 {/*<Grid.Row>
                     <Grid stackable divided>
@@ -95,7 +94,7 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
              <Divider />
 */}
-                    <Divider />
+                  <Divider />
                   <Grid.Row>
                     <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
                     <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
@@ -103,16 +102,18 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
                     <Divider hidden />
                   <Grid.Row>
-                    <h4>Tags:</h4>
-                    {(deckData.tags.length === 0) ? <div>There are currently no tags.</div> : <TagList items={deckData.tags} editable={false}/>}
+                    <h4>Available in the following languages:</h4>
+                    {<span><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + deckData.language}>{getLanguageName(deckData.language)} <Flag name={flagForLocale(deckData.language)}/></NavLink>{(deckData.variants.length > 0) ? ', ' : ''}</span>}
+                    {deckData.variants.map((variant, key) => {
+                        return <span key={key}><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + variant.language}>{getLanguageName(variant.language)} <Flag name={flagForLocale(variant.language)}/></NavLink>{(deckData.variants.length - 1 !== key) ? ', ' : ''}</span>;
+                    })}
                   </Grid.Row>
+                  <br/>
                   <Grid.Row>
-                      <Divider hidden />
-                    <h4>Languages:</h4>
-                    {(deckData.tags.length === 0) ? <div>There are currently no tags.</div> : <TagList items={deckData.tags} editable={false}/>}
+                    <h4>Marked with tags:</h4>
+                    {(deckData.tags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckData.tags} editable={false}/>}
                   </Grid.Row>
-
-                  <Divider  />
+                  <Divider />
                   <Grid.Row>
                     <h4>You may also be interested in:</h4>
                     {interestedInDecks}
@@ -122,13 +123,10 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={3}>
                   <Grid.Row>
-                     <Grid.Row>
                     <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid icon basic labelPosition='left' size='large' ><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink>
                     <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' size='large' ><Icon name='play circle' color='grey'/>Play SlideShow</Button></a>
                     {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
-                    <PresentationPanel deckPage={true}/><b/>
-                  </Grid.Row>
-                                
+                    <PresentationPanel deckPage={true}/>
                   </Grid.Row>
                   
                   <Divider />
@@ -136,14 +134,12 @@ class DeckLandingPage extends React.Component {
                     <ActivityFeedPanel />
                   </Grid.Row>
                   <Divider />
-                 
                   <Grid.Row>
-                    <Segment>
-                      <Image alt='Creative Commons License' src='https://i.creativecommons.org/l/by-sa/4.0/88x31.png' as='a' />
-                        This work is licensed under a LINK Creative Commons Attribution-ShareAlike 4.0 International License 
-                      </Segment>
-                    </Grid.Row>
-                     <Grid.Row>
+                    <Image alt='Creative Commons License' src='https://i.creativecommons.org/l/by-sa/4.0/88x31.png' as='a' href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'/><br/><br/>
+                    This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                  </Grid.Row>
+                  <Divider />
+                  <Grid.Row>
                     <ReportModal id="reportModal" deckpage={true}/>
                   </Grid.Row>
                 </Grid.Column>
