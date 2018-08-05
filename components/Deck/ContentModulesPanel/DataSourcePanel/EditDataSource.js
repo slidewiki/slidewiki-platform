@@ -10,7 +10,8 @@ class EditDataSource extends React.Component {
 
         $.fn.form.settings.rules.yearRule = (year) => {
             let currDate = new Date();
-            let currYear = currDate.getYear() + 1900;;
+            let currYear = currDate.getFullYear();
+            console.log(currYear);
             let intYear = parseInt(year);
             if (!intYear || intYear > currYear) {
                 return false;
