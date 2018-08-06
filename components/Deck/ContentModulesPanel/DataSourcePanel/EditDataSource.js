@@ -22,7 +22,7 @@ class EditDataSource extends React.Component {
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
                 url = 'http://' + url;
             }
-            let expression = /https?:\/\/(www\.)?[-a-z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-z0-9@:%_\+.~#?&//=]*)?/i;
+            let expression = /https?:\/\/(www\.)?[-a-z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(\/[-a-z0-9@:%_\+.~#?&//=]*)?/i;
             let regex = new RegExp(expression);
 
             if (url.match(regex)) {
