@@ -11,13 +11,27 @@ class EditDataSource extends React.Component {
         $.fn.form.settings.rules.yearRule = (year) => {
             let currDate = new Date();
             let currYear = currDate.getFullYear();
-            console.log(currYear);
             let intYear = parseInt(year);
             if (!intYear || intYear > currYear) {
                 return false;
             }
             return true;
         };
+
+        $.fn.form.settings.rules.urlRule = (url) => {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url;
+            }
+            let expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+            let regex = new RegExp(expression);
+
+            if (url.match(regex)) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
         const dataSourceValidation = {
             fields: {
                 title: {
@@ -31,7 +45,7 @@ class EditDataSource extends React.Component {
                     identifier: 'url',
                     optional: true,
                     rules: [{
-                        type: 'url',
+                        type: 'urlRule[url]',
                         prompt: 'The URL must be a valid one.'
                     }]
                 },
