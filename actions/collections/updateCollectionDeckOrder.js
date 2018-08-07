@@ -22,8 +22,6 @@ export default function updateCollectionDeckOrder(context, payload, done) {
             });
         }
 
-
-
         done();
     });
 }

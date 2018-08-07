@@ -30,6 +30,14 @@ class CollectionsPanel extends React.Component {
                 id: 'CollectionsPanel.ariaCreateCollection', 
                 defaultMessage: 'Create a new playlist'
             },
+            errorTitle: {
+                id: 'CollectionsPanel.error.title',
+                defaultMessage: 'Error'
+            },
+            removeDeckError: {
+                id: 'CollectionsPanel.error.removeDeck', 
+                defaultMessage: 'An error occured while removing playlist from deck...'
+            }
         });
     }
     showNewCollectionModal(event){
@@ -38,8 +46,26 @@ class CollectionsPanel extends React.Component {
             showNewCollectionModal: true
         });
     }
+    showErrorPopup(text){
+        let title = this.context.intl.formatMessage(this.messages.errorTitle);
+        swal({
+            title: title,
+            text: text,
+            type: 'error',
+            timer: 2000,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+            showConfirmButton: false
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
+    }
     render() {
-        const groupIds = this.props.UserProfileStore.user.groups.map( (group) => group.id);
+        if (this.props.DeckCollectionStore.removeDeckFromCollectionError) {
+            this.showErrorPopup(this.context.intl.formatMessage(this.messages.removeDeckError));
+        }
+
+        const groupIds = (this.props.UserProfileStore.user.groups || []).map( (group) => group.id);
 
         return (
             <div className="ui bottom attached" ref="tagsPanel">

@@ -18,6 +18,7 @@ class DeckCollectionStore extends BaseStore {
         // variables used in collection tab
         this.selector = {};
         this.deckCollections = [];
+        this.removeDeckFromCollectionError = false;
     }
 
     destructor() {
@@ -32,6 +33,7 @@ class DeckCollectionStore extends BaseStore {
         this.loading = false;
         this.selector = {};
         this.deckCollections = [];
+        this.removeDeckFromCollectionError = false;
     }
 
     getState() {
@@ -46,7 +48,8 @@ class DeckCollectionStore extends BaseStore {
             updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
             loading: this.loading, 
             deckCollections: this.deckCollections, 
-            selector: this.selector, 
+            selector: this.selector,
+            removeDeckFromCollectionError: this.removeDeckFromCollectionError, 
         };
     }
 
@@ -66,6 +69,7 @@ class DeckCollectionStore extends BaseStore {
         this.loading = state.loading;
         this.deckCollections = state.deckCollections;
         this.selector = state.selector; 
+        this.removeDeckFromCollectionError = state.removeDeckFromCollectionError;
     }
 
     updateCollections(payload){
@@ -183,6 +187,19 @@ class DeckCollectionStore extends BaseStore {
         this.selector = payload.selector;
         this.emitChange();
     }
+
+    removeDeckFromCollection(payload){
+        let removedCollectionId = parseInt(payload.collectionId);
+        this.deckCollections = this.deckCollections.filter( (col) => col._id !== removedCollectionId);
+        this.emitChange();
+    }
+
+    removeDeckFromCollectionFailed(){
+        this.removeDeckFromCollectionError = true;
+        this.emitChange();
+        this.removeDeckFromCollectionError = false;
+        this.emitChange();
+    }
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -210,7 +227,10 @@ DeckCollectionStore.handlers = {
 
     // handlers used for collection tab
     'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
-    'LOAD_DECK_COLLECTIONS_FAILURE': 'updateDeckCollectionsError',
+    'LOAD_DECK_COLLECTIONS_FAILURE': 'updateDeckCollectionsFailed',
+
+    'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'removeDeckFromCollection',
+    'REMOVE_DECK_FROM_COLLECTION_FAILURE': 'removeDeckFromCollectionFailed'
 };
 
 export default DeckCollectionStore;

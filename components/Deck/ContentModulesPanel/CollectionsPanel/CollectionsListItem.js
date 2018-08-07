@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { timeSince } from '../../../../common';
 import { defineMessages } from 'react-intl';
+import removeDeckFromCollection from '../../../../actions/collections/removeDeckFromCollection';
 
 class CollectionsListItem extends React.Component {
     constructor(props) {
@@ -22,8 +23,10 @@ class CollectionsListItem extends React.Component {
     }
     removeCollection(collectionId, deckId, event) {
         event.preventDefault();
-        console.log('remove deck: ' + deckId);
-        console.log('from collection: ' + collectionId);
+        this.context.executeAction(removeDeckFromCollection, {
+            collectionId,
+            deckId,
+        });
     }
     render() {
         const item = this.props.item;
@@ -44,7 +47,7 @@ class CollectionsListItem extends React.Component {
                         </div>
                     </div>
                     <div className="four wide column">
-                        { (this.props.userId === item.user) &&
+                        { (this.props.userId === item.user || this.props.userGroups.includes(item.userGroup)) &&
                             <button className="ui tiny compact borderless basic right floated icon button" data-tooltip={this.context.intl.formatMessage(this.messages.removeTooltip)} aria-label={this.context.intl.formatMessage(this.messages.removeAria)} onClick={this.removeCollection.bind(this, item._id, selector.sid)} >
                                 <i aria-hidden="true" className="close icon"></i>
                             </button>

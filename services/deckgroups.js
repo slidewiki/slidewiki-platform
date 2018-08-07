@@ -215,6 +215,20 @@ export default {
                 body: args.newOrder
             }).then( (updated) => callback(null, updated))
             .catch((err) => callback(err));
+        } else if (resource === 'deckgroups.updateDecksOfCollection'){
+            rp({
+                method: 'PATCH',
+                uri: `${Microservices.deck.uri}/group/${args.collectionId}/decks`,
+                json: true,
+                headers: {'----jwt----': args.jwt},
+                body: [
+                    {
+                        op: args.op, 
+                        deckId: args.deckId
+                    }
+                ]
+            }).then( () => callback(null, {}))
+            .catch( (err) => callback(err));
         }
     },
 
