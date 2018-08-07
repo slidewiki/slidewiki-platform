@@ -166,7 +166,7 @@ export default {
                         addOps.push({groupId: deckGroupId, updateOp: {op: 'add', deckId: args.deckId}});
                     }
                 });
-
+                
                 // add/remove deck id to/from the following deck groups
                 async.eachSeries(addOps.concat(removeOps), (item, done) => {
                     rp({

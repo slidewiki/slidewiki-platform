@@ -21,6 +21,7 @@ import TagsPanel from './TagsPanel/TagsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadDeckCollections from '../../../actions/collections/loadDeckCollections';
+import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
 
 class ContentModulesPanel extends React.Component {
     componentWillMount() {
@@ -62,10 +63,12 @@ class ContentModulesPanel extends React.Component {
                 break;
             case 'usage':
                 this.context.executeAction(loadContentUsage, {params: this.props.ContentModulesStore.selector});
-                this.context.executeAction(loadDeckCollections, {params: this.props.ContentModulesStore.selector});
                 break;
             case 'discussion':
                 this.context.executeAction(loadContentDiscussion, {params: this.props.ContentModulesStore.selector});
+                break;
+            case 'playlists': 
+                this.context.executeAction(loadDeckCollections, {params: this.props.ContentModulesStore.selector});
                 break;
             //case 'contributors':
             //    this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
@@ -100,6 +103,9 @@ class ContentModulesPanel extends React.Component {
             case 'tags':
                 activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} />;
                 break;
+            case 'playlists': 
+                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} />;
+                break;
             default:
                 activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
         }
@@ -128,6 +134,11 @@ class ContentModulesPanel extends React.Component {
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'tags')
         });
+        let playlistsTabClass = classNames({
+            'item': true,
+            'active': (this.props.ContentModulesStore.moduleType === 'playlists')
+        });
+
         //let contributorsTabClass = classNames({
         //    'item': true,
         //    'active': (this.props.ContentModulesStore.moduleType === 'contributors')
@@ -143,6 +154,12 @@ class ContentModulesPanel extends React.Component {
             Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span>
         </a> : '';
 
+        // hide playlists tab in slides
+        let palylistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
+        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')}>
+            Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span>
+        </a> : '';
+
         pointingMenu = (
             <div className="ui top attached pointing menu">
                 <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
@@ -153,6 +170,7 @@ class ContentModulesPanel extends React.Component {
                 <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
                 {/*<a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>*/}
                 <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
+                {palylistsTab}
                 {/*
                 <a className="item">
                     <img src="/assets/images/mock-avatars/helen.jpg" className="ui mini image circular"/>

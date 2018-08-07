@@ -14,6 +14,10 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = false;
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
+
+        // variables used in collection tab
+        this.selector = {};
+        this.deckCollections = [];
     }
 
     destructor() {
@@ -26,6 +30,8 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = false;
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
+        this.selector = {};
+        this.deckCollections = [];
     }
 
     getState() {
@@ -38,7 +44,9 @@ class DeckCollectionStore extends BaseStore {
             addCollectionError: this.addCollectionError,
             updateCollectionMetadataError: this.updateCollectionMetadataError,
             updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
-            loading: this.loading
+            loading: this.loading, 
+            deckCollections: this.deckCollections, 
+            selector: this.selector, 
         };
     }
 
@@ -56,6 +64,8 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = state.updateCollectionMetadataError;
         this.updateCollectionDeckOrderError = state.updateCollectionDeckOrderError;
         this.loading = state.loading;
+        this.deckCollections = state.deckCollections;
+        this.selector = state.selector; 
     }
 
     updateCollections(payload){
@@ -168,6 +178,11 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    updateDeckCollections(payload){
+        this.deckCollections = payload.collections;
+        this.selector = payload.selector;
+        this.emitChange();
+    }
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -192,6 +207,10 @@ DeckCollectionStore.handlers = {
     'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
+
+    // handlers used for collection tab
+    'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
+    'LOAD_DECK_COLLECTIONS_FAILURE': 'updateDeckCollectionsError',
 };
 
 export default DeckCollectionStore;

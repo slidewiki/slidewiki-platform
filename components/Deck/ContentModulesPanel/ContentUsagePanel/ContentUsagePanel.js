@@ -2,7 +2,6 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentUsageStore from '../../../../stores/ContentUsageStore';
 import ContentUsageList from './ContentUsageList';
-import DeckCollectionsList from './DeckCollectionsList';
 
 class ContentUsagePanel extends React.Component {
 
@@ -10,7 +9,6 @@ class ContentUsagePanel extends React.Component {
         return (
             <div ref="contentUsagePanel" className="ui">
                 <ContentUsageList usage={this.props.ContentUsageStore.usage} selector={this.props.ContentUsageStore.selector} />
-                <DeckCollectionsList collections={this.props.ContentUsageStore.collections} />
             </div>
         );
     }
