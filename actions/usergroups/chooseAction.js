@@ -29,14 +29,19 @@ export function chooseActionGroups(context, payload, done) {
         default:
             title = shortTitle;
     };
-    context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     console.log('choose action', payload.params.category, payload.params.id);
     
 
     async.series([
         (callback) => {
+            context.executeAction(updateUsergroup, {group: {_id: payload.params.id}}, callback);
+        },
+        (callback) => {
             context.executeAction(fetchUser, {}, callback);
+        },
+        (callback) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title}, callback);
         },
         (callback) => {
             context.dispatch('USERGROUP_CATEGORY', payload.params.category, callback);
@@ -46,7 +51,7 @@ export function chooseActionGroups(context, payload, done) {
                 case categories.categories[0]:
                 case undefined:
                     
-                    context.executeAction(updateUsergroup, {group: {id: payload.params.id}}, callback);
+                    callback()
                     break;
                 case categories.categories[1]:
 

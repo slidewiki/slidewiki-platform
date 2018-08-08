@@ -5,6 +5,8 @@ import UserPicture from '../common/UserPicture';
 class Info extends React.Component {
 
     render() {
+        if (!this.props.group || !this.props.group.creator)
+            return null;
         let content1 = <UserPicture picture={ this.props.group.picture } link={ false } private={ false } width={ 150 } centered={ false } size={ 'small' } aria-hidden={ 'true' } />;
         let content2 = <div><h2>{ this.props.group.name }</h2>
             <div className="ui item">

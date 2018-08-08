@@ -111,8 +111,12 @@ class Details extends React.Component {
             .catch();
             return;
         }
-        this.refs.GroupName.value = this.props.currentUsergroup.name || '';
-        this.refs.GroupDescription.value = this.props.currentUsergroup.description || '';
+        try {
+            this.refs.GroupName.value = this.props.currentUsergroup.name || '';
+            this.refs.GroupDescription.value = this.props.currentUsergroup.description || '';
+        } catch (error) {
+            
+        }
     }
 
     componentDidMount() {
@@ -157,14 +161,19 @@ class Details extends React.Component {
     }
 
     getGroup(members = undefined) {
-        let group = {
-            _id: this.props.currentUsergroup._id,
-            name: this.refs.GroupName.value,
-            description: this.refs.GroupDescription.value,
-            members: members,
-            timestamp: this.props.currentUsergroup.timestamp || '',
-            creator: this.props.currentUsergroup.creator || this.props.userid
-        };
+        let group = {};
+        try {
+            group = {
+                _id: this.props.currentUsergroup._id,
+                name: this.refs.GroupName.value,
+                description: this.refs.GroupDescription.value,
+                members: members,
+                timestamp: this.props.currentUsergroup.timestamp || '',
+                creator: this.props.currentUsergroup.creator || this.props.userid
+            };
+        } catch (error) {
+            
+        }
 
         if (this.props.currentUsergroup._id)
             group.id = group._id;
@@ -252,6 +261,9 @@ class Details extends React.Component {
     }
 
     render() {
+        if (!this.props.group || !this.props.group.creator)
+            return null;
+
         let userlist = [];
         //add creator as default member
         userlist.push(

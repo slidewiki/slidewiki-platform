@@ -20,7 +20,7 @@ export default function updateUsergroup(context, payload, done) {
         }
         else {
             context.dispatch('UPDATE_USERGROUP', res[0]);
-            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Details of user group ' + res[0].name});
+            //context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Details of user group ' + res[0].name});
         }
         done();
     });
