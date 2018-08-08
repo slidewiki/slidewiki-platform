@@ -11,7 +11,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit'],
+    groups: ['overview', 'create'],
     decks: ['shared'],
 };
 

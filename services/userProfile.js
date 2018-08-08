@@ -98,6 +98,8 @@ export default {
                     userid: curr.userid,
                     joined: curr.joined || ''
                 };
+                if (curr.role)
+                    member.role = curr.role;
                 prev.push(member);
                 return prev;
             }, []);

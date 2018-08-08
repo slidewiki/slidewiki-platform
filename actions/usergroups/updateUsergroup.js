@@ -1,12 +1,12 @@
-const log = require('../../log/clog');
-import { shortTitle } from '../../../configs/general';
+const log = require('../log/clog');
+import { shortTitle } from '../../configs/general';
 
 export default function updateUsergroup(context, payload, done) {
     log.info(context);
 
     if (payload.offline) {
         context.dispatch('UPDATE_USERGROUP', payload.group);
-        context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Edit Group ' + payload.group.name});
+        context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Details of user group ' + payload.group.name});
         return done();
     }
 
@@ -16,11 +16,11 @@ export default function updateUsergroup(context, payload, done) {
 
     context.service.read('usergroup.read', payload2, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            context.dispatch('UPDATE_USERGROUP', payload.group);
+            context.dispatch('USERGROUP_ERROR', err);
         }
         else {
             context.dispatch('UPDATE_USERGROUP', res[0]);
-            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Edit Group ' + res[0].name});
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Details of user group ' + res[0].name});
         }
         done();
     });

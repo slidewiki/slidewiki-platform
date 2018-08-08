@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
-import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
-import deleteUsergroup from '../../../actions/user/userprofile/deleteUsergroup';
-import leaveUsergroup from '../../../actions/user/userprofile/leaveUsergroup';
+import updateUsergroup from '../../../actions/usergroups/updateUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
 class UserGroups extends React.Component {
@@ -41,17 +39,13 @@ class UserGroups extends React.Component {
                 id: 'UserGroups.members',
                 defaultMessage: 'members',
             },
-            groupDeletion: {
-                id: 'UserGroups.groupDeletion',
-                defaultMessage: 'Group deletion',
-            },
             groupSettings: {
                 id: 'UserGroups.groupSettings',
                 defaultMessage: 'Group settings',
             },
-            groupLeave: {
-                id: 'UserGroups.groupLeave',
-                defaultMessage: 'Leave group',
+            groupDetails: {
+                id: 'UserGroups.groupDetails',
+                defaultMessage: 'Group details',
             },
             notAGroupmember: {
                 id: 'UserGroups.notAGroupmember',
@@ -97,63 +91,27 @@ class UserGroups extends React.Component {
         }
     }
 
-    handleClickOnEditGroup(e) {
+    handleClickNewGroup(e) {
         e.preventDefault();
-        // console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
+        this.context.executeAction(updateUsergroup, {group: {}, offline: true});
+        this.context.executeAction(navigateAction, {
+            url: '/user/' + this.props.username + '/groups/create'
+        });
+    }
 
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
+    handleClickOnGroupDetails(e) {
+        e.preventDefault();
+
+        const action = e.target.attributes.name.value;  //eg. viewGroup_2
         const groupid = action.split('_')[1];
 
         let group = this.props.groups.find((group) => {
             return group._id.toString() === groupid;
         });
 
-        // console.log('handleClickOnEditGroup: use group', group);
+        // console.log('handleClickOnGroupDetails: use group', group);
 
-        this.context.executeAction(updateUsergroup, {group: group, offline: false});
-
-        this.context.executeAction(navigateAction, {
-            url: '/user/' + this.props.username + '/groups/edit'
-        });
-    }
-
-    handleClickOnRemoveGroup(e) {
-        e.preventDefault();
-        //console.log('handleClickOnRemoveGroup:', e.target.attributes.name.value);
-
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
-        const groupid = action.split('_')[1];
-
-        swal({
-            titleText: 'Are you sure you want to delete this user group?',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((accepted) => {
-            this.context.executeAction(deleteUsergroup, {groupid: groupid});
-            swal('User group successfully deleted');
-        }, (cancelled) => {/*do nothing*/})
-            .catch(swal.noop);
-    }
-
-    handleClickOnLeaveGroup(e) {
-        e.preventDefault();
-        //console.log('handleClickOnLeaveGroup:', e.target.attributes.name.value);
-
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
-        const groupid = action.split('_')[1];
-
-        this.context.executeAction(leaveUsergroup, {groupid: groupid});
-    }
-
-    handleCLickNewGroup(e) {
-        e.preventDefault();
-        this.context.executeAction(updateUsergroup, {group: {}, offline: true});
-        this.context.executeAction(navigateAction, {
-            url: '/user/' + this.props.username + '/groups/edit'
-        });
+        this.context.executeAction(navigateAction, {url: '/usergroup/' + group._id + '/settings'});
     }
 
     render() {
@@ -171,32 +129,13 @@ class UserGroups extends React.Component {
                         </div>
 
                         <div className="right aligned column">
-                            {((this.props.userid === group.creator) || (this.props.userid === group.creator.userid)) ? (
-                              <div>
-                                  <button className="ui large basic icon button"
-                                      data-tooltip={this.context.intl.formatMessage(this.messages.groupDeletion)}
-                                      aria-label={this.context.intl.formatMessage(this.messages.groupDeletion)}
-                                      name={'deleteGroup_' + group._id}
-                                      onClick={this.handleClickOnRemoveGroup.bind(this)} >
-                                    <i className="remove icon" name={'deleteGroup_' + group._id} ></i>
-                                  </button>
-                                  <button className="ui large basic icon button"
-                                      data-tooltip={this.context.intl.formatMessage(this.messages.groupSettings)}
-                                      aria-label={this.context.intl.formatMessage(this.messages.groupSettings)}
-                                      name={'changeGroup_' + group._id}
-                                      onClick={this.handleClickOnEditGroup.bind(this)} >
-                                    <i className="setting icon" name={'changeGroup_' + group._id} ></i>
-                                  </button>
-                              </div>
-                            ) : (
-                              <button className="ui large basic icon button"
-                                  data-tooltip={this.context.intl.formatMessage(this.messages.groupLeave)}
-                                  aria-label={this.context.intl.formatMessage(this.messages.groupLeave)}
-                                  name={'leaveGroup_' + group._id}
-                                  onClick={this.handleClickOnLeaveGroup.bind(this)} >
-                                <i className="remove icon" name={'leaveGroup_' + group._id} ></i>
-                              </button>
-                            )}
+                            <button className="ui large basic icon button"
+                                    data-tooltip={this.context.intl.formatMessage(this.messages.groupDetails)}
+                                    aria-label={this.context.intl.formatMessage(this.messages.groupDetails)}
+                                    name={'viewGroup_' + group._id}
+                                    onClick={this.handleClickOnGroupDetails.bind(this)} >
+                                <i className="eye icon" name={'viewGroup_' + group._id} ></i>
+                            </button>
 
                         </div>
                     </div>
@@ -218,7 +157,7 @@ class UserGroups extends React.Component {
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
                   <h3 className="ui left floated header" >{this.context.intl.formatMessage(this.messages.groups)}</h3>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewGroup.bind(this)}>
+                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
                       <i className="icon users"/>
                       <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>
                   </button>

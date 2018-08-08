@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Microservices } from '../../../configs/microservices';
-import {NavLink, navigateAction} from 'fluxible-router';
+import { Microservices } from '../../configs/microservices';
 import { TextArea } from 'semantic-ui-react';
-import { timeSince } from '../../../common';
-import UserPicture from '../../common/UserPicture';
-import updateUsergroup from '../../../actions/usergroups/updateUsergroup';
-import saveUsergroup from '../../../actions/usergroups/saveUsergroup';
+import { timeSince } from '../../common';
+import UserPicture from '../common/UserPicture';
+import updateUsergroup from '../../actions/usergroups/updateUsergroup';
+import saveUsergroup from '../../actions/usergroups/saveUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import deleteUsergroup from '../../actions/usergroups/deleteUsergroup';
+import leaveUsergroup from '../../actions/usergroups/leaveUsergroup';
 
-class UserGroupEdit extends React.Component {
+class Details extends React.Component {
     constructor(props){
         super(props);
 
@@ -71,6 +72,14 @@ class UserGroupEdit extends React.Component {
             saveGroup: {
                 id: 'UserGroupEdit.saveGroup',
                 defaultMessage: 'Save group',
+            },
+            deleteGroup: {
+                id: 'UserGroupEdit.deleteGroup',
+                defaultMessage: 'Delete Group',
+            },
+            leaveGroup: {
+                id: 'UserGroupEdit.leaveGroup',
+                defaultMessage: 'Leave group',
             },
             loading: {
                 id: 'UserGroupEdit.loading',
@@ -165,10 +174,6 @@ class UserGroupEdit extends React.Component {
         return group;
     }
 
-    handleClickOnEditGroup(e) {
-        e.preventDefault();
-    }
-
     handleSave(e) {
         e.preventDefault();
 
@@ -194,8 +199,44 @@ class UserGroupEdit extends React.Component {
             return;
         }
 
-        group.isNew = true;
         this.context.executeAction(saveUsergroup, group);
+    }
+
+    handleExitGroup(e) {
+        e.preventDefault();
+        console.log('handleExitGroup:', e.target.attributes.name.value);
+
+        const action = e.target.attributes.name.value;  //eg. changeGroup_2
+        const groupid = action.split('_')[1];
+
+        if (this.props.isCreator) {//remove
+            swal({
+                titleText: 'Are you sure you want to delete this user group?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((accepted) => {
+                this.context.executeAction(deleteUsergroup, {groupid: groupid});
+                swal('User group successfully deleted');
+            }, (cancelled) => {/*do nothing*/})
+                .catch(swal.noop);
+        }
+        else {//leave
+            swal({
+                titleText: 'Are you sure you want to leave this user group?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove me'
+            }).then((accepted) => {
+                this.context.executeAction(leaveUsergroup, {groupid: groupid});
+                swal('User group successfully removed you');
+            }, (cancelled) => {/*do nothing*/})
+                .catch(swal.noop);
+        }
     }
 
     handleClickRemoveMember(member) {
@@ -211,15 +252,7 @@ class UserGroupEdit extends React.Component {
     }
 
     render() {
-        const signUpLabelStyle = {width: '150px'};
-
         let userlist = [];
-        //change header and data depending on group should be created or edited
-        let header = this.context.intl.formatMessage(this.messages.createGroup);
-        if (this.props.currentUsergroup._id !== undefined) {
-            header = this.context.intl.formatMessage(this.messages.editGroup);
-        }
-
         //add creator as default member
         userlist.push(
           <div className="item" key={this.props.userid}>
@@ -286,13 +319,6 @@ class UserGroupEdit extends React.Component {
         return (
             <div className="ui container">
                 <div className="ui two column vertically padded grid container">
-                    <div className="column">
-                        <h3>{header}</h3>
-                    </div>
-                    <div className="right aligned column">
-
-                    </div>
-                    <div className="ui hidden divider"></div>
                     <div className="ui container">
                         <form className="ui form">
                             <div className="field" data-tooltip={this.context.intl.formatMessage(this.messages.groupName)} >
@@ -318,6 +344,13 @@ class UserGroupEdit extends React.Component {
                             <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                                 <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
                             </button>
+                            {(this.props.userid && (this.props.isMember || this.props.isCreator)) ?
+                                <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
+                                    <i className="remove icon"></i>{this.props.isCreator ? 
+                                        this.context.intl.formatMessage(this.messages.deleteGroup)
+                                        : this.context.intl.formatMessage(this.messages.leaveGroup)}
+                                </button>
+                            : ''}
                         </div>
                         {(this.props.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
 
@@ -337,9 +370,9 @@ class UserGroupEdit extends React.Component {
     }
 }
 
-UserGroupEdit.contextTypes = {
+Details.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired
 };
 
-export default UserGroupEdit;
+export default Details;
