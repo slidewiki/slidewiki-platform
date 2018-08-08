@@ -20,7 +20,7 @@ import TagsPanel from './TagsPanel/TagsPanel';
 //import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
 import { isLocalStorageOn } from '../../../common.js';
-import loadDeckCollections from '../../../actions/collections/loadDeckCollections';
+import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
 
 class ContentModulesPanel extends React.Component {
@@ -68,7 +68,7 @@ class ContentModulesPanel extends React.Component {
                 this.context.executeAction(loadContentDiscussion, {params: this.props.ContentModulesStore.selector});
                 break;
             case 'playlists': 
-                this.context.executeAction(loadDeckCollections, {params: this.props.ContentModulesStore.selector});
+                this.context.executeAction(loadCollectionsTab, {params: this.props.ContentModulesStore.selector});
                 break;
             //case 'contributors':
             //    this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});

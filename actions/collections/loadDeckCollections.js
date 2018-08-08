@@ -5,8 +5,6 @@ import serviceUnavailable from '../error/serviceUnavailable';
 export default function loadDeckCollections(context, payload, done) {
     log.info(context);
 
-    // context.dispatch('UPDATE_DECK_COLLECTIONS_LOADING', true);
-
     // then get deck collection options
     context.service.read('deckgroups.forDeck', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
@@ -20,8 +18,6 @@ export default function loadDeckCollections(context, payload, done) {
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', { moduleType: 'playlists' });
         }
         
-        // context.dispatch('UPDATE_DECK_COLLECTIONS_LOADING', false);
-
         done();
     });
 
