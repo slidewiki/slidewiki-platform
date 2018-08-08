@@ -39,21 +39,22 @@ export function chooseActionGroups(context, payload, done) {
             context.executeAction(fetchUser, {}, callback);
         },
         (callback) => {
+            context.dispatch('USERGROUP_CATEGORY', payload.params.category, callback);
+        },
+        (callback) => {
             switch (payload.params.category) {
                 case categories.categories[0]:
                 case undefined:
-                    context.dispatch('USERGROUP_CATEGORY', payload.params.category);
+                    
                     context.executeAction(updateUsergroup, {group: {id: payload.params.id}}, callback);
                     break;
                 case categories.categories[1]:
-                    context.dispatch('USERGROUP_CATEGORY', payload.params.category);
 
                     let deckListType = payload.params.item === categories.decks[0] ? 'shared' : undefined;
                     context.executeAction(fetchUserDecks, {deckListType, params: {username: payload.params.username}}, callback);
 
                     break;
                 case categories.categories[2]:
-                    context.dispatch('USERGROUP_CATEGORY', payload.params.category);
                     context.executeAction(loadUserCollections, {}, callback);
                     break;
                 default:
