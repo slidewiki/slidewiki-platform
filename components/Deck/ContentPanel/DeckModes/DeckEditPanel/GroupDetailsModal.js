@@ -51,31 +51,34 @@ class GroupDetailsModal extends React.Component {
     }
 
     render() {
+        let showContent = this.props.group && this.props.group.creator;
+
         let members = [];
         //first the creator
-        let optionalText = (this.props.group.creator.organization || this.props.group.creator.country) ?
+        let optionalText = (showContent && (this.props.group.creator.organization || this.props.group.creator.country)) ?
             (this.props.group.creator.organization || this.context.intl.formatMessage(this.messages.unknownOrganization)) + ', ' + (this.props.group.creator.country || this.context.intl.formatMessage(this.messages.unknownCountry)) :
             '';
-        members.push(
-          (
-            <div className="item" key={this.props.group.creator.userid}>
-              <div className="ui grid">
-                <div className="one wide column middle aligned">
-                  <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
-                </div>
-                <div className="fifteen wide column">
-                  <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.group.creator.userid} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
-                  <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.displayName || this.props.group.creator.username}</a>
-                  <div className="description">
-                    {this.context.intl.formatMessage(this.messages.groupCreator)}
+        if (showContent)
+            members.push(
+              (
+                <div className="item" key={this.props.group.creator.userid}>
+                  <div className="ui grid">
+                    <div className="one wide column middle aligned">
+                      <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
+                    </div>
+                    <div className="fifteen wide column">
+                      <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.group.creator.userid} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
+                      <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.displayName || this.props.group.creator.username}</a>
+                      <div className="description">
+                        {this.context.intl.formatMessage(this.messages.groupCreator)}
+                      </div>
+                      {optionalText}
+                    </div>
                   </div>
-                  {optionalText}
                 </div>
-              </div>
-            </div>
-          )
-        );
-        if (this.props.group.members !== undefined && this.props.group.members.length > 0) {
+              )
+            );
+        if (showContent && this.props.group.members !== undefined && this.props.group.members.length > 0) {
             this.props.group.members.forEach((user) => {
                 optionalText = (user.organization || user.country) ?
                     (user.organization || this.context.intl.formatMessage(this.messages.unknownOrganization)) + ', ' + (user.country || this.context.intl.formatMessage(this.messages.unknownCountry)) :
@@ -100,6 +103,9 @@ class GroupDetailsModal extends React.Component {
         }
 
         let showModal = this.props.show;
+        let textDetails = '';
+        if (showContent)
+            textDetails = 'There are ' + (this.props.group.members.length+1) + ' member' + ((this.props.group.members.length !== 0) ? 's': '') + ' in this group.';
 
         return (
           <Modal dimmer='blurring'
@@ -123,7 +129,7 @@ class GroupDetailsModal extends React.Component {
                     <Segment color="blue" textAlign="center" padded>
                       <Segment attached="bottom" textAlign="left">
       									<h3 className="header" >{this.props.group.name}</h3>
-      									<p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
+      									<p>{textDetails}</p>
       									<div className="ui very relaxed  list">
       											{members}
       									</div>
