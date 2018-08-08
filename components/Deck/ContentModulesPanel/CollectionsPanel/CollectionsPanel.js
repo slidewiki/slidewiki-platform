@@ -8,6 +8,7 @@ import CollectionsList from './CollectionsList';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import { Dropdown } from 'semantic-ui-react';
 import addDeckToCollection from '../../../../actions/collections/addDeckToCollection';
+import NewCollectionModal from '../../../DeckCollection/Modals/NewCollectionModal';
 
 class CollectionsPanel extends React.Component {
 
@@ -97,7 +98,8 @@ class CollectionsPanel extends React.Component {
 
         const userId = this.props.UserProfileStore.userid;
         const selector = this.props.DeckCollectionStore.selector;
-        const groupIds = (this.props.UserProfileStore.user.groups || []).map( (group) => group.id);
+        const groups = this.props.UserProfileStore.user.groups;
+        const groupIds = (groups || []).map( (group) => group.id);
 
         // collections of the current deck
         const deckCollections = this.props.DeckCollectionStore.deckCollections;
@@ -148,7 +150,7 @@ class CollectionsPanel extends React.Component {
                         </div>
                     </div>
                 </div>
-                <br/>
+                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={groups} loggedInUser={userId} deckId={selector.sid} />
             </div>
         );
     }
