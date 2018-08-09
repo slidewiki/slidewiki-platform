@@ -157,7 +157,7 @@ class ContentModulesPanel extends React.Component {
         // hide playlists tab in slides
         let palylistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
         <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')}>
-            Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span>
+            Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.playlists}</span>
         </a> : '';
 
         pointingMenu = (

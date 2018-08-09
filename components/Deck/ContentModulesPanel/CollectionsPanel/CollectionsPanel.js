@@ -29,11 +29,11 @@ class CollectionsPanel extends React.Component {
             },
             createCollection: {
                 id: 'CollectionsPanel.createCollection', 
-                defaultMessage: 'Create new playlist'
+                defaultMessage: 'Add to new playlist'
             },
             ariaCreateCollection: {
                 id: 'CollectionsPanel.ariaCreateCollection', 
-                defaultMessage: 'Create a new playlist'
+                defaultMessage: 'Add to new playlist'
             },
             errorTitle: {
                 id: 'CollectionsPanel.error.title',
@@ -131,16 +131,16 @@ class CollectionsPanel extends React.Component {
                         <div className="middle aligned eight wide column">
                             <h3 className="ui header">{this.context.intl.formatMessage(this.messages.header)}</h3>
                         </div>
-                        <div className="eight wide right aligned column">
-                            <button className="ui small blue labeled icon right floated button" aria-label={this.context.intl.formatMessage(this.messages.ariaCreateCollection)} onClick={this.showNewCollectionModal.bind(this)}>
-                                <i className="icon plus"></i>{this.context.intl.formatMessage(this.messages.createCollection)}
-                            </button>
-                        </div>
                     </div>
                     {   (userId) &&
                         <div className="row">
-                            <div className="sixteen wide column">
+                            <div className="eleven wide column">
                                 <Dropdown value={this.state.currentSelection} placeholder='Select to add a playlist' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this, selector.sid)} />
+                            </div>
+                            <div className="five wide column">
+                                <button className="ui small blue labeled icon right floated button" aria-label={this.context.intl.formatMessage(this.messages.ariaCreateCollection)} onClick={this.showNewCollectionModal.bind(this)}>
+                                    <i className="icon plus"></i>{this.context.intl.formatMessage(this.messages.createCollection)}
+                                </button>
                             </div>
                         </div>
                     }

@@ -49,6 +49,9 @@ export default {
             rp({
                 method: 'GET',
                 uri: uri,
+                qs: {
+                    countOnly: args.countOnly || undefined
+                },
                 json: true,
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
