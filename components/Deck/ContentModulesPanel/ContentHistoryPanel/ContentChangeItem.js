@@ -142,7 +142,7 @@ class ContentChangeItem extends React.Component {
                 <List.Content style={{width:'100%'}} tabIndex='0'>
                     <List.Header>
                         <NavLink className="user"
-                                          href={'/user/' + change.username}> {change.username}</NavLink> {description} {buttons}
+                                          href={'/user/' + change.username}> {change.userDisplayName}</NavLink> {description} {buttons}
                     </List.Header>
                     {/*<List.Description>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</List.Description>*/}
                     <List.Description>{formatDate(change.timestamp)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}</List.Description>

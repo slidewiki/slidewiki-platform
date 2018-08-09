@@ -173,7 +173,8 @@ class DeckPropertiesEditor extends React.Component {
                             joined: data.joined || (new Date()).toISOString(),
                             picture: data.picture,
                             country: data.country,
-                            organization: data.organization
+                            organization: data.organization,
+                            displayName: data.displayName
                         });
                     }
 
@@ -329,7 +330,7 @@ class DeckPropertiesEditor extends React.Component {
                                 <div className="ten wide column">
                                     <div className="content">
                                         <TextArea className="sr-only" id={'usernameIsALinkHint' + key} value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
-                                        <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
+                                        <a className="header" href={'/user/' + user.username} target="_blank">{user.displayName || user.username}</a>
                                         <div className="description">
                                             {optionalElement}{optionalText}
                                         </div>

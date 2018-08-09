@@ -15,36 +15,36 @@ class SearchResultsItem extends React.Component {
             otherVersions: {
                 id: 'SearchResultsItem.otherVersions',
                 defaultMessage: 'Other versions'
-            }, 
+            },
             otherDeckVersion: {
-                id: 'SearchResultsItem.otherVersions.deck', 
+                id: 'SearchResultsItem.otherVersions.deck',
                 defaultMessage: 'Deck Version {index}: {title}'
-            }, 
+            },
             otherSlideVersion: {
-                id: 'SearchResultsItem.otherVersions.slide', 
+                id: 'SearchResultsItem.otherVersions.slide',
                 defaultMessage: 'Also in Deck: {title}'
-            }, 
+            },
             inDeck: {
-                id: 'SearchResultsItem.inDeck', 
+                id: 'SearchResultsItem.inDeck',
                 defaultMessage: 'in'
-            }, 
+            },
             byUser: {
-                id: 'SearchResultsItem.byUser', 
+                id: 'SearchResultsItem.byUser',
                 defaultMessage: 'by user'
-            }, 
+            },
             owner: {
-                id: 'SearchResultsItem.owner', 
+                id: 'SearchResultsItem.owner',
                 defaultMessage: 'Owner'
-            }, 
+            },
             slideLastModified: {
-                id: 'SearchResultsItem.lastModified.slide', 
+                id: 'SearchResultsItem.lastModified.slide',
                 defaultMessage: 'Slide last modified: {date}'
-            }, 
+            },
             deckLastModified: {
-                id: 'SearchResultsItem.lastModified.deck', 
+                id: 'SearchResultsItem.lastModified.deck',
                 defaultMessage: 'Deck last modified: {date}'
             }
-            
+
         });
     }
 
@@ -96,14 +96,14 @@ class SearchResultsItem extends React.Component {
         let lastModifiedLine = '';
 
         if (result.kind === 'Slide'){
-            userLine = <span><FormattedMessage {...this.messages.inDeck} /> <NavLink href={result.deck.link}>{result.deck.title}</NavLink> <FormattedMessage {...this.messages.byUser} /> <NavLink href={result.user.link}>{result.user.username}</NavLink></span>;
+            userLine = <span><FormattedMessage {...this.messages.inDeck} /> <NavLink href={result.deck.link}>{result.deck.title}</NavLink> <FormattedMessage {...this.messages.byUser} /> <NavLink href={result.user.link}>{result.user.displayName || result.user.username}</NavLink></span>;
             lastModifiedLine = <span>{
                 this.context.intl.formatMessage(this.messages.slideLastModified, {
                     date: result.lastUpdate
                 })
             }</span>;
         } else if (result.kind === 'Deck') {
-            userLine = <span><FormattedMessage {...this.messages.owner} />: <NavLink href={result.user.link}>{result.user.username}</NavLink></span>;
+            userLine = <span><FormattedMessage {...this.messages.owner} />: <NavLink href={result.user.link}>{result.user.displayName || result.user.username}</NavLink></span>;
             lastModifiedLine = <span>{
                 this.context.intl.formatMessage(this.messages.deckLastModified, {
                     date: result.lastUpdate
