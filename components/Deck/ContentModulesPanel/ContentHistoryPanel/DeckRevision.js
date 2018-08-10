@@ -60,7 +60,7 @@ class DeckRevision extends React.Component {
                                        aria-label='Saved at'/>
                         <span>{formatDate(revision.lastUpdate)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} by <a
                         className="user"
-                        href={'/user/' + revision.username}> {revision.username}</a>
+                        href={'/user/' + revision.username}> {revision.userDisplayName}</a>
                             </span>
                         <Button basic floated='right' size='tiny'
                                 aria-label='Show details' data-tooltip='Show details'
