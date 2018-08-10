@@ -323,7 +323,7 @@ class UploadMediaModal extends React.Component {
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field">
             <label htmlFor="copyrightHolder">{this.context.intl.formatMessage(this.messages.copyrightHolder_label)}</label>
-            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.defaultMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
+            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
               <TextArea className="sr-only" id="UploadMediaModalDescription" value={this.context.intl.formatMessage(this.messages.modal_description2)} />
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
