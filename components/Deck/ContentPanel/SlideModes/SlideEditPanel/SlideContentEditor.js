@@ -24,6 +24,8 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
 
+const contextMenuPrefix = 'context-menu-';
+
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -1314,13 +1316,20 @@ class SlideContentEditor extends React.Component {
                 let emptySpan = document.createElement('span');
                 emptySpan.innerHTML = '';
                 $('#'+id).prepend(emptySpan);
-                el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
+                el = $('#'+id).find('span:visible:first').not('.cke_widget_wrapper')[0];
             }
         }
-        if(!el){el = $('#'+id)[0];console.log('id directly');}
-        if(!el){el = $(':focus').find('span:first')[0];console.log('try focus find span first 0');}
+        if (!el) {
+            el = $('#'+id).filter(':visible')[0];
+            console.log('id directly');
+        }
+        if (!el) {
+            el = $(':focus').find('span:visible:first')[0];
+            console.log('try focus find span first 0');
+        }
         //if(!el){el = $(':focus');console.log('id of focus');}
-        if(!el){console.log('nothing found, create span element');
+        if (!el) {
+            console.log('nothing found, create span element');
             let emptySpan = document.createElement('span');
             emptySpan.innerHTML = '';
             $('#'+id).prepend(emptySpan);
@@ -1329,7 +1338,7 @@ class SlideContentEditor extends React.Component {
         el.focus();
         if (typeof window.getSelection != 'undefined'
                 && typeof document.createRange != 'undefined') {
-            let range = document.createRange();
+            const range = document.createRange();
             try{
                 range.selectNodeContents(el);
             } catch(error){
@@ -1338,9 +1347,10 @@ class SlideContentEditor extends React.Component {
                 $('#'+id).contextMenu(true);
                 return false;
             }
-            //range.collapse(false);
+            range.setStart(el, 0);
             range.collapse(true);
-            let sel = window.getSelection();
+
+            const sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
         } else if (typeof document.body.createTextRange != 'undefined') {
@@ -1407,7 +1417,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').each(function () {
             this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
-            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;" class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="' + contextMenuPrefix + $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
             //let menuID = $(this).attr('id');
@@ -1484,7 +1494,13 @@ class SlideContentEditor extends React.Component {
                         callback: function(key, options) {
                             //console.log('context menu clicked: ' + key +  'on'  + id);
                             //console.log('context menu clicked: ' + key +  'on'  + $(this).attr('id')+ $(this).text());
-                            $('.'+$(this).attr('id')).show();
+                            let thisId = $(this).attr('id');
+                            $('.' + thisId).show();
+
+                            if (thisId.startsWith(contextMenuPrefix)) {
+                                thisId = thisId.substring(contextMenuPrefix.length);
+                            }
+
                             switch (key) {
                                 //case 'edit':
                                     //slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
@@ -1493,16 +1509,16 @@ class SlideContentEditor extends React.Component {
                                 case 'editImage':
                                     slideEditorContext.editImage(slideEditorContext, false, $(this).attr('id'));
                                 case 'front':
-                                    slideEditorContext.bringToFront(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.bringToFront(slideEditorContext, false, thisId);
                                     break;
                                 case 'back':
-                                    slideEditorContext.sendToBack(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.sendToBack(slideEditorContext, false, thisId);
                                     break;
                                 case 'duplicate':
-                                    slideEditorContext.duplicateNode(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.duplicateNode(slideEditorContext, false, thisId);
                                     break;
                                 case 'delete':
-                                    slideEditorContext.deleteNode(slideEditorContext, false, $(this).attr('id'));
+                                    slideEditorContext.deleteNode(slideEditorContext, false, thisId);
                                     break;
                                 case 'quit':
                                     break;
@@ -2076,6 +2092,10 @@ class SlideContentEditor extends React.Component {
                 }
                 //$(this).remove();
                 $('#'+id).remove();
+                if (id.startsWith(contextMenuPrefix)) {
+                    id = id.substring(contextMenuPrefix.length);
+                    $('#'+id).remove();
+                }
                 context.hasChanges = true;
 
                 //}
