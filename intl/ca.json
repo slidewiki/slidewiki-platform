@@ -418,6 +418,7 @@
   "SlideContentEditor.switchToCanvasModalConfirm": "Yes, switch to canvas-style with input boxes",
   "SlideContentEditor.switchToCanvasModalCancel": "No",
   "SlideContentEditor.unsavedChangesAlert": "You have unsaved changes. If you do not save the slide, it will not be updated. Are you sure you want to exit this page?",
+  "SlideContentEditor.contextMenuEditImage": "Edit Image",
   "SlideContentEditor.contextMenuBringToFront": "Bring to front (Ctrl shift +)",
   "SlideContentEditor.contextMenuSendToBack": "Send to back (Ctrl shift -)",
   "SlideContentEditor.contextDuplicate": "Duplicate (Ctrl d)",
