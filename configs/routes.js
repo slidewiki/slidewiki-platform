@@ -34,7 +34,6 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -581,9 +580,14 @@ export default {
                 (callback) => {
                     // add missing sid in order to load the deck's title
                     payload.params.sid = payload.params.id;
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
                     context.executeAction(loadDeckView, payload, callback);
                 },
                 (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
                 },
                 (err, result) => {

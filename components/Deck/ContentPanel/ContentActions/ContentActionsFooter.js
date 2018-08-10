@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import ContentUtil from '../util/ContentUtil';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
@@ -20,6 +19,8 @@ import ContentLikeStore from '../../../../stores/ContentLikeStore';
 import DownloadModal from './DownloadModal';
 import MobileDetect from 'mobile-detect';
 import AriaMenuButton from 'react-aria-menubutton';
+import TranslationStore from '../../../../stores/TranslationStore';
+import { makeNodeURL } from '../../../common/Util';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -30,35 +31,23 @@ class ContentActionsFooter extends React.Component {
         this.state.isMobile = false;
         // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
     }
+
     componentDidMount(){
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
         this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
+
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
         this.state.expanded = 1;
         return false;
     }
+
     handleCollapseClick(){
         this.context.executeAction(restoreDeckPageLayout, {});
         this.state.expanded = 0;
         return false;
-    }
-    getPresentationHref(){
-        let presLocation = ['/presentation', this.props.ContentStore.selector.id, this.props.deckSlug || '_'].join('/') + '/';
-        if(!this.props.ContentStore.selector.subdeck){
-            //do not duplicate deck ID! only for slides duplicate it
-            presLocation += this.props.ContentStore.selector.id + '/';
-        }
-        else{
-            presLocation += this.props.ContentStore.selector.subdeck + '/';
-        }
-        if(this.props.ContentStore.selector.stype === 'slide'){
-            presLocation += this.props.ContentStore.selector.sid + '/';
-            //presLocation = presLocation+ '#' + this.props.ContentStore.selector.sid;// + '/';
-        }
-        return presLocation;
     }
 
     handlePrintClick(e){
@@ -194,7 +183,7 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={this.getPresentationHref()} target="_blank">
+                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
@@ -218,11 +207,12 @@ ContentActionsFooter.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore], (context, props) => {
     return {
         ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentLikeStore: context.getStore(ContentLikeStore).getState()
+        ContentLikeStore: context.getStore(ContentLikeStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState()
     };
 });
 export default ContentActionsFooter;

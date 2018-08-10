@@ -2,7 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
-import slug from 'slug';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -51,7 +51,8 @@ export default {
                 country: !isEmpty(params.country) ? params.country : '',
                 picture: !isEmpty(params.picture) ? params.picture : '',
                 organization: !isEmpty(params.organization) ? params.organization : '',
-                description: !isEmpty(params.description) ? params.description : ''
+                description: !isEmpty(params.description) ? params.description : '',
+                displayName: !isEmpty(params.displayName) ? params.displayName : ''
             };
             rp({
                 method: 'PUT',
@@ -162,8 +163,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true, 
-                            activity_type: 'react', 
+                            metaonly: true,
+                            activity_type: 'react',
                             all_revisions: true
                         }
                     });
@@ -186,20 +187,20 @@ export default {
             // from the previous response of the deck-service
             if (params.nextLink){
                 requestCall = {
-                    uri: `${Microservices.deck.uri}${params.nextLink}`, 
+                    uri: `${Microservices.deck.uri}${params.nextLink}`,
                     json: true
                 };
             } else {
                 requestCall = {
                     method: 'GET',
-                    uri: `${Microservices.deck.uri}/decks`, 
+                    uri: `${Microservices.deck.uri}/decks`,
                     qs: {
                         user: params.id2,
-                        roles: params.roles, 
+                        roles: params.roles,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
                         status: params.status || 'any',
-                        page: params.page, 
+                        page: params.page,
                         pageSize: 30
                     },
                     json: true
@@ -219,8 +220,8 @@ export default {
                     let promise = rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
-                            metaonly: true, 
-                            activity_type: 'react', 
+                            metaonly: true,
+                            activity_type: 'react',
                             all_revisions: true
                         }
                     });
@@ -235,11 +236,11 @@ export default {
                     let converted = decks.map((deck) => { return transform(deck); });
 
                     callback(null, {
-                        metadata: response._meta, 
+                        metadata: response._meta,
                         decks: converted
                     });
                 });
-            }).catch((err) => callback(err));           
+            }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
@@ -265,7 +266,8 @@ export default {
                         description: !isEmpty(body.description) ? body.description : '',
                         hasPassword: body.hasPassword || false,
                         providers: body.providers || [],
-                        groups: !isEmpty(body.groups) ? body.groups : []
+                        groups: !isEmpty(body.groups) ? body.groups : [],
+                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
                     };
                     callback(null, converted, {
                         headers: {
@@ -300,12 +302,13 @@ export default {
                         country: !isEmpty(body.country) ? body.country : '',
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : ''
+                        description: !isEmpty(body.description) ? body.description : '',
+                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
                     };
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));
-            }            
+            }
         }
     }
 };
@@ -330,5 +333,5 @@ function transform(deck){
 }
 
 function buildSlug(deck) {
-    return slug(deck.title || '').toLowerCase() || '_';
+    return slugify(deck.title || '').toLowerCase() || '_';
 }
