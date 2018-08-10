@@ -9,7 +9,7 @@ import updateGraphic from '../../actions/media/updateGraphic';
 import finishPaintEdition from '../../actions/paint/finishPaintEdition';
 import PaintModalStore from '../../stores/PaintModalStore';
 import { fabric } from 'fabric';
-//import rp from 'request-promise';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -87,6 +87,103 @@ class PaintModal extends React.Component {
         this.getDrawedCoordinates = this.getDrawedCoordinates.bind(this);
         this.showLicense = this.showLicense.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
+
+        // Messages
+        this.messages = defineMessages({
+            paintTitle: {
+                id: 'paintModal.title',
+                defaultMessage: 'Draw your own SVG image'
+            },
+            primaryColourInput: {
+                id: 'paintModal.primaryColourInput',
+                defaultMessage: 'Primary colour: '
+            },
+            secondaryColourInput: {
+                id: 'paintModal.secondaryColourInput',
+                defaultMessage: 'Secondary colour: '
+            },
+            lineBorderWidthInput: {
+                // <FormattedMessage id="paintModal.lineBorderWidth" defaultMessage="Line/Border Width:"/>
+                id: 'paintModal.lineBorderWidthInput',
+                defaultMessage: 'Line/Border Width:'
+            },
+            transparencyInput: {
+                id: 'paintModal.transparencyInput',
+                defaultMessage: 'Object Transparency:'
+            },
+            drawingMode: {
+                id: 'paintModal.drawingMode',
+                defaultMessage: 'Drawing Mode'
+            },
+            selectMode: {
+                id: 'paintModal.selectMode',
+                defaultMessage: 'Select Mode'
+            },
+            addToSlide: {
+                id: 'paintModal.addToSlide',
+                defaultMessage: 'Add to Slide'
+            },
+            paintHeading: {
+                id: 'oaintModal.paintHeading',
+                defaultMessage: 'Draw and Paint'
+            },
+            licenseHeading: {
+                id: 'paintModal.licenseHeading',
+                defaultMessage: 'License information'
+            },
+            undo: {
+                id: 'paintModal.undo',
+                defaultMessage: 'Undo'
+            },
+            redo: {
+                id: 'paintModal.redo',
+                defaultMessage: 'Redo'
+            },
+            bringForwards: {
+                id: 'paintModal.bringForwards',
+                defaultMessage: 'Bring Forwards'
+            },
+            sendBackwards: {
+                id: 'paintModal.sendBackwards',
+                defaultMessage: 'Send Backwards'
+            },
+            uploadImage: {
+                id: 'paintModal.uploadImage',
+                defaultMessage: 'Upload Image'
+            },
+            downloadImage: {
+                id: 'paintModal.downloadImage',
+                defaultMessage: 'Download Image'
+            },
+            clone: {
+                id: 'paintModal.clone',
+                defaultMessage: 'Clone Selected Objects'
+            },
+            delete: {
+                id: 'paintModal.delete',
+                defaultMessage: 'Delete Selected Objects'
+            },
+            addCircle: {
+                id: 'paintModal.addCircle',
+                defaultMessage: 'Add Circle'
+            },
+            addRectangle: {
+                id: 'paintModal.addRectangle',
+                defaultMessage: 'Add Rectangle'
+            },
+            addTriangle: {
+                id: 'paintModal.addTriangle',
+                defaultMessage: 'Add Triangle'
+            },
+            addArrow: {
+                id: 'paintModal.addArrow',
+                defaultMessage: 'Add Arrow'
+            },
+            paintInstruction: {
+                id: 'paintModal.instruction',
+                defaultMessage: 'Draw inside the canvas using the tools provided.'
+            }
+        });
     }
 
     componentDidUpdate() {
@@ -628,70 +725,67 @@ class PaintModal extends React.Component {
 
     render() {
         this.context.getUser().username;
-        let submitButtonText = 'Add to Slide';
+        let submitButtonText = this.context.intl.formatMessage(this.messages.addToSlide);
         let submitButtonIcon = 'arrow right';
         let modePadding = {'padding-bottom': '1.5em', 'padding-top': '1.5em'};
 
         let saveHandler= this.showLicense;
 
-        let mode = this.drawingMode ? (<div><Icon name="pencil"/> Drawing Mode</div>) : (<div><Icon name="hand point up outline"/> Select Mode</div>);
+        let mode = this.drawingMode ? (<div><Icon name="pencil"/> {this.context.intl.formatMessage(this.messages.drawingMode)}</div>) : (<div><Icon name="hand point up outline"/>{this.context.intl.formatMessage(this.messages.selectMode)}</div>);
 
-        let heading = 'Draw and Paint';
+        let heading = this.context.intl.formatMessage(this.messages.paintHeading);
         let licenseBoxes = '';
         let content = <div>
-            <div id="paintModalDescription" tabIndex="0">Draw your own SVG image</div>
+            <div id="paintModalDescription" tabIndex="0">{this.context.intl.formatMessage(this.messages.paintTitle)}</div>
 
             <Segment textAlign="center" >
                 <div className="ui padded grid">
                     <div className="four wide column">
                         <div className="ui grid">
                             <div className="sixteen wide column">
-                                <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip="Undo" aria-label="Undo"><Icon name="reply"/></Button>
-                                <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip="Redo" aria-label="Redo"><Icon name="share"/></Button>
-                                <Button className="icon button" onClick={this.bringForwards} disabled={this.noActiveObject} data-tooltip="Bring Forwards" aria-label="Bring Forwards"><Icon name="arrow up"/></Button>
-                                <Button className="icon button" onClick={this.sendBackwards} disabled={this.noActiveObject} data-tooltip="Send Backwards" aria-label="Send Backwards"><Icon name="arrow down"/></Button>
+                                <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip={this.context.intl.formatMessage(this.messages.undo)} aria-label={this.context.intl.formatMessage(this.messages.undo)}><Icon name="reply"/></Button>
+                                <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip={this.context.intl.formatMessage(this.messages.redo)} aria-label={this.context.intl.formatMessage(this.messages.redo)}><Icon name="share"/></Button>
+                                <Button className="icon button" onClick={this.bringForwards} disabled={this.noActiveObject} data-tooltip={this.context.intl.formatMessage(this.messages.bringForwards)} aria-label={this.context.intl.formatMessage(this.messages.bringForwards)}><Icon name="arrow up"/></Button>
+                                <Button className="icon button" onClick={this.sendBackwards} disabled={this.noActiveObject} data-tooltip={this.context.intl.formatMessage(this.messages.sendBackwards)} aria-label={this.context.intl.formatMessage(this.messages.sendBackwards)}><Icon name="arrow down"/></Button>
                             </div>
                         </div>
                         <div className="ui grid">
                             <div className="sixteen wide column">
-                                <Button className="icon button" onClick={() => {$('#uploadImage').click();}} data-tooltip="Upload Image" aria-label="Upload Image"><Icon name="upload"/></Button>
+                                <Button className="icon button" onClick={() => {$('#uploadImage').click();}} data-tooltip={this.context.intl.formatMessage(this.messages.uploadImage)} aria-label={this.context.intl.formatMessage(this.messages.uploadImage)}><Icon name="upload"/></Button>
                                 <input type="file" id="uploadImage" style={{ display: 'none' }} onChange={this.loadImg}/>
-                                <Button className="icon button" onClick={this.downloadImg} disabled={!this.state.canvasDirty} data-tooltip="Download Image" aria-label="Download Image"><Icon name="download"/></Button>
-                                <Button className="icon button" onClick={this.copyActiveObjects} data-tooltip="Clone Selected Objects" aria-label="Clone Selected Objects"><Icon name="copy"/></Button>
-                                <Button className="icon button" onClick={this.deleteElement} data-tooltip="Delete selected objects" aria-label="Delete selected objects"><Icon name="trash"/></Button>
+                                <Button className="icon button" onClick={this.downloadImg} disabled={!this.state.canvasDirty} data-tooltip={this.context.intl.formatMessage(this.messages.downloadImage)} aria-label={this.context.intl.formatMessage(this.messages.downloadImage)}><Icon name="download"/></Button>
+                                <Button className="icon button" onClick={this.copyActiveObjects} data-tooltip={this.context.intl.formatMessage(this.messages.clone)} aria-label={this.context.intl.formatMessage(this.messages.clone)}><Icon name="copy"/></Button>
+                                <Button className="icon button" onClick={this.deleteElement} data-tooltip={this.context.intl.formatMessage(this.messages.delete)} aria-label={this.context.intl.formatMessage(this.messages.delete)}><Icon name="trash"/></Button>
                             </div>
                         </div><br/>
-                        <Button className="icon button" onClick={this.addRect} data-tooltip="Add Rectangle" aria-label="Add Rectangle"><Icon name="stop"/></Button>
-                        <Button className="icon button" onClick={this.addCircle} data-tooltip="Add Circle" aria-label="Add Circle"><Icon name="circle"/></Button>
-                        <Button className="icon button" onClick={this.addTriangle} data-tooltip="Add Triangle" aria-label="Add Triangle"><Icon name="caret up"/></Button>
+                        <Button className="icon button" onClick={this.addRect} data-tooltip={this.context.intl.formatMessage(this.messages.addRectangle)} aria-label={this.context.intl.formatMessage(this.messages.addRectangle)}><Icon name="stop"/></Button>
+                        <Button className="icon button" onClick={this.addCircle} data-tooltip={this.context.intl.formatMessage(this.messages.addCircle)} aria-label={this.context.intl.formatMessage(this.messages.addCircle)}><Icon name="circle"/></Button>
+                        <Button className="icon button" onClick={this.addTriangle} data-tooltip={this.context.intl.formatMessage(this.messages.addTriangle)} aria-label={this.context.intl.formatMessage(this.messages.addTriangle)}><Icon name="caret up"/></Button>
                         {/*<button onClick={this.addText}>Add Text</button>*/}
-                        <Button className="icon button" onClick={this.addArrow} data-tooltip="Add Arrow" aria-label="Add Arrow"><Icon name="arrow right"/></Button>
+                        <Button className="icon button" onClick={this.addArrow} data-tooltip={this.context.intl.formatMessage(this.messages.addArrow)} aria-label={this.context.intl.formatMessage(this.messages.addArrow)}><Icon name="arrow right"/></Button>
                         <br/>
                         <div className="ui slider checkbox" style={modePadding}>
-                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode} aria-label={'Mode: ' + this.drawingMode}/>
+                            <input type="checkbox" id="drawing" defaultChecked={this.drawingMode} value={this.drawingMode} onClick={this.setDrawingMode} aria-label={this.drawingMode ? this.context.intl.formatMessage(this.messages.drawingMode) : this.context.intl.formatMessage(this.messages.selectMode)}/>
                             <label htmlFor="drawing">{mode}</label>
                             {/*<label htmlFor="drawing">{this.drawingMode ? '<Icon name="pencil alternate"/> Drawing Mode' : '<Icon name="mouse pointer"/> Select Mode'}</label>*/}
                         </div>
                         <br/>
                         <div>
-                            <p><label htmlFor="primaryColor">Primary colour:</label> <input type="color" id="primaryColor"/></p>
-                            <p><label htmlFor="secondaryColor">Border colour:</label> <input type="color" id="secondaryColor"/></p>
+                            <p><label htmlFor="primaryColor">{this.context.intl.formatMessage(this.messages.primaryColourInput)}</label> <input type="color" id="primaryColor"/></p>
+                            <p><label htmlFor="secondaryColor">{this.context.intl.formatMessage(this.messages.secondaryColourInput)}</label> <input type="color" id="secondaryColor"/></p>
                         </div>
                         <br/>
                         <div>
-                            <p><label htmlFor="widthInput">Line/Border Width:</label> </p>
+                            <p><label htmlFor="widthInput">{this.context.intl.formatMessage(this.messages.lineBorderWidthInput)}</label> </p>
                             <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0} id="widthInput"/>
                         </div>
                         <div>
-                            <p><label htmlFor="widthInput">Object Transparency:</label> </p>
+                            <p><label htmlFor="widthInput">{this.context.intl.formatMessage(this.messages.transparencyInput)}</label> </p>
                             <input type="range" min="0" max="100" step="5" onChange={this.setTransparency} defaultValue={0} id="widthInput"/>
                         </div>
-
-
-                        {/*<Button className="icon button" onClick={this.paste} data-tooltip="Paste"><Icon name="paste"/></Button>*/}
                     </div>
                     <div className="twelve wide column">
-                        <p>Draw inside the canvas using the tools provided.</p>
+                        <p>{this.context.intl.formatMessage(this.messages.paintInstruction)}</p>
                         <canvas id="fabriccanvas" style={canvasStyle}/>
                     </div>
                 </div>
@@ -699,7 +793,7 @@ class PaintModal extends React.Component {
         </div>;
 
         if(this.state.license){
-            heading = 'License information';
+            heading = this.context.intl.formatMessage(this.messages.licenseHeading);
             let innerSvg = '<svg' + this.state.file.url.split('<svg')[1];
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
@@ -724,7 +818,7 @@ class PaintModal extends React.Component {
                     <div className="required field">
                         <div className="ui checkbox">
                             <input id="terms" type="checkbox" aria-label="Agree to terms and conditions" aria-required="true" required/>
-                            <label htmlFor="terms">I confirm that I have the rights to upload this image as per the SlideWiki <a href="/imprint">terms and conditions</a> and that the <a href="/license">license information</a> I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
+                            <label htmlFor="terms">I confirm that I have the rights to upload this image as per the SlideWiki <a href="/imprint" target="_blank">terms and conditions</a> and that the <a href="/license" target="_blank">license information</a> I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
                         </div>
                     </div>
                     <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
