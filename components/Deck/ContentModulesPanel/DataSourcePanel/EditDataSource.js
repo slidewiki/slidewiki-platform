@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
@@ -6,10 +7,55 @@ import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataS
 
 class EditDataSource extends React.Component {
     componentDidMount() {
+
+        $.fn.form.settings.rules.yearRule = (year) => {
+            let currDate = new Date();
+            let currYear = currDate.getFullYear();
+            let intYear = parseInt(year);
+            if (!intYear || intYear > currYear) {
+                return false;
+            }
+            return true;
+        };
+
+        $.fn.form.settings.rules.urlRule = (url) => {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url;
+            }
+            let expression = /https?:\/\/(www\.)?[-a-z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(\/[-a-z0-9@:%_\+.~#?&=]*)?/i;
+            let regex = new RegExp(expression);
+
+            if (url.match(regex)) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
         const dataSourceValidation = {
             fields: {
                 title: {
-                    identifier: 'title'
+                    identifier: 'title',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'This field cannot be empty.'
+                    }]
+                },
+                url: {
+                    identifier: 'url',
+                    optional: true,
+                    rules: [{
+                        type: 'urlRule[url]',
+                        prompt: 'The URL must be a valid one.'
+                    }]
+                },
+                year: {
+                    identifier: 'year',
+                    optional: true,
+                    rules: [{
+                        type: 'yearRule[year]',
+                        prompt: 'Enter a valid number for a Year, which is less or equal the current one.'
+                    }]
                 }
             },
             onSuccess: this.handleSave.bind(this)
@@ -93,7 +139,7 @@ class EditDataSource extends React.Component {
                     </div>
                     <div className="ui required field">
                         <label htmlFor="title">Title</label>
-                        <input type="text" ref="title" id="title" name="title" placeholder="Title" defaultValue={dataSource.title} autoFocus required />
+                        <input type="text" ref="title" id="title" name="title" placeholder="Title" defaultValue={dataSource.title} autoFocus />
                     </div>
                     <div className="ui field">
                         <label htmlFor="url">URL</label>
@@ -128,7 +174,7 @@ class EditDataSource extends React.Component {
 }
 
 EditDataSource.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 EditDataSource = connectToStores(EditDataSource, [DataSourceStore], (context, props) => {

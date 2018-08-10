@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
-import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
@@ -9,6 +9,7 @@ import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
 import tableClick from '../../../actions/slide/tableClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
+import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
@@ -16,6 +17,7 @@ import SlideEditStore from '../../../stores/SlideEditStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import PaintModal from '../../Paint/PaintModal';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -37,7 +39,10 @@ class SlideEditLeftPanel extends React.Component {
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
             LeftPanelTitleChange: false,
-            titleMissingError: false
+            titleMissingError: false,
+            paintButton: (<a className="item" id="paintModalTrigger" role="button" >
+                                <i tabIndex="0" className="paint brush icon"></i> Paint
+                               </a>)
         };
     }
     componentDidUpdate(prevProps, prevState){
@@ -83,6 +88,9 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleCodeClick(){
         this.context.executeAction(codeClick, {});
+    }
+    handleRemoveBackgroundClick(){
+        this.context.executeAction(removeBackgroundClick, {});
     }
     handleEmbedClick(){
         this.setState({showEmbed: true});
@@ -319,6 +327,9 @@ class SlideEditLeftPanel extends React.Component {
             }
         }
     }
+    componentDidMount(){
+        this.paintButton = (<PaintModal/>);
+    }
 
     render() {
         const dropDownItemStyle = {
@@ -346,6 +357,13 @@ class SlideEditLeftPanel extends React.Component {
                   </a>
                   <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
+                  </a>
+                  <a className="item" id="handleRemoveBackgroundClick" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
+                      <i tabIndex="0"  className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
+                      {/*eraser*/}
+                  </a>
+                  <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
+                      <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
                   </a>
                 </div>);
 
@@ -551,29 +569,26 @@ class SlideEditLeftPanel extends React.Component {
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1080p.png" alt="template - Title and bullets" />
               </a>
             </div>);
-
         let normalContent = (
           <div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
                 <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
             <a  className="item" id="handleUploadMediaClick" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
-                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Image' />
+                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Add image' />
             </a>
+            {this.paintButton}
             <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
-                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Video' />
+                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Add video' />
             </a>
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
-                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Other' />
+                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
             <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
                 <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
-            </a>
-            <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
-                <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
             </a>
             <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
                 <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
@@ -613,8 +628,8 @@ class SlideEditLeftPanel extends React.Component {
 }
 
 SlideEditLeftPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
     return {

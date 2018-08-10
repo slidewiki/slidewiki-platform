@@ -30,7 +30,7 @@ export default function loadSlideEdit(context, payload, done) {
 
 
         let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
-        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.revisions[0].title + ' | ' + 'edit';
+        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.title + ' | ' + 'edit';
 
         // remove HTML tags and quotation marks from the title
         let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
