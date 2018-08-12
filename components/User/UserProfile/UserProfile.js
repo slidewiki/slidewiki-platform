@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getIntlLanguage } from '../../../common.js';
+import {getIntlLanguage} from '../../../common.js';
 import CategoryBox from './CategoryBox';
 import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
@@ -9,12 +9,13 @@ import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
 import UserGroupEdit from './UserGroupEdit';
-import { connectToStores } from 'fluxible-addons-react';
+import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import UserStatsStore from '../../../stores/UserStatsStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { categories } from '../../../actions/user/userprofile/chooseAction';
+import {defineMessages, FormattedMessage} from 'react-intl';
+import {categories} from '../../../actions/user/userprofile/chooseAction';
 
 let MediaQuery = require ('react-responsive');
 
@@ -220,7 +221,16 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} decksMeta={this.props.UserProfileStore.userDecksMeta} loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading} loadMoreError={this.props.UserProfileStore.nextUserDecksError} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} categoryItem={this.props.UserProfileStore.categoryItem} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user}
+                                          decks={this.props.UserProfileStore.userDecks}
+                                          decksMeta={this.props.UserProfileStore.userDecksMeta}
+                                          loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading}
+                                          loadMoreError={this.props.UserProfileStore.nextUserDecksError}
+                                          loggedinuser={this.props.UserProfileStore.username}
+                                          loggedinUserId={this.props.UserProfileStore.userid}
+                                          category={this.props.UserProfileStore.category}
+                                          categoryItem={this.props.UserProfileStore.categoryItem}
+                                          userStats={this.props.UserStatsStore}/>);
     }
 
     displayIntegrations() {
@@ -256,9 +266,10 @@ UserProfile.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {
+UserProfile = connectToStores(UserProfile, [UserProfileStore, UserStatsStore, IntlStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
+        UserStatsStore: context.getStore(UserStatsStore).getState(),
         IntlStore: context.getStore(IntlStore).getState()
     };
 });

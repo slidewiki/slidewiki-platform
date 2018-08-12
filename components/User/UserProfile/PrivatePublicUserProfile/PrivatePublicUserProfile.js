@@ -7,6 +7,7 @@ import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
 import UserRecommendations from '../UserRecommendations';
+import UserStats from './UserStats';
 import classNames from 'classnames/bind';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 
@@ -28,7 +29,7 @@ class PrivatePublicUserProfile extends React.Component {
     }
 
     showUserStats(){
-        return (<div></div>);
+        return (<UserStats userStats={this.props.userStats}></UserStats>);
     }
 
     chooseView(){
