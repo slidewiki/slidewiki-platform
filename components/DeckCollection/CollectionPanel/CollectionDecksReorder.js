@@ -17,6 +17,9 @@ class CollectionDecksReorder extends React.Component {
     handleMoveDown(index){
         this.props.moveDown(index);
     }
+    handlRemove(index){
+        this.props.remove(index);
+    }
     getIntlMessages(){
         return defineMessages({
             moveUp: {
@@ -26,6 +29,10 @@ class CollectionDecksReorder extends React.Component {
             moveDown: {
                 id: 'CollectionDecksReorder.movedown',
                 defaultMessage: 'Move Down'
+            }, 
+            remove: {
+                id: 'CollectionDecksReorder.remove',
+                defaultMessage: 'Remove'
             }
         });
     }
@@ -48,6 +55,7 @@ class CollectionDecksReorder extends React.Component {
 
                         <div className="right aligned column">
                               <div>
+
                                 { (index > 0) && 
                                     <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.moveUp)} aria-label={this.context.intl.formatMessage(this.messages.moveUp)} onClick={this.handleMoveUp.bind(this, index)} >
                                       <i className="arrow up icon" name={'orderUp' + deck.deckID} ></i>
@@ -57,7 +65,10 @@ class CollectionDecksReorder extends React.Component {
                                     <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.moveDown)} aria-label={this.context.intl.formatMessage(this.messages.moveDown)} onClick={this.handleMoveDown.bind(this, index)} >
                                       <i className="arrow down icon" name={'orderDown' + deck.deckID} ></i>
                                     </button>
-                                } 
+                                }
+                                <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.remove)} aria-label={this.context.intl.formatMessage(this.messages.remove)} onClick={this.handlRemove.bind(this, index)} >
+                                    <i className="remove icon" name={'remove' + deck.deckID} ></i>
+                                </button>
                               </div>
                         </div>
                     </div>

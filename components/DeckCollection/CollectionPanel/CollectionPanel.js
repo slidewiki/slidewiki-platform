@@ -70,6 +70,11 @@ class CollectionPanel extends React.Component {
         newState.decksOrder[index + 1] = tmp;
         this.setState(newState);
     }
+    handleRemove(index){
+        let newState = Object.assign({}, this.state);
+        newState.decksOrder.splice(index, 1);
+        this.setState(newState);
+    }
     showErrorPopup(text){
         swal({
             title: 'Error',
@@ -105,10 +110,14 @@ class CollectionPanel extends React.Component {
                 id: 'CollectionPanel.decks.title', 
                 defaultMessage: 'Decks in Playlist'
             }, 
-            reorderDecks: {
-                id: 'CollectionPanel.decks.reorder', 
-                defaultMessage: 'Reorder Decks'
+            editPlaylist: {
+                id: 'CollectionPanel.decks.edit', 
+                defaultMessage: 'Edit'
             }, 
+            editPlaylistHeader: {
+                id: 'CollectionPanel.decks.edit.header', 
+                defaultMessage: 'Edit Playlist'                
+            },
             saveReorder: {
                 id: 'CollectionPanel.save.reorder', 
                 defaultMessage: 'Save'
@@ -156,10 +165,13 @@ class CollectionPanel extends React.Component {
         }
 
         let data = this.props.DeckCollectionStore.collectionDetails;
-        let content = (!this.state.editMode) 
-        ? <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
-        : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} />;
 
+        let loadingDiv = (this.props.DeckCollectionStore.deckOrderLoading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : '';
+
+        let content = (!this.state.editMode) 
+            ? <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
+            : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} remove={this.handleRemove.bind(this)} />;
+        
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
         let hasEditRights = (this.props.UserProfileStore.userid && this.props.UserProfileStore.userid === data.user.id
                     || this.props.UserProfileStore.user.groups && this.props.UserProfileStore.user.groups.map((group) => group._id).includes(data.userGroup));
@@ -183,12 +195,14 @@ class CollectionPanel extends React.Component {
                 </div>
                 <div className = "twelve wide column" >
                     <div className="ui segments">
+                    {loadingDiv}
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
-                            <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.reorderDecks)}</h2>
+                            <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.editPlaylistHeader)}</h2>
                             { (!this.state.editMode && data.decks.length > 0 && hasEditRights) && 
-                                <Button size='small' as='button' onClick={this.setEditMode.bind(this, true)}>
-                                    <FormattedMessage {...this.messages.reorderDecks} />
+                                <Button primary size='small' as='button' onClick={this.setEditMode.bind(this, true)}>
+                                    <Icon name='edit'/>
+                                    <FormattedMessage {...this.messages.editPlaylist} />
                                 </Button>
                             }
                             { (this.state.editMode) && 

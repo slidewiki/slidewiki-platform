@@ -14,6 +14,7 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = false;
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
+        this.deckOrderLoading = false;
     }
 
     destructor() {
@@ -26,6 +27,7 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = false;
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
+        this.deckOrderLoading = false;
     }
 
     getState() {
@@ -38,7 +40,8 @@ class DeckCollectionStore extends BaseStore {
             addCollectionError: this.addCollectionError,
             updateCollectionMetadataError: this.updateCollectionMetadataError,
             updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
-            loading: this.loading
+            loading: this.loading, 
+            deckOrderLoading: this.deckOrderLoading,
         };
     }
 
@@ -56,6 +59,7 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = state.updateCollectionMetadataError;
         this.updateCollectionDeckOrderError = state.updateCollectionDeckOrderError;
         this.loading = state.loading;
+        this.deckOrderLoading = state.deckOrderLoading;
     }
 
     updateCollections(payload){
@@ -168,6 +172,11 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    updateCollectionDeckOrderLoading(payload){
+        this.deckOrderLoading = payload;
+        this.emitChange();
+    }
+
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -189,6 +198,7 @@ DeckCollectionStore.handlers = {
     'UPDATE_COLLECTION_METADATA_ERROR': 'updateCollectionMetadataFailed',
 
     'UPDATE_COLLECTION_DECK_ORDER_SUCCESS': 'updateCollectionDeckOrder',
+    'UPDATE_COLLECTION_DECK_ORDER_LOADING': 'updateCollectionDeckOrderLoading',
     'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
