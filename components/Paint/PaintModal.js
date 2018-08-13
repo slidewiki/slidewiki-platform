@@ -182,6 +182,78 @@ class PaintModal extends React.Component {
             paintInstruction: {
                 id: 'paintModal.instruction',
                 defaultMessage: 'Draw inside the canvas using the tools provided.'
+            },
+            copyrightholder: {
+                id: 'paintModal.copyrightholder',
+                defaultMessage: 'Copyrightholder'
+            },
+            imageAttribution: {
+                id: 'paintModal.imageAttribution',
+                defaultMessage: 'Image created by/ attributed to:'
+            },
+            imageTitle: {
+                id: 'paintModal.imageTitle',
+                defaultMessage: 'Title:'
+            },
+            imageTitleAria: {
+                id: 'paintModal.imageTitleAria',
+                defaultMessage: 'Title of the image'
+            },
+            imageDescription: {
+                id: 'paintModal.imageDescription',
+                defaultMessage: 'Description/Alt Text:'
+            },
+            imageDescriptionAria: {
+                id: 'paintModal.imageDescriptionAria',
+                defaultMessage: 'Description of the image'
+            },
+            imageDescriptionQuestion: {
+                id: 'paintModal.imageDescriptionQuestion',
+                defaultMessage: 'What does the picture mean?'
+            },
+            chooseLicense: {
+                id: 'paintModal.chooseLicense',
+                defaultMessage: 'Choose a license:'
+            },
+            selectLicense: {
+                id: 'paintModal.selectLicense',
+                defaultMessage: 'Select a license'
+            },
+            agreementAria: {
+                id: 'paintModal.agreementAria',
+                defaultMessage: 'Agree to terms and conditions'
+            },
+            agreement1: {
+                id: 'paintModal.agreement1',
+                defaultMessage: 'I confirm that I have the rights to upload this image as per the SlideWiki '
+            },
+            agreement2: {
+                id: 'paintModal.agreement2',
+                defaultMessage: 'terms and conditions'
+            },
+            agreement3: {
+                id: 'paintModal.agreement3',
+                defaultMessage: 'and that the'
+            },
+            agreement4: {
+                id: 'paintModal.agreement4',
+                defaultMessage: 'license information'
+            },
+            agreement5: {
+                id: 'paintModal.agreement5',
+                defaultMessage: 'I have provided is correct.'
+            },
+            paintButton: {
+                id: 'paintModal.paintButton',
+                defaultMessage: 'Paint'
+            },
+            upload: {
+                id: 'paintModal.upload',
+                defaultMessage: 'Upload'
+            },
+            cancel: {
+                id: 'paintModal.cancel',
+                defaultMessage: 'Cancel'
             }
         });
     }
@@ -796,36 +868,36 @@ class PaintModal extends React.Component {
             heading = this.context.intl.formatMessage(this.messages.licenseHeading);
             let innerSvg = '<svg' + this.state.file.url.split('<svg')[1];
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
-            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">{this.context.intl.formatMessage(this.messages.imageAttribution)}</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.copyrightholder)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
                 {/*<Img src={this.state.file.url} size="large" centered={true}/>*/}
                 <div style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: innerSvg }} />
                 <Divider/>
                 <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                     <div className="required field">
-                        <label htmlFor="mediaTitle">Title:</label>
-                        <Input defaultValue={this.state.file.name} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label="Title of the image" aria-required="true"required autoFocus/>
+                        <label htmlFor="mediaTitle">{this.context.intl.formatMessage(this.messages.imageTitle)}</label>
+                        <Input defaultValue={this.state.file.name} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.imageTitleAria)} aria-required="true"required autoFocus/>
                     </div>
                     <div className="required field">
-                        <label htmlFor="mediaAltText">Description/Alt Text:</label>
-                        <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} aria-label="Description of the image" aria-required="true" required/>} content='What does the picture mean?' position='top center'/>
+                        <label htmlFor="mediaAltText">{this.context.intl.formatMessage(this.messages.imageDescription)}</label>
+                        <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.imageDescriptionAria)} aria-required="true" required/>} content={this.context.intl.formatMessage(this.messages.imageDescriptionQuestion)} position='top center'/>
                     </div>
                     <div className="required field">
-                        <label htmlFor="mediaLicense">Choose a license:</label>
-                        <Dropdown id="mediaLicense" selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" aria-label="Select a license" aria-required="true" required/>
+                        <label htmlFor="mediaLicense">{this.context.intl.formatMessage(this.messages.chooseLicense)}</label>
+                        <Dropdown id="mediaLicense" selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" aria-label={this.context.intl.formatMessage(this.messages.selectLicense)} aria-required="true" required/>
                     </div>
                     {licenseBoxes}
                     <div className="required field">
                         <div className="ui checkbox">
-                            <input id="terms" type="checkbox" aria-label="Agree to terms and conditions" aria-required="true" required/>
-                            <label htmlFor="terms">I confirm that I have the rights to upload this image as per the SlideWiki <a href="/imprint" target="_blank">terms and conditions</a> and that the <a href="/license" target="_blank">license information</a> I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
+                            <input id="terms" type="checkbox" aria-label={this.context.intl.formatMessage(this.messages.agreementAria)} aria-required="true" required/>
+                            <label htmlFor="terms">{this.context.intl.formatMessage(this.messages.agreement1)}<a href="/imprint" target="_blank"> {this.context.intl.formatMessage(this.messages.agreement2)} </a>{this.context.intl.formatMessage(this.messages.agreement3)}<a href="/license" target="_blank"> {this.context.intl.formatMessage(this.messages.agreement4)} </a>{this.context.intl.formatMessage(this.messages.agreement5)}</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
                         </div>
                     </div>
                     <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
                 </form>
             </div>;
             saveHandler = (() => {$('#UploadFormSubmitButton').click();});
-            submitButtonText = 'Upload';
+            submitButtonText = this.context.intl.formatMessage(this.messages.upload);
             submitButtonIcon = 'upload';
         }
 
@@ -835,7 +907,7 @@ class PaintModal extends React.Component {
             <Modal
                 trigger={
                     <a className="item" id="paintModalTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}>
-                        <i tabIndex="0" className="paint brush icon"></i> Paint
+                        <i tabIndex="0" className="paint brush icon"></i>{this.context.intl.formatMessage(this.messages.paintButton)}
                     </a>
                 }
                 open={this.state.modalOpen}
@@ -867,10 +939,10 @@ class PaintModal extends React.Component {
                     <Modal.Actions>
                         <button type="cancel" onClick={this.handleClose} className="ui cancel button">
                             <i className="remove icon"/>
-                            Cancel
+                            {this.context.intl.formatMessage(this.messages.cancel)}
                         </button>
                         <Button id="PaintModalSaveButton" ref="PaintModalSaveButton" color="green" tabIndex="0" type="button"
-                                aria-label="Upload" icon={submitButtonIcon} labelPosition='left' content={submitButtonText}
+                                aria-label={this.context.intl.formatMessage(this.messages.upload)} icon={submitButtonIcon} labelPosition='left' content={submitButtonText}
                                 disabled={!this.state.canvasDirty}
                                 onClick={saveHandler}
                         />
