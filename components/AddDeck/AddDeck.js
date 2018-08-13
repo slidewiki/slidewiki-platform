@@ -616,12 +616,12 @@ class AddDeck extends React.Component {
                                 <label htmlFor="terms">
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
-                                        defaultMessage='I agree to the SlideWiki ' />
+                                        defaultMessage='I agree to the SlideWiki ' />{' '}
                                     <a className="item" href="/terms" target="_blank">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
                                             defaultMessage='terms and conditions' />
-                                    </a>
+                                    </a>{' '}
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
