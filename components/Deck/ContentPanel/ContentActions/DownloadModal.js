@@ -144,6 +144,11 @@ class DownloadModal extends React.Component{
 
 
     }
+    componentDidMount(){
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
+    }
 
     render() {
         return(

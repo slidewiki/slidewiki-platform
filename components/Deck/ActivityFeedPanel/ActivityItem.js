@@ -6,7 +6,7 @@ import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
-import TreeUtil from '../TreePanel/util/TreeUtil';
+import Util from '../../common/Util';
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -23,7 +23,7 @@ class ActivityItem extends React.Component {
             if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
-                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+                let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
 
                 return nodeURL;
             }
@@ -67,7 +67,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'translated '} {nodeRef} {' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
                         <a href={viewPath}>{node.translation_info.language}</a>
@@ -82,7 +82,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="description">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'shared '} {nodeRef} {onPlatform}
                         <br/>
                         {DateDiv}
@@ -94,7 +94,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'created '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -106,7 +106,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'edited '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -118,7 +118,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'moved '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -130,7 +130,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'commented on '} {nodeRef}
                         <br/>
                         <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
@@ -144,7 +144,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a>
                         <span> replied to a comment </span>{'on ' } {nodeRef}
                         <br/>
@@ -160,7 +160,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'used '} {nodeRef}
                         {' in deck '}<a href={'/deck/' + node.use_info.target_id}>{title}</a>
                         <br/>
@@ -173,7 +173,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'attached '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -185,7 +185,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'rated '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -197,7 +197,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ?node.author.displayName ||  node.author.username : 'unknown'}
                         </a> {'liked '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -209,7 +209,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'downloaded '} {nodeRef}
                         <br/>
                         {DateDiv}
@@ -222,7 +222,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'forked '}{nodeRef}{forkRef}
                         <br/>
                         {DateDiv}
@@ -236,7 +236,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> <span>{'deleted ' + node.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}</span>
                         <br/>
                         <span>{'from '} {nodeRef}</span>

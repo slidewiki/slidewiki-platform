@@ -7,7 +7,7 @@ import AddReply from './AddReply';
 import {navigateAction} from 'fluxible-router';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
-import TreeUtil from '../../TreePanel/util/TreeUtil';
+import Util from '../../../common/Util';
 import UserPicture from '../../../common/UserPicture';
 
 class Comment extends React.Component {
@@ -27,7 +27,7 @@ class Comment extends React.Component {
             if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
-                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+                let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
 
                 return nodeURL;
             }
@@ -62,7 +62,7 @@ class Comment extends React.Component {
                     <UserPicture picture={ comment.author.avatar } username={ comment.author.username } avatar={ true } width= { 30 } />
                 </a>
                 <div className="content">
-                    <a className="author" href={'/user/' + comment.author.username}>{comment.author.username}</a>
+                    <a className="author" href={'/user/' + comment.author.username}>{comment.author.displayName || comment.author.username}</a>
                     <div className="metadata">
                         <span className="date">{ActivityFeedUtil.formatDate(comment.timestamp)}</span>
                         {nodeRef}

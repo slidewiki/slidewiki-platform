@@ -16,7 +16,7 @@ class PresentorHTMLLayout extends React.Component {
             <head>
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
-                <meta name="viewport" content="width=device-width, user-scalable=no" />
+                <meta name="viewport" content="width=device-width" />
                 <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />

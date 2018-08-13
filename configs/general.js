@@ -2,7 +2,6 @@
 IMPORTANT NOTE:
 This file gets overridden by entrypoint.sh with the substitude of general.js.template
 */
-
 export default {
     //full page title
     fullTitle: ['SlideWiki -- Authoring platform for OpenCourseWare'],
@@ -12,5 +11,5 @@ export default {
     //Public reCAPTCHA key
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     loglevel: 'debug',
-    ssoEnabled: true
+    ssoEnabled: true,
 };

@@ -17,12 +17,11 @@ class DataSourceStore extends BaseStore {
         this.emitChange();
     }
     updateDatasourcesFromSlideData(payload) {
-        let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
-        this.dataSources = lastRevision.dataSources ? lastRevision.dataSources : [];
+        this.dataSources = payload.slide.dataSources || [];
         this.selector = payload.selector;
         this.dataSource = undefined;
         this.selectedIndex = -1;
-        this.contentOwner = lastRevision.user;
+        this.contentOwner = payload.slide.user;
 
         this.emitChange();
     }
