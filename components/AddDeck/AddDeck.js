@@ -22,6 +22,7 @@ import LanguageDropdown from '../common/LanguageDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import ThemePreviewModal from './ThemePreviewModal';
 
 //TODO: update link to terms of use;
 
@@ -582,7 +583,13 @@ class AddDeck extends React.Component {
                                 </label>
                                 {themeOptions}
                             </div>
-
+                            <div className="field" ref="div_themes" >
+                                <label htmlFor="themes"/>
+                                <ThemePreviewModal slides={[
+                                    {img: '/assets/images/carousel/SW-logo-squ.png'},
+                                    {img: '/assets/images/carousel/globe-squ-transparent.png'}
+                                ]}/>
+                            </div>
                         </div>
 
                         <div className="ui message" id="uploadDesc">
