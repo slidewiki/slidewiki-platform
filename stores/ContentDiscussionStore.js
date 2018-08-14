@@ -80,6 +80,14 @@ class ContentDiscussionStore extends BaseStore {
             console.log('Delete comment failed', payload);
         }
     }
+    hideComment(payload) {
+        let comment = this.findComment(this.discussion, payload.id);
+        if (comment !== null) {//found comment
+            comment.visibility = false;
+        }
+
+        this.emitChange();
+    }
     invertReplyBoxFlag(payload) {
         let comment = payload.comment;
         if (comment.replyBoxOpened) {
@@ -124,7 +132,8 @@ ContentDiscussionStore.handlers = {
     'INVERT_COMMENT_BOX_FLAG': 'invertCommentBoxFlag',
     'ADD_COMMENT_SUCCESS': 'addComment',
     'ADD_REPLY_SUCCESS': 'addReply',
-    'DELETE_COMMENT_SUCCESS': 'deleteComment'
+    'DELETE_COMMENT_SUCCESS': 'deleteComment',
+    'HIDE_COMMENT_SUCCESS': 'hideComment'
 };
 
 export default ContentDiscussionStore;

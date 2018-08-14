@@ -95,6 +95,23 @@ export default {
                 console.log(err);
                 callback(err, params);
             });
+        } else if (resource === 'discussion.itemhide'){
+            /*********connect to microservices*************/
+            const id = args.id;
+            console.log(id);
+            let options = {
+                method: 'PUT',
+                uri: Microservices.discussion.uri + '/comment/hide',
+                body:JSON.stringify({
+                    id: id
+                })
+            };
+            rp(options).then((res) => {
+                callback(null, {id: id});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, params);
+            });
         }
     },
     // other methods

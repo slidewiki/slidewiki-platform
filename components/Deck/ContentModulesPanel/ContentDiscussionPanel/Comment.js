@@ -3,6 +3,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertReplyBoxFlag';
 import deleteComment from '../../../../actions/contentdiscussion/deleteComment';
+import hideComment from '../../../../actions/contentdiscussion/hideComment';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import AddReply from './AddReply';
 import {navigateAction} from 'fluxible-router';
@@ -48,9 +49,15 @@ class Comment extends React.Component {
 
     handleDeleteComment(comment) {
         if (comment.id !== undefined && comment.id !== '') {
-            this.context.executeAction(deleteComment, {
-                id: comment.id
-            });
+            if (comment.replies && comment.replies.length > 0) {//there are replies - hide comment
+              this.context.executeAction(hideComment, {
+                  id: comment.id
+              });
+            } else {
+                this.context.executeAction(deleteComment, {
+                    id: comment.id
+                });
+            }
         }
     }
 
@@ -70,6 +77,14 @@ class Comment extends React.Component {
 
         let deletePermission = (String(this.props.userid) === comment.user_id) || (savedPermissionsStore.permissions.admin || savedPermissionsStore.permissions.edit);
 
+        let commentContent = (comment.visibility === false) ?
+            <div className="text">
+                <i>{'Comment was removed'}</i><br/>
+            </div> :
+            <div className="text">
+                <strong>{comment.title}</strong><br/>
+                {ActivityFeedUtil.breakLines(comment.text)}
+            </div> ;
         return (
             <div className="comment">
                 <a className="avatar">
@@ -88,10 +103,7 @@ class Comment extends React.Component {
                             </div>
                         ) : ''}
                     </div>
-                    <div className="text">
-                        <strong>{comment.title}</strong><br/>
-                        {ActivityFeedUtil.breakLines(comment.text)}
-                    </div>
+                    {commentContent}
                     { (String(this.props.userid) !== '') ? replyLink : ''}
                     { comment.replyBoxOpened ? (<AddReply comment={comment} userid={this.props.userid}/>) : '' }
                 </div>
