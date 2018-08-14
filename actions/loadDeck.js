@@ -24,8 +24,6 @@ import loadLikes from './activityfeed/loadLikes';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
-import changeCurrentLanguage from './translation/changeCurrentLanguage';
-import loadDeckTranslations from './translation/loadDeckTranslations';
 import validateUsedLanguage from './translation/validateUsedLanguage';
 import loadNodeTranslations from './translation/loadNodeTranslations';
 
@@ -121,7 +119,7 @@ export default function loadDeck(context, payload, done) {
     // need to set this for some reason otherwise deck tree does not reload on language change
     if (languageWillChange) {
         if (payloadCustom.navigate) {
-            payloadCustom.navigate.runFetchTree = true;  
+            payloadCustom.navigate.runFetchTree = true;
         } else {
             payloadCustom.navigate = { runFetchTree : true };
         }

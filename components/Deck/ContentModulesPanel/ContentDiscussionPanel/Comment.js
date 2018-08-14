@@ -91,7 +91,7 @@ class Comment extends React.Component {
                     <UserPicture picture={ comment.author.avatar } username={ comment.author.username } avatar={ true } width= { 30 } />
                 </a>
                 <div className="content">
-                    <a className="author" href={'/user/' + comment.author.username}>{comment.author.username}</a>
+                    <a className="author" href={'/user/' + comment.author.username}>{comment.author.displayName || comment.author.username}</a>
                     <div className="metadata">
                         <span className="date">{ActivityFeedUtil.formatDate(comment.timestamp)}</span>
                         {nodeRef}
