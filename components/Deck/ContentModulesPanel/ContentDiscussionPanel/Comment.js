@@ -50,9 +50,9 @@ class Comment extends React.Component {
     handleDeleteComment(comment) {
         if (comment.id !== undefined && comment.id !== '') {
             if (comment.replies && comment.replies.length > 0) {//there are replies - hide comment
-              this.context.executeAction(hideComment, {
-                  id: comment.id
-              });
+                this.context.executeAction(hideComment, {
+                    id: comment.id
+                });
             } else {
                 this.context.executeAction(deleteComment, {
                     id: comment.id
