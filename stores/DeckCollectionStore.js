@@ -15,6 +15,10 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
         this.deckOrderLoading = false;
+
+        // needed for adding decks in playlist modal
+        this.decks = undefined;
+        this.deckMeta = undefined;
     }
 
     destructor() {
@@ -28,6 +32,8 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
         this.deckOrderLoading = false;
+        this.decks = undefined;
+        this.deckMeta = undefined;
     }
 
     getState() {
@@ -42,6 +48,8 @@ class DeckCollectionStore extends BaseStore {
             updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
             loading: this.loading, 
             deckOrderLoading: this.deckOrderLoading,
+            decks: this.decks,
+            deckMeta: this.deckMeta,
         };
     }
 
@@ -60,6 +68,8 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionDeckOrderError = state.updateCollectionDeckOrderError;
         this.loading = state.loading;
         this.deckOrderLoading = state.deckOrderLoading;
+        this.decks = state.decks;
+        this.deckMeta = state.deckMeta;
     }
 
     updateCollections(payload){
@@ -177,6 +187,18 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    updateDecksLoading(){
+        this.decks = undefined;
+        this.emitChange();
+    }
+
+    updateDecks(payload){
+        this.decks = payload.decks;
+        this.deckMeta = payload.metadata;
+
+        this.emitChange();
+    }
+
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -202,6 +224,11 @@ DeckCollectionStore.handlers = {
     'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
+
+
+    // needed for adding decks in playlist modal
+    'NEW_USER_DECKS_LOADING': 'updateDecksLoading',
+    'NEW_USER_DECKS':'updateDecks',
 };
 
 export default DeckCollectionStore;

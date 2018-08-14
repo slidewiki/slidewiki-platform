@@ -10,13 +10,14 @@ import CollectionDecksReorder from './CollectionDecksReorder';
 import {Button, Icon} from 'semantic-ui-react';
 import updateCollectionDeckOrder from '../../../actions/collections/updateCollectionDeckOrder';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import AddDecksModal from '../Modals/AddDecksModal/AddDecksModal';
 
 class CollectionPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             editMode: false, 
-            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || []
+            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || [], 
         };
 
         this.messages = this.getIntlMessages();
@@ -73,6 +74,18 @@ class CollectionPanel extends React.Component {
     handleRemove(index){
         let newState = Object.assign({}, this.state);
         newState.decksOrder.splice(index, 1);
+        this.setState(newState);
+    }
+    handleAdd(newDecks){
+        let newState = Object.assign({}, this.state);
+
+        // add decks that are not already included
+        newDecks.forEach( (newDeck) => {
+            let index = newState.decksOrder.findIndex( (d) => d.deckID === newDeck.deckID);
+            if (index < 0) {
+                newState.decksOrder.push(newDeck);
+            }
+        });
         this.setState(newState);
     }
     showErrorPopup(text){
@@ -141,7 +154,7 @@ class CollectionPanel extends React.Component {
             sortTitle: {
                 id: 'CollectionPanel.sort.title', 
                 defaultMessage: 'Title'
-            }
+            }, 
         });
     }
     getSelectedSort(sortBy){
@@ -209,6 +222,7 @@ class CollectionPanel extends React.Component {
                                 <div className="ui right floated">
                                     <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
                                     <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
+                                    <AddDecksModal selectedDecks={this.state.decksOrder} handleAdd={this.handleAdd.bind(this)} />
                                 </div>
                             }
                             { (!this.state.editMode) && 
