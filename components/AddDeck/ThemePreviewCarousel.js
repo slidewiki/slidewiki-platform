@@ -6,7 +6,6 @@ class ThemePreviewCarousel extends React.Component {
     constructor(props) {
         super(props);
         this.slider = null;
-        this.state = {paused: 0};
     }
 
     componentDidMount() {
@@ -17,28 +16,19 @@ class ThemePreviewCarousel extends React.Component {
         $('.hide-element').removeClass('hide-element');
         this.slider = $('.glide').glide({
             type: 'slideshow',
-            autoplay: 6000,
+            autoplay: false,
             centered: true,
             keyboard: true,
             autoheight: true,
             afterTransition: function(data){
                 $('.gslide-header').removeClass('active');
                 $('.gh' + data.index).addClass('active');
-                //in case a user manually runs the carousel in pause mode
-                if(self.state.paused){
-                    self.setState({paused: 0});
-                }
             },
         });
     }
 
-    togglePause() {
-        if(this.state.paused){
-            this.slider.data('glide_api').start(4000);
-        }else{
-            this.slider.data('glide_api').pause();
-        }
-        this.setState({paused: !this.state.paused});
+    onSelectTheme(themeValue, e) {
+        this.props.callback(themeValue);
     }
 
     createSlides() {
@@ -47,7 +37,8 @@ class ThemePreviewCarousel extends React.Component {
         for (let i=0; i<this.props.slides.length; i++) {
             slides.push(
                 <li className="glide__slide" key={i}>
-                    <img src={this.props.slides[i].img}/>
+                    <img src={this.props.slides[i].img}
+                         onClick={(e) => this.onSelectTheme(this.props.slides[i].value, e)}/>
                 </li>
             );
         }
