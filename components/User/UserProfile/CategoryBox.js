@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import {Microservices} from '../../../configs/microservices';
 
 class CategoryBox extends React.Component {
     constructor(props){
@@ -11,6 +12,35 @@ class CategoryBox extends React.Component {
     }
 
     render() {
+        let analyticsDiv = (Microservices.analytics !== undefined && Microservices.analytics.uri === 'http://slidewiki.imp.bg.ac.rs') ?
+            <div className="ui vertical menu">
+              <div className="item" style={ this.headerStyle }>
+                <table><tr><td>
+                  <h3>
+                    <FormattedMessage
+                      id='CategoryBox.analytics'
+                      defaultMessage='Analytics'
+                    />
+                  </h3>
+                </td><td style={{'textAlign':'center'}}>
+                  <h5 className="ui small header" >
+                    Beta feature
+                  </h5>
+                </td><td style={{'textAlign':'center'}}>
+                  <i className="yellow warning sign icon" />
+                </td></tr></table>
+              </div>
+              <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
+                <p>
+                  <i className="icon chart bar"/>
+                  <FormattedMessage
+                    id='CategoryBox.myAnalytics'
+                    defaultMessage=' My Analytics'
+                  />
+                </p>
+              </NavLink>
+            </div> : '' ;
+
         return (
           <div ref="menus">
 
@@ -72,33 +102,7 @@ class CategoryBox extends React.Component {
               </NavLink>
             </div>
 
-            <div className="ui vertical menu">
-              <div className="item" style={ this.headerStyle }>
-                <table><tr><td>
-                  <h3>
-                    <FormattedMessage
-                      id='CategoryBox.analytics'
-                      defaultMessage='Analytics'
-                    />
-                  </h3>
-                </td><td style={{'textAlign':'center'}}>
-                  <h5 className="ui small header" >
-                    Beta feature
-                  </h5>
-                </td><td style={{'textAlign':'center'}}>
-                  <i className="yellow warning sign icon" />
-                </td></tr></table>
-              </div>
-              <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
-                <p>
-                  <i className="icon chart bar"/>
-                  <FormattedMessage
-                    id='CategoryBox.myAnalytics'
-                    defaultMessage=' My Analytics'
-                  />
-                </p>
-              </NavLink>
-            </div>
+            {analyticsDiv}
 
           </div>
         );

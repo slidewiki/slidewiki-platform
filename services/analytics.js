@@ -2,10 +2,6 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
 
-const analyticsServiceUri = 'http://slidewiki.imp.bg.ac.rs';
-
-
-
 export default {
     name: 'analytics',
     // At least one of the CRUD methods is Required
@@ -19,20 +15,14 @@ export default {
         }
         if (resource === 'analytics.predictionslist'){
 
-
-
+            const analyticsServiceUri = Microservices.analytics.uri;
 
             rp.get({uri: analyticsServiceUri + '/analytics/webresources/predictionjob/' + uid, proxy: '' }).then((res) => {
 
-
-
-
                 let predictions = JSON.parse(res);
+
                 //GET DATA FOR DECKS FROM DECK SERVICE
                 let deckPromises = [];
-                // let likesPromises = [];//get the number of deck likes
-
-                // get details for the decks in the collection
                 for(let prediction of predictions){
                     let deckId = prediction.deckId;
                     deckPromises.push(
@@ -41,17 +31,8 @@ export default {
                             json: true
                         })
                     );
-
-                    // likesPromises.push(
-                    //     rp.get({
-                    //         uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
-                    //     })
-                    // );
                 }
-                // let deckPromise = Promise.all(deckPromises);
-                // let likesPromise = Promise.all(likesPromises);
 
-                // Promise.all([deckPromise, likesPromise]).then( (data) => {
                 Promise.all(deckPromises).then( (data) => {
                     let decks = data;
                     for (let i = 0; i < decks.length; i++) {
