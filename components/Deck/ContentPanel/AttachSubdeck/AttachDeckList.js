@@ -126,7 +126,7 @@ class AttachDeckList extends React.Component {
                 let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
                 let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
                 let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
-                let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
+                let deckLanguageCode = deck.language;
                 let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
                 // default English
                 deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
