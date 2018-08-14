@@ -588,7 +588,11 @@ class AddDeck extends React.Component {
                                 {themeOptions}
                             </div>
                             <div className="field" ref="div_themes" >
-                                <label htmlFor="themes"/>
+                                <label htmlFor="themes">
+                                    <FormattedMessage
+                                        id='AddDeck.form.theme_modal'
+                                        defaultMessage='Select theme' />
+                                </label>
                                 <ThemePreviewModal callback={this.onThemeModalChanged.bind(this)} slides={[
                                     {img: '/assets/images/themes/beige.png', value: 'solarized'},
                                     {img: '/assets/images/themes/black.png', value: 'black'},
