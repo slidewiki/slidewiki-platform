@@ -228,7 +228,7 @@ DeckCollectionStore.handlers = {
 
     // needed for adding decks in playlist modal
     'NEW_USER_DECKS_LOADING': 'updateDecksLoading',
-    'NEW_USER_DECKS':'updateDecks',
+    'NEW_USER_DECKS': 'updateDecks',
 };
 
 export default DeckCollectionStore;

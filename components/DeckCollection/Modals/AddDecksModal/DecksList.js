@@ -86,28 +86,7 @@ class DecksList extends React.Component {
             let languageCode = deck.language;
             let language = languageCode === undefined ? '' : getLanguageName(languageCode);
             language = (language === '' ? 'English' : language);
-                // <Item.Content verticalAlign="middle" >
 
-                //   <Item.Header style ={/*this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:*/{}}>
-                //       {deck.title}
-                //   </Item.Header>
-
-                //   <Item.Meta>
-                //     <span className='meta'>Creator: { editorUsername }</span>
-                //     <br/>
-                //     <span className='meta'>Date: { date }</span>
-                //   </Item.Meta>
-                //    <Item.Extra>
-                //    <Label  size="small">
-                //       <Icon name="comments outline" aria-label="Language"/>
-                //       { language }
-                //     </Label>
-                //     <Label size="small">
-                //        <Icon name="fork" aria-label="Number of versions"/>
-                //        { deck.countRevisions }
-                //      </Label>
-                //    </Item.Extra>
-                //  </Item.Content>
             let isSelected = selectedIds.includes(deck.deckID);
             let selectedIcon = (isSelected) ? <Icon color="green" name="check circle" aria-label="selected deck"/> : <Icon color="grey" name="circle outline" aria-label="unselected deck"/>;
 
@@ -146,7 +125,6 @@ class DecksList extends React.Component {
                         
                     <Grid.Column width={2}>
                         { selectedIcon }
-
                     </Grid.Column>
                 </Grid.Row>            
             );

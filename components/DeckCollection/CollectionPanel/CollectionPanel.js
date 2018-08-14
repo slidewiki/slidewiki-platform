@@ -78,14 +78,7 @@ class CollectionPanel extends React.Component {
     }
     handleAdd(newDecks){
         let newState = Object.assign({}, this.state);
-
-        // add decks that are not already included
-        newDecks.forEach( (newDeck) => {
-            let index = newState.decksOrder.findIndex( (d) => d.deckID === newDeck.deckID);
-            if (index < 0) {
-                newState.decksOrder.push(newDeck);
-            }
-        });
+        newState.decksOrder = newDecks;
         this.setState(newState);
     }
     showErrorPopup(text){
@@ -212,7 +205,7 @@ class CollectionPanel extends React.Component {
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
                             <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.editPlaylistHeader)}</h2>
-                            { (!this.state.editMode && data.decks.length > 0 && hasEditRights) && 
+                            { (!this.state.editMode && hasEditRights) && 
                                 <Button primary size='small' as='button' onClick={this.setEditMode.bind(this, true)}>
                                     <Icon name='edit'/>
                                     <FormattedMessage {...this.messages.editPlaylist} />
@@ -222,7 +215,7 @@ class CollectionPanel extends React.Component {
                                 <div className="ui right floated">
                                     <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
                                     <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
-                                    <AddDecksModal selectedDecks={this.state.decksOrder} handleAdd={this.handleAdd.bind(this)} />
+                                    <AddDecksModal selectedDecks={this.state.decksOrder} handleAdd={this.handleAdd.bind(this)} loggedInDisplayName={data.user.displayName} />
                                 </div>
                             }
                             { (!this.state.editMode) && 
