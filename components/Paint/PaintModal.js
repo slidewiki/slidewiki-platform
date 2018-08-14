@@ -777,6 +777,14 @@ class PaintModal extends React.Component {
         let src = nextProps.PaintModalStore.url;
         let ext = null;
         if (src) ext = src.split('.')[src.split('.').length - 1];
+        let title = nextProps.PaintModalStore.title ? nextProps.PaintModalStore.title : '';
+        let alt = nextProps.PaintModalStore.altText ? nextProps.PaintModalStore.altText : '';
+
+        this.setState({
+            title: title,
+            alt: alt
+        });
+
         if(nextProps.PaintModalStore.toEdit){
             this.handleOpen();
             let str = nextProps.PaintModalStore.svg;
@@ -876,11 +884,11 @@ class PaintModal extends React.Component {
                 <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                     <div className="required field">
                         <label htmlFor="mediaTitle">{this.context.intl.formatMessage(this.messages.imageTitle)}</label>
-                        <Input defaultValue={this.state.file.name} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.imageTitleAria)} aria-required="true"required autoFocus/>
+                        <Input defaultValue={this.state.title ? this.state.title : 'Image'} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.imageTitleAria)} aria-required="true"required autoFocus/>
                     </div>
                     <div className="required field">
                         <label htmlFor="mediaAltText">{this.context.intl.formatMessage(this.messages.imageDescription)}</label>
-                        <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.imageDescriptionAria)} aria-required="true" required/>} content={this.context.intl.formatMessage(this.messages.imageDescriptionQuestion)} position='top center'/>
+                        <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.imageDescriptionAria)} aria-required="true" defaultValue={this.state.alt ? this.state.alt : ''} required/>} content={this.context.intl.formatMessage(this.messages.imageDescriptionQuestion)} position='top center'/>
                     </div>
                     <div className="required field">
                         <label htmlFor="mediaLicense">{this.context.intl.formatMessage(this.messages.chooseLicense)}</label>
@@ -900,8 +908,6 @@ class PaintModal extends React.Component {
             submitButtonText = this.context.intl.formatMessage(this.messages.upload);
             submitButtonIcon = 'upload';
         }
-
-
         return(
 
             <Modal
