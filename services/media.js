@@ -76,6 +76,15 @@ export default {
             rp.get({uri: params.url, proxy: ''}).then((res) => {
                 callback(null, res);
             });
+        } else if (resource === 'media.readMetadata') {
+            let fileName = params.url.split('/').slice(-1).pop();
+            let url = Microservices.file.uri + '/metadata/' + fileName;
+            rp.get({uri: url, proxy: ''}).then((res) => {
+                callback(null, res);
+            })
+            .catch((err) => {
+                callback(err, null);
+            });
         }
     },
     update: (req, resource, params, body, config, callback) => {
