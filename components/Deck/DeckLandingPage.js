@@ -1,6 +1,6 @@
 import React from 'react';;
 import { NavLink } from 'fluxible-router';
-import { Grid, Divider, Button, Image, Icon, Item, Label, Flag } from 'semantic-ui-react';
+import { Grid, Divider, Button, Image, Icon, Item, Label, Flag, Menu } from 'semantic-ui-react';
 
 import { connectToStores } from 'fluxible-addons-react';
 import DeckListStore from '../../stores/DeckListStore';
@@ -125,10 +125,12 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={3}>
                   <Grid.Row>
-                    <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid icon basic labelPosition='left' size='large' ><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink>
-                    <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' size='large' ><Icon name='play circle' color='grey'/>Play SlideShow</Button></a>
+                    <Menu vertical>
+                      <Menu.Item as={() => {return <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid icon basic labelPosition='left' size='large' ><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink>;}}/>
+                      <Menu.Item as={() => {return <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' size='large' ><Icon name='play circle' color='grey'/>Play SlideShow</Button></a>;}}/>
+                      <Menu.Item as={() => {return <PresentationPanel deckPage={true}/>;}}/>
+                    </Menu>
                     {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
-                    <PresentationPanel deckPage={true}/>
                   </Grid.Row>
 
                   <Divider />
