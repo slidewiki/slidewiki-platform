@@ -13,10 +13,12 @@ import { getLanguageName, isEmpty } from '../../common';
 import { flagForLocale } from '../../configs/locales';
 import { Microservices } from '../../configs/microservices';
 
+import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
+
 
 class DeckLandingPage extends React.Component {
 
@@ -135,7 +137,9 @@ class DeckLandingPage extends React.Component {
                   </Grid.Row>
                   <Divider />
                   <Grid.Row>
-                    <Image alt='Creative Commons License' src='https://i.creativecommons.org/l/by-sa/4.0/88x31.png' as='a' href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'/><br/><br/>
+                    <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>
+                      <CCBYSA/>
+                    </a>
                     This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
                   </Grid.Row>
                   <Divider />
