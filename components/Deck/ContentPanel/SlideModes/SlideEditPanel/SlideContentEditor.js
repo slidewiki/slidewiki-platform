@@ -9,6 +9,7 @@ import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import AddQuestionsClick from '../../../../../actions/slide/AddQuestionsClick';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -857,6 +858,38 @@ class SlideContentEditor extends React.Component {
     getAbsoluteDiv(zindex, id){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
         return '<div id=\"' + id + '\" style="position: absolute; top: 300px; left: 250px; width: 300px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
+    }
+    handleAddQuestionsClick(questions){
+        let html = "<div id='slide_questions' style='font-family:sans-serif'>";
+        let questionsList = questions.questions;
+        let uniqueID = this.getuniqueID();
+
+        for (let i = 0; i < questionsList.length; i++){
+            let currentQuestion = questionsList[i];
+            let currentAnswers = currentQuestion.answers;
+
+            html += "<div class='slide_question'><div>" + currentQuestion.title + "</div>";
+
+            for (let j = 0; j < currentAnswers.length; j++){
+                html += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>"
+            }
+
+            html += "</br></div>"
+        }
+
+        html += "</div>";
+        let iframe = '<iframe width="800" height="400" srcdoc="'+ html + '"></iframe>';
+
+        if($('.pptx2html').length) //if slide is in canvas mode
+                {
+                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+                    this.hasChanges = true;
+                    //this.correctDimensionsBoxes('iframe');
+                } else { //if slide is in non-canvas mode
+                    this.refs.inlineContent.innerHTML += iframe;
+        }
+
+        console.log(iframe);
     }
     componentDidMount() {
         window.onbeforeunload = () => {
@@ -1860,6 +1893,10 @@ class SlideContentEditor extends React.Component {
                 }, 1000);
             }
         }
+        //do something to change code for questions
+        if (nextProps.SlideEditStore.AddQuestionsClick === 'true' && nextProps.SlideEditStore.AddQuestionsClick !== this.props.SlideEditStore.AddQuestionsClick){
+            this.handleAddQuestionsClick(nextProps.SlideEditStore.questions);
+        }
     }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
@@ -2222,6 +2259,7 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
+        const questions = this.props.SlideEditStore.questions;
 
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>

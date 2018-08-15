@@ -32,6 +32,8 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
+        this.AddQuestionsClick = 'false';
+        this.questions = [];
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -157,7 +159,13 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.emitChange();
     }
-
+    handleAddQuestionsClick(payload){
+        this.questions = payload.questions;
+        this.AddQuestionsClick = 'true';
+        this.emitChange();
+        this.AddQuestionsClick = 'false';
+        this.emitChange();
+    }
     getState() {
         return {
             id: this.id,
@@ -187,7 +195,9 @@ class SlideEditStore extends BaseStore {
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
-            HTMLEditorClick: this.HTMLEditorClick
+            HTMLEditorClick: this.HTMLEditorClick,
+            AddQuestionsClick: this.AddQuestionsClick,
+            questions: this.questions
         };
     }
     dehydrate() {
@@ -222,6 +232,8 @@ class SlideEditStore extends BaseStore {
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
+        this.AddQuestionsClick = state.AddQuestionsClick;
+        this.questions = state.questions;
     }
 }
 
@@ -244,6 +256,7 @@ SlideEditStore.handlers = {
     'EMBED_CLICK': 'handleEmbedClick',
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
+    'ADD_QUESTIONS_CLICK': 'handleAddQuestionsClick',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
 };

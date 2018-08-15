@@ -13,7 +13,9 @@ import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick'
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
+import AddQuestionsClick from '../../../actions/slide/AddQuestionsClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
+import DeckPageStore from '../../../stores/DeckPageStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -38,6 +40,7 @@ class SlideEditLeftPanel extends React.Component {
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
+            deckID: this.props.DeckPageStore.selector.id,
             LeftPanelTitleChange: false,
             titleMissingError: false,
             paintButton: (<a className="item" id="paintModalTrigger" role="button" >
@@ -198,6 +201,10 @@ class SlideEditLeftPanel extends React.Component {
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
     }
+    //currently just for this deck, change this
+    handleAddQuestionsClick(){
+        this.context.executeAction(AddQuestionsClick, {params: {stype : "deck", sid : this.state.deckID}});
+    }
     handleHelpClick(){
         swal({
             title: this.context.intl.formatMessage({
@@ -320,6 +327,8 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
                     break;
+                case 'handleAddQuestionsClick':
+                    this.handleAddQuestionsClick();
                 case 'handleHelpClick':
                     this.handleHelpClick();
                     break;
@@ -365,6 +374,9 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
                       <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
                   </a>
+                    <a className="item" id="handleAddQuestionsClick" role="button" onClick={this.handleAddQuestionsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddQuestionsClick')}>
+                      <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add Questions' />
+                    </a>
                 </div>);
 
         let embedOptions = (
@@ -631,9 +643,10 @@ SlideEditLeftPanel.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
-SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
+SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore, DeckPageStore], (context, props) => {
     return {
-        SlideEditStore: context.getStore(SlideEditStore).getState()
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        DeckPageStore : context.getStore(DeckPageStore).getState()
     };
 });
 export default SlideEditLeftPanel;
