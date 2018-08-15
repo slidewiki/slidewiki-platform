@@ -51,6 +51,7 @@ class SlideContentEditor extends React.Component {
             ev.editor.document.on('drop', (ev2) => {
                 if (ev2.data.$.dataTransfer.files) {
                     let file = ev2.data.$.dataTransfer.files[0];
+                    console.log(file);
                     let params = {};
                     let url = URL.createObjectURL(file);
                     file.preview = url;
@@ -1663,7 +1664,7 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('aria-hidden','true');
                         $('.pptx2html').attr('alt',' ');
                     } else{
-                        if(nextProps.MediaStore.file.svg) {
+                        if(nextProps.MediaStore.file.type === 'image/svg+xml') {
                             let str = 'div[svg-source="'+ nextProps.MediaStore.file.url +'"]';
                             let oldElems = $(str);
                             oldElems.remove();
