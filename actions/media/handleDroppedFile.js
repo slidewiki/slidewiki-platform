@@ -1,7 +1,12 @@
 const log = require('../log/clog');
 
-export default function uploadMediaFile(context, payload, done) {
+export default function handleDroppedFile(context, payload, done) {
     log.info(context);
-    context.dispatch('HANDLE_DROPPED', payload);
+    try {
+        context.dispatch('HANDLE_DROPPED', payload);
+    } catch (err) {
+        // Literally nothing, the error doesn't affect the focus at all.
+    }
+
     done();
 }

@@ -51,7 +51,6 @@ class SlideContentEditor extends React.Component {
             ev.editor.document.on('drop', (ev2) => {
                 if (ev2.data.$.dataTransfer.files) {
                     let file = ev2.data.$.dataTransfer.files[0];
-                    console.log(file);
                     let params = {};
                     let url = URL.createObjectURL(file);
                     file.preview = url;
