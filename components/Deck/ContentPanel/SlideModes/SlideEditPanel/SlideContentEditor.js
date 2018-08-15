@@ -38,6 +38,7 @@ class SlideContentEditor extends React.Component {
         this.loading = '';
         this.hasChanges = false;
         this.finishLoading = false;
+        this.idContext = null;
         //this.oldContent = '';
         //this.redoContent = '';
     }
@@ -1636,9 +1637,10 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('alt',' ');
                     } else{
                         if(nextProps.MediaStore.file.svg) {
-                            let str = 'div[svg-source="'+ nextProps.MediaStore.file.url +'"]';
-                            let oldElems = $(str);
-                            oldElems.remove();
+                            if (this.idContext) {
+                                $('#' + this.idContext.toString()).remove();
+                                this.idContext = null;
+                            }
                             $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
                         } else {
                             console.log(nextProps.MediaStore.file);
@@ -1970,6 +1972,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     editImage(context, event, idContext){
+        this.idContext = idContext;                     // helpful to delete edited image.
         let contains_img = $('#' + idContext).find('img').length;
         if (contains_img) {
             let src = $('#' + idContext).find('img')[0].src;
