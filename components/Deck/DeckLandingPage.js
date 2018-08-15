@@ -24,6 +24,7 @@ class DeckLandingPage extends React.Component {
 
     render() {
         const deckData = this.props.DeckViewStore.deckData;
+        console.log(deckData);
         if(!deckData.variants)
             deckData.variants = [];
 
@@ -52,7 +53,7 @@ class DeckLandingPage extends React.Component {
                       <Grid.Column width={11}>
                         <Item>
                           <Item.Content>
-                            <Item.Header as="h2">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : ''}</Item.Header>
+                            <Item.Header as="h2">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='red'>Unlisted</Label>}</Item.Header>
                             <Item.Meta><strong>Owner:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink></Item.Meta>
                             <Item.Meta><strong>Original Author:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></Item.Meta>
                             <Item.Meta><strong>Last modified:</strong> {CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</Item.Meta>
