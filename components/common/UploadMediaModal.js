@@ -3,6 +3,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
+import updateGraphic from '../../actions/media/updateGraphic';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import {isEmpty} from '../../common';
@@ -242,32 +243,34 @@ class UploadMediaModal extends React.Component {
 
     submitPressed(e) {
         e.preventDefault();
-        let that = this;
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
-        console.log('copyrightholder: ' + this.state.copyrightHolder);
-        console.log('checkbox_backgroundImage: ' + $('#checkbox_backgroundImage')[0].checked);
-        let payload = {
-            type: this.state.files[0].type,
-            license: this.state.licenseValue,
-            copyrightHolder: this.state.copyrightHolder,
-            title: this.state.title || this.state.files[0].name,
-            text: this.state.alt,
-            filesize: this.state.files[0].size,
-            filename: this.state.files[0].name,
-            checkbox_backgroundImage: $('#checkbox_backgroundImage')[0].checked,
-            bytes: null
-        };
-        console.log(this.state, payload);
+        let fileType = this.state.files[0].type;
+
         let reader = new FileReader();
 
-        reader.onloadend = function (evt) {
+        reader.onloadend = (evt) => {
             console.log('read total length from file: ', reader.result.length, evt.target.readyState);
-
             if (evt.target.readyState === FileReader.DONE) {
-                payload.bytes = reader.result;
-                that.context.executeAction(uploadMediaFiles, payload);
+                let payload = {
+                    type: this.state.files[0].type,
+                    license: this.state.licenseValue,
+                    copyrightHolder: this.state.copyrightHolder,
+                    title: this.state.title || this.state.files[0].name,
+                    text: this.state.alt,
+                    filesize: this.state.files[0].size,
+                    filename: this.state.files[0].name,
+                    checkbox_backgroundImage: $('#checkbox_backgroundImage')[0].checked,
+                    bytes: null
+                };
 
-                that.setState({
+                if (fileType === 'image/svg+xml') {
+                    payload.bytes = atob(reader.result.split('base64,')[1]);
+                    payload.svg = payload.bytes;
+                } else {
+                    payload.bytes = reader.result;
+                }
+                this.context.executeAction(uploadMediaFiles, payload);
+                this.setState({
                     isLoading: true
                 });
             }
