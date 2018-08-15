@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import {NavLink} from 'fluxible-router';
+import {defineMessages} from 'react-intl';
 import {Microservices} from '../../../../configs/microservices';
 
 class UserMenu extends React.Component {
@@ -83,9 +83,12 @@ class UserMenu extends React.Component {
                   <NavLink className="item" href={'/user/' + this.props.user.uname + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
-                  <NavLink className="item" href={'/user/' + this.props.user.uname + '/stats'} activeStyle={this.styles} role="menuitem">
-                      <p><i className="icon grid layout"/> {userStatsMsg}</p>
-                  </NavLink>
+                  {(this.props.user.uname === this.props.loggedinuser) &&
+                      <NavLink className="item" href={'/user/' + this.props.user.uname + '/stats'} activeStyle={this.styles}
+                               role="menuitem">
+                          <p><i className="icon grid layout"/> {userStatsMsg}</p>
+                      </NavLink>
+                  }
               </div>
 
           </div>
