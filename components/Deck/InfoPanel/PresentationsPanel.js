@@ -73,7 +73,7 @@ class PresentationsPanel extends React.Component {
 
         let toReturn;
         if(this.props.deckPage)
-            toReturn = <Button basic fluid icon labelPosition='left' color='grey' onClick={this.handlePresentationRoomClick.bind(this)}><Icon name='sitemap' color='blue'/>Live Session</Button>;
+            toReturn = <Button basic fluid icon labelPosition='left' size='large' onClick={this.handlePresentationRoomClick.bind(this)}><Icon name='sitemap' color='blue'/>Live Session</Button>;
         else
             toReturn = <div ref="presentationPanel">
                 <h5 className="ui small header" tabIndex="0">Beta features
