@@ -126,7 +126,7 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={3}>
                   <Grid.Row>
-                    <Menu vertical>
+                    <Menu vertical fluid>
                       <Menu.Item as={() => {return <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid icon basic labelPosition='left' size='large' ><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink>;}}/>
                       <Menu.Item as={() => {return <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' size='large' ><Icon name='play circle' color='grey'/>Play SlideShow</Button></a>;}}/>
                       <Menu.Item as={() => {return <PresentationPanel deckPage={true}/>;}}/>
