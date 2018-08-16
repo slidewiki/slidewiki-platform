@@ -19,6 +19,7 @@ import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import Util from '../../../../common/Util';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 
 let ReactDOM = require('react-dom');
 
@@ -1025,6 +1026,12 @@ class SlideContentEditor extends React.Component {
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
         //('img');
+
+        let pptxwidth = $('.pptx2html').width();
+        let pptxheight = $('.pptx2html').height();
+        this.context.executeAction(changeSlideSizeText, {
+            slideSizeText: pptxwidth + '\u00D7' + pptxheight
+        });
     }
     handleResize = () => {
         this.forceUpdate();

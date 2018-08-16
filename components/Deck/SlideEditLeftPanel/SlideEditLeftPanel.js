@@ -38,6 +38,7 @@ class SlideEditLeftPanel extends React.Component {
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
+            slideSizeText: '',
             LeftPanelTitleChange: false,
             titleMissingError: false,
             paintButton: (<a className="item" id="paintModalTrigger" role="button" >
@@ -66,6 +67,11 @@ class SlideEditLeftPanel extends React.Component {
             }
         }
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ slideSizeText: nextProps.SlideEditStore.slideSizeText });
+    }
+
     handleAddInputBox(){
         this.context.executeAction(addInputBox, {});
     }
@@ -504,9 +510,11 @@ class SlideEditLeftPanel extends React.Component {
                       <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
                   </a>
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
-                      <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
+                      <i tabIndex="0" className="crop icon"></i>
+                      Slide size (current: {this.state.slideSizeText})
                   </a>
                 </form>);
+
                 /*
                                   <a className="item" id="changeSlideBackgroundClick" role="button" onClick={this.changeSlideBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideBackgroundClick')}>
                                       <i tabIndex="0" className="file image outline icon"></i>Background image
