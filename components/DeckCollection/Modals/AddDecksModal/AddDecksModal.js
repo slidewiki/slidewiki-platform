@@ -9,6 +9,7 @@ import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDe
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 import DeckCollectionStore from '../../../../stores/DeckCollectionStore';
 import DecksList from './DecksList';
+import SearchForm from '../../../Deck/ContentPanel/AttachSubdeck/AttachSearchForm';
 
 class AddDecksModal extends React.Component {
 
@@ -45,6 +46,7 @@ class AddDecksModal extends React.Component {
     handleClose(){
         this.setState({
             isOpen: false,
+            activeItem: 'myDecksTab',
         });
     }
     handleSave() {
@@ -134,7 +136,10 @@ class AddDecksModal extends React.Component {
                             <Menu attached='top' tabular role="tablist">
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
-                             </Menu>
+                            </Menu>
+                            { (this.state.activeItem === 'slidewikiTab') && 
+                                <SearchForm />
+                            }
                             <Segment basic>
                                 { (!decks) && 
                                     <div>
