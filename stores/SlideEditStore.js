@@ -64,6 +64,10 @@ class SlideEditStore extends BaseStore {
         this.slideSize = '';
         this.emitChange();
     }
+    changeSlideSizeText(payload){
+        this.slideSizeText = payload.slideSizeText;
+        this.emitChange();
+    }
     handleSaveSlideClick(){
         this.saveSlideClick = 'true';
         this.emitChange();
