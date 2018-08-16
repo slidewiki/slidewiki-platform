@@ -185,7 +185,7 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showProperties: false});
         this.forceUpdate();
     }
-    handleSlideSizeChange(width, height) {
+    handleSlideSizeChange(width) {
         if (width !== ''){
             //this.setState({showTemplate: false});
             this.context.executeAction(changeSlideSize, {
