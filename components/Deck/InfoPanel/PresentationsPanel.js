@@ -1,30 +1,13 @@
-import PropTypes from 'prop-types';
-import { Button, Icon } from 'semantic-ui-react';
 import React from 'react';
-import {NavLink} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
-import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-import ContentStore from '../../../stores/ContentStore';
-import {isLocalStorageOn} from '../../../common.js';
 import ReactList from 'react-list';
+import { isEmpty } from '../../../common';
+import { makeNodeURL } from '../../common/Util';
+import { Button, Icon } from 'semantic-ui-react';
+import { connectToStores } from 'fluxible-addons-react';
+import ContentStore from '../../../stores/ContentStore';
+import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 
 class PresentationsPanel extends React.Component {
-
-    getPresentationHref(){
-        let presLocation = '/presentation/' + this.props.ContentStore.selector.id + '/';
-        if(!this.props.ContentStore.selector.subdeck){
-
-            presLocation += this.props.ContentStore.selector.id + '/';
-        }
-        else{
-            presLocation += this.props.ContentStore.selector.subdeck + '/';
-        }
-        if(this.props.ContentStore.selector.stype === 'slide'){
-            // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += this.props.ContentStore.selector.sid;// + '/';
-        }
-        return presLocation;
-    }
 
     handlePresentationRoomClick(e){
         if(process.env.BROWSER){
@@ -36,13 +19,13 @@ class PresentationsPanel extends React.Component {
                 confirmButtonText: 'Next',
                 allowOutsideClick: false
             }).then((roomName) => {
-                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
-            }).catch();
+                if ( !isEmpty(roomName) ) {
+                    let presentationURL = makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, undefined, undefined);
+                    window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + presentationURL.replace('#', '%23'));
+                } else
+                    swal({title: 'Please enter a valid room name', showConfirmButton: false, timer: 2000}).catch(() => {return true;});
+            }).catch((e) => {return true;});
         }
-    }
-
-    componentWillMount() {
-
     }
 
     renderItem(index, key) {
@@ -113,13 +96,11 @@ class PresentationsPanel extends React.Component {
     }
 }
 
-PresentationsPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
-};
 PresentationsPanel = connectToStores(PresentationsPanel, [ActivityFeedStore, ContentStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
     };
 });
+
 export default PresentationsPanel;
