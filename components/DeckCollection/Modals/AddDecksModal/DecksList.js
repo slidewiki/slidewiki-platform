@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import {FormattedMessage, defineMessages} from 'react-intl';
-import { Label, Icon, TextArea, Image, Grid, Divider } from 'semantic-ui-react';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { Label, Icon, TextArea, Image, Grid, Button, Loader, Dimmer } from 'semantic-ui-react';
 import { getLanguageName }  from '../../../../common';
 import CustomDate from '../../../Deck/util/CustomDate';
 import { Microservices } from '../../../../configs/microservices';
@@ -20,14 +20,21 @@ class DecksList extends React.Component {
     constructor(props) {
         super(props);
         this.messages = this.getIntlMessages();
+        this.activeStyle = {
+            backgroundColor: '#f8ffff',
+            color: '#2185d0'
+        };
     }
     getIntlMessages(){
         return defineMessages({
-            modalTitle: {
-                id: 'DecksList.title',
-                defaultMessage: 'Add decks to playlist'
-            }, 
-
+            loadingText: {
+                id: 'DecksList.loading',
+                defaultMessage: 'Loading'                
+            },
+            errorMsg: {
+                id: 'DecksList.error',
+                defaultMessage: 'An unexpected error occurred while fetching more decks'                  
+            }
         });
     }
     handleOnDeckClick(deck){
@@ -74,9 +81,40 @@ class DecksList extends React.Component {
         }
         return nextPos;
     }
+    getLoadMoreDiv(meta, listLength){
+        let itemsCount = listLength;
+
+        let loadMoreDiv = '';
+        if (meta && meta.links && meta.links.next) {
+            let loadMoreContent = <Button as='button' aria-label='Load more decks' onClick={this.loadMore.bind(this, meta.links.next)}>Load More</Button>;
+            if(this.props.loadMoreLoading){
+                loadMoreContent = <Dimmer active inverted>
+                    <Loader inverted>{this.context.intl.formatMessage(this.messages.loadingText)}</Loader>
+                </Dimmer>;
+            }
+            if(this.props.loadMoreError){
+                loadMoreContent = this.context.intl.formatMessage(this.messages.errorMsg);
+            }
+            loadMoreDiv = <Grid.Row className="center aligned" key="loadMoreDiv" id={`deckItemList${itemsCount}`} tabIndex="0">
+                <Grid.Column width={16}>
+                    { loadMoreContent }
+                </Grid.Column>
+            </Grid.Row>;
+
+            // add an extra list item to show load more button
+            // this is needed to properly select load more with arrows up/down
+            itemsCount++;
+        }
+        return { loadMoreDiv, itemsCount };
+    }
+    loadMore(nextLink){
+        this.props.loadMore(nextLink);
+    }
     render() {
         let editorUsername = this.props.loggedInDisplayName;
         let selectedIds = this.props.selectedDecks.map( (deck) => deck.deckID);
+
+        let { loadMoreDiv, itemsCount } = this.getLoadMoreDiv(this.props.meta, this.props.decks.length);
 
         let list = this.props.decks.map( (deck, index) => {
             let deckId = deck.deckID; 
@@ -88,53 +126,57 @@ class DecksList extends React.Component {
             language = (language === '' ? 'English' : language);
 
             let isSelected = selectedIds.includes(deck.deckID);
-            let selectedIcon = (isSelected) ? <Icon color="green" name="check circle" aria-label="selected deck"/> : <Icon color="grey" name="circle outline" aria-label="unselected deck"/>;
-
+            let itemStyle = (isSelected) ? this.activeStyle : {};
             return (
                 <Grid.Row
                     key={index}
                     id={'deckItemList' + index}
                     onClick={this.handleOnDeckClick.bind(this, deck)}
                     onKeyPress={this.handleKeyPress.bind(this, deck)}
-                    onKeyDown={this.handleKeyDown.bind(this, index, this.props.decks.length)}
-                    // style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
+                    onKeyDown={this.handleKeyDown.bind(this, index, itemsCount)}
+                    style ={ itemStyle }
                     role="listitem"
-                    // aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
+                    className="item"
+                    aria-selected = { isSelected }
                     tabIndex="0">
 
                     <Grid.Column width={4}>
                         <Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}/${deckTheme}`} alt={deck.title} size="small"/>
                     </Grid.Column>
 
-                    <div className="ten wide column content">
-                                <h2 className="ui header">{ deck.title }</h2>
-                                <div className="meta"><strong>Creator:&nbsp;</strong>{ editorUsername }</div>
-                                <div className="meta"><strong>Last Modified:&nbsp;</strong>{ date }</div>
-                                <div className="extra"> 
-                                    <Label  size="small">
-                                      <Icon name="comments outline" aria-label="Language"/>
-                                      { language }
-                                    </Label>
-                                    <Label size="small">
-                                       <Icon name="fork" aria-label="Number of versions"/>
-                                       { deck.countRevisions }
-                                     </Label>
-                                </div>
+                    <Grid.Column width={10}>
+                        <div className="ui header" style={ itemStyle }>{ deck.title }</div>
+                        <div className="meta"><strong>Creator:&nbsp;</strong>{ editorUsername }</div>
+                        <div className="meta"><strong>Last Modified:&nbsp;</strong>{ date }</div>
+                        <div className="extra"> 
+                            <Label  size="small">
+                              <Icon name="comments outline" aria-label="Language"/>
+                              { language }
+                            </Label>
+                            <Label size="small">
+                               <Icon name="fork" aria-label="Number of versions"/>
+                               { deck.countRevisions }
+                             </Label>
                         </div>
+                    </Grid.Column>
 
-                        
                     <Grid.Column width={2}>
-                        { selectedIcon }
+                        { (isSelected) && 
+                            <Button circular as='button' size="mini" color='green' icon='check' aria-label="selected deck" />
+                        }
+                        { (!isSelected) && 
+                            <Button circular as='button' size="mini" icon='plus' aria-label="unselected deck" />
+                        }
                     </Grid.Column>
                 </Grid.Row>            
             );
         });
         return (
-            <Grid divided='vertically' style={{maxHeight: '600px', minHeight:'320px', overflowY:'auto'}} role="listbox" aria-expanded="true"  aria-describedby="listInstructions">
+            <Grid divided="vertically" verticalAlign="middle" className="items" style={{maxHeight: '600px', minHeight:'320px', overflowY:'auto'}} role="listbox" aria-expanded="true" aria-describedby="listInstructions">
                 <TextArea className="sr-only" id="listInstructions" value="Use up and down arrow keys to navigate through the list and then enter to select a deck. Use tab to go out of the list." tabIndex ='-1'/>
                 { list }
+                { loadMoreDiv }
             </Grid>
-
         );
     }
 }

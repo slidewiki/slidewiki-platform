@@ -18,7 +18,9 @@ class DeckCollectionStore extends BaseStore {
 
         // needed for adding decks in playlist modal
         this.decks = undefined;
-        this.deckMeta = undefined;
+        this.decksMeta = undefined;
+        this.loadMoreLoading = false;
+        this.loadMoreError = false;
     }
 
     destructor() {
@@ -33,7 +35,9 @@ class DeckCollectionStore extends BaseStore {
         this.loading = false;
         this.deckOrderLoading = false;
         this.decks = undefined;
-        this.deckMeta = undefined;
+        this.decksMeta = undefined;
+        this.loadMoreLoading = false;
+        this.loadMoreError = false;
     }
 
     getState() {
@@ -49,7 +53,9 @@ class DeckCollectionStore extends BaseStore {
             loading: this.loading, 
             deckOrderLoading: this.deckOrderLoading,
             decks: this.decks,
-            deckMeta: this.deckMeta,
+            decksMeta: this.decksMeta,
+            loadMoreLoading: this.loadMoreLoading,
+            loadMoreError: this.loadMoreError,
         };
     }
 
@@ -69,7 +75,9 @@ class DeckCollectionStore extends BaseStore {
         this.loading = state.loading;
         this.deckOrderLoading = state.deckOrderLoading;
         this.decks = state.decks;
-        this.deckMeta = state.deckMeta;
+        this.decksMeta = state.decksMeta;
+        this.loadMoreLoading = state.loadMoreLoading;
+        this.loadMoreError = state.loadMoreError;
     }
 
     updateCollections(payload){
@@ -194,11 +202,29 @@ class DeckCollectionStore extends BaseStore {
 
     updateDecks(payload){
         this.decks = payload.decks;
-        this.deckMeta = payload.metadata;
-
+        this.decksMeta = payload.metadata;
         this.emitChange();
     }
 
+    setLoadMoreLoading(){
+        this.loadMoreLoading = true;
+        this.emitChange();
+    }
+
+    loadMoreDecks(payload){
+        this.decks = this.decks.concat(payload.decks);
+        this.decksMeta = payload.metadata;
+        this.loadMoreLoading = false;
+        this.loadMoreError = false;
+        this.emitChange();
+    }
+
+    setLoadMoreDecksFailed() {
+        this.loadMoreError = true;
+        this.loadMoreLoading = false;
+        this.emitChange();
+        this.loadMoreError = false;
+    }
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -229,6 +255,11 @@ DeckCollectionStore.handlers = {
     // needed for adding decks in playlist modal
     'NEW_USER_DECKS_LOADING': 'updateDecksLoading',
     'NEW_USER_DECKS': 'updateDecks',
+
+    'FETCH_NEXT_USER_DECKS_LOADING': 'setLoadMoreLoading',
+    'FETCH_NEXT_USER_DECKS': 'loadMoreDecks',
+    'FETCH_NEXT_USER_DECKS_FAILED': 'setLoadMoreDecksFailed',
+
 };
 
 export default DeckCollectionStore;

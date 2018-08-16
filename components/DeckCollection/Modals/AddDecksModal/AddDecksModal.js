@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
-import {navigateAction} from 'fluxible-router';
-import {Button, Icon, Modal, Header, Image, Segment, TextArea, Menu, Popup, Dimmer, Loader} from 'semantic-ui-react';
+import { navigateAction } from 'fluxible-router';
+import { Button, Icon, Modal, Header, Image, Segment, TextArea, Menu, Popup, Dimmer, Loader, Container } from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
-import {FormattedMessage, defineMessages} from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
+import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 import DeckCollectionStore from '../../../../stores/DeckCollectionStore';
 import DecksList from './DecksList';
 
@@ -44,7 +45,6 @@ class AddDecksModal extends React.Component {
     handleClose(){
         this.setState({
             isOpen: false,
-            // selectedDecks: this.props.selectedDecks,
         });
     }
     handleSave() {
@@ -92,6 +92,11 @@ class AddDecksModal extends React.Component {
 
         this.setState(newState);
     }
+    loadMore(nextLink){
+        this.context.executeAction(fetchNextUserDecks, {
+            nextLink: nextLink
+        });
+    }
     render() {
         let button = <Button floated="right" size="small" primary positive as="button"
             type="button"
@@ -101,24 +106,13 @@ class AddDecksModal extends React.Component {
             tabIndex={ this.state.isOpen ? -1 : 0} >
             {this.context.intl.formatMessage(this.messages.modalTitle)}
         </Button>;
-        let trigger = <Popup trigger={button} />;
 
         let decks = this.props.DeckCollectionStore.decks;
-        let content;
+        let decksMeta = this.props.DeckCollectionStore.decksMeta;
 
-        if (!decks) {
-            content = <Segment id="panelMyDecksContent">
-                <Dimmer active inverted>
-                    <Loader inverted>Loading</Loader>
-                </Dimmer>
-                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-            </Segment>;
-        } else {
-            content = <DecksList handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} decks={decks} selectedDecks={this.state.selectedDecks} />;
-        }
         return (
             <Modal 
-                trigger={trigger}
+                trigger={button}
                 id="newCollectioModal"
                 dimmer='blurring' 
                 size='small' 
@@ -131,24 +125,40 @@ class AddDecksModal extends React.Component {
                 onClose={this.handleClose}>
 
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.state.isOpen} className="header">
-                    <Modal.Header  as="h1" content={this.context.intl.formatMessage(this.messages.modalTitle)} id='addNewCollectionHeader'/>
+                    <Modal.Header className="ui center aligned" as="h1" id='addNewCollectionHeader'>
+                        {this.context.intl.formatMessage(this.messages.modalTitle)}
+                    </Modal.Header>
                     <Modal.Content>
-                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
-                        <Menu attached='top' tabular role="tablist">
-                           <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
-                           <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
-                         </Menu>
-                         { content }
-                    </Modal.Content>
+                        <Container text fluid>
+                            <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
+                            <Menu attached='top' tabular role="tablist">
+                               <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
+                               <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
+                             </Menu>
+                            <Segment basic>
+                                { (!decks) && 
+                                    <div>
+                                        <Dimmer active inverted>
+                                            <Loader inverted>Loading</Loader>
+                                        </Dimmer>
+                                        <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+                                    </div>
+                                }
+                                { (decks) && 
+                                    <DecksList handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
+                                }
+                            </Segment>
+                            <Modal.Actions>
+                                <Segment basic textAlign="center">
+                                    <div>
+                                        <Button id="addDecksButton" primary as='button' onClick={this.handleSave}><Icon name='plus'/><FormattedMessage {...this.messages.buttonAdd} /></Button>
+                                        <Button as='button' onClick={this.handleClose}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
+                                    </div>
+                                </Segment>
+                            </Modal.Actions>
+                        </Container>
 
-                    <Modal.Actions>
-                        <Segment basic textAlign="center">
-                            <div>
-                                <Button primary as='button' onClick={this.handleSave}><Icon name='plus'/><FormattedMessage {...this.messages.buttonAdd} /></Button>
-                                <Button as='button' onClick={this.handleClose}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
-                            </div>
-                        </Segment>
-                    </Modal.Actions>
+                    </Modal.Content>     
                 </FocusTrap>
             </Modal>
         );
