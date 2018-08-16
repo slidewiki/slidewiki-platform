@@ -82,29 +82,38 @@ class SlideContentEditor extends React.Component {
                     allowEnterKey: true,
                 }).then((accepted) => {
                     //this.applyTemplate(template);
+                    let width = '';
+                    let height = '';
                     switch (slideSize) {
                         case '960':
-                            $('.pptx2html').css('width', '960');
-                            $('.pptx2html').css('height', '720');
+                            width = '960';
+                            height = '720';
                             break;
                         case '1280':
-                            $('.pptx2html').css('width', '1280');
-                            $('.pptx2html').css('height', '960');
+                            width = '1280';
+                            height = '960';
                             break;
                         case '1600':
-                            $('.pptx2html').css('width', '1600');
-                            $('.pptx2html').css('height', '1200');
+                            width = '1600';
+                            height = '1200';
                             break;
                         case '720p':
-                            $('.pptx2html').css('width', '1280');
-                            $('.pptx2html').css('height', '720');
+                            width = '1280';
+                            height = '720';
                             break;
                         case '1080p':
-                            $('.pptx2html').css('width', '1920');
-                            $('.pptx2html').css('height', '1080');
+                            width = '1920';
+                            height = '1080';
                             break;
                         default:
                     }
+
+                    $('.pptx2html').css('width', width);
+                    $('.pptx2html').css('height', height);
+
+                    this.context.executeAction(changeSlideSizeText, {
+                        slideSizeText: width + '\u00D7' + height
+                    });
                     this.resize();
                 }, (reason) => {
                     //done(reason);
@@ -1025,12 +1034,9 @@ class SlideContentEditor extends React.Component {
 
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
-        //('img');
 
-        let pptxwidth = $('.pptx2html').width();
-        let pptxheight = $('.pptx2html').height();
         this.context.executeAction(changeSlideSizeText, {
-            slideSizeText: pptxwidth + '\u00D7' + pptxheight
+            slideSizeText: $('.pptx2html').width() + '\u00D7' + $('.pptx2html').height()
         });
     }
     handleResize = () => {
