@@ -2,7 +2,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import {Microservices} from '../../configs/microservices';
 const log = require('../log/clog');
 
-export default function uploadMediaFile(context, payload, done) {
+export default function updateGraphic(context, payload, done) {
     log.info(context);
 
     payload.userid = context.getStore(UserProfileStore).userid;
@@ -10,7 +10,7 @@ export default function uploadMediaFile(context, payload, done) {
 
     context.dispatch('START_UPLOADING_MEDIA_FILE', {type: payload.type, name: payload.title});
 
-    context.service.create('media.create', payload, { timeout: 20 * 1000 }, { timeout: 20 * 1000 }, (err, res) => {
+    context.service.update('media.updateGraphic', payload, { timeout: 20 * 1000 }, (err, res) => {
         delete payload.jwt;
         delete payload.userid;
 
@@ -34,22 +34,11 @@ export default function uploadMediaFile(context, payload, done) {
             }
         }
         else {
-            let subPath = res.type === 'image/svg+xml' ? '/graphic/' : '/picture/';
-            payload.url = Microservices.file.uri + subPath + res.fileName;
-            payload.thumbnailUrl = Microservices.file.uri + subPath + res.thumbnailName;
-            if(res.type === 'image/svg+xml') {
-                context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
-                    // context.dispatch('OPEN_WITH_SRC', {url: url, svg: res});
-                    payload.svg = res;
-                    context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
-                    done();
-                });
-            } else {
+            context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                payload.svg = res;
                 context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
                 done();
-            }
-            /**/
+            });
         }
-        done();
     });
 }

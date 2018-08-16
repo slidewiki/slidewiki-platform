@@ -185,7 +185,7 @@ ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
     'STORE_FILE': 'storeFile',
     'IMPORT_CANCELED': 'cancel',
-    'IMPORT_FINISHED': 'cancel',
+    'IMPORT_FINISHED': 'destructor',
     'UPLOAD_FAILED': 'uploadFailed',
     'UPLOAD_SUCCESS': 'uploadSuccess',
     'UPLOAD_STARTED': 'uploadStarted',
