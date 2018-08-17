@@ -21,6 +21,7 @@ class DeckCollectionStore extends BaseStore {
         this.decksMeta = undefined;
         this.loadMoreLoading = false;
         this.loadMoreError = false;
+        this.subheader = '';
     }
 
     destructor() {
@@ -38,6 +39,7 @@ class DeckCollectionStore extends BaseStore {
         this.decksMeta = undefined;
         this.loadMoreLoading = false;
         this.loadMoreError = false;
+        this.subheader = '';
     }
 
     getState() {
@@ -56,6 +58,7 @@ class DeckCollectionStore extends BaseStore {
             decksMeta: this.decksMeta,
             loadMoreLoading: this.loadMoreLoading,
             loadMoreError: this.loadMoreError,
+            subheader: this.subheader,
         };
     }
 
@@ -78,6 +81,7 @@ class DeckCollectionStore extends BaseStore {
         this.decksMeta = state.decksMeta;
         this.loadMoreLoading = state.loadMoreLoading;
         this.loadMoreError = state.loadMoreError;
+        this.subheader = state.subheader;
     }
 
     updateCollections(payload){
@@ -238,10 +242,53 @@ class DeckCollectionStore extends BaseStore {
             deck.creationDate = deck.timestamp;
         });
         this.decks = payload.recent;
+        this.decksMeta = undefined;
+        this.emitChange();
+    }
+
+    loadSearchResults(payload) {
+
+        // transform search results
+        payload.docs.forEach( (deck) => {
+            deck.deckID = deck.db_id;
+            deck.creationDate = deck.timestamp;
+            deck.username = deck.user.username;
+            deck.countRevisions = deck.revisionCount;
+        });
+
+        // more results have been loaded
+        if (payload.page > 1) {
+            this.decks = this.decks.concat(payload.docs);
+            this.loadMoreLoading = false;
+            this.loadMoreError = false;
+
+        // page 1 of results is requested
+        } else {
+            this.decks = payload.docs;
+            this.decksMeta = {
+                queryparams: payload.queryparams
+            };
+        }
+
+        // form next page link if more results are available
+        if (payload.hasMore) {
+            this.decksMeta['links'] = {
+                next: `${this.decksMeta.queryparams}&page=${payload.page + 1}`
+            };
+
+        } else {
+            this.decksMeta['links'] = {
+                next: undefined
+            };
+        }
 
         this.emitChange();
     }
 
+    setSubtitle(payload) {
+        this.subheader = payload;
+        this.emitChange();
+    }
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -279,6 +326,14 @@ DeckCollectionStore.handlers = {
 
     'ATTACHSUBDECK_LOAD_RECENTDECKS_LOADING': 'setLoading',
     'ATTACHSUBDECK_LOAD_RECENTDECKS': 'loadRecentDecks',
+
+    'ATTACHSUBDECK_LOAD_SEARCHDECKS_LOADING': 'setLoading',
+    'ATTACHSUBDECK_LOAD_SEARCHDECKS': 'loadSearchResults',
+
+    'SHOW_LOAD_MORE_LOADING': 'setLoadMoreLoading',
+    'LOAD_MORE_RESULTS_SUCCESS': 'loadSearchResults',
+    'LOAD_RESULTS_FAILURE': 'setLoadMoreDecksFailed',
+    'UPDATE_ADD_DECKS_TO_COLLECTION_MODAL_SUBTITLE': 'setSubtitle',
 };
 
 export default DeckCollectionStore;

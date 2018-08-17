@@ -2,10 +2,17 @@ import log from '../log/clog';
 import notFoundError from '../error/notFoundError';
 import methodNotAllowedError  from '../error/methodNotAllowedError';
 import searchSyntaxError from '../error/searchSyntaxError';
+import updateModalSubtitle from '../collections/updateModalSubtitle';
 
 export default function loadSearchedDecks(context,payload,done){
     log.info(context);
+
+    context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS_LOADING');
+    context.executeAction(updateModalSubtitle, 'Search Results');
+    
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
+        res.queryparams = payload.params.queryparams || undefined;
+        
         if (err) {
             if (err.statusCode === 404) {
                 context.executeAction(notFoundError, {}, done);

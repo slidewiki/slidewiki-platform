@@ -121,7 +121,7 @@ class DecksList extends React.Component {
                 </div>
             );
         }
-
+        
         let editorUsername = this.props.loggedInDisplayName;
         let selectedIds = this.props.selectedDecks.map( (deck) => deck.deckID);
 

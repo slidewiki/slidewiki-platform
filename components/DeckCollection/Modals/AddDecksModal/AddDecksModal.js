@@ -11,6 +11,8 @@ import DeckCollectionStore from '../../../../stores/DeckCollectionStore';
 import DecksList from './DecksList';
 import SearchForm from '../../../Deck/ContentPanel/AttachSubdeck/AttachSearchForm';
 import loadRecentDecks from '../../../../actions/attachSubdeck/loadRecentDecks';
+import loadMoreSearchResults from '../../../../actions/search/loadMoreResults';
+import updateModalSubtitle from '../../../../actions/collections/updateModalSubtitle';
 
 class AddDecksModal extends React.Component {
 
@@ -20,7 +22,6 @@ class AddDecksModal extends React.Component {
             activeItem: 'myDecksTab',
             isOpen: false,
             selectedDecks: this.props.selectedDecks.slice(), 
-            subheader: '',
         };
 
         this.messages = this.getIntlMessages();
@@ -42,17 +43,19 @@ class AddDecksModal extends React.Component {
                 offset: 0, 
                 limit: 20,
             });
-            subheader = 'Recent decks';
+            this.context.executeAction(updateModalSubtitle, 'Recent decks');
+
         } else if (id === 'myDecksTab') {
             this.context.executeAction(fetchUserDecks, { params: {} });
+            this.context.executeAction(updateModalSubtitle, '');
         }
 
         this.setState({ 
             activeItem: id, 
-            subheader: subheader,
         });
     }
     handleOpen(){
+        this.context.executeAction(updateModalSubtitle, '');
         this.context.executeAction(fetchUserDecks, { params: {} });
 
         this.setState({
@@ -111,9 +114,15 @@ class AddDecksModal extends React.Component {
         this.setState(newState);
     }
     loadMore(nextLink){
-        this.context.executeAction(fetchNextUserDecks, {
-            nextLink: nextLink
-        });
+        if (this.state.activeItem === 'myDecksTab') {
+            this.context.executeAction(fetchNextUserDecks, {
+                nextLink: nextLink
+            });
+        } else if (this.state.activeItem === 'slidewikiTab') {
+            this.context.executeAction(loadMoreSearchResults, {
+                queryparams: nextLink
+            });
+        }
     }
     render() {
         let button = <Button floated="right" size="small" primary positive as="button"
@@ -154,9 +163,9 @@ class AddDecksModal extends React.Component {
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
                             </Menu>
                             { (this.state.activeItem === 'slidewikiTab') && 
-                                <SearchForm />
+                                <SearchForm ref={ (e) => {this.searchForm = e;} }/>
                             }
-                            <h3>{this.state.subheader}</h3>
+                            <h3>{ this.props.DeckCollectionStore.subheader }</h3>
                             <Segment basic>
                                 <DecksList handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
                             </Segment>
