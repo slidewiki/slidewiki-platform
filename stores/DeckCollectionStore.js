@@ -272,12 +272,12 @@ class DeckCollectionStore extends BaseStore {
 
         // form next page link if more results are available
         if (payload.hasMore) {
-            this.decksMeta['links'] = {
+            this.decksMeta.links = {
                 next: `${this.decksMeta.queryparams}&page=${payload.page + 1}`
             };
 
         } else {
-            this.decksMeta['links'] = {
+            this.decksMeta.links = {
                 next: undefined
             };
         }
