@@ -14,25 +14,13 @@ class SlideViewStore extends BaseStore {
     }
 
     updateContent(payload) {
-        if (payload.slide.revisions !== undefined)
-        {
-            //this.id = payload.slide.id;
-            this.slideId = payload.selector.sid;
-            let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
-            this.title = lastRevision.title;
-            this.content = lastRevision.content;
-            this.speakernotes = lastRevision.speakernotes;
-            this.tags = lastRevision.tags? lastRevision.tags: [];
-            this.emitChange();
-        }
-        else
-        {
-            this.slideId = '';
-            this.title = 'title not found';
-            this.content = 'content not found';
-            this.tags = [];
-            this.emitChange();
-        }
+        //this.id = payload.slide.id;
+        this.slideId = payload.selector.sid;
+        this.title = payload.slide.title;
+        this.content = payload.slide.content;
+        this.speakernotes = payload.slide.speakernotes;
+        this.tags = payload.slide.tags || [];
+        this.emitChange();
     }
 
     getState() {

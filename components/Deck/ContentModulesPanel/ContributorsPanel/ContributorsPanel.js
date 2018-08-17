@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
@@ -52,7 +53,7 @@ class ContributorsPanel extends React.Component {
 }
 
 ContributorsPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], (context, props) => {
     return {

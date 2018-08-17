@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {DropTarget} from 'react-dnd';
 
@@ -44,7 +45,7 @@ class TreeNodeTarget extends React.Component {
 }
 
 TreeNodeTarget.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default DropTarget('tree-node', dropTarget, (connect, monitor) => ({

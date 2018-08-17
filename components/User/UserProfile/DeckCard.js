@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Thumbnail from '../../common/Thumbnail';
 import { NavLink } from 'fluxible-router';
@@ -68,10 +69,10 @@ class DeckCard extends React.Component {
                     </div>
                 </div>
                 <div className="bottom attached menu ui basic buttons">
-                    <NavLink href={viewUrl} data-tooltip="Open deck" type="button" role="button" className="ui icon button" aria-label="Open deck">
+                    <NavLink href={viewUrl} data-tooltip="Open deck" role="button" className="ui icon button" aria-label="Open deck">
                         <i className="yellow open folder large icon" aria-hidden="true" ></i>
                     </NavLink>
-                    <a href={presentationUrl} target="_blank" className="ui icon button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                    <a href={presentationUrl} target="_blank" className="ui icon button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                         <i className="grey circle play large icon" aria-hidden="true" ></i>
                     </a>
                 </div>
@@ -81,7 +82,7 @@ class DeckCard extends React.Component {
 }
 
 DeckCard.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default DeckCard;

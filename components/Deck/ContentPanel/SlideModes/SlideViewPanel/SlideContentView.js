@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
@@ -7,18 +8,16 @@ const ReactDOM = require('react-dom');
 class SlideContentView extends React.Component {
     constructor(props) {
         super(props);
-        this.scaleRatio;
+        this.scaleRatio = null;
         this.currentContent;
+
+        this.resize = this.resize.bind(this);
     }
     componentWillReceiveProps(nextProps){
         if (this.currentContent !== this.props.content)
         {
             this.currentContent = this.props.content;
-            this.scaleRatio = 1;
-        }
-        if (nextProps.SlideViewStore.scaleRatio !== this.scaleRatio) {
-            this.scaleRatio = nextProps.SlideViewStore.scaleRatio;
-            this.resize();
+            this.scaleRatio = null;
         }
     }
     componentWillUnmount(){
@@ -42,47 +41,35 @@ class SlideContentView extends React.Component {
 
     resize()
     {
-        if ($('.pptx2html').length)
-        {
-            //if (this.initialScale === 1)
-            if (this.scaleRatio === 1)
-            {
-                //Function to fit canvas/pptx2html contents in edit and view component
-                let containerwidth = document.getElementById('container').offsetWidth;
-                //let containerheight = document.getElementById('container').offsetHeight;
-                //reset scaling of pptx2html element to get original size
-                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-                //get width of PPTX2html content
-                //let pptxwidth = $('.pptx2html').outerWidth();
-                //let pptxheight = $('.pptx2html').outerHeight();
-                let pptxwidth = $('.pptx2html').width();
-                //let pptxheight = $('.pptx2html').height();
-                this.scaleRatio = containerwidth / (pptxwidth + 10);
-                $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-                $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
+        if ($('.pptx2html').length) {
+            const containerwidth = document.getElementById('container').offsetWidth;
 
-                let pptxheight = $('.pptx2html').outerHeight();
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
-                const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-                this.refs.slideContentView.style.height = (pptxheight * this.scaleRatio + scrollbarHeight) + 'px';
+            const pptxwidth = $('.pptx2html').outerWidth();
+            const padding = 12;
 
-                //$('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
-                $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
-
-                //set vars for zoom
-                //this.initialScale = this.scaleRatio;
+            if (!this.scaleRatio) {
+                this.scaleRatio = containerwidth / (pptxwidth + padding);
             }
-            else
-            {
-                $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
-                let pptxheight = $('.pptx2html').outerHeight();
-                const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
-                this.refs.slideContentView.style.height = (pptxheight * this.scaleRatio + scrollbarHeight) + 'px';
-            }
-            this.refs.inlineContent.style.overflowY = 'auto';
-            this.refs.inlineContent.style.height = '';
-        }
-        else {
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
+                'transform-origin': 'top left'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+
+            const pptxheight = $('.pptx2html').outerHeight();
+            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+            const contentHeight = pptxheight * this.scaleRatio;
+            const contentWidth = pptxwidth * this.scaleRatio;
+
+            this.refs.slideContentView.style.height = contentHeight + padding + 'px';
+            this.refs.inlineContent.style.overflowY = 'hidden';
+            this.refs.inlineContent.style.overflowX = 'hidden';
+
+            /* Some extra padding is added to ensure that the borderline is visible. */
+            this.refs.inlineContent.style.height = contentHeight + padding + 'px';
+            this.refs.inlineContent.style.width = contentWidth + padding + 'px';
+        } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.inlineContent.style.height = '100%';
         }
@@ -92,8 +79,6 @@ class SlideContentView extends React.Component {
         this.resize();
     }
     resetZoom(){
-        //this.zoom = 1;
-        //this.scaleRatio = this.initialScale;
         this.scaleRatio = 1;
         this.resize();
     }
@@ -104,26 +89,23 @@ class SlideContentView extends React.Component {
     render() {
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
-            minWidth: '100%',
             overflowY: 'auto',
             position: 'relative'
         };
         const compStyle = {
-            minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
-            overflowX: 'hidden',
+            overflowX: 'auto',
             height: '100%',
             padding: 0,
         };
         const contentStyle = {
-            minWidth: '100%',
             overflowY: 'hidden',
-            overflowX: 'auto',
+            overflowX: 'hidden',
         };
         const compSpeakerStyle = {
             overflowY: 'auto',
@@ -131,15 +113,11 @@ class SlideContentView extends React.Component {
             paddingLeft: '5px'
         };
         const SpeakerStyle = {
-            minWidth: '100%',
-            minHeight: 85,
+            minHeight: '85px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
             resize: 'vertical'
-        };
-        const containerMinHeight = {
-
         };
 
         // Add the CSS dependency for the theme
@@ -182,7 +160,7 @@ class SlideContentView extends React.Component {
                   :
                   <div className="ui segment vertical attached left icon buttons">
                       <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="stacked icons"><i className="small plus icon "></i><i className="large search icon "></i></i></button>
-                      <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="reset zoom" data-tooltip="reset zoom"><i className="stacked icons"><i className="small compress icon "></i><i className="large search icon "></i></i></button>
+                      <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="Reset zoom" data-tooltip="reset zoom"><i className="stacked icons"><i className="small compress icon "></i><i className="large search icon "></i></i></button>
                       <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="stacked icons"><i className="small minus icon "></i><i className="large search icon "></i></i></button>
                   </div>
                 }
@@ -194,7 +172,7 @@ class SlideContentView extends React.Component {
 }
 
 SlideContentView.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 SlideContentView = connectToStores(SlideContentView, [SlideViewStore], (context, props) => {

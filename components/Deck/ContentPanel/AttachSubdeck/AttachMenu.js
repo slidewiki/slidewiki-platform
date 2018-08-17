@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Menu} from 'semantic-ui-react';
 import updateActiveItem  from '../../../../actions/attachSubdeck/updateActiveItem';
@@ -49,7 +50,7 @@ class AttachMenu extends React.Component{
     }
 }
 AttachMenu.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
@@ -260,7 +261,7 @@ class ContentQuestionEdit extends React.Component {
 }
 
 ContentQuestionEdit.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentQuestionEdit;

@@ -1,9 +1,15 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Divider, Dropdown, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import { Image as Img}  from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFile';
+import updateGraphic from '../../actions/media/updateGraphic';
+import finishPaintEdition from '../../actions/paint/finishPaintEdition';
+import PaintModalStore from '../../stores/PaintModalStore';
 import { fabric } from 'fabric';
+//import rp from 'request-promise';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -33,6 +39,8 @@ class PaintModal extends React.Component {
         this.reader = new FileReader();
         this.primaryColor = 'black';
         this.secondaryColor = 'black';
+        this.transparency = 1;
+        this.noActiveObject = true;
         this.drawingMode = false;
         this.canvas = null;
 
@@ -68,11 +76,15 @@ class PaintModal extends React.Component {
         this.deleteElement = this.deleteElement.bind(this);
         this.setDrawingMode = this.setDrawingMode.bind(this);
         this.setLineWidth = this.setLineWidth.bind(this);
+        this.setTransparency = this.setTransparency.bind(this);
+        this.sendBackwards = this.sendBackwards.bind(this);
+        this.bringForwards= this.bringForwards.bind(this);
         this.loadImg = this.loadImg.bind(this);
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
         this.copyActiveObjects = this.copyActiveObjects.bind(this);
         this.paste = this.paste.bind(this);
+        this.getDrawedCoordinates = this.getDrawedCoordinates.bind(this);
         this.showLicense = this.showLicense.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
     }
@@ -116,7 +128,8 @@ class PaintModal extends React.Component {
                 let image = new fabric.Image(imgObj);
                 image.set({
                     angle: 0,
-                    padding: 0
+                    padding: 0,
+                    opacity: this.transparency
                 });
                 this.canvas.centerObject(image);
                 this.canvas.add(image);
@@ -136,6 +149,16 @@ class PaintModal extends React.Component {
 
         this.canvas.on('object:removed', (e) => {
             this.updateCanvasState();
+        });
+
+        this.canvas.on('selection:created', (e) => {
+            this.noActiveObject = false;
+            this.forceUpdate();
+        });
+
+        this.canvas.on('selection:cleared', (e) => {
+            this.noActiveObject = true;
+            this.forceUpdate();
         });
     }
 
@@ -205,6 +228,8 @@ class PaintModal extends React.Component {
             redoDisabled            : true
         };
 
+        this.context.executeAction(finishPaintEdition);
+
     }
 
     unmountTrap() {
@@ -222,7 +247,7 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1,
+            opacity: this.transparency,
             stroke: this.secondaryColor,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
@@ -236,7 +261,7 @@ class PaintModal extends React.Component {
             top: coord.top,
             fill: this.primaryColor,
             radius: 50,
-            opacity: 1,
+            opacity: this.transparency,
             stroke: this.secondaryColor,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
@@ -251,7 +276,7 @@ class PaintModal extends React.Component {
             fill: this.primaryColor,
             width: 50,
             height: 50,
-            opacity: 1,
+            opacity: this.transparency,
             stroke: this.secondaryColor,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
@@ -296,7 +321,7 @@ class PaintModal extends React.Component {
             top: 30,
             fill: this.primaryColor,
             stroke: this.secondaryColor,
-            opacity: 1,
+            opacity: this.transparency,
             strokeWidth: this.canvas.freeDrawingBrush.width
         }));
     }
@@ -319,6 +344,30 @@ class PaintModal extends React.Component {
         let value = parseInt(event.target.value, 10) || 1;
         this.canvas.freeDrawingBrush.width = value;
         this.forceUpdate();
+    }
+
+    setTransparency(event) {
+        let value = parseInt(event.target.value, 10) || 1;
+        if( value !== 0 ) {
+            this.transparency = 1 - value/100;
+        } else {
+            this.transparency = 1;
+        }
+        this.forceUpdate();
+    }
+
+    sendBackwards() {
+        let actObjects = this.canvas.getActiveObject();
+        if (actObjects) {
+            this.canvas.sendBackwards(actObjects);
+        }
+    }
+
+    bringForwards(){
+        let actObjects = this.canvas.getActiveObject();
+        if (actObjects) {
+            this.canvas.bringForward(actObjects);
+        }
     }
 
     loadImg(event) {
@@ -445,22 +494,49 @@ class PaintModal extends React.Component {
         });
     }
 
+    getDrawedCoordinates(objects) {
+        let coordinates = {
+            minX: 10000,
+            minY: 10000,
+            maxX: 0,
+            maxY: 0
+        };
+
+        for (let i = 0; i < objects.length; i++){
+            let coords = objects[i].aCoords;
+            for (let coord in coords) {
+                if (coords[coord].x > coordinates.maxX) coordinates.maxX = coords[coord].x;
+                if (coords[coord].y > coordinates.maxY) coordinates.maxY = coords[coord].y;
+                if (coords[coord].x < coordinates.minX) coordinates.minX = coords[coord].x;
+                if (coords[coord].y < coordinates.minY) coordinates.minY = coords[coord].y;
+            }
+        }
+
+        return coordinates;
+    }
+
     showLicense() {
 
-        let href = this.canvas.toDataURL({
-            format: 'png',
-            quality: 1
+        let coordinates = this.getDrawedCoordinates(this.canvas.getObjects());
+        let href = this.canvas.toSVG({
+            suppressPreamble: true,
+            width: coordinates.maxX - coordinates.minX,
+            height: coordinates.maxY - coordinates.minY,
+            viewBox: {
+                x: coordinates.minX,
+                y: coordinates.minY,
+                width: coordinates.maxX - coordinates.minX,
+                height: coordinates.maxY - coordinates.minY
+            }
         });
-
-        let file = this.dataURLtoBlob(href);
 
         this.setState({
             license: true,
             file: {
                 url: href,
-                format: 'png',
+                format: 'svg+xml',
                 name: 'Image',
-                size: file.size
+                size: href.length
             }
         });
     }
@@ -476,7 +552,7 @@ class PaintModal extends React.Component {
         });
     }
 
-    dataURLtoBlob(dataURL) {
+    /*dataURLtoBlob(dataURL) {
         //http://mitgux.com/send-canvas-to-server-as-file-using-ajax
         // Decode the dataURL
         let binary = atob(dataURL.split(',')[1]);
@@ -486,27 +562,68 @@ class PaintModal extends React.Component {
             array.push(binary.charCodeAt(i));
         }
         // Return our Blob object
-        return new Blob([new Uint8Array(array)], {type: 'image/png'});
-    }
+        return new Blob([new Uint8Array(array)], {type: 'image/svg+xml'});
+    }*/
 
     submitPressed(e) {
         e.preventDefault();
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
 
-        let payload = {
-            type: 'image/png',
-            license: this.state.licenseValue,
-            copyrightHolder: this.state.copyrightHolder,
-            title: this.state.title || 'Image',
-            text: this.state.alt,
-            filesize: this.state.file.size,
-            filename: 'Image.png',
-            bytes: this.state.file.url
-        };
+        let paintModalState = this.props.PaintModalStore;
 
-        this.context.executeAction(uploadMediaFiles, payload);
+        if(!paintModalState.toEdit) {
+            let payload = {
+                type: 'image/svg+xml',
+                license: this.state.licenseValue,
+                copyrightHolder: this.state.copyrightHolder,
+                title: this.state.title || 'Image',
+                text: this.state.alt,
+                filesize: this.state.file.size,
+                filename: 'Image.svg',
+                bytes: this.state.file.url
+            };
+
+            this.context.executeAction(uploadMediaFiles, payload);
+        } else {
+            let payload = {
+                url: this.props.PaintModalStore.url,
+                type: 'image/svg+xml',
+                license: this.state.licenseValue,
+                copyrightHolder: this.state.copyrightHolder,
+                title: this.state.title || 'Image',
+                text: this.state.alt,
+                filesize: this.state.file.size,
+                filename: 'Image.svg',
+                bytes: this.state.file.url
+            };
+
+            this.context.executeAction(updateGraphic, payload);
+        }
+
         this.handleClose();
         return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let src = nextProps.PaintModalStore.url;
+        let ext = null;
+        if (src) ext = src.split('.')[src.split('.').length - 1];
+        if(nextProps.PaintModalStore.toEdit){
+            this.handleOpen();
+            let str = nextProps.PaintModalStore.svg;
+            fabric.loadSVGFromString(str, (objects) => {
+                for (let i = 0; i < objects.length; i++){
+                    this.canvas.add(objects[i]);
+                }
+                this.canvas.renderAll();
+            });
+        } else if ( ext === 'png' || ext === 'jpg' || ext === 'jpeg' ) {
+            this.handleOpen();
+            fabric.Image.fromURL(nextProps.PaintModalStore.url, (oImg) => {
+                this.canvas.add(oImg);
+                this.canvas.renderAll();
+            });
+        }
     }
 
     render() {
@@ -517,7 +634,7 @@ class PaintModal extends React.Component {
 
         let saveHandler= this.showLicense;
 
-        let mode = this.drawingMode ? (<div><Icon name="pencil"/> Drawing Mode</div>) : (<div><Icon name="hand outline up"/> Select Mode</div>);
+        let mode = this.drawingMode ? (<div><Icon name="pencil"/> Drawing Mode</div>) : (<div><Icon name="hand point up outline"/> Select Mode</div>);
 
         let heading = 'Draw and Paint';
         let licenseBoxes = '';
@@ -528,9 +645,11 @@ class PaintModal extends React.Component {
                 <div className="ui padded grid">
                     <div className="four wide column">
                         <div className="ui grid">
-                            <div className="eleven wide column">
+                            <div className="sixteen wide column">
                                 <Button className="icon button" onClick={this.undo} disabled={this.canvas_config.undoDisabled} data-tooltip="Undo" aria-label="Undo"><Icon name="reply"/></Button>
                                 <Button className="icon button" onClick={this.redo} disabled={this.canvas_config.redoDisabled} data-tooltip="Redo" aria-label="Redo"><Icon name="share"/></Button>
+                                <Button className="icon button" onClick={this.bringForwards} disabled={this.noActiveObject} data-tooltip="Bring Forwards" aria-label="Bring Forwards"><Icon name="arrow up"/></Button>
+                                <Button className="icon button" onClick={this.sendBackwards} disabled={this.noActiveObject} data-tooltip="Send Backwards" aria-label="Send Backwards"><Icon name="arrow down"/></Button>
                             </div>
                         </div>
                         <div className="ui grid">
@@ -563,6 +682,10 @@ class PaintModal extends React.Component {
                             <p><label htmlFor="widthInput">Line/Border Width:</label> </p>
                             <input type="range" min="0" max="50" step="5" onChange={this.setLineWidth} defaultValue={0} id="widthInput"/>
                         </div>
+                        <div>
+                            <p><label htmlFor="widthInput">Object Transparency:</label> </p>
+                            <input type="range" min="0" max="100" step="5" onChange={this.setTransparency} defaultValue={0} id="widthInput"/>
+                        </div>
 
 
                         {/*<Button className="icon button" onClick={this.paste} data-tooltip="Paste"><Icon name="paste"/></Button>*/}
@@ -577,10 +700,12 @@ class PaintModal extends React.Component {
 
         if(this.state.license){
             heading = 'License information';
+            let innerSvg = '<svg' + this.state.file.url.split('<svg')[1];
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
-                <Img src={this.state.file.url} size="large" centered={true}/>
+                {/*<Img src={this.state.file.url} size="large" centered={true}/>*/}
+                <div style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: innerSvg }} />
                 <Divider/>
                 <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                     <div className="required field">
@@ -664,9 +789,14 @@ class PaintModal extends React.Component {
 }
 
 PaintModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
+    getUser: PropTypes.func
 };
 
+PaintModal = connectToStores(PaintModal, [PaintModalStore], (context, props) => {
+    return {
+        PaintModalStore: context.getStore(PaintModalStore).getState()
+    };
+});
 export default PaintModal;
