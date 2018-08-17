@@ -41,6 +41,7 @@ export default {
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
                     usage.forEach((item) => {
                         item.username = users.find((user) => user._id === item.user).username;
+                        item.displayName = users.find((user) => user._id === item.user).displayName;
                     });
                 });
             }).then(() => {

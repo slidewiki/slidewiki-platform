@@ -39,7 +39,10 @@ export default {
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
                     changes.forEach((changeOp) => {
                         let opUser = users.find((user) => user._id === changeOp.user);
-                        if (opUser) changeOp.username = opUser.username;
+                        if (opUser) {
+                            changeOp.username = opUser.username;
+                            changeOp.userDisplayName = opUser.displayName || opUser.username;
+                        }
                     });
                     return changes;
                 });
@@ -64,7 +67,11 @@ export default {
                 let userIds = [... new Set(revisions.map((rev) => rev.user))];
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
                     revisions.forEach((rev) => {
-                        rev.username = users.find((user) => user._id === rev.user).username;
+                        let revUser = users.find((user) => user._id === rev.user);
+                        if (revUser){
+                            rev.username = revUser.username;
+                            rev.userDisplayName = revUser.displayName || revUser.username;
+                        }
                     });
                     return revisions;
                 });

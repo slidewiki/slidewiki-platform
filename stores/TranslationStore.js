@@ -129,8 +129,6 @@ class TranslationStore extends BaseStore {
         let primaryVariant = payload.translations.find((v) => !!v.original);
         if (primaryVariant) {
             this.originLanguage = primaryVariant.language.replace('_', '-');
-        } else {
-            this.originLanguage = 'en';
         }
 
         // update translations

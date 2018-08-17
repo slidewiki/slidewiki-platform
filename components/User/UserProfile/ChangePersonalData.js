@@ -33,6 +33,7 @@ class ChangePersonalData extends React.Component {
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
+        payload.displayName = this.refs.displayName.value;
 
         console.log(payload.language);
 
@@ -96,6 +97,16 @@ class ChangePersonalData extends React.Component {
                             </label>
                             <input type="text" placeholder="Doe" name="lname" id="lname" defaultValue={this.props.user.lname} ref="lname" required/>
                         </div>
+                    </div>
+
+                    <div className="ui field">
+                        <label htmlFor="displayName">
+                          <FormattedMessage
+                            id='ChangePersonalData.displayName'
+                            defaultMessage='Display name'
+                          />
+                        </label>
+                        <input type="text" placeholder={this.props.user.uname} id="displayName" name="displayName" defaultValue={this.props.user.displayName} ref="displayName"/>
                     </div>
 
                     <div className="two fields">
