@@ -503,16 +503,20 @@ class SlideEditLeftPanel extends React.Component {
 
         let propertiesContent  = (
                 <form className="ui form">
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                  </a>
-                  <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
-                  </a>
-                  <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
-                      <i tabIndex="0" className="crop icon"></i>
-                      Slide size (current: {this.state.slideSizeText})
-                  </a>
+                    <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                        <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                    </a>
+                    <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
+                        <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
+                    </a>
+                    <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
+                        <i tabIndex="0" className="crop icon"></i>
+                        <FormattedMessage id='editpanel.slideSizeCurrent'
+                                values={{
+                                    size: this.state.slideSizeText,
+                                }}
+                                defaultMessage={'Slide size (current: {size})'}/>
+                    </a>
                 </form>);
 
                 /*
