@@ -11,6 +11,7 @@ import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -40,6 +41,38 @@ class SlideContentEditor extends React.Component {
         this.finishLoading = false;
         //this.oldContent = '';
         //this.redoContent = '';
+
+        CKEDITOR.on('instanceReady', (ev) => {
+
+            ev.editor.on('fileUploadRequest', (ev2) => {
+                ev2.cancel();
+            });
+
+            ev.editor.document.on('drop', (ev2) => {
+                if (ev2.data.$.dataTransfer.files) {
+                    let file = ev2.data.$.dataTransfer.files[0];
+                    let params = {};
+                    let url = URL.createObjectURL(file);
+                    file.preview = url;
+                    params.file = file;
+
+                    this.context.executeAction(handleDroppedFile, file);
+                }
+            });
+
+            ev.editor.document.on('paste', (ev2) => {
+                if (ev2.data.$.clipboardData.files) {
+                    let file = ev2.data.$.clipboardData.files[0];
+                    let params = {};
+                    let url = URL.createObjectURL(file);
+                    file.preview = url;
+                    params.file = file;
+
+                    this.context.executeAction(handleDroppedFile, file);
+                }
+            });
+        });
+
     }
 
     handleSlideSizechange(slideSize){
@@ -1614,13 +1647,8 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').css('background-size', '');
             $('.pptx2html').attr('aria-hidden','');
         }
-        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
-        {
-            this.refs.uploadMediaModal.handleOpen();
-        }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
-                this.refs.uploadMediaModal.handleClose();
                 //TODO code which inserts the file into the slide
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)  //if slide is in canvas mode
@@ -1635,7 +1663,7 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('aria-hidden','true');
                         $('.pptx2html').attr('alt',' ');
                     } else{
-                        if(nextProps.MediaStore.file.svg) {
+                        if(nextProps.MediaStore.file.type === 'image/svg+xml') {
                             let str = 'div[svg-source="'+ nextProps.MediaStore.file.url +'"]';
                             let oldElems = $(str);
                             oldElems.remove();
@@ -1681,7 +1709,6 @@ class SlideContentEditor extends React.Component {
 
             }
             else if (nextProps.MediaStore.status === 'error') {
-                this.refs.uploadMediaModal.handleClose();
                 const messagesimageUploadError = defineMessages({
                     swal_title:{
                         id: 'SlideContentEditor.imageUploadErrorTitle',
