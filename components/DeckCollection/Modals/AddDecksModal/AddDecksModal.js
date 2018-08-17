@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import { navigateAction } from 'fluxible-router';
-import { Button, Icon, Modal, Header, Image, Segment, TextArea, Menu, Popup, Dimmer, Loader, Container } from 'semantic-ui-react';
+import { Button, Icon, Modal, Header, Image, Segment, TextArea, Menu, Popup, Container } from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
@@ -10,6 +10,7 @@ import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNe
 import DeckCollectionStore from '../../../../stores/DeckCollectionStore';
 import DecksList from './DecksList';
 import SearchForm from '../../../Deck/ContentPanel/AttachSubdeck/AttachSearchForm';
+import loadRecentDecks from '../../../../actions/attachSubdeck/loadRecentDecks';
 
 class AddDecksModal extends React.Component {
 
@@ -18,7 +19,8 @@ class AddDecksModal extends React.Component {
         this.state = {
             activeItem: 'myDecksTab',
             isOpen: false,
-            selectedDecks: this.props.selectedDecks.slice()
+            selectedDecks: this.props.selectedDecks.slice(), 
+            subheader: '',
         };
 
         this.messages = this.getIntlMessages();
@@ -34,7 +36,21 @@ class AddDecksModal extends React.Component {
         }
     }
     handleMenuClick(e, { id }){
-        this.setState({ activeItem: id });
+        let subheader = '';
+        if (id === 'slidewikiTab') {
+            this.context.executeAction(loadRecentDecks, {
+                offset: 0, 
+                limit: 20,
+            });
+            subheader = 'Recent decks';
+        } else if (id === 'myDecksTab') {
+            this.context.executeAction(fetchUserDecks, { params: {} });
+        }
+
+        this.setState({ 
+            activeItem: id, 
+            subheader: subheader,
+        });
     }
     handleOpen(){
         this.context.executeAction(fetchUserDecks, { params: {} });
@@ -140,18 +156,9 @@ class AddDecksModal extends React.Component {
                             { (this.state.activeItem === 'slidewikiTab') && 
                                 <SearchForm />
                             }
+                            <h3>{this.state.subheader}</h3>
                             <Segment basic>
-                                { (!decks) && 
-                                    <div>
-                                        <Dimmer active inverted>
-                                            <Loader inverted>Loading</Loader>
-                                        </Dimmer>
-                                        <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                                    </div>
-                                }
-                                { (decks) && 
-                                    <DecksList handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
-                                }
+                                <DecksList handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
                             </Segment>
                             <Modal.Actions>
                                 <Segment basic textAlign="center">

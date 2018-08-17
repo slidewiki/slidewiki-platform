@@ -225,6 +225,23 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
         this.loadMoreError = false;
     }
+
+    setLoading() {
+        this.decks = undefined; 
+        this.emitChange();
+    }
+
+    loadRecentDecks(payload) {
+        // also add _id in deckID field
+        payload.recent.forEach( (deck) => {
+            deck.deckID = deck._id;
+            deck.creationDate = deck.timestamp;
+        });
+        this.decks = payload.recent;
+
+        this.emitChange();
+    }
+
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -260,6 +277,8 @@ DeckCollectionStore.handlers = {
     'FETCH_NEXT_USER_DECKS': 'loadMoreDecks',
     'FETCH_NEXT_USER_DECKS_FAILED': 'setLoadMoreDecksFailed',
 
+    'ATTACHSUBDECK_LOAD_RECENTDECKS_LOADING': 'setLoading',
+    'ATTACHSUBDECK_LOAD_RECENTDECKS': 'loadRecentDecks',
 };
 
 export default DeckCollectionStore;

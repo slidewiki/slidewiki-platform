@@ -111,6 +111,17 @@ class DecksList extends React.Component {
         this.props.loadMore(nextLink);
     }
     render() {
+        if (this.props.loading) {
+            return (
+                <div>
+                    <Dimmer active inverted>
+                        <Loader inverted>Loading</Loader>
+                    </Dimmer>
+                    <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+                </div>
+            );
+        }
+
         let editorUsername = this.props.loggedInDisplayName;
         let selectedIds = this.props.selectedDecks.map( (deck) => deck.deckID);
 
@@ -146,8 +157,8 @@ class DecksList extends React.Component {
 
                     <Grid.Column width={10}>
                         <div className="ui header" style={ itemStyle }>{ deck.title }</div>
-                        <div className="meta"><strong>Creator:&nbsp;</strong>{ editorUsername }</div>
-                        <div className="meta"><strong>Last Modified:&nbsp;</strong>{ date }</div>
+                        <div className="meta"><strong>Creator:&nbsp;</strong>{ deck.username || editorUsername }</div>
+                        <div className="meta"><strong>Creation Date:&nbsp;</strong>{ date }</div>
                         <div className="extra"> 
                             <Label  size="small">
                               <Icon name="comments outline" aria-label="Language"/>
