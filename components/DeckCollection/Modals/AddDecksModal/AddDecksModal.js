@@ -36,8 +36,7 @@ class AddDecksModal extends React.Component {
             });
         }
     }
-    handleMenuClick(e, { id }){
-        let subheader = '';
+    handleMenuClick({ id }){
         if (id === 'slidewikiTab') {
             this.context.executeAction(loadRecentDecks, {
                 offset: 0, 
@@ -124,6 +123,13 @@ class AddDecksModal extends React.Component {
             });
         }
     }
+    getDeckListStyle(){
+        return {
+            maxHeight: (this.state.activeItem === 'myDecksTab') ? '640px' : '320px', 
+            minHeight: '320px', 
+            overflowY: 'auto',
+        };
+    }
     render() {
         let button = <Button floated="right" size="small" primary positive as="button"
             type="button"
@@ -159,15 +165,15 @@ class AddDecksModal extends React.Component {
                         <Container text fluid>
                             <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
                             <Menu attached='top' tabular role="tablist">
-                               <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
-                               <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this)} role="tab" tabIndex="0" />
+                               <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this, {id: 'myDecksTab'})} onKeyPress={this.handleMenuClick.bind(this, {id: 'myDecksTab'})} role="tab" tabIndex="0" />
+                               <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this, {id: 'slidewikiTab'})} onKeyPress={this.handleMenuClick.bind(this, {id: 'slidewikiTab'})} role="tab" tabIndex="0" />
                             </Menu>
                             { (this.state.activeItem === 'slidewikiTab') && 
-                                <SearchForm ref={ (e) => {this.searchForm = e;} }/>
+                                <SearchForm />
                             }
                             <h3>{ this.props.DeckCollectionStore.subheader }</h3>
                             <Segment basic>
-                                <DecksList handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
+                                <DecksList style={this.getDeckListStyle()} handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
                             </Segment>
                             <Modal.Actions>
                                 <Segment basic textAlign="center">

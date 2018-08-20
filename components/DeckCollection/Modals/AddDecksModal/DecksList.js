@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { Label, Icon, TextArea, Image, Grid, Button, Loader, Dimmer } from 'semantic-ui-react';
+import { Label, Icon, TextArea, Image, Grid, Button, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import { getLanguageName }  from '../../../../common';
 import CustomDate from '../../../Deck/util/CustomDate';
 import { Microservices } from '../../../../configs/microservices';
@@ -34,7 +34,11 @@ class DecksList extends React.Component {
             errorMsg: {
                 id: 'DecksList.error',
                 defaultMessage: 'An unexpected error occurred while fetching more decks'                  
-            }
+            }, 
+            noResults: {
+                id: 'DecksList.noResults', 
+                defaultMessage: 'No results found'
+            },
         });
     }
     handleOnDeckClick(deck){
@@ -81,6 +85,11 @@ class DecksList extends React.Component {
         }
         return nextPos;
     }
+    handleLoadMoreKeyPress(nextLink, event){
+        if (event.key === 'Enter') {
+            this.props.loadMore(nextLink);
+        }
+    }
     getLoadMoreDiv(meta, listLength){
         let itemsCount = listLength;
 
@@ -95,7 +104,7 @@ class DecksList extends React.Component {
             if(this.props.loadMoreError){
                 loadMoreContent = this.context.intl.formatMessage(this.messages.errorMsg);
             }
-            loadMoreDiv = <Grid.Row className="center aligned" key="loadMoreDiv" id={`deckItemList${itemsCount}`} tabIndex="0">
+            loadMoreDiv = <Grid.Row className="center aligned" onKeyPress={this.handleLoadMoreKeyPress.bind(this, meta.links.next)} key="loadMoreDiv" id={`deckItemList${itemsCount}`} tabIndex="0">
                 <Grid.Column width={16}>
                     { loadMoreContent }
                 </Grid.Column>
@@ -120,6 +129,12 @@ class DecksList extends React.Component {
                     <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
                 </div>
             );
+        }
+
+        if (this.props.decks.length === 0) {
+            return <Segment basic textAlign="center"> 
+                {this.context.intl.formatMessage(this.messages.noResults)}
+            </Segment>;
         }
         
         let editorUsername = this.props.loggedInDisplayName;
@@ -183,7 +198,7 @@ class DecksList extends React.Component {
             );
         });
         return (
-            <Grid divided="vertically" verticalAlign="middle" className="items" style={{maxHeight: '600px', minHeight:'320px', overflowY:'auto'}} role="listbox" aria-expanded="true" aria-describedby="listInstructions">
+            <Grid divided="vertically" verticalAlign="middle" className="items" style={this.props.style} role="listbox" aria-expanded="true" aria-describedby="listInstructions">
                 <TextArea className="sr-only" id="listInstructions" value="Use up and down arrow keys to navigate through the list and then enter to select a deck. Use tab to go out of the list." tabIndex ='-1'/>
                 { list }
                 { loadMoreDiv }

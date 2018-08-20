@@ -11,7 +11,6 @@ export default function loadSearchedDecks(context,payload,done){
     context.executeAction(updateModalSubtitle, 'Search Results');
     
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
-        res.queryparams = payload.params.queryparams || undefined;
         
         if (err) {
             if (err.statusCode === 404) {
@@ -34,8 +33,7 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
-
-            log.info(context,res);
+            res.queryparams = payload.params.queryparams || undefined;
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
 
