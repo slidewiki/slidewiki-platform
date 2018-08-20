@@ -64,7 +64,7 @@ class Presentation extends React.Component{
 
             window.location.hash = '#slide-' + this.startingSlide;
 
-            let multiplexFileToLoad = (this.secret) ? '/custom_modules/reveal_multiplex/master.js' : '/custom_modules/reveal_multiplex/client.js' ;
+            let multiplexFileToLoad = (this.secret) ? '/custom_modules/reveal.js/plugin/multiplex/master.js' : '/custom_modules/reveal.js/plugin/multiplex/client.js' ;
             multiplexFileToLoad = (this.id) ? multiplexFileToLoad : '' ;
             let multiplexConfig = (this.secret) ? {secret: this.secret, id: this.id} : {secret: null, id: this.id};
             multiplexConfig.url = Microservices.webrtc.uri;
