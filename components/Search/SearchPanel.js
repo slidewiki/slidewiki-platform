@@ -4,7 +4,6 @@ import { connectToStores } from 'fluxible-addons-react';
 import { navigateAction } from 'fluxible-router';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../stores/SearchResultsStore';
-import SearchParamsStore from '../../stores/SearchParamsStore';
 import ErrorStore from '../../stores/ErrorStore';
 import SearchResultsPanel from './SearchResultsPanel/SearchResultsPanel';
 import loadSearchResults from '../../actions/search/loadSearchResults';
@@ -14,21 +13,15 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
+import { isEmpty } from 'lodash';
+import querystring from 'querystring';
 
 let MediaQuery = require ('react-responsive');
 
 class SearchPanel extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            keywords: this.props.SearchParamsStore.keywords,
-            kind: this.props.SearchParamsStore.kind,
-            language: this.props.SearchParamsStore.language,
-            field: this.props.SearchParamsStore.field,
-            user: this.props.SearchParamsStore.user,
-            tag: this.props.SearchParamsStore.tag,
-            sort: this.props.SearchParamsStore.sort,
-        };
+        this.state = Object.assign({}, this.props.SearchResultsStore.queryparams);
         this.messages = this.getIntlMessages();
     }
     getIntlMessages(){
@@ -168,11 +161,11 @@ class SearchPanel extends React.Component {
     componentDidUpdate(){
         this.initDropdown();
     }
-    componentWillReceiveProps(nextProps){
-        // TODO: find a more elegant way to do this!
-        if(!nextProps.SearchParamsStore.fetch) return;
-        this.setState(nextProps.SearchParamsStore);
-    }
+    // componentWillReceiveProps(nextProps){
+    //     // TODO: find a more elegant way to do this!
+    //     if(!nextProps.SearchParamsStore.fetch) return;
+    //     this.setState(nextProps.SearchParamsStore);
+    // }
     onChange(event) {
         // console.log(event.target.name + ' -> \"' + event.target.value + '"');
         let curstate = {};
@@ -199,43 +192,43 @@ class SearchPanel extends React.Component {
 
         // form the query parameters to send to search service
         let keywords;
-        if(params && params.keywords){
-            keywords = params.keywords;
-        } else {
-            keywords = ((this.state.keywords) ? this.state.keywords : '*:*');
-        }
+        // if(params && params.keywords){
+        //     keywords = params.keywords;
+        // } else {
+        //     keywords = ((this.state.keywords) ? this.state.keywords : '*:*');
+        // }
 
-        let queryparams = `keywords=${encodeURIComponent(keywords)}`;
+        // let queryparams = `keywords=${encodeURIComponent(keywords)}`;
 
-        if(this.state.field && this.state.field.trim()){
-            queryparams += `&field=${this.state.field}`;
-        }
+        // if(this.state.field && this.state.field.trim()){
+        //     queryparams += `&field=${this.state.field}`;
+        // }
 
-        if(this.state.kind && this.state.kind.trim()){
-            queryparams += `&kind=${this.state.kind}`;
-        }
+        // if(this.state.kind && this.state.kind.trim()){
+        //     queryparams += `&kind=${this.state.kind}`;
+        // }
 
-        if(this.state.language && this.state.language.trim()){
-            queryparams += `&language=${this.state.language}`;
-        }
-
+        // if(this.state.language && this.state.language.trim()){
+        //     queryparams += `&language=${this.state.language}`;
+        // }
+        let query = Object.assign({}, this.state);
         let users = this.refs.user.getSelected();
         if(users){
-            queryparams += users.split(',').map( (u) => { return `&user=${u}`; }).join('');
+            query.user = users.split(',');
         }
 
         let tags = this.refs.tag.getSelected();
         if(tags){
-            queryparams += tags.split(',').map( (t) => { return `&tag=${t}`; }).join('');
+            query.tag = tags.split(',');
         }
 
-        if(this.state.sort){
-            queryparams += `&sort=${this.state.sort}`;
-        }
+        // if(this.state.sort){
+        //     queryparams += `&sort=${this.state.sort}`;
+        // }
 
         // redirect with query params
         this.context.executeAction(navigateAction, {
-            url: `/search/${queryparams}`
+            url: `/search?${querystring.stringify(query)}`
         });
 
         this.refs.keywords.blur();
@@ -253,11 +246,10 @@ class SearchPanel extends React.Component {
         let nextPage = this.props.SearchResultsStore.page + 1;
 
         this.context.executeAction(loadMoreResults, {
-            queryparams: `${this.props.SearchParamsStore.queryparams}&page=${nextPage}`
+// queryparams: `${this.props.SearchParamsStore.queryparams}&page=${nextPage}`
         });
     }
     render() {
-
         let loadingDiv = <div className="ui basic segment">
             <div className="ui active text loader">Loading</div>
         </div>;
@@ -274,12 +266,12 @@ class SearchPanel extends React.Component {
         else if(this.props.SearchResultsStore.loading){
             searchResultsDiv = loadingDiv;
         }
-        else if(this.props.SearchParamsStore.queryparams){
+        else if(!isEmpty(this.props.SearchResultsStore.queryparams)){
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
                 spellcheck={this.props.SearchResultsStore.spellcheck}
                 numFound={this.props.SearchResultsStore.numFound}
-                sort={this.props.SearchParamsStore.sort}
+                sort={this.props.SearchResultsStore.queryparams.sort}
                 handleRedirect={this.handleRedirect.bind(this)}
                 changeSort={this.changeSort.bind(this)}
                 hasMore={this.props.SearchResultsStore.hasMore}
@@ -337,6 +329,7 @@ class SearchPanel extends React.Component {
         return (
             <div className="ui container" ref="searchPanel">
                 <div className='advancedSearch'>
+                {JSON.stringify(this.state)}
                     <div className="ui content">
                         <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
                         <form className="ui form success">
@@ -381,10 +374,9 @@ SearchPanel.contextTypes = {
     intl: PropTypes.object.isRequired,
 };
 
-SearchPanel = connectToStores(SearchPanel, [SearchResultsStore, SearchParamsStore], (context, props) => {
+SearchPanel = connectToStores(SearchPanel, [SearchResultsStore], (context, props) => {
     return {
         SearchResultsStore: context.getStore(SearchResultsStore).getState(),
-        SearchParamsStore: context.getStore(SearchParamsStore).getState()
     };
 });
 

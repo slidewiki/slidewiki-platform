@@ -17,6 +17,7 @@ class SearchResultsStore extends BaseStore {
         this.loadMoreLoading = false;
         this.hasMore = false;
         this.page = 1;
+        this.queryparams = {};
     }
     showLoading(payload){
         this.loading = true;
@@ -34,6 +35,7 @@ class SearchResultsStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
+        this.queryparams = payload.queryparams;
 
         // hide loading
         this.loading = false;
@@ -49,6 +51,7 @@ class SearchResultsStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
+        this.queryparams = payload.queryparams;
 
         // hide loading
         this.loading = false;
@@ -67,7 +70,8 @@ class SearchResultsStore extends BaseStore {
         this.hasMore = false;
         this.loadMoreLoading = false;
         this.page = 1;
-        
+        this.queryparam = {};
+
         this.emitChange();
     }
     displayError(){
@@ -86,7 +90,8 @@ class SearchResultsStore extends BaseStore {
             error: this.error,
             hasMore: this.hasMore,
             loadMoreLoading: this.loadMoreLoading,
-            page: this.page
+            page: this.page, 
+            queryparams: this.queryparams,
         };
     }
     dehydrate() {
@@ -102,6 +107,7 @@ class SearchResultsStore extends BaseStore {
         this.hasMore = state.hasMore;
         this.loadMoreLoading = state.loadMoreLoading;
         this.page = state.page;
+        this.queryparams = state.queryparams;
     }
 }
 

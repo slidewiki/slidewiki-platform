@@ -114,19 +114,25 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-        let args = params.params? params.params : params;
 
         if(resource === 'searchresults.list'){
 
-            // extra options for enabling results expansion, spellcheck and faceting
-            let requestOptions = '&expand=true&spellcheck=true&facets=false';
+            // set keywords and sort, if not given
+            params.query.keywords = (params.query.keywords.trim() === '') 
+                ? '*:*' : params.query.keywords;
+            params.query.sort = params.sort || 'score';
 
-            // console.log(args.queryparams);
+            // extra options for enabling results expansion, spellcheck and faceting
+            let query = Object.assign({}, params.query);
+            query.expand = true; 
+            query.spellcheck = true;
+            query.facets = true;
 
             // request search results from search service
             rp.get({
-                uri: `${Microservices.search.uri}/search/v2?${args.queryparams}${requestOptions}`,
-                json: true
+                uri: `${Microservices.search.uri}/search/v2`,
+                json: true, 
+                qs: query,
             }).then( (response) => {
 
                 let userIds = new Set(), deckIds = new Set();
@@ -236,6 +242,7 @@ export default {
                     });
 
                     callback(null, {
+                        queryparams: params.query,
                         numFound: response.numFound,
                         hasMore: response.hasMore,
                         page: response.page,
