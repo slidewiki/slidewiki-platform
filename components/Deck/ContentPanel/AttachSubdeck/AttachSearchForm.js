@@ -64,13 +64,6 @@ class AttachSearchForm extends React.Component{
 
         return false;
     }
-    handleKeyPress(event){
-
-        if(event.key === 'Enter'){
-            this.handleRedirect(event);
-        }
-
-    }
     onChange(event) {
         let curstate = {};
         curstate[event.target.name] = event.target.value;
@@ -108,7 +101,7 @@ class AttachSearchForm extends React.Component{
                             <Form.Group>
                               <Form.Field width="11" >
                                 <Label htmlFor="SearchTerm"  className="sr-only">Search Term</Label>
-                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} />
+                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' handleRedirect={this.handleRedirect.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} />
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="field" className="sr-only">Search field</Label>
