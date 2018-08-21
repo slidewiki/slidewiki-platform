@@ -587,7 +587,7 @@ class SlideContentEditor extends React.Component {
         this.uniqueIDAllElements();
         this.resize();
         $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
-        this.resizeDrag();
+        this.resizeDragAndContextMenu();
         //this.forceUpdate();
     }
     refreshCKeditor(){
@@ -604,25 +604,27 @@ class SlideContentEditor extends React.Component {
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
-                CKEDITOR.instances.inlineContent.on('beforeCommandExec', (evt) => {
+                CKEDITOR.instances.inlineContent.on('afterCommandExec', (evt) => {
                     if(evt.data.name === 'undo') {
-                        // handle before undo
-                        console.log('undo pressed');
+                        console.log('undo pressed after refreshing CKeditor');
                         setTimeout(() => {
-                            this.resizeDrag();
+                            CKEDITOR.instances.inlineContent.fire('lockSnapshot');
+                            this.resetResizeDragContext();
+                            CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
                         }, 500);
                     }
                     if(evt.data.name === 'redo') {
-                        // handle before redo
-                        console.log('redo pressed');
+                        console.log('redo pressed after refreshing CKeditor');
                         setTimeout(() => {
-                            this.resizeDrag();
+                            CKEDITOR.instances.inlineContent.fire('lockSnapshot');
+                            this.resetResizeDragContext();
+                            CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
                         }, 500);
                     }
                 });
                 //this.forceUpdate();
                 //this.addBorders();
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
                 //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
                 $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
                     //remove resize and drag interaction because it generates HTML in slide editor content
@@ -635,7 +637,7 @@ class SlideContentEditor extends React.Component {
                             //console.log('====ckeditor save button ok==== - refresh drag and menus');
                             //this.addBorders();
                             setTimeout(() => {
-                                this.resizeDrag();
+                                this.resizeDragAndContextMenu();
                                 this.hasChanges = true;
                                 ////this.forceUpdate();
                             }, 500);
@@ -659,7 +661,7 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.refreshCKeditor();
-                            this.resizeDrag();
+                            this.resizeDragAndContextMenu();
                             //this.forceUpdate();
                             this.hasChanges = true;
                         }, 500);
@@ -806,6 +808,12 @@ class SlideContentEditor extends React.Component {
             $(this).css('box-shadow','');
         });
     }
+    resetResizeDragContext(){
+        console.log('resetResizeDragContext');
+        this.disableResizeDrag();
+        this.contextMenuAndDragDivAllRemove();
+        this.resizeDragAndContextMenu();
+    }
     getHighestZIndex(){
         let index_highest = 0;
         $('.pptx2html [style*="absolute"]').each(function() {
@@ -848,7 +856,7 @@ class SlideContentEditor extends React.Component {
                 CKEDITOR.instances.inlineContent.getSelection().unlock();
             });
             //this.uniqueIDAllElements();
-            this.resizeDrag();
+            this.resizeDragAndContextMenu();
 
             this.placeCaretAtStart(uniqueID);
             $('#' + uniqueID).focus();
@@ -897,7 +905,7 @@ class SlideContentEditor extends React.Component {
                 //CKEDITOR.instances.inlineContent.setData(newContent);
                 this.hasChanges = true;
                 //this.forceUpdate();
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
                 this.resize();
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             }, (reason) => {
@@ -949,7 +957,7 @@ class SlideContentEditor extends React.Component {
         CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){
         CKEDITOR.inline('inlineSpeakerNotes', {
-            customConfig: '/assets/ckeditor_config_basic.js',
+            customConfig: '/assets/ckeditor_config_speaker_notes.js',
             toolbarGroups: [
                 //needed for Chrome initialization
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
@@ -984,20 +992,22 @@ class SlideContentEditor extends React.Component {
         //});
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-            CKEDITOR.instances.inlineContent.on('beforeCommandExec', (evt) => {
+            CKEDITOR.instances.inlineContent.on('afterCommandExec', (evt) => {
                 if(evt.data.name === 'undo') {
-                    // handle before undo
-                    console.log('undo pressed');
+                    console.log('undo pressed - initial CKeditor load');
                     setTimeout(() => {
-                        this.resizeDrag();
-                    }, 1000);
+                        CKEDITOR.instances.inlineContent.fire('lockSnapshot');
+                        this.resetResizeDragContext();
+                        CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
+                    }, 500);
                 }
                 if(evt.data.name === 'redo') {
-                    // handle before redo
-                    console.log('redo pressed');
+                    console.log('redo pressed - initial CKeditor load');
                     setTimeout(() => {
-                        this.resizeDrag();
-                    }, 1000);
+                        CKEDITOR.instances.inlineContent.fire('lockSnapshot');
+                        this.resetResizeDragContext();
+                        CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
+                    }, 500);
                 }
             });
             this.finishLoading = true;
@@ -1020,9 +1030,9 @@ class SlideContentEditor extends React.Component {
             {
                 //this.forceUpdate();
                 //this.addBorders();
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
 
-                //console.log('resizeDrag and borders');
+                //console.log('resizeDragAndContextMenu and borders');
                 //show that content is outside of pptx2html box
                 //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
@@ -1039,7 +1049,7 @@ class SlideContentEditor extends React.Component {
                             //console.log('====ckeditor save button ok==== - refresh drag and menus');
                             //this.addBorders();
                             setTimeout(() => {
-                                this.resizeDrag();
+                                this.resizeDragAndContextMenu();
                                 this.hasChanges = true;
                                 ////this.forceUpdate();
                             }, 500);
@@ -1059,7 +1069,7 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.refreshCKeditor();
-                            this.resizeDrag();
+                            this.resizeDragAndContextMenu();
                             //this.forceUpdate();
                             this.hasChanges = true;
                         }, 500);
@@ -1150,17 +1160,13 @@ class SlideContentEditor extends React.Component {
         });
     }
 
-    resizeDrag(){
+    resizeDragAndContextMenu(){
         //http://jqueryui.com/resizable/
-        //http://interface.eyecon.ro/docs/resizable
 
         // TODO -> create SVG around draggable element with points/blocks for resize handlers
         // OR by emulating textarea - http://stackoverflow.com/questions/18427555/jquery-textarea-draggable
-        // or: make images JQUERY draggable, and have original button for text input  - too complex
+        // or: make images JQUERY draggable, and have original button for text input
         //<g><path fill="#000" fill-opacity="0" stroke="#000" stroke-opacity="0" stroke-width="10550.76923076923" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" pointer-events="visiblePainted" d="M 4331 28073 L 318671 28073 318671 170081 4331 170081 Z"></path></g>
-        // TODO: Make background outside slide grey!
-
-        //***************position mode - default/start//***************
 
         let slideEditorContext = this; //set slideEditorContext inside doubleclick callbacks
 
@@ -1306,22 +1312,11 @@ class SlideContentEditor extends React.Component {
         //give each input box element a context menu (hide/overlap CKeditor context menu)
         this.contextMenuAll();
 
-        //***************content mode//***************
-        //TODO: on undo (ctr-l Z) - restore resize/drag elements previously removed
         //TODO: on editing source in CKeditor - restore resize/drag elements
         //TODO: caret position is reset in firefox, except for when typing
         //TODO: call emitChange() for new actions
         //TODO: if you select an element and starty typing: then directly switch to edit mode
 
-        //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
-        /*
-        $('.pptx2html [style*="absolute"]').not('.drawing').dblclick(function(evt) {
-            if (!$(this).hasClass('editMode'))
-            {
-                slideEditorContext.setEditMode(evt, slideEditorContext, $(this).attr('id'), false);
-            }
-        });
-        */
     }
 
     enterEditKey(evt, slideEditorContext, clickMenuFocus, previousCaret){
@@ -1468,6 +1463,7 @@ class SlideContentEditor extends React.Component {
         });
     }
     contextMenuAll(){
+        //performance improvement - check if contextmenu already exists
         let slideEditorContext = this;
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
@@ -1656,20 +1652,23 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.undoClick === 'true' && nextProps.SlideEditStore.undoClick !== this.props.SlideEditStore.undoClick)
         {
-            //console.log('undo');
-            //this.redoContent = this.props.SlideEditStore.content; //existing content is redocontent now
-            //this.props.SlideEditStore.content = this.oldContent; //oldcontent is restored
+            console.log('undo - via slide edit left panel');
             CKEDITOR.instances.inlineContent.execCommand('undo');
-            this.resizeDrag();
-            ////this.forceUpdate();
+            setTimeout(() => {
+                CKEDITOR.instances.inlineContent.fire('lockSnapshot');
+                this.resetResizeDragContext();
+                CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
+            }, 500);
         }
         if (nextProps.SlideEditStore.redoClick === 'true' && nextProps.SlideEditStore.redoClick !== this.props.SlideEditStore.redoClick)
         {
-            //console.log('redo');
-            //this.props.SlideEditStore.content = this.redoContent; //restore oringal content before undo
+            console.log('redo - via slide edit left panel');
             CKEDITOR.instances.inlineContent.execCommand('redo');
-            this.resizeDrag();
-            ////this.forceUpdate();
+            setTimeout(() => {
+                CKEDITOR.instances.inlineContent.fire('lockSnapshot');
+                this.resetResizeDragContext();
+                CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
+            }, 500);
         }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
@@ -1718,7 +1717,7 @@ class SlideContentEditor extends React.Component {
                         }
                         this.refreshCKeditor();
                         //this.resize();
-                        this.resizeDrag();
+                        this.resizeDragAndContextMenu();
                     }
                     this.hasChanges = true;
 
@@ -1784,7 +1783,7 @@ class SlideContentEditor extends React.Component {
             if($('.pptx2html').length) //if slide is in canvas mode
             {
                 $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  width: 400px; height: 300px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
                 this.hasChanges = true;
@@ -1817,7 +1816,7 @@ class SlideContentEditor extends React.Component {
                 $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
                     CKEDITOR.instances.inlineContent.getSelection().unlock();
                 });
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
                 this.hasChanges = true;
@@ -1833,7 +1832,7 @@ class SlideContentEditor extends React.Component {
             {
                 let uniqueID = this.getuniqueID();
                 $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 300px; height:200px; top: 200px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
                 this.hasChanges = true;
@@ -1849,7 +1848,7 @@ class SlideContentEditor extends React.Component {
             {
                 let uniqueID = this.getuniqueID();
                 $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:400px; top: 250px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
                 this.hasChanges = true;
@@ -1888,7 +1887,7 @@ class SlideContentEditor extends React.Component {
             if($('.pptx2html').length) //if slide is in canvas mode
             {
                 //this.uniqueIDAllElements();
-                this.resizeDrag();
+                this.resizeDragAndContextMenu();
             }
         }
         if (nextProps.SlideEditStore.title !== '' &&
@@ -1964,7 +1963,7 @@ class SlideContentEditor extends React.Component {
                         //console.log('====ckeditor save button ok==== - refresh drag and menus');
                         //this.addBorders();
                         setTimeout(() => {
-                            this.resizeDrag();
+                            this.resizeDragAndContextMenu();
                             this.hasChanges = true;
                             ////this.forceUpdate();
                         }, 500);
@@ -2087,7 +2086,7 @@ class SlideContentEditor extends React.Component {
 
             //context.uniqueIDAllElements(localContext);
             context.uniqueIDAllElements();
-            context.resizeDrag();
+            context.resizeDragAndContextMenu();
             ////this.forceUpdate();
         }
     }

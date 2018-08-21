@@ -3,6 +3,8 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
+import undoClick from '../../../actions/slide/undoClick';
+import redoClick from '../../../actions/slide/redoClick';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
@@ -65,6 +67,12 @@ class SlideEditLeftPanel extends React.Component {
                 $('#handleBackLink').focus();
             }
         }
+    }
+    handleUndoClick(){
+        this.context.executeAction(undoClick, {});
+    }
+    handleRedoClick(){
+        this.context.executeAction(redoClick, {});
     }
     handleAddInputBox(){
         this.context.executeAction(addInputBox, {});
@@ -252,8 +260,14 @@ class SlideEditLeftPanel extends React.Component {
         //console.log(event.key);
         //if(event.key === 'Enter' || event.key === ' '){
         if(event.key === 'Enter'){
-            console.log('enter key');
+            //console.log('enter key');
             switch (param) {
+                case 'handleUndoClick':
+                    this.handleUndoClick();
+                    break;
+                case 'handleRedoClick':
+                    this.handleRedoClick();
+                    break;
                 case 'handleBack':
                     this.handleBack();
                     break;
@@ -341,11 +355,25 @@ class SlideEditLeftPanel extends React.Component {
         const whiteText = {
             fontColor: 'white',
         };
+        let undoredoList = (
+            <div className="ui horizontal labeled icon grey inverted menu">
+              <a className="item" id="handleUndoClick" role="button" onClick={this.handleUndoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUndoClick')}>
+                  <i tabIndex="0" className="undo icon small"></i><FormattedMessage id='editpanel.undo' defaultMessage='undo' />
+              </a>
+              <a className="item right" id="handleRedoClick" role="button" onClick={this.handleRedoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRedoClick')}>
+                  <i tabIndex="0" className="redo icon small"></i><FormattedMessage id='editpanel.redo' defaultMessage='redo' />
+              </a>
+            </div>
+          );
+        let backKey = (
+            <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+            </a>
+        );
         let otherList = (
                 <div>
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                  </a>
+                  {undoredoList}
+                  {backKey}
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
                   </a>
@@ -369,9 +397,8 @@ class SlideEditLeftPanel extends React.Component {
 
         let embedOptions = (
                 <form className="ui form">
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                  </a>
+                {undoredoList}
+                {backKey}
                   <label htmlFor="embedCode">
                     <FormattedMessage id='editpanel.embedCode' defaultMessage='Code to embed content:' />
                   </label>
@@ -422,9 +449,8 @@ class SlideEditLeftPanel extends React.Component {
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
                 <div style={templateListStyle}>
-                  <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                  </a>
+                {undoredoList}
+                {backKey}
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
                       <i tabIndex="0" aria-label="Empty document"><FormattedMessage id='editpanel.template2' defaultMessage='Empty document - Document-mode (non-canvas)' /></i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
@@ -497,9 +523,8 @@ class SlideEditLeftPanel extends React.Component {
 
         let propertiesContent  = (
                 <form className="ui form">
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                  </a>
+                {undoredoList}
+                {backKey}
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
                       <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
                   </a>
@@ -524,9 +549,8 @@ class SlideEditLeftPanel extends React.Component {
 
         let titleChangeContent  = (
                 <div className="ui form">
-                  <a className="item" id="handleTitleBack" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                  </a>
+                {undoredoList}
+                {backKey}
                   <i className="error">
                       {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
                       <br />
@@ -545,9 +569,8 @@ class SlideEditLeftPanel extends React.Component {
 
         let sizeContent = (
             <div >
-              <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                  <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-              </a>
+            {undoredoList}
+            {backKey}
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '960')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '960')}>
                   <i tabIndex="0" aria-label="Standard (4:3) low - 960 * 720 pixels -  (legacy Powerpoint default) "><FormattedMessage id='editpanel.slideSizeStandard' defaultMessage='Standard (4:3) low' /> <br/> 960 * 720 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' />  <br/> <FormattedMessage id='editpanel.slideSizeNameLegacy' defaultMessage='(legacy/old) Powerpoint default' />  </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/960.png" alt="template - Title and bullets" />
@@ -571,6 +594,7 @@ class SlideEditLeftPanel extends React.Component {
             </div>);
         let normalContent = (
           <div>
+          {undoredoList}
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
                 <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
