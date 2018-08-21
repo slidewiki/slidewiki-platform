@@ -1672,11 +1672,16 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('alt',' ');
                     } else{
                         if(nextProps.MediaStore.file.svg) {
+                            let idContextTop = '300px';
+                            let idContextLeft = '250px';
                             if (this.idContext) {
+                                let style = $('#' + this.idContext).attr('style');
+                                idContextTop = style.split('top: ')[1].split(';')[0];
+                                idContextLeft = style.split('left: ')[1].split(';')[0];
                                 $('#' + this.idContext.toString()).remove();
                                 this.idContext = null;
                             }
-                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: ' + idContextTop + '; left: ' + idContextLeft + ';  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
                         } else {
                             console.log(nextProps.MediaStore.file);
                             // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
@@ -2006,6 +2011,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     editImage(context, event, idContext){
+        this.idContext = idContext;
         let contains_img = $('#' + idContext).find('img').length;
         if (contains_img) {
             let src = $('#' + idContext).find('img')[0].src;
