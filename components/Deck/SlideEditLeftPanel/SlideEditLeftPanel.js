@@ -357,11 +357,11 @@ class SlideEditLeftPanel extends React.Component {
         };
         let undoredoList = (
             <div className="ui horizontal labeled icon grey inverted menu">
-              <a className="item" id="handleUndoClick" role="button" onClick={this.handleUndoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUndoClick')}>
-                  <i tabIndex="0" className="undo icon small"></i><FormattedMessage id='editpanel.undo' defaultMessage='undo' />
+              <a className="item red"  id="handleUndoClick" role="button" onClick={this.handleUndoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUndoClick')}>
+                  <i tabIndex="0" className="undo icon small red"></i><FormattedMessage id='editpanel.undo' defaultMessage='undo' />
               </a>
-              <a className="item right" id="handleRedoClick" role="button" onClick={this.handleRedoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRedoClick')}>
-                  <i tabIndex="0" className="redo icon small"></i><FormattedMessage id='editpanel.redo' defaultMessage='redo' />
+              <a className="item green right" id="handleRedoClick" role="button" onClick={this.handleRedoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRedoClick')}>
+                  <i tabIndex="0" className="redo icon small green"></i><FormattedMessage id='editpanel.redo' defaultMessage='redo' />
               </a>
             </div>
           );

@@ -1654,21 +1654,22 @@ class SlideContentEditor extends React.Component {
         {
             console.log('undo - via slide edit left panel');
             CKEDITOR.instances.inlineContent.execCommand('undo');
-            setTimeout(() => {
+            //CKEDITOR.instances.inlineContent.fire('undo');
+            /*setTimeout(() => {
                 CKEDITOR.instances.inlineContent.fire('lockSnapshot');
                 this.resetResizeDragContext();
                 CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
-            }, 500);
+            }, 500);*/
         }
         if (nextProps.SlideEditStore.redoClick === 'true' && nextProps.SlideEditStore.redoClick !== this.props.SlideEditStore.redoClick)
         {
             console.log('redo - via slide edit left panel');
             CKEDITOR.instances.inlineContent.execCommand('redo');
-            setTimeout(() => {
+            /*setTimeout(() => {
                 CKEDITOR.instances.inlineContent.fire('lockSnapshot');
                 this.resetResizeDragContext();
                 CKEDITOR.instances.inlineContent.fire('unlockSnapshot');
-            }, 500);
+            }, 500);*/
         }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
