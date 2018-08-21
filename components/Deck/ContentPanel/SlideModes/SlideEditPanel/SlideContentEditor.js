@@ -1,29 +1,32 @@
+import {connectToStores} from 'fluxible-addons-react';
+import {NavLink, navigateAction} from 'fluxible-router';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
-import SlideEditStore from '../../../../../stores/SlideEditStore';
-import DataSourceStore from '../../../../../stores/DataSourceStore';
-import SlideViewStore from '../../../../../stores/SlideViewStore';
-import MediaStore from '../../../../../stores/MediaStore';
-import PaintModalStore from '../../../../../stores/PaintModalStore';
-import addSlide from '../../../../../actions/slide/addSlide';
-import saveSlide from '../../../../../actions/slide/saveSlide';
-import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
-import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
-//import ResizeAware from 'react-resize-aware';
-import { findDOMNode } from 'react-dom';
-import UserProfileStore from '../../../../../stores/UserProfileStore';
-import {Microservices} from '../../../../../configs/microservices';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
-//import TemplateDropdown from '../../../../common/TemplateDropdown';
-import {HotKeys} from 'react-hotkeys';
-import UploadMediaModal from '../../../../common/UploadMediaModal';
-import Util from '../../../../common/Util';
-import {FormattedMessage, defineMessages} from 'react-intl';
-
 let ReactDOM = require('react-dom');
+
+import ChartRender from '../../util/ChartRender';
+import DataSourceStore from '../../../../../stores/DataSourceStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
+import { findDOMNode } from 'react-dom';
+import {FormattedMessage, defineMessages} from 'react-intl';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import {HotKeys} from 'react-hotkeys';
+import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import MediaStore from '../../../../../stores/MediaStore';
+import {Microservices} from '../../../../../configs/microservices';
+import PaintModalStore from '../../../../../stores/PaintModalStore';
+import saveSlide from '../../../../../actions/slide/saveSlide';
+//import ResizeAware from 'react-resize-aware';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
+//import TemplateDropdown from '../../../../common/TemplateDropdown';
+import UploadMediaModal from '../../../../common/UploadMediaModal';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
+import Util from '../../../../common/Util';
+
+
+
 
 class SlideContentEditor extends React.Component {
     constructor(props) {
