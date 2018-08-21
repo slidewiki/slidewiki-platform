@@ -38,6 +38,7 @@ class ChartRender {
                         .useInteractiveGuideline(true);
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
+                case 'bar3DChart':
                 case 'barChart':
                     data = chartData;
                     chart = nv.models.multiBarChart();
@@ -62,6 +63,7 @@ class ChartRender {
                         .donut(true)
                         .donutRatio(0.35);
                     break;
+                case 'line3DChart':
                 case 'lineChart':
                     data = chartData;
                     chart = nv.models.lineChart()
