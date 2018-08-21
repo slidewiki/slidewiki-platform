@@ -32,14 +32,17 @@ class ChartRender {
 
             switch (chartType) {
                 case 'areaChart':
+                case 'area3DChart':
                     data = chartData;
                     chart = nv.models.stackedAreaChart()
                         .clipEdge(true)
                         .useInteractiveGuideline(true);
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
-                case 'bar3DChart':
                 case 'barChart':
+                case 'bar3DChart':
+                case 'radarChart':
+                case 'surface3DChart':
                     data = chartData;
                     chart = nv.models.multiBarChart();
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
@@ -63,8 +66,8 @@ class ChartRender {
                         .donut(true)
                         .donutRatio(0.35);
                     break;
-                case 'line3DChart':
                 case 'lineChart':
+                case 'line3DChart':
                     data = chartData;
                     chart = nv.models.lineChart()
                         .useInteractiveGuideline(true);
@@ -85,6 +88,7 @@ class ChartRender {
                     chartData = data;
                     break;
                 case 'pieChart':
+                case 'ofPieChart':
                     data = [];
                     for (let k = 0; k < chartData[0].values.length; k++) {
                         data.push({
