@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckHistoryStore from '../../../../stores/DeckHistoryStore';
@@ -56,7 +57,7 @@ class DeckHistoryPanel extends React.Component {
 }
 
 DeckHistoryPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 DeckHistoryPanel = connectToStores(DeckHistoryPanel, [DeckHistoryStore, UserProfileStore, PermissionsStore], (context, props) => {

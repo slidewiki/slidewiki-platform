@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic-ui-react';
@@ -19,6 +20,7 @@ import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
 import AttachSearchForm from './AttachSearchForm';
 import AttachSlides from './AttachSlides';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 
 class AttachSubdeckModal extends React.Component{
@@ -223,7 +225,8 @@ class AttachSubdeckModal extends React.Component{
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
 
-            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck." tabIndex ='-1'/>;
+            modalDescription = <p><FormattedMessage id='slidesModal.attachSlidesDescriptionStep1' defaultMessage='You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.' />
+            <TextArea className="sr-only" id="attachSlidesDescriptionSR" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection." tabIndex ='-1'/></p>;
 
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
@@ -244,7 +247,9 @@ class AttachSubdeckModal extends React.Component{
         } else{ //deck selected, diplay its slides, previous and attach button
             attachMenu ='';
             searchForm ='';
-            modalDescription= <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
+            modalDescription= <p><FormattedMessage id='slidesModal.attachSlidesDescriptionStep2' defaultMessage='Select slides to attach. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.' />
+            <TextArea className="sr-only" id="attachSlidesDescriptionSR" value="Select slides to attach. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection." tabIndex ='-1'/></p>;
+            //<TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
 
             segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
@@ -263,15 +268,15 @@ class AttachSubdeckModal extends React.Component{
         }
 
         let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
-                                                     type="button" aria-label="Attach Slides"
+                                                     type="button" aria-label="Attach slides"
                                                      aria-hidden={this.state.modalOpen}
-                                                     basic icon onClick={this.handleOpen}
+                                                     basic onClick={this.handleOpen}
                                                      tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
             <Icon.Group size={this.props.buttonStyle.iconSize}>
-                <Icon className="grey" name="file text outline"/>
+                <Icon className="grey" name="file alternate outline"/>
                 <Icon className="corner black" name="attach"/>
             </Icon.Group>
-        </Button>} content='Attach Slides' on='hover'/>;
+        </Button>} content='Attach slides' on='hover'/>;
 
 
         return (
@@ -281,7 +286,7 @@ class AttachSubdeckModal extends React.Component{
                 role="dialog"
                 id="attachSubDeckModal"
                 aria-labelledby="attachModalHeader"
-                aria-describedby="attachSlidesDescription"
+                aria-describedby="attachSlidesDescriptionSR"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
@@ -295,14 +300,15 @@ class AttachSubdeckModal extends React.Component{
                         className = "header">
 
                 <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
-                     Attach Slides
+                     Attach slides
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
+                         {modalDescription}
                          <Segment color="blue" textAlign="center" padded>
                             {attachMenu}
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               {modalDescription}
+
                                {searchForm}
                                {segmentPanelContent}
                             </Segment>
@@ -327,7 +333,7 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../stores/DeckCollectionStore';
@@ -235,8 +236,8 @@ class UserCollections extends React.Component {
 }
 
 UserCollections.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 UserCollections = connectToStores(UserCollections, [DeckCollectionStore, UserProfileStore], (context, props) => {

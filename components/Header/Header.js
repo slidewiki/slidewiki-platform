@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
@@ -143,8 +144,8 @@ class Header extends React.Component {
 
 
 Header.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 Header = connectToStores(Header, [UserProfileStore], (context, props) => {

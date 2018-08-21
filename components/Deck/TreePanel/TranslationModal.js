@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 
 import {connectToStores} from 'fluxible-addons-react';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../common';
 import {navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
@@ -60,10 +61,10 @@ class TranslationModal extends React.Component {
 
     render() {
         let current = '';
-        
-        const deckLanguage = this.props.TranslationStore.currentLang.language;
+
+        const deckLanguage = this.props.TranslationStore.currentLang;
         if (deckLanguage){
-            current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+            current =getLanguageName(deckLanguage.toLowerCase().substr(0,2));
         }else{
             current = '';
         }
@@ -79,13 +80,13 @@ class TranslationModal extends React.Component {
         if (this.props.TranslationStore.translations){
             translations = this.props.TranslationStore.translations;
             existing_codes = this.props.TranslationStore.translations.map((el) => { //getting all translations codes
-                return el.language.split('_')[0];
+                return el.split('_')[0];
             });
 
             available_array = translations.map((translation) => {
-                let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+                let languageName = getLanguageName(translation.toLowerCase().substr(0,2));
                 if (languageName){
-                    if (translation.language !== this.props.TranslationStore.currentLang.language){
+                    if (translation !== this.props.TranslationStore.currentLang){
                         let link = '/deck/';
                         link+= translation.deck_id;
                         return (
@@ -104,7 +105,7 @@ class TranslationModal extends React.Component {
 
 
         const supported = this.props.TranslationStore.supportedLangs.filter((el) => { //removing existing translations from supported
-            return !existing_codes.includes(el.code);
+            return !existing_codes.includes(el);
         });
 
 
@@ -149,7 +150,7 @@ class TranslationModal extends React.Component {
 }
 
 TranslationModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 TranslationModal = connectToStores(TranslationModal, [TranslationStore, UserProfileStore], (context, props) => {
     return {

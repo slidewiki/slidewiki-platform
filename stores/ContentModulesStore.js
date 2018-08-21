@@ -22,19 +22,17 @@ class ContentModulesStore extends BaseStore {
         this.emitChange();
     }
     updateTagAndDatasourceCount(payload) {
-        let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
-        this.moduleCount.tags = lastRevision.tags?
-            lastRevision.tags.length : 0;
+        this.moduleCount.tags = payload.slide.tags?
+            payload.slide.tags.length : 0;
 
-        this.moduleCount.datasource = lastRevision.dataSources?
-            lastRevision.dataSources.length : 0;
+        this.moduleCount.datasource = payload.slide.dataSources?
+            payload.slide.dataSources.length : 0;
 
         this.emitChange();
     }
     updateTagCountDeck(payload) {
-        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
-        this.moduleCount.tags = lastRevision.tags?
-            lastRevision.tags.length : 0;
+        this.moduleCount.tags = payload.deckData.tags?
+            payload.deckData.tags.length : 0;
 
         this.emitChange();
     }
@@ -60,6 +58,13 @@ class ContentModulesStore extends BaseStore {
     }
     addCommentSuccess() {
         this.moduleCount.comments++;
+        if (isLocalStorageOn()) {
+            localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
+        }
+        this.emitChange();
+    }
+    deleteCommentSuccess() {
+        this.moduleCount.comments--;
         if (isLocalStorageOn()) {
             localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
         }
@@ -112,6 +117,7 @@ ContentModulesStore.handlers = {
     'REMOVE_TAG': 'removeTagSuccess',
     'NEW_TAG': 'addTagSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
+    'DELETE_COMMENT_SUCCESS': 'deleteCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount',

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import UserPicture from '../../../../common/UserPicture';
@@ -64,7 +65,7 @@ class GroupDetailsModal extends React.Component {
                 </div>
                 <div className="fifteen wide column">
                   <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.group.creator.userid} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
-                  <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.username}</a>
+                  <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.displayName || this.props.group.creator.username}</a>
                   <div className="description">
                     {this.context.intl.formatMessage(this.messages.groupCreator)}
                   </div>
@@ -88,7 +89,7 @@ class GroupDetailsModal extends React.Component {
                         </div>
                         <div className="fifteen wide column">
                           <TextArea className="sr-only" id={'usernameIsALinkHint' + user.userid} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
-                          <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
+                          <a className="header" href={'/user/' + user.username} target="_blank">{user.displayName || user.username}</a>
                           {optionalText}
                         </div>
                       </div>
@@ -145,8 +146,8 @@ class GroupDetailsModal extends React.Component {
 }
 
 GroupDetailsModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default GroupDetailsModal;

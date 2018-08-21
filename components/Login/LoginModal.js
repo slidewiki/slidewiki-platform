@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
@@ -468,8 +469,8 @@ class LoginModal extends React.Component {
 }
 
 LoginModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 LoginModal = connectToStores(LoginModal,[LoginModalStore],(context,props) => {
     return {
