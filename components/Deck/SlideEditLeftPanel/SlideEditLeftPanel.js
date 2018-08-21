@@ -356,12 +356,12 @@ class SlideEditLeftPanel extends React.Component {
             fontColor: 'white',
         };
         let undoredoList = (
-            <div className="ui horizontal labeled icon grey inverted menu">
-              <a className="item red"  id="handleUndoClick" role="button" onClick={this.handleUndoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUndoClick')}>
-                  <i tabIndex="0" className="undo icon small red"></i><FormattedMessage id='editpanel.undo' defaultMessage='undo' />
+            <div className="ui horizontal labeled icon grey inverted small menu attached">
+              <a className="item"  id="handleUndoClick" role="button" onClick={this.handleUndoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUndoClick')}>
+                  <i tabIndex="0" className="undo icon small"></i><FormattedMessage id='editpanel.undo' defaultMessage='undo' />
               </a>
-              <a className="item green right" id="handleRedoClick" role="button" onClick={this.handleRedoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRedoClick')}>
-                  <i tabIndex="0" className="redo icon small green"></i><FormattedMessage id='editpanel.redo' defaultMessage='redo' />
+              <a className="item right" id="handleRedoClick" role="button" onClick={this.handleRedoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRedoClick')}>
+                  <i tabIndex="0" className="redo icon small"></i><FormattedMessage id='editpanel.redo' defaultMessage='redo' />
               </a>
             </div>
           );
@@ -372,7 +372,6 @@ class SlideEditLeftPanel extends React.Component {
         );
         let otherList = (
                 <div>
-                  {undoredoList}
                   {backKey}
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
@@ -397,7 +396,6 @@ class SlideEditLeftPanel extends React.Component {
 
         let embedOptions = (
                 <form className="ui form">
-                {undoredoList}
                 {backKey}
                   <label htmlFor="embedCode">
                     <FormattedMessage id='editpanel.embedCode' defaultMessage='Code to embed content:' />
@@ -449,7 +447,6 @@ class SlideEditLeftPanel extends React.Component {
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
                 <div style={templateListStyle}>
-                {undoredoList}
                 {backKey}
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
                       <i tabIndex="0" aria-label="Empty document"><FormattedMessage id='editpanel.template2' defaultMessage='Empty document - Document-mode (non-canvas)' /></i> <br/><br/>
@@ -523,7 +520,6 @@ class SlideEditLeftPanel extends React.Component {
 
         let propertiesContent  = (
                 <form className="ui form">
-                {undoredoList}
                 {backKey}
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
                       <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
@@ -549,7 +545,6 @@ class SlideEditLeftPanel extends React.Component {
 
         let titleChangeContent  = (
                 <div className="ui form">
-                {undoredoList}
                 {backKey}
                   <i className="error">
                       {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
@@ -569,7 +564,6 @@ class SlideEditLeftPanel extends React.Component {
 
         let sizeContent = (
             <div >
-            {undoredoList}
             {backKey}
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '960')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '960')}>
                   <i tabIndex="0" aria-label="Standard (4:3) low - 960 * 720 pixels -  (legacy Powerpoint default) "><FormattedMessage id='editpanel.slideSizeStandard' defaultMessage='Standard (4:3) low' /> <br/> 960 * 720 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' />  <br/> <FormattedMessage id='editpanel.slideSizeNameLegacy' defaultMessage='(legacy/old) Powerpoint default' />  </i> <br/><br/>
@@ -594,7 +588,6 @@ class SlideEditLeftPanel extends React.Component {
             </div>);
         let normalContent = (
           <div>
-          {undoredoList}
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
                 <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
@@ -641,7 +634,8 @@ class SlideEditLeftPanel extends React.Component {
               <NavigationPanel mode='edit' />
               <div className="ui grey inverted segment bottom attached active tab">
                 <div className="ui center aligned grid">
-                    <div className="ui vertical labeled icon grey inverted large menu">
+                    {undoredoList}
+                    <div className="ui vertical labeled icon grey inverted large menu attached">
                           {panelcontent}
                           </div>
                       </div>
