@@ -28,11 +28,13 @@ class ChartRender {
             let chartID = jsonChart.chartID;
             let chartType = jsonChart.chartType;
             let chartData = jsonChart.chartData;
+            let title = null;
 
             switch (chartType) {
-                case 'lineChart':
+                case 'areaChart':
                     data = chartData;
-                    chart = nv.models.lineChart()
+                    chart = nv.models.stackedAreaChart()
+                        .clipEdge(true)
                         .useInteractiveGuideline(true);
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
@@ -41,19 +43,30 @@ class ChartRender {
                     chart = nv.models.multiBarChart();
                     chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
-                case 'pieChart':
-                    data = [];
+                case 'doughnutChart':
+                    title = chartData[0].key;
+                    let data = [];
                     for (let k = 0; k < chartData[0].values.length; k++) {
                         data.push({
                             label: chartData[0].xlabels[k][0],
                             value: chartData[0].values[k].y
                         });
                     }
-                    chart = nv.models.pieChart()
-                        .x((d) => { return d.label; })
-                        .y((d) => { return d.value; })
-                        .showLabels(true);
                     chartData = data;
+                    chart = nv.models.pieChart()
+                        .x((d) => { return d.label })
+                        .y((d) => { return d.value })
+                        .showLabels(true)
+                        .labelThreshold(.05)
+                        .labelType("percent")
+                        .donut(true)
+                        .donutRatio(0.35);
+                    break;
+                case 'lineChart':
+                    data = chartData;
+                    chart = nv.models.lineChart()
+                        .useInteractiveGuideline(true);
+                    chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
                     break;
                 case 'pie3DChart':
                     data = [];
@@ -69,12 +82,19 @@ class ChartRender {
                         .showLabels(true);
                     chartData = data;
                     break;
-                case 'areaChart':
-                    data = chartData;
-                    chart = nv.models.stackedAreaChart()
-                        .clipEdge(true)
-                        .useInteractiveGuideline(true);
-                    chart.xAxis.tickFormat( (d) => { return chartData[0].xlabels[d] || d; });
+                case 'pieChart':
+                    data = [];
+                    for (let k = 0; k < chartData[0].values.length; k++) {
+                        data.push({
+                            label: chartData[0].xlabels[k][0],
+                            value: chartData[0].values[k].y
+                        });
+                    }
+                    chart = nv.models.pieChart()
+                        .x((d) => { return d.label; })
+                        .y((d) => { return d.value; })
+                        .showLabels(true);
+                    chartData = data;
                     break;
                 case 'scatterChart':
                     data = [];
@@ -102,18 +122,38 @@ class ChartRender {
                     chartData = data;
                     break;
                 default:
+                    break;
             }
 
             if (chart !== null) {
                 let h = $('#' + chartID).height();
                 let w = $('#' + chartID).width();
-                d3.select('#' + chartID)
-                    .append('svg')
-                    .datum(chartData)
-                    // .transition().duration(500)
-                    .call(chart)
-                    .style({'width': w, 'height': h});
-                    //.text(chartData[0].key);
+                // Auxiliar sleep function for the asynchronous rendering.
+                let sleep = (ms) => {
+                    return new Promise((resolve) => setTimeout(resolve,ms));
+                };
+                // Async function that waits one second to render the charts, so that the component mounts properly all
+                // its components.
+                let renderChart = async () => {
+                    // Black Magic Trick to avoid multiple rendering of charts due to multiple updates in the component.
+                    let ghostDiv = '<div id="' + chartID + 'ghost" style="display: none;"></div>';
+                    let ghostDivExists = $('#' + chartID + 'ghost').length;
+                    if (ghostDivExists) return;
+                    // Black Magic Ends here.
+                    $('#' + chartID).append(ghostDiv);
+                    await sleep(1000);
+                    let titleExists = $('#' + chartID + 'title').length;
+                    if (title && !titleExists) {
+                        let $chartDiv = $('#' + chartID);
+                        $chartDiv.append('<div style="text-align:center;" id="' + chartID + 'title">' + title + '</div>');
+                    }
+                    d3.select('#' + chartID)
+                        .append('svg')
+                        .datum(chartData)
+                        .call(chart)
+                        .style({'width': w, 'height': h});
+                };
+                renderChart();
             }
         }
 
