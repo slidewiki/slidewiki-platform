@@ -16,9 +16,12 @@ export default function loadSearchResults(context, payload, done) {
         return;
     }
 
+    payload.query.sort = payload.query.sort || 'score';
+
     // start loading ans set search params
     context.dispatch('SHOW_LOADING');
-    
+    context.dispatch('SET_SEARCH_PARAMS', payload.query);
+
     // fetch results from search-service
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

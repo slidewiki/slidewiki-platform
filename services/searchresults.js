@@ -117,16 +117,15 @@ export default {
 
         if(resource === 'searchresults.list'){
 
-            // set keywords and sort, if not given
-            params.query.keywords = (params.query.keywords.trim() === '') 
-                ? '*:*' : params.query.keywords;
-            params.query.sort = params.sort || 'score';
+            // if empty keywords are given, then search for all
+            params.query.keywords = params.query.keywords || '*:*';
 
             // extra options for enabling results expansion, spellcheck and faceting
             let query = Object.assign({}, params.query);
             query.expand = true; 
             query.spellcheck = true;
             query.facets = true;
+            query.kind = 'deck';
 
             // request search results from search service
             rp.get({
@@ -242,7 +241,6 @@ export default {
                     });
 
                     callback(null, {
-                        queryparams: params.query,
                         numFound: response.numFound,
                         hasMore: response.hasMore,
                         page: response.page,

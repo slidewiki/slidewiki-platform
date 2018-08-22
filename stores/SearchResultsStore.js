@@ -18,10 +18,13 @@ class SearchResultsStore extends BaseStore {
         this.hasMore = false;
         this.page = 1;
         this.queryparams = {};
+        this.fetch = false;
     }
     showLoading(payload){
         this.loading = true;
+        this.fetch = true;
         this.emitChange();
+        this.fetch = false;
     }
     showLoadMoreLoading(payload){
         this.loadMoreLoading = true;
@@ -35,7 +38,6 @@ class SearchResultsStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
-        this.queryparams = payload.queryparams;
 
         // hide loading
         this.loading = false;
@@ -51,7 +53,6 @@ class SearchResultsStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
-        this.queryparams = payload.queryparams;
 
         // hide loading
         this.loading = false;
@@ -71,6 +72,7 @@ class SearchResultsStore extends BaseStore {
         this.loadMoreLoading = false;
         this.page = 1;
         this.queryparam = {};
+        this.fetch = false;
 
         this.emitChange();
     }
@@ -92,6 +94,7 @@ class SearchResultsStore extends BaseStore {
             loadMoreLoading: this.loadMoreLoading,
             page: this.page, 
             queryparams: this.queryparams,
+            fetch: this.fetch,
         };
     }
     dehydrate() {
@@ -108,6 +111,13 @@ class SearchResultsStore extends BaseStore {
         this.loadMoreLoading = state.loadMoreLoading;
         this.page = state.page;
         this.queryparams = state.queryparams;
+        this.fetch = state.fetch;
+    }
+    setSearchParams(payload) {
+        this.queryparams = payload;
+        this.fetch = true;
+        this.emitChange();
+        this.fetch = false;
     }
 }
 
@@ -118,7 +128,8 @@ SearchResultsStore.handlers = {
     'RESET_PARAMS': 'resetParams',
     'SHOW_LOADING': 'showLoading',
     'LOAD_MORE_RESULTS_SUCCESS': 'loadMoreResults',
-    'SHOW_LOAD_MORE_LOADING': 'showLoadMoreLoading'
+    'SHOW_LOAD_MORE_LOADING': 'showLoadMoreLoading', 
+    'SET_SEARCH_PARAMS': 'setSearchParams',
 };
 
 export default SearchResultsStore;

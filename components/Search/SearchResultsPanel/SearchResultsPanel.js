@@ -8,6 +8,8 @@ import loadSearchResults from '../../../actions/search/loadSearchResults';
 import SpellcheckPanel from './SpellcheckPanel';
 import loadMoreResults from '../../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import { Grid } from 'semantic-ui-react';
+import Facets from './Facets';
 
 class SearchResultsPanel extends React.Component {
     constructor(props){
@@ -26,7 +28,7 @@ class SearchResultsPanel extends React.Component {
             },
             header: {
                 id: 'SearchResultsPanel.header',
-                defaultMessage: 'Search Results'
+                defaultMessage: 'Results'
             }, 
             noResults: {
                 id: 'SearchResultsPanel.noResults',
@@ -42,7 +44,7 @@ class SearchResultsPanel extends React.Component {
             }, 
             resultsMsg: {
                 id: 'SearchResultsPanel.results.message', 
-                defaultMessage: 'Showing {resultsNum} out of {totalResults} results'
+                defaultMessage: 'Displaying {resultsNum} out of {totalResults} results'
             }
         });
     }
@@ -98,11 +100,7 @@ class SearchResultsPanel extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="ui centered grid" key="searchResults">
-                <div className="twelve wide column">
-                    <SearchResultsList items={results} ></SearchResultsList>
-                </div>
-            </div>
+            <SearchResultsList items={results} ></SearchResultsList>
         </div>;
 
         // define no results div
@@ -127,11 +125,20 @@ class SearchResultsPanel extends React.Component {
         let spellcheckDiv = <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />;
 
         return (
-            <div ref="searchResultsPanel">
-                {spellcheckDiv}
-                {resultsPanel}
-                {loadMoreDiv}
-            </div>
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column width={16}>
+                        {spellcheckDiv}
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                        <Facets data={this.props.facets} />
+                    </Grid.Column>
+                    <Grid.Column width={12}>
+                        {resultsPanel}
+                        {loadMoreDiv}
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         );
     }
 }

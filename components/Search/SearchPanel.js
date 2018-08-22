@@ -13,10 +13,13 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
-import { isEmpty } from 'lodash';
+import { isEmpty, pickBy } from 'lodash';
 import querystring from 'querystring';
+import Responsive from 'react-responsive';
+import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 
-let MediaQuery = require ('react-responsive');
+const Default = (props) => <Responsive {...props} minWidth={768} />;
+const Mobile = (props) => <Responsive {...props} maxWidth={767} />;
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -161,13 +164,12 @@ class SearchPanel extends React.Component {
     componentDidUpdate(){
         this.initDropdown();
     }
-    // componentWillReceiveProps(nextProps){
-    //     // TODO: find a more elegant way to do this!
-    //     if(!nextProps.SearchParamsStore.fetch) return;
-    //     this.setState(nextProps.SearchParamsStore);
-    // }
+    componentWillReceiveProps(nextProps){
+        if (this.props.SearchResultsStore.fetch) {
+            this.setState(nextProps.SearchResultsStore.queryparams);
+        }
+    }
     onChange(event) {
-        // console.log(event.target.name + ' -> \"' + event.target.value + '"');
         let curstate = {};
         curstate[event.target.name] = event.target.value;
         this.setState(curstate);
@@ -179,19 +181,17 @@ class SearchPanel extends React.Component {
     onSelect(searchstring){
         this.setState({
             keywords: searchstring
-        });
-
-        this.handleRedirect();
+        }, 
+        this.handleRedirect);
     }
     handleKeyPress(event){
         if(event.key === 'Enter'){
+            event.preventDefault();
             this.handleRedirect();
         }
     }
-    handleRedirect(params){
-
+    handleRedirect(params, e){
         // form the query parameters to send to search service
-        let keywords;
         // if(params && params.keywords){
         //     keywords = params.keywords;
         // } else {
@@ -211,36 +211,43 @@ class SearchPanel extends React.Component {
         // if(this.state.language && this.state.language.trim()){
         //     queryparams += `&language=${this.state.language}`;
         // }
-        let query = Object.assign({}, this.state);
-        let users = this.refs.user.getSelected();
-        if(users){
-            query.user = users.split(',');
-        }
+        // let query = Object.assign({}, this.state);
+        // let users = this.refs.user.getSelected();
+        // if(users){
+        //     query.user = users.split(',');
+        // }
 
-        let tags = this.refs.tag.getSelected();
-        if(tags){
-            query.tag = tags.split(',');
-        }
+        // let tags = this.refs.tag.getSelected();
+        // if(tags){
+        //     query.tag = tags.split(',');
+        // }
 
         // if(this.state.sort){
         //     queryparams += `&sort=${this.state.sort}`;
         // }
+
+        // pick from state the required fields
+        let query = pickBy(this.state, (prop) => prop.trim());
+
+        // needed for spellcheck suggestion
+        if (params && params.keywords) {
+            query.keywords = params.keywords;
+        }
 
         // redirect with query params
         this.context.executeAction(navigateAction, {
             url: `/search?${querystring.stringify(query)}`
         });
 
-        this.refs.keywords.blur();
-
+        this.keywordsInput.blur();
+        
         return false;
     }
     changeSort(_sort){
         this.setState({
             sort: _sort
-        });
-
-        this.handleRedirect();
+        }, 
+        this.handleRedirect);
     }
     loadMore(){
         let nextPage = this.props.SearchResultsStore.page + 1;
@@ -249,9 +256,15 @@ class SearchPanel extends React.Component {
 // queryparams: `${this.props.SearchParamsStore.queryparams}&page=${nextPage}`
         });
     }
-    render() {
+    render() {      
         let loadingDiv = <div className="ui basic segment">
-            <div className="ui active text loader">Loading</div>
+            <p></p>
+            <p></p>
+            <div className="ui active inverted dimmer">
+                <div className="ui medium text loader">Loading</div>
+            </div>
+            <p></p>
+            <p></p>
         </div>;
 
         let errorDiv = <div className="ui grid centered">
@@ -269,6 +282,7 @@ class SearchPanel extends React.Component {
         else if(!isEmpty(this.props.SearchResultsStore.queryparams)){
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
+                facets={this.props.SearchResultsStore.facets}
                 spellcheck={this.props.SearchResultsStore.spellcheck}
                 numFound={this.props.SearchResultsStore.numFound}
                 sort={this.props.SearchResultsStore.queryparams.sort}
@@ -334,26 +348,32 @@ class SearchPanel extends React.Component {
                         <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
                         <form className="ui form success">
                             <div className="field">
-                                <label htmlFor="SearchTerm"><FormattedMessage {...this.messages.searchTerm} /></label>
-                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
+                                {
+                                    // <label htmlFor="SearchTerm"><FormattedMessage {...this.messages.searchTerm} /></label>
+                                    // <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.keywords || ''} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
+                                }
+                                <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
                             </div>
-                            <MediaQuery minDeviceWidth={768}>
-                                {advanced_options}
-                            </MediaQuery>
-                            <MediaQuery maxDeviceWidth={767}>
-                            <div className="ui accordion">
-                                <div className="title active">
-                                  <i className="icon dropdown"></i>
-                                  Advanced Options
-                                </div>
-                                <div className="content field">
-                                    {advanced_options}
-                                </div>
-                            </div>
-                            </MediaQuery>
-                            <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
-                                 <FormattedMessage {...this.messages.submitButton} />
-                            </div>
+                            {
+                            //     <Default>
+                            //         {advanced_options}
+                            //     </Default>
+                            //     <Mobile>
+                            //         <div className="ui accordion">
+                            //             <div className="title active">
+                            //               <i className="icon dropdown"></i>
+                            //               Advanced Options
+                            //             </div>
+                            //             <div className="content field">
+                            //                 {advanced_options}
+                            //             </div>
+                            //         </div>
+                            //     </Mobile>
+                                // <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
+                                //  <FormattedMessage {...this.messages.submitButton} />
+                                // </div>
+                            }
+
 
                         </form>
 
