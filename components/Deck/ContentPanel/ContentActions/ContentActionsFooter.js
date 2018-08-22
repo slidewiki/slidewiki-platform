@@ -113,17 +113,31 @@ class ContentActionsFooter extends React.Component {
         }
     }
 
+    handleFollowClick(e){
+
+    }
+
     render() {
         let likeButton = 'ui button';
+        let followButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
+        let classNameFollowButton = 'rss large icon';
+        let tooltipFollowButton = 'Follow this deck';
         let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
             //undefined user
             likeButton = 'ui disabled button';
-        } else if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
-            //already liked
-            classNameLikeButton = 'thumbs up alternate large blue icon';
-            tooltipLikeButton = 'Dislike this deck';
+            followButton = 'ui disabled button';
+        } else {
+            if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
+                //already liked
+                classNameLikeButton = 'thumbs up alternate large blue icon';
+                tooltipLikeButton = 'Dislike this deck';
+            }
+            if (false) {//IS USER FOLLOWING THIS DECK
+                classNameFollowButton = 'rss large blue icon';
+                tooltipFollowButton = 'Following this deck, click to unfollow';
+            }
         }
 
         let desktopButtons = <div>
@@ -137,6 +151,9 @@ class ContentActionsFooter extends React.Component {
           <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
           <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
               <i className={classNameLikeButton}></i>
+          </button>
+          <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+              <i className={classNameFollowButton}></i>
           </button>
           </div>;
 
