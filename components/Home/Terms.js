@@ -129,7 +129,7 @@ class terms extends React.Component {
                         values={{
                             noProfessionalAdvice: <b><FormattedMessage id="terms.4.ul.noProfessionalAdvice" defaultMessage="No professional advice"/></b>
                         }}
-                        defaultMessage="{noProfessionalAdvice} &#8211; the content of presentations and other projects is for informational purposes only and does not constitute professional advice or commercial advertisement. However, you can contact the SlideWiki foundation to support you in creating your own installation of SlideWiki on a website or webserver for commercial, educational, hybrid, or other purposes."
+                        defaultMessage="{noProfessionalAdvice} &#8211; the content of presentations and other projects is for informational/educational purposes only and does not constitute professional advice or commercial advertisement. However, you can contact the SlideWiki foundation to support you in creating your own installation of SlideWiki on a website or webserver for commercial, educational, hybrid, or other purposes."
                       />
                     </li>
                 </ul>
