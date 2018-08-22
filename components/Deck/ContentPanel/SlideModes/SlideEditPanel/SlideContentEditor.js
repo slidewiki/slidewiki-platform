@@ -1139,8 +1139,27 @@ class SlideContentEditor extends React.Component {
 
             // Make SVG resizable as soon as it is selected the first time.
             if ($(this).find('svg').length) {
-                $(this).children('svg').attr('width', '100%');
-                $(this).children('svg').attr('height', '100%');
+                // Remove previous width and height if it is defined inside its style attribute.
+                let svgStyle = $(this).children('svg').attr('style');
+                if (svgStyle) {
+                    let first = svgStyle.split(' width: ')[0];
+                    let second = svgStyle.split(' width: ')[1] ? svgStyle.split(' width: ')[1].split('px;')[2] : undefined;
+                    if (second) {
+                        let newStyle = first + second;
+                        $(this).children('svg').attr('style', newStyle);
+                    }
+                }
+
+                $(this).children('svg').attr('width', '98%');
+                $(this).children('svg').attr('height', '98%');
+                // If there is no viewBox defined, let's add one.
+                if (!$(this).children('svg').attr('viewBox')) {
+                    let parentStyle = $(this).attr('style');
+                    let parentWidth = parentStyle.split('width: ')[1].split('px')[0];
+                    let parentHeight = parentStyle.split('height: ')[1].split('px')[0];
+                    $(this).children('svg').attr('viewBox', '0 0 ' + parentWidth + ' ' + parentHeight);
+                }
+
             }
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
