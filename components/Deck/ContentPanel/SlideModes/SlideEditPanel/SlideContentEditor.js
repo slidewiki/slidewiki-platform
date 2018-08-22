@@ -51,25 +51,31 @@ class SlideContentEditor extends React.Component {
 
             ev.editor.document.on('drop', (ev2) => {
                 if (ev2.data.$.dataTransfer.files) {
-                    let file = ev2.data.$.dataTransfer.files[0];
-                    let params = {};
-                    let url = URL.createObjectURL(file);
-                    file.preview = url;
-                    params.file = file;
+                    console.log('droppped');
+                    if (ev2.data.$.dataTransfer.files.length !== 0) {
+                        let file = ev2.data.$.dataTransfer.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
 
-                    this.context.executeAction(handleDroppedFile, file);
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
                 }
             });
 
             ev.editor.document.on('paste', (ev2) => {
                 if (ev2.data.$.clipboardData.files) {
-                    let file = ev2.data.$.clipboardData.files[0];
-                    let params = {};
-                    let url = URL.createObjectURL(file);
-                    file.preview = url;
-                    params.file = file;
+                    console.log('pasted');
+                    if (ev2.data.$.clipboardData.files.length !== 0){
+                        let file = ev2.data.$.clipboardData.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
 
-                    this.context.executeAction(handleDroppedFile, file);
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
                 }
             });
         });
