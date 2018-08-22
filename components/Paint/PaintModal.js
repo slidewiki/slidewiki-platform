@@ -784,7 +784,6 @@ class PaintModal extends React.Component {
             title: title,
             alt: alt
         });
-
         if(nextProps.PaintModalStore.toEdit){
             this.handleOpen();
             let str = nextProps.PaintModalStore.svg;
@@ -792,6 +791,12 @@ class PaintModal extends React.Component {
                 for (let i = 0; i < objects.length; i++){
                     this.canvas.add(objects[i]);
                 }
+                // Black Magic to render correctly imported SVGs from a Slide... please don't remove, unless
+                // you find a better solution (real solution)
+                let dummy = new fabric.Rect({ width: 20, height: 20, left: 30, top:0 });
+                this.canvas.add(dummy);
+                this.undo();
+                // Black Magic ends here.
                 this.canvas.renderAll();
             });
         } else if ( ext === 'png' || ext === 'jpg' || ext === 'jpeg' ) {

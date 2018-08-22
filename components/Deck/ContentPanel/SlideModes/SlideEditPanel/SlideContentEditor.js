@@ -10,6 +10,7 @@ import PaintModalStore from '../../../../../stores/PaintModalStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
+import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 //import ResizeAware from 'react-resize-aware';
@@ -2037,7 +2038,13 @@ class SlideContentEditor extends React.Component {
             this.context.executeAction(editImageWithSrc, src);
         } else {
             let src = $('#' + idContext).attr('svg-source');
-            this.context.executeAction(editImageWithSrc, src);
+            if (src) {
+                this.context.executeAction(editImageWithSrc, src);
+            } else {
+                let svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' +
+                    $('#' + idContext).children('svg').html() + '</svg>';
+                this.context.executeAction(editSVGwithSVG, svg);
+            }
         }
 
 
