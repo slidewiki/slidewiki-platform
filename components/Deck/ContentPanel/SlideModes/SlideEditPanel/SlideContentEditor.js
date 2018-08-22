@@ -1834,6 +1834,13 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
+                    //give surrounding div the width and height of its child Iframe element
+                    $('#'. uniqueID).style('width', $('#'. uniqueID).firstChild.style('width'));
+                    $('#'. uniqueID).style('width', $('#'. uniqueID).firstChild.style('height'));
+                    //Give Iframe a title if it does not yet exist - to improve accessbility
+                    if($('#'. uniqueID).firstChild.attr('title') !== ''){
+                        $('#'. uniqueID).firstChild.attr('title', 'Iframe showing contents from website: ' + $('#'. uniqueID).firstChild.attr('src'));
+                    }
                     this.correctDimensionsBoxesIframe();
 
                 } else { //if slide is in non-canvas mode
