@@ -23,6 +23,9 @@ class PresentorHTMLLayout extends React.Component {
                   {/* we add this config option for mathjax so we can better control when the typesetting will occur */}
                   <script type="text/x-mathjax-config" dangerouslySetInnerHTML={{__html:'MathJax.Hub.Config({skipStartupTypeset: true});'}} defer></script>
                   <script src="/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+                  {/* Vendors css bundle */
+                      this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
+                  }
               </head>
               <body>
                   <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
@@ -36,6 +39,9 @@ class PresentorHTMLLayout extends React.Component {
                   <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                   <script src="/jquery/dist/jquery.min.js"></script>
                   <script src="/headjs/dist/1.0.0/head.min.js" defer></script>
+                  {/* All external vendors bundle*/
+                      this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'} defer></script> : ''
+                  }
                   {/* Adding for dependency loading with reveal.js*/}
                   <script src="/custom_modules/reveal.js/js/reveal.js" defer></script>
                   {/* Run-time settings */}
