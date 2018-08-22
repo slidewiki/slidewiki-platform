@@ -129,7 +129,7 @@ class terms extends React.Component {
                         values={{
                             noProfessionalAdvice: <b><FormattedMessage id="terms.4.ul.noProfessionalAdvice" defaultMessage="No professional advice"/></b>
                         }}
-                        defaultMessage="{noProfessionalAdvice} &#8211; the content of presentations and other projects is for informational purposes only and does not constitute professional advice."
+                        defaultMessage="{noProfessionalAdvice} &#8211; the content of presentations and other projects is for informational purposes only and does not constitute professional advice or commercial advertisement. However, you can contact the SlideWiki foundation to support you in creating your own installation of SlideWiki on a website or webserver for commercial, educational, hybrid, or other purposes."
                       />
                     </li>
                 </ul>
@@ -176,7 +176,7 @@ class terms extends React.Component {
                     <ul className="ui list">
                         <li><FormattedMessage id="terms.5.6.ul.ul.noAbuse" defaultMessage="such actions do not unduly abuse or disrupt our technical systems or networks;"/></li>
                         <li><FormattedMessage id="terms.5.6.ul.ul.noGain" defaultMessage="such actions are not for personal gain (except for credit for your work);"/></li>
-                        <li><FormattedMessage id="terms.5.6.ul.ul.reportVulnerabilities" defaultMessage="you report any vulnerabilities to project&apo;s developers (or fix it yourself); and"/></li>
+                        <li><FormattedMessage id="terms.5.6.ul.ul.reportVulnerabilities" defaultMessage="you report any vulnerabilities to SlideWiki developers or administrators of this SlideWiki website (i.e., server on which SlideWiki is installed), or fix it yourself; and"/></li>
                         <li><FormattedMessage id="terms.5.6.ul.ul.noMaliciousIntent" defaultMessage="you do not undertake such actions with malicious or destructive intent."/></li>
                     </ul>
                 </ul>
