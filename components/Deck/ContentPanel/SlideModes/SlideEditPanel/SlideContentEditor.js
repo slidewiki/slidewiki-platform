@@ -1835,16 +1835,24 @@ class SlideContentEditor extends React.Component {
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
                     //give surrounding div the width and height of its child Iframe element
-                    $('#'. uniqueID).style('width', $('#'. uniqueID).firstChild.style('width'));
-                    $('#'. uniqueID).style('width', $('#'. uniqueID).firstChild.style('height'));
-                    //Give Iframe a title if it does not yet exist - to improve accessbility
-                    if($('#'. uniqueID).firstChild.attr('title') !== ''){
-                        $('#'. uniqueID).firstChild.attr('title', 'Iframe showing contents from website: ' + $('#'. uniqueID).firstChild.attr('src'));
+                    if ($('#'+uniqueID + ' > iframe').css('width') !== ''){
+                        $('#'+ uniqueID).css('width', $('#'+uniqueID + ' > iframe').css('width'));
+                    } else {
+                        $('#'+ uniqueID).css('width', nextProps.SlideEditStore.embedWidth);
                     }
+                    if ($('#'+uniqueID + ' > iframe').css('height') !== ''){
+                        $('#'+ uniqueID).css('height', $('#'+uniqueID + ' > iframe').css('height'));
+                    } else {
+                        $('#'+ uniqueID).css('height', nextProps.SlideEditStore.embedHeight);
+                    }
+                    //Overwrite Iframe title with title entered in slide edit left panel to improve accessbility
+                    $('#'+uniqueID + ' > iframe').attr('title', nextProps.SlideEditStore.embedTitle);
                     this.correctDimensionsBoxesIframe();
 
                 } else { //if slide is in non-canvas mode
                     this.refs.inlineContent.innerHTML += '<div id="'+uniqueID+'">' + nextProps.SlideEditStore.embedCode + '</div>';
+                    //Overwrite Iframe title with title entered in slide edit left panel to improve accessbility
+                    $('#'+uniqueID + ' > iframe').attr('title', nextProps.SlideEditStore.embedTitle);
                 }
                 this.hasChanges = true;
             }

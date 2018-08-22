@@ -62,7 +62,7 @@ class SlideEditLeftPanel extends React.Component {
                 $('#slideTitle').focus();
             } else if (this.state.showEmbed === true)
             {
-                $('#embedCode').focus();
+                $('#embedTitle').focus();
             } else {
                 $('#handleBackLink').focus();
             }
@@ -104,11 +104,13 @@ class SlideEditLeftPanel extends React.Component {
     handleEmbedAddClick(){
         if(this.state.embedTitle === '' ){
             this.setState({ EmbedTitleMissingError: true });
+            $('#embedTitle').focus();
         }
         else if (this.state.embedURL === '' && this.state.embedCode === ''){
             this.setState({ EmbedTitleMissingError: false });
 
             this.setState({ URLMissingError: true });
+            $('#embedURL').focus();
             this.setState({ embedCodeMissingError: true });
             //console.log('errormissing');
             this.forceUpdate();
@@ -180,6 +182,7 @@ class SlideEditLeftPanel extends React.Component {
         //console.log('change title');
         if (this.state.slideTitle === ''){
             this.setState({titleMissingError: true});
+            $('#slideTitle').focus();
         } else {
             console.log(this.state.slideTitle);
             this.context.executeAction(changeTitle, {
@@ -417,32 +420,34 @@ class SlideEditLeftPanel extends React.Component {
                   </div>
                   <Divider/>
                   <Divider/>
+                  <label htmlFor="embedURL">
+                    <FormattedMessage id='editpanel.embedURL' defaultMessage='URL/Link to embedded content:' />
+                  </label>
+                  <div className={this.state.URLMissingError === false ? 'field' : 'field error'}>
+                    <i style={error}>
+                        {this.state.URLMissingError === false ? '' : <FormattedMessage id='editpanel.URLMissingError' defaultMessage='missing URL/link to content' />}
+                    </i>
+                    <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" autoFocus/>
+                  </div>
+                  <div>
+                    <i>or</i>
+                  </div>
                   <label htmlFor="embedCode">
                     <FormattedMessage id='editpanel.embedCode' defaultMessage='Code to embed content:' />
                   </label>
+                  <br/><i><FormattedMessage id='editpanel.embedCodeNote' defaultMessage='(any title in embedded code fragment is replaced with title above for accessibility purposes. Any width and height definition in the Iframe will however be adopted.)' /></i>
                   <div className={this.state.embedCodeMissingError === false ? 'field' : 'field error'}>
                     <i style={error}>
                         {this.state.embedCodeMissingError === false ? '' : <FormattedMessage id='editpanel.embedCodeMissingError' defaultMessage='missing embed code' />}
                     </i>
                     <textarea rows="4" onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-label="Code to embed content" autoFocus ></textarea>
                   </div>
-                  <div>
-                    <i>or</i>
-                  </div>
-                  <label htmlFor="embedURL">
-                    <FormattedMessage id='editpanel.embedURL' defaultMessage='URL/Link to embedded content:' />
-                  </label>
-                  <div className={this.state.embedCodeMissingError === false ? 'field' : 'field error'}>
-                    <i className={error}>
-                        {this.state.URLMissingError === false ? '' : <FormattedMessage id='editpanel.URLMissingError' defaultMessage='missing URL/link to content' />}
-                    </i>
-                    <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" autoFocus/>
-                  </div>
                   <a className="item" id="handleEmbedAddClick" role="button" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
                       <i tabIndex="0" className="add square icon"></i><FormattedMessage id='editpanel.embedAdd' defaultMessage='Add to Slide' />
                   </a>
                   <label htmlFor="handleEmbedAddClick">
-                    <FormattedMessage id='editpanel.embedNote' defaultMessage='Not all website owners allow their content to be embedded. Using an embed code (instead of URL) often works best.' />
+                    <FormattedMessage id='editpanel.embedNote' defaultMessage='Not all website owners allow their content to be embedded. Using embed code provided by the website you want to embed (instead of URL) often works best.' />
+                    <b><FormattedMessage id='editpanel.embedNoteTerms' defaultMessage='Please note that our terms (e.g., on malicious code and commercial material) also strictly apply to any content on webpages that you embed.' /></b>
                   </label>
                 </form>);
 
