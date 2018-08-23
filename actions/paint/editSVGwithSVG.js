@@ -6,7 +6,8 @@ export default function editSVGwithSVG(context, svg, done) {
         svg: svg,
         title: null,
         altText: null,
-        url: null
+        url: null,
+        toEdit: 'SVGFromImport'
     };
     context.dispatch('OPEN_WITH_SRC', params);
 }
