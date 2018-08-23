@@ -11,11 +11,14 @@ import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDec
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
+import deleteFollowing from '../../../../actions/following/deleteFollowing.js';
+import createFollowing from '../../../../actions/following/createFollowing.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
+import UserFollowingsStore from '../../../../stores/UserFollowingsStore';
 import DownloadModal from './DownloadModal';
 import MobileDetect from 'mobile-detect';
 import AriaMenuButton from 'react-aria-menubutton';
@@ -114,7 +117,16 @@ class ContentActionsFooter extends React.Component {
     }
 
     handleFollowClick(e){
-
+        if (this.props.UserFollowingsStore.selectedDeckFollowingId !== null) {
+            this.context.executeAction(deleteFollowing, {
+                id: this.props.UserFollowingsStore.selectedDeckFollowingId
+            });
+        } else {
+            this.context.executeAction(createFollowing, {
+                selector: this.props.ContentStore.selector,
+                userId: this.props.UserProfileStore.userid
+            });
+        }
     }
 
     render() {
@@ -134,9 +146,10 @@ class ContentActionsFooter extends React.Component {
                 classNameLikeButton = 'thumbs up alternate large blue icon';
                 tooltipLikeButton = 'Dislike this deck';
             }
-            if (false) {//IS USER FOLLOWING THIS DECK
+
+            if (this.props.UserFollowingsStore.selectedDeckFollowingId !== null) {//IS USER FOLLOWING THIS DECK
                 classNameFollowButton = 'rss large blue icon';
-                tooltipFollowButton = 'Following this deck, click to unfollow';
+                tooltipFollowButton = 'You are following this deck, click to unfollow';
             }
         }
 
@@ -187,6 +200,11 @@ class ContentActionsFooter extends React.Component {
                        <i className={classNameLikeButton}></i> Like
                    </div>
                  </AriaMenuButton.MenuItem>
+                 <AriaMenuButton.MenuItem className='item' key= {5} tag='li'>
+                   <div aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+                       <i className={classNameFollowButton}></i> Follow
+                   </div>
+                 </AriaMenuButton.MenuItem>
              </AriaMenuButton.Menu>
          </AriaMenuButton.Wrapper>;
 
@@ -224,12 +242,13 @@ ContentActionsFooter.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore, UserFollowingsStore], (context, props) => {
     return {
         ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        UserFollowingsStore: context.getStore(UserFollowingsStore).getState()
     };
 });
 export default ContentActionsFooter;

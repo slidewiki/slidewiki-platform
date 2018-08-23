@@ -21,6 +21,7 @@ import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
+import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
@@ -173,6 +174,16 @@ export default function loadDeck(context, payload, done) {
             (callback) => {
                 if(runNonContentActions){
                     context.executeAction(loadLikes, {selector: payload.params}, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    const userId = context.getStore(UserProfileStore).getState().userid;
+                    if (userId !== undefined && userId !== null && userId !== '') {
+                        context.executeAction(getFollowing, {selector: payload.params, userId: userId}, callback);
+                    }
                 }else{
                     callback();
                 }
