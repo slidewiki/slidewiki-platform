@@ -1678,7 +1678,12 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('alt',' ');
                     } else{
                         if(nextProps.MediaStore.file.svg) {
+                            let idContextTop = '300px';
+                            let idContextLeft = '250px';
                             if (this.idContext) {
+                                let style = $('#' + this.idContext).attr('style');
+                                idContextTop = style.split('top: ')[1].split(';')[0];
+                                idContextLeft = style.split('left: ')[1].split(';')[0];
                                 $('#' + this.idContext.toString()).remove();
                                 this.idContext = null;
                             }
@@ -2012,6 +2017,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     editImage(context, event, idContext){
+        this.idContext = idContext;
         let contains_img = $('#' + idContext).find('img').length;
         if (contains_img) {
             let src = $('#' + idContext).find('img')[0].src;
