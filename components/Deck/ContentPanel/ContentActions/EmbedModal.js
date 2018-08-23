@@ -157,10 +157,18 @@ class EmbedModal extends React.Component {
         }
     }
 
+    findTitle() {
+        if (this.props.ContentStore.selector.stype === 'slide') {
+            return this.props.SlideViewStore.title;
+        } else {
+            const currentRevision = this.findCurrentRevision(this.props.DeckViewStore.deckData);
+            return currentRevision && currentRevision.title;
+        }
+    }
+
     render() {
         const {size, exportObject} = this.state;
-        const title = ((this.props.ContentStore.selector.stype === 'slide') ? this.props.SlideViewStore.title
-                : this.findCurrentRevision(this.props.DeckViewStore.deckData).title);
+        const title = this.findTitle();
         const userName = ((this.props.ContentStore.selector.stype === 'slide')
                 ? this.props.ContributorsStore.creator[0].username : this.props.DeckViewStore.creatorData.username);
         const slideRadio = (this.props.ContentStore.selector.stype === 'slide')
