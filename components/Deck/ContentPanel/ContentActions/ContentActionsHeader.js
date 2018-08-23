@@ -79,6 +79,10 @@ class ContentActionsHeader extends React.Component {
                 defaultMessage:'Loading'
             },
         });
+
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
+        this.resetZoom = this.resetZoom.bind(this);
     }
 
 
@@ -352,21 +356,21 @@ class ContentActionsHeader extends React.Component {
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="red large trash alternate icon"></i>
                         </button>
-                        <button className="ui button" onClick={this.zoomIn.bind(this)}
+                        <button className="ui button" onClick={this.zoomIn}
                                 type="button" aria-label="Zoom in" data-tooltip="Zoom in">
                             <i className="stacked icons">
                                 <i className="small plus icon "></i>
                                 <i className="large search icon "></i>
                             </i>
                         </button>
-                        <button className="ui button" onClick={this.resetZoom.bind(this)}
+                        <button className="ui button" onClick={this.resetZoom}
                                 type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
                             <i className="stacked icons">
                                 <i className="small compress icon "></i>
                                 <i className="large search icon "></i>
                             </i>
                         </button>
-                        <button className="ui button" onClick={this.zoomOut.bind(this)}
+                        <button className="ui button" onClick={this.zoomOut}
                                 type="button" aria-label="Zoom out" data-tooltip="Zoom out">
                             <i className="stacked icons">
                                 <i className="small minus icon "></i>

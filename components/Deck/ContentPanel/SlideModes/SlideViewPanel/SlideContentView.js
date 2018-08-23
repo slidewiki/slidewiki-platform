@@ -6,6 +6,10 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 const ReactDOM = require('react-dom');
 
 class SlideContentView extends React.Component {
+    state = {
+        scaleRatio: 1,
+    }
+
     constructor(props) {
         super(props);
         this.scaleRatio = null;
@@ -17,7 +21,13 @@ class SlideContentView extends React.Component {
         if (this.currentContent !== this.props.content)
         {
             this.currentContent = this.props.content;
-            this.scaleRatio = null;
+//            this.scaleRatio = null;
+            if (SlideViewStore.scaleRatio !== this.scaleRatio) {
+                this.scaleRatio = SlideViewStore.scaleRatio;
+                this.resize();
+            }
+
+//            this.setState({staleRatio: SlideViewStore.scaleRatio});
         }
     }
     componentWillUnmount(){
@@ -74,18 +84,22 @@ class SlideContentView extends React.Component {
             this.refs.inlineContent.style.height = '100%';
         }
     }
+
     zoomIn(){
         this.scaleRatio += 0.25;
         this.resize();
     }
+
     resetZoom(){
         this.scaleRatio = 1;
         this.resize();
     }
+
     zoomOut(){
         this.scaleRatio -= 0.25;
         this.resize();
     }
+
     render() {
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
@@ -156,12 +170,28 @@ class SlideContentView extends React.Component {
                       </div>
                   </div>
                 }
-                {this.props.hideSpeakerNotes ?  null
-                  :
-                  <div className="ui segment vertical attached left icon buttons">
-                      <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="stacked icons"><i className="small plus icon "></i><i className="large search icon "></i></i></button>
-                      <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="Reset zoom" data-tooltip="reset zoom"><i className="stacked icons"><i className="small compress icon "></i><i className="large search icon "></i></i></button>
-                      <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="stacked icons"><i className="small minus icon "></i><i className="large search icon "></i></i></button>
+                {this.props.hideSpeakerNotes ?  null : <div className="ui segment vertical attached left icon buttons">
+                        <button className="ui button" onClick={this.zoomIn.bind(this)}
+                                type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                            <i className="stacked icons">
+                                <i className="small plus icon "></i>
+                                <i className="large search icon "></i>
+                            </i>
+                        </button>
+                        <button className="ui button" onClick={this.resetZoom.bind(this)} type="button"
+                                aria-label="Reset zoom" data-tooltip="reset zoom">
+                            <i className="stacked icons">
+                                <i className="small compress icon "></i>
+                                <i className="large search icon "></i>
+                            </i>
+                        </button>
+                        <button className="ui button" onClick={this.zoomOut.bind(this)} type="button"
+                                aria-label="Zoom out" data-tooltip="Zoom out">
+                            <i className="stacked icons">
+                                <i className="small minus icon "></i>
+                                <i className="large search icon "></i>
+                            </i>
+                        </button>
                   </div>
                 }
 
