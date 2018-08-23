@@ -22,7 +22,7 @@ export default function editImageWithSrc(context, src, done) {
                         title: title,
                         altText: altText,
                         toEdit: 'SVG'
-                    }
+                    };
                     context.dispatch('OPEN_WITH_SRC', params);
                     done();
                 });
