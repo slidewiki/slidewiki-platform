@@ -418,6 +418,7 @@
   "SlideContentEditor.switchToCanvasModalConfirm": "Sí, cambie al estilo-lienzo con casillas de entrada",
   "SlideContentEditor.switchToCanvasModalCancel": "No",
   "SlideContentEditor.unsavedChangesAlert": "Tiene cambios no guardados. Si no guarda la diapositiva, ésta no será actualizada. Está seguro que quiere salir de esta página?",
+  "SlideContentEditor.contextMenuEditImage": "Editar imagen",
   "SlideContentEditor.contextMenuBringToFront": "Traer hacia adelante (Ctrl shift +)",
   "SlideContentEditor.contextMenuSendToBack": "Mandar hacia atrás  (Ctrl shift -)",
   "SlideContentEditor.contextDuplicate": "Duplicar (Ctrl d)",
