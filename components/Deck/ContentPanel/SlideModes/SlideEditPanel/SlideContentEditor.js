@@ -1687,7 +1687,7 @@ class SlideContentEditor extends React.Component {
                                 $('#' + this.idContext.toString()).remove();
                                 this.idContext = null;
                             }
-                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top:' + idContextTop + '; left: ' + idContextLeft + ';  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
                         } else {
                             console.log(nextProps.MediaStore.file);
                             // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
