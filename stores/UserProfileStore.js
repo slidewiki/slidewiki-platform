@@ -23,7 +23,8 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: ''
+            description: '',
+            displayName: ''
         };
         this.userDecks = undefined;
         this.userDecksMeta = {};
@@ -81,7 +82,8 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: ''
+            description: '',
+            displayName: ''
         };
         this.lastUser = '';
         this.userpicture = undefined;

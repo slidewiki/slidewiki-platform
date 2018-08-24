@@ -34,9 +34,21 @@ export default function uploadMediaFile(context, payload, done) {
             }
         }
         else {
-            payload.url = Microservices.file.uri + '/picture/' + res.fileName;
-            payload.thumbnailUrl = Microservices.file.uri + '/picture/' + res.thumbnailName;
-            context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+            let subPath = res.type === 'image/svg+xml' ? '/graphic/' : '/picture/';
+            payload.url = Microservices.file.uri + subPath + res.fileName;
+            payload.thumbnailUrl = Microservices.file.uri + subPath + res.thumbnailName;
+            if(res.type === 'image/svg+xml') {
+                context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                    // context.dispatch('OPEN_WITH_SRC', {url: url, svg: res});
+                    payload.svg = res;
+                    context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                    done();
+                });
+            } else {
+                context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                done();
+            }
+            /**/
         }
         done();
     });

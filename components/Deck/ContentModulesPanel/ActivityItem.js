@@ -30,7 +30,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'translated ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>{' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
@@ -45,7 +45,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'shared ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>{' on '}
                         <a target="_blank" href={node.share_info.postURI}>{node.share_info.platform}</a>
@@ -59,7 +59,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'created ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -72,7 +72,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'edited ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -85,7 +85,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'commented on ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -100,7 +100,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a>
                         <span> replied to a comment </span>{'on ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
@@ -116,7 +116,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'used ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         {' in deck '}<a href={'/deckview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
@@ -130,7 +130,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'rated ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -143,7 +143,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'liked ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -156,7 +156,7 @@ class ActivityItem extends React.Component {
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'downloaded ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
