@@ -19,14 +19,26 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
+import MobileDetect from 'mobile-detect/mobile-detect';
 
 class DeckViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isMobile: false};
+    }
+
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();
         if (text.length > 25) {
             text = text.substr(0, 21) + '...';
         }
         return text;
+    }
+
+    componentDidMount() {
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
 
     render() {
@@ -187,7 +199,22 @@ class DeckViewPanel extends React.Component {
                                 if (slide.theme) {
                                     thumbnailURL += '/' + slide.theme;
                                 }
-                                if (index < maxSlideThumbnails) {
+                                if (this.state.isMobile) {
+                                    const slideURL = Util.makeNodeURL({
+                                        id: this.props.selector.id,
+                                        stype: 'slide',
+                                        sid: slide.id
+                                    }, 'deck', '', this.props.deckSlug);
+                                    return (
+                                        <div key={index} className="ui card">
+                                            <a href={slideURL} className="ui image"
+                                               tabIndex="-1">
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
+                                            </a>
+                                        </div>
+                                    );
+                                }
+                                else if (index < maxSlideThumbnails) {
                                     const slideURL = Util.makeNodeURL({
                                         id: this.props.selector.id,
                                         stype: 'slide',
