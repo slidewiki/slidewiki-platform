@@ -1,14 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {NavLink, navigateAction} from 'fluxible-router';
 import ImportStore from '../../stores/ImportStore';
 import storeFile from '../../actions/import/storeFile';
 import importFinished from '../../actions/import/importFinished';
 import importCanceled from '../../actions/import/importCanceled';
-import ReactDOM  from 'react-dom';
 import classNames from 'classnames';
-import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
+import { Button, Icon, Modal, Container, Segment, Popup } from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import {defineMessages} from 'react-intl';
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
@@ -44,7 +42,7 @@ class Import extends React.Component {
             },
             swal_message:{
                 id:'importFileModal.swal_message',
-                defaultMessage:'This file is not supported. Please, remember only pptx and odp files are supported.',
+                defaultMessage:'This file is not supported. Please, remember only pptx, odp, and zip (HTML download) files are supported.',
             },
             modal_selectButton:{
                 id:'importFileModal.modal_selectButton',
@@ -60,7 +58,7 @@ class Import extends React.Component {
             },
             modal_explanation2:{
                 id:'importFileModal.modal_explanation2',
-                defaultMessage:'Only PowerPoint (.pptx) and OpenOffice (.odp) are supported (Max size:'
+                defaultMessage:'Only PowerPoint (.pptx), OpenOffice (.odp) and SlideWiki HTML (.zip - previously downloaded/exported) are supported (Max size:'
             },
             modal_cancelButton:{
                 id:'importFileModal.modal_cancelButton',
@@ -146,7 +144,9 @@ class Import extends React.Component {
         const size = file.size;
         isCorrect = ( filetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
                       filetype === 'application/wps-office.pptx' ||
-                      filetype === 'application/vnd.oasis.opendocument.presentation' ) && ( size < MAX_FILESIZE );
+                      filetype === 'application/vnd.oasis.opendocument.presentation' ||
+                      filetype === 'application/x-zip-compressed' ||
+                      filetype === 'application/zip' ) && ( size < MAX_FILESIZE );
 
         if (isCorrect) {
             let reader = new FileReader();
@@ -164,7 +164,7 @@ class Import extends React.Component {
                         break; // noop
                     default:
                         //console.error('An error occurred reading this file.', evt.target.error);
-                };
+                }
             }
 
             let that = this;
@@ -227,7 +227,7 @@ class Import extends React.Component {
         //variable for intermediate storage of output
         let outputDIV = '';
 
-        let acceptedFormats = '.key, .odp, .pps, .ppsx, .ppt, .pptm, .pptx,  ';
+        let acceptedFormats = '.key, .odp, .pps, .ppsx, .ppt, .pptm, .pptx, .zip,  ';
         let btnClasses_upload = classNames({
             'ui': true,
             'primary': true,
