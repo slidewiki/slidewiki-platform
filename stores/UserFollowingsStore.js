@@ -45,11 +45,15 @@ class UserFollowingsStore extends BaseStore {
         this.emitChange();
     }
     createFollowing(payload) {
-        if (payload.id !== undefined && payload.id !== null) {
-            this.selectedDeckFollowingId = payload.id;
-        } else {
-            this.selectedDeckFollowingId = null;
+        if (payload.followed_type === 'deck') {
+            if (payload.id !== undefined && payload.id !== null) {
+                this.selectedDeckFollowingId = payload.id;
+            } else {
+                this.selectedDeckFollowingId = null;
+            }
         }
+
+        this.followings.push(payload);
         this.emitChange();
     }
     deleteFollowing(payload) {

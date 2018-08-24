@@ -46,9 +46,10 @@ export default {
         let selector= args.selector;
         let userId = args.userId;
         let targetDeckID;
-
+        let headers = {};
+        if (args.jwt) headers['----jwt----'] = args.jwt;
         switch (resource) {
-            case 'following.new':
+            case 'following.deck':
                 if (selector.stype === 'deck') {
                     targetDeckID = selector.sid;
                 } else if (selector.stype === 'slide') {
@@ -63,9 +64,6 @@ export default {
                 }
                 targetDeckID =  targetDeckID.split('-')[0];
 
-                let headers = {};
-                if (args.jwt) headers['----jwt----'] = args.jwt;
-
                 rp.post({
                     uri: Microservices.activities.uri + '/followings/new',
                     body:JSON.stringify({
@@ -78,11 +76,25 @@ export default {
                     callback(null, JSON.parse(res));
                 }).catch((err) => {
                     console.log(err);
-                    callback(null, {id: null});
+                    callback(err, params);
                 });
-                //callback(null, {userid:  params.userid});
                 break;
-
+            case 'following.playlist':
+                rp.post({
+                    uri: Microservices.activities.uri + '/followings/new',
+                    body:JSON.stringify({
+                        user_id: String(userId),
+                        followed_type: 'playlist',
+                        followed_id: String(args.playlistId)
+                    }),
+                    headers,
+                }).then((res) => {
+                    callback(null, JSON.parse(res));
+                }).catch((err) => {
+                    console.log(err);
+                    callback(err, params);
+                });
+                break;
         }
     },
     delete: (req, resource, params, config, callback) => {

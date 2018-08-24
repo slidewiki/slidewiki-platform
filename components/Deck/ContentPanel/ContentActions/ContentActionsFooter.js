@@ -12,7 +12,7 @@ import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
 import deleteFollowing from '../../../../actions/following/deleteFollowing.js';
-import createFollowing from '../../../../actions/following/createFollowing.js';
+import createDeckFollowing from '../../../../actions/following/createDeckFollowing.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
