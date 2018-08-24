@@ -14,8 +14,11 @@ import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import AddQuestionsClick from '../../../actions/slide/AddQuestionsClick';
+import AttachQuestions from './../ContentPanel/AttachSubdeck/AttachQuestionsModal';
+import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import DeckPageStore from '../../../stores/DeckPageStore';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -350,6 +353,17 @@ class SlideEditLeftPanel extends React.Component {
         const whiteText = {
             fontColor: 'white',
         };
+        let selectorImm = this.props.DeckTreeStore.selector;
+        let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+
+        let buttonStyle = {
+            classNames : classNames({
+                'help':true,
+                'icon':true
+            }),
+            iconSize : 'large',
+        } ;
+
         let otherList = (
                 <div>
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
@@ -374,9 +388,6 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
                       <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
                   </a>
-                    <a className="item" id="handleAddQuestionsClick" role="button" onClick={this.handleAddQuestionsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddQuestionsClick')}>
-                      <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add Questions' />
-                    </a>
                 </div>);
 
         let embedOptions = (
@@ -596,6 +607,9 @@ class SlideEditLeftPanel extends React.Component {
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
+            <a className="item" id="handleAddQuestionsClick" role="button">
+                <AttachQuestions buttonStyle={buttonStyle} selector={selector}/><FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add Questions' />
+            </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
@@ -643,10 +657,11 @@ SlideEditLeftPanel.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
-SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore, DeckPageStore], (context, props) => {
+SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore, DeckPageStore, DeckTreeStore], (context, props) => {
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
-        DeckPageStore : context.getStore(DeckPageStore).getState()
+        DeckPageStore : context.getStore(DeckPageStore).getState(),
+        DeckTreeStore : context.getStore(DeckTreeStore).getState()
     };
 });
 export default SlideEditLeftPanel;
