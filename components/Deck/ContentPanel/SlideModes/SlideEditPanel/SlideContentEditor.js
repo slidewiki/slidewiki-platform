@@ -50,25 +50,31 @@ class SlideContentEditor extends React.Component {
 
             ev.editor.document.on('drop', (ev2) => {
                 if (ev2.data.$.dataTransfer.files) {
-                    let file = ev2.data.$.dataTransfer.files[0];
-                    let params = {};
-                    let url = URL.createObjectURL(file);
-                    file.preview = url;
-                    params.file = file;
+                    console.log('droppped');
+                    if (ev2.data.$.dataTransfer.files.length !== 0) {
+                        let file = ev2.data.$.dataTransfer.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
 
-                    this.context.executeAction(handleDroppedFile, file);
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
                 }
             });
 
             ev.editor.document.on('paste', (ev2) => {
                 if (ev2.data.$.clipboardData.files) {
-                    let file = ev2.data.$.clipboardData.files[0];
-                    let params = {};
-                    let url = URL.createObjectURL(file);
-                    file.preview = url;
-                    params.file = file;
+                    console.log('pasted');
+                    if (ev2.data.$.clipboardData.files.length !== 0){
+                        let file = ev2.data.$.clipboardData.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
 
-                    this.context.executeAction(handleDroppedFile, file);
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
                 }
             });
         });
@@ -1674,7 +1680,7 @@ class SlideContentEditor extends React.Component {
                             let str = 'div[svg-source="'+ nextProps.MediaStore.file.url +'"]';
                             let oldElems = $(str);
                             oldElems.remove();
-                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
                         } else {
                             console.log(nextProps.MediaStore.file);
                             // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
