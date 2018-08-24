@@ -45,7 +45,7 @@ export default function uploadFile(context, payload, done) {
                 context.dispatch('UPLOAD_FAILED', err);
                 context.dispatch('CREATION_FAILURE', err);
             } else {
-                context.dispatch('UPLOAD_SUCCESS', res);
+                context.dispatch('UPLOAD_SUCCESS', {payload: payload, headers: res});
             }
         }
         done();
