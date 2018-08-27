@@ -58,11 +58,11 @@ class ChartRender {
                     }
                     chartData = data;
                     chart = nv.models.pieChart()
-                        .x((d) => { return d.label })
-                        .y((d) => { return d.value })
+                        .x((d) => { return d.label; })
+                        .y((d) => { return d.value; })
                         .showLabels(true)
                         .labelThreshold(.05)
-                        .labelType("percent")
+                        .labelType('percent')
                         .donut(true)
                         .donutRatio(0.35);
                     break;
