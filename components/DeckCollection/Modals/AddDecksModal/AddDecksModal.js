@@ -162,17 +162,16 @@ class AddDecksModal extends React.Component {
                         {this.context.intl.formatMessage(this.messages.modalTitle)}
                     </Modal.Header>
                     <Modal.Content>
-                        <Container text fluid>
                             <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
                             <Menu attached='top' tabular role="tablist">
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this, {id: 'myDecksTab'})} onKeyPress={this.handleMenuClick.bind(this, {id: 'myDecksTab'})} role="tab" tabIndex="0" />
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this, {id: 'slidewikiTab'})} onKeyPress={this.handleMenuClick.bind(this, {id: 'slidewikiTab'})} role="tab" tabIndex="0" />
                             </Menu>
-                            { (this.state.activeItem === 'slidewikiTab') && 
-                                <SearchForm />
-                            }
-                            <h3>{ this.props.DeckCollectionStore.subheader }</h3>
-                            <Segment basic>
+                            <Segment attached='bottom' basic>
+                                { (this.state.activeItem === 'slidewikiTab') && 
+                                    <SearchForm />
+                                }
+                                <Header as='h3'>{ this.props.DeckCollectionStore.subheader }</Header>
                                 <DecksList style={this.getDeckListStyle()} handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
                             </Segment>
                             <Modal.Actions>
@@ -183,8 +182,6 @@ class AddDecksModal extends React.Component {
                                     </div>
                                 </Segment>
                             </Modal.Actions>
-                        </Container>
-
                     </Modal.Content>     
                 </FocusTrap>
             </Modal>
