@@ -45,7 +45,7 @@ class SearchResultsItem extends React.Component {
             },
             otherVersionsMsg: {
                 id: 'SearchResultsItem.otherVersionsMsg',
-                defaultMessage: 'Other versions available'
+                defaultMessage: 'Other versions available ({count})'
             },
             otherVersionsHeader: {
                 id: 'SearchResultsItem.otherVersionsHeader',
@@ -66,23 +66,23 @@ class SearchResultsItem extends React.Component {
         const result = this.props.data;
 
         // form sublist items and expand button
-        let subList = '';
+        let forksList = '';
         let otherVersions;
-        if(result.subItems && result.subItems.length > 0){
-            otherVersions = <NavLink href="#" onClick={this.handleOtherVersionsClick.bind(this)}>{this.context.intl.formatMessage(this.messages.otherVersionsMsg)}</NavLink>;
+        if(result.forks && result.forks.length > 0){
+            otherVersions = <NavLink href="#" onClick={this.handleOtherVersionsClick.bind(this)}>{this.context.intl.formatMessage(this.messages.otherVersionsMsg, { count: result.forks.length})} { (this.state.expanded) ? <Icon name="angle up" aria-label="expand other versions"/> : <Icon name="angle down" aria-label="expand other versions"/>}</NavLink>;
 
-            subList = result.subItems.map( (item, index) => {
-                return <div className="row" key={item.id}>
-                    <NavLink href={item.link}>
-                        {
-                            this.context.intl.formatMessage(this.messages.otherDeckVersion, {
-                                index: index+1,
-                                title: item.title
-                            })
-                        }
-                    </NavLink>
-                </div>;
-            });
+            forksList = <List divided relaxed>
+                {
+                    result.forks.map( (fork, index) => {
+                        return <List.Item key={`result_${result.index}_fork_${index}`}>
+                            <List.Header><NavLink href={fork.link}>{ fork.title }</NavLink></List.Header>
+                            <List.Description>
+                                <FormattedMessage {...this.messages.lastModified} />: {fork.lastUpdate} <FormattedMessage {...this.messages.by} /> <NavLink href={result.user.link}>{result.user.displayName || result.user.username}</NavLink>
+                            </List.Description>
+                        </List.Item>;
+                    })
+                }
+            </List>;
         }
 
         return (
@@ -106,16 +106,16 @@ class SearchResultsItem extends React.Component {
                              <Grid.Column width={5}>
                                 <div className="ui labels">
                                     <Label  size="small">
-                                       <Icon name="fork" aria-label="Number of forks"/>1
+                                       <Icon name="fork" aria-label="Number of forks"/>{result.fork_count - 1}
                                     </Label>
                                      <Label  size="small">
-                                       <Icon name="thumbs up" aria-label="Number of likes"/>1
+                                       <Icon name="thumbs up" aria-label="Number of likes"/>{result.noOfLikes}
                                     </Label>
                                     <Label  size="small">
-                                       <Icon name="share alternate" aria-label="Number of shares"/>1
+                                       <Icon name="share alternate" aria-label="Number of shares"/>{result.sharesCount}
                                     </Label>
                                     <Label  size="small">
-                                       <Icon name="download" aria-label="Number of downloads"/>1
+                                       <Icon name="download" aria-label="Number of downloads"/>{result.downloadsCount}
                                     </Label>
                                 </div>
 
@@ -133,20 +133,7 @@ class SearchResultsItem extends React.Component {
                             <Grid.Row>
                                 <Grid.Column width={16}>
                                     <h4>{this.context.intl.formatMessage(this.messages.otherVersionsHeader)}</h4>
-                                        <List divided relaxed>
-                                            <List.Item>
-                                                <List.Header as='a'>Fork 1</List.Header>
-                                                <List.Description>
-                                                    Last Modified: [date] by <a>[username]</a>
-                                                </List.Description>
-                                            </List.Item>
-                                                <List.Item>
-                                                <List.Header as='a'>Fork 2</List.Header>
-                                                <List.Description>
-                                                    Last Modified: [date] by <a>[username]</a>
-                                                </List.Description>
-                                            </List.Item>
-                                        </List>
+                                    { forksList }
                                 </Grid.Column>
                                 
                             </Grid.Row>

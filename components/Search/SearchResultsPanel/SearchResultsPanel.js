@@ -131,7 +131,8 @@ class SearchResultsPanel extends React.Component {
                         {spellcheckDiv}
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        <Facets data={this.props.facets} />
+                        <h2 className="ui header">Filters</h2>
+                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} />
                     </Grid.Column>
                     <Grid.Column width={12}>
                         {resultsPanel}

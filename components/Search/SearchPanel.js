@@ -13,7 +13,7 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
-import { isEmpty, pickBy } from 'lodash';
+import { isEmpty, pickBy, isArray } from 'lodash';
 import querystring from 'querystring';
 import Responsive from 'react-responsive';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
@@ -190,44 +190,29 @@ class SearchPanel extends React.Component {
             this.handleRedirect();
         }
     }
-    handleRedirect(params, e){
-        // form the query parameters to send to search service
-        // if(params && params.keywords){
-        //     keywords = params.keywords;
-        // } else {
-        //     keywords = ((this.state.keywords) ? this.state.keywords : '*:*');
-        // }
+    handleRedirect(params, source){
 
-        // let queryparams = `keywords=${encodeURIComponent(keywords)}`;
-
-        // if(this.state.field && this.state.field.trim()){
-        //     queryparams += `&field=${this.state.field}`;
-        // }
-
-        // if(this.state.kind && this.state.kind.trim()){
-        //     queryparams += `&kind=${this.state.kind}`;
-        // }
-
-        // if(this.state.language && this.state.language.trim()){
-        //     queryparams += `&language=${this.state.language}`;
-        // }
-        // let query = Object.assign({}, this.state);
-        // let users = this.refs.user.getSelected();
-        // if(users){
-        //     query.user = users.split(',');
-        // }
-
-        // let tags = this.refs.tag.getSelected();
-        // if(tags){
-        //     query.tag = tags.split(',');
-        // }
-
-        // if(this.state.sort){
-        //     queryparams += `&sort=${this.state.sort}`;
-        // }
+        if (source !== 'facets') {
+            let newState = Object.assign({}, this.state);
+            delete newState.language;
+            delete newState.tag;
+            delete newState.user;
+            delete newState.facet_exclude;
+            this.setState(newState, () => {
+                this.handleSearch(params);
+            });
+        } else {
+            this.handleSearch(params);
+        }
+        
+        return false;
+    }
+    handleSearch(params){
 
         // pick from state the required fields
-        let query = pickBy(this.state, (prop) => prop.trim());
+        let query = pickBy(this.state, (prop) => {
+            return (isArray(prop)) ? !isEmpty(prop) : prop.trim();
+        });
 
         // needed for spellcheck suggestion
         if (params && params.keywords) {
@@ -240,8 +225,6 @@ class SearchPanel extends React.Component {
         });
 
         this.keywordsInput.blur();
-        
-        return false;
     }
     changeSort(_sort){
         this.setState({
@@ -254,6 +237,31 @@ class SearchPanel extends React.Component {
 
         this.context.executeAction(loadMoreResults, {
 // queryparams: `${this.props.SearchParamsStore.queryparams}&page=${nextPage}`
+        });
+    }
+    handleFacetClick(facetItem) {
+        const facetField = facetItem.field;
+        const facetValue = facetItem.value;
+        let facetFieldValue = [];
+
+        if (facetField in this.state) {
+            if (this.state[facetField].includes(facetValue)) {
+                facetFieldValue = this.state[facetField].filter( (item) => item !== facetValue);
+            } else {
+                let facetFieldArray = this.state[facetField].slice();
+                facetFieldArray.push(facetValue);
+                facetFieldValue = facetFieldArray;
+            }
+        } else {
+            facetFieldValue = [facetValue];
+        }
+
+        this.setState({
+            ...this.state, 
+            [facetField]: facetFieldValue,
+            facet_exclude: facetField,
+        }, () => {
+            this.handleRedirect(null, 'facets');
         });
     }
     render() {      
@@ -291,7 +299,12 @@ class SearchPanel extends React.Component {
                 hasMore={this.props.SearchResultsStore.hasMore}
                 loadMore={this.loadMore.bind(this)}
                 loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
-
+                handleFacetClick={this.handleFacetClick.bind(this)}
+                selectedFacets={{
+                    languages: this.state.language || [], 
+                    tags: this.state.tag || [],
+                    users: this.state.user || [],
+                }}
             />;
         }
 

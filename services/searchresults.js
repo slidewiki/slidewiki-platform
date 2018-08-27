@@ -1,7 +1,8 @@
-import {Microservices} from '../configs/microservices';
-import rp from 'request-promise';
+import { Microservices } from '../configs/microservices';
+import rp from 'request-promise-native';
 import customDate from '../components/Deck/util/CustomDate';
 import slugify from 'slugify';
+import { isEmpty, compact, flatten, uniq } from 'lodash';
 
 const log = require('../configs/log').log;
 
@@ -23,7 +24,7 @@ function parseSlide(slide){
     };
 }
 
-function parseDeck(deck){
+function parseDeck(deck, usernames){
     let deckSlug = buildSlug(deck);
     // different link if this is a root deck or a sub-deck
     deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
@@ -32,24 +33,26 @@ function parseDeck(deck){
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
     deck.updated = deck.lastUpdate;     // this is used to sort deck family's decks
     deck.lastUpdate = customDate.format(deck.lastUpdate, 'Do MMMM YYYY');
+    let user = usernames[deck.creator];
     deck.user = {
         id: deck.creator,
-        username: '',
-        link: ''
+        username: user.displayName,
+        link: '/user/' + user.username,
     };
+
+    // TODO: do not return content from service
+    delete deck.content;
+    (deck.forks || []).forEach( (fork) => delete fork.content);
 }
 
 function buildSlug(deck) {
     return slugify(deck.title || '').toLowerCase() || '_';
 }
 
-function getUsers(userIdsSet){
-    let userPromises = [];
+function getUsers(userIds){
     let usernames = {};
-
-    // request usernames of user ids found
-    for(let userId of userIdsSet){
-        userPromises.push(rp.get({uri: `${Microservices.user.uri}/user/${userId}`, json: true}).then((userRes) => {
+    let userPromises = userIds.map( (userId) => 
+        rp.get({uri: `${Microservices.user.uri}/user/${userId}`, json: true}).then((userRes) => {
             usernames[userId] = { 
                 displayName: userRes.displayName || userRes.username, 
                 username: userRes.username
@@ -57,17 +60,14 @@ function getUsers(userIdsSet){
         }).catch( (err) => {
             usernames[userId] = 'Unknown user';
         }));
-    }
 
     return Promise.all(userPromises).then( () => { return usernames; });
 }
 
-function getDecks(deckIdsSet){
+function getDecks(deckIds){
     let decks = {}, deckRevisions = {};
-    let deckPromises = [];
-
-    for(let deckId of deckIdsSet){
-        deckPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`, json: true}).then( (deckRes) => {
+    let deckPromises = deckIds.map( (deckId) => 
+        rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`, json: true}).then( (deckRes) => {
             decks[deckId] = deckRes;
             decks[deckId].revisions.forEach( (rev) => {
                 deckRevisions[deckId + '-' + rev.id] = rev;
@@ -75,37 +75,44 @@ function getDecks(deckIdsSet){
         }).catch( (err) => {
             decks[deckId] = null;
         }));
-    }
+
 
     return Promise.all(deckPromises).then( () => { return {decks, deckRevisions}; });
 }
 
-function getForks(deckIdsSet){
+function getForks(deckIds){
     let forks = {};
-    let forkPromises = [];
-
-    for(let deckId of deckIdsSet){
-        forkPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
+    let forkPromises = deckIds.map( (deckId) => 
+        rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
             forks[deckId] = deckForks.filter((f) => !f.hidden);
         }).catch( (err) => {
             forks[deckId] = [];
         }));
-    }
+
     return Promise.all(forkPromises).then( () => { return forks; });
 }
 
-function getLikes(deckIdsSet){
-    let likes = {};
-    let likePromises = [];
-
-    for(let deckId of deckIdsSet){
-        likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
-            likes[deckId] = noOfLikes;
+function getActivity(activityType, deckIds){
+    let activities = {};
+    let likePromises = deckIds.map( (deckId) => 
+        rp.get({
+            uri: `${Microservices.activities.uri}/activities/deck/${deckId}`, 
+            qs: {
+                metaonly: true, 
+                activity_type: activityType, 
+                all_revisions: true,
+            }
+        }).then((noOfLikes) => {
+            activities[deckId] = noOfLikes;
         }).catch( (err) => {
-            likes[deckId] = 0;
+            activities[deckId] = 0;
         }));
-    }
-    return Promise.all(likePromises).then( () => { return likes; });
+
+    return Promise.all(likePromises).then( () => { return activities; });
+}
+
+function fillUserInfo(usernames, userId){
+
 }
 
 export default {
@@ -126,118 +133,75 @@ export default {
             query.spellcheck = true;
             query.facets = true;
             query.kind = 'deck';
+            query.pageSize = 20;
 
             // request search results from search service
             rp.get({
                 uri: `${Microservices.search.uri}/search/v2`,
                 json: true, 
                 qs: query,
+                useQuerystring: true,
             }).then( (response) => {
 
-                let userIds = new Set(), deckIds = new Set();
+                let deckIds = response.docs.map( (result) => result.db_id);
+                let userIds = compact(uniq(flatten(response.docs.map( (result) => {
+                    if (isEmpty(result.forks)) { 
+                        return result.creator; 
 
-                response.docs.forEach( (res) => {
-
-                    // keep user id to request later
-                    if(res.creator !== null){
-                        userIds.add(res.creator);
+                    // if matching forks are availabe, collect user ids for them also
+                    } else {
+                        let forkUserIds = result.forks.map( (fork) => fork.creator);
+                        forkUserIds.push(result.creator);
+                        return forkUserIds;
                     }
+                }))));
 
-                    // transform results to return to frontend
-                    if(res.kind === 'deck'){
+                Promise.all([ getUsers(userIds), getDecks(deckIds), getActivity('react', deckIds), getActivity('download', deckIds), getActivity('share', deckIds)])
+                .then( ([ usernames, { decks, deckRevisions }, likes, downloads, shares ]) => {
+                    response.docs.forEach( (result) => {
 
-                        parseDeck(res);
+                        parseDeck(result, usernames);
 
-                        //keep deck id to request later
-                        deckIds.add(res.db_id);
-                    }
-                    else if(res.kind === 'slide'){
-
-                        parseSlide(res);
-
-                        // keep more deck ids to request later
-                        res.usage.forEach( (deckRev) => {
-                            deckIds.add(deckRev.split('-')[0]);
-                        });
-                    }
-
-                });
-
-                // get required usernames
-                let usernames = {};
-                let userPromise = getUsers(userIds).then( (usernamesFromService) => {
-                    usernames = usernamesFromService;
-                });
-
-                // get requires decks and deck revisions
-                let decks = {}, deckRevisions = {};
-                let deckPromise = getDecks(deckIds).then( (decksFromService) => {
-                    decks = decksFromService.decks;
-                    deckRevisions = decksFromService.deckRevisions;
-                });
-
-                // get deck forks to show as deck other versions
-                let forks = {};
-                let forksPromise = getForks(deckIds).then( (forksFromService) => {
-                    forks = forksFromService;
-                });
-
-                // get number of likes for decks
-                let likes = {};
-                let likesPromise = getLikes(deckIds).then( (likesFromService) => {
-                    likes = likesFromService;
-                });
-
-                Promise.all([userPromise, deckPromise, forksPromise, likesPromise]).then( () => {
-                    response.docs.forEach( (returnItem) => {
-
-                        // fill extra user info
-                        let user = usernames[returnItem.user.id];
-                        returnItem.user.username = user.displayName;
-                        returnItem.user.link = '/user/' + user.username;
-
-                        if(returnItem.kind === 'Deck'){
-
-                            returnItem.revisionCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
-                            returnItem.theme = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
-                                                        deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].theme : '';
-
-                            returnItem.firstSlide = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
-                                                        deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
-
-                            // fill deck subitems (forks of the deck)
-                            if(forks[returnItem.db_id].length > 0){
-                                returnItem.subItems = forks[returnItem.db_id].map( (fork) => {
-                                    return {
-                                        id: fork.id,
-                                        title: fork.title,
-                                        link: `/deck/${fork.id}/${buildSlug(fork)}`,
-                                    };
-                                });
-                            }
-
-                            //fill number of likes
-                            returnItem.noOfLikes = likes[returnItem.db_id];
+                        // fill forks data
+                        if (!isEmpty(result.forks)) {
+                            result.forks.forEach( (fork) => parseDeck(fork, usernames));
                         }
-                        else if(returnItem.kind === 'Slide'){
-                            returnItem.subItems = returnItem.usage.filter( (usageItem) => {
-                                // do not contain usage presented in result title
-                                return (returnItem.deck.id !== usageItem) && deckRevisions[usageItem];
-                            }).map( (usageItem) => {
-                                return {
-                                    id: usageItem,
-                                    title: deckRevisions[usageItem].title,
-                                    link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`,
-                                };
-                            });
 
-                            // fill deck info
-                            returnItem.deck.title = (deckRevisions[returnItem.deck.id]) ? deckRevisions[returnItem.deck.id].title : '';
-                            let deckSlug = buildSlug(returnItem.deck);
-                            returnItem.deck.link = `/deck/${returnItem.deck.id}/${deckSlug}`;
 
-                            returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`;
-                        }
+                        // if(returnItem.kind === 'Deck'){
+
+                        result.revisionCount = (decks[result.db_id]) ? decks[result.db_id].revisions.length : 1;
+                        result.theme = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
+                                                    deckRevisions[`${result.db_id}-${result.db_revision_id}`].theme : '';
+
+                        result.firstSlide = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
+                                                    deckRevisions[`${result.db_id}-${result.db_revision_id}`].firstSlide : '';
+
+                        //fill number of likes, downloads and shares
+                        result.noOfLikes = likes[result.db_id];
+                        result.downloadsCount = downloads[result.db_id];
+                        result.sharesCount = shares[result.db_id];
+                        
+                        // }
+                        // else if(returnItem.kind === 'Slide'){
+                        //     returnItem.subItems = returnItem.usage.filter( (usageItem) => {
+                        //         // do not contain usage presented in result title
+                        //         return (returnItem.deck.id !== usageItem) && deckRevisions[usageItem];
+                        //     }).map( (usageItem) => {
+                        //         return {
+                        //             id: usageItem,
+                        //             title: deckRevisions[usageItem].title,
+                        //             link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`,
+                        //         };
+                        //     });
+
+                        //     // fill deck info
+                        //     returnItem.deck.title = (deckRevisions[returnItem.deck.id]) ? deckRevisions[returnItem.deck.id].title : '';
+                        //     let deckSlug = buildSlug(returnItem.deck);
+                        //     returnItem.deck.link = `/deck/${returnItem.deck.id}/${deckSlug}`;
+
+                        //     returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`;
+                        // }
                     });
 
                     callback(null, {
@@ -248,11 +212,9 @@ export default {
                         facets: response.facets,
                         docs: response.docs
                     });
-                });
+                }).catch(callback);
 
-            }).catch((error) => {
-                callback(error);
-            });
+            }).catch(callback);
 
         }
     }

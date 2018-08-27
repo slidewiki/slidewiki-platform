@@ -1049,7 +1049,7 @@
   "SearchResultsItem.by": "by",
   "SearchResultsItem.lastModified": "Last modified",
   "SearchResultsItem.description": "Description",
-  "SearchResultsItem.otherVersions": "Other versions available",
+  "SearchResultsItem.otherVersionsMsg": "Other versions available ({count})",
   "SearchResultsItem.otherVersionsHeader": "Other matching versions",
   "SearchResultsPanel.sort.relevance": "Relevance",
   "SearchResultsPanel.sort.lastUpdated": "Last updated",
