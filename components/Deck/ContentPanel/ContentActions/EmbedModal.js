@@ -209,16 +209,16 @@ class EmbedModal extends React.Component {
                         focusTrapOptions={{
                             onDeactivate: this.unmountTrap,
                             clickOutsideDeactivates: true ,
-                            initialFocus: '#embedModalDescription'
+                            initialFocus: '#deckRadio'
                         }}>
                     <Modal.Header className="ui center aligned" id="embedModalHeader">
-                        <h1 style={{'textAlign': 'center'}}>
+                        <h1 style={{'textAlign': 'left'}}>
                             <FormattedMessage id='embedModal.embedHeader'
                                 values={{
                                     title: title,
                                     creator: userName
                                 }}
-                                defaultMessage={'SlideWiki deck on "{title}" by {creator}.'}
+                                defaultMessage={'Embed Options for SlideWiki deck "{title}" by {creator}'}
                             />
                         </h1>
                     </Modal.Header>
@@ -229,11 +229,27 @@ class EmbedModal extends React.Component {
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>
                                     <Form>
+                                        <Form.Field>
+                                            <textarea id="embedModalDescription"
+                                                    ref="embedModalDescription"
+                                                    label="description"
+                                                    height="100px"
+                                                    value={
+                                                        '<iframe src="' + this.state.href + '" width="'
+                                                        + this.state.width + '" height="' + this.state.height
+                                                        + '"></iframe><p>'
+                                                        + '<a href="' + this.state.href +'">'
+                                                        + title
+                                                        + ' - '
+                                                        + userName
+                                                        + '</a></p>'
+                                                    }/>
+                                        </Form.Field>
                                         <Form.Group inline>
                                             <label>
-                                                <FormattedMessage id='embedModal.embed' defaultMessage='Embed'/>
+                                                <b><FormattedMessage id='embedModal.embed' defaultMessage='Embed: '/></b>
                                             </label>
-                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.deckRadio)}
+                                            <Form.Radio id='deckRadio' label={this.context.intl.formatMessage(this.messages.deckRadio)}
                                                     value='d' checked={exportObject === 'd'}
                                                     onChange={this.handleEmbedChange}/>
                                             <Form.Radio label={this.context.intl.formatMessage(this.messages.slideshowRadio)}
@@ -243,7 +259,7 @@ class EmbedModal extends React.Component {
                                         </Form.Group>
                                         <Form.Group inline>
                                             <label>
-                                                <FormattedMessage id='embedModal.size' defaultMessage='Size'/>
+                                                <b><FormattedMessage id='embedModal.size' defaultMessage='Size: '/></b>
                                             </label>
                                             <Form.Radio label={this.context.intl.formatMessage(this.messages.small)}
                                                     value='sm' checked={size === 'sm'} onChange={this.handleChange}/>
@@ -274,22 +290,6 @@ class EmbedModal extends React.Component {
                                                         onChange={this.handleChange}/>
                                             </Form.Field>
                                         </Form.Group>
-                                        <Form.Field>
-                                            <textarea id="embedModalDescription"
-                                                    ref="embedModalDescription"
-                                                    label="description"
-                                                    autoHeight={true}
-                                                    value={
-                                                        '<iframe src="' + this.state.href + '" width="'
-                                                        + this.state.width + '" height="' + this.state.height
-                                                        + '"></iframe><p>'
-                                                        + '<a href="' + this.state.href +'">'
-                                                        + title
-                                                        + ' - '
-                                                        + userName
-                                                        + '</a></p>'
-                                                    }/>
-                                        </Form.Field>
                                         <Modal.Actions>
                                             <Button icon="remove"
                                                     color="red"
