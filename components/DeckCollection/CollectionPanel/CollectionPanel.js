@@ -3,19 +3,22 @@ import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../../stores/DeckCollectionStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import UserFollowingsStore from '../../../stores/UserFollowingsStore';
 import { connectToStores } from 'fluxible-addons-react';
 import CustomDate from '../../Deck/util/CustomDate';
 import CollectionDecks from './CollectionDecks';
 import CollectionDecksReorder from './CollectionDecksReorder';
 import {Button, Icon} from 'semantic-ui-react';
 import updateCollectionDeckOrder from '../../../actions/collections/updateCollectionDeckOrder';
+import createFollowing from '../../../actions/following/createFollowing';
+import deleteFollowing from '../../../actions/following/deleteFollowing';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 class CollectionPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            editMode: false, 
+            editMode: false,
             decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || []
         };
 
@@ -32,7 +35,7 @@ class CollectionPanel extends React.Component {
     dropdownSelect(value) {
         // redirect with sort param
         this.context.executeAction(navigateAction, {
-            url: `/playlist/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`, 
+            url: `/playlist/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`,
         });
     }
     setEditMode(value){
@@ -42,7 +45,7 @@ class CollectionPanel extends React.Component {
     }
     handleCancelEditOrder(){
         this.setState({
-            editMode: false, 
+            editMode: false,
             decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() // revert to inital stored order
         });
     }
@@ -70,6 +73,20 @@ class CollectionPanel extends React.Component {
         newState.decksOrder[index + 1] = tmp;
         this.setState(newState);
     }
+    handleFollowCollection() {
+        if (this.props.UserFollowingsStore.selectedFollowingId !== null) {
+            this.context.executeAction(deleteFollowing, {
+                id: this.props.UserFollowingsStore.selectedFollowingId
+            });
+        } else {
+            this.context.executeAction(createFollowing, {
+                playlistId: this.props.DeckCollectionStore.collectionDetails._id,
+                userId: this.props.UserProfileStore.userid,
+                followed_type: 'playlist'
+            });
+        }
+
+    }
     showErrorPopup(text){
         swal({
             title: 'Error',
@@ -88,50 +105,58 @@ class CollectionPanel extends React.Component {
             reorderError: {
                 id: 'CollectionPanel.error.reorder',
                 defaultMessage: 'An error occurred while updating deck order in the playlist...'
-            }, 
+            },
             collectionTitle: {
                 id: 'CollectionPanel.title',
                 defaultMessage: 'Playlist'
-            }, 
+            },
             collectionCreator: {
                 id: 'CollectionPanel.creator',
                 defaultMessage: 'Creator'
-            }, 
+            },
             collectionDate: {
                 id: 'CollectionPanel.date',
                 defaultMessage: 'Date'
-            }, 
+            },
             decksInCollectionText: {
-                id: 'CollectionPanel.decks.title', 
+                id: 'CollectionPanel.decks.title',
                 defaultMessage: 'Decks in Playlist'
-            }, 
+            },
             reorderDecks: {
-                id: 'CollectionPanel.decks.reorder', 
+                id: 'CollectionPanel.decks.reorder',
                 defaultMessage: 'Reorder Decks'
-            }, 
+            },
             saveReorder: {
-                id: 'CollectionPanel.save.reorder', 
+                id: 'CollectionPanel.save.reorder',
                 defaultMessage: 'Save'
-            }, 
+            },
             cancelReorder: {
-                id: 'CollectionPanel.cancel.reorder', 
+                id: 'CollectionPanel.cancel.reorder',
                 defaultMessage: 'Close'
             },
             sortDefault: {
-                id: 'CollectionPanel.sort.default', 
+                id: 'CollectionPanel.sort.default',
                 defaultMessage: 'Default Order'
-            }, 
+            },
             sortLastUpdated: {
-                id: 'CollectionPanel.sort.lastUpdated', 
+                id: 'CollectionPanel.sort.lastUpdated',
                 defaultMessage: 'Last updated'
-            }, 
+            },
             sortCreationDate: {
-                id: 'CollectionPanel.sort.date', 
+                id: 'CollectionPanel.sort.date',
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'CollectionPanel.sort.title', 
+                id: 'CollectionPanel.sort.title',
                 defaultMessage: 'Title'
+            },
+            collectionFollow: {
+                id: 'UserCollections.collections.follow',
+                defaultMessage: 'Follow this playlist'
+            },
+            collectionUnfollow: {
+                id: 'UserCollections.collections.unfollow',
+                defaultMessage: 'You are following this playlist, click to unfollow'
             }
         });
     }
@@ -139,12 +164,12 @@ class CollectionPanel extends React.Component {
         switch(sortBy){
             case 'lastUpdated':
                 return this.context.intl.formatMessage(this.messages.sortLastUpdated);
-            case 'date': 
+            case 'date':
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
                 return this.context.intl.formatMessage(this.messages.sortTitle);
-            case 'order': 
-            default: 
+            case 'order':
+            default:
                 return this.context.intl.formatMessage(this.messages.sortDefault);
         }
 
@@ -179,6 +204,11 @@ class CollectionPanel extends React.Component {
                             <b><FormattedMessage {...this.messages.collectionDate} />:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
 
                         <div className = "ui divider" />
+                        { (this.props.UserProfileStore.userid === '') ? '' : (this.props.UserFollowingsStore.selectedFollowingId === null) ? <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionFollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionFollow)} onClick={this.handleFollowCollection.bind(this)} >
+                            <i className="rss icon" ></i>
+                        </button> : <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionUnfollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionUnfollow)} onClick={this.handleFollowCollection.bind(this)} >
+                            <i className="rss blue icon" ></i>
+                        </button> }
                     </div>
                 </div>
                 <div className = "twelve wide column" >
@@ -186,18 +216,18 @@ class CollectionPanel extends React.Component {
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
                             <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.reorderDecks)}</h2>
-                            { (!this.state.editMode && data.decks.length > 0 && hasEditRights) && 
+                            { (!this.state.editMode && data.decks.length > 0 && hasEditRights) &&
                                 <Button size='small' as='button' onClick={this.setEditMode.bind(this, true)}>
                                     <FormattedMessage {...this.messages.reorderDecks} />
                                 </Button>
                             }
-                            { (this.state.editMode) && 
+                            { (this.state.editMode) &&
                                 <div className="ui right floated">
                                     <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
                                     <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
                                 </div>
                             }
-                            { (!this.state.editMode) && 
+                            { (!this.state.editMode) &&
                                 <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                                     <i className="icon exchange"/>
                                     <div className="text">{sortText}</div>
@@ -225,10 +255,11 @@ CollectionPanel.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore], (context, props) => {
+CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore, UserProfileStore, UserFollowingsStore], (context, props) => {
     return {
         DeckCollectionStore: context.getStore(DeckCollectionStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
+        UserFollowingsStore: context.getStore(UserFollowingsStore).getState(),
     };
 });
 

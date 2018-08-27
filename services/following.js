@@ -10,26 +10,38 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-        let selector= args.selector;
         let userId = args.userId;
-        const content_kind = selector.stype;
-        let targetDeckID;
-        if (selector.stype === 'deck') {
-            targetDeckID = selector.sid;
-        } else if (selector.stype === 'slide') {
-            let tmp = selector.spath.split(';');
-            if (tmp.length > 1) {
-                targetDeckID = tmp[tmp.length - 2];
-                tmp = targetDeckID.split(':');
-                targetDeckID = tmp[0];
-            } else {
-                targetDeckID = selector.id;
-            }
-        }
-        targetDeckID =  targetDeckID.split('-')[0];
+
         switch (resource) {
-            case 'following.item':
+            case 'following.deck':
+                let selector= args.selector;
+                const content_kind = selector.stype;
+                let targetDeckID;
+                if (selector.stype === 'deck') {
+                    targetDeckID = selector.sid;
+                } else if (selector.stype === 'slide') {
+                    let tmp = selector.spath.split(';');
+                    if (tmp.length > 1) {
+                        targetDeckID = tmp[tmp.length - 2];
+                        tmp = targetDeckID.split(':');
+                        targetDeckID = tmp[0];
+                    } else {
+                        targetDeckID = selector.id;
+                    }
+                }
+                targetDeckID =  targetDeckID.split('-')[0];
+
                 rp.get({uri: Microservices.activities.uri + '/followings/follower/' + userId + '?followed_type=deck&followed_id=' + targetDeckID }).then((res) => {
+                    let followings = JSON.parse(res);
+                    callback(null, {followings: followings});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {followings: []});
+                });
+                break;
+            case 'following.playlist':
+                const playlistId = args.playlistId;
+                rp.get({uri: Microservices.activities.uri + '/followings/follower/' + userId + '?followed_type=playlist&followed_id=' + playlistId }).then((res) => {
                     let followings = JSON.parse(res);
                     callback(null, {followings: followings});
                 }).catch((err) => {

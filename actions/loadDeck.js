@@ -182,7 +182,7 @@ export default function loadDeck(context, payload, done) {
                 if(runNonContentActions){
                     const userId = context.getStore(UserProfileStore).getState().userid;
                     if (userId !== undefined && userId !== null && userId !== '') {
-                        context.executeAction(getFollowing, {selector: payload.params, userId: userId}, callback);
+                        context.executeAction(getFollowing, {selector: payload.params, userId: userId, followed_type: 'deck'}, callback);
                     }
                 }else{
                     callback();

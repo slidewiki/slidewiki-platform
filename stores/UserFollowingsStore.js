@@ -5,7 +5,7 @@ class UserFollowingsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.followings = undefined;
-        this.selectedDeckFollowingId = null;
+        this.selectedFollowingId = null;
         this.loading = true;
     }
     showLoading(payload){
@@ -38,32 +38,29 @@ class UserFollowingsStore extends BaseStore {
     }
     getFollowing(payload) {
         if (payload.followings.length > 0) {
-            this.selectedDeckFollowingId = payload.followings[0].id;
+            this.selectedFollowingId = payload.followings[0].id;
         } else {
-            this.selectedDeckFollowingId = null;
+            this.selectedFollowingId = null;
         }
         this.emitChange();
     }
     createFollowing(payload) {
-        if (payload.followed_type === 'deck') {
-            if (payload.id !== undefined && payload.id !== null) {
-                this.selectedDeckFollowingId = payload.id;
-            } else {
-                this.selectedDeckFollowingId = null;
-            }
+        if (payload.id !== undefined && payload.id !== null) {
+            this.selectedFollowingId = payload.id;
+        } else {
+            this.selectedFollowingId = null;
         }
-
-        this.followings.push(payload);
+        
         this.emitChange();
     }
     deleteFollowing(payload) {
-        this.selectedDeckFollowingId = null;
+        this.selectedFollowingId = null;
         this.emitChange();
     }
     getState() {
         return {
             followings: this.followings,
-            selectedDeckFollowingId: this.selectedDeckFollowingId,
+            selectedFollowingId: this.selectedFollowingId,
             loading: this.loading
         };
     }
@@ -72,7 +69,7 @@ class UserFollowingsStore extends BaseStore {
     }
     rehydrate(state) {
         this.followings = state.followings;
-        this.selectedDeckFollowingId = state.selectedDeckFollowingId;
+        this.selectedFollowingId = state.selectedFollowingId;
         this.loading = state.loading;
     }
 }

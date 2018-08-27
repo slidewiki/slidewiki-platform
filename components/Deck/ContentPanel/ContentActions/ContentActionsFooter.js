@@ -12,7 +12,7 @@ import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
 import deleteFollowing from '../../../../actions/following/deleteFollowing.js';
-import createDeckFollowing from '../../../../actions/following/createDeckFollowing.js';
+import createFollowing from '../../../../actions/following/createFollowing.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
@@ -117,14 +117,15 @@ class ContentActionsFooter extends React.Component {
     }
 
     handleFollowClick(e){
-        if (this.props.UserFollowingsStore.selectedDeckFollowingId !== null) {
+        if (this.props.UserFollowingsStore.selectedFollowingId !== null) {
             this.context.executeAction(deleteFollowing, {
-                id: this.props.UserFollowingsStore.selectedDeckFollowingId
+                id: this.props.UserFollowingsStore.selectedFollowingId
             });
         } else {
             this.context.executeAction(createFollowing, {
                 selector: this.props.ContentStore.selector,
-                userId: this.props.UserProfileStore.userid
+                userId: this.props.UserProfileStore.userid,
+                followed_type: 'deck'
             });
         }
     }
@@ -147,7 +148,7 @@ class ContentActionsFooter extends React.Component {
                 tooltipLikeButton = 'Dislike this deck';
             }
 
-            if (this.props.UserFollowingsStore.selectedDeckFollowingId !== null) {//IS USER FOLLOWING THIS DECK
+            if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
                 classNameFollowButton = 'rss large blue icon';
                 tooltipFollowButton = 'You are following this deck, click to unfollow';
             }

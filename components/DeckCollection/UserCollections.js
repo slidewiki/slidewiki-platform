@@ -4,7 +4,6 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../stores/DeckCollectionStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import deleteCollection from '../../actions/collections/deleteCollection';
-import createPlaylistFollowing from '../../actions/following/createPlaylistFollowing';
 import { connectToStores } from 'fluxible-addons-react';
 import NewCollectionModal from './Modals/NewCollectionModal';
 import UpdateCollectionModal from './Modals/UpdateCollectionModal';
@@ -69,21 +68,6 @@ class UserCollections extends React.Component {
         });
     }
 
-    handleFollowCollection(colId) {
-        let followings = this.props.UserFollowingsStore.followings;
-        let playlistFollowing = followings.find((f) => {return ((f.followed_type === 'playlist') && (f.followed_id === colId));});
-        if (playlistFollowing !== undefined) {
-            this.context.executeAction(deleteFollowing, {
-                id: playlistFollowing.id
-            });
-        } else {
-            this.context.executeAction(createPlaylistFollowing, {
-                playlistId: colId,
-                userId: this.props.UserProfileStore.userid
-            });
-        }
-    }
-
     showErrorPopup(text){
         let title = this.context.intl.formatMessage(this.messages.errorText);
         swal({
@@ -136,10 +120,6 @@ class UserCollections extends React.Component {
             collectionSettings: {
                 id: 'UserCollections.collections.settings',
                 defaultMessage: 'Playlist Settings'
-            },
-            collectionFollow: {
-                id: 'UserCollections.collections.follow',
-                defaultMessage: 'Follow Playlist'
             },
             myCollectionsTitle: {
                 id: 'UserCollections.collections.mycollections',
@@ -224,18 +204,8 @@ class UserCollections extends React.Component {
                                           <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionSettings)} aria-label={this.context.intl.formatMessage(this.messages.collectionSettings)} name={col._id} onClick={this.handleClickOnEditCollection.bind(this, col)} >
                                               <i className="setting icon" name={'editCollection' + col._id} ></i>
                                           </button>
-                                          <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionFollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionFollow)} onClick={this.handleFollowCollection.bind(this, col._id)} >
-                                              <i className="rss icon" name={'followCollection_' + col._id} ></i>
-                                          </button>
                                       </div>
-                                    ) :
-                                      <div>
-                                        <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionFollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionFollow)} onClick={this.handleFollowCollection.bind(this, col._id)} >
-                                            <i className="rss icon" name={'followCollection_' + col._id} ></i>
-                                        </button>
-                                      </div>
-                                    }
-
+                                    ) : ''}
                                 </div>
                             </div>
                         </div>
