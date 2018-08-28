@@ -18,10 +18,13 @@ export default function uploadMediaFiles(context, payload, done) {
                 let parts = err.message.split(' ');
                 let filename = parts[parts.length-1];
                 filename = filename.substring(0, filename.length - 4);
-                payload.url = Microservices.file.uri + '/picture/' + filename;
+                // Check if the file is an SVG. (sub-path already included in filename for SVGs)
+                let subpath = '/picture/';
+                if (filename.includes('/graphic/')) subpath = '';
+                payload.url = Microservices.file.uri + subpath + filename;
 
                 let thumbnailName = filename.substring(0, filename.lastIndexOf('.')) + '_thumbnail' + filename.substr(filename.lastIndexOf('.'));
-                payload.thumbnailUrl = Microservices.file.uri + '/picture/' + thumbnailName;
+                payload.thumbnailUrl = Microservices.file.uri + subpath + thumbnailName;
 
                 delete payload.jwt;
                 delete payload.userid;
