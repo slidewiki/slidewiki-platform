@@ -22,6 +22,19 @@ class CollectionsPanel extends React.Component {
             currentSelection: '',
         };
     }
+    componentDidMount() {
+        this.initDropbox();
+    }
+    initDropbox(){
+        let addCollection = this.addCollection.bind(this);
+        $('#playlistsDropdown').dropdown({
+            action: (text, value, element) => {
+                $('#playlistsDropdown').dropdown('clear');
+                $('#playlistsDropdown').dropdown('hide');
+                addCollection(value);
+            }
+        });
+    }
     getIntlMessages() {
         return defineMessages({
             header: {
@@ -75,8 +88,8 @@ class CollectionsPanel extends React.Component {
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
     }
-    addCollection(deckId, event, data){
-        let collectionId = data.value;
+    addCollection(collectionId){
+        let deckId = this.props.DeckCollectionStore.selector.sid;
         let collectionDetails = {};
 
         // transform collection details from array to json
@@ -123,11 +136,7 @@ class CollectionsPanel extends React.Component {
             // exclude collections that are already selected
             return !deckCollectionIds.includes(collection._id);
         }).map( (collection) => {
-            return {
-                key: collection._id,
-                value: collection._id,
-                text: collection.title
-            };
+            return <div key={collection._id} className="item" data-value={collection._id}>{collection.title}</div>;
         });
 
         return (
@@ -143,7 +152,14 @@ class CollectionsPanel extends React.Component {
                             </div>
                             <Divider hidden />
                             <div className="eleven wide column">
-                                <Dropdown value={this.state.currentSelection} placeholder='Select to add a playlist' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this, selector.sid)} />
+                                <div id="playlistsDropdown" value={this.state.currentSelection} className="ui fluid search selection dropdown" aria-labelledby="playlists">
+                                    <input type="hidden" name="playlists" />
+                                    <i className="dropdown icon"></i>
+                                    <div className="default text">Select to add a playlist</div>
+                                    <div className="menu">
+                                        {collectionDropdownOptions}
+                                    </div>
+                                </div>
                             </div>
                             <div className="five wide column">
                                 <button className="ui small blue labeled icon right floated button" aria-label={this.context.intl.formatMessage(this.messages.ariaCreateCollection)} onClick={this.showNewCollectionModal.bind(this)}>
