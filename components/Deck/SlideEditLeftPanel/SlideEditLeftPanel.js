@@ -230,6 +230,9 @@ class SlideEditLeftPanel extends React.Component {
             //done(reason);
         });
     }
+    handleChangeBackgroundColorClick(){
+        $('#changeBackgroundColorInput').click();
+    }
     handleBackEmbed(){
         this.setState({showOther: true});
         this.setState({showEmbed: false});
@@ -323,15 +326,28 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleHelpClick':
                     this.handleHelpClick();
                     break;
+                case 'handleChangeBackgroundColor':
+                    this.handleChangeBackgroundColorClick();
+                    break;
                 default:
             }
         }
     }
     componentDidMount(){
         this.paintButton = (<PaintModal/>);
+        let backgroundColorInput = document.getElementById('changeBackgroundColorInput');
+
+        if (backgroundColorInput) {
+            backgroundColorInput.addEventListener('input', () => {
+                $('.pptx2html').css('background-color', backgroundColorInput.value);
+            });
+        }
     }
 
     render() {
+        const changeBackgroundColorInputStyle = {
+            display: 'none'
+        };
         const dropDownItemStyle = {
             //minWidth: '100%',
             minHeight: '100px',
@@ -593,6 +609,10 @@ class SlideEditLeftPanel extends React.Component {
             <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
                 <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
             </a>
+            <a className="item" id="handleChangeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
+              <i tabIndex="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change BackgroundColor' />
+            </a>
+              <input id="changeBackgroundColorInput" type="color" style={changeBackgroundColorInputStyle}/>
             </div>
           );
 
