@@ -130,7 +130,7 @@ class CollectionPanel extends React.Component {
             }, 
             cancelReorder: {
                 id: 'CollectionPanel.cancel.reorder', 
-                defaultMessage: 'Close'
+                defaultMessage: 'Cancel'
             },
             sortDefault: {
                 id: 'CollectionPanel.sort.default', 

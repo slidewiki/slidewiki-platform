@@ -29,13 +29,6 @@ class AddDecksModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
     }
-    componentWillReceiveProps(newProps){
-        if (this.props !== newProps) {
-            this.setState({
-                selectedDecks: newProps.selectedDecks.slice(),
-            });
-        }
-    }
     handleMenuClick({ id }){
         if (id === 'slidewikiTab') {
             this.context.executeAction(loadRecentDecks, {
@@ -59,12 +52,14 @@ class AddDecksModal extends React.Component {
 
         this.setState({
             isOpen: true,
+            selectedDecks: this.props.selectedDecks.slice(),
         });
     }
     handleClose(){
         this.setState({
             isOpen: false,
             activeItem: 'myDecksTab',
+            selectedDecks: [],
         });
     }
     handleSave() {
@@ -97,20 +92,22 @@ class AddDecksModal extends React.Component {
         });
     }
     handleOnDeckClick(deck){
-        let newState = Object.assign({}, this.state);
+        let newSelectedDecks = this.state.selectedDecks.slice();
 
-        let index = this.state.selectedDecks.findIndex( (d) => d.deckID === deck.deckID);
+        let index = newSelectedDecks.findIndex( (d) => d.deckID === deck.deckID);
         if (index < 0) {
 
             // add selected deck
-            newState.selectedDecks.push(deck);
+            newSelectedDecks.push(deck);
         } else {
 
             // if already selected, then remove it
-            newState.selectedDecks.splice(index, 1);
+            newSelectedDecks.splice(index, 1);
         }
 
-        this.setState(newState);
+        this.setState({
+            selectedDecks: newSelectedDecks,
+        });
     }
     loadMore(nextLink){
         if (this.state.activeItem === 'myDecksTab') {
