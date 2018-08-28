@@ -173,10 +173,6 @@ class CollectionPanel extends React.Component {
         let data = this.props.DeckCollectionStore.collectionDetails;
 
         let loadingDiv = (this.props.DeckCollectionStore.deckOrderLoading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : '';
-
-        let content = (!this.state.editMode) 
-            ? <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
-            : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} remove={this.handleRemove.bind(this)} />;
         
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
         let hasEditRights = (this.props.UserProfileStore.userid && this.props.UserProfileStore.userid === data.user.id
@@ -231,9 +227,18 @@ class CollectionPanel extends React.Component {
                                 </div>
                             }
                         </div>
-                        <div className="ui segment">
-                            {content}
-                        </div>
+                        
+                        {
+                            (!this.state.editMode) ? (
+                                <div className="ui segment">
+                                    <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
+                                </div>
+                            ) : (
+                                <div className="ui vertical segment">
+                                    <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} remove={this.handleRemove.bind(this)} />
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>
