@@ -1,7 +1,21 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import CollectionsListItem from './CollectionsListItem';
+import { defineMessages } from 'react-intl';
 
 class CollectionsList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.messages = this.getIntlMessages();
+    }
+    getIntlMessages() {
+        return defineMessages({
+            partOfPlaylists: {
+                id: 'CollectionsList.partOfPlaylists',
+                defaultMessage: 'This deck is part of the following playlists'
+            },
+        });
+    }
     render() {
 
         const selector = this.props.selector;
@@ -11,11 +25,11 @@ class CollectionsList extends React.Component {
         return (
             <div ref="collectionsList">
                 {
-                    (collections.length === 0) &&
-                    <div>
-                        This deck is currently not part of any playlist.
-                    </div>
-                    
+                    (collections.length === 0) ? (
+                        <div>This deck is currently not part of any playlist.</div>
+                    ) : (
+                        <h4 className="ui header">{this.context.intl.formatMessage(this.messages.partOfPlaylists)}:</h4>
+                    )
                 }
                 { 
                     (collections.length > 0) &&
@@ -28,5 +42,9 @@ class CollectionsList extends React.Component {
         );
     }
 }
+
+CollectionsList.contextTypes = {
+    intl: PropTypes.object.isRequired,
+};
 
 export default CollectionsList;

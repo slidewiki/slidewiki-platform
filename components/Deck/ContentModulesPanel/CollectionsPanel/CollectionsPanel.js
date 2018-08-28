@@ -9,6 +9,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import { Dropdown } from 'semantic-ui-react';
 import addDeckToCollection from '../../../../actions/collections/addDeckToCollection';
 import NewCollectionModal from '../../../DeckCollection/Modals/NewCollectionModal';
+import { Divider } from 'semantic-ui-react'
 
 class CollectionsPanel extends React.Component {
 
@@ -46,7 +47,12 @@ class CollectionsPanel extends React.Component {
             addDeckError: {
                 id: 'CollectionsPanel.error.adDeck', 
                 defaultMessage: 'An error occured while adding playlist to the deck...'                
-            }
+            },
+            addToPlaylist: {
+                id: 'CollectionsPanel.addToPlaylist', 
+                defaultMessage: 'Add deck to playlist'                
+            },
+
         });
     }
     showNewCollectionModal(event){
@@ -126,14 +132,16 @@ class CollectionsPanel extends React.Component {
 
         return (
             <div className="ui bottom attached" ref="tagsPanel">
-                <div className="ui stackable grid">
-                    <div className="row">
-                        <div className="middle aligned eight wide column">
-                            <h3 className="ui header">{this.context.intl.formatMessage(this.messages.header)}</h3>
-                        </div>
-                    </div>
+                            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.header)}</h3>
+
+                    <div className="ui stackable grid">
+
                     {   (userId) &&
                         <div className="row">
+                            <div className="sixteen wide column">
+                                <h4 className="ui header">{this.context.intl.formatMessage(this.messages.addToPlaylist)}</h4>
+                            </div>
+                            <Divider hidden />
                             <div className="eleven wide column">
                                 <Dropdown value={this.state.currentSelection} placeholder='Select to add a playlist' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this, selector.sid)} />
                             </div>

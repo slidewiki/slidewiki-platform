@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { timeSince } from '../../../../common';
 import { defineMessages } from 'react-intl';
 import removeDeckFromCollection from '../../../../actions/collections/removeDeckFromCollection';
 
@@ -19,6 +18,10 @@ class CollectionsListItem extends React.Component {
                 id: 'CollectionsListItem.removeAria', 
                 defaultMessage: 'Remove current deck from collection'
             },
+            noDescription: {
+                id: 'CollectionsListItem.noDescription', 
+                defaultMessage: 'No description provided'                
+            }
         });
     }
     removeCollection(collectionId, deckId, event) {
@@ -31,7 +34,7 @@ class CollectionsListItem extends React.Component {
     render() {
         const item = this.props.item;
         const selector = this.props.selector;
-        const description = `${item.description} ${(item.description) ? '\u00b7' : ''} Created ${timeSince((new Date(item.timestamp)))} ago`;
+        const description = (item.description) ? item.description : this.context.intl.formatMessage(this.messages.noDescription);
 
         return (
             <div className="item">
