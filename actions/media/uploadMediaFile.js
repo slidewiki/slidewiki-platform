@@ -28,9 +28,17 @@ export default function uploadMediaFile(context, payload, done) {
 
                 let thumbnailName = filename.substring(0, filename.lastIndexOf('.')) + '_thumbnail' + filename.substr(filename.lastIndexOf('.'));
                 payload.thumbnailUrl = Microservices.file.uri + subpath + thumbnailName;
-
-                console.log('Got 409 from file service', payload);
-                context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                
+                if (subpath === '') {
+                    context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                        payload.svg = res;
+                        context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                        done();
+                    });
+                } else {
+                    console.log('Got 409 from file service', payload);
+                    context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                }
             }
             else {
                 context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);

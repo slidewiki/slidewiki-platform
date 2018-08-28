@@ -29,8 +29,16 @@ export default function uploadMediaFiles(context, payload, done) {
                 delete payload.jwt;
                 delete payload.userid;
 
-                console.log('Got 409 from file service', payload);
-                context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                if (subpath === '') {
+                    context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                        payload.svg = res;
+                        context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                        done();
+                    });
+                } else {
+                    console.log('Got 409 from file service', payload);
+                    context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                }
             }
             else {
                 context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
