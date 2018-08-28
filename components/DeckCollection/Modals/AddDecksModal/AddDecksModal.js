@@ -29,13 +29,6 @@ class AddDecksModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
     }
-    componentWillReceiveProps(newProps){
-        if (this.props !== newProps) {
-            this.setState({
-                selectedDecks: newProps.selectedDecks.slice(),
-            });
-        }
-    }
     handleMenuClick({ id }){
         if (id === 'slidewikiTab') {
             this.context.executeAction(loadRecentDecks, {
@@ -59,12 +52,14 @@ class AddDecksModal extends React.Component {
 
         this.setState({
             isOpen: true,
+            selectedDecks: this.props.selectedDecks.slice(),
         });
     }
     handleClose(){
         this.setState({
             isOpen: false,
             activeItem: 'myDecksTab',
+            selectedDecks: [],
         });
     }
     handleSave() {
@@ -97,20 +92,22 @@ class AddDecksModal extends React.Component {
         });
     }
     handleOnDeckClick(deck){
-        let newState = Object.assign({}, this.state);
+        let newSelectedDecks = this.state.selectedDecks.slice();
 
-        let index = this.state.selectedDecks.findIndex( (d) => d.deckID === deck.deckID);
+        let index = newSelectedDecks.findIndex( (d) => d.deckID === deck.deckID);
         if (index < 0) {
 
             // add selected deck
-            newState.selectedDecks.push(deck);
+            newSelectedDecks.push(deck);
         } else {
 
             // if already selected, then remove it
-            newState.selectedDecks.splice(index, 1);
+            newSelectedDecks.splice(index, 1);
         }
 
-        this.setState(newState);
+        this.setState({
+            selectedDecks: newSelectedDecks,
+        });
     }
     loadMore(nextLink){
         if (this.state.activeItem === 'myDecksTab') {
@@ -140,6 +137,7 @@ class AddDecksModal extends React.Component {
             {this.context.intl.formatMessage(this.messages.modalTitle)}
         </Button>;
 
+
         let decks = this.props.DeckCollectionStore.decks;
         let decksMeta = this.props.DeckCollectionStore.decksMeta;
 
@@ -161,18 +159,20 @@ class AddDecksModal extends React.Component {
                     <Modal.Header className="ui center aligned" as="h1" id='addNewCollectionHeader'>
                         {this.context.intl.formatMessage(this.messages.modalTitle)}
                     </Modal.Header>
-                    <Modal.Content>
+                    <Modal.Content >
                             <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
                             <Menu attached='top' tabular role="tablist">
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromMyDecksTitle)} id="myDecksTab" active={this.state.activeItem === 'myDecksTab'} aria-selected={this.state.activeItem === 'myDecksTab'} onClick={this.handleMenuClick.bind(this, {id: 'myDecksTab'})} onKeyPress={this.handleMenuClick.bind(this, {id: 'myDecksTab'})} role="tab" tabIndex="0" />
                                <Menu.Item name={this.context.intl.formatMessage(this.messages.fromSlidewikiTitle)} id="slidewikiTab" active={this.state.activeItem === 'slidewikiTab'} aria-selected={this.state.activeItem === 'slidewikiTab'} onClick={this.handleMenuClick.bind(this, {id: 'slidewikiTab'})} onKeyPress={this.handleMenuClick.bind(this, {id: 'slidewikiTab'})} role="tab" tabIndex="0" />
                             </Menu>
-                            <Segment attached='bottom' basic>
+                            <Segment attached='bottom' basic >
                                 { (this.state.activeItem === 'slidewikiTab') && 
                                     <SearchForm />
                                 }
                                 <Header as='h3'>{ this.props.DeckCollectionStore.subheader }</Header>
-                                <DecksList style={this.getDeckListStyle()} handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
+                                <div role="application">
+                                    <DecksList style={this.getDeckListStyle()} handleOnDeckClick={this.handleOnDeckClick.bind(this)} loggedInDisplayName={this.props.loggedInDisplayName} loading={!decks} decks={decks} selectedDecks={this.state.selectedDecks} meta={decksMeta} loadMore={this.loadMore.bind(this)} loadMoreLoading={this.props.DeckCollectionStore.loadMoreLoading} loadMoreError={this.props.DeckCollectionStore.loadMoreError} />
+                                </div>
                             </Segment>
                             <Modal.Actions>
                                 <Segment basic textAlign="center">
