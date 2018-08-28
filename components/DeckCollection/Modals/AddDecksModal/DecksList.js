@@ -188,10 +188,10 @@ class DecksList extends React.Component {
 
                     <Grid.Column width={2}>
                         { (isSelected) && 
-                            <Button circular as='button' size="mini" color='green' icon='check' aria-label="selected deck" />
+                            <Button circular as='button' size="tiny" color='green' icon='check' aria-label="selected deck" />
                         }
                         { (!isSelected) && 
-                            <Button circular as='button' size="mini" icon='plus' aria-label="unselected deck" />
+                            <Button circular as='button' size="tiny" icon='plus' aria-label="unselected deck" />
                         }
                     </Grid.Column>
                 </Grid.Row>            
