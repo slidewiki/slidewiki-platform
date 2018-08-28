@@ -9,7 +9,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import { Dropdown } from 'semantic-ui-react';
 import addDeckToCollection from '../../../../actions/collections/addDeckToCollection';
 import NewCollectionModal from '../../../DeckCollection/Modals/NewCollectionModal';
-import { Divider } from 'semantic-ui-react'
+import { Divider } from 'semantic-ui-react';
 
 class CollectionsPanel extends React.Component {
 
