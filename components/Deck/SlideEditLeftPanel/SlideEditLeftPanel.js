@@ -65,6 +65,14 @@ class SlideEditLeftPanel extends React.Component {
                 $('#handleBackLink').focus();
             }
         }
+
+        let backgroundColorInput = document.getElementById('changeBackgroundColorInput');
+
+        if (backgroundColorInput) {
+            backgroundColorInput.addEventListener('input', () => {
+                $('.pptx2html').css('background-color', backgroundColorInput.value);
+            });
+        }
     }
     handleAddInputBox(){
         this.context.executeAction(addInputBox, {});
