@@ -249,10 +249,11 @@ class EmbedModal extends React.Component {
                                             <label>
                                                 <b><FormattedMessage id='embedModal.embed' defaultMessage='Embed: '/></b>
                                             </label>
-                                            <Form.Radio id='deckRadio' label={this.context.intl.formatMessage(this.messages.deckRadio)}
+                                            <Form.Radio autoFocus id='embedModalDeckRadio'
+                                                    label={this.context.intl.formatMessage(this.messages.deckRadio)}
                                                     value='d' checked={exportObject === 'd'}
                                                     onChange={this.handleEmbedChange}/>
-                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.slideshowRadio)}
+                                            <Form.Radio id='embedModalSlideshowRadio' label={this.context.intl.formatMessage(this.messages.slideshowRadio)}
                                                     value='ss' checked={exportObject === 'ss'}
                                                     onChange={this.handleEmbedChange}/>
                                             {slideRadio}
@@ -261,13 +262,13 @@ class EmbedModal extends React.Component {
                                             <label>
                                                 <b><FormattedMessage id='embedModal.size' defaultMessage='Size: '/></b>
                                             </label>
-                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.small)}
+                                            <Form.Radio id="embedModalSmallRadio" label={this.context.intl.formatMessage(this.messages.small)}
                                                     value='sm' checked={size === 'sm'} onChange={this.handleChange}/>
-                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.medium)}
+                                            <Form.Radio id="embedModalMediumRadio" label={this.context.intl.formatMessage(this.messages.medium)}
                                                     value='md' checked={size === 'md'} onChange={this.handleChange}/>
-                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.large)}
+                                            <Form.Radio id="embedModalLargeRadio" label={this.context.intl.formatMessage(this.messages.large)}
                                                     value='lg' checked={size === 'lg'} onChange={this.handleChange}/>
-                                            <Form.Radio label={this.context.intl.formatMessage(this.messages.other)}
+                                            <Form.Radio id="embedModalOtherRadio" label={this.context.intl.formatMessage(this.messages.other)}
                                                     value='ot' checked={size === 'ot'} onChange={this.handleChange}/>
                                             <Form.Field>
                                                 <Label>

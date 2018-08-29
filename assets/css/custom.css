@@ -207,3 +207,7 @@
   background-color: transparent;
   text-decoration: none;
 }
+
+div#embedModal .ui.radio.checkbox label {
+    font-weight: normal;
+}
