@@ -50,7 +50,7 @@ class CollectionsListItem extends React.Component {
                         </div>
                     </div>
                     <div className="four wide column">
-                        { (this.props.userId === item.user || (item.userGroup && this.props.userGroups.includes(item.userGroup))) &&
+                        { (this.props.userCollectionIds.includes(item._id)) &&
                             <button className="ui tiny compact borderless basic right floated icon button" data-tooltip={this.context.intl.formatMessage(this.messages.removeTooltip)} aria-label={this.context.intl.formatMessage(this.messages.removeAria)} onClick={this.removeCollection.bind(this, item._id, selector.sid)} >
                                 <i aria-hidden="true" className="close icon"></i>
                             </button>

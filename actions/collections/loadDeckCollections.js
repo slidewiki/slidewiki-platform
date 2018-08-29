@@ -18,6 +18,7 @@ export default function loadDeckCollections(context, payload, done) {
                 selector: payload.params, 
                 collections: res
             });
+            context.dispatch('LOAD_PLAYLISTS_COUNT', res.length);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', { moduleType: 'playlists' });
         }
         

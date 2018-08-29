@@ -20,7 +20,7 @@ class CollectionsList extends React.Component {
 
         const selector = this.props.selector;
         const collections = this.props.collections;
-        const collectionsList = collections.map( (node, index) => <CollectionsListItem key={index} item={node} selector={this.props.selector} userId={this.props.userId} userGroups={this.props.userGroups} />);
+        const collectionsList = collections.map( (node, index) => <CollectionsListItem key={index} item={node} selector={this.props.selector} userCollectionIds={this.props.userCollectionIds} />);
 
         return (
             <div ref="collectionsList">

@@ -22,7 +22,14 @@ export default function addNewCollection(context, payload, done) {
                     deckId: payload.deckId, 
                     collection: res, 
                     collectionId: res._id,
-                }, done);
+                }).then( () => {
+                    context.dispatch('ADD_COLLECTION_SUCCESS', res);
+                    done();
+                }).catch( (err) => {
+                    log.error(context, {filepath: __filename});
+                    context.dispatch('ADD_COLLECTION_FAILURE', err);
+                    done();
+                });
             } else {
                 context.dispatch('ADD_COLLECTION_SUCCESS', res);
                 done();

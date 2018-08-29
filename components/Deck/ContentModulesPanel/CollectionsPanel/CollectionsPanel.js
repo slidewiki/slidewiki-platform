@@ -118,7 +118,6 @@ class CollectionsPanel extends React.Component {
         const userId = this.props.UserProfileStore.userid;
         const selector = this.props.DeckCollectionStore.selector;
         const groups = this.props.UserProfileStore.user.groups;
-        const groupIds = (groups || []).map( (group) => group.id);
 
         // collections of the current deck
         const deckCollections = this.props.DeckCollectionStore.deckCollections;
@@ -128,7 +127,9 @@ class CollectionsPanel extends React.Component {
         if (this.props.DeckCollectionStore.collections !== undefined) {
             this.userCollections = this.props.DeckCollectionStore.collections.documents;
         }
-        
+       
+        let userCollectionIds = this.userCollections.map( (col) => col._id);
+
         // find collection dropdown options
         let deckCollectionIds = deckCollections.map( (col) => col._id);
         let collectionDropdownOptions = this.userCollections.filter( (collection) => {
@@ -170,7 +171,7 @@ class CollectionsPanel extends React.Component {
                     }
                     <div className="row">
                         <div className="sixteen wide column">
-                            <CollectionsList collections={deckCollections} selector={selector} userId={userId} userGroups={groupIds} />
+                            <CollectionsList collections={deckCollections} selector={selector} userCollectionIds={userCollectionIds} />
                         </div>
                     </div>
                 </div>
