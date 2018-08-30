@@ -66,11 +66,11 @@ class PresentationPrint extends React.Component{
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
                 let notes = '';
-                if(slide.speakernotes.trim()){
+                if(slide.speakernotes && slide.speakernotes.trim()){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content + notes;
-                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={slide.speakernotes.trim() ? notes : ''} hideSpeakerNotes={slide.speakernotes.trim()? false : true} theme={slide.theme}/></div>);
+                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={slide.speakernotes && slide.speakernotes.trim()? false : true} theme={slide.theme}/></div>);
             }
             return returnList;
 
