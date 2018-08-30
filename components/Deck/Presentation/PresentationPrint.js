@@ -35,40 +35,7 @@ class PresentationPrint extends React.Component{
     }
 
     componentDidMount(){
-        if(process.env.BROWSER){
-             //loading reveal style
-            //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
-            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'display': 'none'});
-            $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-
-            let styleName = this.props.PresentationStore.theme;
-
-
-            this.revealDiv.style.display = 'inline';
-
-
-            let pptxwidth = $('.pptx2html').width();
-            let pptxheight = $('.pptx2html').height();
-
-            Reveal.initialize({
-                width: pptxwidth,
-    			height: pptxheight,
-                transition: 'none',
-                backgroundTransition: 'none',
-                history: true,
-                dependencies: [
-                    { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true }
-                ]
-            });
-            if(pdf){
-                window.print();
-            }
-
-        }
+        window.print();
     }
 
     componentDidUpdate(){
@@ -78,7 +45,7 @@ class PresentationPrint extends React.Component{
         this.slides = this.getSlides();
         return(
             <div id="presentationPrint">
-                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                <div className="reveal-old" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                     <div className="slides">
         			     	{this.slides}
         			      </div>

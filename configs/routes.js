@@ -597,6 +597,33 @@ export default {
             ]);
         }
     },
+    print: {
+        path: '/print/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'print',
+        handler: require('../components/Deck/Presentation/PresentationPrint'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.sid = payload.params.id;
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
     oldSlugPresentation: {
         path: '/presentation:slug(_.+)?/:id/:subdeck?/:sid?',
         method: 'get',
