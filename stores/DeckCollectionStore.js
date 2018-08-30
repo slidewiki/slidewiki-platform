@@ -22,6 +22,12 @@ class DeckCollectionStore extends BaseStore {
         this.loadMoreLoading = false;
         this.loadMoreError = false;
         this.subheader = '';
+
+        // variables used in collection tab
+        this.selector = {};
+        this.deckCollections = [];
+        this.removeDeckFromCollectionError = false;
+        this.addDeckToCollectionError = false;
     }
 
     destructor() {
@@ -40,6 +46,10 @@ class DeckCollectionStore extends BaseStore {
         this.loadMoreLoading = false;
         this.loadMoreError = false;
         this.subheader = '';
+        this.selector = {};
+        this.deckCollections = [];
+        this.removeDeckFromCollectionError = false;
+        this.addDeckToCollectionError = false;
     }
 
     getState() {
@@ -59,6 +69,10 @@ class DeckCollectionStore extends BaseStore {
             loadMoreLoading: this.loadMoreLoading,
             loadMoreError: this.loadMoreError,
             subheader: this.subheader,
+            deckCollections: this.deckCollections, 
+            selector: this.selector,
+            removeDeckFromCollectionError: this.removeDeckFromCollectionError,
+            addDeckToCollectionError: this.addDeckToCollectionError, 
         };
     }
 
@@ -82,6 +96,10 @@ class DeckCollectionStore extends BaseStore {
         this.loadMoreLoading = state.loadMoreLoading;
         this.loadMoreError = state.loadMoreError;
         this.subheader = state.subheader;
+        this.deckCollections = state.deckCollections;
+        this.selector = state.selector; 
+        this.removeDeckFromCollectionError = state.removeDeckFromCollectionError;
+        this.addDeckToCollectionError = state.addDeckToCollectionError;
     }
 
     updateCollections(payload){
@@ -287,6 +305,36 @@ class DeckCollectionStore extends BaseStore {
 
     setSubtitle(payload) {
         this.subheader = payload;
+    updateDeckCollections(payload){
+        this.deckCollections = payload.collections;
+        this.selector = payload.selector;
+        this.emitChange();
+    }
+
+    removeDeckFromCollection(payload){
+        let removedCollectionId = parseInt(payload.collectionId);
+        this.deckCollections = this.deckCollections.filter( (col) => col._id !== removedCollectionId);
+        this.removeDeckFromCollectionError = false;
+        this.emitChange();
+    }
+
+    removeDeckFromCollectionFailed(){
+        this.removeDeckFromCollectionError = true;
+        this.emitChange();
+        this.removeDeckFromCollectionError = false;
+        this.emitChange();
+    }
+
+    addDeckToCollection(collection){
+        this.deckCollections.unshift(collection);
+        this.addDeckToCollectionError = false;
+        this.emitChange();
+    }
+
+    addDeckToCollectionFailed(){
+        this.addDeckToCollectionError = true;
+        this.emitChange();
+        this.addDeckToCollectionError = false;
         this.emitChange();
     }
 }
@@ -334,6 +382,15 @@ DeckCollectionStore.handlers = {
     'LOAD_MORE_RESULTS_SUCCESS': 'loadSearchResults',
     'LOAD_RESULTS_FAILURE': 'setLoadMoreDecksFailed',
     'UPDATE_ADD_DECKS_TO_COLLECTION_MODAL_SUBTITLE': 'setSubtitle',
+    // handlers used for collection tab
+    'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
+    'LOAD_DECK_COLLECTIONS_FAILURE': 'updateDeckCollectionsFailed',
+
+    'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'removeDeckFromCollection',
+    'REMOVE_DECK_FROM_COLLECTION_FAILURE': 'removeDeckFromCollectionFailed', 
+
+    'ADD_DECK_TO_COLLECTION_SUCCESS': 'addDeckToCollection', 
+    'ADD_DECK_TO_COLLECTION_FAILURE': 'addDeckToCollectionFailed',
 };
 
 export default DeckCollectionStore;
