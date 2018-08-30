@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 
@@ -69,7 +68,7 @@ class PresentationPrint extends React.Component{
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id + '-' + i} id={'slide-' + slide.id + '-' + i} />);
+                returnList.push(<section key={slide.id + '-' + i} style={{'page-break-after' : 'always'}} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} />);
             }
             return returnList;
 
