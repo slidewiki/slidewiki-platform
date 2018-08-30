@@ -62,17 +62,17 @@ class DeckCollectionStore extends BaseStore {
             addCollectionError: this.addCollectionError,
             updateCollectionMetadataError: this.updateCollectionMetadataError,
             updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
-            loading: this.loading, 
+            loading: this.loading,
             deckOrderLoading: this.deckOrderLoading,
             decks: this.decks,
             decksMeta: this.decksMeta,
             loadMoreLoading: this.loadMoreLoading,
             loadMoreError: this.loadMoreError,
             subheader: this.subheader,
-            deckCollections: this.deckCollections, 
+            deckCollections: this.deckCollections,
             selector: this.selector,
             removeDeckFromCollectionError: this.removeDeckFromCollectionError,
-            addDeckToCollectionError: this.addDeckToCollectionError, 
+            addDeckToCollectionError: this.addDeckToCollectionError,
         };
     }
 
@@ -97,7 +97,7 @@ class DeckCollectionStore extends BaseStore {
         this.loadMoreError = state.loadMoreError;
         this.subheader = state.subheader;
         this.deckCollections = state.deckCollections;
-        this.selector = state.selector; 
+        this.selector = state.selector;
         this.removeDeckFromCollectionError = state.removeDeckFromCollectionError;
         this.addDeckToCollectionError = state.addDeckToCollectionError;
     }
@@ -249,7 +249,7 @@ class DeckCollectionStore extends BaseStore {
     }
 
     setLoading() {
-        this.decks = undefined; 
+        this.decks = undefined;
         this.emitChange();
     }
 
@@ -305,6 +305,9 @@ class DeckCollectionStore extends BaseStore {
 
     setSubtitle(payload) {
         this.subheader = payload;
+        this.emitChange();
+    }
+
     updateDeckCollections(payload){
         this.deckCollections = payload.collections;
         this.selector = payload.selector;
@@ -383,13 +386,13 @@ DeckCollectionStore.handlers = {
     'LOAD_RESULTS_FAILURE': 'setLoadMoreDecksFailed',
     'UPDATE_ADD_DECKS_TO_COLLECTION_MODAL_SUBTITLE': 'setSubtitle',
     // handlers used for collection tab
-    'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
+    'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections',
     'LOAD_DECK_COLLECTIONS_FAILURE': 'updateDeckCollectionsFailed',
 
     'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'removeDeckFromCollection',
-    'REMOVE_DECK_FROM_COLLECTION_FAILURE': 'removeDeckFromCollectionFailed', 
+    'REMOVE_DECK_FROM_COLLECTION_FAILURE': 'removeDeckFromCollectionFailed',
 
-    'ADD_DECK_TO_COLLECTION_SUCCESS': 'addDeckToCollection', 
+    'ADD_DECK_TO_COLLECTION_SUCCESS': 'addDeckToCollection',
     'ADD_DECK_TO_COLLECTION_FAILURE': 'addDeckToCollectionFailed',
 };
 
