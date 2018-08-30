@@ -14,6 +14,14 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = false;
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
+        this.deckOrderLoading = false;
+
+        // needed for adding decks in playlist modal
+        this.decks = undefined;
+        this.decksMeta = undefined;
+        this.loadMoreLoading = false;
+        this.loadMoreError = false;
+        this.subheader = '';
 
         // variables used in collection tab
         this.selector = {};
@@ -32,6 +40,12 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = false;
         this.updateCollectionDeckOrderError = false;
         this.loading = false;
+        this.deckOrderLoading = false;
+        this.decks = undefined;
+        this.decksMeta = undefined;
+        this.loadMoreLoading = false;
+        this.loadMoreError = false;
+        this.subheader = '';
         this.selector = {};
         this.deckCollections = [];
         this.removeDeckFromCollectionError = false;
@@ -48,11 +62,17 @@ class DeckCollectionStore extends BaseStore {
             addCollectionError: this.addCollectionError,
             updateCollectionMetadataError: this.updateCollectionMetadataError,
             updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
-            loading: this.loading, 
-            deckCollections: this.deckCollections, 
+            loading: this.loading,
+            deckOrderLoading: this.deckOrderLoading,
+            decks: this.decks,
+            decksMeta: this.decksMeta,
+            loadMoreLoading: this.loadMoreLoading,
+            loadMoreError: this.loadMoreError,
+            subheader: this.subheader,
+            deckCollections: this.deckCollections,
             selector: this.selector,
             removeDeckFromCollectionError: this.removeDeckFromCollectionError,
-            addDeckToCollectionError: this.addDeckToCollectionError, 
+            addDeckToCollectionError: this.addDeckToCollectionError,
         };
     }
 
@@ -70,8 +90,14 @@ class DeckCollectionStore extends BaseStore {
         this.updateCollectionMetadataError = state.updateCollectionMetadataError;
         this.updateCollectionDeckOrderError = state.updateCollectionDeckOrderError;
         this.loading = state.loading;
+        this.deckOrderLoading = state.deckOrderLoading;
+        this.decks = state.decks;
+        this.decksMeta = state.decksMeta;
+        this.loadMoreLoading = state.loadMoreLoading;
+        this.loadMoreError = state.loadMoreError;
+        this.subheader = state.subheader;
         this.deckCollections = state.deckCollections;
-        this.selector = state.selector; 
+        this.selector = state.selector;
         this.removeDeckFromCollectionError = state.removeDeckFromCollectionError;
         this.addDeckToCollectionError = state.addDeckToCollectionError;
     }
@@ -186,6 +212,102 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    updateCollectionDeckOrderLoading(payload){
+        this.deckOrderLoading = payload;
+        this.emitChange();
+    }
+
+    updateDecksLoading(){
+        this.decks = undefined;
+        this.emitChange();
+    }
+
+    updateDecks(payload){
+        this.decks = payload.decks;
+        this.decksMeta = payload.metadata;
+        this.emitChange();
+    }
+
+    setLoadMoreLoading(){
+        this.loadMoreLoading = true;
+        this.emitChange();
+    }
+
+    loadMoreDecks(payload){
+        this.decks = this.decks.concat(payload.decks);
+        this.decksMeta = payload.metadata;
+        this.loadMoreLoading = false;
+        this.loadMoreError = false;
+        this.emitChange();
+    }
+
+    setLoadMoreDecksFailed() {
+        this.loadMoreError = true;
+        this.loadMoreLoading = false;
+        this.emitChange();
+        this.loadMoreError = false;
+    }
+
+    setLoading() {
+        this.decks = undefined;
+        this.emitChange();
+    }
+
+    loadRecentDecks(payload) {
+        // also add _id in deckID field
+        payload.recent.forEach( (deck) => {
+            deck.deckID = deck._id;
+            deck.creationDate = deck.timestamp;
+        });
+        this.decks = payload.recent;
+        this.decksMeta = undefined;
+        this.emitChange();
+    }
+
+    loadSearchResults(payload) {
+
+        // transform search results
+        payload.docs.forEach( (deck) => {
+            deck.deckID = deck.db_id;
+            deck.creationDate = deck.timestamp;
+            deck.username = deck.user.username;
+            deck.countRevisions = deck.revisionCount;
+        });
+
+        // more results have been loaded
+        if (payload.page > 1) {
+            this.decks = this.decks.concat(payload.docs);
+            this.loadMoreLoading = false;
+            this.loadMoreError = false;
+
+        // page 1 of results is requested
+        } else {
+            this.decks = payload.docs;
+            this.decksMeta = {
+                queryparams: payload.queryparams
+            };
+        }
+
+        // form next page link if more results are available
+        if (payload.hasMore) {
+            this.decksMeta.links = {
+                next: `${this.decksMeta.queryparams}&page=${payload.page + 1}`
+            };
+
+        } else {
+            this.decksMeta.links = {
+                next: undefined
+            };
+        }
+
+        this.emitChange();
+    }
+
+    setSubtitle(payload) {
+        this.subheader = payload;
+        this.emitChange();
+    }
+
     updateDeckCollections(payload){
         this.deckCollections = payload.collections;
         this.selector = payload.selector;
@@ -239,18 +361,38 @@ DeckCollectionStore.handlers = {
     'UPDATE_COLLECTION_METADATA_ERROR': 'updateCollectionMetadataFailed',
 
     'UPDATE_COLLECTION_DECK_ORDER_SUCCESS': 'updateCollectionDeckOrder',
+    'UPDATE_COLLECTION_DECK_ORDER_LOADING': 'updateCollectionDeckOrderLoading',
     'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
 
+
+    // needed for adding decks in playlist modal
+    'NEW_USER_DECKS_LOADING': 'updateDecksLoading',
+    'NEW_USER_DECKS': 'updateDecks',
+
+    'FETCH_NEXT_USER_DECKS_LOADING': 'setLoadMoreLoading',
+    'FETCH_NEXT_USER_DECKS': 'loadMoreDecks',
+    'FETCH_NEXT_USER_DECKS_FAILED': 'setLoadMoreDecksFailed',
+
+    'ATTACHSUBDECK_LOAD_RECENTDECKS_LOADING': 'setLoading',
+    'ATTACHSUBDECK_LOAD_RECENTDECKS': 'loadRecentDecks',
+
+    'ATTACHSUBDECK_LOAD_SEARCHDECKS_LOADING': 'setLoading',
+    'ATTACHSUBDECK_LOAD_SEARCHDECKS': 'loadSearchResults',
+
+    'SHOW_LOAD_MORE_LOADING': 'setLoadMoreLoading',
+    'LOAD_MORE_RESULTS_SUCCESS': 'loadSearchResults',
+    'LOAD_RESULTS_FAILURE': 'setLoadMoreDecksFailed',
+    'UPDATE_ADD_DECKS_TO_COLLECTION_MODAL_SUBTITLE': 'setSubtitle',
     // handlers used for collection tab
-    'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
+    'LOAD_DECK_COLLECTIONS_SUCCESS': 'updateDeckCollections',
     'LOAD_DECK_COLLECTIONS_FAILURE': 'updateDeckCollectionsFailed',
 
     'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'removeDeckFromCollection',
-    'REMOVE_DECK_FROM_COLLECTION_FAILURE': 'removeDeckFromCollectionFailed', 
+    'REMOVE_DECK_FROM_COLLECTION_FAILURE': 'removeDeckFromCollectionFailed',
 
-    'ADD_DECK_TO_COLLECTION_SUCCESS': 'addDeckToCollection', 
+    'ADD_DECK_TO_COLLECTION_SUCCESS': 'addDeckToCollection',
     'ADD_DECK_TO_COLLECTION_FAILURE': 'addDeckToCollectionFailed',
 };
 
