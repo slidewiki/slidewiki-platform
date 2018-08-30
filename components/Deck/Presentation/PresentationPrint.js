@@ -5,9 +5,11 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
+import SlideContentView from '../../../components/Deck/ContentPanel/SlideModes/SlideViewPanel/SlideContentView';
 
 let playerCss = {
-    height: '100%',
+    height: '29.7cm',
+    width: '21cm',
     // position: 'absolute',
     top: '0',
     fontSize: '100%'
@@ -17,9 +19,9 @@ let clearStyle = {
     clear: 'both'
 };
 
-let pdf;
+//let pdf;
 if(process.env.BROWSER){
-    pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
+    //pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
 }
 
 
@@ -64,11 +66,11 @@ class PresentationPrint extends React.Component{
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
                 let notes = '';
-                if(slide.speakernotes){
+                if(slide.speakernotes.trim()){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content + notes;
-                returnList.push(<section key={slide.id + '-' + i} style={{'page-break-after' : 'always'}} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} />);
+                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={slide.speakernotes.trim() ? notes : ''} hideSpeakerNotes={slide.speakernotes.trim()? false : true} theme={slide.theme}/></div>);
             }
             return returnList;
 
