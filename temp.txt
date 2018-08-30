@@ -1,0 +1,30 @@
+In this screen clipping those are:
+Edit (editClass, editButton)
+Add slide (addSlideClass, handleAddNode, action: addTreeNodeAndNavigate)
+Attach slide (AttachSlides)
+Add subdeck (addDeckClass, handleAddNode)
+Attach subdeck (AttachSubdeck)
+Duplicate slide (greyed out at deck level) (duplicateItemClass, handleAddNode)
+Delete slide (greyed out at deck level) (deleteItemClass, handleDeleteNode, action: deleteTreeNodeAndNavigate)
+
+Contains a number of handler functions which operate when the button has been clicked.
+But the AttachSubdeck and AttachSlides don't have handler functions in the ContentPanel
+
+Contains a number of className definitions that are given for different button types. 
+Some of these have the conditions are which they have the 'disabled' class. Where they would be greyed out.
+    But not the attach buttons
+
+Then have different bits setting the value of content based upon whether it is in view/edit mode, slide or deck mode etc 
+This includes the editButton, markdownEditButton, saveButton, cancelButton, undoButton and redoButton
+
+Then comes the return section
+This is split into the left side buttons and right side buttons
+left: {editButton}{markdownEditButton}{saveButton}{cancelButton}{undoButton}{redoButton} - all of those that were set in the render section
+
+right: addSlideClass (content defined in ContentActionsHeader), 
+AttachSlides - content defined in imported file, 
+addDeckClass (content defined in ContentActionsHeader), 
+AttachSubdeck - content defined in imported file,
+duplicateItemClass (content defined in ContentActionsHeader),
+deleteItemClass (content defined in ContentActionsHeader)
+

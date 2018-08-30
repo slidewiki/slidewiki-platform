@@ -2,7 +2,7 @@ class Util{
     //build URL based on the context
     static makeNodeURL(selector, page, mode, slug, language, defaultIsDecktree = false) {
         if (!slug) slug = '_';
-        if (mode === undefined) {console.log('Util.makeNodeURL without mode', selector, page, slug, language); mode = '';}
+        if (mode === undefined) {/*console.log('Util.makeNodeURL without mode', selector, page, slug, language);*/ mode = '';}
 
         let nodeURL;
 
@@ -57,6 +57,16 @@ class Util{
                 break;
             case 'decktree':
                 nodeURL = '/decktree/' + selector.id + '/' + selector.spath + query;
+                break;
+            case 'presentation':
+                nodeURL = ['/presentation', selector.id, slug].join('/') + '/';
+                if(!selector.subdeck)//do not duplicate deck ID! only for slides duplicate it
+                    nodeURL += selector.id + '/';
+                else
+                    nodeURL += selector.subdeck + '/';
+                if(selector.stype === 'slide')//nodeURL = nodeURL+ '#' + this.props.ContentStore.selector.sid;// + '/';
+                    nodeURL += selector.sid + '/';
+                nodeURL += query;
                 break;
             default:
                 if (defaultIsDecktree)
