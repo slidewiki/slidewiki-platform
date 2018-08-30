@@ -36,7 +36,8 @@ class PresentationPrint extends React.Component{
 
     componentDidMount(){
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
-        window.print();
+        setTimeout(() => { window.print(); }, 2000);
+
     }
 
     componentDidUpdate(){
