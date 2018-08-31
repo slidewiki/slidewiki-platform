@@ -60,7 +60,18 @@ class PresentationPrint extends React.Component{
 
     getSlides(){
         let slides = this.props.PresentationStore.content;
-
+        const lastSlideContent = `
+          <br/>
+          <br/>
+          <center>
+          Author:  <br/><br/>
+          Contributors: <br/><br/><br/>
+          Licensed under the Creative Commons <br/> Attribution ShareAlike license (CC-BY-SA) <br/>
+          <br/><br/>
+          This deck was created using <a href="http://slidewiki.org">SlideWiki</a>.<br/>
+          <img src="/assets/images/slideWiki-logo-linear.png" style="width: 200px;"/>
+          </center>
+        `;
         let returnList = [];
         if(slides){
             for (let i = 0; i < slides.length; i++) {
@@ -72,6 +83,9 @@ class PresentationPrint extends React.Component{
                 let content = slide.content + notes;
                 returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={slide.speakernotes && slide.speakernotes.trim()? false : true} theme={slide.theme}/></div>);
             }
+            //add last slide for licensing
+            returnList.push(<div key={'end-slide'} style={{'page-break-after' : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
+
             return returnList;
 
         }
