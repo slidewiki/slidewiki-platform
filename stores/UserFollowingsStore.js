@@ -4,7 +4,8 @@ import slugify from 'slugify';
 class UserFollowingsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.followings = undefined;
+        this.deckFollowings = undefined;
+        this.playlistFollowings = undefined;
         this.selectedFollowingId = null;
         this.loading = true;
     }
@@ -13,27 +14,17 @@ class UserFollowingsStore extends BaseStore {
         this.emitChange();
     }
     loadFollowings(payload) {
-        // // format the results of the service
-        // this.recommendations = payload.recommendations.map( (deck) => {
-        //
-        //     // get the active revision of the deck
-        //     let activeRevision = deck.revisions[deck.revisions.length-1];
-        //     return {
-        //         deckID: deck._id,
-        //         title: activeRevision.title,
-        //         firstSlide: activeRevision.firstSlide,
-        //         theme: activeRevision.theme,
-        //         updated: deck.lastUpdate,
-        //         description: deck.description,
-        //         creationDate: deck.timestamp,
-        //         noOfLikes: deck.noOfLikes,
-        //         recommendationWeight: deck.recommendationWeight,
-        //         slug: activeRevision.title && slugify(activeRevision.title).toLowerCase() || '_',
-        //     };
-        // });
-
         this.loading = false;
-
+        this.deckFollowings = [];
+        this.playlistFollowings = [];
+        payload.followings.forEach((following) => {
+            if (following.followed_type === 'deck') {
+                this.deckFollowings.push(following);
+            } else if (following.followed_type === 'playlist') {
+                this.playlistFollowings.push(following);
+            }
+        });
+        this.selectedFollowingId = null;
         this.emitChange();
     }
     getFollowing(payload) {
@@ -50,16 +41,29 @@ class UserFollowingsStore extends BaseStore {
         } else {
             this.selectedFollowingId = null;
         }
-        
+
         this.emitChange();
     }
     deleteFollowing(payload) {
         this.selectedFollowingId = null;
+
+        //remove from the list
+        let index = this.deckFollowings.findIndex((following) => {return (following.id === payload.id);});
+        if (index === -1) {
+            index = this.playlistFollowings.findIndex((following) => {return (following.id === payload.id);});
+            if (index !== -1) {
+                this.playlistFollowings.splice(index, 1);
+            }
+        } else {
+            this.deckFollowings.splice(index, 1);
+        }
+
         this.emitChange();
     }
     getState() {
         return {
-            followings: this.followings,
+            deckFollowings: this.deckFollowings,
+            playlistFollowings: this.playlistFollowings,
             selectedFollowingId: this.selectedFollowingId,
             loading: this.loading
         };
@@ -68,7 +72,8 @@ class UserFollowingsStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.followings = state.followings;
+        this.deckFollowings = state.deckFollowings;
+        this.playlistFollowings = state.playlistFollowings;
         this.selectedFollowingId = state.selectedFollowingId;
         this.loading = state.loading;
     }
@@ -79,6 +84,7 @@ UserFollowingsStore.handlers = {
     'LOAD_USER_FOLLOWINGS_SUCCESS': 'loadFollowings',
     'SHOW_FOLLOWINGS_LOADING': 'showLoading',
     'GET_FOLLOWING_SUCCESS': 'getFollowing',
+    'LOAD_FOLLOWINGS_SUCCESS': 'loadFollowings',
     'CREATE_FOLLOWING_SUCCESS': 'createFollowing',
     'DELETE_FOLLOWING_SUCCESS': 'deleteFollowing'
 };

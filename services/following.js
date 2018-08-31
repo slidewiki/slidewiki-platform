@@ -49,6 +49,99 @@ export default {
                     callback(null, {followings: []});
                 });
                 break;
+            case 'following.all':
+                rp.get({uri: Microservices.activities.uri + '/followings/follower/' + userId }).then((res) => {
+                    let followings = JSON.parse(res);
+
+                    //GET TITLES FOR DECKS AND PLAYLISTS
+                    if (followings.length === 0) {
+                        callback(null, []);
+                    } else {
+                        //GET DATA FOR DECKS FROM DECK SERVICE
+                        let deckPromises = [];
+                        let playlistPromises = [];
+
+                        for(let following of followings){
+                            if (following.followed_type === 'deck') {
+                                let deckId = following.followed_id;
+                                deckPromises.push(
+                                    rp.get({
+                                        uri: `${Microservices.deck.uri}/deck/${deckId}`,
+                                        json: true
+                                    })
+                                );
+                            } else if (following.followed_type === 'playlist') {
+                                let playlistId = following.followed_id;
+                                playlistPromises.push(
+                                    rp.get({
+                                        uri: `${Microservices.deck.uri}/group/${playlistId}`,
+                                        json: true
+                                    })
+                                );
+                            }
+                        }
+
+                        let deckPromise = Promise.all(deckPromises);
+                        let playlistPromise = Promise.all(playlistPromises);
+
+                        Promise.all([deckPromise, playlistPromise]).then( (data) => {
+                            let decks = data[0];
+                            let playlists = data[1];
+                            let users = [];
+                            decks.forEach((deck) => {
+                                let index = followings.findIndex((following) => {return (following.followed_id === String(deck._id));});
+                                if (index !== -1) {
+                                    let activeRevision = deck.revisions[deck.revisions.length-1];
+                                    followings[index].title = activeRevision.title;
+                                    followings[index].description = deck.description;
+                                    followings[index].userId = deck.user;
+                                    users.push(deck.user);
+                                }
+                            });
+                            playlists.forEach((playlist) => {
+                                let index = followings.findIndex((following) => {return (following.followed_id === String(playlist._id));});
+                                if (index !== -1) {
+                                    followings[index].title = playlist.title;
+                                    followings[index].description = playlist.description;
+                                    followings[index].decksLength = playlist.decks.length;
+                                    followings[index].userId = playlist.user;
+                                    // users.push(playlist.user);
+                                }
+                            });
+                            if (users.length === 0) {
+                                callback(null, {followings: followings});
+                            } else {
+                                let userData = JSON.stringify(users);
+                                rp.post({uri: Microservices.user.uri + '/users', body: userData}).then((res) => {
+                                    let userDataArray = JSON.parse(res);
+                                    userDataArray.forEach((userData) => {
+                                        let userId = userData._id;
+                                        let username = userData.username;
+                                        let displayName = userData.displayName;
+                                        followings.forEach((following) => {
+                                            if (following.userId === userId) {
+                                                following.userName = username;
+                                                following.displayName = displayName;
+                                            }
+                                        });
+                                    });
+
+                                    callback(null, {followings: followings});
+                                }).catch( (err) => {
+                                    console.log(err);
+                                    callback(null, []);
+                                });
+                            }
+                        }).catch( (err) => {
+                            console.log(err);
+                            callback(null, []);
+                        });
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {followings: []});
+                });
+                break;
         }
     },
     create: (req, resource, params, body, config, callback) => {
