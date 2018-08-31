@@ -5,6 +5,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from '../../../common';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import classNames from 'classnames/bind';
 
 class CollectionDecksReorder extends React.Component {
     constructor(props){
@@ -17,6 +18,9 @@ class CollectionDecksReorder extends React.Component {
     handleMoveDown(index){
         this.props.moveDown(index);
     }
+    handlRemove(index){
+        this.props.remove(index);
+    }
     getIntlMessages(){
         return defineMessages({
             moveUp: {
@@ -26,7 +30,15 @@ class CollectionDecksReorder extends React.Component {
             moveDown: {
                 id: 'CollectionDecksReorder.movedown',
                 defaultMessage: 'Move Down'
-            }
+            }, 
+            remove: {
+                id: 'CollectionDecksReorder.remove',
+                defaultMessage: 'Remove'
+            }, 
+            noDescription: {
+                id: 'CollectionDecksReorder.noDescription',
+                defaultMessage: 'No description provided'
+            }, 
         });
     }
     render() {
@@ -37,28 +49,47 @@ class CollectionDecksReorder extends React.Component {
             return <center><h3>No decks available</h3></center>;
         }
 
+        const buttonClasses = {
+            ui: true, 
+            large: true, 
+            basic: true,
+            icon: true, 
+            button: true,
+        };
+
+        
+
         content = this.props.decks.map( (deck, index) => {
+
+            let moveUpButtonClasses =  {
+                ...buttonClasses, 
+                disabled: (index === 0),
+            };
+
+            let moveDownButtonClasses = {
+                ...buttonClasses, 
+                disabled: (index === this.props.decks.length-1),
+            };
+
+
             return (
-                <div key={deck.deckID} className="ui vertical segment">
+                <div id={`deck_${index}`} key={deck.deckID} className="ui vertical segment">
                     <div className="ui two column stackable grid container">
                         <div className="column">
                             <div className="ui header"><h3><a href={`/deck/${deck.deckID}`}>{deck.title}</a></h3></div>
-                            <div className="meta">{deck.description}</div>
+                            <div className="meta">{deck.description || this.context.intl.formatMessage(this.messages.noDescription)}</div>
                         </div>
 
                         <div className="right aligned column">
-                              <div>
-                                { (index > 0) && 
-                                    <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.moveUp)} aria-label={this.context.intl.formatMessage(this.messages.moveUp)} onClick={this.handleMoveUp.bind(this, index)} >
-                                      <i className="arrow up icon" name={'orderUp' + deck.deckID} ></i>
-                                    </button>
-                                }
-                                { (index !== this.props.decks.length-1) &&
-                                    <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.moveDown)} aria-label={this.context.intl.formatMessage(this.messages.moveDown)} onClick={this.handleMoveDown.bind(this, index)} >
-                                      <i className="arrow down icon" name={'orderDown' + deck.deckID} ></i>
-                                    </button>
-                                } 
-                              </div>
+                            <button className={classNames(moveUpButtonClasses)} data-tooltip={this.context.intl.formatMessage(this.messages.moveUp)} aria-label={this.context.intl.formatMessage(this.messages.moveUp)} onClick={this.handleMoveUp.bind(this, index)} >
+                                <i className="arrow up icon" name={'orderUp' + deck.deckID} ></i>
+                            </button>
+                            <button className={classNames(moveDownButtonClasses)} data-tooltip={this.context.intl.formatMessage(this.messages.moveDown)} aria-label={this.context.intl.formatMessage(this.messages.moveDown)} onClick={this.handleMoveDown.bind(this, index)} >
+                                <i className="arrow down icon" name={'orderDown' + deck.deckID} ></i>
+                            </button>
+                            <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.remove)} aria-label={this.context.intl.formatMessage(this.messages.remove)} onClick={this.handlRemove.bind(this, index)} >
+                                <i className="remove icon" name={'remove' + deck.deckID} ></i>
+                            </button>
                         </div>
                     </div>
                 </div>
