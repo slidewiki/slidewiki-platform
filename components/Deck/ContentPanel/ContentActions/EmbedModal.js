@@ -218,20 +218,20 @@ class EmbedModal extends React.Component {
                                     title: title,
                                     creator: userName
                                 }}
-                                defaultMessage={'Embed Options for SlideWiki deck "{title}" by {creator}'}
+                                defaultMessage={'Embed SlideWiki deck "{title}"'}
                             />
                         </h1>
                     </Modal.Header>
                     <Modal.Content>
                         <Container>
                             <FormattedMessage id='embedModel.desc'
-                                    defaultMessage='Select from the options below and then copy the generate HTML into your site.'/>
+                                    defaultMessage='Use the options to select how this deck will be displayed. Then copy the generated code into your site.'/>
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>
                                     <Form>
                                         <Form.Field>
-                                            <textarea id="embedModalDescription"
-                                                    ref="embedModalDescription"
+                                            <textarea aria-label="Embed content code"
+                                                    ref="embedModalText"
                                                     label="description"
                                                     height="100px"
                                                     value={
@@ -271,20 +271,20 @@ class EmbedModal extends React.Component {
                                             <Form.Radio id="embedModalOtherRadio" label={this.context.intl.formatMessage(this.messages.other)}
                                                     value='ot' checked={size === 'ot'} onChange={this.handleChange}/>
                                             <Form.Field>
-                                                <Label>
+                                                <label htmlFor="embedModalWidth">
                                                     <FormattedMessage id='embedModal.widthLabel'
                                                             defaultMessage='Width of embedded content'/>
-                                                </Label>
+                                                </label>
                                                 <Input id="embedModalWidth" ref={(ref) => this.widthInput = ref}
                                                         disabled={this.state.size !== 'ot'}
                                                         placeholder={this.defaultWidthValue}
                                                         onChange={this.handleChange}/>
                                             </Form.Field>
                                             <Form.Field>
-                                                <Label>
+                                                <label htmlFor="embedModalHeight">
                                                     <FormattedMessage id='embedModal.heightLabel'
                                                             defaultMessage='Height of embedded content'/>
-                                                </Label>
+                                                </label>
                                                 <Input id="embedModalHeight" ref={(ref) => this.heightInput = ref}
                                                         disabled={this.state.size !== 'ot'}
                                                         placeholder={this.defaultHeightValue}
