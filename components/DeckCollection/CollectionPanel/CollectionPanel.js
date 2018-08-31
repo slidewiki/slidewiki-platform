@@ -20,7 +20,7 @@ class CollectionPanel extends React.Component {
         super(props);
         this.state = {
             editMode: false,
-            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || [],
+            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || [], 
         };
 
         this.messages = this.getIntlMessages();
@@ -36,7 +36,7 @@ class CollectionPanel extends React.Component {
     dropdownSelect(value) {
         // redirect with sort param
         this.context.executeAction(navigateAction, {
-            url: `/playlist/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`,
+            url: `/playlist/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`, 
         });
     }
     setEditMode(value){
@@ -46,7 +46,7 @@ class CollectionPanel extends React.Component {
     }
     handleCancelEditOrder(){
         this.setState({
-            editMode: false,
+            editMode: false, 
             decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() // revert to inital stored order
         });
     }
@@ -115,53 +115,53 @@ class CollectionPanel extends React.Component {
             reorderError: {
                 id: 'CollectionPanel.error.reorder',
                 defaultMessage: 'An error occurred while updating deck order in the playlist...'
-            },
+            }, 
             collectionTitle: {
                 id: 'CollectionPanel.title',
                 defaultMessage: 'Playlist'
-            },
+            }, 
             collectionCreator: {
                 id: 'CollectionPanel.creator',
                 defaultMessage: 'Creator'
-            },
+            }, 
             collectionDate: {
                 id: 'CollectionPanel.date',
                 defaultMessage: 'Date'
-            },
+            }, 
             decksInCollectionText: {
-                id: 'CollectionPanel.decks.title',
+                id: 'CollectionPanel.decks.title', 
                 defaultMessage: 'Decks in Playlist'
-            },
+            }, 
             editPlaylist: {
-                id: 'CollectionPanel.decks.edit',
+                id: 'CollectionPanel.decks.edit', 
                 defaultMessage: 'Edit'
-            },
+            }, 
             editPlaylistHeader: {
-                id: 'CollectionPanel.decks.edit.header',
-                defaultMessage: 'Edit Playlist'
+                id: 'CollectionPanel.decks.edit.header', 
+                defaultMessage: 'Edit Playlist'                
             },
             saveReorder: {
-                id: 'CollectionPanel.save.reorder',
+                id: 'CollectionPanel.save.reorder', 
                 defaultMessage: 'Save'
-            },
+            }, 
             cancelReorder: {
-                id: 'CollectionPanel.cancel.reorder',
+                id: 'CollectionPanel.cancel.reorder', 
                 defaultMessage: 'Cancel'
             },
             sortDefault: {
-                id: 'CollectionPanel.sort.default',
+                id: 'CollectionPanel.sort.default', 
                 defaultMessage: 'Default Order'
-            },
+            }, 
             sortLastUpdated: {
-                id: 'CollectionPanel.sort.lastUpdated',
+                id: 'CollectionPanel.sort.lastUpdated', 
                 defaultMessage: 'Last updated'
-            },
+            }, 
             sortCreationDate: {
-                id: 'CollectionPanel.sort.date',
+                id: 'CollectionPanel.sort.date', 
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'CollectionPanel.sort.title',
+                id: 'CollectionPanel.sort.title', 
                 defaultMessage: 'Title'
             },
             collectionFollow: {
@@ -178,12 +178,12 @@ class CollectionPanel extends React.Component {
         switch(sortBy){
             case 'lastUpdated':
                 return this.context.intl.formatMessage(this.messages.sortLastUpdated);
-            case 'date':
+            case 'date': 
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
                 return this.context.intl.formatMessage(this.messages.sortTitle);
-            case 'order':
-            default:
+            case 'order': 
+            default: 
                 return this.context.intl.formatMessage(this.messages.sortDefault);
         }
 
@@ -197,7 +197,7 @@ class CollectionPanel extends React.Component {
         let data = this.props.DeckCollectionStore.collectionDetails;
 
         let loadingDiv = (this.props.DeckCollectionStore.deckOrderLoading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : '';
-
+        
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
         let hasEditRights = (this.props.UserProfileStore.userid && this.props.UserProfileStore.userid === data.user.id
                     || this.props.UserProfileStore.user.groups && this.props.UserProfileStore.user.groups.map((group) => group._id).includes(data.userGroup));
@@ -230,20 +230,20 @@ class CollectionPanel extends React.Component {
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
                             <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.editPlaylistHeader)}</h2>
-                            { (!this.state.editMode && hasEditRights) &&
+                            { (!this.state.editMode && hasEditRights) && 
                                 <Button primary size='small' as='button' onClick={this.setEditMode.bind(this, true)}>
                                     <Icon name='edit'/>
                                     <FormattedMessage {...this.messages.editPlaylist} />
                                 </Button>
                             }
-                            { (this.state.editMode) &&
+                            { (this.state.editMode) && 
                                 <div className="ui right floated">
                                     <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
                                     <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
                                     <AddDecksModal selectedDecks={this.state.decksOrder} handleAdd={this.handleAdd.bind(this)} loggedInDisplayName={data.user.displayName} />
                                 </div>
                             }
-                            { (!this.state.editMode) &&
+                            { (!this.state.editMode) && 
                                 <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                                     <i className="icon exchange"/>
                                     <div className="text">{sortText}</div>
@@ -256,7 +256,7 @@ class CollectionPanel extends React.Component {
                                 </div>
                             }
                         </div>
-
+                        
                         {
                             (!this.state.editMode) ? (
                                 <div className="ui segment">
