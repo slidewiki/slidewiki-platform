@@ -96,8 +96,6 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-                    <EmbedModal size={iconSize} fontSize={24} color="white" backgroundColor="#1e78bb"
-                            embedPresentationHref={this.props.embedPresentationHref}/>
                     <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}
@@ -151,6 +149,8 @@ class SocialShare extends React.Component {
                                 round />
                         </LinkedinShareButton>
                     </div>
+                    <EmbedModal size={iconSize} fontSize={24} color="white" backgroundColor="#1e78bb"
+                                embedPresentationHref={this.props.embedPresentationHref}/>
                 </div>
             </div>
         );
