@@ -1,5 +1,4 @@
 import {BaseStore} from 'fluxible/addons';
-import slugify from 'slugify';
 
 class UserFollowingsStore extends BaseStore {
     constructor(dispatcher) {
@@ -9,7 +8,7 @@ class UserFollowingsStore extends BaseStore {
         this.selectedFollowingId = null;
         this.loading = true;
     }
-    showLoading(payload){
+    showLoading(){
         this.loading = true;
         this.emitChange();
     }
@@ -48,14 +47,16 @@ class UserFollowingsStore extends BaseStore {
         this.selectedFollowingId = null;
 
         //remove from the list
-        let index = this.deckFollowings.findIndex((following) => {return (following.id === payload.id);});
-        if (index === -1) {
-            index = this.playlistFollowings.findIndex((following) => {return (following.id === payload.id);});
-            if (index !== -1) {
-                this.playlistFollowings.splice(index, 1);
+        if (this.deckFollowings && this.playlistFollowings) {
+            let index = this.deckFollowings.findIndex((following) => {return (following.id === payload.id);});
+            if (index === -1) {
+                index = this.playlistFollowings.findIndex((following) => {return (following.id === payload.id);});
+                if (index !== -1) {
+                    this.playlistFollowings.splice(index, 1);
+                }
+            } else {
+                this.deckFollowings.splice(index, 1);
             }
-        } else {
-            this.deckFollowings.splice(index, 1);
         }
 
         this.emitChange();
