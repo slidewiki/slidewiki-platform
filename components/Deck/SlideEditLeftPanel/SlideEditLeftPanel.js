@@ -99,6 +99,8 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleRemoveBackgroundClick(){
         this.context.executeAction(removeBackgroundClick, {});
+        // Remove background color in case there is
+        $('.pptx2html').css({'background-color' : ''});
     }
     handleEmbedClick(){
         this.setState({showEmbed: true});
