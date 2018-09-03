@@ -4,6 +4,9 @@ import methodNotAllowedError  from '../error/methodNotAllowedError';
 
 export default function loadRecentDecks(context,payload,done){
     log.info(context);
+
+    context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS_LOADING', []);
+
     context.service.read('deck.recent', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             
@@ -20,7 +23,6 @@ export default function loadRecentDecks(context,payload,done){
                 context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
             }
         } else { //Normal action
-
             context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', res);
         }
         done();
