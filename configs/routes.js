@@ -611,6 +611,12 @@ export default {
                     context.executeAction(loadDataSources, payload, callback);
                 },
                 (callback) => {
+                    // handle sub deck contributors
+                    payload.params.stype = 'deck';
+                    payload.params.sid = payload.params.subdeck ? payload.params.subdeck : payload.params.id;
+                    context.executeAction(loadContributors, payload, callback);
+                },
+                (callback) => {
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);

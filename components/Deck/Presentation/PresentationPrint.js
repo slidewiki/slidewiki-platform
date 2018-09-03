@@ -4,9 +4,11 @@ import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import PresentationStore from '../../../stores/PresentationStore';
+import ContributorsStore from '../../../stores/ContributorsStore';
 import DataSourceStore from '../../../stores/DataSourceStore';
 import SlideContentView from '../../../components/Deck/ContentPanel/SlideModes/SlideViewPanel/SlideContentView';
 import DataSourceList from '../../../components/Deck/ContentModulesPanel/DataSourcePanel/DataSourceList';
+import ContributorsList from '../../../components/Deck/ContentModulesPanel/ContributorsPanel/ContributorsList';
 
 let playerCss = {
     height: '29.7cm',
@@ -64,15 +66,34 @@ class PresentationPrint extends React.Component{
         });
         return items;
     }
+    prepareContributorName(contributor){
+        let out = '';
+        if(contributor.displayName){
+            out = contributor.displayName;
+        }else{
+            out = contributor.username;
+        }
+        if(contributor.organization){
+            out = out + ' (' + contributor.organization + ')';
+        }
+        return out;
+    }
     getSlides(){
         //console.log(this.props.DataSourceStore);
+        //console.log(this.props.ContributorsStore);
+        let contributors = [];
+        let creator = this.prepareContributorName(this.props.ContributorsStore.creator[0]);
+        this.props.ContributorsStore.contributors.forEach((contrib) => {
+            contributors.push(this.prepareContributorName(contrib));
+        });
+        let joinedContribs = contributors.join(', ');
         let slides = this.props.PresentationStore.content;
         const lastSlideContent = `
           <br/>
           <br/>
           <center>
-          Creator:  <br/><br/>
-          Contributors: <br/><br/><br/>
+          Creator:  ${creator}<br/><br/>
+          Contributors: <br/> ${joinedContribs}<br/><br/><br/>
           Licensed under the Creative Commons <br/>Attribution ShareAlike CC-BY-SA license <br/>
           <br/><br/>
           This deck was created using <a href="http://slidewiki.org">SlideWiki</a>.<br/>
@@ -87,7 +108,7 @@ class PresentationPrint extends React.Component{
                 let slideSources = '';
                 let sources = this.findSourcesForSlide(slide.id);
                 if(sources.length){
-                    slideSources = <div><b>Sources</b>:<br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
+                    slideSources = <div className="ui segment"><b>Sources</b>:<br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
                 }
                 if(slide.speakernotes && slide.speakernotes.trim()){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
@@ -112,10 +133,11 @@ PresentationPrint.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-PresentationPrint = connectToStores(PresentationPrint, [PresentationStore, DataSourceStore], (context, props) => {
+PresentationPrint = connectToStores(PresentationPrint, [PresentationStore, DataSourceStore, ContributorsStore], (context, props) => {
     return {
         PresentationStore: context.getStore(PresentationStore).getState(),
-        DataSourceStore: context.getStore(DataSourceStore).getState()
+        DataSourceStore: context.getStore(DataSourceStore).getState(),
+        ContributorsStore: context.getStore(ContributorsStore).getState()
     };
 });
 
