@@ -605,12 +605,10 @@ export default {
         action: (context, payload, done) => {
             async.series([
                 (callback) => {
-                    // add missing sid in order to load the deck's title
-                    payload.params.sid = payload.params.id;
-                    // adding language to the params
-                    payload.params.language = payload.query.language;
-                    payload.params.presentation = true;
-                    context.executeAction(loadDeckView, payload, callback);
+                    // handle sub deck sources
+                    payload.params.stype = 'deck';
+                    payload.params.sid = payload.params.subdeck ? payload.params.subdeck : payload.params.id;
+                    context.executeAction(loadDataSources, payload, callback);
                 },
                 (callback) => {
                     // adding language to the params

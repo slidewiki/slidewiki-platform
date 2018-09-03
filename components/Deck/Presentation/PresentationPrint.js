@@ -3,9 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
+import DataSourceStore from '../../../stores/DataSourceStore';
 import SlideContentView from '../../../components/Deck/ContentPanel/SlideModes/SlideViewPanel/SlideContentView';
+import DataSourceList from '../../../components/Deck/ContentModulesPanel/DataSourcePanel/DataSourceList';
 
 let playerCss = {
     height: '29.7cm',
@@ -57,16 +58,22 @@ class PresentationPrint extends React.Component{
             </div>
         );
     }
-
+    findSourcesForSlide(sid) {
+        let items = this.props.DataSourceStore.dataSources.filter((source) => {
+            return source.sid === sid;
+        });
+        return items;
+    }
     getSlides(){
+        //console.log(this.props.DataSourceStore);
         let slides = this.props.PresentationStore.content;
         const lastSlideContent = `
           <br/>
           <br/>
           <center>
-          Author:  <br/><br/>
+          Creator:  <br/><br/>
           Contributors: <br/><br/><br/>
-          Licensed under the Creative Commons <br/> Attribution ShareAlike license (CC-BY-SA) <br/>
+          Licensed under the Creative Commons <br/>Attribution ShareAlike CC-BY-SA license <br/>
           <br/><br/>
           This deck was created using <a href="http://slidewiki.org">SlideWiki</a>.<br/>
           <img src="/assets/images/slideWiki-logo-linear.png" style="width: 200px;"/>
@@ -77,11 +84,16 @@ class PresentationPrint extends React.Component{
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
                 let notes = '';
+                let slideSources = '';
+                let sources = this.findSourcesForSlide(slide.id);
+                if(sources.length){
+                    slideSources = <div><b>Sources</b>:<br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
+                }
                 if(slide.speakernotes && slide.speakernotes.trim()){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content + notes;
-                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={slide.speakernotes && slide.speakernotes.trim()? false : true} theme={slide.theme}/></div>);
+                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={slide.speakernotes && slide.speakernotes.trim()? false : true} theme={slide.theme}/>{slideSources}</div>);
             }
             //add last slide for licensing
             returnList.push(<div key={'end-slide'} style={{'page-break-after' : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
@@ -100,9 +112,10 @@ PresentationPrint.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-PresentationPrint = connectToStores(PresentationPrint, [PresentationStore], (context, props) => {
+PresentationPrint = connectToStores(PresentationPrint, [PresentationStore, DataSourceStore], (context, props) => {
     return {
-        PresentationStore: context.getStore(PresentationStore).getState()
+        PresentationStore: context.getStore(PresentationStore).getState(),
+        DataSourceStore: context.getStore(DataSourceStore).getState()
     };
 });
 
