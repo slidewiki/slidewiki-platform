@@ -115,7 +115,7 @@ class PresentationPrint extends React.Component{
                     slideSources = <div className="ui segment"><b><i className="ui icon caret square up"></i> Sources</b><br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
                 }
                 if(slide.speakernotes && slide.speakernotes.trim()){
-                    notes = <div className="ui segment"><b><i className="ui icon caret square up"></i> Speaker Notes</b><div dangerouslySetInnerHTML={{__html: slide.speakernotes}}></div></div>;
+                    notes = <div className="ui segment"><b><i className="ui icon caret square up"></i> Speaker Notes</b><div dangerouslySetInnerHTML={{__html: slide.speakernotes.replace('position: absolute;','')}}></div></div>;
                 }
                 let content = slide.content + notes;
                 returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
