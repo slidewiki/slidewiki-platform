@@ -112,13 +112,13 @@ class PresentationPrint extends React.Component{
                 let slideSources = '';
                 let sources = this.findSourcesForSlide(slide.id);
                 if(sources.length){
-                    slideSources = <div className="ui segment"><b>Sources</b>:<br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
+                    slideSources = <div className="ui segment"><b><i className="ui icon caret square up"></i> Sources</b><br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
                 }
                 if(slide.speakernotes && slide.speakernotes.trim()){
-                    notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
+                    notes = <div className="ui segment"><b><i className="ui icon caret square up"></i> Speaker Notes</b><div dangerouslySetInnerHTML={{__html: slide.speakernotes}}></div></div>;
                 }
                 let content = slide.content + notes;
-                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={slide.speakernotes && slide.speakernotes.trim()? false : true} theme={slide.theme}/>{slideSources}</div>);
+                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
             }
             //add last slide for licensing
             returnList.push(<div key={'end-slide'} style={{'page-break-after' : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
