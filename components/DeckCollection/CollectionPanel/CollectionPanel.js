@@ -19,7 +19,7 @@ class CollectionPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            editMode: false,
+            editMode: false, 
             decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || [], 
         };
 

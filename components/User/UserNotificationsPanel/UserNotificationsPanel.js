@@ -118,19 +118,19 @@ class UserNotificationsPanel extends React.Component {
 
         let buttons = (
             <Button.Group basic >
-                <Button disabled={buttonMarkAsReadDisabled} aria-label='Mark all as read' onClick={this.handleMarkAsRead.bind(this)} tabIndex='0' title={buttonMarkAsReadTitle}>
+                <Button disabled={buttonMarkAsReadDisabled} aria-label='Mark all as read' onClick={this.handleMarkAsRead.bind(this)} tabIndex='0' data-tooltip={buttonMarkAsReadTitle}>
                     <i className="icons large">
                         <i className="check square outline icon" ></i>
                         <i className="corner check icon"></i>
                     </i>
                 </Button>
-                <Button disabled={buttonDeleteAllDisabled} aria-label='Delete all' onClick={this.handleDelete.bind(this)} tabIndex='0' title={buttonDeleteAllTitle}>
+                <Button disabled={buttonDeleteAllDisabled} aria-label='Delete all' onClick={this.handleDelete.bind(this)} tabIndex='0' data-tooltip={buttonDeleteAllTitle}>
                     <i className="icons large">
                         <i className="times circle outline icon" ></i>
                         <i className="corner remove icon"></i>
                     </i>
                 </Button>
-                <Button aria-label='Manage followings' onClick={this.handleClickOnFollowingsSetting.bind(this)} tabIndex='0' title={followingDisplay} >
+                <Button aria-label='Manage followings' onClick={this.handleClickOnFollowingsSetting.bind(this)} tabIndex='0' data-tooltip={followingDisplay} >
                     <i className="icons large">
                         <i className="setting icon" ></i>
                         <i className="corner rss icon"></i>
