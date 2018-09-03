@@ -14,7 +14,7 @@ class ContentUsageStore extends BaseStore {
     getState() {
         return {
             usage: this.usage,
-            selector: this.selector
+            selector: this.selector,
         };
     }
     dehydrate() {
@@ -28,7 +28,7 @@ class ContentUsageStore extends BaseStore {
 
 ContentUsageStore.storeName = 'ContentUsageStore';
 ContentUsageStore.handlers = {
-    'LOAD_CONTENT_USAGE_SUCCESS': 'updateUsage'
+    'LOAD_CONTENT_USAGE_SUCCESS': 'updateUsage',
 };
 
 export default ContentUsageStore;

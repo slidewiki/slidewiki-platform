@@ -16,7 +16,14 @@ export default function editImageWithSrc(context, src, done) {
             let title = res.title;
             if (fileType === 'image/svg+xml') {
                 context.service.read('media.readCSV', {url: url}, { timeout: 20 * 1000 }, (err, res) => {
-                    context.dispatch('OPEN_WITH_SRC', {url: url, svg: res, title: title, altText: altText});
+                    let params = {
+                        url: url,
+                        svg: res,
+                        title: title,
+                        altText: altText,
+                        toEdit: 'SVG'
+                    };
+                    context.dispatch('OPEN_WITH_SRC', params);
                     done();
                 });
             } else {
