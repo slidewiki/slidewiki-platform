@@ -87,7 +87,11 @@ class PresentationPrint extends React.Component{
             contributors.push(this.prepareContributorName(contrib));
         });
         let joinedContribs = contributors.join(', ');
+        if(!joinedContribs.trim()){
+            joinedContribs = ' - ';
+        }
         let slides = this.props.PresentationStore.content;
+        //the fake slide added at the end
         const lastSlideContent = `
           <br/>
           <br/>
@@ -97,7 +101,7 @@ class PresentationPrint extends React.Component{
           Licensed under the Creative Commons <br/>Attribution ShareAlike CC-BY-SA license <br/>
           <br/><br/>
           This deck was created using <a href="http://slidewiki.org">SlideWiki</a>.<br/>
-          <img src="/assets/images/slideWiki-logo-linear.png" style="width: 200px;"/>
+          <div><img src="/assets/images/slideWiki.svg" style="width: 200px;"/></div>
           </center>
         `;
         let returnList = [];
