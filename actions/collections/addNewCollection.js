@@ -1,6 +1,7 @@
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import UserProfileStore from '../../stores/UserProfileStore';
+import addDeckToCollection from './addDeckToCollection';
 
 export default function addNewCollection(context, payload, done) {
     log.info(context);
@@ -12,10 +13,27 @@ export default function addNewCollection(context, payload, done) {
         if (err) {
             log.error(context, {filepath: __filename});
             context.dispatch('ADD_COLLECTION_FAILURE', err);
+            done();
         } else {
-            context.dispatch('ADD_COLLECTION_SUCCESS', res);
-        }
 
-        done();
+            // also add new collection to a deck
+            if (payload.deckId) {
+                context.executeAction(addDeckToCollection, {
+                    deckId: payload.deckId, 
+                    collection: res, 
+                    collectionId: res._id,
+                }).then( () => {
+                    context.dispatch('ADD_COLLECTION_SUCCESS', res);
+                    done();
+                }).catch( (err) => {
+                    log.error(context, {filepath: __filename});
+                    context.dispatch('ADD_COLLECTION_FAILURE', err);
+                    done();
+                });
+            } else {
+                context.dispatch('ADD_COLLECTION_SUCCESS', res);
+                done();
+            }
+        }
     });
 }
