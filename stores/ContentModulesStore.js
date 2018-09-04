@@ -5,7 +5,7 @@ class ContentModulesStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.moduleType = 'questions';
-        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0};
+        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0, 'playlists': 0};
         this.selector = {};
     }
     updateContentModules(payload) {
@@ -63,6 +63,13 @@ class ContentModulesStore extends BaseStore {
         }
         this.emitChange();
     }
+    deleteCommentSuccess() {
+        this.moduleCount.comments--;
+        if (isLocalStorageOn()) {
+            localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
+        }
+        this.emitChange();
+    }
     addTagSuccess() {
         this.moduleCount.tags++;
         this.emitChange();
@@ -95,6 +102,23 @@ class ContentModulesStore extends BaseStore {
         this.selector = state.selector;
         this.moduleCount = state.moduleCount;
     }
+    loadPlaylistsCount(payload){
+        this.moduleCount.playlists = payload;
+        this.emitChange();
+    }
+    loadPlaylistsCountError(){
+        // not critical to show an error
+        this.moduleCount.playlists = 0;
+        this.emitChange();
+    }
+    increasePlaylistsCount(){
+        this.moduleCount.playlists++;
+        this.emitChange();
+    }
+    decreasePlaylistsCount(){
+        this.moduleCount.playlists--;
+        this.emitChange();
+    }
 }
 
 ContentModulesStore.storeName = 'ContentModulesStore';
@@ -110,11 +134,16 @@ ContentModulesStore.handlers = {
     'REMOVE_TAG': 'removeTagSuccess',
     'NEW_TAG': 'addTagSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
+    'DELETE_COMMENT_SUCCESS': 'deleteCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount',
     'ADD_QUESTION': 'addQuestionSuccess',
-    'DELETE_QUESTION': 'deleteQuestionSuccess'
+    'DELETE_QUESTION': 'deleteQuestionSuccess', 
+    'LOAD_PLAYLISTS_COUNT': 'loadPlaylistsCount', 
+    'LOAD_PLAYLISTS_COUNT_FAILURE': 'loadPlaylistsCountError',
+    'ADD_DECK_TO_COLLECTION_SUCCESS': 'increasePlaylistsCount', 
+    'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'decreasePlaylistsCount',
 };
 
 export default ContentModulesStore;

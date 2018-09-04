@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {NavLink, navigateAction} from 'fluxible-router';
+import { navigateAction} from 'fluxible-router';
 import { Microservices } from '../../configs/microservices';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
@@ -17,10 +17,8 @@ import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
-import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import ThemePreviewCarousel from './ThemePreviewCarousel';
 
@@ -32,7 +30,7 @@ class AddDeck extends React.Component {
         this.percentage = 0;
     }
     componentDidMount() {
-        let that = this;
+        // let that = this;
         /* deleted by Sole
         $('.ui.small.modal').modal({
             onDeny: function(){
@@ -405,7 +403,7 @@ class AddDeck extends React.Component {
             this.context.executeAction(uploadFile, payload);
         }
         else {
-            console.error('Submission not possible - no file or not pptx/odp');
+            console.error('Submission not possible - no file or not pptx/odp/zip');
         }
     }
 
@@ -578,7 +576,7 @@ class AddDeck extends React.Component {
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.format_message'
-                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.' />
+                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx, OpenOffice ODP, and SlideWiki HTML downloads (*.zip files) are supported.' />
                             </p>
                         </div>
                         <div className="ui grid">
@@ -610,12 +608,12 @@ class AddDeck extends React.Component {
                                 <label htmlFor="terms">
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
-                                        defaultMessage='I agree to the SlideWiki ' />
+                                        defaultMessage='I agree to the SlideWiki ' />{' '}
                                     <a className="item" href="/terms" target="_blank">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
                                             defaultMessage='terms and conditions' />
-                                    </a>
+                                    </a>{' '}
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
