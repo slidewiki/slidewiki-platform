@@ -107,11 +107,16 @@ export default {
 
                 return deck;
             });
+
             /* Create promise for slides data success */
             let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
             if (args.language)
                 uri2 += '?language=' + args.language;
-            let slidesRes = rp.get({uri:uri2});
+            let slidesRes = rp.get({
+                uri: uri2,
+                json: true,
+            });
+
             /* Catch errors from deck data response */
             let deckPromise = deckRes.catch((err) => {
                 callback({msg: 'Error in retrieving deck meta data ' + Microservices.deck.uri + ',', content: err}, {});
@@ -126,7 +131,10 @@ export default {
 
             // the forkCount API requires just the deck id, not the revision (a deck may be a fork of any revision)
             let deckId = parseInt(args.sid); // we rely on parseInt
-            let forkCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + deckId + '/forkCount'}).catch((err) => {
+            let forkCountPromise = rp.get({
+                uri: Microservices.deck.uri + '/deck/' + deckId + '/forkCount',
+                json: true,
+            }).catch((err) => {
                 callback({
                     msg: 'Error in retrieving fork count',
                     content: err
@@ -135,6 +143,7 @@ export default {
 
             let shareCountPromise = rp.get({
                 uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=share&all_revisions=true',
+                json: true,
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -145,6 +154,7 @@ export default {
 
             let downloadCountPromise = rp.get({
                 uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=download&all_revisions=true',
+                json: true,
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -162,28 +172,49 @@ export default {
                 }
                 let userPromisesMap = {};
                 let userPromises = users.map((user) => {
-                    return userPromisesMap[user] = userPromisesMap[user] || rp.get({uri: Microservices.user.uri + '/user/' + user.toString()});
+                    return userPromisesMap[user] = userPromisesMap[user] || rp.get({
+                        uri: Microservices.user.uri + '/user/' + user.toString(),
+                        json: true,
+                    });
                 });
                 return Promise.all(userPromises);
             }).catch((err) => {
                 callback({msg: 'Error in retrieving user data from ' + Microservices.user.uri, content: err}, {});
             });
 
+            // fetch the tags data
+            let tagsPromise = deckPromise.then((deck) => {
+                if (!deck.tags || !deck.tags.length) return [];
+
+                return rp.get({
+                    uri: `${Microservices.tag.uri}/tags`,
+                    qs: {
+                        tagName: deck.tags.map((t) => t.tagName),
+                        paging: false, // this allows for unpaged results
+                    },
+                    useQuerystring: true,
+                    json: true,
+                });
+            });
+
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise]).then((data) => {
-                let deckData = data[0];
-                deckData.forkCount = JSON.parse(data[2]);
-                deckData.shareCount = JSON.parse(data[4]);
-                deckData.downloadCount = JSON.parse(data[5]);
+            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise, tagsPromise])
+            .then(([deckData, slidesData, forkCount, usersData, shareCount, downloadCount, tags]) => {
+                Object.assign(deckData, {
+                    forkCount,
+                    shareCount,
+                    downloadCount,
+                    tags,
+                });
 
                 addSlug(deckData);
 
                 callback(null, {
-                    deckData: deckData,
-                    slidesData: JSON.parse(data[1]),
-                    creatorData: JSON.parse(data[3][0]),
-                    ownerData: JSON.parse(data[3][1]),
-                    originCreatorData: data[3][2] != null ? JSON.parse(data[3][2]) : {}
+                    deckData,
+                    slidesData,
+                    creatorData: usersData[0],
+                    ownerData: usersData[1],
+                    originCreatorData: usersData[2] || {},
                 });
             }).catch((err) => {
                 //console.log(err);
