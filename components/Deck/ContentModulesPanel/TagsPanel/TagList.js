@@ -11,9 +11,11 @@ class TagList extends React.Component {
 
     //TODO shrink tag name if too long for screen
     render() {
+        let tags = this.props.items.map((t) => Object.assign(t, { tagColor: t.tagType === 'topic' ? 'green' : ''}));
+
         return (
             <div ref="tagList">
-                { this.props.items.map((tag, index) => (<a key={index} target="_blank" href={'/deckfamily/' + tag.tagName} key={tag.tagName} className="ui large tag label" tabIndex="0" aria-label={tag.defaultName || tag.tagName}>
+                { tags.map((tag, index) => (<a key={index} target="_blank" href={'/deckfamily/' + tag.tagName} key={tag.tagName} className={`ui large tag label ${tag.tagColor}`} tabIndex="0" aria-label={tag.defaultName || tag.tagName}>
                     { tag.defaultName || tag.tagName }
                     {
                         this.props.isEditMode?
@@ -21,7 +23,7 @@ class TagList extends React.Component {
                             : ''
                     }
                 </a>)) }
-             </div>
+            </div>
         );
     }
 }
