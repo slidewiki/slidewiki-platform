@@ -557,7 +557,7 @@ class DeckPropertiesEditor extends React.Component {
                     {img: '/assets/images/themes/pale_blue.png', value: 'sky'},
                     {img: '/assets/images/themes/simple.png', value: 'simple'},
                     {img: '/assets/images/themes/simple.png', value: 'serif'}  // # TODO: use real thumbnail for serif once SWAQ-973 is solved
-                ]}/>
+                                      ]}/>
             </div>
             <div className="field">
                 <label htmlFor="license" id="license_label">License</label>
