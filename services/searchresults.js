@@ -26,6 +26,9 @@ function parseSlide(slide){
 
 function parseDeck(deck, usernames){
     let deckSlug = buildSlug(deck);
+    if(deck.db_id === 2162) {
+        console.log(deck.creator);
+    }
     // different link if this is a root deck or a sub-deck
     deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
@@ -58,7 +61,10 @@ function getUsers(userIds){
                 username: userRes.username
             };
         }).catch( (err) => {
-            usernames[userId] = 'Unknown user';
+            usernames[userId] = {
+                displayName: `Unknown user ${userId}`, 
+                username: userId
+            };
         }));
 
     return Promise.all(userPromises).then( () => { return usernames; });
@@ -111,8 +117,38 @@ function getActivity(activityType, deckIds){
     return Promise.all(likePromises).then( () => { return activities; });
 }
 
-function fillUserInfo(usernames, userId){
+function getUserIds(docs, facets){
+    let userIds = flatten(docs.map( (result) => {
+        if (isEmpty(result.forks)) { 
+            return result.creator; 
 
+        // if matching forks are availabe, collect user ids for them also
+        } else {
+            let forkUserIds = result.forks.map( (fork) => fork.creator);
+            forkUserIds.push(result.creator);
+            return forkUserIds;
+        }
+    }));
+
+    // if faceting is enabled, also require usernames for user ids in facets
+    if (facets.creator) {
+
+        // user ids are returned as strings in facets response
+        facets.creator.forEach( (item) => {
+            item.key = parseInt(item.key);
+        });
+
+        let creatorIds = facets.creator.map( (item) => item.key);
+        userIds = userIds.concat(creatorIds);
+    }
+
+    return compact(uniq(userIds));
+}
+
+function fillFacetsInfo(facets, usernames) {
+    facets.creator.forEach( (item) => {
+        item.user = usernames[item.key];
+    });
 }
 
 export default {
@@ -144,17 +180,7 @@ export default {
             }).then( (response) => {
 
                 let deckIds = response.docs.map( (result) => result.db_id);
-                let userIds = compact(uniq(flatten(response.docs.map( (result) => {
-                    if (isEmpty(result.forks)) { 
-                        return result.creator; 
-
-                    // if matching forks are availabe, collect user ids for them also
-                    } else {
-                        let forkUserIds = result.forks.map( (fork) => fork.creator);
-                        forkUserIds.push(result.creator);
-                        return forkUserIds;
-                    }
-                }))));
+                let userIds = getUserIds(response.docs, response.facets);
 
                 Promise.all([ getUsers(userIds), getDecks(deckIds), getActivity('react', deckIds), getActivity('download', deckIds), getActivity('share', deckIds)])
                 .then( ([ usernames, { decks, deckRevisions }, likes, downloads, shares ]) => {
@@ -166,9 +192,6 @@ export default {
                         if (!isEmpty(result.forks)) {
                             result.forks.forEach( (fork) => parseDeck(fork, usernames));
                         }
-
-
-                        // if(returnItem.kind === 'Deck'){
 
                         result.revisionCount = (decks[result.db_id]) ? decks[result.db_id].revisions.length : 1;
                         result.theme = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
@@ -182,27 +205,11 @@ export default {
                         result.downloadsCount = downloads[result.db_id];
                         result.sharesCount = shares[result.db_id];
                         
-                        // }
-                        // else if(returnItem.kind === 'Slide'){
-                        //     returnItem.subItems = returnItem.usage.filter( (usageItem) => {
-                        //         // do not contain usage presented in result title
-                        //         return (returnItem.deck.id !== usageItem) && deckRevisions[usageItem];
-                        //     }).map( (usageItem) => {
-                        //         return {
-                        //             id: usageItem,
-                        //             title: deckRevisions[usageItem].title,
-                        //             link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`,
-                        //         };
-                        //     });
-
-                        //     // fill deck info
-                        //     returnItem.deck.title = (deckRevisions[returnItem.deck.id]) ? deckRevisions[returnItem.deck.id].title : '';
-                        //     let deckSlug = buildSlug(returnItem.deck);
-                        //     returnItem.deck.link = `/deck/${returnItem.deck.id}/${deckSlug}`;
-
-                        //     returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`;
-                        // }
                     });
+
+                    if (response.facets) {
+                        fillFacetsInfo(response.facets, usernames);
+                    }
 
                     callback(null, {
                         numFound: response.numFound,

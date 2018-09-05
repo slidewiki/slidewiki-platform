@@ -77,7 +77,7 @@ class SearchResultsItem extends React.Component {
                         return <List.Item key={`result_${result.index}_fork_${index}`}>
                             <List.Header><NavLink href={fork.link}>{ fork.title }</NavLink></List.Header>
                             <List.Description>
-                                <FormattedMessage {...this.messages.lastModified} />: {fork.lastUpdate} <FormattedMessage {...this.messages.by} /> <NavLink href={result.user.link}>{result.user.displayName || result.user.username}</NavLink>
+                                <FormattedMessage {...this.messages.lastModified} />: {fork.lastUpdate} <FormattedMessage {...this.messages.by} /> <NavLink href={fork.user.link}>{fork.user.displayName || fork.user.username}</NavLink>
                             </List.Description>
                         </List.Item>;
                     })

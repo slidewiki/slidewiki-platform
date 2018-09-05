@@ -4,7 +4,7 @@ import searchStringEmptyError  from '../error/searchStringEmptyError';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import resetSearchParams from './resetSearchParams';
-import { isEmpty } from 'lodash';
+import { isEmpty, isArray } from 'lodash';
 
 export default function loadSearchResults(context, payload, done) {
     context.dispatch('UPDATE_PAGE_TITLE', {
@@ -17,6 +17,19 @@ export default function loadSearchResults(context, payload, done) {
     }
 
     payload.query.sort = payload.query.sort || 'score';
+
+    // convert facet filters to arrays
+    if (payload.query.language && !isArray(payload.query.language)) {
+        payload.query.language = [payload.query.language];
+    }
+
+    if (payload.query.user && !isArray(payload.query.user)) {
+        payload.query.user = [payload.query.user];
+    }
+
+    if (payload.query.tag && !isArray(payload.query.tag)) {
+        payload.query.tag = [payload.query.tag];
+    }
 
     // start loading ans set search params
     context.dispatch('SHOW_LOADING');

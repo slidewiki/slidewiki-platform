@@ -1,5 +1,4 @@
 import {BaseStore} from 'fluxible/addons';
-import { isArray } from 'lodash';
 
 class SearchResultsStore extends BaseStore {
 
@@ -115,11 +114,14 @@ class SearchResultsStore extends BaseStore {
         this.fetch = state.fetch;
     }
     setSearchParams(payload) {
-        if (payload.language && !isArray(payload.language)) {
-            payload.language = [payload.language];
-        }
-
         this.queryparams = payload;
+
+        // convert user ids to integers
+        if (this.queryparams.user) {
+            this.queryparams.user = this.queryparams.user.map( (u) => {
+                return parseInt(u);
+            });
+        }
         this.fetch = true;
         this.emitChange();
         this.fetch = false;

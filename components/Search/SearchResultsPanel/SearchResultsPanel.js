@@ -45,6 +45,10 @@ class SearchResultsPanel extends React.Component {
             resultsMsg: {
                 id: 'SearchResultsPanel.results.message', 
                 defaultMessage: 'Displaying {resultsNum} out of {totalResults} results'
+            },
+            error: {
+                id: 'SearchResultsPanel.error', 
+                defaultMessage: 'An error occured while fetching search results'                
             }
         });
     }
@@ -78,42 +82,41 @@ class SearchResultsPanel extends React.Component {
     }
     render() {
         const results = this.props.results;
-        const numFound = this.props.numFound;
 
-        // define results div
-        let resultsDiv = <div ref="resultsDiv">
-            <div className="ui grid" key="resultsHeader">
-                <div className="eight wide left floated column" key="resultsTitleDiv">
-                    <h2 className="ui header"><FormattedMessage {...this.messages.header} /></h2> 
-                    {
-                        this.context.intl.formatMessage(this.messages.resultsMsg, {
-                            resultsNum: results.length,
-                            totalResults: numFound
-                        })
-                    }
+        if (this.props.error) {
+            return (
+                <div className="ui grid centered">
+                    <h3><FormattedMessage {...this.messages.error} /></h3>
                 </div>
-                <div className="eight wide right floated column" key="resultsSortDropdown">
-                    <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
-                        <i className="sort content ascending icon"/>
-                        <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
-                        {this.renderSortDropdownItems()}
-                    </div>
+            );
+        } else if (this.props.numFound === 0) {
+            return (
+                <div key="noResultsDiv" className="ui basic segment center aligned">
+                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
                 </div>
+            );
+        }
+
+        const loadingDiv = <div className="ui basic segment">
+            <p></p>
+            <p></p>
+            <div className="ui active inverted dimmer">
+                <div className="ui medium text loader">Loading</div>
             </div>
-            <SearchResultsList items={results} ></SearchResultsList>
+            <p></p>
+            <p></p>
         </div>;
 
-        // define no results div
-        let noResultsDiv = <div key="noResultsDiv" className="ui basic segment center aligned">
-            <h3><FormattedMessage {...this.messages.noResults} /></h3>
-        </div>;
+        // if we do not come from facets, also hide facets when loading
+        if (this.props.loading && !this.props.fromFacets) {
+            return loadingDiv;
+        }
 
         // define load more results div
         let loadMoreDiv = '';
-
-        if(this.props.hasMore){
+        if (this.props.hasMore) {
             let loadMoreContent = <button className="ui button" onClick={this.props.loadMore.bind(this)}><FormattedMessage {...this.messages.loadMore} /></button>;
-            if(this.props.loadMoreLoading){
+            if (this.props.loadMoreLoading) {
                 loadMoreContent = <div className="ui active text loader"><FormattedMessage {...this.messages.loading} /></div>;
             }
             loadMoreDiv = <div key="loadMoreDiv" className="ui basic segment center aligned">
@@ -121,22 +124,46 @@ class SearchResultsPanel extends React.Component {
             </div>;
         }
 
-        let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
-        let spellcheckDiv = <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />;
-
-        return (
+        return (            
             <Grid>
                 <Grid.Row>
                     <Grid.Column width={16}>
-                        {spellcheckDiv}
+                        <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />
                     </Grid.Column>
                     <Grid.Column width={4}>
                         <h2 className="ui header">Filters</h2>
-                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} />
+                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} />
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        {resultsPanel}
-                        {loadMoreDiv}
+                        {
+                            // if we are come from facets, then load only search results panel
+                            (this.props.loading && this.props.fromFacets) ? (
+                                loadingDiv
+                            ) : (
+                                <div ref="resultsDiv">
+                                    <div className="ui grid" key="resultsHeader">
+                                        <div className="eight wide left floated column" key="resultsTitleDiv">
+                                            <h2 className="ui header"><FormattedMessage {...this.messages.header} /></h2> 
+                                            {
+                                                this.context.intl.formatMessage(this.messages.resultsMsg, {
+                                                    resultsNum: results.length,
+                                                    totalResults: this.props.numFound
+                                                })
+                                            }
+                                        </div>
+                                        <div className="eight wide right floated column" key="resultsSortDropdown">
+                                            <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
+                                                <i className="sort content ascending icon"/>
+                                                <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
+                                                {this.renderSortDropdownItems()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <SearchResultsList items={results} />
+                                    { loadMoreDiv }
+                                </div>
+                            )
+                        }
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

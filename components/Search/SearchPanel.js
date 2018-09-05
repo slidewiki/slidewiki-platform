@@ -148,8 +148,7 @@ class SearchPanel extends React.Component {
             submitButton: {
                 id: 'SearchPanel.button.submit',
                 defaultMessage: 'Submit'
-            }
-
+            },
         });
     }
     initDropdown(){
@@ -187,18 +186,20 @@ class SearchPanel extends React.Component {
     handleKeyPress(event){
         if(event.key === 'Enter'){
             event.preventDefault();
+            this.keywordsInput.cancelAutocomplete();
             this.handleRedirect();
         }
     }
     handleRedirect(params, source){
 
         if (source !== 'facets') {
-            let newState = Object.assign({}, this.state);
-            delete newState.language;
-            delete newState.tag;
-            delete newState.user;
-            delete newState.facet_exclude;
-            this.setState(newState, () => {
+            this.setState({
+                ...this.state, 
+                language: [], 
+                tag: [], 
+                user: [], 
+                facet_exclude: undefined,
+            }, () => {
                 this.handleSearch(params);
             });
         } else {
@@ -211,7 +212,7 @@ class SearchPanel extends React.Component {
 
         // pick from state the required fields
         let query = pickBy(this.state, (prop) => {
-            return (isArray(prop)) ? !isEmpty(prop) : prop.trim();
+            return (isArray(prop)) ? !isEmpty(prop) : prop && prop.trim();
         });
 
         // needed for spellcheck suggestion
@@ -229,8 +230,11 @@ class SearchPanel extends React.Component {
     changeSort(_sort){
         this.setState({
             sort: _sort
-        }, 
-        this.handleRedirect);
+        }, () => {
+            // call handleRedirect, as coming from facets
+            // so as not to clear filters
+            this.handleRedirect(null, 'facets');
+        });
     }
     loadMore(){
         let nextPage = this.props.SearchResultsStore.page + 1;
@@ -264,30 +268,28 @@ class SearchPanel extends React.Component {
             this.handleRedirect(null, 'facets');
         });
     }
-    render() {      
-        let loadingDiv = <div className="ui basic segment">
-            <p></p>
-            <p></p>
-            <div className="ui active inverted dimmer">
-                <div className="ui medium text loader">Loading</div>
-            </div>
-            <p></p>
-            <p></p>
-        </div>;
+    clearFacets(fieldName='all') {
+        let newState = {};
+        if (fieldName === 'language' || fieldName === 'all') {
+            newState.language = [];
+        }
 
-        let errorDiv = <div className="ui grid centered">
-            <h3>An error occured while fetching search results</h3>
-        </div>;
+        if (fieldName === 'tag' || fieldName === 'all') {
+            newState.tag = [];
+        }
+
+        if (fieldName === 'user' || fieldName === 'all') {
+            newState.user = [];
+        }
+
+        this.setState(newState, () => {
+            this.handleRedirect(null, 'facets');
+        });
+    }
+    render() {      
 
         let searchResultsDiv='';
-
-        if(this.props.SearchResultsStore.error){
-            searchResultsDiv = errorDiv;
-        }
-        else if(this.props.SearchResultsStore.loading){
-            searchResultsDiv = loadingDiv;
-        }
-        else if(!isEmpty(this.props.SearchResultsStore.queryparams)){
+        if(!isEmpty(this.props.SearchResultsStore.queryparams)){
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
                 facets={this.props.SearchResultsStore.facets}
@@ -305,6 +307,10 @@ class SearchPanel extends React.Component {
                     tags: this.state.tag || [],
                     users: this.state.user || [],
                 }}
+                loading={this.props.SearchResultsStore.loading}
+                error={this.props.SearchResultsStore.error}
+                fromFacets={this.state.facet_exclude !== undefined}
+                clearFacets={this.clearFacets.bind(this)}
             />;
         }
 

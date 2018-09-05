@@ -1,23 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { Menu, Label }  from 'semantic-ui-react';
+import { Menu, Label, Icon, Container }  from 'semantic-ui-react';
 import { getLanguageName }  from '../../../common';
+import { isEmpty } from 'lodash';
+import { NavLink } from 'fluxible-router';
 
 class Facets extends React.Component {
     constructor(props) {
         super(props);
         this.messages = this.getIntlMessages();
         this.state = {
-            activeItem: 'spam',
+            expanded: [],
         };
     }
     getIntlMessages(){
         return defineMessages({
-            relevanceSort: {
-                id: 'Facets.header',
-                defaultMessage: 'Filters'
+            languagesFacet: {
+                id: 'Facets.languagesFacet',
+                defaultMessage: 'Languages'                
+            },
+            ownersFacet: {
+                id: 'Facets.ownersFacet',
+                defaultMessage: 'Owners'                
             }, 
+            showMore: {
+                id: 'Facets.showMore',
+                defaultMessage: 'show more'                 
+            },
+            showLess: {
+                id: 'Facets.showLess',
+                defaultMessage: 'show less'                 
+            },
         });
     }
     handleFacetClick(e, { name }) {
@@ -29,35 +43,97 @@ class Facets extends React.Component {
         let language = languageCode === undefined ? '' : getLanguageName(languageCode);
         return (language === '' ? 'English' : language);
     }
-    getFacetItems(facetArray, facetField, selected) {
-        return (facetArray || []).map( (item, index) => {
-            // facets is a json array with the value as key and count as value e.g. {'en': 51}
-            let key = Object.keys(item)[0];
-            let value = item[key];
-            let isActive = selected.includes(key);
-            let labelColor = (isActive) ? 'blue' : 'grey';
-            let name = { 
-                field: facetField,
-                value: key
-            };
+    handleKeyPress(name, event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.props.handleFacetClick(JSON.parse(name));
+        }
+    }
+    clearFacets(fieldName, e) {
+        e.preventDefault();
+        this.props.clearFacets(fieldName);
+    }
+    handleShowMoreFacets(facetField) {
+        let expanded;
+        if (this.state.expanded.includes(facetField)) {
+            expanded = this.state.expanded.filter( (f) => f !== facetField);
+        } else {
+            expanded = [
+                ...this.state.expanded, 
+                facetField
+            ];
+        }
 
-            return <Menu.Item key={`${facetField}_${index}`} name={ JSON.stringify(name) } active={ isActive } onClick={this.handleFacetClick.bind(this)} tabIndex="0">
-                <Label color={ labelColor }>{ value }</Label>
-                { this.getLanguageName(key) }
+        this.setState({
+            expanded
+        });
+    }
+    handleShowMoreFacetsKeyPress(facetField, event) {
+         if (event.key === 'Enter') {
+            event.preventDefault();
+            this.handleShowMoreFacets(facetField);
+        }
+    }
+    getFacetItems(facetArray, facetField, selected) {
+
+        let hasMore = (facetArray.length > 5);
+        let isExpanded = this.state.expanded.includes(facetField);
+
+        if (hasMore && !isExpanded) {
+            facetArray = facetArray.slice(0, 5);
+        }
+
+        let facetItems = facetArray.map( (item, index) => {
+            let isActive = selected.includes(item.key);
+            let labelColor = (isActive) ? 'blue' : 'grey';
+            let name = JSON.stringify({ 
+                field: facetField,
+                value: item.key
+            });
+
+            let facetText;
+            if (facetField === 'language') {
+                facetText = this.getLanguageName(item.key)
+            } else if (facetField === 'user') {
+                facetText = item.user.displayName;
+            } 
+
+            return <Menu.Item key={`${facetField}_${index}`} name={ name } active={ isActive } onClick={this.handleFacetClick.bind(this)} onKeyPress={this.handleKeyPress.bind(this, name)} tabIndex="0">
+                <Label color={ labelColor }>{ item.value }</Label>
+                { facetText }
             </Menu.Item>;
         });
+
+        if (hasMore) {
+            let hasMoreText = (isExpanded) ? this.context.intl.formatMessage(this.messages.showLess): this.context.intl.formatMessage(this.messages.showMore);
+            let hasMoreIcon = (isExpanded) ? <Icon name="angle up" aria-label={`show less ${facetField}s filters`}/> : <Icon name="angle down" aria-label={`show more ${facetField}s filters`}/>;
+            facetItems.push(
+                <Menu.Item color='red' key={`${facetField}_more_button`} onClick={this.handleShowMoreFacets.bind(this, facetField)} onKeyPress={this.handleShowMoreFacetsKeyPress.bind(this, facetField)} tabIndex="0">
+                    <Container color='red' textAlign="center">
+                        { hasMoreText } { hasMoreIcon }
+                    </Container>
+                </Menu.Item>
+            );
+        }
+
+        return facetItems;
     }
     render() {
         const data = this.props.data;
         const selected = this.props.selectedFacets;
         const languageItems = this.getFacetItems(data.language, 'language', selected.languages);
-
+        const userItems = this.getFacetItems(data.creator, 'user', selected.users);
 
         return (
             <div id="facets">
-                <h4 className="ui header">Languages</h4>
                 <Menu vertical>
+                    <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} { (!isEmpty(selected.languages)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
                     { languageItems }
+                </Menu>
+
+                <Menu vertical>
+                    <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} { (!isEmpty(selected.users)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear users"/></NavLink></span> : ''}</Menu.Item>
+                    { userItems }
                 </Menu>
             </div>
         );
