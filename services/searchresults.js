@@ -151,6 +151,34 @@ function fillFacetsInfo(facets, usernames) {
     });
 }
 
+function getRequestOptions(params) {
+    if (params.nextLink) {
+        return {
+            uri: `${Microservices.search.uri}${params.nextLink}`, 
+            json: true,
+        };
+    } else {
+
+        // if empty keywords are given, then search for all
+        params.query.keywords = params.query.keywords || '*:*';
+
+        // extra options for enabling results expansion, spellcheck and faceting
+        let query = Object.assign({}, params.query);
+        query.expand = true; 
+        query.spellcheck = true;
+        query.facets = true;
+        query.kind = 'deck';
+        query.pageSize = 20;
+
+        return {
+            uri: `${Microservices.search.uri}/search/v2`,
+            json: true, 
+            qs: query,
+            useQuerystring: true,
+        };
+    }
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -160,24 +188,10 @@ export default {
 
         if(resource === 'searchresults.list'){
 
-            // if empty keywords are given, then search for all
-            params.query.keywords = params.query.keywords || '*:*';
-
-            // extra options for enabling results expansion, spellcheck and faceting
-            let query = Object.assign({}, params.query);
-            query.expand = true; 
-            query.spellcheck = true;
-            query.facets = true;
-            query.kind = 'deck';
-            query.pageSize = 20;
+            let options = getRequestOptions(params);
 
             // request search results from search service
-            rp.get({
-                uri: `${Microservices.search.uri}/search/v2`,
-                json: true, 
-                qs: query,
-                useQuerystring: true,
-            }).then( (response) => {
+            rp.get(options).then( (response) => {
 
                 let deckIds = response.docs.map( (result) => result.db_id);
                 let userIds = getUserIds(response.docs, response.facets);
@@ -214,7 +228,7 @@ export default {
                     callback(null, {
                         numFound: response.numFound,
                         hasMore: response.hasMore,
-                        page: response.page,
+                        links: response.links,
                         spellcheck: response.spellcheck,
                         facets: response.facets,
                         docs: response.docs

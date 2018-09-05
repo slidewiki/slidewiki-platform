@@ -16,7 +16,7 @@ class SearchResultsStore extends BaseStore {
 
         this.loadMoreLoading = false;
         this.hasMore = false;
-        this.page = 1;
+        this.links = {};
         this.queryparams = {};
         this.fetch = false;
     }
@@ -37,7 +37,7 @@ class SearchResultsStore extends BaseStore {
         this.facets = payload.facets;
         this.error = payload.error;
         this.hasMore = payload.hasMore;
-        this.page = payload.page;
+        this.links = payload.links;
 
         // hide loading
         this.loading = false;
@@ -52,7 +52,7 @@ class SearchResultsStore extends BaseStore {
         this.facets = payload.facets;
         this.error = payload.error;
         this.hasMore = payload.hasMore;
-        this.page = payload.page;
+        this.links = payload.links;
 
         // hide loading
         this.loading = false;
@@ -70,7 +70,7 @@ class SearchResultsStore extends BaseStore {
         this.error = false;
         this.hasMore = false;
         this.loadMoreLoading = false;
-        this.page = 1;
+        this.links = 1;
         this.queryparams = {};
         this.fetch = false;
 
@@ -92,7 +92,7 @@ class SearchResultsStore extends BaseStore {
             error: this.error,
             hasMore: this.hasMore,
             loadMoreLoading: this.loadMoreLoading,
-            page: this.page, 
+            links: this.links, 
             queryparams: this.queryparams,
             fetch: this.fetch,
         };
@@ -109,7 +109,7 @@ class SearchResultsStore extends BaseStore {
         this.error = state.error;
         this.hasMore = state.hasMore;
         this.loadMoreLoading = state.loadMoreLoading;
-        this.page = state.page;
+        this.links = state.links;
         this.queryparams = state.queryparams;
         this.fetch = state.fetch;
     }

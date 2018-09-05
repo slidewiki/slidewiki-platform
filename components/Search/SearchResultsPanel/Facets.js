@@ -69,7 +69,7 @@ class Facets extends React.Component {
         });
     }
     handleShowMoreFacetsKeyPress(facetField, event) {
-         if (event.key === 'Enter') {
+        if (event.key === 'Enter') {
             event.preventDefault();
             this.handleShowMoreFacets(facetField);
         }
@@ -93,7 +93,7 @@ class Facets extends React.Component {
 
             let facetText;
             if (facetField === 'language') {
-                facetText = this.getLanguageName(item.key)
+                facetText = this.getLanguageName(item.key);
             } else if (facetField === 'user') {
                 facetText = item.user.displayName;
             } 

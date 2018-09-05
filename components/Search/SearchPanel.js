@@ -237,10 +237,8 @@ class SearchPanel extends React.Component {
         });
     }
     loadMore(){
-        let nextPage = this.props.SearchResultsStore.page + 1;
-
         this.context.executeAction(loadMoreResults, {
-// queryparams: `${this.props.SearchParamsStore.queryparams}&page=${nextPage}`
+            nextLink: this.props.SearchResultsStore.links.next
         });
     }
     handleFacetClick(facetItem) {
