@@ -99,7 +99,7 @@ class EditDataSource extends React.Component {
             dataSource.url = this.refs.url.value;
             dataSource.comment = this.refs.comment.value;
             dataSource.authors = this.refs.authors.value;
-            dataSource.year = this.refs.authors.year;
+            dataSource.year = this.refs.year.value;
         }
         this.context.executeAction(updateDataSources, {
             dataSources: dataSources,

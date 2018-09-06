@@ -20,14 +20,25 @@ export default function uploadMediaFile(context, payload, done) {
             if (err.statusCode === 409) {
                 let parts = err.message.split(' ');
                 let filename = parts[parts.length-1];
+                // Check if the file is an SVG. (sub-path already included in filename for SVGs)
+                let subpath = '/picture/';
+                if (filename.includes('/graphic/')) subpath = '';
                 filename = filename.substring(0, filename.length - 4);
-                payload.url = Microservices.file.uri + '/picture/' + filename;
+                payload.url = Microservices.file.uri + subpath + filename;
 
                 let thumbnailName = filename.substring(0, filename.lastIndexOf('.')) + '_thumbnail' + filename.substr(filename.lastIndexOf('.'));
-                payload.thumbnailUrl = Microservices.file.uri + '/picture/' + thumbnailName;
-
-                console.log('Got 409 from file service', payload);
-                context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                payload.thumbnailUrl = Microservices.file.uri + subpath + thumbnailName;
+                
+                if (subpath === '') {
+                    context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                        payload.svg = res;
+                        context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                        done();
+                    });
+                } else {
+                    console.log('Got 409 from file service', payload);
+                    context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+                }
             }
             else {
                 context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
