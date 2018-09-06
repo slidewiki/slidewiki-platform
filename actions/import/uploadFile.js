@@ -1,6 +1,7 @@
 'use strict';
 import { shortTitle } from '../../configs/general';
 import serviceUnavailable from '../error/serviceUnavailable';
+import addActivity from '../../actions/activityfeed/addActivity';
 const log = require('../log/clog');
 
 export default function uploadFile(context, payload, done) {
@@ -45,6 +46,17 @@ export default function uploadFile(context, payload, done) {
                 context.dispatch('UPLOAD_FAILED', err);
                 context.dispatch('CREATION_FAILURE', err);
             } else {
+                // createActivity
+                let activity = {
+                    activity_type: 'add',
+                    user_id: String(payload.userid),
+                    content_id: String(res.deckId) + '-1',
+                    content_name: payload.title,
+                    content_owner_id: String(payload.userid),
+                    content_kind: 'deck'
+                };
+                context.executeAction(addActivity, {activity: activity});
+                
                 context.dispatch('UPLOAD_SUCCESS', {payload: payload, headers: res});
             }
         }
