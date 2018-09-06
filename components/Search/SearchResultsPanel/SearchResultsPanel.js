@@ -91,8 +91,11 @@ class SearchResultsPanel extends React.Component {
             );
         } else if (this.props.numFound === 0) {
             return (
-                <div key="noResultsDiv" className="ui basic segment center aligned">
-                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                <div>
+                    <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />
+                    <div key="noResultsDiv" className="ui basic segment center aligned">
+                        <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                    </div>
                 </div>
             );
         }

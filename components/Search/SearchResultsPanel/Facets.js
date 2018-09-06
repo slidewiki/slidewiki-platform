@@ -24,6 +24,10 @@ class Facets extends React.Component {
                 id: 'Facets.ownersFacet',
                 defaultMessage: 'Owners'                
             }, 
+            tagsFacet: {
+                id: 'Facets.tagsFacet',
+                defaultMessage: 'Tags'  
+            },
             showMore: {
                 id: 'Facets.showMore',
                 defaultMessage: 'show more'                 
@@ -84,22 +88,24 @@ class Facets extends React.Component {
         }
 
         let facetItems = facetArray.map( (item, index) => {
-            let isActive = selected.includes(item.key);
+            let isActive = selected.includes(item.val);
             let labelColor = (isActive) ? 'blue' : 'grey';
             let name = JSON.stringify({ 
                 field: facetField,
-                value: item.key
+                value: item.val
             });
 
             let facetText;
             if (facetField === 'language') {
-                facetText = this.getLanguageName(item.key);
+                facetText = this.getLanguageName(item.val);
             } else if (facetField === 'user') {
                 facetText = item.user.displayName;
-            } 
+            } else if (facetField === 'tag') {
+                facetText = item.defaultName;
+            }
 
             return <Menu.Item key={`${facetField}_${index}`} name={ name } active={ isActive } onClick={this.handleFacetClick.bind(this)} onKeyPress={this.handleKeyPress.bind(this, name)} tabIndex="0">
-                <Label color={ labelColor }>{ item.value }</Label>
+                <Label color={ labelColor }>{ item.rowCount }</Label>
                 { facetText }
             </Menu.Item>;
         });
@@ -108,8 +114,8 @@ class Facets extends React.Component {
             let hasMoreText = (isExpanded) ? this.context.intl.formatMessage(this.messages.showLess): this.context.intl.formatMessage(this.messages.showMore);
             let hasMoreIcon = (isExpanded) ? <Icon name="angle up" aria-label={`show less ${facetField}s filters`}/> : <Icon name="angle down" aria-label={`show more ${facetField}s filters`}/>;
             facetItems.push(
-                <Menu.Item color='red' key={`${facetField}_more_button`} onClick={this.handleShowMoreFacets.bind(this, facetField)} onKeyPress={this.handleShowMoreFacetsKeyPress.bind(this, facetField)} tabIndex="0">
-                    <Container color='red' textAlign="center">
+                <Menu.Item key={`${facetField}_more_button`} onClick={this.handleShowMoreFacets.bind(this, facetField)} onKeyPress={this.handleShowMoreFacetsKeyPress.bind(this, facetField)} tabIndex="0">
+                    <Container textAlign="center">
                         { hasMoreText } { hasMoreIcon }
                     </Container>
                 </Menu.Item>
@@ -123,18 +129,34 @@ class Facets extends React.Component {
         const selected = this.props.selectedFacets;
         const languageItems = this.getFacetItems(data.language, 'language', selected.languages);
         const userItems = this.getFacetItems(data.creator, 'user', selected.users);
+        const tagItems = this.getFacetItems(data.tags, 'tag', selected.tags);
 
         return (
             <div id="facets">
-                <Menu vertical>
-                    <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} { (!isEmpty(selected.languages)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
-                    { languageItems }
-                </Menu>
 
-                <Menu vertical>
-                    <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} { (!isEmpty(selected.users)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear users"/></NavLink></span> : ''}</Menu.Item>
-                    { userItems }
-                </Menu>
+                {
+                    (languageItems.length > 0) &&
+                        <Menu vertical>
+                            <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} { (!isEmpty(selected.languages)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
+                            { languageItems }
+                        </Menu>
+                }
+
+                {
+                    (userItems.length > 0) &&
+                        <Menu vertical>
+                            <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} { (!isEmpty(selected.users)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear users"/></NavLink></span> : ''}</Menu.Item>
+                            { userItems }
+                        </Menu>
+                }
+
+                {
+                    (tagItems.length > 0) && 
+                        <Menu vertical>
+                            <Menu.Item key="tagFacetHeader" header>{this.context.intl.formatMessage(this.messages.tagsFacet)} { (!isEmpty(selected.tags)) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}><Icon name="cancel" aria-label="clear tags"/></NavLink></span> : ''}</Menu.Item>
+                            { tagItems }
+                        </Menu>
+                }
             </div>
         );
     }

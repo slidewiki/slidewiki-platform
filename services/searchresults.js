@@ -135,19 +135,23 @@ function getUserIds(docs, facets){
 
         // user ids are returned as strings in facets response
         facets.creator.forEach( (item) => {
-            item.key = parseInt(item.key);
+            item.val = parseInt(item.val);
         });
 
-        let creatorIds = facets.creator.map( (item) => item.key);
+        let creatorIds = facets.creator.map( (item) => item.val);
         userIds = userIds.concat(creatorIds);
     }
 
     return compact(uniq(userIds));
 }
 
-function fillFacetsInfo(facets, usernames) {
+function fillFacetsInfo(facets, usernames, tags) {
     facets.creator.forEach( (item) => {
-        item.user = usernames[item.key];
+        item.user = usernames[item.val];
+    });
+
+    facets.tags.forEach( (item) => {
+        item.defaultName = tags[item.val];
     });
 }
 
@@ -179,6 +183,23 @@ function getRequestOptions(params) {
     }
 }
 
+function getTags(facets) {
+    if (!facets || !facets.tags) {
+        return Promise.resolve();
+    }
+
+    let tags = {};
+
+    let tagPromises = facets.tags.map( (facetTag) => 
+        rp.get({uri: `${Microservices.tag.uri}/tag/${facetTag.val}`, json: true}).then( (tag) => {
+            tags[tag.tagName] = tag.defaultName;
+        }).catch( (err) => {
+            tags[facetTag.val] = facetTag.val;
+        }));
+
+    return Promise.all(tagPromises).then( () => { return tags; });
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -196,8 +217,14 @@ export default {
                 let deckIds = response.docs.map( (result) => result.db_id);
                 let userIds = getUserIds(response.docs, response.facets);
 
-                Promise.all([ getUsers(userIds), getDecks(deckIds), getActivity('react', deckIds), getActivity('download', deckIds), getActivity('share', deckIds)])
-                .then( ([ usernames, { decks, deckRevisions }, likes, downloads, shares ]) => {
+                Promise.all([ 
+                    getUsers(userIds), 
+                    getDecks(deckIds), 
+                    getActivity('react', deckIds), 
+                    getActivity('download', deckIds), 
+                    getActivity('share', deckIds),
+                    getTags(response.facets),
+                ]).then( ([ usernames, { decks, deckRevisions }, likes, downloads, shares, tags ]) => {
                     response.docs.forEach( (result) => {
 
                         parseDeck(result, usernames);
@@ -222,7 +249,7 @@ export default {
                     });
 
                     if (response.facets) {
-                        fillFacetsInfo(response.facets, usernames);
+                        fillFacetsInfo(response.facets, usernames, tags);
                     }
 
                     callback(null, {
