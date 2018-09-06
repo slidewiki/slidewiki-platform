@@ -6,10 +6,6 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 const ReactDOM = require('react-dom');
 
 class SlideContentView extends React.Component {
-    state = {
-        scaleRatio: 1,
-    }
-
     constructor(props) {
         super(props);
         this.scaleRatio = null;
@@ -18,16 +14,13 @@ class SlideContentView extends React.Component {
         this.resize = this.resize.bind(this);
     }
     componentWillReceiveProps(nextProps){
-        if (this.currentContent !== this.props.content)
-        {
+        if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
-//            this.scaleRatio = null;
-            if (SlideViewStore.scaleRatio !== this.scaleRatio) {
-                this.scaleRatio = SlideViewStore.scaleRatio;
-                this.resize();
-            }
+        }
 
-//            this.setState({staleRatio: SlideViewStore.scaleRatio});
+        if (nextProps.SlideViewStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideViewStore.scaleRatio;
+            this.resize();
         }
     }
     componentWillUnmount(){

@@ -21,6 +21,8 @@ import addDeckTranslation from '../../../actions/translation/addDeckTranslation'
 import addSlideTranslation from '../../../actions/translation/addSlideTranslation';
 import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';
 import qs from 'querystring';
+import zoom from "../../../actions/slide/zoom";
+import ContentStore from "../../../stores/ContentStore";
 
 class InfoPanelInfoView extends React.Component {
     constructor(props){
@@ -51,6 +53,10 @@ class InfoPanelInfoView extends React.Component {
                 defaultMessage:'Also available in'
             },
         });
+
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
+        this.resetZoom = this.resetZoom.bind(this);
     }
 
     getNameofNodes(tree, selector) {
@@ -139,6 +145,18 @@ class InfoPanelInfoView extends React.Component {
                 language: this.props.TranslationStore.currentLang,
             });
         }
+    }
+
+    zoomIn() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'in' });
+    }
+
+    resetZoom() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'reset' });
+    }
+
+    zoomOut() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'out' });
     }
 
     render() {
@@ -268,20 +286,22 @@ class InfoPanelInfoView extends React.Component {
                         icon={null}
                         aria-label="Select language" data-tooltip="Select language"
                         defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-                        {/*
-                            <button className="ui basic attached button" aria-label="Reset zoom" data-tooltip="Reset zoom">
-                                <i className="stacked icons">
-                                    <i className="small compress icon"></i>
-                                    <i className="large search icon "></i>
-                                </i>
-                            </button>
-                            <button className="ui basic attached button" aria-label="Zoom out" data-tooltip="Zoom out">
-                                <i className="large search minus icon"></i>
-                            </button>
-                            <button className="ui basic attached button" aria-label="Zoom in" data-tooltip="Zoom in">
-                                <i className="large search plus icon"></i>
-                            </button>
-                        */}
+
+                    <button className="ui basic attached button" onClick={this.resetZoom}
+                            type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                        <i className="stacked icons">
+                            <i className="small compress icon "></i>
+                            <i className="large search icon "></i>
+                        </i>
+                    </button>
+                    <button className="ui basic attached button" onClick={this.zoomOut}
+                            type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                        <i className="large search minus icon"></i>
+                    </button>
+                    <button className="ui basic attached button" onClick={this.zoomIn}
+                            type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                        <i className="large search plus icon"></i>
+                    </button>
                 </div>
                 { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
@@ -381,12 +401,13 @@ InfoPanelInfoView.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore, ContentStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         TranslationStore: context.getStore(TranslationStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState(),
     };
 });
 export default InfoPanelInfoView;

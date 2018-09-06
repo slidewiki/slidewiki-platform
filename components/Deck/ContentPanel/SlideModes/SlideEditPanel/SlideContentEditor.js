@@ -43,6 +43,7 @@ class SlideContentEditor extends React.Component {
         this.idContext = null;
         //this.oldContent = '';
         //this.redoContent = '';
+        this.scaleRatio = null;
 
         CKEDITOR.on('instanceReady', (ev) => {
 
@@ -107,7 +108,6 @@ class SlideContentEditor extends React.Component {
                 });
                 swal({
                     title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
-                    title: 'Apply template',
                     text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text, {
                         width: $('.pptx2html').css('width'),
                         height: $('.pptx2html').css('height')
@@ -226,7 +226,6 @@ class SlideContentEditor extends React.Component {
                 buttonsStyling: false,
                 focusConfirm: true,
                 allowEnterKey: true,
-                showCloseButton: true,
                 allowEscapeKey: true,
             }).then((result) => {
                 this.applyTemplate(template, true); //keep existing content
@@ -1584,8 +1583,13 @@ class SlideContentEditor extends React.Component {
         if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
             //this.initialScale = 1;
-            this.scaleRatio = null;
         }
+
+        if (nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideEditStore.scaleRatio;
+            this.resize();
+        }
+
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
             if (this.finishLoading === true){
