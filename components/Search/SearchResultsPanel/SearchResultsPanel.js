@@ -5,10 +5,9 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
-import SpellcheckPanel from './SpellcheckPanel';
 import loadMoreResults from '../../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Segment, Container } from 'semantic-ui-react';
 import Facets from './Facets';
 
 class SearchResultsPanel extends React.Component {
@@ -92,7 +91,6 @@ class SearchResultsPanel extends React.Component {
         } else if (this.props.numFound === 0) {
             return (
                 <div>
-                    <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />
                     <div key="noResultsDiv" className="ui basic segment center aligned">
                         <h3><FormattedMessage {...this.messages.noResults} /></h3>
                     </div>
@@ -129,13 +127,39 @@ class SearchResultsPanel extends React.Component {
 
         return (            
             <Grid>
-                <Grid.Row>
-                    <Grid.Column width={16}>
-                        <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />
-                    </Grid.Column>
+                <div className="ui row" style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
                     <Grid.Column width={4}>
                         <h2 className="ui header">Filters</h2>
-                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} />
+                    </Grid.Column>
+                    <Grid.Column width={12}>
+                    {
+                        (!this.props.loading) &&
+                            <Grid>
+                                <Grid.Row as='span'>
+                                    <Grid.Column as='span' width={8} floated="left">
+                                        <h2 className="ui header"><FormattedMessage {...this.messages.header} /></h2> 
+                                        {
+                                            this.context.intl.formatMessage(this.messages.resultsMsg, {
+                                                resultsNum: results.length,
+                                                totalResults: this.props.numFound
+                                            })
+                                        }
+                                    </Grid.Column>
+                                    <Grid.Column as='span' width={8} floated="left">
+                                        <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
+                                        <i className="sort content ascending icon"/>
+                                        <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
+                                        {this.renderSortDropdownItems()}
+                                    </div>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                    }
+                    </Grid.Column>
+                </div>
+                <Grid.Row>
+                    <Grid.Column width={4}>
+                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
                     </Grid.Column>
                     <Grid.Column width={12}>
                         {
@@ -144,24 +168,6 @@ class SearchResultsPanel extends React.Component {
                                 loadingDiv
                             ) : (
                                 <div ref="resultsDiv">
-                                    <div className="ui grid" key="resultsHeader">
-                                        <div className="eight wide left floated column" key="resultsTitleDiv">
-                                            <h2 className="ui header"><FormattedMessage {...this.messages.header} /></h2> 
-                                            {
-                                                this.context.intl.formatMessage(this.messages.resultsMsg, {
-                                                    resultsNum: results.length,
-                                                    totalResults: this.props.numFound
-                                                })
-                                            }
-                                        </div>
-                                        <div className="eight wide right floated column" key="resultsSortDropdown">
-                                            <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
-                                                <i className="sort content ascending icon"/>
-                                                <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
-                                                {this.renderSortDropdownItems()}
-                                            </div>
-                                        </div>
-                                    </div>
                                     <SearchResultsList items={results} />
                                     { loadMoreDiv }
                                 </div>

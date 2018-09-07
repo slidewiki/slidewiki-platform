@@ -17,6 +17,8 @@ import { isEmpty, pickBy, isArray } from 'lodash';
 import querystring from 'querystring';
 import Responsive from 'react-responsive';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
+import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
+import { Divider } from 'semantic-ui-react';
 
 const Default = (props) => <Responsive {...props} minWidth={768} />;
 const Mobile = (props) => <Responsive {...props} maxWidth={767} />;
@@ -285,122 +287,89 @@ class SearchPanel extends React.Component {
         });
     }
     render() {      
+        // let advanced_options= <div>
+        // <div className="three fields">
+        //     <div className="field">
+        //         <label htmlFor="field"><FormattedMessage {...this.messages.searchFieldTitle} /></label>
+        //         <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
+        //           <option value=' '>{this.context.intl.formatMessage(this.messages.searchFieldPlaceholder)}</option>
+        //           <option value='title'>{this.context.intl.formatMessage(this.messages.searchFieldOptionTitle)}</option>
+        //           <option value='description'>{this.context.intl.formatMessage(this.messages.searchFieldOptionDescription)}</option>
+        //           <option value='content'>{this.context.intl.formatMessage(this.messages.searchFieldOptionContent)}</option>
+        //           <option value='speakernotes'>{this.context.intl.formatMessage(this.messages.searchFieldOptionSpeakernotes)}</option>
+        //         </select>
+        //     </div>
 
-        let searchResultsDiv='';
-        if(!isEmpty(this.props.SearchResultsStore.queryparams)){
-            searchResultsDiv = <SearchResultsPanel
-                results={this.props.SearchResultsStore.docs}
-                facets={this.props.SearchResultsStore.facets}
-                spellcheck={this.props.SearchResultsStore.spellcheck}
-                numFound={this.props.SearchResultsStore.numFound}
-                sort={this.props.SearchResultsStore.queryparams.sort}
-                handleRedirect={this.handleRedirect.bind(this)}
-                changeSort={this.changeSort.bind(this)}
-                hasMore={this.props.SearchResultsStore.hasMore}
-                loadMore={this.loadMore.bind(this)}
-                loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
-                handleFacetClick={this.handleFacetClick.bind(this)}
-                selectedFacets={{
-                    languages: this.state.language || [], 
-                    tags: this.state.tag || [],
-                    users: this.state.user || [],
-                }}
-                loading={this.props.SearchResultsStore.loading}
-                error={this.props.SearchResultsStore.error}
-                fromFacets={this.state.facet_exclude !== undefined}
-                clearFacets={this.clearFacets.bind(this)}
-            />;
-        }
+        //     <div className="field">
+        //         <label htmlFor="kind"><FormattedMessage {...this.messages.entityFilterTitle} /></label>
+        //         <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
+        //           <option value=' '>{this.context.intl.formatMessage(this.messages.entityFilterPlaceholder)}</option>
+        //           <option value='slide'>{this.context.intl.formatMessage(this.messages.entityFilterOptionSlide)}</option>
+        //           <option value='deck'>{this.context.intl.formatMessage(this.messages.entityFilterOptionDeck)}</option>
+        //         </select>
+        //     </div>
 
-        let advanced_options= <div>
-        <div className="three fields">
-            <div className="field">
-                <label htmlFor="field"><FormattedMessage {...this.messages.searchFieldTitle} /></label>
-                <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
-                  <option value=' '>{this.context.intl.formatMessage(this.messages.searchFieldPlaceholder)}</option>
-                  <option value='title'>{this.context.intl.formatMessage(this.messages.searchFieldOptionTitle)}</option>
-                  <option value='description'>{this.context.intl.formatMessage(this.messages.searchFieldOptionDescription)}</option>
-                  <option value='content'>{this.context.intl.formatMessage(this.messages.searchFieldOptionContent)}</option>
-                  <option value='speakernotes'>{this.context.intl.formatMessage(this.messages.searchFieldOptionSpeakernotes)}</option>
-                </select>
-            </div>
+        //     <div className="field">
+        //         <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
+        //         <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
+        //           <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
+        //           {translationLanguages.reduce((arr, curr) => { //<div className="menu">
+        //               arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
+        //               return arr;
+        //           }, [])}
+        //         </select>
+        //     </div>
+        // </div>
+        // <div className="two fields">
+        //     <div className="field">
+        //         <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
+        //         <UsersInput ref='user' placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
+        //     </div>
 
-            <div className="field">
-                <label htmlFor="kind"><FormattedMessage {...this.messages.entityFilterTitle} /></label>
-                <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
-                  <option value=' '>{this.context.intl.formatMessage(this.messages.entityFilterPlaceholder)}</option>
-                  <option value='slide'>{this.context.intl.formatMessage(this.messages.entityFilterOptionSlide)}</option>
-                  <option value='deck'>{this.context.intl.formatMessage(this.messages.entityFilterOptionDeck)}</option>
-                </select>
-            </div>
+        //     <div className="field">
+        //         <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
+        //         <TagsInput ref='tag' placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
+        //     </div>
 
-            <div className="field">
-                <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
-                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-                  <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
-                  {translationLanguages.reduce((arr, curr) => { //<div className="menu">
-                      arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
-                      return arr;
-                  }, [])}
-                </select>
-            </div>
-        </div>
-        <div className="two fields">
-            <div className="field">
-                <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
-                <UsersInput ref='user' placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
-            </div>
+        // </div></div>;
 
-            <div className="field">
-                <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
-                <TagsInput ref='tag' placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
-            </div>
-
-        </div></div>;
         return (
-            <div className="ui container" ref="searchPanel">
-                <div className='advancedSearch'>
-                {JSON.stringify(this.state)}
-                    <div className="ui content">
-                        <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
-                        <form className="ui form success">
-                            <div className="field">
-                                {
-                                    // <label htmlFor="SearchTerm"><FormattedMessage {...this.messages.searchTerm} /></label>
-                                    // <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.keywords || ''} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
-                                }
-                                <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
-                            </div>
-                            {
-                            //     <Default>
-                            //         {advanced_options}
-                            //     </Default>
-                            //     <Mobile>
-                            //         <div className="ui accordion">
-                            //             <div className="title active">
-                            //               <i className="icon dropdown"></i>
-                            //               Advanced Options
-                            //             </div>
-                            //             <div className="content field">
-                            //                 {advanced_options}
-                            //             </div>
-                            //         </div>
-                            //     </Mobile>
-                                // <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
-                                //  <FormattedMessage {...this.messages.submitButton} />
-                                // </div>
-                            }
-
-
-                        </form>
-
+            <div className="ui container">
+                <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
+                <form className="ui form success">
+                    <div className="field">
+                        <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
                     </div>
-
-                </div>
-                <br/>
-                <div className='searchResults'>
-                    {searchResultsDiv}
-                </div>
+                </form>
+                <Divider hidden />
+                {
+                    (!isEmpty(this.props.SearchResultsStore.spellcheck)) &&
+                        <SpellcheckPanel spellcheckData={this.props.SearchResultsStore.spellcheck} handleRedirect={this.handleRedirect.bind(this)} />
+                }
+                { 
+                    (!isEmpty(this.props.SearchResultsStore.queryparams)) &&
+                        <SearchResultsPanel
+                            results={this.props.SearchResultsStore.docs}
+                            facets={this.props.SearchResultsStore.facets}
+                            numFound={this.props.SearchResultsStore.numFound}
+                            sort={this.props.SearchResultsStore.queryparams.sort}
+                            handleRedirect={this.handleRedirect.bind(this)}
+                            changeSort={this.changeSort.bind(this)}
+                            hasMore={this.props.SearchResultsStore.hasMore}
+                            loadMore={this.loadMore.bind(this)}
+                            loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
+                            handleFacetClick={this.handleFacetClick.bind(this)}
+                            selectedFacets={{
+                                languages: this.state.language || [], 
+                                tags: this.state.tag || [],
+                                users: this.state.user || [],
+                            }}
+                            loading={this.props.SearchResultsStore.loading}
+                            error={this.props.SearchResultsStore.error}
+                            fromFacets={this.state.facet_exclude !== undefined}
+                            clearFacets={this.clearFacets.bind(this)}
+                        />
+                }
             </div>
         );
     }
