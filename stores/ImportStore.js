@@ -184,17 +184,21 @@ class ImportStore extends BaseStore {
     thumbnailSuccess(payload) {
         let slideIndex = this.slides.findIndex((s) => {return (String(s.id) === String(payload.id));});
         if (slideIndex !== -1) {
-            this.slides[slideIndex].thumbnail = payload.thumbnail;
+            if (!this.slides[slideIndex].thumbnail) {
+                this.slides[slideIndex].thumbnail = payload.thumbnail;
+                console.log('!!!!!!!!!!!!!!!!! ', payload.id);
+                this.emitChange();
+            } 
         }
-        console.log('!!!!!!!!!!!!!!!!! ', payload.id);
-        this.emitChange();
     }
     thumbnailFailed(payload) {
         let slideIndex = this.slides.findIndex((s) => {return (String(s.id) === String(payload.id));});
         if (slideIndex !== -1) {
+            this.slides[slideIndex].thumbnail = undefined;//null means there is an ongoing request
             let currentNoOfFailedAttempts = this.slides[slideIndex].noOfThumbnailAttempts;
+            console.log('Fail !!!!!!!! ', payload.id, currentNoOfFailedAttempts);  
             this.slides[slideIndex].noOfThumbnailAttempts = (currentNoOfFailedAttempts) ? ++currentNoOfFailedAttempts : 1;
-            if (currentNoOfFailedAttempts < 10) {
+            if (this.slides[slideIndex].noOfThumbnailAttempts < 10) {
                 this.emitChange();
             }
         }

@@ -93,8 +93,9 @@ class ImportPreviewModal extends React.Component {
 
             let slides = this.props.ImportStore.slides;
             slides.forEach((slide) => {
-                if (!slide.thumbnail && (!slide.noOfThumbnailAttempts || slide.noOfThumbnailAttempts < 10)) {
+                if ((slide.thumbnail === undefined) && (!slide.noOfThumbnailAttempts || slide.noOfThumbnailAttempts < 10)) {
                     console.log('~~~~~~~~~~~~~~~~~~~ ', slide.id, slide.noOfThumbnailAttempts);
+                    slide.thumbnail = null;// ongoing request
                     setTimeout( () => {
                         this.context.executeAction(waitForThumbnails, {slide: slide, theme: this.props.ImportStore.theme});
                     }, 100);
@@ -220,7 +221,7 @@ class ImportPreviewModal extends React.Component {
                                   '\n' + this.context.intl.formatMessage(success_messages.success_text_extra)}
                             </div>
                         </Modal.Header>
-                        <Modal.Header className="ui center aligned " as="h4" id="importPreviewModalHeader2">
+                        <Modal.Header className="ui center aligned " as="h4" id="importPreviewModalHeader3">
                             <br/>
                             <div>
                               {this.context.intl.formatMessage(success_messages.preview_text)}
