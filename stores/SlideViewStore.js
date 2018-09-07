@@ -10,7 +10,7 @@ class SlideViewStore extends BaseStore {
         this.content = '';
         this.speakernotes = '';
         this.tags = [];
-        this.scaleRatio = 1;
+        this.scaleRatio = null;
     }
 
     updateContent(payload) {
@@ -46,10 +46,13 @@ class SlideViewStore extends BaseStore {
         this.content = state.content;
         this.tags = state.tags;
         this.speakernotes = state.speakernotes;
-        this.scaleRatio = state.scaleRatio;
     }
 
     zoomContent(payload) {
+        if (!this.scaleRatio) {
+            this.scaleRatio = 1;
+        }
+
         if (payload.mode === 'view') {
             switch (payload.direction) {
                 case 'in':

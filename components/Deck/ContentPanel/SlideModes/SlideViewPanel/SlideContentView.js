@@ -18,7 +18,7 @@ class SlideContentView extends React.Component {
             this.currentContent = this.props.content;
         }
 
-        if (nextProps.SlideViewStore.scaleRatio !== this.scaleRatio) {
+        if (nextProps.SlideViewStore.scaleRatio && nextProps.SlideViewStore.scaleRatio !== this.scaleRatio) {
             this.scaleRatio = nextProps.SlideViewStore.scaleRatio;
             this.resize();
         }

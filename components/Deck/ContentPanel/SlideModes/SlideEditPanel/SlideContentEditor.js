@@ -1582,10 +1582,9 @@ class SlideContentEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
-            //this.initialScale = 1;
         }
 
-        if (nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
+        if (nextProps.SlideEditStore.scaleRatio && nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
             this.scaleRatio = nextProps.SlideEditStore.scaleRatio;
             this.resize();
         }

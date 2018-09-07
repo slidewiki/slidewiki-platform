@@ -356,27 +356,31 @@ class ContentActionsHeader extends React.Component {
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="red large trash alternate icon"></i>
                         </button>
-                        <button className="ui button" onClick={this.zoomIn}
-                                type="button" aria-label="Zoom in" data-tooltip="Zoom in">
-                            <i className="stacked icons">
-                                <i className="small plus icon "></i>
-                                <i className="large search icon "></i>
-                            </i>
-                        </button>
-                        <button className="ui button" onClick={this.resetZoom}
-                                type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
-                            <i className="stacked icons">
-                                <i className="small compress icon "></i>
-                                <i className="large search icon "></i>
-                            </i>
-                        </button>
-                        <button className="ui button" onClick={this.zoomOut}
-                                type="button" aria-label="Zoom out" data-tooltip="Zoom out">
-                            <i className="stacked icons">
-                                <i className="small minus icon "></i>
-                                <i className="large search icon "></i>
-                            </i>
-                        </button>
+                            {
+                                this.props.ContentStore.mode === 'edit' ? [
+                                        <button className="ui button" onClick={this.zoomIn}
+                                                type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                            <i className="stacked icons">
+                                                <i className="small plus icon "></i>
+                                                <i className="large search icon "></i>
+                                            </i>
+                                        </button>,
+                                        <button className="ui button" onClick={this.resetZoom}
+                                                type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                            <i className="stacked icons">
+                                                <i className="small compress icon "></i>
+                                                <i className="large search icon "></i>
+                                            </i>
+                                        </button>,
+                                        <button className="ui button" onClick={this.zoomOut}
+                                                type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                            <i className="stacked icons">
+                                                <i className="small minus icon "></i>
+                                                <i className="large search icon "></i>
+                                            </i>
+                                        </button>
+                                        ] : null
+                            }
                     </div>
                     }
                 </div>

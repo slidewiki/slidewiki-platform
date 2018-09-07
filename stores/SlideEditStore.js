@@ -32,7 +32,7 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
-        this.scaleRatio = 1;
+        this.scaleRatio = null;
     }
 
     updateContent(payload) {
@@ -247,6 +247,10 @@ class SlideEditStore extends BaseStore {
     }
 
     zoomContent(payload) {
+        if (!this.scaleRatio) {
+            this.scaleRatio = 1;
+        }
+
         if (payload.mode === 'edit') {
             switch (payload.direction) {
                 case 'in':
