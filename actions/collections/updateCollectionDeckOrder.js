@@ -9,6 +9,8 @@ export default function updateCollectionDeckOrder(context, payload, done) {
     // enrich payload with jwt
     payload.jwt = context.getStore(UserProfileStore).jwt;
 
+    context.dispatch('UPDATE_COLLECTION_DECK_ORDER_LOADING', true);
+
     context.service.update('deckgroups.deckOrder', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
@@ -22,6 +24,7 @@ export default function updateCollectionDeckOrder(context, payload, done) {
             });
         }
 
+        context.dispatch('UPDATE_COLLECTION_DECK_ORDER_LOADING', false);
         done();
     });
 }
