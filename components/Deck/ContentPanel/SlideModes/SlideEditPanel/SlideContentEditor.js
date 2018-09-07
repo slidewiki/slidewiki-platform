@@ -2262,21 +2262,6 @@ class SlideContentEditor extends React.Component {
         //context.hasChanges = true;
     }
 
-    zoomIn(){
-        this.scaleRatio += 0.25;
-        this.resize();
-    }
-
-    resetZoom(){
-        this.scaleRatio = 1;
-        this.resize();
-    }
-
-    zoomOut(){
-        this.scaleRatio -= 0.25;
-        this.resize();
-    }
-
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
@@ -2463,33 +2448,6 @@ class SlideContentEditor extends React.Component {
                             </div>
                         </div>
                     }
-                    {
-                        this.props.hideSpeakerNotes ?  null :
-                        <div className="ui segment vertical attached left icon buttons">
-                            <button className="ui button" onClick={this.zoomIn.bind(this)} type="button"
-                                    aria-label="Zoom in" data-tooltip="Zoom in">
-                                <i className="stacked icons">
-                                    <i className="small plus icon"></i>
-                                    <i className="large search icon"></i>
-                                </i>
-                            </button>
-                            <button className="ui button" onClick={this.resetZoom.bind(this)} type="button"
-                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
-                                <i className="stacked icons">
-                                    <i className="small compress icon"></i>
-                                    <i className="large search icon"></i>
-                                </i>
-                            </button>
-                            <button className="ui button" onClick={this.zoomOut.bind(this)} type="button"
-                                    aria-label="Zoom out" data-tooltip="Zoom out">
-                                <i className="stacked icons">
-                                    <i className="small minus icon"></i>
-                                    <i className="large search icon"></i>
-                                </i>
-                            </button>
-                        </div>
-                    }
-
                 </div>
             </div>
         );

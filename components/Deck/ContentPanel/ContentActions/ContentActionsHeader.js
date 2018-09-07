@@ -358,13 +358,6 @@ class ContentActionsHeader extends React.Component {
                         </button>
                             {
                                 this.props.ContentStore.mode === 'edit' ? [
-                                        <button className="ui button" onClick={this.zoomIn}
-                                                type="button" aria-label="Zoom in" data-tooltip="Zoom in">
-                                            <i className="stacked icons">
-                                                <i className="small plus icon "></i>
-                                                <i className="large search icon "></i>
-                                            </i>
-                                        </button>,
                                         <button className="ui button" onClick={this.resetZoom}
                                                 type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
                                             <i className="stacked icons">
@@ -376,6 +369,13 @@ class ContentActionsHeader extends React.Component {
                                                 type="button" aria-label="Zoom out" data-tooltip="Zoom out">
                                             <i className="stacked icons">
                                                 <i className="small minus icon "></i>
+                                                <i className="large search icon "></i>
+                                            </i>
+                                        </button>,
+                                        <button className="ui button" onClick={this.zoomIn}
+                                                type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                            <i className="stacked icons">
+                                                <i className="small plus icon "></i>
                                                 <i className="large search icon "></i>
                                             </i>
                                         </button>
