@@ -5,6 +5,7 @@ import loadDataSources from './datasource/loadDataSources';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
 import loadQuestionsCount from './questions/loadQuestionsCount';
 import loadCommentsCount from './contentdiscussion/loadCommentsCount';
+import loadPlaylistsCount from './collections/loadPlaylistsCount';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
@@ -39,6 +40,9 @@ export default function loadContentModules(context, payload, done) {
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
         },
+        (callback) => {
+            context.executeAction(loadPlaylistsCount, payload, callback);
+        }
     ];
 
     if (payload.params.stype !== 'slide') {

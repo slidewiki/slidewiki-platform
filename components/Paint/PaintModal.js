@@ -740,20 +740,7 @@ class PaintModal extends React.Component {
 
         let paintModalState = this.props.PaintModalStore;
 
-        if(!paintModalState.toEdit) {
-            let payload = {
-                type: 'image/svg+xml',
-                license: this.state.licenseValue,
-                copyrightHolder: this.state.copyrightHolder,
-                title: this.state.title || 'Image',
-                text: this.state.alt,
-                filesize: this.state.file.size,
-                filename: 'Image.svg',
-                bytes: this.state.file.url
-            };
-
-            this.context.executeAction(uploadMediaFiles, payload);
-        } else {
+        if(paintModalState.toEdit === 'SVG') {
             let payload = {
                 url: this.props.PaintModalStore.url,
                 type: 'image/svg+xml',
@@ -765,8 +752,20 @@ class PaintModal extends React.Component {
                 filename: 'Image.svg',
                 bytes: this.state.file.url
             };
-
             this.context.executeAction(updateGraphic, payload);
+        } else {
+            let payload = {
+                type: 'image/svg+xml',
+                license: this.state.licenseValue,
+                copyrightHolder: this.state.copyrightHolder,
+                title: this.state.title || 'Image',
+                text: this.state.alt,
+                filesize: this.state.file.size,
+                filename: 'Image.svg',
+                bytes: this.state.file.url
+            };
+            this.context.executeAction(uploadMediaFiles, payload);
+
         }
 
         this.handleClose();
@@ -784,17 +783,22 @@ class PaintModal extends React.Component {
             title: title,
             alt: alt
         });
-
-        if(nextProps.PaintModalStore.toEdit){
+        if(nextProps.PaintModalStore.toEdit && nextProps.PaintModalStore.toEdit !== 'Image'){
             this.handleOpen();
             let str = nextProps.PaintModalStore.svg;
             fabric.loadSVGFromString(str, (objects) => {
                 for (let i = 0; i < objects.length; i++){
                     this.canvas.add(objects[i]);
                 }
+                // Black Magic to render correctly imported SVGs from a Slide... please don't remove, unless
+                // you find a better solution (real solution)
+                let dummy = new fabric.Rect({ width: 20, height: 20, left: 30, top:0 });
+                this.canvas.add(dummy);
+                this.undo();
+                // Black Magic ends here.
                 this.canvas.renderAll();
             });
-        } else if ( ext === 'png' || ext === 'jpg' || ext === 'jpeg' ) {
+        } else if (nextProps.PaintModalStore.toEdit) {
             this.handleOpen();
             fabric.Image.fromURL(nextProps.PaintModalStore.url, (oImg) => {
                 this.canvas.add(oImg);

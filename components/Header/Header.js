@@ -58,7 +58,7 @@ class Header extends React.Component {
             <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
             </button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/>
-            <FormattedMessage id='header.signin.mobile' defaultMessage='Sign in'/>
+            <FormattedMessage id='header.signin.mobile' defaultMessage='Sign In'/>
             </a>;
         let notification_locale = '';
 
@@ -67,6 +67,9 @@ class Header extends React.Component {
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
               <FormattedMessage id='header.mydecks.mobile' defaultMessage='Decks'/>
+              </NavLink>
+              <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/playlists'}><i className="grid layout icon"/>
+              <FormattedMessage id='header.myplaylists.mobile' defaultMessage='Playlists'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>
               <FormattedMessage id='header.mygroups.mobile' defaultMessage='Groups'/>
