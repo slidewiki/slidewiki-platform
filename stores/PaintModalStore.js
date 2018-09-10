@@ -4,14 +4,14 @@ class PaintModalStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.svg = '';
-        this.toEdit = false;
+        this.toEdit = null; // Has 4 possible values. Null, Image, SVG and SVGFromImport
         this.url = '';
         this.title = '';
         this.altText = '';
     }
     destructor() {
         this.svg = '';
-        this.toEdit = false;
+        this.toEdit = null;
         this.url = '';
         this.title = '';
         this.altText = '';
@@ -37,7 +37,7 @@ class PaintModalStore extends BaseStore {
 
     openWithSrc(params) {
         this.svg = params.svg;
-        this.toEdit = true;
+        this.toEdit = params.toEdit;
         this.url = params.url;
         this.title = params.title;
         this.altText = params.altText;
@@ -45,7 +45,7 @@ class PaintModalStore extends BaseStore {
     }
 
     finishEdition() {
-        this.toEdit = false;
+        this.toEdit = null;
         this.url = '';
         this.svg = '';
         this.title = '';
@@ -55,7 +55,7 @@ class PaintModalStore extends BaseStore {
 
     openPicture(params) {
         this.svg = '';
-        this.toEdit = false;
+        this.toEdit = 'Image';
         this.url = params.url;
         this.title = params.title;
         this.altText = params.altText;
