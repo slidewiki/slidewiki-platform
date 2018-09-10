@@ -136,7 +136,7 @@ class Facets extends React.Component {
 
                 {
                     (languageItems.length > 0) &&
-                        <Menu vertical>
+                        <Menu fluid vertical>
                             <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} { (!isEmpty(selected.languages) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
                             { languageItems }
                         </Menu>
@@ -144,7 +144,7 @@ class Facets extends React.Component {
 
                 {
                     (userItems.length > 0) &&
-                        <Menu vertical>
+                        <Menu fluid vertical>
                             <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} { (!isEmpty(selected.users) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear users"/></NavLink></span> : ''}</Menu.Item>
                             { userItems }
                         </Menu>
@@ -152,7 +152,7 @@ class Facets extends React.Component {
 
                 {
                     (tagItems.length > 0) && 
-                        <Menu vertical>
+                        <Menu fluid vertical>
                             <Menu.Item key="tagFacetHeader" header>{this.context.intl.formatMessage(this.messages.tagsFacet)} { (!isEmpty(selected.tags) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}><Icon name="cancel" aria-label="clear tags"/></NavLink></span> : ''}</Menu.Item>
                             { tagItems }
                         </Menu>

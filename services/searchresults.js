@@ -26,9 +26,7 @@ function parseSlide(slide){
 
 function parseDeck(deck, usernames){
     let deckSlug = buildSlug(deck);
-    if(deck.db_id === 2162) {
-        console.log(deck.creator);
-    }
+
     // different link if this is a root deck or a sub-deck
     deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
@@ -43,6 +41,10 @@ function parseDeck(deck, usernames){
         link: '/user/' + user.username,
     };
 
+    // needed for deck card
+    deck.slug = deckSlug;
+    deck.deckID = deck.db_id;
+    
     // TODO: do not return content from service
     delete deck.content;
     (deck.forks || []).forEach( (fork) => delete fork.content);

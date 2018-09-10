@@ -15,13 +15,9 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
 import { isEmpty, pickBy, isArray } from 'lodash';
 import querystring from 'querystring';
-import Responsive from 'react-responsive';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
 import { Divider } from 'semantic-ui-react';
-
-const Default = (props) => <Responsive {...props} minWidth={768} />;
-const Mobile = (props) => <Responsive {...props} maxWidth={767} />;
 
 class SearchPanel extends React.Component {
     constructor(props){
