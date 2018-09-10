@@ -7,6 +7,7 @@ import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
 import PresentorComponent from '../components/PresentorHTMLLayout';
 import PresentationRoomsComponent from '../components/PresentationRoomsHTMLLayout';
+import PresentationPrintComponent from '../components/PresentationPrintHTMLLayout';
 import BasicHTMLLayout from '../components/BasicHTMLLayout';
 
 import serialize from 'serialize-javascript';
@@ -43,8 +44,11 @@ let renderApp = function(req, res, context){
 
     //todo: for future, we can choose to not include specific scripts in some predefined layouts
     let layout = HTMLComponent;
-    if(req.url && (req.url.slice(0,20).includes('/Presentation')|| req.url.slice(0,20).includes('/presentation') || req.url.slice(0,20).includes('/print'))){//NOTE only test first few chars as presentaton rooms URL has "/Presentation/..." also in it
+    if(req.url && (req.url.slice(0,20).includes('/Presentation')|| req.url.slice(0,20).includes('/presentation'))){//NOTE only test first few chars as presentaton rooms URL has "/Presentation/..." also in it
         layout = PresentorComponent;
+    }
+    if(req.url && (req.url.slice(0,20).includes('/print'))){
+        layout = PresentationPrintComponent;
     }
     if(req.url && (req.url.slice(0,20).includes('/neo4jguide'))){
         layout = BasicHTMLLayout;

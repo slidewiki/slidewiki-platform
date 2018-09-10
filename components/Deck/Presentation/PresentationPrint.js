@@ -50,7 +50,7 @@ class PresentationPrint extends React.Component{
     render(){
         this.slides = this.getSlides();
         return(
-            <div id="presentationPrint">
+            <div id="presentationPrint" className="printView">
                 <div className="reveal-old" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                     <div className="slides">
         			     	{this.slides}
