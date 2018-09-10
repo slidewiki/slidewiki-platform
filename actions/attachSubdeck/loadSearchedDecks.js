@@ -17,7 +17,6 @@ export default function loadSearchedDecks(context,payload,done){
 
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-        console.log(err);
             if (err.statusCode === 404) {
                 context.executeAction(notFoundError, {}, done);
                 context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', {docs:[]});
@@ -38,7 +37,6 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
-            // res.queryparams = payload.params.queryparams || undefined;
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
 

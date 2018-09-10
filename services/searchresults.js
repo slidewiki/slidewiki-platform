@@ -260,6 +260,7 @@ export default {
                         links: response.links,
                         spellcheck: response.spellcheck,
                         facets: response.facets,
+                        page: response.page,
                         docs: response.docs
                     });
                 }).catch(callback);
