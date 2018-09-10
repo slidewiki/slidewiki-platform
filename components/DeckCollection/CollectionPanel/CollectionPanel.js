@@ -164,13 +164,13 @@ class CollectionPanel extends React.Component {
                 id: 'CollectionPanel.sort.title', 
                 defaultMessage: 'Title'
             },
-            collectionFollow: {
-                id: 'UserCollections.collections.follow',
-                defaultMessage: 'Follow this playlist'
+            collectionSubscribe: {
+                id: 'UserCollections.collections.subscribe',
+                defaultMessage: 'Subscribe to this playlist'
             },
-            collectionUnfollow: {
-                id: 'UserCollections.collections.unfollow',
-                defaultMessage: 'You are following this playlist, click to unfollow'
+            collectionUnsubscribe: {
+                id: 'UserCollections.collections.unsubscribe',
+                defaultMessage: 'You are subscribed to this playlist, click to unsubscribe'
             },
         });
     }
@@ -217,9 +217,9 @@ class CollectionPanel extends React.Component {
                             <b><FormattedMessage {...this.messages.collectionDate} />:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
 
                         <div className = "ui divider" />
-                        { (this.props.UserProfileStore.userid === '') ? '' : (this.props.UserFollowingsStore.selectedFollowingId === null) ? <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionFollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionFollow)} onClick={this.handleFollowCollection.bind(this)} >
+                        { (this.props.UserProfileStore.userid === '') ? '' : (this.props.UserFollowingsStore.selectedFollowingId === null) ? <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionFollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionSubscribe)} onClick={this.handleFollowCollection.bind(this)} >
                             <i className="rss icon" />
-                        </button> : <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionUnfollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionUnfollow)} onClick={this.handleFollowCollection.bind(this)} >
+                        </button> : <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionUnfollow)} aria-label={this.context.intl.formatMessage(this.messages.collectionUnsubscribe)} onClick={this.handleFollowCollection.bind(this)} >
                             <i className="rss blue icon" ></i>
                         </button> }
                     </div>

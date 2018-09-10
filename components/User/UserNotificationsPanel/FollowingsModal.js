@@ -12,7 +12,7 @@ class FollowingModal extends React.Component {
         this.props.handleClose();
     }
 
-    handleUnfollow(following) {
+    handleUnsubscribe(following) {
         this.context.executeAction(deleteFollowing, {
             id: following.id
         });
@@ -21,7 +21,7 @@ class FollowingModal extends React.Component {
     render() {
         let deckFollowings = this.props.UserFollowingsStore.deckFollowings;
         let playlistFollowings = this.props.UserFollowingsStore.playlistFollowings;
-        let deckContent = (this.props.UserFollowingsStore.loading) ? '' : (this.props.UserFollowingsStore.deckFollowings.length === 0) ? <div className="ui center aligned basic segment">You are not following any decks. </div> : deckFollowings.map( (fol) => {
+        let deckContent = (this.props.UserFollowingsStore.loading) ? '' : (this.props.UserFollowingsStore.deckFollowings.length === 0) ? <div className="ui center aligned basic segment">You are not subscriebd to any decks. </div> : deckFollowings.map( (fol) => {
             let slug = fol.title && slugify(fol.title).toLowerCase() || '_';
             return (
                 <div key={fol.id} className="ui vertical segment">
@@ -32,8 +32,8 @@ class FollowingModal extends React.Component {
                         </div>
                         <div className="right aligned column">
                             <div>
-                                <button className="ui basic red button" aria-label='Unfollow' name={fol.id} onClick={this.handleUnfollow.bind(this, fol)} >
-                                    Unfollow
+                                <button className="ui basic red button" aria-label='Unsubscribe' name={fol.id} onClick={this.handleUnsubscribe.bind(this, fol)} >
+                                    Unsubscribe
                                 </button>
                             </div>
                         </div>
@@ -42,7 +42,7 @@ class FollowingModal extends React.Component {
             );
         });
 
-        let playlistContent = (this.props.UserFollowingsStore.loading) ? '' : (this.props.UserFollowingsStore.playlistFollowings.length === 0) ?  <div className="ui center aligned basic segment">You are not following any playlists.</div> : playlistFollowings.map( (fol) => {
+        let playlistContent = (this.props.UserFollowingsStore.loading) ? '' : (this.props.UserFollowingsStore.playlistFollowings.length === 0) ?  <div className="ui center aligned basic segment">You are not subscribed to any playlists.</div> : playlistFollowings.map( (fol) => {
             return (
                 <div key={fol.id} className="ui vertical segment">
                     <div className="ui two column stackable grid container">
@@ -52,8 +52,8 @@ class FollowingModal extends React.Component {
                         </div>
                         <div className="right aligned column">
                             <div>
-                                <button className="ui basic red button" aria-label='Unfollow' name={fol.id} onClick={this.handleUnfollow.bind(this, fol)} >
-                                    Unfollow
+                                <button className="ui basic red button" aria-label='Unsubscribe' name={fol.id} onClick={this.handleUnsubscribe.bind(this, fol)} >
+                                    Unsubscribe
                                 </button>
                             </div>
                         </div>
@@ -76,16 +76,16 @@ class FollowingModal extends React.Component {
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="dialog">
                     <Modal.Content>
                         <div className="ui hidden divider" />
-                        <h2 className="ui centered header">Decks you are following: </h2>
+                        <h2 className="ui centered header">Decks you are subscribed to: </h2>
                         <br/>
                         {deckContent}
                         <div className="ui hidden divider" />
-                        <h2 className="ui centered header">Playlists you are following: </h2>
+                        <h2 className="ui centered header">Playlists you are subscribed to: </h2>
                         <br/>
                         {playlistContent}
                         <div className="ui hidden divider" />
                     </Modal.Content>
-                    <TextArea className="sr-only" id="FollowingDescription" value="Following decks and playlists" tabIndex ='-1'/>
+                    <TextArea className="sr-only" id="FollowingDescription" value="Subscribed to decks and playlists" tabIndex ='-1'/>
                     <Modal.Actions>
                         <Segment basic textAlign="center">
                             <div>

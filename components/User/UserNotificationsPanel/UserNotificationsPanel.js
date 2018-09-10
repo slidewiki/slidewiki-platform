@@ -114,7 +114,7 @@ class UserNotificationsPanel extends React.Component {
         const buttonDeleteAllTitle = (notificationsCount > 1) ? 'Delete all ' + notificationsCount + ' notifications' : 'Delete all notifications';
         let noOfDecks = (this.props.UserFollowingsStore.deckFollowings) ? this.props.UserFollowingsStore.deckFollowings.length : '';
         let noOfPlaylists = (this.props.UserFollowingsStore.playlistFollowings) ? this.props.UserFollowingsStore.playlistFollowings.length : '';
-        let followingDisplay = (this.props.UserFollowingsStore.loading) ? 'Following   decks and   playlists      ' : 'Following ' + noOfDecks + ' ' + ((noOfDecks > 1) ? 'decks' : 'deck' ) + ' and ' + noOfPlaylists + ' ' + ((noOfPlaylists > 1) ? 'playlists' : 'playlist') + '      ';
+        let followingDisplay = (this.props.UserFollowingsStore.loading) ? 'You are subscribed to   decks and   playlists      ' : 'You are subscribed to ' + noOfDecks + ' ' + ((noOfDecks > 1) ? 'decks' : 'deck' ) + ' and ' + noOfPlaylists + ' ' + ((noOfPlaylists > 1) ? 'playlists' : 'playlist') + '      ';
 
         let buttons = (
             <Button.Group basic >
@@ -130,7 +130,7 @@ class UserNotificationsPanel extends React.Component {
                         <i className="corner remove icon"></i>
                     </i>
                 </Button>
-                <Button aria-label='Manage followings' onClick={this.handleClickOnFollowingsSetting.bind(this)} tabIndex='0' data-tooltip={followingDisplay} >
+                <Button aria-label='Manage subscriptions' onClick={this.handleClickOnFollowingsSetting.bind(this)} tabIndex='0' data-tooltip={followingDisplay} >
                     <i className="icons large">
                         <i className="setting icon" ></i>
                         <i className="corner rss icon"></i>

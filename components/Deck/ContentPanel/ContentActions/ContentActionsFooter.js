@@ -135,7 +135,7 @@ class ContentActionsFooter extends React.Component {
         let followButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
         let classNameFollowButton = 'rss large icon';
-        let tooltipFollowButton = 'Follow this deck';
+        let tooltipFollowButton = 'Subscribe to this deck';
         let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
             //undefined user
@@ -150,7 +150,7 @@ class ContentActionsFooter extends React.Component {
 
             if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
                 classNameFollowButton = 'rss large blue icon';
-                tooltipFollowButton = 'You are following this deck, click to unfollow';
+                tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
             }
         }
 
@@ -203,7 +203,7 @@ class ContentActionsFooter extends React.Component {
                  </AriaMenuButton.MenuItem>
                  <AriaMenuButton.MenuItem className='item' key= {5} tag='li'>
                    <div aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
-                       <i className={classNameFollowButton}></i> Follow
+                       <i className={classNameFollowButton}></i> Subscribe
                    </div>
                  </AriaMenuButton.MenuItem>
              </AriaMenuButton.Menu>
