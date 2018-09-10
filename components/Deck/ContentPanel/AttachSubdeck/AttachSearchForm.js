@@ -37,11 +37,11 @@ class AttachSearchForm extends React.Component{
         let users = this.refs.user.getSelected();
         this.context.executeAction(loadSearchedDecks, {
             query: {
-              keywords: this.state.keywords || undefined, 
-              field: this.state.field || undefined,
-              language: this.state.language || undefined, 
-              kind: 'deck',
-              user: (users !== "") ? users.split(',') : undefined,
+                keywords: this.state.keywords || undefined, 
+                field: this.state.field || undefined,
+                language: this.state.language || undefined, 
+                kind: 'deck',
+                user: (users !== '') ? users.split(',') : undefined,
             }
         });
 
