@@ -133,7 +133,7 @@ function getUserIds(docs, facets){
     }));
 
     // if faceting is enabled, also require usernames for user ids in facets
-    if (facets.creator) {
+    if (facets && facets.creator) {
 
         // user ids are returned as strings in facets response
         facets.creator.forEach( (item) => {
@@ -170,11 +170,11 @@ function getRequestOptions(params) {
 
         // extra options for enabling results expansion, spellcheck and faceting
         let query = Object.assign({}, params.query);
-        query.expand = true; 
-        query.spellcheck = true;
-        query.facets = true;
+        query.expand = (params.query.hasOwnProperty('expand')) ? params.query.expand : true; 
+        query.spellcheck = (params.query.hasOwnProperty('spellcheck')) ? params.query.spellcheck : true;
+        query.facets = (params.query.hasOwnProperty('facets')) ? params.query.facets : true;
         query.kind = 'deck';
-        query.pageSize = 20;
+        query.pageSize = params.query.pageSize || 20;
 
         return {
             uri: `${Microservices.search.uri}/search/v2`,

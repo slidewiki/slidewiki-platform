@@ -34,29 +34,14 @@ class AttachSearchForm extends React.Component{
             event.preventDefault();
         }
 
-        // form the query parameters to send to service
-        let queryparams = 'keywords=' + ((this.state.keywords) ? this.state.keywords : '*:*');
-        if(this.state.field)
-            queryparams += `&field=${this.state.field}`;
-
-        if(this.state.language)
-            queryparams += `&language=${this.state.language}`;
-
-
-        queryparams += '&kind=deck';        // always request decks here
-
         let users = this.refs.user.getSelected();
-        if(users){
-            users = users.split(',');
-            for(let i in users){
-                queryparams += `&user=${users[i]}`;
-            }
-        }
-
-        // console.log(queryparams);
         this.context.executeAction(loadSearchedDecks, {
-            params: {
-                queryparams: queryparams
+            query: {
+              keywords: this.state.keywords || undefined, 
+              field: this.state.field || undefined,
+              language: this.state.language || undefined, 
+              kind: 'deck',
+              user: (users !== "") ? users.split(',') : undefined,
             }
         });
 
