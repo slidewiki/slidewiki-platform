@@ -24,6 +24,7 @@ import MobileDetect from 'mobile-detect';
 import AriaMenuButton from 'react-aria-menubutton';
 import TranslationStore from '../../../../stores/TranslationStore';
 import { makeNodeURL } from '../../../common/Util';
+import {Icon} from 'semantic-ui-react';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -134,7 +135,10 @@ class ContentActionsFooter extends React.Component {
         let likeButton = 'ui button';
         let followButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
-        let classNameFollowButton = 'rss large icon';
+        let iconFollowButton = <Icon.Group >
+            <Icon size='large' name='circle outline' />
+            <Icon name='rss'/>
+        </Icon.Group>;
         let tooltipFollowButton = 'Subscribe to this deck';
         let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
@@ -149,7 +153,10 @@ class ContentActionsFooter extends React.Component {
             }
 
             if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
-                classNameFollowButton = 'rss large blue icon';
+                iconFollowButton = <Icon.Group >
+                    <Icon size='large' name='circle' color='blue'/>
+                    <Icon name='rss' inverted='true'/>
+                </Icon.Group>;
                 tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
             }
         }
@@ -167,7 +174,7 @@ class ContentActionsFooter extends React.Component {
               <i className={classNameLikeButton}></i>
           </button>
           <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
-              <i className={classNameFollowButton}></i>
+              {iconFollowButton}
           </button>
           </div>;
 
@@ -203,7 +210,7 @@ class ContentActionsFooter extends React.Component {
                  </AriaMenuButton.MenuItem>
                  <AriaMenuButton.MenuItem className='item' key= {5} tag='li'>
                    <div aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
-                       <i className={classNameFollowButton}></i> Subscribe
+                       {iconFollowButton} Subscribe
                    </div>
                  </AriaMenuButton.MenuItem>
              </AriaMenuButton.Menu>

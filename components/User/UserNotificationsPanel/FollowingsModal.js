@@ -27,13 +27,13 @@ class FollowingModal extends React.Component {
                 <div key={fol.id} className="ui vertical segment">
                     <div className="ui two column stackable grid container">
                         <div className="column">
-                            <div className="ui header"><h3><a href={['/deck', fol.followed_id, slug,].join('/')} target='_blank'>{fol.title}</a></h3></div>
+                            <div className="ui header"><h4><a href={['/deck', fol.followed_id, slug,].join('/')} target='_blank'>{fol.title}</a></h4></div>
                             <div className="meta">{fol.description} {(fol.description) ? '\u00b7' : ''} Owner: <a href={'/user/' + fol.userName} target='_blank'>{fol.displayName || fol.userName}</a> </div>
                         </div>
                         <div className="right aligned column">
                             <div>
-                                <button className="ui basic red button" aria-label='Unsubscribe' name={fol.id} onClick={this.handleUnsubscribe.bind(this, fol)} >
-                                    Unsubscribe
+                                <button className="ui large basic icon button" data-tooltip={'Unsubscribe from "' + fol.title + '"'} aria-label={'Unsubscribe from ' + fol.title} name={fol.id}  onClick={this.handleUnsubscribe.bind(this, fol)} >
+                                    <i className="remove icon" ></i>
                                 </button>
                             </div>
                         </div>
@@ -47,13 +47,13 @@ class FollowingModal extends React.Component {
                 <div key={fol.id} className="ui vertical segment">
                     <div className="ui two column stackable grid container">
                         <div className="column">
-                            <div className="ui header"><h3><a href={`/playlist/${fol.followed_id}?sort=order`} target='_blank'>{fol.title}</a></h3></div>
+                            <div className="ui header"><h4><a href={`/playlist/${fol.followed_id}?sort=order`} target='_blank'>{fol.title}</a></h4></div>
                             <div className="meta">{fol.description} {(fol.description) ? '\u00b7' : ''} {fol.decksLength} {(fol.decksLength === 1) ? 'deck' : 'decks'} </div>
                         </div>
                         <div className="right aligned column">
                             <div>
-                                <button className="ui basic red button" aria-label='Unsubscribe' name={fol.id} onClick={this.handleUnsubscribe.bind(this, fol)} >
-                                    Unsubscribe
+                                <button className="ui large basic icon button" data-tooltip={'Unsubscribe from "' + fol.title + '"'} aria-label={'Unsubscribe from ' + fol.title} name={fol.id}  onClick={this.handleUnsubscribe.bind(this, fol)} >
+                                    <i className="remove icon" ></i>
                                 </button>
                             </div>
                         </div>
@@ -74,13 +74,17 @@ class FollowingModal extends React.Component {
                 open={this.props.isOpen}
                 onClose={this.props.handleClose}>
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="dialog">
+                    <Modal.Header className="ui center aligned" as="h2" id="followingModalHeader">
+                        Manage decks and playlist subscriptions
+                    </Modal.Header>
                     <Modal.Content>
+                        <div style={{'textAlign':'center'}} id="followingDescription"> Change your subscriptions. Activities for your subscribed decks and playlists appear in your notifications.</div>
                         <div className="ui hidden divider" />
-                        <h2 className="ui centered header">Decks you are subscribed to: </h2>
+                        <h3 className="ui centered header">Subscribed decks</h3>
                         <br/>
                         {deckContent}
                         <div className="ui hidden divider" />
-                        <h2 className="ui centered header">Playlists you are subscribed to: </h2>
+                        <h3 className="ui centered header">Subscribed playlists</h3>
                         <br/>
                         {playlistContent}
                         <div className="ui hidden divider" />
