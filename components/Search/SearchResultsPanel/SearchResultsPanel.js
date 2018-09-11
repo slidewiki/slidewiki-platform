@@ -7,7 +7,7 @@ import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 import loadMoreResults from '../../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import { Grid, Button, Icon } from 'semantic-ui-react';
+import { Grid, Button, Icon, Segment } from 'semantic-ui-react';
 import Facets from './Facets';
 import Responsive from 'react-responsive';
 import MobileResultsList from './MobileResultsList';
@@ -248,8 +248,10 @@ class SearchResultsPanel extends React.Component {
                     </Grid>
                     <Mobile>
                         <div className="ui left dimmed sidebar vertical menubar" ref="menubar" >
-                            <h2 className="ui header">{this.context.intl.formatMessage(this.messages.filters)}</h2>
-                            <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
+                            <Segment basic>
+                                <h2 className="ui header">{this.context.intl.formatMessage(this.messages.filters)}</h2>
+                                <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
+                            </Segment>
                         </div>
                     </Mobile>
                 </div>

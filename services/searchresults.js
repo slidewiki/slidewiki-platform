@@ -2,7 +2,7 @@ import { Microservices } from '../configs/microservices';
 import rp from 'request-promise-native';
 import customDate from '../components/Deck/util/CustomDate';
 import slugify from 'slugify';
-import { isEmpty, compact, flatten, uniq } from 'lodash';
+import { isEmpty, compact, flatten, uniq, keyBy } from 'lodash';
 
 const log = require('../configs/log').log;
 
@@ -24,7 +24,7 @@ function parseSlide(slide){
     };
 }
 
-function parseDeck(deck, usernames){
+function parseDeck(deck, users){
     let deckSlug = buildSlug(deck);
 
     // different link if this is a root deck or a sub-deck
@@ -34,7 +34,7 @@ function parseDeck(deck, usernames){
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
     deck.updated = deck.lastUpdate;     // this is used to sort deck family's decks
     deck.lastUpdate = customDate.format(deck.lastUpdate, 'Do MMMM YYYY');
-    let user = usernames[deck.creator];
+    let user = users[deck.creator];
     deck.user = {
         id: deck.creator,
         username: user.displayName,
@@ -44,10 +44,6 @@ function parseDeck(deck, usernames){
     // needed for deck card
     deck.slug = deckSlug;
     deck.deckID = deck.db_id;
-    
-    // TODO: do not return content from service
-    delete deck.content;
-    (deck.forks || []).forEach( (fork) => delete fork.content);
 }
 
 function buildSlug(deck) {
@@ -55,21 +51,30 @@ function buildSlug(deck) {
 }
 
 function getUsers(userIds){
-    let usernames = {};
-    let userPromises = userIds.map( (userId) => 
-        rp.get({uri: `${Microservices.user.uri}/user/${userId}`, json: true}).then((userRes) => {
-            usernames[userId] = { 
-                displayName: userRes.displayName || userRes.username, 
-                username: userRes.username
-            };
-        }).catch( (err) => {
-            usernames[userId] = {
-                displayName: `Unknown user ${userId}`, 
-                username: userId
-            };
-        }));
+    return rp.post({
+        uri: `${Microservices.user.uri}/users`,
+        body: userIds,
+        json: true
+    }).then((userData) => {
+        userData = keyBy(userData, '_id');
+        let users = {};
+        userIds.forEach( (userId) => {
+            let user = userData[userId];
+            if (!user) {
+                users[userId] = {
+                    displayName: `Unknown user ${userId}`, 
+                    username: userId
+                };
+            } else {
+                users[userId] = { 
+                    displayName: user.displayName || user.username, 
+                    username: user.username
+                };
+            }
+        });
 
-    return Promise.all(userPromises).then( () => { return usernames; });
+        return users;
+    });
 }
 
 function getDecks(deckIds){
@@ -86,18 +91,6 @@ function getDecks(deckIds){
 
 
     return Promise.all(deckPromises).then( () => { return {decks, deckRevisions}; });
-}
-
-function getForks(deckIds){
-    let forks = {};
-    let forkPromises = deckIds.map( (deckId) => 
-        rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
-            forks[deckId] = deckForks.filter((f) => !f.hidden);
-        }).catch( (err) => {
-            forks[deckId] = [];
-        }));
-
-    return Promise.all(forkPromises).then( () => { return forks; });
 }
 
 function getActivity(activityType, deckIds){
@@ -144,7 +137,7 @@ function getUserIds(docs, facets){
         userIds = userIds.concat(creatorIds);
     }
 
-    return compact(uniq(userIds));
+    return uniq(userIds);
 }
 
 function fillFacetsInfo(facets, usernames, tags) {
@@ -226,14 +219,14 @@ export default {
                     getActivity('download', deckIds), 
                     getActivity('share', deckIds),
                     getTags(response.facets),
-                ]).then( ([ usernames, { decks, deckRevisions }, likes, downloads, shares, tags ]) => {
+                ]).then( ([ users, { decks, deckRevisions }, likes, downloads, shares, tags ]) => {
                     response.docs.forEach( (result) => {
 
-                        parseDeck(result, usernames);
+                        parseDeck(result, users);
 
                         // fill forks data
                         if (!isEmpty(result.forks)) {
-                            result.forks.forEach( (fork) => parseDeck(fork, usernames));
+                            result.forks.forEach( (fork) => parseDeck(fork, users));
                         }
 
                         result.revisionCount = (decks[result.db_id]) ? decks[result.db_id].revisions.length : 1;
@@ -251,7 +244,7 @@ export default {
                     });
 
                     if (response.facets) {
-                        fillFacetsInfo(response.facets, usernames, tags);
+                        fillFacetsInfo(response.facets, users, tags);
                     }
 
                     callback(null, {
