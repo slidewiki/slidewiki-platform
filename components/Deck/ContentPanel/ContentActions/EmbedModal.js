@@ -161,8 +161,7 @@ class EmbedModal extends React.Component {
         if (this.props.ContentStore.selector.stype === 'slide') {
             return this.props.SlideViewStore.title;
         } else {
-            const currentRevision = this.findCurrentRevision(this.props.DeckViewStore.deckData);
-            return currentRevision && currentRevision.title;
+            return this.props.DeckViewStore.deckData.title;
         }
     }
 
