@@ -234,7 +234,7 @@ class EmbedModal extends React.Component {
                     </Modal.Header>
                     <Modal.Content>
                         <Container>
-                            <FormattedMessage id='embedModel.desc'
+                            <FormattedMessage id='embedModal.description'
                                     defaultMessage='Use the options to select how this deck will be displayed. Then copy the generated code into your site.'/>
                             <Segment color="blue" textAlign="center" padded>
                                 <Segment>

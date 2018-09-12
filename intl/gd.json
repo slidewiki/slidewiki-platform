@@ -360,7 +360,7 @@
   "embedModal.large": "Large",
   "embedModal.other": "Other",
   "embedModal.embedHeader": "Embed SlideWiki deck \"{title}\"",
-  "embedModel.desc": "Use the options to select how this deck will be displayed. Then copy the generated code into your site.",
+  "embedModal.description": "Use the options to select how this deck will be displayed. Then copy the generated code into your site.",
   "embedModal.embed": "Embed",
   "embedModal.size": "Size",
   "embedModal.widthLabel": "Width of embedded content",
