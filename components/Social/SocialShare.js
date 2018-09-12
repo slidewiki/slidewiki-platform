@@ -149,8 +149,8 @@ class SocialShare extends React.Component {
                                 round />
                         </LinkedinShareButton>
                     </div>
-                    <EmbedModal size={iconSize} fontSize={24} color="white" backgroundColor="#1e78bb"
-                                embedPresentationHref={this.props.embedPresentationHref}/>
+                    <EmbedModal size={iconSize} fontSize={14} color="white" backgroundColor="#1e78bb"
+                            embedPresentationHref={this.props.embedPresentationHref}/>
                 </div>
             </div>
         );
