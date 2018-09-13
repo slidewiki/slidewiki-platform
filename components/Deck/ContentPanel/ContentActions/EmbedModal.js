@@ -199,7 +199,7 @@ class EmbedModal extends React.Component {
                     onClose={this.handleClose}
                     id="embedModal"
                     aria-labelledby="embedModalHeader"
-                    aria-describedby="embedModalDescription"
+                    aria-describedby="embedModal.description"
                     aria-hidden = {!this.state.modalOpen}
                     role="dialog"
                     tabIndex="0">
