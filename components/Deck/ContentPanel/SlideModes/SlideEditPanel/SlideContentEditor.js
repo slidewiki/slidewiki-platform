@@ -10,6 +10,7 @@ import PaintModalStore from '../../../../../stores/PaintModalStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
+import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 //import ResizeAware from 'react-resize-aware';
@@ -40,6 +41,7 @@ class SlideContentEditor extends React.Component {
         this.loading = '';
         this.hasChanges = false;
         this.finishLoading = false;
+        this.idContext = null;
         //this.oldContent = '';
         //this.redoContent = '';
 
@@ -51,25 +53,31 @@ class SlideContentEditor extends React.Component {
 
             ev.editor.document.on('drop', (ev2) => {
                 if (ev2.data.$.dataTransfer.files) {
-                    let file = ev2.data.$.dataTransfer.files[0];
-                    let params = {};
-                    let url = URL.createObjectURL(file);
-                    file.preview = url;
-                    params.file = file;
+                    console.log('droppped');
+                    if (ev2.data.$.dataTransfer.files.length !== 0) {
+                        let file = ev2.data.$.dataTransfer.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
 
-                    this.context.executeAction(handleDroppedFile, file);
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
                 }
             });
 
             ev.editor.document.on('paste', (ev2) => {
                 if (ev2.data.$.clipboardData.files) {
-                    let file = ev2.data.$.clipboardData.files[0];
-                    let params = {};
-                    let url = URL.createObjectURL(file);
-                    file.preview = url;
-                    params.file = file;
+                    console.log('pasted');
+                    if (ev2.data.$.clipboardData.files.length !== 0){
+                        let file = ev2.data.$.clipboardData.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
 
-                    this.context.executeAction(handleDroppedFile, file);
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
                 }
             });
         });
@@ -1157,8 +1165,27 @@ class SlideContentEditor extends React.Component {
 
             // Make SVG resizable as soon as it is selected the first time.
             if ($(this).find('svg').length) {
-                $(this).children('svg').attr('width', '100%');
-                $(this).children('svg').attr('height', '100%');
+                // Remove previous width and height if it is defined inside its style attribute.
+                let svgStyle = $(this).children('svg').attr('style');
+                if (svgStyle) {
+                    let first = svgStyle.split(' width: ')[0];
+                    let second = svgStyle.split(' width: ')[1] ? svgStyle.split(' width: ')[1].split('px;')[2] : undefined;
+                    if (second) {
+                        let newStyle = first + second;
+                        $(this).children('svg').attr('style', newStyle);
+                    }
+                }
+
+                $(this).children('svg').attr('width', '98%');
+                $(this).children('svg').attr('height', '98%');
+                // If there is no viewBox defined, let's add one.
+                if (!$(this).children('svg').attr('viewBox')) {
+                    let parentStyle = $(this).attr('style');
+                    let parentWidth = parentStyle.split('width: ')[1].split('px')[0];
+                    let parentHeight = parentStyle.split('height: ')[1].split('px')[0];
+                    $(this).children('svg').attr('viewBox', '0 0 ' + parentWidth + ' ' + parentHeight);
+                }
+
             }
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
@@ -1689,11 +1716,17 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('aria-hidden','true');
                         $('.pptx2html').attr('alt',' ');
                     } else{
-                        if(nextProps.MediaStore.file.type === 'image/svg+xml') {
-                            let str = 'div[svg-source="'+ nextProps.MediaStore.file.url +'"]';
-                            let oldElems = $(str);
-                            oldElems.remove();
-                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+                        if(nextProps.MediaStore.file.svg) {
+                            let idContextTop = '300px';
+                            let idContextLeft = '250px';
+                            if (this.idContext) {
+                                let style = $('#' + this.idContext).attr('style');
+                                idContextTop = style.split('top: ')[1].split(';')[0];
+                                idContextLeft = style.split('left: ')[1].split(';')[0];
+                                $('#' + this.idContext.toString()).remove();
+                                this.idContext = null;
+                            }
+                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: ' + idContextTop + '; left: ' + idContextLeft + ';  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
                         } else {
                             console.log(nextProps.MediaStore.file);
                             // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
@@ -2023,13 +2056,20 @@ class SlideContentEditor extends React.Component {
         }
     }
     editImage(context, event, idContext){
+        this.idContext = idContext;
         let contains_img = $('#' + idContext).find('img').length;
         if (contains_img) {
             let src = $('#' + idContext).find('img')[0].src;
             this.context.executeAction(editImageWithSrc, src);
         } else {
             let src = $('#' + idContext).attr('svg-source');
-            this.context.executeAction(editImageWithSrc, src);
+            if (src) {
+                this.context.executeAction(editImageWithSrc, src);
+            } else {
+                let svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' +
+                    $('#' + idContext).children('svg').html() + '</svg>';
+                this.context.executeAction(editSVGwithSVG, svg);
+            }
         }
 
 
