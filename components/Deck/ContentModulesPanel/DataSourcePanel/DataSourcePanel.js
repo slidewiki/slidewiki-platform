@@ -18,6 +18,12 @@ class DataSourcePanel extends React.Component {
         this.context.executeAction(showMoreDataSources);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.DataSourceStore && nextProps.DataSourceStore !== this.props.DataSourceStore) {
+            this.forceUpdate();
+        }
+    }
+
     render() {
         const dataSources = this.props.DataSourceStore.dataSources;
         const arrayOfDataSourcesIsLarge = dataSources.length > 10;
