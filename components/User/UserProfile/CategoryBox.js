@@ -106,7 +106,7 @@ class CategoryBox extends React.Component {
             </div>
 
           </div>
-          );
+            );
         }//end
         else{
             return (
@@ -174,7 +174,7 @@ class CategoryBox extends React.Component {
             </div>
 
           </div>
-          );
+            );
         }//end else
     }
 }
