@@ -99,7 +99,7 @@ class UserLTIs extends React.Component {
         console.log('render userLTIs:', this.props.userid, this.props.ltis);
         if(! (this.props.username.endsWith(LTI_ID))){
             this.props.ltis.forEach((lti) => {
-              items.push( (
+                items.push( (
                   <div key={lti._id} className="ui vertical segment" >
                       <div className="ui two column grid container">
 
@@ -129,11 +129,11 @@ class UserLTIs extends React.Component {
                       </div>
                   </div>
               ));
-          });
+            });
         }//end if(! (this.props.username.endsWith(LTI_ID))
         else{
             this.props.ltis.forEach((lti) => {
-              items.push( (
+                items.push( (
                   <div key={lti._id} className="ui vertical segment" >
                       <div className="ui two column grid container">
 
@@ -145,7 +145,7 @@ class UserLTIs extends React.Component {
                       </div>
                   </div>
               ));
-          });
+            });
         }
 
 
@@ -174,7 +174,7 @@ class UserLTIs extends React.Component {
 
                 {items}
               </div>
-          );
+            );
         }//end if
         else{
             return (
@@ -187,7 +187,7 @@ class UserLTIs extends React.Component {
 
                 {items}
               </div>
-          );
+            );
         }//end else
 
     }

@@ -24,7 +24,7 @@ class CategoryBox extends React.Component {
         //console.log('CategoryBox.props.username='+this.props.username);
         if (! (this.props.username.endsWith(LTI_ID)))
         {
-          return (
+            return (
             <div ref="menus">
 
               <div className="ui vertical fluid menu">
@@ -106,10 +106,10 @@ class CategoryBox extends React.Component {
             </div>
 
           </div>
-        );
-      }//end
+          );
+        }//end
         else{
-          return (
+            return (
             <div ref="menus">
 
               <div className="ui vertical fluid menu">
@@ -174,8 +174,8 @@ class CategoryBox extends React.Component {
             </div>
 
           </div>
-        );
-      }//end else
+          );
+        }//end else
     }
 }
 

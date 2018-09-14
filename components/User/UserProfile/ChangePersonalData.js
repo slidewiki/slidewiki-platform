@@ -171,13 +171,13 @@ class ChangePersonalData extends React.Component {
                     </button>
                 </form>
             </div>
-          );
+            );
         }//end if
         else{
 
             return (
               <div>   </div>
-        );
+            );
         }//end else
 
     }
