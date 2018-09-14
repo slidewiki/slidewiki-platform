@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { LTI_ID } from '../../../configs/general';
 
 import UserProfileStore from '../../../stores/UserProfileStore';
 import fetchUser from '../../../actions/user/userprofile/fetchUser';
@@ -20,7 +21,8 @@ class CategoryBox extends React.Component {
       //this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
     render() {
-    //if (this.props.UserProfileStore.user.email != 'temp@temp.com')
+      console.log("CategoryBox.props.username="+this.props.username);
+      if (! (this.props.username.endsWith(LTI_ID)))
       {
         return (
           <div ref="menus">
@@ -107,7 +109,6 @@ class CategoryBox extends React.Component {
           </div>
         );
       }//end
-      /*
       else{
         return (
           <div ref="menus">
@@ -130,24 +131,7 @@ class CategoryBox extends React.Component {
                   />
                 </p>
               </NavLink>
-              <NavLink className="item" href={'/user/' + this.props.username + '/settings/account'} activeStyle={this.styles}>
-                <p>
-                  <i className="icon lock"/>
-                  <FormattedMessage
-                    id='CategoryBox.account'
-                    defaultMessage=' Account'
-                  />
-                </p>
-              </NavLink>
-              <NavLink className="item" href={'/user/' + this.props.username + '/settings/integrations'} activeStyle={this.styles}>
-                <p>
-                  <i className="icon cloud"/>
-                  <FormattedMessage
-                    id='CategoryBox.authorizedAccounts'
-                    defaultMessage=' Authorized Accounts'
-                  />
-                </p>
-              </NavLink>
+
             </div>
 
             <div className="ui vertical fluid menu">
@@ -170,11 +154,29 @@ class CategoryBox extends React.Component {
               </NavLink>
             </div>
 
+            <div className="ui vertical fluid menu">
+              <div className="item" style={ this.headerStyle }>
+                <h3>
+                  <FormattedMessage
+                    id='CategoryBox.ltis'
+                    defaultMessage='LTIs'
+                  />
+                </h3>
+              </div>
+              <NavLink className="item" href={'/user/' + this.props.username + '/ltis/overview'} activeStyle={this.styles}>
+                <p>
+                  <i className="icon users"/>
+                  <FormattedMessage
+                    id='CategoryBox.myLTIs'
+                    defaultMessage=' My LTIs'
+                  />
+                </p>
+              </NavLink>
+            </div>
+            
           </div>
         );
-
       }//end else
-      */
     }
 }
 

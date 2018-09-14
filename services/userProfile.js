@@ -297,7 +297,7 @@ export default {
             }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
-                 console.log('trying to get private user with id: ', params);
+                 //console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.id + '/profile',

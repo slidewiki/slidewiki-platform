@@ -226,7 +226,7 @@ class UserProfileStore extends BaseStore {
 
     fillInUser(payload) {
         //console.log('UserProfileStore.fillInUser.payload='+JSON.stringify(payload));
-        console.log('UserProfileStore.fillInUser called');
+        //console.log('UserProfileStore.fillInUser called');
         if(this.username === payload.uname)
             this.userpicture = payload.picture;
         if(!payload.onlyPicture){
@@ -234,8 +234,7 @@ class UserProfileStore extends BaseStore {
             this.category = payload.category;
         }
         this.user.email = payload.email;
-        console.log('UserProfileStore.fillInUser.this.user.email='+this.user.email);
-
+        //console.log('UserProfileStore.fillInUser.this.user.email='+this.user.email);
         this.emitChange();
     }
 

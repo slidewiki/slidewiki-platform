@@ -4,6 +4,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import updateUserlti from '../../../actions/user/userprofile/updateUserlti';
 import deleteUserlti from '../../../actions/user/userprofile/deleteUserlti';
 import leaveUserlti from '../../../actions/user/userprofile/leaveUserlti';
+import { LTI_ID } from '../../../configs/general';
 
 class UserLTIs extends React.Component {
     constructor(props){
@@ -48,10 +49,7 @@ class UserLTIs extends React.Component {
             return lti._id.toString() === ltiid;
         });
 
-        // console.log('handleClickOnEditLTI: use lti', lti);
-
         this.context.executeAction(updateUserlti, {lti: lti, offline: false});
-
         this.context.executeAction(navigateAction, {
             url: '/user/' + this.props.username + '/ltis/edit'
         });
@@ -98,39 +96,58 @@ class UserLTIs extends React.Component {
 
     render() {
         let items = [];
-        // console.log('render userLTIs:', this.props.userid, this.props.ltis);
-        this.props.ltis.forEach((lti) => {
-            items.push( (
-                <div key={lti._id} className="ui vertical segment" >
-                    <div className="ui two column grid container">
+        console.log('render userLTIs:', this.props.userid, this.props.ltis);
+        if(! (this.props.username.endsWith(LTI_ID))){
+          this.props.ltis.forEach((lti) => {
+              items.push( (
+                  <div key={lti._id} className="ui vertical segment" >
+                      <div className="ui two column grid container">
 
-                        <div className="column">
-                            <div className="ui header"><h3>{lti.key}</h3></div>
-                            <div
-                                 className="meta">{lti.members.length+1} member{((lti.members.length+1) !== 1) ? 's': ''}</div>
-                        </div>
+                          <div className="column">
+                              <div className="ui header"><h3>{lti.key}</h3></div>
+                              <div
+                                   className="meta">{lti.members.length+1} member{((lti.members.length+1) !== 1) ? 's': ''}</div>
+                          </div>
 
-                        <div className="right aligned column">
-                            {((this.props.userid === lti.creator) || (this.props.userid === lti.creator.userid)) ? (
-                              <div>
-                                  <button className="ui large basic icon button" data-tooltip="LTI deletion" aria-label="LTI deletion" name={'deleteLTI_' + lti._id} onClick={this.handleClickOnRemoveLTI.bind(this)} >
-                                      <i className="remove icon" name={'deleteLTI_' + lti._id} ></i>
-                                  </button>
-                                  <button className="ui large basic icon button" data-tooltip="LTI settings" aria-label="LTI settings" name={'changeLTI_' + lti._id} onClick={this.handleClickOnEditLTI.bind(this)} >
-                                      <i className="setting icon" name={'changeLTI_' + lti._id} ></i>
-                                  </button>
-                              </div>
-                            ) : (
-                              <button className="ui large basic icon button" data-tooltip="Leave LTI" aria-label="Leave LTI" name={'leaveLTI_' + lti._id} onClick={this.handleClickOnLeaveLTI.bind(this)} >
-                                  <i className="remove icon" name={'leaveLTI_' + lti._id} ></i>
-                              </button>
-                            )}
+                          <div className="right aligned column">
+                              {((this.props.userid === lti.creator) || (this.props.userid === lti.creator.userid)) ? (
+                                <div>
+                                    <button className="ui large basic icon button" data-tooltip="LTI deletion" aria-label="LTI deletion" name={'deleteLTI_' + lti._id} onClick={this.handleClickOnRemoveLTI.bind(this)} >
+                                        <i className="remove icon" name={'deleteLTI_' + lti._id} ></i>
+                                    </button>
+                                    <button className="ui large basic icon button" data-tooltip="LTI settings" aria-label="LTI settings" name={'changeLTI_' + lti._id} onClick={this.handleClickOnEditLTI.bind(this)} >
+                                        <i className="setting icon" name={'changeLTI_' + lti._id} ></i>
+                                    </button>
+                                </div>
+                              ) : (
+                                <button className="ui large basic icon button" data-tooltip="Leave LTI" aria-label="Leave LTI" name={'leaveLTI_' + lti._id} onClick={this.handleClickOnLeaveLTI.bind(this)} >
+                                    <i className="remove icon" name={'leaveLTI_' + lti._id} ></i>
+                                </button>
+                              )}
 
-                        </div>
-                    </div>
-                </div>
-            ));
-        });
+                          </div>
+                      </div>
+                  </div>
+              ));
+          });
+        }//end if(! (this.props.username.endsWith(LTI_ID))
+        else{
+          this.props.ltis.forEach((lti) => {
+              items.push( (
+                  <div key={lti._id} className="ui vertical segment" >
+                      <div className="ui two column grid container">
+
+                          <div className="column">
+                              <div className="ui header"><h3>{lti.key}</h3></div>
+                              <div
+                                   className="meta">{lti.members.length+1} member{((lti.members.length+1) !== 1) ? 's': ''}</div>
+                          </div>
+                      </div>
+                  </div>
+              ));
+          });
+        }
+
 
         if (this.props.ltis === undefined || this.props.ltis === null || this.props.ltis.length < 1) {
             items = [(
@@ -142,21 +159,37 @@ class UserLTIs extends React.Component {
             )];
         }
 
-        return (
-            <div className="ui segments">
-                <div className="ui secondary clearing segment" >
-                  <h3 className="ui left floated header" >LTIs</h3>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewLTI.bind(this)}>
-                      <i className="icon users"/>
-                      <p>Create new LTI</p>
-                  </button>
+        if(! (this.props.username.endsWith(LTI_ID))){
+          return (
+              <div className="ui segments">
+                  <div className="ui secondary clearing segment" >
+                    <h3 className="ui left floated header" >LTIs</h3>
+                    <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewLTI.bind(this)}>
+                        <i className="icon users"/>
+                        <p>Create new LTI</p>
+                    </button>
+                </div>
+
+                {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+
+                {items}
               </div>
+          );
+        }//end if
+        else{
+          return (
+              <div className="ui segments">
+                  <div className="ui secondary clearing segment" >
+                    <h3 className="ui left floated header" >LTIs</h3>
+                </div>
 
-              {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
-              {items}
-            </div>
-        );
+                {items}
+              </div>
+          );
+        }//end else
+
     }
 }
 

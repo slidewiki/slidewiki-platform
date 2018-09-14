@@ -79,16 +79,6 @@ class UserLTIEdit extends React.Component {
     }
 
     getLTI(members = undefined) {
-      /*
-        let lti = {
-            _id: this.props.currentUserlti._id,
-            name: this.refs.LTIName.value,
-            description: this.refs.LTIDescription.value,
-            members: members,
-            timestamp: this.props.currentUserlti.timestamp || '',
-            creator: this.props.currentUserlti.creator || this.props.userid
-        };
-        */
 
         let lti = {
             _id: this.props.currentUserlti._id,
@@ -141,7 +131,6 @@ class UserLTIEdit extends React.Component {
 
     handleClickRemoveMember(member) {
         // console.log('handleClickRemoveMember', member, 'from', this.props.currentUserlti.members);
-
         let lti = this.getLTI(this.props.currentUserlti.members);
 
         lti.members = lti.members.filter((gmember) => {

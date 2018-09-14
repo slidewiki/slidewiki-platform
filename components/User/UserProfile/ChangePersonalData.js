@@ -9,6 +9,7 @@ import Iso from 'iso-639-1';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
+import { LTI_ID } from '../../../configs/general';
 import { Dropdown, Label } from 'semantic-ui-react';
 
 
@@ -75,13 +76,11 @@ class ChangePersonalData extends React.Component {
         let languageOptions = this.getLocaleOptions();
         let currentLocale = (this.state.currentLocale.length <= 2) ? this.state.currentLocale : 'en';
 
-        console.log("ChangePersonalData.props.user.email="+this.props.user.email);
-        console.log("ChangePersonalData.props.username="+this.props.user.uname);
-        //if (this.props.user.email != 'temp@temp.com')
-        //if (this.props.user.uname != 'admin@lti.org')
-        if (!this.props.user.uname.endsWith('@lti.org'))
+        //console.log("ChangePersonalData.props.username="+this.props.user.uname);
+        //console.log("LTI_ID="+LTI_ID);
+        if (!this.props.user.uname.endsWith(LTI_ID))
         {
-        return (
+          return (
             <div>
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
                     <div className="two fields">
@@ -173,14 +172,12 @@ class ChangePersonalData extends React.Component {
                 </form>
             </div>
         );
-
       }//end if
       else{
 
         return (
-            <div>           </div>
+            <div>   </div>
           );
-
       }//end else
 
     }

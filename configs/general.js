@@ -12,4 +12,5 @@ export default {
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     loglevel: 'debug',
     ssoEnabled: true,
+    LTI_ID: '@lti.org',
 };

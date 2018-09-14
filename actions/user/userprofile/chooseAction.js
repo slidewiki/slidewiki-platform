@@ -5,7 +5,7 @@ import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
 import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
-import { shortTitle } from '../../../configs/general';
+import { shortTitle, LTI_ID } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
@@ -19,14 +19,9 @@ export const categories = { //Do NOT alter the order of these items! Just add yo
 
 export function chooseAction(context, payload, done) {
     log.info(context);
-    console.log('chooseAction.context='+JSON.stringify(context));
-    console.log('chooseAction.payload='+JSON.stringify(payload));
-    console.log('chooseAction.payload.params.username='+payload.params.username);
-    console.log('chooseAction.payload.params.username='+payload.params.username.endsWith('@lti.org'));
-    //console.log('chooseAction.payload.params.username='+this.props.UserProfileStore.user.email);
+
     let title = shortTitle + ' | ';
-    if(!(payload.params.username.endsWith('@lti.org')))
-    {
+    
     switch(payload.params.category){
         case categories.categories[0]:
             switch(payload.params.item){
@@ -88,12 +83,6 @@ export function chooseAction(context, payload, done) {
         default:
             title = shortTitle;
     };
-
-  }
-  else{
-
-
-  }//end else
     context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     async.series([
@@ -128,7 +117,6 @@ export function chooseAction(context, payload, done) {
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     context.executeAction(loadUserRecommendations, {}, callback);
                     break;
-
 
                 case categories.categories[5]:
                     if(!categories.settings.includes(payload.params.item) && !categories.ltis.includes(payload.params.item) ){
