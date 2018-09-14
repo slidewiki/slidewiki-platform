@@ -141,7 +141,7 @@ class UserLTIEdit extends React.Component {
     }
 
     render() {
-       console.log("UserLTIEdit rendered");
+        //console.log('UserLTIEdit rendered');
         const signUpLabelStyle = {width: '150px'};
 
         let userlist = [];

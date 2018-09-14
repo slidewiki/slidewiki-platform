@@ -21,47 +21,47 @@ class CategoryBox extends React.Component {
       //this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
     render() {
-      console.log("CategoryBox.props.username="+this.props.username);
-      if (! (this.props.username.endsWith(LTI_ID)))
-      {
-        return (
-          <div ref="menus">
+        //console.log('CategoryBox.props.username='+this.props.username);
+        if (! (this.props.username.endsWith(LTI_ID)))
+        {
+          return (
+            <div ref="menus">
 
-            <div className="ui vertical fluid menu">
-              <div className="item" style={ this.headerStyle }>
-                <h3>
-                  <FormattedMessage
-                    id='CategoryBox.personalSettings'
-                    defaultMessage='Personal settings'
-                  />
-                </h3>
-              </div>
+              <div className="ui vertical fluid menu">
+                <div className="item" style={ this.headerStyle }>
+                  <h3>
+                    <FormattedMessage
+                      id='CategoryBox.personalSettings'
+                      defaultMessage='Personal settings'
+                      />
+                  </h3>
+                </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
-                <p>
-                  <i className="icon user"/>
-                  <FormattedMessage
-                    id='CategoryBox.profile'
-                    defaultMessage=' Profile'
-                  />
-                </p>
+                 <p>
+                   <i className="icon user"/>
+                   <FormattedMessage
+                     id='CategoryBox.profile'
+                     defaultMessage=' Profile'
+                   />
+                 </p>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/account'} activeStyle={this.styles}>
-                <p>
-                  <i className="icon lock"/>
-                  <FormattedMessage
-                    id='CategoryBox.account'
-                    defaultMessage=' Account'
-                  />
-                </p>
+                 <p>
+                   <i className="icon lock"/>
+                   <FormattedMessage
+                     id='CategoryBox.account'
+                     defaultMessage=' Account'
+                   />
+                 </p>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/integrations'} activeStyle={this.styles}>
-                <p>
-                  <i className="icon cloud"/>
-                  <FormattedMessage
-                    id='CategoryBox.authorizedAccounts'
-                    defaultMessage=' Authorized Accounts'
-                  />
-                </p>
+                 <p>
+                   <i className="icon cloud"/>
+                   <FormattedMessage
+                     id='CategoryBox.authorizedAccounts'
+                     defaultMessage=' Authorized Accounts'
+                   />
+                 </p>
               </NavLink>
             </div>
 
@@ -84,7 +84,6 @@ class CategoryBox extends React.Component {
                 </p>
               </NavLink>
             </div>
-
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
@@ -109,19 +108,19 @@ class CategoryBox extends React.Component {
           </div>
         );
       }//end
-      else{
-        return (
-          <div ref="menus">
+        else{
+          return (
+            <div ref="menus">
 
-            <div className="ui vertical fluid menu">
-              <div className="item" style={ this.headerStyle }>
-                <h3>
-                  <FormattedMessage
-                    id='CategoryBox.personalSettings'
-                    defaultMessage='Personal settings'
-                  />
-                </h3>
-              </div>
+              <div className="ui vertical fluid menu">
+                <div className="item" style={ this.headerStyle }>
+                  <h3>
+                    <FormattedMessage
+                      id='CategoryBox.personalSettings'
+                      defaultMessage='Personal settings'
+                      />
+                  </h3>
+                </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                 <p>
                   <i className="icon user"/>
@@ -173,7 +172,7 @@ class CategoryBox extends React.Component {
                 </p>
               </NavLink>
             </div>
-            
+
           </div>
         );
       }//end else

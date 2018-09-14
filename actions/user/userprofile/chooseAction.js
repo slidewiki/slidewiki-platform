@@ -21,7 +21,7 @@ export function chooseAction(context, payload, done) {
     log.info(context);
 
     let title = shortTitle + ' | ';
-    
+
     switch(payload.params.category){
         case categories.categories[0]:
             switch(payload.params.item){
@@ -120,12 +120,12 @@ export function chooseAction(context, payload, done) {
 
                 case categories.categories[5]:
                     if(!categories.settings.includes(payload.params.item) && !categories.ltis.includes(payload.params.item) ){
-                            context.executeAction(notFoundError, {}, callback);
-                            break;
-                        }
-                        context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
-                        callback();
-                      break;
+                        context.executeAction(notFoundError, {}, callback);
+                        break;
+                    }
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+                    callback();
+                    break;
 
                 default:
                     context.executeAction(notFoundError, {}, callback);

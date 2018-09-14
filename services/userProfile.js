@@ -25,7 +25,7 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
-        console.log("userProfile.resource="+resource);
+        //console.log('userProfile.resource='+resource);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'userProfile.updatePassword') {

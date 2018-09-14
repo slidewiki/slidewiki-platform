@@ -80,7 +80,7 @@ class ChangePersonalData extends React.Component {
         //console.log("LTI_ID="+LTI_ID);
         if (!this.props.user.uname.endsWith(LTI_ID))
         {
-          return (
+            return (
             <div>
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
                     <div className="two fields">
@@ -171,14 +171,14 @@ class ChangePersonalData extends React.Component {
                     </button>
                 </form>
             </div>
-        );
-      }//end if
-      else{
-
-        return (
-            <div>   </div>
           );
-      }//end else
+        }//end if
+        else{
+
+            return (
+              <div>   </div>
+        );
+        }//end else
 
     }
 }

@@ -98,7 +98,7 @@ class UserLTIs extends React.Component {
         let items = [];
         console.log('render userLTIs:', this.props.userid, this.props.ltis);
         if(! (this.props.username.endsWith(LTI_ID))){
-          this.props.ltis.forEach((lti) => {
+            this.props.ltis.forEach((lti) => {
               items.push( (
                   <div key={lti._id} className="ui vertical segment" >
                       <div className="ui two column grid container">
@@ -132,7 +132,7 @@ class UserLTIs extends React.Component {
           });
         }//end if(! (this.props.username.endsWith(LTI_ID))
         else{
-          this.props.ltis.forEach((lti) => {
+            this.props.ltis.forEach((lti) => {
               items.push( (
                   <div key={lti._id} className="ui vertical segment" >
                       <div className="ui two column grid container">
@@ -160,7 +160,7 @@ class UserLTIs extends React.Component {
         }
 
         if(! (this.props.username.endsWith(LTI_ID))){
-          return (
+            return (
               <div className="ui segments">
                   <div className="ui secondary clearing segment" >
                     <h3 className="ui left floated header" >LTIs</h3>
@@ -177,7 +177,7 @@ class UserLTIs extends React.Component {
           );
         }//end if
         else{
-          return (
+            return (
               <div className="ui segments">
                   <div className="ui secondary clearing segment" >
                     <h3 className="ui left floated header" >LTIs</h3>
