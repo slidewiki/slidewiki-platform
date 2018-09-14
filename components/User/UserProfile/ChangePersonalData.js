@@ -5,7 +5,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import {getLanguageName, getLanguageNativeName} from '../../../common';
+import Iso from 'iso-639-1';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
@@ -33,7 +33,6 @@ class ChangePersonalData extends React.Component {
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
-        payload.displayName = this.refs.displayName.value;
 
         console.log(payload.language);
 
@@ -49,7 +48,7 @@ class ChangePersonalData extends React.Component {
             let flag = flagForLocale(locale) || 'icon';
             let options = {
                 key: locale,
-                text: <span><i className={`flag ${flag}`} />{getLanguageName(locale)}</span>,
+                text: <span><i className={`flag ${flag}`} />{Iso.getName(locale)}</span>,
                 value: locale,
             };
             return options;
@@ -75,6 +74,13 @@ class ChangePersonalData extends React.Component {
         let emailToolTipp = this.props.failures.emailNotAllowed ? this.context.intl.formatMessage(messages.emailNotAllowed) : undefined;
         let languageOptions = this.getLocaleOptions();
         let currentLocale = (this.state.currentLocale.length <= 2) ? this.state.currentLocale : 'en';
+
+        console.log("ChangePersonalData.props.user.email="+this.props.user.email);
+        console.log("ChangePersonalData.props.username="+this.props.user.uname);
+        //if (this.props.user.email != 'temp@temp.com')
+        //if (this.props.user.uname != 'admin@lti.org')
+        if (!this.props.user.uname.endsWith('@lti.org'))
+        {
         return (
             <div>
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
@@ -97,16 +103,6 @@ class ChangePersonalData extends React.Component {
                             </label>
                             <input type="text" placeholder="Doe" name="lname" id="lname" defaultValue={this.props.user.lname} ref="lname" required/>
                         </div>
-                    </div>
-
-                    <div className="ui field">
-                        <label htmlFor="displayName">
-                          <FormattedMessage
-                            id='ChangePersonalData.displayName'
-                            defaultMessage='Display name'
-                          />
-                        </label>
-                        <input type="text" placeholder={this.props.user.uname} id="displayName" name="displayName" defaultValue={this.props.user.displayName} ref="displayName"/>
                     </div>
 
                     <div className="two fields">
@@ -177,6 +173,16 @@ class ChangePersonalData extends React.Component {
                 </form>
             </div>
         );
+
+      }//end if
+      else{
+
+        return (
+            <div>           </div>
+          );
+
+      }//end else
+
     }
 }
 

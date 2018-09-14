@@ -2,7 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
-import slugify from 'slugify';
+import slug from 'slug';
 
 const log = require('../configs/log').log;
 
@@ -25,6 +25,7 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
+        console.log("userProfile.resource="+resource);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'userProfile.updatePassword') {
@@ -51,8 +52,7 @@ export default {
                 country: !isEmpty(params.country) ? params.country : '',
                 picture: !isEmpty(params.picture) ? params.picture : '',
                 organization: !isEmpty(params.organization) ? params.organization : '',
-                description: !isEmpty(params.description) ? params.description : '',
-                displayName: !isEmpty(params.displayName) ? params.displayName : ''
+                description: !isEmpty(params.description) ? params.description : ''
             };
             rp({
                 method: 'PUT',
@@ -141,7 +141,61 @@ export default {
             })
             .then((body) => callback(null, body))
             .catch((err) => callback(err));
-        } else {
+        } else if (resource === 'userProfile.saveUserlti') {
+            console.log('userProfile.saveUserlti');
+            //prepare data
+            if (params.members === null || params.members === undefined)
+                params.members = [];
+            let members = params.members.reduce((prev, curr) => {
+                let member = {
+                    userid: curr.userid,
+                    joined: curr.joined || ''
+                };
+                prev.push(member);
+                return prev;
+            }, []);
+            let tosend = {
+                id: params.id,
+                key: params.key,
+                secret: !isEmpty(params.secret) ? params.secret : '',
+                isActive: !isEmpty(params.isActive) ? params.isActive : true,
+                timestamp: !isEmpty(params.timestamp) ? params.timestamp : '',
+                members: members,
+                referenceDateTime: (new Date()).toISOString()
+            };
+            // console.log('sending:', tosend, params.jwt);
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/userlti/createorupdate',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                body: tosend,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.deleteUserlti') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.user.uri + '/userlti/' + params.ltiid,
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.leaveUserlti') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/userlti/' + params.ltiid + '/leave',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        }
+        else {
             callback('failure');
         }
     },
@@ -199,7 +253,7 @@ export default {
                         roles: params.roles,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        status: params.status || 'any',
+                        status: params.status || 'public',
                         page: params.page,
                         pageSize: 30
                     },
@@ -243,7 +297,7 @@ export default {
             }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
-                // console.log('trying to get private user with id: ', params);
+                 console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.id + '/profile',
@@ -267,7 +321,7 @@ export default {
                         hasPassword: body.hasPassword || false,
                         providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : [],
-                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
+                        ltis: !isEmpty(body.ltis) ? body.ltis : []
                     };
                     callback(null, converted, {
                         headers: {
@@ -302,8 +356,7 @@ export default {
                         country: !isEmpty(body.country) ? body.country : '',
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : '',
-                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
+                        description: !isEmpty(body.description) ? body.description : ''
                     };
                     callback(null, converted);
                 })
@@ -333,5 +386,5 @@ function transform(deck){
 }
 
 function buildSlug(deck) {
-    return slugify(deck.title || '').toLowerCase() || '_';
+    return slug(deck.title || '').toLowerCase() || '_';
 }

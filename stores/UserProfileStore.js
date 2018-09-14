@@ -23,8 +23,7 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: '',
-            displayName: ''
+            description: ''
         };
         this.userDecks = undefined;
         this.userDecksMeta = {};
@@ -44,9 +43,17 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
+
+        this.currentUserlti = {};
+        this.saveUserltiError = '';
+        this.saveUserltiIsLoading = false;
+
         this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+
+        this.deleteUserltiError = '';
+        this.userltisViewStatus = '';
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -82,8 +89,7 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: '',
-            displayName: ''
+            description: ''
         };
         this.lastUser = '';
         this.userpicture = undefined;
@@ -99,10 +105,17 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
+
+        this.currentUserlti = {};
+        this.saveUserltiError = '';
+        this.saveUserltiIsLoading = false;
         this.saveProfileIsLoading = false;
+
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.deleteUserltiError = '';
 
+        this.userltisViewStatus = '';
         //LoginModal
         this.showLoginModal = false;
 
@@ -135,9 +148,18 @@ class UserProfileStore extends BaseStore {
             currentUsergroup: this.currentUsergroup,
             saveUsergroupError: this.saveUsergroupError,
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
+
+            currentUserlti: this.currentUserlti,
+            saveUserltiError: this.saveUserltiError,
+            saveUserltiIsLoading: this.saveUserltiIsLoading,
             saveProfileIsLoading: this.saveProfileIsLoading,
+
             deleteUsergroupError: this.deleteUsergroupError,
             usergroupsViewStatus: this.usergroupsViewStatus,
+
+            deleteUserltiError: this.deleteUserltiError,
+            userltisViewStatus: this.userltisViewStatus,
+
             showDeactivateAccountModal: this.showDeactivateAccountModal
         };
     }
@@ -174,6 +196,14 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = state.saveProfileIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
+
+        this.currentUserlti = state.currentUserlti;
+        this.saveUserltiError = state.saveUserltiError;
+        this.saveUserltiIsLoading = state.saveUserltiIsLoading;
+        this.deleteUserltiError = state.deleteUserltiError;
+        this.userltisViewStatus = state.userltisViewStatus;
+
+
         this.showDeactivateAccountModal = state.showDeactivateAccountModal;
     }
 
@@ -195,12 +225,17 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUser(payload) {
+        //console.log('UserProfileStore.fillInUser.payload='+JSON.stringify(payload));
+        console.log('UserProfileStore.fillInUser called');
         if(this.username === payload.uname)
             this.userpicture = payload.picture;
         if(!payload.onlyPicture){
             Object.assign(this.user, payload);
             this.category = payload.category;
         }
+        this.user.email = payload.email;
+        console.log('UserProfileStore.fillInUser.this.user.email='+this.user.email);
+
         this.emitChange();
     }
 
@@ -337,11 +372,27 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    updateUserlti(lti) {
+        this.currentUserlti = lti;
+        console.log('UserProfileStore: updateUserlti', lti);
+        this.saveUserltiError = '';
+        this.deleteUserltiError = '';
+        this.emitChange();
+    }
+
+
     saveUsergroupFailed(error) {
         this.saveUsergroupIsLoading = false;
         this.saveUsergroupError = error.message;
         this.emitChange();
     }
+
+    saveUserltiFailed(error) {
+        this.saveUserltiIsLoading = false;
+        this.saveUserltiError = error.message;
+        this.emitChange();
+    }
+
 
     saveUsergroupSuccess() {
         this.saveUsergroupIsLoading = false;
@@ -350,8 +401,20 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    saveUserltiSuccess() {
+        this.saveUserltiIsLoading = false;
+        this.currentUserlti = {};
+        this.saveUserltiError = '';
+        this.emitChange();
+    }
+
     saveUsergroupStart() {
         this.saveUsergroupIsLoading = true;
+        this.emitChange();
+    }
+
+    saveUserltiStart() {
+        this.saveUserltiIsLoading = true;
         this.emitChange();
     }
 
@@ -369,6 +432,15 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    deleteUserltiFailed(error) {
+        this.deleteUserltiError = {
+            action: 'delete',
+            message: error.message
+        };
+        this.userltisViewStatus = '';
+        this.emitChange();
+    }
+
     deleteUsergroupSuccess(groupid) {
         console.log('UserProfileStore deleteUsergroupSuccess: delete % from %', groupid, this.user.groups);
         //remove group from user
@@ -383,8 +455,27 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    deleteUserltiSuccess(ltiid) {
+        console.log('UserProfileStore deleteUserltiSuccess: delete % from %', ltiid, this.user.ltis);
+        //remove lti from user
+        let ltis = this.user.ltis.reduce((prev, curr) => {
+            if (curr._id.toString() !== ltiid.toString())
+                prev.push(curr);
+            return prev;
+        }, []);
+        this.user.ltis = ltis;
+        this.deleteUserltiError = '';
+        this.userltisViewStatus = '';
+        this.emitChange();
+    }
+
     updateUsergroupsStatus() {
         this.usergroupsViewStatus = 'pending';
+        this.emitChange();
+    }
+
+    updateUserltisStatus() {
+        this.userltisViewStatus = 'pending';
         this.emitChange();
     }
 
@@ -470,6 +561,18 @@ UserProfileStore.handlers = {
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
+
+    //LTI
+    'UPDATE_USERLTI': 'updateUserlti',
+    'SAVE_USERLTI_START': 'saveUserltiStart',
+    'SAVE_USERLTI_FAILED': 'saveUserltiFailed',
+    'SAVE_USERLTI_SUCCESS': 'saveUserltiSuccess',
+    'DELETE_USERLTI_FAILED': 'deleteUserltiFailed',
+    'DELETE_USERLTI_SUCCESS': 'deleteUserltiSuccess',
+    'UPDATE_USERLTIS_STATUS': 'updateUserltisStatus',
+    'LEAVE_USERLTI_FAILED': 'deleteUserltiFailed',
+    'LEAVE_USERLTI_SUCCESS': 'deleteUserltiSuccess',
+
     'SAVE_USERPROFILE_START': 'saveProfileStart',
     'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
     'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal'

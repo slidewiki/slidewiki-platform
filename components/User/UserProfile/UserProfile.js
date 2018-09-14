@@ -9,6 +9,8 @@ import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
 import UserGroupEdit from './UserGroupEdit';
+import UserLTIs from './UserLTIs';
+import UserLTIEdit from './UserLTIEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
@@ -110,6 +112,17 @@ class UserProfile extends React.Component {
                         break;
                     case categories.groups[1]:
                         return this.displayGroupedit();
+                        break;
+                    default:
+                        return this.notImplemented();
+                }});
+            case categories.categories[5]:
+                return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
+                    case categories.ltis[0]:
+                        return this.displayLTIs();
+                        break;
+                    case categories.ltis[1]:
+                        return this.displayLTIedit();
                         break;
                     default:
                         return this.notImplemented();
@@ -237,6 +250,13 @@ class UserProfile extends React.Component {
         return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} displayName={this.props.UserProfileStore.user.displayName} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
+    displayLTIs() {
+        return (<UserLTIs error={this.props.UserProfileStore.deleteUserltiError} status={this.props.UserProfileStore.userltsViewStatus} ltis={this.props.UserProfileStore.user.ltis} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+    }
+
+    displayLTIedit() {
+        return (<UserLTIEdit saveUserltiError={this.props.UserProfileStore.saveUserltiError} username={this.props.UserProfileStore.username} currentUserlti={this.props.UserProfileStore.currentUserlti} userid={this.props.UserProfileStore.userid} saveUserltiIsLoading={this.props.UserProfileStore.saveUserltiIsLoading} picture={this.props.UserProfileStore.user.picture} />);
+    }
     notImplemented() {
         return (<h3>
           <FormattedMessage
