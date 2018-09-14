@@ -13,8 +13,8 @@ import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick'
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
-import AddQuestionsClick from '../../../actions/slide/AddQuestionsClick';
-import AttachQuestions from './../ContentPanel/AttachSubdeck/AttachQuestionsModal';
+import AddQuestionsClick from '../../../actions/slide/AddQuestionsClick'; /*nikki no longer needed? now done by the modal function? */
+import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal'; /*nikki should this file be moved to another section of components? */
 import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import DeckPageStore from '../../../stores/DeckPageStore';
@@ -205,9 +205,12 @@ class SlideEditLeftPanel extends React.Component {
         this.context.executeAction(HTMLEditorClick, {});
     }
     //currently just for this deck, change this
+    /*nikki is this needed anymore? */
+    /*nikki is add questions click even the correct thing here? is this from sami's code*/
     handleAddQuestionsClick(){
         this.context.executeAction(AddQuestionsClick, {params: {stype : "deck", sid : this.state.deckID}});
     }
+
     handleHelpClick(){
         swal({
             title: this.context.intl.formatMessage({
@@ -330,7 +333,7 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
                     break;
-                case 'handleAddQuestionsClick':
+                case 'handleAddQuestionsClick': /*nikki is this needed anymore? */
                     this.handleAddQuestionsClick();
                 case 'handleHelpClick':
                     this.handleHelpClick();
@@ -353,8 +356,11 @@ class SlideEditLeftPanel extends React.Component {
         const whiteText = {
             fontColor: 'white',
         };
-        let selectorImm = this.props.DeckTreeStore.selector;
-        let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+        let selectorImm = this.props.DeckTreeStore.selector; 
+        let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')}; /*is this line still needed */
+        //let selectorDeck = this.props.DeckPageStore.selector;
+        let selectorDeck = {id: this.props.DeckPageStore.selector.id, stype: 'deck', sid: this.props.DeckPageStore.selector.id}
+        let currentDeck = {DeckTreeStore: this.props.DeckTreeStore};
 
         let buttonStyle = {
             classNames : classNames({
@@ -607,9 +613,8 @@ class SlideEditLeftPanel extends React.Component {
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
-            <a className="item" id="handleAddQuestionsClick" role="button">
-                <AttachQuestions buttonStyle={buttonStyle} selector={selector}/><FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add Questions' />
-            </a>
+           {/*nikki  {console.log(selectorDeck)}*/}
+            <AttachQuestions currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck}/>{/*nikki  <FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add Questions' />*/}
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>

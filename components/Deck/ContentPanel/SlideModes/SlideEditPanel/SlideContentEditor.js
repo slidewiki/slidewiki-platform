@@ -11,11 +11,8 @@ import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-<<<<<<< HEAD
 import AddQuestionsClick from '../../../../../actions/slide/AddQuestionsClick';
-=======
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
->>>>>>> master
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
