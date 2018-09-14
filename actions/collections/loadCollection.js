@@ -4,12 +4,12 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import notFoundError from '../error/notFoundError';
 import loadCollectionDetails from './loadCollectionDetails';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
+import getFollowing from '../../actions/following/getFollowing';
 import UserProfileStore from '../../stores/UserProfileStore';
 
 // loads deck collection details and user info
 export default function loadCollection(context, payload, done) {
     log.info(context);
-
     // load required actions in parallel
     async.parallel([
         (callback) => {
@@ -21,6 +21,14 @@ export default function loadCollection(context, payload, done) {
         },
         (callback) => {
             context.executeAction(loadCollectionDetails, payload, callback);
+        },
+        (callback) => {
+            const userId = context.getStore(UserProfileStore).getState().userid;
+            if (userId !== undefined && userId !== null && userId !== '') {
+                context.executeAction(getFollowing, {playlistId: payload.params.id, userId: userId, followed_type: 'playlist'}, callback);
+            } else {
+                callback();
+            }
         }
     ], (err, results) => {
         if (err) {
