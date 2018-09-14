@@ -16,22 +16,12 @@ export default {
 
         if (resource === 'notifications.list'){
 
-            let subscriptionsString = '';
-            // let mockupSubscriptions = [
-            //   {id:'2', type: 'user', name: 'Nikola T.', selected: true},
-            //   {id:'1', type: 'user', name: 'Dejan P.', selected: true},
-            //   {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
-            //   {id:'8', type: 'slide', name: 'Introduction', selected: true}
-            // ];
-            // mockupSubscriptions.push({id:String(uid), type: 'owner', name: 'My decks and slides', selected: true});
-            let subscriptions = [{id:String(uid), type: 'owner', name: 'My decks and slides', selected: true}];
-
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=false'}).then((res) => {
                 let notifications = JSON.parse(res).items;
-                callback(null, {notifications: notifications, subscriptions: subscriptions});
+                callback(null, {notifications: notifications});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {notifications: [], subscriptions: subscriptions});
+                callback(null, {notifications: []});
             });
         } else if (resource === 'notifications.countnew'){
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=true'}).then((res) => {
