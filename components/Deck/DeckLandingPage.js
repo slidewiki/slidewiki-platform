@@ -98,12 +98,7 @@ class DeckLandingPage extends React.Component {
              <Divider />
 */}
                   <Divider />
-                  <Grid.Row>
-                    <Button compact color='grey' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
-                    <Button compact color='grey' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
-                    <Button compact color='grey' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
-                  </Grid.Row>
-                    <Divider hidden />
+                  
                   <Grid.Row>
                     <h4>Available in the following languages:</h4>
                     {<span><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + deckData.language}>{getLanguageName(deckData.language)} <Flag name={flagForLocale(deckData.language)}/></NavLink>{(deckData.variants.length > 0) ? ', ' : ''}</span>}
@@ -126,14 +121,32 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={3}>
                   <Grid.Row>
-                    <Menu vertical fluid>
-                      <Menu.Item as={() => {return <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid icon basic labelPosition='left' size='large' ><Icon name='folder open' color='yellow'/>Open Deck</Button></NavLink>;}}/>
-                      <Menu.Item as={() => {return <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button basic fluid icon labelPosition='left' size='large' ><Icon name='play circle' color='grey'/>Play SlideShow</Button></a>;}}/>
+                        <Button.Group fluid size='large' basic color='primary' >
+                          <Button icon large aria-label='open deck' data-tooltip='open deck' role='button' >
+                            <Icon name='open folder' color='yellow' />
+                          </Button>
+                          <Button icon large aria-label='open slideshow' data-tooltip='open slideshow' role='button' >
+                            <Icon name='play circle' color='grey' />
+                          </Button>
+                          <Button icon large aria-label='start live presentation' data-tooltip='start live presentation' role='button'>
+                            <Icon name='sitemap' color='blue' />
+                          </Button>
+                        </Button.Group>
+                      {/*<Menu vertical fluid>
+                      <Menu.Item as={() => {return <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid basic color='blue' size='large' ><Icon name='folder large open' color='yellow'/>
+                                Open Deck</Button></NavLink>;}}/>
+                      <Menu.Item as={() => {return <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button fluid basic color='blue' size='large' ><Icon name='play large circle' color='grey'/>Play SlideShow</Button></a>;}}/>
                       <Menu.Item as={() => {return <PresentationPanel deckPage={true}/>;}}/>
                     </Menu>
                     {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
+                    
                   </Grid.Row>
-                  
+                  <Divider />
+                  <Grid.Row>
+                    <Button compact color='secondary' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
+                    <Button compact color='secondary' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
+                    <Button compact color='secondary' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
+                  </Grid.Row>
                   <Divider />
                   <Grid.Row>
                     <ActivityFeedPanel />
