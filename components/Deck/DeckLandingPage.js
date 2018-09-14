@@ -121,7 +121,7 @@ class DeckLandingPage extends React.Component {
 
                 <Grid.Column mobile={16} tablet={4} computer={3}>
                   <Grid.Row>
-                        <Button.Group fluid size='large' basic color='primary' >
+                        <Button.Group fluid size='large' basic color='blue' >
                           <Button icon large aria-label='open deck' data-tooltip='open deck' role='button' >
                             <Icon name='open folder' color='yellow' />
                           </Button>
