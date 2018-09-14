@@ -162,11 +162,11 @@ class ContentActionsFooter extends React.Component {
         }
 
         let desktopButtons = <div>
-          <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
-          <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
+          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+          <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
               <i className="print large icon"></i>
           </button>
-          </NavLink>
+          </a>
           <DownloadModal/>
           <ReportModal/>
           <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
@@ -187,12 +187,12 @@ class ContentActionsFooter extends React.Component {
             <AriaMenuButton.Menu className='ui menu vertical'
              style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
                  <AriaMenuButton.MenuItem className='item' key= {0} tag='li'>
-                   <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank" style={{'color': 'black'}}>
-                    <div aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
+                   <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+                    <div aria-label="Print" data-tooltip="Print" >
                         <i className="print large icon"></i>
                         Print
                     </div>
-                    </NavLink>
+                    </a>
                  </AriaMenuButton.MenuItem>
                  <AriaMenuButton.MenuItem className='item' key= {1} tag='li'>
                    <DownloadModal textOnly={true}/>
