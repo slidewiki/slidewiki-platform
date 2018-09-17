@@ -30,9 +30,9 @@ class ImageCarousel extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log('parent: ' + newProps.initialImage);
+        // console.log('parent: ' + newProps.initialImage);
         if (!this.props.initialImage && newProps.initialImage) {
-            console.log('setting initialImage');
+            // console.log('setting initialImage');
             this.setStart(newProps.initialImage);
             this.initialImage = newProps.initialImage;
         }
@@ -45,23 +45,24 @@ class ImageCarousel extends React.Component {
 
     findImageIndex(image, slides) {
         for (let i = 0; i < slides.length; i++) {
-            console.log(slides[i].value, image);
+            // console.log(slides[i].value, image);
             if (image === slides[i].value) return i + 1;
         }
     }
 
-    onSelectTheme(imageValue, e) {
-        console.log(imageValue);
+    onSelectImage(imageValue, e) {
+        // console.log(imageValue);
         this.props.callback(imageValue);
     }
 
     createSlides() {
         let slides = [];
-
+        // console.log(this.props.slides);
         for (let i=0; i<this.props.slides.length; i++) {
+            // console.log(this.props.slides[i].img);
             slides.push(
                 <li className="glide__slide" key={i}>
-                    <img src={this.props.slides[i].img}/>
+                    <img src={this.props.slides[i].img} alt={this.props.slides[i].alt}/>
                 </li>
             );
         }

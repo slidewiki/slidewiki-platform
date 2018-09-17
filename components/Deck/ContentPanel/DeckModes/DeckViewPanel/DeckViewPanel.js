@@ -20,6 +20,7 @@ import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
 import MobileDetect from 'mobile-detect/mobile-detect';
+import ImageCarousel from '../../../../common/ImageCarousel';
 
 class DeckViewPanel extends React.Component {
     constructor(props) {
@@ -39,6 +40,10 @@ class DeckViewPanel extends React.Component {
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
         this.setState({isMobile: (mobile.phone() !== null) ? true : false});
+    }
+
+    onImageCarouselClicked() {
+        return;
     }
 
     render() {
@@ -235,6 +240,17 @@ class DeckViewPanel extends React.Component {
                                     );
                                 }
                             })}
+                        </div>
+                        <div className="ui container">
+                            <ImageCarousel callback={this.onImageCarouselClicked.bind(this)}
+                                                  initialImage={slidesArr[0].id}
+                                                  slides={
+                                                      slidesArr.map((slide, _) => {
+                                                          let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
+                                                          let thumbnailAlt = slide.title === undefined ? slide.id : slide.title + ' | ' + slide.id;
+                                                          return {img: thumbnailURL, alt: thumbnailAlt, value: slide.id};
+                                                      })
+                                                  }/>
                         </div>
                     </div>
                 </main>
