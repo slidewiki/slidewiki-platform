@@ -13,7 +13,7 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
-import { isEmpty, pickBy, isArray } from 'lodash';
+import { isEmpty, pick, pickBy, isArray, filter } from 'lodash';
 import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
@@ -239,27 +239,48 @@ class SearchPanel extends React.Component {
             nextLink: this.props.SearchResultsStore.links.next
         });
     }
+    getSelectedFacetFields() {
+        let fields = [];
+
+        if (!isEmpty(this.state.language)) {
+            fields.push('language');
+        }
+
+        if (!isEmpty(this.state.user)) {
+            fields.push('user');
+        }
+
+        if (!isEmpty(this.state.tag)) {
+            fields.push('tag');
+        }
+
+        return fields;
+    }
     handleFacetClick(facetItem) {
         const facetField = facetItem.field;
         const facetValue = facetItem.value;
         let facetFieldValue = [];
+        let facetExclude = [];
 
         if (facetField in this.state) {
             if (this.state[facetField].includes(facetValue)) {
                 facetFieldValue = this.state[facetField].filter( (item) => item !== facetValue);
+                facetExclude = this.getSelectedFacetFields();
             } else {
                 let facetFieldArray = this.state[facetField].slice();
                 facetFieldArray.push(facetValue);
                 facetFieldValue = facetFieldArray;
+                facetExclude = [facetField];
             }
         } else {
             facetFieldValue = [facetValue];
+            facetExclude = [facetField];
         }
 
         this.setState({
             ...this.state, 
             [facetField]: facetFieldValue,
-            facet_exclude: facetField,
+            facet_exclude: facetExclude,
         }, () => {
             this.handleRedirect(null, 'facets');
         });
@@ -277,6 +298,8 @@ class SearchPanel extends React.Component {
         if (fieldName === 'user' || fieldName === 'all') {
             newState.user = [];
         }
+
+        newState.facet_exclude = this.getSelectedFacetFields();
 
         this.setState(newState, () => {
             this.handleRedirect(null, 'facets');
@@ -331,6 +354,7 @@ class SearchPanel extends React.Component {
 
         return (
             <div className="ui container">
+            {JSON.stringify(this.state)}
                 <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
                 <form className="ui form success">
                     <div className="field">
