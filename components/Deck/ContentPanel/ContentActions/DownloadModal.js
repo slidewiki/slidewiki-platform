@@ -18,7 +18,6 @@ class DownloadModal extends React.Component{
             modalOpen: false,
             activeTrap: false,
             radioValue: 'PDF'
-
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -94,7 +93,9 @@ class DownloadModal extends React.Component{
 
         switch (type) {
             case 'PDF':
-                return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+                //show print view instead of pdf export service
+                return makeNodeURL(this.props.ContentStore.selector, 'print', undefined, undefined, undefined);
+                //return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
                 break;
             case 'ePub':
                 return Microservices.pdf.uri + '/exportEPub/' + splittedId[0];
