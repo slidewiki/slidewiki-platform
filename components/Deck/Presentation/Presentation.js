@@ -251,7 +251,9 @@ class Presentation extends React.Component{
         if(slides){
             html = slides.map((slide) => {
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
-                let backgroundColour = content.split('background-color: ')[1].split(';')[0];
+                let bgTemp = content.split('background-color: ');
+                //need to check if bg is provided
+                let backgroundColour = bgTemp.length > 1 ? content.split('background-color: ')[1].split(';')[0] : '';
                 return <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
             });
         }

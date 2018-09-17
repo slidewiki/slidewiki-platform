@@ -130,7 +130,11 @@ class SlideContentView extends React.Component {
             styleName = 'white';
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-
+        //to handle non-canvas display of slides
+        let slideHTMLContent = this.props.content;
+        if(slideHTMLContent.indexOf('class="pptx2html"') === -1){
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">' + slideHTMLContent + '</div>';
+        }
         return (
         <div ref='container' id='container'>
             <div ref="slideContentView" className="ui" style={compStyle}>
@@ -138,7 +142,7 @@ class SlideContentView extends React.Component {
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
-                                 dangerouslySetInnerHTML={{__html: this.props.content}}>
+                                 dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
                         </section>
                     </div>
