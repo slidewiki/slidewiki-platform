@@ -9,7 +9,7 @@ import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import {FormattedMessage, defineMessages} from 'react-intl';
-
+import { makeNodeURL } from '../../../common/Util';
 
 class DownloadModal extends React.Component{
     constructor(props) {
@@ -94,7 +94,9 @@ class DownloadModal extends React.Component{
 
         switch (type) {
             case 'PDF':
-                return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+                //show print view instead of pdf export service
+                return makeNodeURL(this.props.ContentStore.selector, 'print', undefined, undefined, undefined);
+                //return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
                 break;
             case 'ePub':
                 return Microservices.pdf.uri + '/exportEPub/' + splittedId[0];
