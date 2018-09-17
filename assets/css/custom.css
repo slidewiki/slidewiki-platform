@@ -207,3 +207,11 @@
   background-color: transparent;
   text-decoration: none;
 }
+
+@media screen and (min-width: 800px) {
+    .printView {
+      margin-left: auto;
+      margin-right: auto;
+      width: 800px;
+    }
+}
