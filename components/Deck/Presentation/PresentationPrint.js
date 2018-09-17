@@ -101,7 +101,7 @@ class PresentationPrint extends React.Component{
           Licensed under the Creative Commons <br/>Attribution ShareAlike CC-BY-SA license <br/>
           <br/><br/>
           This deck was created using <a href="http://slidewiki.org">SlideWiki</a>.<br/>
-          <div><img src="/assets/images/slideWiki.svg" style="width: 200px;"/></div>
+          <div><img src="/assets/images/slidewiki.svg" style="width: 200px;"/></div>
           </center>
         `;
         let returnList = [];
