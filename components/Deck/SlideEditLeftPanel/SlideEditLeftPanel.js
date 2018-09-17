@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
+import { PhotoshopPicker } from 'react-color';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
+import {Button, Icon, Input, Popup, TextArea} from 'semantic-ui-react';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
@@ -240,9 +241,6 @@ class SlideEditLeftPanel extends React.Component {
             //done(reason);
         });
     }
-    handleChangeBackgroundColorClick(){
-        $('#changeBackgroundColorInput').click();
-    }
     handleBackEmbed(){
         this.setState({showOther: true});
         this.setState({showEmbed: false});
@@ -345,19 +343,14 @@ class SlideEditLeftPanel extends React.Component {
     }
     componentDidMount(){
         this.paintButton = (<PaintModal/>);
-        let backgroundColorInput = document.getElementById('changeBackgroundColorInput');
+    }
 
-        if (backgroundColorInput) {
-            backgroundColorInput.addEventListener('input', () => {
-                $('.pptx2html').css('background-color', backgroundColorInput.value);
-            });
-        }
+    handleColorChange(color) {
+        console.log(color);
+        $('.pptx2html').css('background-color', color.hex);
     }
 
     render() {
-        const changeBackgroundColorInputStyle = {
-            display: 'none'
-        };
         const dropDownItemStyle = {
             //minWidth: '100%',
             minHeight: '100px',
@@ -384,10 +377,17 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
                   </a>
-                  <a className="item" id="handleChangeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
-                      <i tabIndex="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
-                  </a>
-                  <input id="changeBackgroundColorInput" type="color" style={changeBackgroundColorInputStyle}/>
+                  <Popup trigger={
+                      <a className="item" id="handleChangeBackgroundColor" role="button" onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
+                          <i tabIndexn="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
+                      </a>
+                    }
+                    content={
+                        <PhotoshopPicker onChange={ this.handleColorChange.bind(this) } header='ola k ase   '/>
+                    }
+                    on='click'
+                    position='right center'
+                  />
                   <a className="item" id="handleRemoveBackgroundClick" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
                       <i tabIndex="0"  className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
                       {/*eraser*/}
