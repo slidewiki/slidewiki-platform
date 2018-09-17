@@ -354,7 +354,6 @@ class SearchPanel extends React.Component {
 
         return (
             <div className="ui container">
-            {JSON.stringify(this.state)}
                 <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
                 <form className="ui form success">
                     <div className="field">
