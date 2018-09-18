@@ -221,6 +221,7 @@ class SearchPanel extends React.Component {
             query.keywords = params.keywords;
         }
 
+        query.keywords = (query.keywords) ? query.keywords : '';
         query.sort = query.sort || 'score';
 
         // redirect with query params

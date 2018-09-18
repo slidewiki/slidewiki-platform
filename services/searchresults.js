@@ -116,7 +116,7 @@ function getActivity(activityType, deckIds){
     return Promise.all(likePromises).then( () => { return activities; });
 }
 
-function getUserIds(docs, facets){
+function getUserIds(docs, facets, selectedUserIds){
     let userIds = flatten(docs.map( (result) => {
         if (isEmpty(result.forks)) { 
             return result.creator; 
@@ -140,6 +140,9 @@ function getUserIds(docs, facets){
         let creatorIds = facets.creator.map( (item) => item.val);
         userIds = userIds.concat(creatorIds);
     }
+
+    // show selected users in facet, even its facet count is zero
+    userIds.concat(selectedUserIds);
 
     return uniq(userIds);
 }
@@ -199,6 +202,28 @@ function getTags(facets) {
     return Promise.all(tagPromises).then( () => { return tags; });
 }
 
+function addToFacet(facetValues, selectedValues) {
+    (selectedValues || []).forEach( (selected) => {
+        let found = facetValues.find( (f) => {
+            return f.val === selected;
+        });
+
+        if (!found) {
+            facetValues.push({
+                val: selected,
+                count: 0, 
+                rowCount: 0
+            });
+        }
+    });
+}
+
+function addSelectedToFacets(facets, query) {
+    addToFacet(facets.language, query.language);
+    addToFacet(facets.creator, query.user);
+    addToFacet(facets.tags, query.tag);
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -214,7 +239,11 @@ export default {
             rp.get(options).then( (response) => {
 
                 let deckIds = response.docs.map( (result) => result.db_id);
-                let userIds = getUserIds(response.docs, response.facets);
+
+                // add selected filters to facets with zero facet count
+                addSelectedToFacets(response.facets, params.query);
+
+                let userIds = getUserIds(response.docs, response.facets, params.query.user);
 
                 Promise.all([ 
                     getUsers(userIds), 

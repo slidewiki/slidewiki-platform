@@ -3,18 +3,12 @@ import searchSyntaxError from '../error/searchSyntaxError';
 import searchStringEmptyError  from '../error/searchStringEmptyError';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
-import resetSearchParams from './resetSearchParams';
 import { isEmpty, isArray } from 'lodash';
 
 export default function loadSearchResults(context, payload, done) {
     context.dispatch('UPDATE_PAGE_TITLE', {
         pageTitle: shortTitle + ' | Search'
     });
-
-    if(isEmpty(payload.query)){
-        context.executeAction(resetSearchParams, payload, done);
-        return;
-    }
 
     payload.query.sort = payload.query.sort || 'score';
 

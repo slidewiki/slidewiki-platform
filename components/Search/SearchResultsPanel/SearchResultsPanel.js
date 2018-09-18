@@ -5,7 +5,6 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
-import loadMoreResults from '../../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import { Grid, Button, Icon, Segment } from 'semantic-ui-react';
 import Facets from './Facets';

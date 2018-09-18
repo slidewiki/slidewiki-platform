@@ -275,7 +275,7 @@ class DeckCollectionStore extends BaseStore {
 
         // more results have been loaded
         if (payload.page > 1) {
-            this.decks = this.decks.concat(payload.docs);
+            this.decks = (this.decks || []).concat(payload.docs);
             this.loadMoreLoading = false;
             this.loadMoreError = false;
 
