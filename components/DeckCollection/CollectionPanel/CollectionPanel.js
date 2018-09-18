@@ -3,12 +3,15 @@ import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../../stores/DeckCollectionStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import UserFollowingsStore from '../../../stores/UserFollowingsStore';
 import { connectToStores } from 'fluxible-addons-react';
 import CustomDate from '../../Deck/util/CustomDate';
 import CollectionDecks from './CollectionDecks';
 import CollectionDecksReorder from './CollectionDecksReorder';
 import {Button, Icon} from 'semantic-ui-react';
 import updateCollectionDeckOrder from '../../../actions/collections/updateCollectionDeckOrder';
+import createFollowing from '../../../actions/following/createFollowing';
+import deleteFollowing from '../../../actions/following/deleteFollowing';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import AddDecksModal from '../Modals/AddDecksModal/AddDecksModal';
 
@@ -70,6 +73,19 @@ class CollectionPanel extends React.Component {
         newState.decksOrder[index] = newState.decksOrder[index + 1];
         newState.decksOrder[index + 1] = tmp;
         this.setState(newState);
+    }
+    handleFollowCollection() {
+        if (this.props.UserFollowingsStore.selectedFollowingId !== null) {
+            this.context.executeAction(deleteFollowing, {
+                id: this.props.UserFollowingsStore.selectedFollowingId
+            });
+        } else {
+            this.context.executeAction(createFollowing, {
+                playlistId: this.props.DeckCollectionStore.collectionDetails._id,
+                userId: this.props.UserProfileStore.userid,
+                followed_type: 'playlist'
+            });
+        }
     }
     handleRemove(index){
         let newState = Object.assign({}, this.state);
@@ -147,7 +163,15 @@ class CollectionPanel extends React.Component {
             sortTitle: {
                 id: 'CollectionPanel.sort.title', 
                 defaultMessage: 'Title'
-            }, 
+            },
+            collectionSubscribe: {
+                id: 'UserCollections.collections.subscribe',
+                defaultMessage: 'Subscribe to this playlist'
+            },
+            collectionUnsubscribe: {
+                id: 'UserCollections.collections.unsubscribe',
+                defaultMessage: 'You are subscribed to this playlist, click to unsubscribe'
+            },
         });
     }
     getSelectedSort(sortBy){
@@ -193,6 +217,11 @@ class CollectionPanel extends React.Component {
                             <b><FormattedMessage {...this.messages.collectionDate} />:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
 
                         <div className = "ui divider" />
+                        { (this.props.UserProfileStore.userid === '') ? '' : (this.props.UserFollowingsStore.selectedFollowingId === null) ? <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionSubscribe)} aria-label={this.context.intl.formatMessage(this.messages.collectionSubscribe)} onClick={this.handleFollowCollection.bind(this)} >
+                            <i className="rss icon" />
+                        </button> : <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.collectionUnsubscribe)} aria-label={this.context.intl.formatMessage(this.messages.collectionUnsubscribe)} onClick={this.handleFollowCollection.bind(this)} >
+                            <i className="rss blue icon" ></i>
+                        </button> }
                     </div>
                 </div>
                 <div className = "twelve wide column" >
@@ -251,10 +280,11 @@ CollectionPanel.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore], (context, props) => {
+CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore, UserProfileStore, UserFollowingsStore], (context, props) => {
     return {
         DeckCollectionStore: context.getStore(DeckCollectionStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
+        UserFollowingsStore: context.getStore(UserFollowingsStore).getState(),
     };
 });
 

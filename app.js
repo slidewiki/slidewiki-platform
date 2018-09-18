@@ -50,6 +50,7 @@ import EditRightsStore from './stores/EditRightsStore';
 import DeckCollectionStore from './stores/DeckCollectionStore';
 import SSOStore from './stores/SSOStore';
 import UserRecommendationsStore from './stores/UserRecommendationsStore';
+import UserFollowingsStore from './stores/UserFollowingsStore';
 import LoginModalStore from './stores/LoginModalStore';
 
 // create new fluxible instance & register all stores
@@ -104,6 +105,7 @@ const app = new Fluxible({
         DeckCollectionStore,
         SSOStore,
         UserRecommendationsStore,
+        UserFollowingsStore,
         LoginModalStore,
     ]
 });
