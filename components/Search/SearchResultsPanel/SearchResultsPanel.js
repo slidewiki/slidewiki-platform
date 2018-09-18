@@ -108,6 +108,9 @@ class SearchResultsPanel extends React.Component {
     clearAll() {
         this.props.clearFacets('all');
     }
+    isEmptyFacets(facets) {
+        return (isEmpty(facets.language) && isEmpty(facets.user) && isEmpty(facets.tags));
+    }
     render() {
         const results = this.props.results;
 
@@ -167,7 +170,8 @@ class SearchResultsPanel extends React.Component {
 
         let showLoading = (this.props.loading && !this.props.fromFacets);
         let showClearAll = (!isEmpty(this.props.selectedFacets.languages) || !isEmpty(this.props.selectedFacets.tags) || !isEmpty(this.props.selectedFacets.users));
-        
+        let emptyFacets = this.isEmptyFacets(this.props.facets);
+
         return (       
             <div>     
             {
@@ -177,7 +181,7 @@ class SearchResultsPanel extends React.Component {
                     </div>
             }
             {
-                (this.props.numFound === 0) &&
+                (this.props.numFound === 0 && emptyFacets) &&
                     <div>
                         <div key="noResultsDiv" className="ui basic segment center aligned">
                             <h3><FormattedMessage {...this.messages.noResults} /></h3>
@@ -189,7 +193,7 @@ class SearchResultsPanel extends React.Component {
                     loadingDiv
             }
             {
-                (!showLoading && !this.props.error && this.props.numFound > 0) &&
+                (!showLoading && !this.props.error && !emptyFacets) &&
                 <div>
                     <Grid>
                         <Default>
@@ -198,14 +202,26 @@ class SearchResultsPanel extends React.Component {
                                     <h2 className="ui header"><FormattedMessage {...this.messages.filters} /></h2> 
                                 </Grid.Column>
                                 <Grid.Column width={12}>
-                                    { resultsHeader }
+                                    { 
+                                        (this.props.numFound === 0)
+                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                </div>
+                                            : resultsHeader
+                                    }
                                 </Grid.Column>
                             </div>
                         </Default>
                         <Mobile>
                             <div className="ui row" style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
                                 <Grid.Column width={16}>
-                                    { resultsHeader }
+                                    { 
+                                        (this.props.numFound === 0)
+                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                </div>
+                                            : resultsHeader
+                                    }
                                 </Grid.Column>
                             </div>
                         </Mobile>

@@ -51,6 +51,10 @@ function buildSlug(deck) {
 }
 
 function getUsers(userIds){
+    if (isEmpty(userIds)) {
+        return Promise.resolve();
+    }
+
     return rp.post({
         uri: `${Microservices.user.uri}/users`,
         body: userIds,

@@ -80,14 +80,17 @@ class Facets extends React.Component {
     }
     getFacetItems(facetArray, facetField, selected) {
 
-        let hasMore = (facetArray.length > 5);
-        let isExpanded = this.state.expanded.includes(facetField);
+        let facetItems = facetArray.sort( (a, b) => {
+            if (selected.includes(a.val) && !selected.includes(b.val)) {
+                return -1;
+            }
 
-        if (hasMore && !isExpanded) {
-            facetArray = facetArray.slice(0, 5);
-        }
+            if (!selected.includes(a.val) && selected.includes(b.val)) {
+                return 1;
+            }
 
-        let facetItems = facetArray.map( (item, index) => {
+            return (b.rowCount - a.rowCount);
+        }).map( (item, index) => {
             let isActive = selected.includes(item.val);
             let labelColor = (isActive) ? 'blue' : 'grey';
             let name = JSON.stringify({ 
@@ -109,6 +112,13 @@ class Facets extends React.Component {
                 { facetText }
             </Menu.Item>;
         });
+
+        let hasMore = (facetItems.length > 5);
+        let isExpanded = this.state.expanded.includes(facetField);
+
+        if (hasMore && !isExpanded) {
+            facetItems = facetItems.slice(0, 5);
+        }
 
         if (hasMore) {
             let hasMoreText = (isExpanded) ? this.context.intl.formatMessage(this.messages.showLess): this.context.intl.formatMessage(this.messages.showMore);

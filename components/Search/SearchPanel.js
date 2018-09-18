@@ -163,6 +163,9 @@ class SearchPanel extends React.Component {
     }
     componentWillReceiveProps(nextProps){
         if (this.props.SearchResultsStore.fetch) {
+            // need to replace state here
+            this.state = null;
+            this.forceUpdate();
             this.setState(nextProps.SearchResultsStore.queryparams);
         }
     }
@@ -217,6 +220,8 @@ class SearchPanel extends React.Component {
         if (params && params.keywords) {
             query.keywords = params.keywords;
         }
+
+        query.sort = query.sort || 'score';
 
         // redirect with query params
         this.context.executeAction(navigateAction, {
@@ -306,52 +311,6 @@ class SearchPanel extends React.Component {
         });
     }
     render() {      
-        // let advanced_options= <div>
-        // <div className="three fields">
-        //     <div className="field">
-        //         <label htmlFor="field"><FormattedMessage {...this.messages.searchFieldTitle} /></label>
-        //         <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
-        //           <option value=' '>{this.context.intl.formatMessage(this.messages.searchFieldPlaceholder)}</option>
-        //           <option value='title'>{this.context.intl.formatMessage(this.messages.searchFieldOptionTitle)}</option>
-        //           <option value='description'>{this.context.intl.formatMessage(this.messages.searchFieldOptionDescription)}</option>
-        //           <option value='content'>{this.context.intl.formatMessage(this.messages.searchFieldOptionContent)}</option>
-        //           <option value='speakernotes'>{this.context.intl.formatMessage(this.messages.searchFieldOptionSpeakernotes)}</option>
-        //         </select>
-        //     </div>
-
-        //     <div className="field">
-        //         <label htmlFor="kind"><FormattedMessage {...this.messages.entityFilterTitle} /></label>
-        //         <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
-        //           <option value=' '>{this.context.intl.formatMessage(this.messages.entityFilterPlaceholder)}</option>
-        //           <option value='slide'>{this.context.intl.formatMessage(this.messages.entityFilterOptionSlide)}</option>
-        //           <option value='deck'>{this.context.intl.formatMessage(this.messages.entityFilterOptionDeck)}</option>
-        //         </select>
-        //     </div>
-
-        //     <div className="field">
-        //         <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
-        //         <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-        //           <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
-        //           {translationLanguages.reduce((arr, curr) => { //<div className="menu">
-        //               arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
-        //               return arr;
-        //           }, [])}
-        //         </select>
-        //     </div>
-        // </div>
-        // <div className="two fields">
-        //     <div className="field">
-        //         <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
-        //         <UsersInput ref='user' placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
-        //     </div>
-
-        //     <div className="field">
-        //         <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
-        //         <TagsInput ref='tag' placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
-        //     </div>
-
-        // </div></div>;
-
         return (
             <div className="ui container">
                 <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
