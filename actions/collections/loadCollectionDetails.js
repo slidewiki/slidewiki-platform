@@ -2,6 +2,7 @@ const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import UserProfileStore from '../../stores/UserProfileStore';
 import notFoundError from '../error/notFoundError';
+import { shortTitle } from '../../configs/general';
 
 // loads a deck collection
 export default function loadCollectionDetails(context, payload, done) {
@@ -22,6 +23,11 @@ export default function loadCollectionDetails(context, payload, done) {
         } else {
             res.sortBy = (payload.query.sort) ? payload.query.sort : 'order';
             context.dispatch('LOAD_COLLECTION_DETAILS_SUCCESS', res);
+
+            let pageTitle = shortTitle + ' | Playlist | ' + res.title;
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: pageTitle
+            });
         }
 
         done();
