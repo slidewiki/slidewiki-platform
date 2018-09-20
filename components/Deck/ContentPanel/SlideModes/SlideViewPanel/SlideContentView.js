@@ -70,8 +70,8 @@ class SlideContentView extends React.Component {
             this.refs.inlineContent.style.overflowX = 'hidden';
 
             /* Some extra padding is added to ensure that the borderline is visible. */
-            this.refs.inlineContent.style.height = contentHeight + padding + 'px';
-            this.refs.inlineContent.style.width = contentWidth + padding + 'px';
+            this.refs.inlineContent.style.height = contentHeight + 'px';
+            this.refs.inlineContent.style.width = contentWidth + 'px';
         } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.inlineContent.style.height = '100%';
