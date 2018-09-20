@@ -24,7 +24,6 @@ import UploadMediaModal from '../../../../common/UploadMediaModal';
 import Util from '../../../../common/Util';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
-import changeSlideSize from "../../../../../actions/slide/changeSlideSize";
 
 let ReactDOM = require('react-dom');
 
