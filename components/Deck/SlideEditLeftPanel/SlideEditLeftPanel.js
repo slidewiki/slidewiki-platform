@@ -43,7 +43,9 @@ class SlideEditLeftPanel extends React.Component {
             titleMissingError: false,
             paintButton: (<a className="item" id="paintModalTrigger" role="button" >
                                 <i tabIndex="0" className="paint brush icon"></i> Paint
-                               </a>)
+                               </a>),
+            backgroundColor: null,
+            colorPopupIsOpen: false
         };
     }
     componentDidUpdate(prevProps, prevState){
@@ -184,6 +186,12 @@ class SlideEditLeftPanel extends React.Component {
         }
 
     }
+    handleOpenColorPopup(){
+        this.setState({
+            colorPopupIsOpen: true,
+            backgroundColor: $('.pptx2html').css('background-color')
+        });
+    }
     changeSlideSizeClick(){
         //console.log('change slide size button clicked');
         this.setState({showSize: true});
@@ -200,11 +208,17 @@ class SlideEditLeftPanel extends React.Component {
             //this.forceUpdate();
         }
     }
-    changeSlideBackgroundClick(){
-        //console.log('change slide background clicked');
-        this.setState({showBackground: true});
-        this.setState({showProperties: false});
-        this.forceUpdate();
+    changeBackgroundColor(){
+        this.setState({
+            backgroundColor: $('.pptx2html').css('background-color'),
+            colorPopupIsOpen: false
+        });
+    }
+    cancelChangeBackgroundColor(){
+        $('.pptx2html').css('background-color', this.state.backgroundColor);
+        this.setState({
+            colorPopupIsOpen: false
+        });
     }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
@@ -258,6 +272,11 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showProperties: false});
         this.setState({showSize: false});
         this.forceUpdate();
+    }
+    handleChangeBackgroundColorClick(){
+        this.setState({
+            backgroundColor: $('.pptx2html').css('background-color')
+        });
     }
     handleKeyPress = (event, param, template) => {
         //console.log(event.key);
@@ -325,16 +344,13 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleSlideSizechange':
                     this.handleSlideSizechange(slideSize);
                     break;
-                case 'changeSlideBackgroundClick':
-                    this.changeSlideBackgroundClick();
-                    break;
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
                     break;
                 case 'handleHelpClick':
                     this.handleHelpClick();
                     break;
-                case 'handleChangeBackgroundColor':
+                case 'handleChangeBackgroundColorClick':
                     this.handleChangeBackgroundColorClick();
                     break;
                 default:
@@ -346,7 +362,6 @@ class SlideEditLeftPanel extends React.Component {
     }
 
     handleColorChange(color) {
-        console.log(color);
         $('.pptx2html').css('background-color', color.hex);
     }
 
@@ -521,27 +536,28 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                       <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
                   </a>
-                 <Popup trigger={
-                      <a className="item" id="handleChangeBackgroundColor" role="button" onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
+                 <Popup id='colorpopup' trigger={
+                      <a className="item" id="handleChangeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
                           <i tabIndexn="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
                       </a>
                     }
                     content={
-                        <PhotoshopPicker onChange={ this.handleColorChange.bind(this) } header='ola k ase   '/>
+                        <PhotoshopPicker onChange={ this.handleColorChange.bind(this) } header='Choose Background Color'
+                            onAccept={this.changeBackgroundColor.bind(this)}
+                            onCancel={this.cancelChangeBackgroundColor.bind(this)}
+                            color={this.state.backgroundColor}
+                        />
                     }
                     on='click'
                     position='right center'
+                    open={this.state.colorPopupIsOpen}
+                    onOpen={this.handleOpenColorPopup.bind(this)}
                   />
                   <a className="item" id="handleRemoveBackgroundClick" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
                       <i tabIndex="0"  className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
                       {/*eraser*/}
                   </a>
                 </form>);
-                /*
-                                  <a className="item" id="changeSlideBackgroundClick" role="button" onClick={this.changeSlideBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideBackgroundClick')}>
-                                      <i tabIndex="0" className="file image outline icon"></i>Background image
-                                  </a>
-                */
                 //better (not working) icons for change slide size
                 //window restore
                 //window restore icon
