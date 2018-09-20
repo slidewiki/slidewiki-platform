@@ -22,7 +22,7 @@ import addSlideTranslation from '../../../actions/translation/addSlideTranslatio
 import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';
 import qs from 'querystring';
 import zoom from '../../../actions/slide/zoom';
-import ContentStore from "../../../stores/ContentStore";
+import ContentStore from '../../../stores/ContentStore';
 
 class InfoPanelInfoView extends React.Component {
     constructor(props){
