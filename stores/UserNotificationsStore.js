@@ -5,7 +5,6 @@ class UserNotificationsStore extends BaseStore {
         super(dispatcher);
         this.notifications = undefined;
         this.newNotificationsCount = 0;
-        this.subscriptions = [];
         this.loading = true;
         this.activityTypes = [
             {type:'add', selected: true},
@@ -26,13 +25,12 @@ class UserNotificationsStore extends BaseStore {
             {type:'left', selected: true}
         ];
     }
-    showLoading(payload){
+    showLoading(){
         this.loading = true;
         this.emitChange();
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        this.subscriptions = payload.subscriptions;
         this.loading = false;
 
         this.newNotificationsCount = this.countNewNotifications();
@@ -58,7 +56,7 @@ class UserNotificationsStore extends BaseStore {
 
         this.emitChange();
     }
-    readAllUserNotificationsSuccess(payload) {
+    readAllUserNotificationsSuccess() {
         this.notifications.forEach((notification) => {notification.new = false;});
         this.newNotificationsCount = 0;
         this.emitChange();
@@ -83,56 +81,26 @@ class UserNotificationsStore extends BaseStore {
         this.emitChange();
     }
     updateNotificationsVisibility(payload) {
-        let clickedSubscription = (payload.changedId === 0) ? this.activityTypes.find((at) => {return (at.type === payload.changedType);}) : this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
-        if (clickedSubscription !== undefined) {
-            clickedSubscription.selected = !clickedSubscription.selected;
-            this.notifications.forEach((notification) => {
-                // notification.visible = this.isVisibleWhenChangedSubscription(notification, clickedSubscription);
-                notification.visible = this.isVisible(notification);
-            });
+        if (payload.changedId === 0) {//activity type filter changed
+            let changedActivityTypeFilter = this.activityTypes.find((at) => {return (at.type === payload.changedType);});
+            if (changedActivityTypeFilter !== undefined) {
+                changedActivityTypeFilter.selected = !changedActivityTypeFilter.selected;
+                this.notifications.forEach((notification) => {
+                    notification.visible = this.isActivityTypeSelected(notification.activity_type);
+                });
+            }
+            this.emitChange();
         }
-
-        this.emitChange();
     }
     selectAllActivityTypes(payload) {
         this.activityTypes.forEach((at) => {at.selected = payload.value;});
         this.notifications.forEach((notification) => {
-            notification.visible = this.isVisible(notification);
+            notification.visible = this.isActivityTypeSelected(notification.activity_type);
         });
 
         this.emitChange();
     }
-    // isVisibleWhenChangedSubscription(notification, changedSubscription) {
-    //     switch (changedSubscription.type) {
-    //         case 'user':
-    //             if (changedSubscription.id === notification.user_id) {
-    //                 return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed(notification.content_kind, notification.content_id);
-    //             }
-    //             break;
-    //         case 'slide':
-    //             if (changedSubscription.id === notification.content_id) {
-    //                 return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed('user', notification.user_id);
-    //             }
-    //             break;
-    //         case 'deck':
-    //             if (changedSubscription.id === notification.content_id) {
-    //                 return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed('user', notification.user_id);
-    //             }
-    //             break;
-    //         default:
-    //             return true;
-    //     }
-    // }
-    isVisible(notification) {
-        return (this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id) || this.isSubscribed('owner', notification.content_owner_id)) && this.isActivityTypeSelected(notification.activity_type);
-    }
-    isSubscribed(type, id) {
-        let subscription = this.subscriptions.find((s) => {return ((s.type === type) && (s.id === id));});
-        if (subscription === undefined) {//not found - not subscribed
-            return false;
-        }
-        return subscription.selected;
-    }
+
     isActivityTypeSelected(type) {
         let activityType = this.activityTypes.find((at) => {return ((at.type === type));});
         if (activityType === undefined) {//not found
@@ -142,7 +110,7 @@ class UserNotificationsStore extends BaseStore {
     }
     addVisibleParameterToNotifications() {
         this.notifications.forEach((notification) => {
-            notification.visible = this.isVisible(notification);
+            notification.visible = this.isActivityTypeSelected(notification.activity_type);
         });
     }
 
@@ -178,7 +146,6 @@ class UserNotificationsStore extends BaseStore {
             notifications: this.notifications,
             newNotificationsCount: this.newNotificationsCount,
             loading: this.loading,
-            subscriptions: this.subscriptions,
             activityTypes: this.activityTypes
         };
     }
@@ -189,7 +156,6 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = state.notifications;
         this.newNotificationsCount = state.newNotificationsCount;
         this.loading = state.loading;
-        this.subscriptions = state.subscriptions;
         this.activityTypes = state.activityTypes;
     }
 }

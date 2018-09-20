@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import sendReportShowWrongFields from '../../actions/report/sendReportShowWrongFields';
@@ -107,6 +108,9 @@ class ReportModal extends React.Component {
     }
 
     componentDidMount() {
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
         $(this.refs.reasonDropdown).dropdown();
         const reportValidation = {
             fields: {
@@ -288,11 +292,14 @@ class ReportModal extends React.Component {
         return(
 
                 <Modal
-                    trigger={
+                    trigger={ !this.props.textOnly ?
                           <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
                                 <Icon name="warning circle" size='large' />
                           </Button>
-
+                          :
+                          <div aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+                                <Icon name="warning circle" size='large' /> Report
+                          </div>
                         }
                     open={this.state.modalOpen}
                     onOpen={this.handleOpen}
@@ -372,8 +379,8 @@ class ReportModal extends React.Component {
 }
 
 ReportModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 ReportModal = connectToStores(ReportModal, [ContentStore, UserProfileStore, SendReportStore], (context, props) => {

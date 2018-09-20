@@ -9,6 +9,8 @@ export default function updateCollectionDeckOrder(context, payload, done) {
     // enrich payload with jwt
     payload.jwt = context.getStore(UserProfileStore).jwt;
 
+    context.dispatch('UPDATE_COLLECTION_DECK_ORDER_LOADING', true);
+
     context.service.update('deckgroups.deckOrder', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
@@ -18,12 +20,11 @@ export default function updateCollectionDeckOrder(context, payload, done) {
 
             // redirect when new order has been saved
             context.executeAction(navigateAction, {
-                url: `/collection/${payload.id}?sort=order`, 
+                url: `/playlist/${payload.id}?sort=order`, 
             });
         }
 
-
-
+        context.dispatch('UPDATE_COLLECTION_DECK_ORDER_LOADING', false);
         done();
     });
 }

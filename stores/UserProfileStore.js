@@ -23,9 +23,13 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: ''
+            description: '',
+            displayName: ''
         };
         this.userDecks = undefined;
+        this.userDecksMeta = {};
+        this.nextUserDecksLoading = false;
+        this.nextUserDecksError = false;
         this.lastUser = '';
         this.username = '';
         this.userid = '';
@@ -56,6 +60,9 @@ class UserProfileStore extends BaseStore {
 
         //LoginModal
         this.showLoginModal = false;
+
+        //Deactivate account modal
+        this.showDeactivateAccountModal = false;
     }
 
     destructor() {
@@ -75,11 +82,15 @@ class UserProfileStore extends BaseStore {
             country: '',
             organization: '',
             picture: '',
-            description: ''
+            description: '',
+            displayName: ''
         };
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+        this.userDecksMeta = {};
+        this.nextUserDecksLoading = false;
+        this.nextUserDecksError = false;
         this.socialLoginError = false;
         this.removeProviderError = false;
         this.addProviderError = false;
@@ -94,6 +105,8 @@ class UserProfileStore extends BaseStore {
 
         //LoginModal
         this.showLoginModal = false;
+
+        this.showDeactivateAccountModal = false;
     }
 
     getState() {
@@ -103,6 +116,9 @@ class UserProfileStore extends BaseStore {
             failures: this.failures,
             user: this.user,
             userDecks: this.userDecks,
+            userDecksMeta: this.userDecksMeta,
+            nextUserDecksLoading: this.nextUserDecksLoading,
+            nextUserDecksError: this.nextUserDecksError,
             dimmer: this.dimmer,
             username: this.username,
             userid: this.userid,
@@ -121,7 +137,8 @@ class UserProfileStore extends BaseStore {
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
             saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
-            usergroupsViewStatus: this.usergroupsViewStatus, 
+            usergroupsViewStatus: this.usergroupsViewStatus,
+            showDeactivateAccountModal: this.showDeactivateAccountModal
         };
     }
 
@@ -135,6 +152,9 @@ class UserProfileStore extends BaseStore {
         this.failures = state.failures;
         this.user = state.user;
         this.userDecks = state.userDecks;
+        this.userDecksMeta = state.userDecksMeta;
+        this.nextUserDecksLoading = state.nextUserDecksLoading;
+        this.nextUserDecksError = state.nextUserDecksError;
         this.dimmer = state.dimmer;
         this.username = state.username;
         this.userid = state.userid;
@@ -154,6 +174,7 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = state.saveProfileIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
+        this.showDeactivateAccountModal = state.showDeactivateAccountModal;
     }
 
     changeTo(payload) {
@@ -192,8 +213,8 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUserDecks(payload) {
-        this.userDecks = [];
-        Object.assign(this.userDecks, payload);
+        this.userDecks = payload.decks;
+        this.userDecksMeta = payload.metadata;
         this.lastUser = this.user.uname;
         this.emitChange();
     }
@@ -234,11 +255,14 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.errorMessage = '';
         this.userDecks = undefined;
+        this.userDecksMeta = {};
         this.emitChange();
     }
 
     handleSignInError(err) {
         this.errorMessage = err.message;
+        this.emitChange();
+        this.errorMessage = '';
         this.emitChange();
     }
 
@@ -363,6 +387,45 @@ class UserProfileStore extends BaseStore {
         this.usergroupsViewStatus = 'pending';
         this.emitChange();
     }
+
+    setUserDecksLoading(){
+        this.userDecks = undefined;
+        // preserve sorting of sort dropdown during loading
+        this.userDecksMeta = {
+            sort: this.userDecksMeta.sort
+        };
+        this.emitChange();
+    }
+
+    setNextUserDecksLoading(){
+        this.nextUserDecksLoading = true;
+        this.emitChange();
+    }
+
+    fetchNextUserDecks(payload){
+        this.userDecks = this.userDecks.concat(payload.decks);
+        this.userDecksMeta = payload.metadata;
+        this.nextUserDecksLoading = false;
+        this.nextUserDecksError = false;
+        this.emitChange();
+    }
+
+    fetchNextUserDecksFailed(){
+        this.nextUserDecksError = true;
+        this.nextUserDecksLoading = false;
+        this.emitChange();
+        this.nextUserDecksError = false;
+    }
+
+    showDeactivateModal() {
+        this.showDeactivateAccountModal = true;
+        this.emitChange();
+    }
+
+    hideDeactivateModal() {
+        this.showDeactivateAccountModal = false;
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -373,6 +436,13 @@ UserProfileStore.handlers = {
     'NEW_USER_DATA': 'fillInUser',
     'NEW_EDITED_USER_DATA': 'fillInEditedUser',
     'NEW_USER_DECKS': 'fillInUserDecks',
+    'NEW_USER_DECKS_LOADING': 'setUserDecksLoading',
+
+    // loading more decks
+    'FETCH_NEXT_USER_DECKS_LOADING': 'setNextUserDecksLoading',
+    'FETCH_NEXT_USER_DECKS': 'fetchNextUserDecks',
+    'FETCH_NEXT_USER_DECKS_FAILED': 'fetchNextUserDecksFailed',
+
     'FETCH_USER_FAILED': 'actionFailed',
     'EDIT_USER_FAILED': 'actionFailed',
     'NEW_PASSWORD': 'successMessage',
@@ -401,6 +471,8 @@ UserProfileStore.handlers = {
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
     'SAVE_USERPROFILE_START': 'saveProfileStart',
+    'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
+    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal'
 };
 
 export default UserProfileStore;

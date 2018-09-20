@@ -3,7 +3,8 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
-const log = require('./log/clog');
+import log from './log/clog';
+import TranslationStore from '../stores/TranslationStore';
 
 export default function loadContributors(context, payload, done) {
     log.info(context);
@@ -19,6 +20,10 @@ export default function loadContributors(context, payload, done) {
 
     context.dispatch('LOAD_CONTRIBUTORS_LOAD', {loadingIndicator: true});
 
+    if (!payload.params.language) {
+        payload.params.language = context.getStore(TranslationStore).currentLang;
+    }
+
     context.service.read('contributors.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
@@ -29,9 +34,6 @@ export default function loadContributors(context, payload, done) {
             // context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'contributors'});
         }
         let pageTitle = shortTitle + ' | Contributors | ' + payload.params.stype + ' | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
         done();
     });
 }

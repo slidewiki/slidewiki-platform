@@ -6,6 +6,8 @@ class DeckFamilyStore extends BaseStore {
         super(dispatcher);
 
         this.tag = '';
+        this.defaultName = '';
+
         this.decks = [];
         this.numFound = 0;
 
@@ -26,6 +28,7 @@ class DeckFamilyStore extends BaseStore {
     }
     updateFamilyDecks(payload){
         this.tag = payload.tag;
+        this.defaultName = payload.defaultName;
         this.decks = payload.decks.map( (deck) => {
             return {
                 deckID: deck.db_id,
@@ -35,6 +38,7 @@ class DeckFamilyStore extends BaseStore {
                 updated: deck.updated,
                 description: deck.description,
                 creationDate: deck.timestamp,
+                noOfLikes: deck.noOfLikes,
             };
         });
 
@@ -73,6 +77,7 @@ class DeckFamilyStore extends BaseStore {
     getState() {
         return {
             tag: this.tag,
+            defaultName: this.defaultName, 
             decks: this.decks,
             numFound: this.numFound,
             loading: this.loading,
@@ -88,6 +93,7 @@ class DeckFamilyStore extends BaseStore {
     rehydrate(state) {
         this.tag = state.tag;
         this.decks = state.decks;
+        this.defaultName = state.defaultName;
         this.numFound = state.numFound;
         this.loading = state.loading;
         this.error = state.error;

@@ -7,7 +7,9 @@ class SlideEditStore extends BaseStore {
         this.id = '';
         this.slideId = '';
         this.title = '';
+        this.LeftPanelTitleChange = false;
         this.content = '';
+        this.markdown = '';
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
@@ -23,6 +25,7 @@ class SlideEditStore extends BaseStore {
         this.tableClick = 'false';
         this.mathsClick = 'false';
         this.codeClick = 'false';
+        this.removeBackgroundClick = 'false';
         this.embedClick = 'false';
         this.embedWidth = '';
         this.embedHeight = '';
@@ -32,27 +35,15 @@ class SlideEditStore extends BaseStore {
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
-        //console.log('test' + payload.slide.revisions[0].title + ' id: ' + payload.slide.id);
-        //console.log('test' + payload.slide.revisions[payload.slide.revisions.length-1]);
-        if (payload.slide.revisions !== undefined)
-        {
-            this.id = payload.slide.id;
-            this.slideId = payload.selector.sid;
-            let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
-            this.title = lastRevision.title? lastRevision.title: ' ';
-            this.content = lastRevision.content? lastRevision.content: ' ';
-            this.speakernotes = lastRevision.speakernotes? lastRevision.speakernotes: ' ';
+        //console.log('test' + payload.slide.title + ' id: ' + payload.slide.id);
+        this.id = payload.slide.id;
+        this.slideId = payload.selector.sid;
+        this.title = payload.slide.title || ' ';
+        this.content = payload.slide.content || ' ';
+        this.markdown = payload.slide.markdown || ' ';
+        this.speakernotes = payload.slide.speakernotes || ' ';
 
-            this.emitChange();
-        }
-        else
-        {
-            this.slideId = '';
-            this.title = 'title not found';
-            this.content = 'content not found';
-            this.speakernotes = 'speaker notes not found';
-            this.emitChange();
-        }
+        this.emitChange();
     }
     saveSlide() {
         this.emitChange();
@@ -133,6 +124,12 @@ class SlideEditStore extends BaseStore {
         this.codeClick = 'false';
         this.emitChange();
     }
+    handleRemoveBackgroundClick(){
+        this.removeBackgroundClick = 'true';
+        this.emitChange();
+        this.removeBackgroundClick = 'false';
+        this.emitChange();
+    }
     handleEmbedClick(payload){
         this.embedClick = 'true';
         this.embedWidth = payload.embedWidth;
@@ -149,6 +146,7 @@ class SlideEditStore extends BaseStore {
     }
     changeTitle(payload){
         this.title = payload.title;
+        this.LeftPanelTitleChange = payload.LeftPanelTitleChange;
         this.emitChange();
         //this.title = '';
         //this.emitChange();
@@ -165,7 +163,9 @@ class SlideEditStore extends BaseStore {
             id: this.id,
             slideId: this.slideId,
             title: this.title,
+            LeftPanelTitleChange: this.LeftPanelTitleChange,
             content: this.content,
+            markdown: this.markdown,
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
             saveSlideClick: this.saveSlideClick,
@@ -181,6 +181,7 @@ class SlideEditStore extends BaseStore {
             tableClick: this.tableClick,
             mathsClick: this.mathsClick,
             codeClick: this.codeClick,
+            removeBackgroundClick: this.removeBackgroundClick,
             embedClick: this.embedClick,
             embedURL: this.embedURL,
             embedCode: this.embedCode,
@@ -196,7 +197,9 @@ class SlideEditStore extends BaseStore {
         this.id = state.id;
         this.slideId = state.slideId;
         this.title = state.title;
+        this.LeftPanelTitleChange = state.LeftPanelTitleChange;
         this.content = state.content;
+        this.markdown = state.markdown;
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
         this.saveSlideClick = state.saveSlideClick;
@@ -212,6 +215,7 @@ class SlideEditStore extends BaseStore {
         this.tableClick = state.tableClick;
         this.mathsClick = state.mathsClick;
         this.codeClick = state.codeClick;
+        this.removeBackgroundClick = state.removeBackgroundClick;
         this.embedClick = state.embedClick;
         this.embedURL = state.embedURL;
         this.embedCode = state.embedCode;
@@ -236,6 +240,7 @@ SlideEditStore.handlers = {
     'TABLE_CLICK': 'handleTableClick',
     'MATHS_CLICK': 'handleMathsClick',
     'CODE_CLICK': 'handleCodeClick',
+    'REMOVE_BACKGROUND_CLICK': 'handleRemoveBackgroundClick',
     'EMBED_CLICK': 'handleEmbedClick',
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',

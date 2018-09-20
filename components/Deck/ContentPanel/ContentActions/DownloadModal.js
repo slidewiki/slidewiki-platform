@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Container, Form, Modal, Radio, Icon, Segment, Grid } from 'semantic-ui-react';
@@ -9,7 +10,6 @@ import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
-
 class DownloadModal extends React.Component{
     constructor(props) {
         super(props);
@@ -18,7 +18,6 @@ class DownloadModal extends React.Component{
             modalOpen: false,
             activeTrap: false,
             radioValue: 'PDF'
-
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -26,7 +25,6 @@ class DownloadModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.handleRadioChange = this.handleRadioChange.bind(this);
-
 
         this.messages = defineMessages({
             downloadModal_header:{
@@ -44,6 +42,10 @@ class DownloadModal extends React.Component{
             downloadModal_cancelButton:{
                 id:'downloadModal.downloadModal_cancelButton',
                 defaultMessage: 'Cancel'
+            },
+            downloadModal_HTML:{
+                id:'downloadModal.downloadModal_HTML',
+                defaultMessage: 'HTML (unzip and open index.html to access off-line presentation)'
             }
         });
     }
@@ -57,7 +59,6 @@ class DownloadModal extends React.Component{
 
     }
 
-
     handleClose(){
         $('#app').attr('aria-hidden', 'false');
         this.setState({
@@ -66,18 +67,21 @@ class DownloadModal extends React.Component{
         });
 
     }
+
     unmountTrap() {
         if(this.state.activeTrap){
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
         }
     }
+
     handleRadioChange(event,data){
         this.setState({
             radioValue:data.value
         });
 
     }
+
     getExportHref(type){
         let splittedId;
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0){
@@ -89,10 +93,15 @@ class DownloadModal extends React.Component{
 
         switch (type) {
             case 'PDF':
-                return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+                //show print view instead of pdf export service
+                return makeNodeURL(this.props.ContentStore.selector, 'print', undefined, undefined, undefined);
+                //return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
                 break;
             case 'ePub':
                 return Microservices.pdf.uri + '/exportEPub/' + splittedId[0];
+                break;
+            case 'HTML':
+                return Microservices.pdf.uri +'/exportOfflineHTML/'+ splittedId[0];
                 break;
             case 'SCORMv1.2':
             case 'SCORMv2':
@@ -108,6 +117,7 @@ class DownloadModal extends React.Component{
 
 
     }
+
     createDownloadActivity() {
         //create new activity
         let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
@@ -124,25 +134,37 @@ class DownloadModal extends React.Component{
         this.context.executeAction(addActivity, {activity: activity});
         context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
+
     handleDownload(event,data){
         if(process.env.BROWSER){
             event.preventDefault();
             window.open(this.getExportHref(this.state.radioValue));
+            this.handleClose();
         }
 
         this.createDownloadActivity();
+        this.handleClose();
 
 
+    }
+    componentDidMount(){
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
     }
 
     render() {
         return(
 
               <Modal
-                  trigger={
+                  trigger={ !this.props.textOnly ?
                         <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
                               <Icon name='download' size='large'/>
                         </Button>
+                        :
+                        <div aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
+                              <Icon name='download' size='large'/> Download
+                        </div>
                   }
 
                   open={this.state.modalOpen}
@@ -181,7 +203,7 @@ class DownloadModal extends React.Component{
 
                                    <Grid.Column textAlign='left' width={13} role="radiogroup" aria-labelledby="downloadModalDescription">
                                     <div  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</div>
-                                    <Form.Field >
+                                     <Form.Field >
                                           <Radio
                                             label='PDF'
                                             name='downloadRadioGroup'
@@ -194,6 +216,20 @@ class DownloadModal extends React.Component{
                                             tabIndex="0"
 
                                             />
+                                      </Form.Field>
+                                      <Form.Field>
+                                        <Radio
+                                          label={this.context.intl.formatMessage(this.messages.downloadModal_HTML)}
+                                          name='downloadRadioGroup'
+                                          value='HTML'
+                                          checked={this.state.radioValue === 'HTML'}
+                                          onChange={this.handleRadioChange}
+                                          role="radio"
+                                          aria-checked={this.state.radioValue === 'HTML'}
+                                          aria-label='HTML'
+                                          tabIndex="0"
+
+                                          />
                                         </Form.Field>
                                         <Form.Field>
                                           <Radio
@@ -285,6 +321,7 @@ class DownloadModal extends React.Component{
                                           onClick={this.handleClose}
                                           content={this.context.intl.formatMessage(this.messages.downloadModal_cancelButton)}
                                       />
+
                                       </Grid.Column>
                                       </Grid.Row>
 
@@ -310,8 +347,8 @@ class DownloadModal extends React.Component{
 }
 
 DownloadModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DownloadModal = connectToStores(DownloadModal,[ContentStore,UserProfileStore],(context,props) => {
     return{

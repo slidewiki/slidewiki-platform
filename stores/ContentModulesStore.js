@@ -5,7 +5,7 @@ class ContentModulesStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.moduleType = 'questions';
-        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0};
+        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0, 'playlists': 0};
         this.selector = {};
     }
     updateContentModules(payload) {
@@ -22,19 +22,17 @@ class ContentModulesStore extends BaseStore {
         this.emitChange();
     }
     updateTagAndDatasourceCount(payload) {
-        let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
-        this.moduleCount.tags = lastRevision.tags?
-            lastRevision.tags.length : 0;
+        this.moduleCount.tags = payload.slide.tags?
+            payload.slide.tags.length : 0;
 
-        this.moduleCount.datasource = lastRevision.dataSources?
-            lastRevision.dataSources.length : 0;
+        this.moduleCount.datasource = payload.slide.dataSources?
+            payload.slide.dataSources.length : 0;
 
         this.emitChange();
     }
     updateTagCountDeck(payload) {
-        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
-        this.moduleCount.tags = lastRevision.tags?
-            lastRevision.tags.length : 0;
+        this.moduleCount.tags = payload.deckData.tags?
+            payload.deckData.tags.length : 0;
 
         this.emitChange();
     }
@@ -46,12 +44,27 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount.questions = payload.count;
         this.emitChange();
     }
+    addQuestionSuccess() {
+        this.moduleCount.questions++;
+        this.emitChange();
+    }
+    deleteQuestionSuccess() {
+        this.moduleCount.questions--;
+        this.emitChange();
+    }
     updateCommentsCount(payload) {
         this.moduleCount.comments = payload.count;
         this.emitChange();
     }
     addCommentSuccess() {
         this.moduleCount.comments++;
+        if (isLocalStorageOn()) {
+            localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
+        }
+        this.emitChange();
+    }
+    deleteCommentSuccess() {
+        this.moduleCount.comments--;
         if (isLocalStorageOn()) {
             localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
         }
@@ -89,6 +102,23 @@ class ContentModulesStore extends BaseStore {
         this.selector = state.selector;
         this.moduleCount = state.moduleCount;
     }
+    loadPlaylistsCount(payload){
+        this.moduleCount.playlists = payload;
+        this.emitChange();
+    }
+    loadPlaylistsCountError(){
+        // not critical to show an error
+        this.moduleCount.playlists = 0;
+        this.emitChange();
+    }
+    increasePlaylistsCount(){
+        this.moduleCount.playlists++;
+        this.emitChange();
+    }
+    decreasePlaylistsCount(){
+        this.moduleCount.playlists--;
+        this.emitChange();
+    }
 }
 
 ContentModulesStore.storeName = 'ContentModulesStore';
@@ -104,9 +134,16 @@ ContentModulesStore.handlers = {
     'REMOVE_TAG': 'removeTagSuccess',
     'NEW_TAG': 'addTagSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
+    'DELETE_COMMENT_SUCCESS': 'deleteCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
-    'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount'
+    'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount',
+    'ADD_QUESTION': 'addQuestionSuccess',
+    'DELETE_QUESTION': 'deleteQuestionSuccess', 
+    'LOAD_PLAYLISTS_COUNT': 'loadPlaylistsCount', 
+    'LOAD_PLAYLISTS_COUNT_FAILURE': 'loadPlaylistsCountError',
+    'ADD_DECK_TO_COLLECTION_SUCCESS': 'increasePlaylistsCount', 
+    'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'decreasePlaylistsCount',
 };
 
 export default ContentModulesStore;

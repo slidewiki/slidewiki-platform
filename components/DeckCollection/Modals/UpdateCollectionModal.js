@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form, Dropdown, Segment, TextArea} from 'semantic-ui-react';
@@ -94,7 +95,7 @@ class UpdateCollectionModal extends React.Component {
         return defineMessages({
             modalTitle: {
                 id: 'UpdateCollectionModal.title',
-                defaultMessage: 'Update Deck Collection'
+                defaultMessage: 'Update Playlist'
             }, 
             titleField: {
                 id: 'UpdateCollectionModal.field.title',
@@ -102,7 +103,7 @@ class UpdateCollectionModal extends React.Component {
             }, 
             titleFieldPlaceholder: {
                 id: 'UpdateCollectionModal.field.title.placeholder',
-                defaultMessage: 'Deck Collection Title'
+                defaultMessage: 'Playlist Title'
             }, 
             descriptionField: {
                 id: 'UpdateCollectionModal.field.description',
@@ -110,7 +111,7 @@ class UpdateCollectionModal extends React.Component {
             }, 
             descriptionFieldPlaceholder: {
                 id: 'UpdateCollectionModal.field.description.placeholder',
-                defaultMessage: 'Deck Collection Description'
+                defaultMessage: 'Playlist Description'
             }, 
             usergroupField: {
                 id: 'UpdateCollectionModal.field.usergroup',
@@ -130,20 +131,18 @@ class UpdateCollectionModal extends React.Component {
             }, 
             updateCollectionSuccessTitle: {
                 id: 'UpdateCollectionModal.success.title',
-                defaultMessage: 'Update Deck Collection'
+                defaultMessage: 'Update Playlist'
             }, 
             updateCollectionSuccessText: {
                 id: 'UpdateCollectionModal.success.text',
-                defaultMessage: 'We are updating the Deck Collection...'
+                defaultMessage: 'We are updating the Playlist...'
             }
         });
     }
     render() {
 
-        // the user can assign a user group to a collection only if he is the creator of the user group
-        let userGroupOptions = (this.props.userGroups || []).filter( (userGroup) => {
-            return (userGroup.creator.userid === this.props.loggedInUser);
-        }).map( (userGroup) => ({
+        // the user can assign a user group to that collection
+        let userGroupOptions = (this.props.userGroups || []).map( (userGroup) => ({
             text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
             value: userGroup._id
         }));
@@ -200,8 +199,8 @@ class UpdateCollectionModal extends React.Component {
 }
 
 UpdateCollectionModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired, 
+    intl: PropTypes.object.isRequired
 };
 
 export default UpdateCollectionModal;

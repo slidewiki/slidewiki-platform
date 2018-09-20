@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Thumbnail from '../../common/Thumbnail';
 import { NavLink } from 'fluxible-router';
@@ -23,54 +24,57 @@ class DeckCard extends React.Component {
         } else {
             thumbnailURL = this.props.cardContent.picture;
         }
+        let viewUrl = ['/deck', this.props.cardContent.deckID, this.props.cardContent.slug].join('/');
+        let presentationUrl = ['/presentation', this.props.cardContent.deckID, this.props.cardContent.slug, this.props.cardContent.deckID].join('/');
+
+        let cardTitle = this.props.cardContent.title;
+        if (cardTitle.length > 25) cardTitle = cardTitle.slice(0,24) + '…';
 
         let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
+
+        let ariaLabel = `Deck: ${this.props.cardContent.title}. Last updated ${timeSince((new Date(this.props.cardContent.updated)))} ago`;
+
+        let hiddenRibbon = '';
+        if (this.props.cardContent.hidden) {
+            hiddenRibbon = <span className="ui red right ribbon label" tabIndex={-1}>Unlisted</span>;
+            ariaLabel = `Unlisted ${ariaLabel}`;
+        };
+        let thumbnailAlt= this.props.cardContent.title + ' | ' + this.props.cardContent.deckID;
         return (
-            <div className='card'>
+            <div className='ui card'>
                 {this.props.newTab === true ? (
-                    <a className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
-                        <Thumbnail url={thumbnailURL} alt={''}
-                            slideId={this.props.cardContent.deckID} />
+                    <a className="image" aria-hidden tabIndex='-1' href={viewUrl} target='_blank'>
+                        <img src={thumbnailURL} alt={thumbnailAlt} />
                     </a>
                 ) : (
-                    <NavLink className="ui medium centered spaced image" aria-hidden={'true'}  tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID}>
-                        <Thumbnail url={thumbnailURL} alt={''}
-                            slideId={this.props.cardContent.deckID} />
+                    <NavLink className="image" aria-hidden tabIndex='-1' href={viewUrl}>
+                        <img src={thumbnailURL} alt={thumbnailAlt} />
                     </NavLink>
                 )}
 
                 <div className="content">
-                    {this.props.newTab === true ? (
-                        this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
+                    <div className="header">
+                        {this.props.newTab === true ? (
+                            <a href={viewUrl} data-tooltip={this.props.cardContent.title} aria-label={ariaLabel} target='_blank'>{cardTitle}</a>
                         ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
-                        )
-                    ) : (
-                        this.props.cardContent.title.length > 25 ? (
-                            <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}><h3 className="header" tabIndex="0">{this.props.cardContent.title.slice(0,24) + '...'}</h3></a>
-                        ) : (
-                            <a href={'/deck/' + this.props.cardContent.deckID}><h3 className="header" tabIndex="0">{this.props.cardContent.title}</h3></a>
-                        )
-                    )}
-                    <div className="meta">
-                        <span className="right floated meta">
-                            <i className="thumbs up icon" aria-label="Number of likes"></i>{this.props.cardContent.noOfLikes}
+                            <NavLink href={viewUrl} data-tooltip={this.props.cardContent.title} aria-label={ariaLabel} >{cardTitle}</NavLink>
+                        )}
+                    </div>
+                    {hiddenRibbon}
+                    <div>
+                        <span className="right floated">
+                            <i className="thumbs up icon" aria-label="Number of likes"></i>{' ' + this.props.cardContent.noOfLikes}
                         </span>
-                        <i className="edit icon" aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</i>
-
+                        <span aria-label="Last updated">{timeSince((new Date(this.props.cardContent.updated)))}</span>
                     </div>
                 </div>
-                <div className="ui menu top attached">
-                    <div className="ui fluid basic buttons">
-                        <a href={'/deck/' + this.props.cardContent.deckID} data-tooltip="open deck" type="button" role="button" className="ui button" aria-label="Open deck">
-                            <i className="yellow open folder large icon" tabIndex="0"></i>
-                        </a>
-                        <a href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui button" type="button" type="button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                            <i className="grey circle play large icon" tabIndex="0"></i>
-                        </a>
-
-                    </div>
+                <div className="bottom attached menu ui basic buttons">
+                    <NavLink href={viewUrl} data-tooltip="Open deck" role="button" className="ui icon button" aria-label="Open deck">
+                        <i className="yellow open folder large icon" aria-hidden="true" ></i>
+                    </NavLink>
+                    <a href={presentationUrl} target="_blank" className="ui icon button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                        <i className="grey circle play large icon" aria-hidden="true" ></i>
+                    </a>
                 </div>
             </div>
         );
@@ -78,7 +82,7 @@ class DeckCard extends React.Component {
 }
 
 DeckCard.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default DeckCard;

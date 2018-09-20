@@ -2,6 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -50,7 +51,8 @@ export default {
                 country: !isEmpty(params.country) ? params.country : '',
                 picture: !isEmpty(params.picture) ? params.picture : '',
                 organization: !isEmpty(params.organization) ? params.organization : '',
-                description: !isEmpty(params.description) ? params.description : ''
+                description: !isEmpty(params.description) ? params.description : '',
+                displayName: !isEmpty(params.displayName) ? params.displayName : ''
             };
             rp({
                 method: 'PUT',
@@ -147,13 +149,105 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-        if(resource !== 'userProfile.fetchUserDecks') {
-            if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
+        params = (params.params) ? params.params : params;
+
+        if(resource === 'userProfile.fetchUserDecks') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/alldecks/' + params.id2,
+                json: true
+            }).then((body) => {
+                //get the number of likes
+                let arrayOfPromises = [];
+                body.forEach((deck) => {
+                    let promise = rp.get({
+                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
+                        qs: {
+                            metaonly: true,
+                            activity_type: 'react',
+                            all_revisions: true
+                        }
+                    });
+                    arrayOfPromises.push(promise);
+                });
+
+                return Promise.all(arrayOfPromises).then((numbers) => {
+                    for (let i = 0; i < numbers.length; i++) {
+                        body[i].noOfLikes = numbers[i];
+                    }
+
+                    let converted = body.map((deck) => { return transform(deck); });
+                    callback(null, converted);
+                });
+            }).catch((err) => callback(err));
+        } else if (resource === 'userProfile.fetchUserOwnedDecks'){
+            let requestCall = '';
+
+            // if we want to load more results, we already have a next link
+            // from the previous response of the deck-service
+            if (params.nextLink){
+                requestCall = {
+                    uri: `${Microservices.deck.uri}${params.nextLink}`,
+                    json: true
+                };
+            } else {
+                requestCall = {
+                    method: 'GET',
+                    uri: `${Microservices.deck.uri}/decks`,
+                    qs: {
+                        user: params.id2,
+                        roles: params.roles,
+                        rootsOnly: true,
+                        sort: (params.sort || 'lastUpdate'),
+                        status: params.status || 'any',
+                        page: params.page,
+                        pageSize: 30
+                    },
+                    json: true
+                };
+            }
+
+            if(params.jwt){
+                requestCall.headers = { '----jwt----': params.jwt };
+            }
+
+            rp(requestCall).then( (response) => {
+                let decks = response.items;
+
+                //get the number of likes
+                let arrayOfPromises = [];
+                decks.forEach((deck) => {
+                    let promise = rp.get({
+                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
+                        qs: {
+                            metaonly: true,
+                            activity_type: 'react',
+                            all_revisions: true
+                        }
+                    });
+                    arrayOfPromises.push(promise);
+                });
+
+                return Promise.all(arrayOfPromises).then((numbers) => {
+                    for (let i = 0; i < numbers.length; i++) {
+                        decks[i].noOfLikes = numbers[i];
+                    }
+
+                    let converted = decks.map((deck) => { return transform(deck); });
+
+                    callback(null, {
+                        metadata: response._meta,
+                        decks: converted
+                    });
+                });
+            }).catch((err) => callback(err));
+        } else {
+            if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
-                    uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
-                    headers: { '----jwt----': params.params.jwt },
+                    uri: Microservices.user.uri + '/user/' + params.id + '/profile',
+                    headers: { '----jwt----': params.jwt },
                     resolveWithFullResponse: true,
                 })
                 .then((response) => {
@@ -172,7 +266,8 @@ export default {
                         description: !isEmpty(body.description) ? body.description : '',
                         hasPassword: body.hasPassword || false,
                         providers: body.providers || [],
-                        groups: !isEmpty(body.groups) ? body.groups : []
+                        groups: !isEmpty(body.groups) ? body.groups : [],
+                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
                     };
                     callback(null, converted, {
                         headers: {
@@ -193,7 +288,7 @@ export default {
                 // console.log('trying to get public user with username: ', params);
                 rp({
                     method: 'GET',
-                    uri: Microservices.user.uri + '/user/' + params.params.username,
+                    uri: Microservices.user.uri + '/user/' + params.username,
                     json: true
                 })
                 .then((body) => {
@@ -207,80 +302,9 @@ export default {
                         country: !isEmpty(body.country) ? body.country : '',
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : ''
+                        description: !isEmpty(body.description) ? body.description : '',
+                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
                     };
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
-            }
-        } else {
-            //TODO get id of a user
-            if(!isEmpty(params.params.jwt) && params.params.loggedInUser === params.params.username){
-                rp({
-                    method: 'GET',
-                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id,
-                    json: true
-                })
-                .then((body) => {
-                    //get the number of likes
-                    let arrayOfPromises = [];
-                    body.forEach((deck) => {
-                        let promise = rp.get({uri: Microservices.activities.uri + '/activities/deck/' + deck._id + '?metaonly=true&activity_type=react&all_revisions=true'});
-                        arrayOfPromises.push(promise);
-                    });
-
-                    return Promise.all(arrayOfPromises)
-                        .then((numbers) => {
-                            for (let i = 0; i < numbers.length; i++) {
-                                body[i].noOfLikes = numbers[i];
-                            }
-
-                            let converted = body.map((deck) => {
-
-                                return {
-                                    title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                                    picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                                    description: deck.description,
-                                    updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                                    creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                                    deckID: deck._id,
-                                    firstSlide: deck.firstSlide,
-                                    theme: deck.theme,
-                                    language:deck.language,
-                                    countRevisions:deck.countRevisions,
-                                    noOfLikes: deck.noOfLikes
-
-                                };
-
-                            }).sort((a,b) => a.creationDate < b.creationDate);
-                            callback(null, converted);
-                        })
-                        .catch((err) => callback(err));
-                })
-                .catch((err) => callback(err));
-            } else if(params.params.loggedInUser !== params.params.username) {
-                //get id of username
-                rp({
-                    method: 'GET',
-                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id2,
-                    json: true
-                })
-                .then((body) => {
-                    let converted = body.map((deck) => {
-                        console.log(deck);
-                        return {
-                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: deck.description,
-                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id,
-                            firstSlide: deck.firstSlide,
-                            theme: deck.theme,
-                            language:deck.language,
-                            countRevisions:deck.countRevisions
-                        };
-                    });
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));
@@ -288,3 +312,26 @@ export default {
         }
     }
 };
+
+function transform(deck){
+    return {
+        title: !isEmpty(deck.title) ? deck.title : 'No Title',
+        slug: buildSlug(deck),
+        picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+        description: deck.description,
+        updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+        creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+        hidden: deck.hidden,
+        deckID: deck._id,
+        firstSlide: deck.firstSlide,
+        theme: deck.theme,
+        language:deck.language,
+        countRevisions:deck.countRevisions,
+        noOfLikes: deck.noOfLikes
+
+    };
+}
+
+function buildSlug(deck) {
+    return slugify(deck.title || '').toLowerCase() || '_';
+}

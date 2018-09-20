@@ -21,7 +21,7 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
-import loadNotFound from '../actions/loadNotFound';
+import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
@@ -34,7 +34,6 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -149,6 +148,17 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Contact Us'
             });
+            done();
+        }
+    },
+    help: {
+        path: '/help', // /playlist/26?sort=order
+        method: 'get',
+        page: 'help',
+        title: 'SlideWiki -- Guides and Help',
+        handler: require('../components/Home/GuidesHelp'),
+        action: (context, payload, done) => {
+            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
             done();
         }
     },
@@ -351,28 +361,39 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            async.series([
-                (callback) => {
-                    context.executeAction(loadDeck, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadTranslations, payload, callback);
-                },
-
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
+            // check params for slug misinterpretation
+            if (payload.params.slug && !payload.params.stype && payload.params.sid) {
+                let stype = payload.params.slug.substring(1);
+                if (['deck', 'slide', 'question'].includes(stype)) {
+                    payload.params.stype = stype;
+                    payload.params.slug = undefined;
+                }
+            }
+            context.executeAction(loadDeck, payload, done);
         }
+    },
+    oldSlugDeck: {
+        path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/deck',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                payload.params.stype,
+                payload.params.spath,
+                payload.params.mode,
+                payload.params.theme,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
+        },
     },
     legacydeck: {
         path: '/deck/:oldid(\\d+_\\w+.*)',
@@ -549,16 +570,104 @@ export default {
         }
 
     },
-
-
     presentation: {
-        path: '/presentation/:id/:subdeck/:sid?',
+        path: '/presentation/:id:slug(/[^/]+)?/:subdeck?/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.sid = payload.params.id;
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
+    print: {
+        path: '/print/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'print',
+        handler: require('../components/Deck/Presentation/PresentationPrint'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // handle sub deck sources
+                    payload.params.stype = 'deck';
+                    payload.params.sid = payload.params.subdeck ? payload.params.subdeck : payload.params.id;
+                    context.executeAction(loadDataSources, payload, callback);
+                },
+                (callback) => {
+                    // handle sub deck contributors
+                    payload.params.stype = 'deck';
+                    payload.params.sid = payload.params.subdeck ? payload.params.subdeck : payload.params.id;
+                    context.executeAction(loadContributors, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
+    oldSlugPresentation: {
+        path: '/presentation:slug(_.+)?/:id/:subdeck?/:sid?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/presentation',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                payload.params.subdeck,
+                payload.params.sid,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
+        },
+    },
+    neo4jguide: {
+        path: '/neo4jguide/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'neo4jguide',
+        handler: require('../components/Deck/Presentation/PresentationNeo4J'),
+        action: (context, payload, done) => {
             context.executeAction(loadPresentation, payload, done);
         }
+    },
+    oldNeo4jguide: {
+        path: '/neo4jguide:slug(_.+)?/:id/:subdeck?/:sid?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/neo4jguide',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                payload.params.subdeck,
+                payload.params.sid,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
+        },
     },
     importfile: {
         path: '/importfile',
@@ -567,7 +676,6 @@ export default {
         handler: require('../actions/loadImportFile'),
         action: (context, payload, done) => {
             context.executeAction(loadImportFile, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
         }
     },
@@ -613,11 +721,11 @@ export default {
         page: 'presentationBroadcast',
         handler: require('../components/webrtc/presentationBroadcast')
     },
-    collection: {
-        path: '/collection/:id',
+    playlist: {
+        path: '/playlist/:id',
         method: 'get',
-        page: 'collection',
-        title: 'SlideWiki -- Deck Collection',
+        page: 'playlist',
+        title: 'SlideWiki -- Playlist',
         handler: require('../components/DeckCollection/CollectionPanel/CollectionPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadCollection, payload, done);
@@ -629,7 +737,7 @@ export default {
         method: 'get',
         handler: require('../components/Error/Dummy'),
         action: (context, payload, done) => {
-            context.executeAction(loadNotFound, payload, done);
+            context.executeAction(notFoundError, payload, done);
         }
     }
     /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/

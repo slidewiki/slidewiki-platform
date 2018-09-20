@@ -10,34 +10,15 @@ class SlideViewStore extends BaseStore {
         this.content = '';
         this.speakernotes = '';
         this.tags = [];
-        this.loadingIndicator = '';
-    }
-    loading(payload){
-        this.loadingIndicator = payload.loadingIndicator;
-        this.emitChange();
     }
     updateContent(payload) {
-        if (payload.slide.revisions !== undefined)
-        {
-            //this.id = payload.slide.id;
-            this.slideId = payload.selector.sid;
-            let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
-            this.title = lastRevision.title;
-            this.content = lastRevision.content;
-            this.speakernotes = lastRevision.speakernotes;
-            this.tags = lastRevision.tags? lastRevision.tags: [];
-            this.loadingIndicator = 'false';
-            this.emitChange();
-        }
-        else
-        {
-            this.slideId = '';
-            this.title = 'title not found';
-            this.content = 'content not found';
-            this.tags = [];
-            this.loadingIndicator = 'false';
-            this.emitChange();
-        }
+        //this.id = payload.slide.id;
+        this.slideId = payload.selector.sid;
+        this.title = payload.slide.title;
+        this.content = payload.slide.content;
+        this.speakernotes = payload.slide.speakernotes;
+        this.tags = payload.slide.tags || [];
+        this.emitChange();
     }
     getState() {
         return {
@@ -47,7 +28,6 @@ class SlideViewStore extends BaseStore {
             content: this.content,
             tags: this.tags,
             speakernotes: this.speakernotes,
-            loadingIndicator: this.loadingIndicator
         };
     }
     dehydrate() {
@@ -60,14 +40,12 @@ class SlideViewStore extends BaseStore {
         this.content = state.content;
         this.tags = state.tags;
         this.speakernotes = state.speakernotes;
-        this.loadingIndicator = state.loadingIndicator;
     }
 }
 
 SlideViewStore.storeName = 'SlideViewStore';
 SlideViewStore.handlers = {
-    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent',
-    'LOAD_SLIDE_CONTENT_LOAD': 'loading'
+    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent'
 };
 
 export default SlideViewStore;

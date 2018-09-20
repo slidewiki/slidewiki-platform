@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { getIntlLanguage } from '../../../common.js';
 import CategoryBox from './CategoryBox';
@@ -14,6 +15,8 @@ import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUs
 import Integrations from './Integrations';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
+
+let MediaQuery = require ('react-responsive');
 
 class UserProfile extends React.Component {
     componentDidMount() {}
@@ -123,9 +126,22 @@ class UserProfile extends React.Component {
                     <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
-                <div className = "twelve wide column" >
-                    {toInsert()}
-                </div>
+                <MediaQuery minDeviceWidth={1024} values={{deviceWidth: 1600}}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={768} maxDeviceWidth={1023}>
+                    <div className = "eleven wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery maxDeviceWidth={767}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+
             </div>
         );
     }
@@ -159,7 +175,7 @@ class UserProfile extends React.Component {
                       </h3>
                   </div>
                   <div className="ui segment">
-                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
+                      <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
                   </div>
 
               </div>
@@ -197,14 +213,14 @@ class UserProfile extends React.Component {
               </div>
 
               <div className="ui segment">
-                <DeactivateAccount />
+                <DeactivateAccount showModal={this.props.UserProfileStore.showDeactivateAccountModal} />
               </div>
             </div>
         </div>);
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} decksMeta={this.props.UserProfileStore.userDecksMeta} loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading} loadMoreError={this.props.UserProfileStore.nextUserDecksError} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} categoryItem={this.props.UserProfileStore.categoryItem} />);
     }
 
     displayIntegrations() {
@@ -218,7 +234,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroupedit() {
-        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
+        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} displayName={this.props.UserProfileStore.user.displayName} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
     notImplemented() {
@@ -236,8 +252,8 @@ class UserProfile extends React.Component {
 }
 
 UserProfile.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {

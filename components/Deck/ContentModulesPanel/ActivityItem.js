@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import likeActivity from '../../../actions/activityfeed/likeActivity';
 import {formatDate} from './util/ActivityFeedUtil';
@@ -25,11 +26,11 @@ class ActivityItem extends React.Component {
         const viewPath = ((node.content_kind === 'slide') ? '/slideview/' : '/deckview/') + node.content_id;
         switch (node.activity_type) {
             case 'translate':
-                IconNode = (<i className="ui big translate icon"></i>);
+                IconNode = (<i className="ui translate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'translated ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>{' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
@@ -40,11 +41,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'share':
-                IconNode = (<i className="ui big slideshare icon"></i>);
+                IconNode = (<i className="ui share alternate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'shared ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>{' on '}
                         <a target="_blank" href={node.share_info.postURI}>{node.share_info.platform}</a>
@@ -54,11 +55,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'add':
-                IconNode = (<i className="ui big write icon"></i>);
+                IconNode = (<i className="ui pencil alternate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'created ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -67,11 +68,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'edit':
-                IconNode = (<i className="ui big edit icon"></i>);
+                IconNode = (<i className="ui edit icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'edited ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -80,11 +81,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'comment':
-                IconNode = (<i className="ui big comment outline icon"></i>);
+                IconNode = (<i className="ui comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'commented on ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -95,11 +96,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'reply':
-                IconNode = (<i className="ui big comments outline icon"></i>);
+                IconNode = (<i className="ui comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a>
                         <span> replied to a comment </span>{'on ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
@@ -111,11 +112,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui big copy icon"></i>);
+                IconNode = (<i className="ui clone outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'used ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         {' in deck '}<a href={'/deckview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
@@ -125,11 +126,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'rate'://TODO modify rate display
-                IconNode = (<i className="ui big empty star icon"></i>);
+                IconNode = (<i className="ui star outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'rated ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -138,11 +139,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'react'://TODO modify react display
-                IconNode = (<i className="ui big thumbs outline up icon"></i>);
+                IconNode = (<i className="ui thumbs outline up icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'liked ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -151,11 +152,11 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'download':
-                IconNode = (<i className="ui big download icon"></i>);
+                IconNode = (<i className="ui download icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
-                            {node.author ? node.author.username : 'unknown'}
+                            {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'downloaded ' + node.content_kind + ' '}
                         <a href={viewPath}>{node.content_name}</a>
                         <br/>
@@ -164,7 +165,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             default:
-                IconNode = (<i className="ui big warning icon"></i>);
+                IconNode = (<i className="ui exclamation circle icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         Unknown type of activity - {node.activity_type}
@@ -196,7 +197,7 @@ class ActivityItem extends React.Component {
 }
 
 ActivityItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ActivityItem;

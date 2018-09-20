@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserReviewStore from '../../../stores/UserReviewStore';
 import getNextReviewableUser from '../../../actions/userReview/getNextReviewableUser';
+import updateTrap from '../../../actions/loginModal/updateTrap';
 
 class UserProfileReview extends React.Component {
     componentDidMount() {
@@ -10,7 +12,10 @@ class UserProfileReview extends React.Component {
         if (!((userProfileStore.username !== undefined && userProfileStore.username !== null && userProfileStore.username !== '')
           && (userProfileStore.userid !== undefined && userProfileStore.userid !== null && userProfileStore.userid !== '')
           && (userProfileStore.jwt !== undefined && userProfileStore.jwt !== null && userProfileStore.jwt !== ''))) {
-
+            //prepraring the modal
+            this.context.executeAction(updateTrap,{activeTrap:true});
+            //hidden the other page elements to readers
+            $('#app').attr('aria-hidden','true');
             $('.ui.login.modal').modal('show');
         }
     }
@@ -55,7 +60,7 @@ class UserProfileReview extends React.Component {
 }
 
 UserProfileReview.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserProfileReview = connectToStores(UserProfileReview, [UserProfileStore,UserReviewStore], (context, props) => {

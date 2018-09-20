@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -44,7 +45,7 @@ class InfoPanel extends React.Component {
 }
 
 InfoPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 InfoPanel = connectToStores(InfoPanel, [ContributorsStore, ActivityFeedStore], (context, props) => {
     return {

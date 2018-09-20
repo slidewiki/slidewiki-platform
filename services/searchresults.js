@@ -1,42 +1,9 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
+import slugify from 'slugify';
+
 const log = require('../configs/log').log;
-
-function extractSpellcheckSuggestion(spellcheck){
-
-    if(!spellcheck) return '';      // spellcheck is not defined
-
-    if(spellcheck.collations && spellcheck.collations.length > 0){
-        // collations are returned in an array with the term 'collation' in odd cells
-        // and the actual collations in even cells
-        for(let i=1; i<spellcheck.collations.length; i+=2){
-            let collation = spellcheck.collations[i].collationQuery;
-            let col = '';
-            let index = 1;
-
-            // if query was made against a specific field, remove this field name from the collation
-            if(collation.startsWith('title:') || collation.startsWith('description:') ||
-                    collation.startsWith('content:') || collation.startsWith('speakernotes:')){
-
-                index = collation.indexOf(':') + 2;
-            }
-            return collation.substring(index, collation.length-1); //terms are inside parentheses
-        }
-    }
-    else if(spellcheck.suggestions && spellcheck.suggestions.length > 0){
-        let suggestion = '';
-
-        // collations are not present, so concatenate suggestions of individual terms
-        for(let i=1; i<spellcheck.suggestions.length; i+=2){
-            suggestion += spellcheck.suggestions[i].suggestion[0].word + ' ';
-        }
-        return suggestion.trim();
-
-    }
-
-    return '';
-}
 
 function parseSlide(slide){
     slide.deck = {
@@ -47,7 +14,7 @@ function parseSlide(slide){
     slide.link = `/deck/${slide.usage[0]}/slide/${slide.db_id}-${slide.db_revision_id}`;
     slide.kind = 'Slide';
     slide.title = (slide.title && slide.title.length > 70) ? slide.title.substring(0,70)+'...' : slide.title;
-    slide.description = (slide.content && slide.content.length > 85) ? slide.content.substring(0,85)+'...' : slide.content;
+    slide.description = (slide.content[0] && slide.content[0].length > 85) ? slide.content[0].substring(0,85)+'...' : slide.content[0];
     slide.lastUpdate = customDate.format(slide.lastUpdate, 'Do MMMM YYYY');
     slide.user = {
         id: slide.creator,
@@ -57,8 +24,9 @@ function parseSlide(slide){
 }
 
 function parseDeck(deck){
+    let deckSlug = buildSlug(deck);
     // different link if this is a root deck or a sub-deck
-    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
+    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -71,6 +39,10 @@ function parseDeck(deck){
     };
 }
 
+function buildSlug(deck) {
+    return slugify(deck.title || '').toLowerCase() || '_';
+}
+
 function getUsers(userIdsSet){
     let userPromises = [];
     let usernames = {};
@@ -78,7 +50,10 @@ function getUsers(userIdsSet){
     // request usernames of user ids found
     for(let userId of userIdsSet){
         userPromises.push(rp.get({uri: `${Microservices.user.uri}/user/${userId}`, json: true}).then((userRes) => {
-            usernames[userId] = userRes.username;
+            usernames[userId] = { 
+                displayName: userRes.displayName || userRes.username, 
+                username: userRes.username
+            };
         }).catch( (err) => {
             usernames[userId] = 'Unknown user';
         }));
@@ -111,12 +86,26 @@ function getForks(deckIdsSet){
 
     for(let deckId of deckIdsSet){
         forkPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
-            forks[deckId] = deckForks;
+            forks[deckId] = deckForks.filter((f) => !f.hidden);
         }).catch( (err) => {
             forks[deckId] = [];
         }));
     }
     return Promise.all(forkPromises).then( () => { return forks; });
+}
+
+function getLikes(deckIdsSet){
+    let likes = {};
+    let likePromises = [];
+
+    for(let deckId of deckIdsSet){
+        likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
+            likes[deckId] = noOfLikes;
+        }).catch( (err) => {
+            likes[deckId] = 0;
+        }));
+    }
+    return Promise.all(likePromises).then( () => { return likes; });
 }
 
 export default {
@@ -136,7 +125,7 @@ export default {
 
             // request search results from search service
             rp.get({
-                uri: `${Microservices.search.uri}/search/v2?${args.queryparams}${requestOptions}`, 
+                uri: `${Microservices.search.uri}/search/v2?${args.queryparams}${requestOptions}`,
                 json: true
             }).then( (response) => {
 
@@ -168,7 +157,7 @@ export default {
                     }
 
                 });
-                
+
                 // get required usernames
                 let usernames = {};
                 let userPromise = getUsers(userIds).then( (usernamesFromService) => {
@@ -183,22 +172,28 @@ export default {
                 });
 
                 // get deck forks to show as deck other versions
-                let forks = {}; 
+                let forks = {};
                 let forksPromise = getForks(deckIds).then( (forksFromService) => {
                     forks = forksFromService;
                 });
 
+                // get number of likes for decks
+                let likes = {};
+                let likesPromise = getLikes(deckIds).then( (likesFromService) => {
+                    likes = likesFromService;
+                });
 
-                Promise.all([userPromise, deckPromise, forksPromise]).then( () => {
+                Promise.all([userPromise, deckPromise, forksPromise, likesPromise]).then( () => {
                     response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
-                        returnItem.user.username = usernames[returnItem.user.id];
-                        returnItem.user.link = '/user/' + returnItem.user.username;
+                        let user = usernames[returnItem.user.id];
+                        returnItem.user.username = user.displayName;
+                        returnItem.user.link = '/user/' + user.username;
 
                         if(returnItem.kind === 'Deck'){
 
-                            returnItem.revisionsCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
+                            returnItem.revisionCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
                             returnItem.theme = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
                                                         deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].theme : '';
 
@@ -209,12 +204,15 @@ export default {
                             if(forks[returnItem.db_id].length > 0){
                                 returnItem.subItems = forks[returnItem.db_id].map( (fork) => {
                                     return {
-                                        id: fork.id, 
-                                        title: fork.title, 
-                                        link: `/deck/${fork.id}`
+                                        id: fork.id,
+                                        title: fork.title,
+                                        link: `/deck/${fork.id}/${buildSlug(fork)}`,
                                     };
                                 });
                             }
+
+                            //fill number of likes
+                            returnItem.noOfLikes = likes[returnItem.db_id];
                         }
                         else if(returnItem.kind === 'Slide'){
                             returnItem.subItems = returnItem.usage.filter( (usageItem) => {
@@ -224,21 +222,24 @@ export default {
                                 return {
                                     id: usageItem,
                                     title: deckRevisions[usageItem].title,
-                                    link: '/deck/' + usageItem + '/slide/' + returnItem.db_id + '-' + returnItem.db_revision_id
+                                    link: `/deck/${usageItem}/${buildSlug(deckRevisions[usageItem])}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`,
                                 };
                             });
 
                             // fill deck info
                             returnItem.deck.title = (deckRevisions[returnItem.deck.id]) ? deckRevisions[returnItem.deck.id].title : '';
-                            returnItem.deck.link = '/deck/' + returnItem.deck.id;
+                            let deckSlug = buildSlug(returnItem.deck);
+                            returnItem.deck.link = `/deck/${returnItem.deck.id}/${deckSlug}`;
+
+                            returnItem.link = `/deck/${returnItem.usage[0]}/${deckSlug}/slide/${returnItem.db_id}-${returnItem.db_revision_id}?language=${returnItem.language}`;
                         }
                     });
 
                     callback(null, {
                         numFound: response.numFound,
-                        hasMore: response.hasMore, 
+                        hasMore: response.hasMore,
                         page: response.page,
-                        spellcheck: response.spellcheck, 
+                        spellcheck: response.spellcheck,
                         facets: response.facets,
                         docs: response.docs
                     });

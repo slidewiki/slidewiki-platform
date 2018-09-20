@@ -1,4 +1,13 @@
+import ISO6391 from 'iso-639-1';
+import locale from 'locale-code';
+import { sha512 } from 'js-sha512';
+import { hashingSalt } from './configs/general';
+
 export default {
+
+    hashPassword: function(password) {
+        return sha512(password + hashingSalt);
+    },
 
     writeCookie(name, value, days) {
         let expires;
@@ -36,6 +45,14 @@ export default {
             toTest === '' ||
             (toTest instanceof Object && Object.keys(toTest).length === 0) ||
             (toTest instanceof Array && toTest.length === 0));
+    },
+
+    assignToAllById(original, update) {
+        original.forEach((val) => {
+            // if not found does nothing :)
+            Object.assign(val, update.find((el) => el.id === val.id) );
+        });
+        return original;
     },
 
     timeSince: function(date) {
@@ -134,7 +151,30 @@ export default {
         return re.test(email);
     },
 
-    equals: function(x, y) {
+    // some locale support aux code
+    getLanguageName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageName(code.replace('_', '-'));
+        return '';
+    },
+
+    getLanguageNativeName: (code) => {
+        if (code.length === 2)
+            return ISO6391.getNativeName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageNativeName(code.replace('_', '-'));
+        return '';
+    },
+
+    compareLanguageCodes: (a, b) => {
+        if (a.length === 5 && b.length === 5)
+            return a.replace('_', '-') === b.replace('_', '-');
+        return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
+    },
+
+    equals: (x, y) => {
         if (x === y) return true;
         // if both x and y are null or undefined and exactly the same
 
@@ -169,4 +209,193 @@ export default {
 
         return true;
     },
+
+    //ISO6391 language codes from https://pkgstore.datahub.io/core/language-codes/language-codes_csv/data/b65af208b52970a4683fa8fde9af8e9f/language-codes_csv.csv
+    translationLanguages: [
+        'de',
+        'el',
+        'en',
+        'es',
+        'fr',
+        'it',
+        'sr',
+        'lt',
+        'nl',
+        'pt',
+        'ru',
+        'zh',
+        'hi',
+        'ar',
+        'bn',
+        'ja',
+        'pa',
+        'jv',
+        'ml',
+        'aa',
+        'ab',
+        'ae',
+        'af',
+        'ak',
+        'am',
+        'an',
+        'as',
+        'av',
+        'ay',
+        'az',
+        'ba',
+        'be',
+        'bg',
+        'bh',
+        'bi',
+        'bm',
+        'bo',
+        'br',
+        'bs',
+        'ca',
+        'ce',
+        'ch',
+        'co',
+        'cr',
+        'cs',
+        'cu',
+        'cv',
+        'cy',
+        'da',
+        'dv',
+        'dz',
+        'ee',
+        'eo',
+        'et',
+        'eu',
+        'fa',
+        'ff',
+        'fi',
+        'fj',
+        'fo',
+        'fy',
+        'ga',
+        'gd',
+        'gl',
+        'gn',
+        'gu',
+        'gv',
+        'ha',
+        'he',
+        'ho',
+        'hr',
+        'ht',
+        'hu',
+        'hy',
+        'hz',
+        'ia',
+        'id',
+        'ie',
+        'ig',
+        'ii',
+        'ik',
+        'io',
+        'is',
+        'iu',
+        'ka',
+        'kg',
+        'ki',
+        'kj',
+        'kk',
+        'kl',
+        'km',
+        'kn',
+        'ko',
+        'kr',
+        'ks',
+        'ku',
+        'kv',
+        'kw',
+        'ky',
+        'la',
+        'lb',
+        'lg',
+        'li',
+        'ln',
+        'lo',
+        'lu',
+        'lv',
+        'mg',
+        'mh',
+        'mi',
+        'mk',
+        'mn',
+        'mr',
+        'ms',
+        'mt',
+        'my',
+        'na',
+        'nb',
+        'nd',
+        'ne',
+        'ng',
+        'nn',
+        'no',
+        'nr',
+        'nv',
+        'ny',
+        'oc',
+        'oj',
+        'om',
+        'or',
+        'os',
+        'pi',
+        'pl',
+        'ps',
+        'qu',
+        'rm',
+        'rn',
+        'ro',
+        'rw',
+        'sa',
+        'sc',
+        'sd',
+        'se',
+        'sg',
+        'si',
+        'sk',
+        'sl',
+        'sm',
+        'sn',
+        'so',
+        'sq',
+        'ss',
+        'st',
+        'su',
+        'sv',
+        'sw',
+        'ta',
+        'te',
+        'tg',
+        'th',
+        'ti',
+        'tk',
+        'tl',
+        'tn',
+        'to',
+        'tr',
+        'ts',
+        'tt',
+        'tw',
+        'ty',
+        'ug',
+        'uk',
+        'ur',
+        'uz',
+        've',
+        'vi',
+        'vo',
+        'wa',
+        'wo',
+        'xh',
+        'yi',
+        'yo',
+        'za',
+        'zu'
+    ],
+
 };

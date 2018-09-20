@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Grid, Divider, Form, Button, Label, Popup, Message, Comment } from 'semantic-ui-react';
+import TweetEmbed from 'react-tweet-embed';
+import { Grid, Divider, Form, Button, Label, Popup, Message, Comment, Checkbox } from 'semantic-ui-react';
 
 class Chat extends React.Component {
 
@@ -19,7 +21,8 @@ class Chat extends React.Component {
         this.state = {
             commentList: {},//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
             charCount: 0,
-            TextAreaContent: ''
+            TextAreaContent: '',
+            includeTweets: true
         };
         this.textInputLength = 2000;
     }
@@ -30,20 +33,9 @@ class Chat extends React.Component {
 
     sendMessage(event) {
         event.preventDefault();
-        if(this.state.TextAreaContent.length < 15){
-            swal({
-                titleText: 'Message too short',
-                text: 'The message you tried to send is too short. Please write more than 15 characters.',
-                type: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Okay',
-                allowOutsideClick: false
-            });
-        } else {
-            this.props.sendRTCMessage('message', this.state.TextAreaContent, this.props.presenterID);
-            this.addMessage({sender: this.props.myID, data: this.state.TextAreaContent}, true);
-            this.setState({charCount: 0, TextAreaContent: ''});
-        }
+        this.props.sendRTCMessage('message', this.state.TextAreaContent, this.props.presenterID);
+        this.addMessage({sender: this.props.myID, data: this.state.TextAreaContent}, true);
+        this.setState({charCount: 0, TextAreaContent: ''});
         return false;
     }
 
@@ -56,6 +48,18 @@ class Chat extends React.Component {
         else
             newPost[currentTime].peer = 'Me';
         newPost[currentTime].message = data.data;
+        newPost[currentTime].type = 'message';
+        this.setState((prevState) => {
+            return {commentList: Object.assign({}, prevState.commentList, newPost)};
+        });
+    }
+
+    addTweet(tweet) {
+        let currentTime = new Date().getTime();
+        let newPost = {};
+        newPost[currentTime] = {};
+        newPost[currentTime].id = tweet.id_str;
+        newPost[currentTime].type = 'tweet';
         this.setState((prevState) => {
             return {commentList: Object.assign({}, prevState.commentList, newPost)};
         });
@@ -79,35 +83,43 @@ class Chat extends React.Component {
         }
     }
 
+    toggleShowTweets() {
+        this.setState({ includeTweets: (this.state.includeTweets === false) ? true : false });
+    }
+
     render() {
         let messages = [];
-        for(let i in this.state.commentList) {
-            let author = this.state.commentList[i].peer.toString();
-            let message = this.state.commentList[i].message;
-            messages.push(
-              <Popup key={i}
-                trigger={
-                  <Message floating>
-                    <Comment.Group>
-                      <Comment>
-                        <Comment.Content>
-                          <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
-                            {message}
-                          </Comment.Text>
-                          {(this.props.isInitiator) ? (
-                            <Comment.Actions>
-                                <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
-                            </Comment.Actions>
-                          ) : ('')}
-                        </Comment.Content>
-                      </Comment>
-                    </Comment.Group>
-                  </Message>
-                }
-                content={this.props.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
-                position='bottom right'
-              />);
+        for(let i in this.state.commentList) {//TODO do not recalculate the whole messages array on each render, but save in state and push only new elements
+            if(this.state.commentList[i].type !== 'tweet'){
+                let author = this.state.commentList[i].peer.toString();
+                let message = this.state.commentList[i].message;
+                messages.push(
+                  <Popup key={i}
+                    trigger={
+                      <Message floating warning>
+                        <Comment.Group>
+                          <Comment>
+                            <Comment.Content>
+                              <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                              <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
+                                {message}
+                              </Comment.Text>
+                              {(this.props.isInitiator) ? (
+                                <Comment.Actions>
+                                    <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
+                                </Comment.Actions>
+                              ) : ('')}
+                            </Comment.Content>
+                          </Comment>
+                        </Comment.Group>
+                      </Message>
+                    }
+                    content={this.props.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
+                    position='bottom right'
+                  />);
+            } else if(this.state.includeTweets) {
+                messages.push(<TweetEmbed id={this.state.commentList[i].id} key={i}/>);
+            }
         }
 
         return (
@@ -116,6 +128,7 @@ class Chat extends React.Component {
               <Grid columns={1}>
                 <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
                   <h3>Questions from Audience:</h3>
+                  <Checkbox ref="tweetCheckBox" toggle label='Show Tweets' onChange={this.toggleShowTweets.bind(this)} checked={this.state.includeTweets}/>
                   {messages}
                 </Grid.Column>
                 <Grid.Column>
@@ -127,6 +140,7 @@ class Chat extends React.Component {
               <Grid columns={1}>
                 <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
                   <h3>Your Questions ({this.props.myName}):</h3>
+                  <Checkbox ref="tweetCheckBox" toggle label='Show Tweets' onChange={this.toggleShowTweets.bind(this)} checked={this.state.includeTweets}/>
                   {messages}
                 </Grid.Column>
                 <Grid.Column>
@@ -149,7 +163,7 @@ class Chat extends React.Component {
 }
 
 Chat.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default Chat;

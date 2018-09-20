@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {NavLink, navigateAction} from 'fluxible-router';
+import { navigateAction} from 'fluxible-router';
+import { Microservices } from '../../configs/microservices';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ImportStore from '../../stores/ImportStore';
@@ -9,14 +11,14 @@ import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
+import importCanceled from '../../actions/import/importCanceled';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
+import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
-import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 //TODO: update link to terms of use;
@@ -27,7 +29,7 @@ class AddDeck extends React.Component {
         this.percentage = 0;
     }
     componentDidMount() {
-        let that = this;
+        // let that = this;
         /* deleted by Sole
         $('.ui.small.modal').modal({
             onDeny: function(){
@@ -93,20 +95,13 @@ class AddDeck extends React.Component {
         else {
             wrongFields.title = false;
         }
-        if (language === null || language === undefined || language.length !== 5) {
+        if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
             everythingIsFine = false;
         }
         else {
             wrongFields.language = false;
         }
-        // if (license === null || license === undefined || license.length < 2) {
-        //     wrongFields.license = true;
-        //     everythingIsFine = false;
-        // }
-        // else {
-        //     wrongFields.license = false;
-        // }
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
             everythingIsFine = false;
@@ -146,11 +141,6 @@ class AddDeck extends React.Component {
             });
         }
     }
-    /* moved to the imporModal
-    handleCancelSelectFile() {
-        this.context.executeAction(importCanceled, {});
-    }
-    */
     handleCancel(x) {
         //console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
@@ -237,26 +227,98 @@ class AddDeck extends React.Component {
                         id: 'AddDeck.swal.success_text',
                         defaultMessage: 'The selected file has been imported and a new deck has been created.',
                     },
+                    preview_text:{
+                        id: 'AddDeck.swal.preview_text',
+                        defaultMessage: 'Here is a preview of your slides. It may take a few seconds for the images to be created. You can use the tab key to move through the images.',
+                    },
+                    success_text_extra:{
+                        id: 'AddDeck.swal.success_text_extra',
+                        defaultMessage: 'This new deck will not be visible to others in your decks page or in search results until published.',
+                    },
                     success_confirm_text:{
                         id: 'AddDeck.swal.success_confirm_text',
-                        defaultMessage: 'View deck',
+                        defaultMessage: 'Complete import',
+                    },
+                    success_reject_text:{
+                        id: 'AddDeck.swal.success_reject_text',
+                        defaultMessage: 'Try again',
+                    },
+                    success_imported_slides_text:{
+                        id: 'AddDeck.swal.success_imported_slides_text',
+                        defaultMessage: 'Imported slides:',
+                    },
+                    success_publish_deck_text:{
+                        id: 'AddDeck.swal.success_publish_deck_text',
+                        defaultMessage: 'Publish your deck for it to show in search results immediately (publishing occurs after a few seconds)',
                     }
                 });
+
+                let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:100%;"';
+                // let borderStyle = 'border:1px solid black;border-radius:5px;';
+                //let html = this.context.intl.formatMessage(success_messages.success_text) + ' ' + this.context.intl.formatMessage(success_messages.preview_text) + '<br><br>' +
+                let html = '<p style="text-align:left;">' + this.context.intl.formatMessage(success_messages.preview_text) + '</p><br><br>' +
+                    '<div style="height: 260px;overflow: auto;" >' +
+                    '<table><tr>';
+                let slides = this.props.ImportStore.slides;
+                for(let i = 0; i < slides.length; i++) {
+                    let slide = slides[i];
+                    let thumbnailAlt = 'Slide ' + (i+1) + ': ';
+                    if (slide.title !== undefined)
+                        thumbnailAlt += slide.title ;
+                    let thumbnailSrc = Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/' + (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
+                    html += '<td style="padding: 15px;"><div style="width: 250px;" tabIndex="0">' +
+                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + thumbnailSrc + ' alt="' + thumbnailAlt + '" aria-hidden="true" />' +
+                        '</div></td>'; //THUMBNAIL
+                }
+                html += '</tr></table></div>';
+                html += '<br><h3><div><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
+
                 swal({
                     title: this.context.intl.formatMessage(success_messages.success_title_text),
-                    text: this.context.intl.formatMessage(success_messages.success_text),
+                    text: this.context.intl.formatMessage(success_messages.success_text) +
+                        '\n' + this.context.intl.formatMessage(success_messages.success_text_extra),
+                    html: html,
                     type: 'success',
+                    showCloseButton: true,
+                    showCancelButton: true,
                     confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
                     confirmButtonClass: 'positive ui button',
+                    cancelButtonText: this.context.intl.formatMessage(success_messages.success_reject_text),
+                    cancelButtonClass: 'ui red button',
                     buttonsStyling: false
-                })
-                    .then((dismiss) => {
-                        this.handleImportRedirect();
-                        return true;
-                    })
-                    .catch(() => {
-                        return true;
-                    });
+                }).then((accepted) => {
+                    let checkboxPublish = $('#checkbox_publish')[0].checked;
+                    if (checkboxPublish) {
+                        //Publish the deck (set hidden to false)
+                        let deckId = this.props.ImportStore.deckId;
+                        let selector = {
+                            id: deckId
+                        };
+
+                        this.context.executeAction(publishDeck, {
+                            deckId: deckId,
+                            title: this.props.ImportStore.title,
+                            language: this.props.ImportStore.language,
+                            description: this.props.ImportStore.description,
+                            theme: this.props.ImportStore.theme,
+                            license: this.props.ImportStore.license,
+                            selector: selector,
+                            hidden: false,
+                        });
+                    }
+                    this.handleImportRedirect();
+
+                    return true;
+                }, (reason) => {
+                    //Reset form
+                    this.context.executeAction(importCanceled, {});  // destroy import components state
+                    this.context.executeAction(addDeckDestruct, {});
+                    this.initializeProgressBar();
+                    this.refs.checkbox_conditions.checked = false;
+                    this.refs.checkbox_imageslicense.checked = false;
+                }).catch(() => {
+                    return true;
+                });
             } else {
                 const error_messages = defineMessages({
                     error_title_text:{
@@ -340,7 +402,7 @@ class AddDeck extends React.Component {
             this.context.executeAction(uploadFile, payload);
         }
         else {
-            console.error('Submission not possible - no file or not pptx/odp');
+            console.error('Submission not possible - no file or not pptx/odp/zip');
         }
     }
 
@@ -525,7 +587,7 @@ class AddDeck extends React.Component {
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.format_message'
-                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.' />
+                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx, OpenOffice ODP, and SlideWiki HTML downloads (*.zip files) are supported.' />
                             </p>
                         </div>
                         <div className="ui grid">
@@ -557,12 +619,12 @@ class AddDeck extends React.Component {
                                 <label htmlFor="terms">
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
-                                        defaultMessage='I agree to the SlideWiki ' />
+                                        defaultMessage='I agree to the SlideWiki ' />{' '}
                                     <a className="item" href="/terms" target="_blank">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
                                             defaultMessage='terms and conditions' />
-                                    </a>
+                                    </a>{' '}
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
@@ -595,8 +657,8 @@ class AddDeck extends React.Component {
 
 
 AddDeck.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore, ImportStore], (context, props) => {
     return {
