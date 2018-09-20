@@ -511,11 +511,13 @@ class SlideEditLeftPanel extends React.Component {
                     </a>
                     <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                         <i tabIndex="0" className="crop icon"></i>
+                        <FormattedMessage id='editpanel.slideSizeChange' defaultMessage={'Change slide size'}/>
+                        <br/>
                         <FormattedMessage id='editpanel.slideSizeCurrent'
                                 values={{
                                     size: this.state.slideSizeText,
                                 }}
-                                defaultMessage={'Slide size (current: {size})'}/>
+                                defaultMessage={'(current: {size})'}/>
                     </a>
                 </form>);
 

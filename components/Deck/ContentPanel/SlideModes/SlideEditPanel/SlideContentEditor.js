@@ -1118,9 +1118,15 @@ class SlideContentEditor extends React.Component {
 
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
-
+        let slideSizeTextTemp;
+        if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
+        {
+            slideSizeTextTemp = $('.pptx2html').css('width') + ' * ' + $('.pptx2html').css('height');
+        } else {
+            slideSizeTextTemp = 'none (document-mode)'; //slide is in document-mode
+        }
         this.context.executeAction(changeSlideSizeText, {
-            slideSizeText: $('.pptx2html').width() + '\u00D7' + $('.pptx2html').height()
+            slideSizeText: slideSizeTextTemp
         });
     }
     handleResize = () => {
