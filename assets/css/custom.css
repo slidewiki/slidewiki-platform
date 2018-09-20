@@ -215,3 +215,11 @@
       width: 800px;
     }
 }
+
+div#embedModal .ui.radio.checkbox label {
+    font-weight: normal;
+}
+
+div#embedModal .fields>label {
+    font-size: larger;
+}

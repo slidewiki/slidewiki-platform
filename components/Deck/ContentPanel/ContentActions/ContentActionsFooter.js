@@ -169,7 +169,8 @@ class ContentActionsFooter extends React.Component {
           </a>
           <DownloadModal/>
           <ReportModal/>
-          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
+          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
+                embedPresentationHref={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)}/>
           <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
               <i className={classNameLikeButton}></i>
           </button>
@@ -233,10 +234,6 @@ class ContentActionsFooter extends React.Component {
                             </a>
 
                             {!this.state.isMobile ? desktopButtons : ''}
-
-                            {/* {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>} */}
-                            {/* below is temporary fix (disable) for SWIK-1996 - When expand screen (hide decktree) on slide edit, then no content is displayed
-                                this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)}  aria-label="Reset Layout" data-tooltip="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} aria-label="Expand Content" data-tooltip="Expand Content"><i className="large icon expand"></i></button>*/}
                         </div>
                         {!this.state.isMobile ? '' : mobileButtons}
                     </div>
