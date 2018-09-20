@@ -286,22 +286,25 @@ class InfoPanelInfoView extends React.Component {
                         icon={null}
                         aria-label="Select language" data-tooltip="Select language"
                         defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-
-                    <button className="ui basic attached button" onClick={this.resetZoom}
-                            type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
-                        <i className="stacked icons">
-                            <i className="small compress icon "></i>
-                            <i className="large search icon "></i>
-                        </i>
-                    </button>
-                    <button className="ui basic attached button" onClick={this.zoomOut}
-                            type="button" aria-label="Zoom out" data-tooltip="Zoom out">
-                        <i className="large search minus icon"></i>
-                    </button>
-                    <button className="ui basic attached button" onClick={this.zoomIn}
-                            type="button" aria-label="Zoom in" data-tooltip="Zoom in">
-                        <i className="large search plus icon"></i>
-                    </button>
+                    {
+                        this.props.ContentStore.selector.stype === 'slide' && [
+                            <button className="ui basic attached button" onClick={this.resetZoom}
+                                    type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                <i className="stacked icons">
+                                    <i className="small compress icon "></i>
+                                    <i className="large search icon "></i>
+                                </i>
+                            </button>,
+                            <button className="ui basic attached button" onClick={this.zoomOut}
+                                    type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                <i className="large search minus icon"></i>
+                            </button>,
+                            <button className="ui basic attached button" onClick={this.zoomIn}
+                                    type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                <i className="large search plus icon"></i>
+                            </button>
+                        ]
+                    }
                 </div>
                 { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
