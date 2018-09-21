@@ -34,11 +34,11 @@ class AttachQuestionsList extends React.Component {
 
         this.state = {
             //selectedQuestionId: this.props.selectedQuestionId, //does it have ids?
-            deckQuestions:'', /*nikki this.props.deckQuestions is this already passed down through props? is this overwriting the deckQuestions?*/
+            deckQuestions: this.props.AttachQuestionsModalStore.deckQuestions, /*nikki this.props.deckQuestions is this already passed down through props? is this overwriting the deckQuestions?*/
             selectedQuestions:this.props.AttachQuestionsModalStore.selectedQuestions,
             selectedDeckTitle: this.props.AttachQuestionsModalStore.selectedDeckTitle,
             selectedQuestionsLabel: this.props.AttachQuestionsModalStore.selectedQuestions.length +' of ' + this.props.AttachQuestionsModalStore.deckQuestions.length,
-            firstTime:true
+            firstTime:true //*nikki is this needed? */
 
         };
         this.handleAllQuestions = this.handleAllQuestions.bind(this);
@@ -116,10 +116,10 @@ class AttachQuestionsList extends React.Component {
 
         this.setState({
             selectedQuestions: questions
-     });
+        });
 
-     this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
-     console.log(this.props.AttachQuestionsModalStore.selectedQuestions)/*nikki remove after */
+        this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
+        console.log(this.props.AttachQuestionsModalStore.selectedQuestions);/*nikki remove after */
     }
 
 
@@ -193,7 +193,7 @@ class AttachQuestionsList extends React.Component {
     }
 
     render() {
-        let deckQuestions = this.state.deckQuestions;
+        let deckQuestions = this.state.deckQuestions; //nikki should this be changed from state.
  //       let activeItemStyle = {backgroundColor:'#f8ffff', color:'#2185d0'};
 
         let questionsContent;

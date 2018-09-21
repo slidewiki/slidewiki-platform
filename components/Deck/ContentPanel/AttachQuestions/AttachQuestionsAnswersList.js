@@ -38,7 +38,7 @@ class AttachQuestionsAnswersList extends React.Component{
         /*nikki add accordion here? Does it need the activeIfFirst bit? since we don't really want the first one open...*/
         /*nikki what does the data-reactid do? */
         return (
-            <div className="ui segment" ref="attachquestionsanswers">
+            <div className="ui segment unpadded_segment" ref="attachquestionsanswers">
                 <div className="ui accordion">
                 <div ref="attachquestionanswersList" className='title'>
                     <i className="dropdown icon" />

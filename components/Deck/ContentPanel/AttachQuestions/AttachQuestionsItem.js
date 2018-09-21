@@ -33,11 +33,11 @@ class AttachQuestionsItem extends React.Component {
         };
 
         this.setState({
-           selectedQuestions: questions
+            selectedQuestions: questions
         });
 
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
-        console.log(this.props.AttachQuestionsModalStore.selectedQuestions)/*nikki remove after */
+        //console.log(this.props.AttachQuestionsModalStore.selectedQuestions);/*nikki remove after */
         //console.log(this);
     }
 

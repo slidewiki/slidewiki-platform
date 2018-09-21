@@ -208,7 +208,7 @@ class SlideEditLeftPanel extends React.Component {
     /*nikki is this needed anymore? */
     /*nikki is add questions click even the correct thing here? is this from sami's code*/
     handleAddQuestionsClick(){
-        this.context.executeAction(AddQuestionsClick, {params: {stype : "deck", sid : this.state.deckID}});
+        this.context.executeAction(AddQuestionsClick, {params: {stype : 'deck', sid : this.state.deckID}});
     }
 
     handleHelpClick(){
@@ -359,7 +359,7 @@ class SlideEditLeftPanel extends React.Component {
         let selectorImm = this.props.DeckTreeStore.selector; 
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')}; /*is this line still needed */
         //let selectorDeck = this.props.DeckPageStore.selector;
-        let selectorDeck = {id: this.props.DeckPageStore.selector.id, stype: 'deck', sid: this.props.DeckPageStore.selector.id}
+        let selectorDeck = {id: this.props.DeckPageStore.selector.id, stype: 'deck', sid: this.props.DeckPageStore.selector.id};
         let currentDeck = {DeckTreeStore: this.props.DeckTreeStore};
 
         let buttonStyle = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
-import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
+import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore'; /*nikki should this be using the questions store? */
 import AttachDeckList from './AttachDeckList';
 import {  Segment, Loader,Label, Image,Dimmer} from 'semantic-ui-react';
 

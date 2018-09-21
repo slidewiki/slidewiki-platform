@@ -18,7 +18,6 @@ class AttachMenu extends React.Component{
     }
 
     handleCurrentDeckClick(){
-        console.log(this.props.selector); //undefined... 
         this.context.executeAction(loadQuestions, {params:this.props.selector});
         this.setState({
             activeItem:'CurrentDeck',
@@ -28,10 +27,8 @@ class AttachMenu extends React.Component{
             activeItem:'CurrentDeck',
             //showQuestions: true /*nikki does it matter if this is true or false? */
         };
-
         this.context.executeAction(updateActiveItem,payload,null);
-        
-
+    
     }
 
     handleMyDecksClick(){
@@ -65,7 +62,7 @@ class AttachMenu extends React.Component{
     render(){
         return(
           <Menu attached='top' tabular role="tablist">
-                <Menu.Item as="button" name="From Current Deck" id="tabCurrentDeckId" active={this.state.activeItem === 'CurrentDeck'} aria-selected={this.state.activeItem === 'CurrentDeck'} onClick={this.handleCurrentDeckClick}
+                <Menu.Item as="button" name="From Current Deck" id="tabCurrentDeckId" active={this.state.activeItem === 'CurrentDeck'} aria-selected={this.state.activeItem === 'CurrentDeck'} onClick={this.handleCurrentDeckClick.bind(this.props.selector)}
                             role="tab" tabIndex="0" />
                <Menu.Item as="button" name="From My Decks" id="tabMyDecksId" active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
                             role="tab" tabIndex="0" />

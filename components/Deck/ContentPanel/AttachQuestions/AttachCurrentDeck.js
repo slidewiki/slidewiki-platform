@@ -36,13 +36,13 @@ class AttachCurrentDeck extends React.Component{
         };*/
 
         let currentDeckContent;
-     if(this.props.questionsCount === 0){
-           currentDeckContent = <div>There are no questions in this deck. Either select another deck to insert questions from or create some questions within this deck.</div> 
-       }else {
-           currentDeckContent = (
-             <AttachQuestionsList deckQuestions={this.props.deckQuestions} selectedDeckId={this.props.currentDeckID} maxHeight='350px'/>
-           ); /*nikki does it need all of these parameters? removed: user={userInfo} actionButtonId={this.props.actionButtonId}*/ 
-       }
+        if(this.props.questionsCount === 0){
+            currentDeckContent = <div>There are no questions in this deck. Either select another deck to insert questions from or create some questions within this deck.</div>;
+        }else {
+            currentDeckContent = (
+                <AttachQuestionsList deckQuestions={this.props.deckQuestions} selectedDeckId={this.props.currentDeckID} maxHeight='350px'/>
+            ); /*nikki does it need all of these parameters? removed: user={userInfo} actionButtonId={this.props.actionButtonId}*/ 
+        }
 /*nikki removed segment */
  //<Segment id="panelCurrentDeckContent">
  //</Segment>

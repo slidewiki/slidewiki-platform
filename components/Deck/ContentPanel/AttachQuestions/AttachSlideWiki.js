@@ -9,7 +9,7 @@ class AttachSlideWiki extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-
+            /*nikki should this be using the questions store */
             recentDecks:this.props.AttachSubdeckModalStore.recentDecks,
             searchDecks:this.props.AttachSubdeckModalStore.searchDecks,
             selectedDeckTitle:   this.props.AttachSubdeckModalStore.selectedDeckTitle,

@@ -900,6 +900,7 @@ class SlideContentEditor extends React.Component {
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
         return '<div id=\"' + id + '\" style="position: absolute; top: 300px; left: 250px; width: 300px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
+    /*nikki no longer used?? */
     handleAddQuestionsClick(questions){
         let html = "<div id='slide_questions' style='font-family:sans-serif'>";
         let questionsList = questions.questions;
@@ -912,22 +913,22 @@ class SlideContentEditor extends React.Component {
             html += "<div class='slide_question'><div>" + currentQuestion.title + "</div>";
 
             for (let j = 0; j < currentAnswers.length; j++){
-                html += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>"
+                html += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>";
             }
 
-            html += "</br></div>"
+            html += "</br></div>";
         }
 
         html += "</div>";
         let iframe = '<iframe width="800" height="400" srcdoc="'+ html + '"></iframe>';
 
         if($('.pptx2html').length) //if slide is in canvas mode
-                {
-                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
-                    this.hasChanges = true;
-                    //this.correctDimensionsBoxes('iframe');
-                } else { //if slide is in non-canvas mode
-                    this.refs.inlineContent.innerHTML += iframe;
+        {
+            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+            this.hasChanges = true;
+            //this.correctDimensionsBoxes('iframe');
+        } else { //if slide is in non-canvas mode
+            this.refs.inlineContent.innerHTML += iframe;
         }
 
         console.log(iframe);

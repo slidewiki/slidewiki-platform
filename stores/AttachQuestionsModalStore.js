@@ -12,6 +12,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.selectedDeckId =-1;
         this.showSearchResults = false;
         this.showQuestions = false; /*nikki changed away from true */
+        this.showOptions = false;
         this.activeItem = 'CurrentDeck';
         //this.selectedSlides = [];
         this.deckSlides =[];
@@ -19,6 +20,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.selectedQuestions = []; /*nikki for storing the questions that have been selected for insertion */
         this.currentDeckId = '';
         this.currentDeckTitle = '';
+        this.questionsCount = '';
     }
 
     getState(){ //should this be getInitialState?
@@ -30,12 +32,14 @@ class AttachQuestionsModalStore extends BaseStore{
             selectedDeckId: this.selectedDeckId,
             showSearchResults: this.showSearchResults,
             showQuestions: this.showQuestions,
+            showOptions: this.showOptions,
             activeItem: this.activeItem,
         //    selectedSlides:this.selectedSlides,
             deckSlides: this.deckSlides,
             deckQuestions: this.deckQuestions,
             deckQuestionsCount: this.deckQuestionsCount,
             selectedQuestions: this.selectedQuestions,
+            questionsCount: this.questionsCount,
         };
     }
     dehydrate() {
@@ -49,12 +53,14 @@ class AttachQuestionsModalStore extends BaseStore{
         this.selectedDeckId = state.selectedDeckId;
         this.showSearchResults = state.showSearchResults;
         this.showQuestions = state.showQuestions;
+        this.showOptions = state.showOptions;
         this.activeItem = state.activeItem;
      //   this.selectedSlides = state.selectedSlides;
         this.deckSlides = state.deckSlides;
         this.deckQuestions = state.deckQuestions;
         this.deckQuestionsCount = state.deckQuestionsCount;
         this.selectedQuestions = state.selectedQuestions;
+        this.questionsCount = state.questionsCount;//nikki 
     }
     resetModalStore(){
         this.userDecks = [];
@@ -63,13 +69,15 @@ class AttachQuestionsModalStore extends BaseStore{
         this.selectedDeckTitle = ''; /*nikki 'Select the deck you wish to attach...'; */
         this.selectedDeckId = -1;
         this.showSearchResults = false;
-        this.showQuestions = false; //nikki - not needed to be true for current deck anymore? because on CurrentDeck it should display questions
+        this.showQuestions = false; 
+        this.showOptions = false;
         this.activeItem = 'CurrentDeck';
      //   this.selectedSlides = [];
         this.deckSlides = [];
         this.deckQuestions = [];
         this.deckQuestionsCount = '';
         this.selectedQuestions = [];
+        this.questionsCount = '';//nikki 
 
         this.emitChange();
     }
@@ -78,13 +86,14 @@ class AttachQuestionsModalStore extends BaseStore{
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.showQuestions = false;
+        this.showOptions = false;
         this.activeItem = 'CurrentDeck';
     //    this.selectedSlides = [];
         this.deckSlides = [];
         this.deckQuestions = [];
-        this.deckQuestionsCount = '';
-        this.selectedQuestions = [];
-
+        this.deckQuestionsCount = ''; 
+        this.selectedQuestions = []; 
+    
         this.emitChange();
     }
 
@@ -99,7 +108,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.emitChange();
     }
 
-    updateRecentDecks(payload){ /*nikki what is this used for? */
+    updateRecentDecks(payload){ /*nikki what is this used for? used for the search form*/
         if(payload.recent===[]){
             this.recentDecks =[];
         } else{
@@ -174,6 +183,16 @@ class AttachQuestionsModalStore extends BaseStore{
         this.emitChange();
     }
 
+    updateShowOptions(payload){
+        if (payload===true){
+            this.showOptions = true;
+        }
+        else {
+            this.showOptions = false;
+        }
+        this.emitChange();
+    }
+
     updateDeckSlides(payload){ /*nikki is this still needed? */
         if((payload.slides===[])||(typeof payload.slides === 'undefined')){
             this.deckSlides =[];
@@ -188,13 +207,18 @@ class AttachQuestionsModalStore extends BaseStore{
     }
     updateDeckQuestions(payload){
 /*nikki should i add the logic back in?*/
-        //if((payload === [])||(typeof payload === 'undefined')){
-        //    this.deckQuestions = [];
-         //   this.deckQuestionsCount = 0;
-        //}else{
-            this.deckQuestions = payload.questions;
-            this.deckQuestionsCount = this.deckQuestions.length;
-        //}
+        if((payload === [])||(typeof payload === 'undefined')){
+            this.deckQuestions = [];
+            this.deckQuestionsCount = 0;
+        }else{
+        this.deckQuestions = payload.questions;
+        this.deckQuestionsCount = this.deckQuestions.length;
+        }
+        this.emitChange();
+    }
+
+    getQuestionsCount(payload){
+        this.questionsCount = payload.count;
         this.emitChange();
     }
 
@@ -232,6 +256,8 @@ AttachQuestionsModalStore.handlers = {
     'ATTACHQUESTIONS_LOAD_QUESTIONS' : 'updateDeckQuestions', //new
     'ATTACHQUESTIONS_SELECTED_QUESTIONS' : 'updateSelectedQuestions', //new
     'ATTACHQUESTIONS_SHOW_QUESTIONS' : 'updateShowQuestions', //new
+    'ATTACHQUESTIONS_SHOW_OPTIONS'  : 'updateShowOptions',  //new
+    'ATTACHQUESTIONS_QUESTIONS_COUNT': 'getQuestionsCount', //new
 //    'ATTACHQUESTIONS_SELECTED_SLIDES' :'updateSelectedSlides'
 };
 
