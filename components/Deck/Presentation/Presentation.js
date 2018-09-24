@@ -257,6 +257,9 @@ class Presentation extends React.Component{
                 //need to check if bg is provided
                 if (bgImgTemp.length > 1) {
                     let backgroundImage = content.split('background-image: url(&quot;')[1].split('&quot;);')[0];
+                    // Remove background of the inner slide
+                    content = content.split('background-image: url(&quot;')[0] + content.split('&quot;);')[1];
+                    if(bgColor.length > 1) content =  content.split('background-color: ')[0] + content.split('background-color: ')[1].split(';').slice(1).join('');
                     resultingSlide = <section data-background-image={backgroundImage} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
                 } else if (bgColor.length > 1) {
                     let backgroundColour = content.split('background-color: ')[1].split(';')[0] ;
