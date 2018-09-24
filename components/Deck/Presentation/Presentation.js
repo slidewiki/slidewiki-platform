@@ -251,10 +251,19 @@ class Presentation extends React.Component{
         if(slides){
             html = slides.map((slide) => {
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
-                let bgTemp = content.split('background-color: ');
+                let bgColor = content.split('background-color: ');
+                let bgImgTemp = content.split('background-image: ');
+                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
                 //need to check if bg is provided
-                let backgroundColour = bgTemp.length > 1 ? content.split('background-color: ')[1].split(';')[0] : '';
-                return <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                if (bgImgTemp.length > 1) {
+                    let backgroundImage = content.split('background-image: url(&quot;')[1].split('&quot;);')[0];
+                    resultingSlide = <section data-background-image={backgroundImage} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                } else if (bgColor.length > 1) {
+                    let backgroundColour = content.split('background-color: ')[1].split(';')[0] ;
+                    resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                }
+
+                return resultingSlide;
             });
         }
         return html;
