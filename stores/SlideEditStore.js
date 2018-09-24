@@ -13,6 +13,7 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
+        this.templateQuestionsContent = ''; //contains the content for the question embedding
         this.slideSize = '';
         this.saveSlideClick = 'false';
         this.cancelClick = 'false';
@@ -54,10 +55,21 @@ class SlideEditStore extends BaseStore {
         this.emitChange();
     }
     changeTemplate(payload){
-        this.template = payload.template;
-        this.emitChange();
-        this.template = '';
-        this.emitChange();
+        if (payload.template === 'questions'){
+            this.template = payload.template;
+            this.templateQuestionsContent = payload.templateQuestionsContent;
+            this.emitChange();
+            this.template = '';
+            this.templateContent = '';
+            this.emitChange();
+        }
+        else {
+            this.template = payload.template;
+            this.emitChange();
+            this.template = '';
+            this.emitChange();
+        }
+        
     }
     changeSlideSize(payload){
         this.slideSize = payload.slideSize;
@@ -182,6 +194,7 @@ class SlideEditStore extends BaseStore {
             undoClick: this.undoClick,
             redoClick: this.redoClick,
             template: this.template,
+            templateQuestionsContent: this.templateQuestionsContent,
             slideSize: this.slideSize,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
@@ -218,6 +231,7 @@ class SlideEditStore extends BaseStore {
         this.undoClick = state.undoClick;
         this.redoClick = state.redoClick;
         this.template = state.template;
+        this.templateQuestionsContent = state.templateQuestionsContent;
         this.slideSize = state.slideSize;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;

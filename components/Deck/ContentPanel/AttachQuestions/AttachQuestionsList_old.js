@@ -125,7 +125,7 @@ class AttachQuestionsList extends React.Component{
             Returns next position in a liat, taking into account
             the arrow key pressed and the number of items of the list
         ********************************************/
-       let nextPos = parseInt(pos); //In case of overflow, we stayed in the same position. Force working with integers
+        let nextPos = parseInt(pos); //In case of overflow, we stayed in the same position. Force working with integers
        //right and left arrows: same position
         switch (eventKeyCode) {
             case KEY_CODE.UP:
@@ -142,21 +142,21 @@ class AttachQuestionsList extends React.Component{
     }
     handleKeyDown(pos,numQuestions,event){
         if(event.keyCode === KEY_CODE.UP ||
-           event.keyCode === KEY_CODE.DOWN ){
-           //the user wants to navigate through the grid
-           event.preventDefault();
-           let nextPos = this.getNextPos(pos,numQuestions,event.keyCode);  //get next item
+            event.keyCode === KEY_CODE.DOWN ){
+            //the user wants to navigate through the grid
+            event.preventDefault();
+            let nextPos = this.getNextPos(pos,numQuestions,event.keyCode);  //get next item
             //get the id of the cell
-           $('#question'+nextPos).focus(); //move to the cell
-       } else if(event.keyCode === KEY_CODE.TAB){ //exit list and go to button
-           event.preventDefault();
-           if(this.state.selectedQuestions.length > 0){
-               $(this.props.actionButtonId).focus();
-           } else { // deck is not selected
-               $('#previousAttachModal').focus();
-           }
-       }
-   }
+            $('#question'+nextPos).focus(); //move to the cell
+        } else if(event.keyCode === KEY_CODE.TAB){ //exit list and go to button
+            event.preventDefault();
+            if(this.state.selectedQuestions.length > 0){
+                $(this.props.actionButtonId).focus();
+            } else { // deck is not selected
+                $('#previousAttachModal').focus();
+            }
+        }
+    }
         //    let nextPos = this.getNextPos(pos,this.state.deckQuestions.length,event.keyCode);  //get next cell
 
  /*   loadQuestionsGrid()

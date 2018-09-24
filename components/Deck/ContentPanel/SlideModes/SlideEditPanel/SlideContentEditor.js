@@ -177,7 +177,7 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
-    handleTemplatechange(template){
+    handleTemplatechange(template, templateQuestionsContent){
         /*
         if (this.showTemplates === false){
             this.refs.template.showOptions();
@@ -188,6 +188,15 @@ class SlideContentEditor extends React.Component {
         //let template = this.refs.template.value;
         if (template === '2'){
             this.applyTemplate(template, false); //remove existing content
+        }
+        else if (template === 'questions'){ /*nikki should this go here, or does it want a different nextProps thing? */
+            console.log('questions template');
+            let keepExistingContent = false;
+            let pptx2htmlStartDiv = templateQuestionsContent.htmlstart;
+            let pptx2htmlcontent = templateQuestionsContent.html
+            let pptx2htmlCloseDiv = templateQuestionsContent.htmlend
+            this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
+            
         }
         else if (template !== '')
         {
@@ -241,7 +250,7 @@ class SlideContentEditor extends React.Component {
                 $('.swal2-confirm').focus();
             }, 500);
         }
-        //}
+    
     }
     rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv){
         if(keepExistingContent){
@@ -1949,7 +1958,12 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {
-            this.handleTemplatechange(nextProps.SlideEditStore.template);
+            if (nextProps.SlideEditStore.template === 'questions'){
+                this.handleTemplatechange(nextProps.SlideEditStore.template, nextProps.SlideEditStore.templateQuestionsContent);
+            }
+            else {/*nikki nested if here? to see if the template change is a question? is this actually needed?*/
+                this.handleTemplatechange(nextProps.SlideEditStore.template, nextProps.SlideEditStore.templateQuestionsContent);
+            }
         }
         if (nextProps.SlideEditStore.HTMLEditorClick === 'true' && nextProps.SlideEditStore.HTMLEditorClick !== this.props.SlideEditStore.HTMLEditorClick)
         {

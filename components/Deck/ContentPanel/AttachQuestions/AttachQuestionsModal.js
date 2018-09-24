@@ -27,6 +27,7 @@ import loadQuestions from '../../../../actions/attachQuestions/loadQuestions';
 import updateShowQuestions from '../../../../actions/attachQuestions/updateShowQuestions';
 import updateShowOptions from '../../../../actions/attachQuestions/updateShowOptions'; 
 import AttachQuestionsOptions from './AttachQuestionsOptions';
+import embedQuestions from '../../../../actions/attachQuestions/embedQuestions';
 
 class AttachQuestionsModal extends React.Component{
   /*Props expected:
@@ -188,12 +189,14 @@ class AttachQuestionsModal extends React.Component{
 
     handleAttachButton(){
         /*nikki need to change this bit */
+        //call action that produces the slide content and then calls the changeTemplate action? or just dispatches to the store? 
+        /*nikki can it have an extra parameter? */
 
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
         //each element of the payload.selectedSlides array is like 11225-2-6 (slideId-revisionId-orderInDeck)
         //we need to remove the order in Deck
-        let nodeSpec = this.state.selectedSlides.map((slideIdWithOrder) => {
+        /*let nodeSpec = this.state.selectedSlides.map((slideIdWithOrder) => {
             let pos = slideIdWithOrder.lastIndexOf('-');
             let slideId = slideIdWithOrder.substring(0,pos);
             return {
@@ -204,8 +207,8 @@ class AttachQuestionsModal extends React.Component{
         this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec, attach: true});
 
         //find target deck id
-        let targetDeckId = this.props.selector.sid; //*nikki not correct as it is coming from a slide */
-        if (this.props.selector.stype === 'slide') {
+        let targetDeckId = this.props.selector.sid; */ /*nikki not correct as it is coming from a slide */
+        /*if (this.props.selector.stype === 'slide') {
             const pathArray = this.props.selector.spath.split(';');
             if (pathArray.length > 1) {
                 const parentDeck = pathArray[pathArray.length - 2];
@@ -213,7 +216,7 @@ class AttachQuestionsModal extends React.Component{
             } else {
                 targetDeckId = this.props.selector.id;
             }
-        }
+        }*/
 
         /*nikki do we need this bit? what does it do? */
         /*let activities = nodeSpec.map((node) => {
@@ -228,8 +231,51 @@ class AttachQuestionsModal extends React.Component{
                 }
             };
         });*/
-        this.context.executeAction(addActivities, {activities: activities});
-        this.handleClose();
+        //this.context.executeAction(addActivities, {activities: activities});
+
+        /*nikki change comments below */
+        //set some content
+        let embedContent = {
+            title: 'title',
+            questions: this.props.AttachQuestionsModalStore.selectedQuestions,
+            //insert additional options here
+        };
+        /*nikki need error handling before doing the close action? */
+        //TODO: internationalise these messages?
+        swal({
+            title: 'Confirm Embed Questions',
+            text: 'Adding questions will overwrite the existing content in this slide. You can always revert to an earlier version of the slide or decide to not save after embedding the questions.',
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Embed Questions',
+            confirmButtonClass: 'ui green button',
+            cancelButtonText: 'Cancel',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false,
+            focusConfirm: true,
+            allowEnterKey: true,
+            showCloseButton: true,
+            allowEscapeKey: true,
+        }).then((result) => {
+            this.handleClose();
+            console.log(embedContent);
+            this.context.executeAction(embedQuestions, embedContent);
+            //this.applyTemplate(template, true); //keep existing content
+        }, (reason) => {
+            if (reason === 'cancel') {
+                
+                console.log('cancel pressed - do nothing/close dialog?');
+                //this.applyTemplate(template, false);
+            } else {
+                console.log('reason:' + reason + ' - do nothing/close dialog');
+            }
+        });
+        setTimeout(() => {
+            $('.swal2-confirm').focus();
+        }, 500);
+
+        
 
     }
 
@@ -285,7 +331,7 @@ class AttachQuestionsModal extends React.Component{
         <Icon name="arrow left"/>
     </Button>;; // previous button to take you back to the question listing
     //onClick={this.handlePreviousButton}
-        let attachBtn = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach" disabled={this.state.selectedQuestions.length===0} >
+        let attachBtn = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach" disabled={this.state.selectedQuestions.length===0} onClick={this.handleAttachButton}>
             <Icon name="attach"/>
                 Attach
             <Icon name="attach"/>
