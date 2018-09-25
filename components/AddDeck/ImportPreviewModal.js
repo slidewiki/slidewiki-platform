@@ -6,13 +6,16 @@ import {connectToStores} from 'fluxible-addons-react';
 import ImportStore from '../../stores/ImportStore';
 import FocusTrap from 'focus-trap-react';
 import importFinished from '../../actions/import/importFinished';
-import {FormattedMessage, defineMessages} from 'react-intl';
-import { Microservices } from '../../configs/microservices';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import waitForThumbnails from '../../actions/addDeck/waitForThumbnails';
+import importCanceled from '../../actions/import/importCanceled';
+import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 
 class ImportPreviewModal extends React.Component {
     handleReject(){
+        this.context.executeAction(importCanceled, {});  // destroy import components state
+        this.context.executeAction(addDeckDestruct, {});
+        
         this.props.handleClose();
     }
     

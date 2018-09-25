@@ -10,7 +10,6 @@ import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
-import importCanceled from '../../actions/import/importCanceled';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import ImportModal from '../Import/ImportModal';
@@ -50,15 +49,17 @@ class AddDeck extends React.Component {
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
             this.updateProgressBar();
+        if (this.props.ImportStore.uploadProgress === 0) {
+            $('#progressbar_addDeck_upload').progress('reset');
+            $('#progresslabel_addDeck_upload').text('');
+        }
 
         if (this.props.ImportStore.error !== null)
             this.showError();
     }
     closePreviewModal() {
         // Reset form
-        this.context.executeAction(importCanceled, {});  // destroy import components state
-        this.context.executeAction(addDeckDestruct, {});
-        this.initializeProgressBar();
+        // this.initializeProgressBar();
         this.refs.checkbox_conditions.checked = false;
         this.refs.checkbox_imageslicense.checked = false;
         
