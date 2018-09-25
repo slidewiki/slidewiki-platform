@@ -203,7 +203,7 @@ class DownloadModal extends React.Component{
 
                                    <Grid.Column textAlign='left' width={13} role="radiogroup" aria-labelledby="downloadModalDescription">
                                     <div  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</div>
-                                     <Form.Field >
+                                   {/*  <Form.Field >
                                           <Radio
                                             label='PDF'
                                             name='downloadRadioGroup'
@@ -216,7 +216,7 @@ class DownloadModal extends React.Component{
                                             tabIndex="0"
 
                                             />
-                                      </Form.Field>
+                                      </Form.Field> */}
                                       <Form.Field>
                                         <Radio
                                           label={this.context.intl.formatMessage(this.messages.downloadModal_HTML)}
