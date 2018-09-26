@@ -248,7 +248,7 @@ class Presentation extends React.Component{
         let slides = this.props.PresentationStore.content;
 
         let html = <section />;
-        if(slides){
+        if (slides) {
             html = slides.map((slide) => {
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
                 let bgColor = content.split('background-color: ');
@@ -256,16 +256,26 @@ class Presentation extends React.Component{
                 let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
                 //need to check if bg is provided
                 if (bgImgTemp.length > 1) {
-                    let backgroundImage = content.split('background-image: url(&quot;')[1].split('&quot;);')[0];
-                    // Remove background of the inner slide
-                    content = content.split('background-image: url(&quot;')[0] + content.split('&quot;);')[1];
-                    if(bgColor.length > 1) content =  content.split('background-color: ')[0] + content.split('background-color: ')[1].split(';').slice(1).join('');
-                    resultingSlide = <section data-background-image={backgroundImage} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                    let backgroundImageExtr = content.split('background-image: url(&quot;'); // url(&quot;
+                    backgroundImageExtr = backgroundImageExtr.length > 1 ? backgroundImageExtr[1] :  undefined;
+                    if (backgroundImageExtr) backgroundImageExtr = backgroundImageExtr.split('&quot;);').length > 1 ? backgroundImageExtr.split('&quot;);')[0] : undefined;
+                    if (backgroundImageExtr) {
+                        // Remove background of the inner slide
+                        content = content.split('background-image: url(&quot;')[0] + content.split('&quot;);')[1];
+                        if(bgColor.length > 1) content =  content.split('background-color: ')[0] + content.split('background-color: ')[1].split(';').slice(1).join('');
+                        // Add resulting slide.
+                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                    } else {
+                        console.log('Problem extracting the background image: ', bgImgTemp[1]);
+                    }
                 } else if (bgColor.length > 1) {
-                    let backgroundColour = content.split('background-color: ')[1].split(';')[0] ;
-                    resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                    let backgroundColour = bgColor[1].split(';').length > 1 ? bgColor[1].split(';')[0] : undefined;
+                    if (backgroundColour) {
+                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                    } else {
+                        console.log('Problem extracting the background colour: ', bgColor[1]);
+                    }
                 }
-
                 return resultingSlide;
             });
         }
