@@ -11,15 +11,20 @@ import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDec
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
+import deleteFollowing from '../../../../actions/following/deleteFollowing.js';
+import createFollowing from '../../../../actions/following/createFollowing.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
+import UserFollowingsStore from '../../../../stores/UserFollowingsStore';
 import DownloadModal from './DownloadModal';
 import MobileDetect from 'mobile-detect';
 import AriaMenuButton from 'react-aria-menubutton';
 import TranslationStore from '../../../../stores/TranslationStore';
+import { makeNodeURL } from '../../../common/Util';
+import {Icon} from 'semantic-ui-react';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -30,38 +35,23 @@ class ContentActionsFooter extends React.Component {
         this.state.isMobile = false;
         // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
     }
+
     componentDidMount(){
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
         this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
+
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
         this.state.expanded = 1;
         return false;
     }
+
     handleCollapseClick(){
         this.context.executeAction(restoreDeckPageLayout, {});
         this.state.expanded = 0;
         return false;
-    }
-    getPresentationHref(){
-        let presLocation = ['/presentation', this.props.ContentStore.selector.id, this.props.deckSlug || '_'].join('/') + '/';
-        if(!this.props.ContentStore.selector.subdeck){
-            //do not duplicate deck ID! only for slides duplicate it
-            presLocation += this.props.ContentStore.selector.id + '/';
-        }
-        else{
-            presLocation += this.props.ContentStore.selector.subdeck + '/';
-        }
-        if(this.props.ContentStore.selector.stype === 'slide'){
-            presLocation += this.props.ContentStore.selector.sid + '/';
-            //presLocation = presLocation+ '#' + this.props.ContentStore.selector.sid;// + '/';
-        }
-        if (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.currentLang) {
-            presLocation += '?language=' + this.props.TranslationStore.currentLang;
-        }
-        return presLocation;
     }
 
     handlePrintClick(e){
@@ -127,30 +117,65 @@ class ContentActionsFooter extends React.Component {
         }
     }
 
+    handleFollowClick(e){
+        if (this.props.UserFollowingsStore.selectedFollowingId !== null) {
+            this.context.executeAction(deleteFollowing, {
+                id: this.props.UserFollowingsStore.selectedFollowingId
+            });
+        } else {
+            this.context.executeAction(createFollowing, {
+                selector: this.props.ContentStore.selector,
+                userId: this.props.UserProfileStore.userid,
+                followed_type: 'deck'
+            });
+        }
+    }
+
     render() {
         let likeButton = 'ui button';
+        let followButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
+        let iconFollowButton = <Icon.Group >
+            <Icon size='large' name='circle outline' />
+            <Icon name='rss'/>
+        </Icon.Group>;
+        let tooltipFollowButton = 'Subscribe to this deck';
         let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
             //undefined user
             likeButton = 'ui disabled button';
-        } else if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
-            //already liked
-            classNameLikeButton = 'thumbs up alternate large blue icon';
-            tooltipLikeButton = 'Dislike this deck';
+            followButton = 'ui disabled button';
+        } else {
+            if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
+                //already liked
+                classNameLikeButton = 'thumbs up alternate large blue icon';
+                tooltipLikeButton = 'Dislike this deck';
+            }
+
+            if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
+                iconFollowButton = <Icon.Group >
+                    <Icon size='large' name='circle' color='blue'/>
+                    <Icon name='rss' inverted='true'/>
+                </Icon.Group>;
+                tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
+            }
         }
 
         let desktopButtons = <div>
-          <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
-          <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
+          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+          <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
               <i className="print large icon"></i>
           </button>
-          </NavLink>
+          </a>
           <DownloadModal/>
           <ReportModal/>
-          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
+          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
+                embedPresentationHref={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)}/>
           <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
               <i className={classNameLikeButton}></i>
+          </button>
+          <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+              {iconFollowButton}
           </button>
           </div>;
 
@@ -163,12 +188,12 @@ class ContentActionsFooter extends React.Component {
             <AriaMenuButton.Menu className='ui menu vertical'
              style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
                  <AriaMenuButton.MenuItem className='item' key= {0} tag='li'>
-                   <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank" style={{'color': 'black'}}>
-                    <div aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
+                   <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+                    <div aria-label="Print" data-tooltip="Print" >
                         <i className="print large icon"></i>
                         Print
                     </div>
-                    </NavLink>
+                    </a>
                  </AriaMenuButton.MenuItem>
                  <AriaMenuButton.MenuItem className='item' key= {1} tag='li'>
                    <DownloadModal textOnly={true}/>
@@ -184,6 +209,11 @@ class ContentActionsFooter extends React.Component {
                        <i className={classNameLikeButton}></i> Like
                    </div>
                  </AriaMenuButton.MenuItem>
+                 <AriaMenuButton.MenuItem className='item' key= {5} tag='li'>
+                   <div aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+                       {iconFollowButton} Subscribe
+                   </div>
+                 </AriaMenuButton.MenuItem>
              </AriaMenuButton.Menu>
          </AriaMenuButton.Wrapper>;
 
@@ -197,17 +227,13 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={this.getPresentationHref()} target="_blank">
+                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
                             </a>
 
                             {!this.state.isMobile ? desktopButtons : ''}
-
-                            {/* {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>} */}
-                            {/* below is temporary fix (disable) for SWIK-1996 - When expand screen (hide decktree) on slide edit, then no content is displayed
-                                this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)}  aria-label="Reset Layout" data-tooltip="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} aria-label="Expand Content" data-tooltip="Expand Content"><i className="large icon expand"></i></button>*/}
                         </div>
                         {!this.state.isMobile ? '' : mobileButtons}
                     </div>
@@ -221,12 +247,13 @@ ContentActionsFooter.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore, UserFollowingsStore], (context, props) => {
     return {
         ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        UserFollowingsStore: context.getStore(UserFollowingsStore).getState()
     };
 });
 export default ContentActionsFooter;
