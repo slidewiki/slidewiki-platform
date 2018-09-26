@@ -166,6 +166,10 @@ class AttachDeckList extends React.Component {
                                    <Icon name="fork" aria-label="Number of versions"/>
                                    {deck.countRevisions}
                                  </Label>
+                                 <Label size="small">
+                                   <Icon name="help" aria-label="Number of questions"/>
+                                   {deck.questionsCount}
+                                 </Label>
                                </Item.Extra>
                              </Item.Content>
                             </Item>

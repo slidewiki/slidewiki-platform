@@ -128,8 +128,8 @@ class AttachQuestionsModalStore extends BaseStore{
                     language:deck.language,
                     countRevisions:deck.countRevisions,
                     deckCreatorid:deck.user,
-                    deckCreator:deck.username
-
+                    deckCreator:deck.username,
+                    questionsCount: deck.questionsCount,
                 });
 
             }); //map
@@ -156,8 +156,8 @@ class AttachQuestionsModalStore extends BaseStore{
                     language:deck.language,
                     countRevisions:deck.revisionCount,
                     deckCreatorid:deck.creator,
-                    deckCreator:deck.user.username
-                    /*nikki add the number of questions in here? */
+                    deckCreator:deck.user.username,
+                    questionsCount: deck.questionsCount,
                 });
             });//map
 

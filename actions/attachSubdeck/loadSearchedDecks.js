@@ -9,7 +9,7 @@ export default function loadSearchedDecks(context,payload,done){
 
     context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS_LOADING');
     context.executeAction(updateModalSubtitle, 'Search Results');
-    
+
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         
         if (err) {

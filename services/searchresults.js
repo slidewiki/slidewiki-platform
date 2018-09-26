@@ -108,6 +108,28 @@ function getLikes(deckIdsSet){
     return Promise.all(likePromises).then( () => { return likes; });
 }
 
+function getQuestionsCount(deckIdsSet) {
+    let questionsCount = {};
+    let questionsPromises = [];
+
+    for(let deckId of deckIdsSet){
+        let qPromise = rp.get({
+            uri: `${Microservices.questions.uri}/deck/${deckId}/questions`,
+            qs: {
+                metaonly: true,
+                include_subdecks_and_slides: true,
+            },
+            json: true,
+        }).then( (response) => {
+            questionsCount[deckId] = response.count;
+        }).catch( (err) => {
+            questionsCount[deckId] = 0;
+        });
+        questionsPromises.push(qPromise);
+    }
+    return Promise.all(questionsPromises).then( () => { return questionsCount; });
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -183,7 +205,13 @@ export default {
                     likes = likesFromService;
                 });
 
-                Promise.all([userPromise, deckPromise, forksPromise, likesPromise]).then( () => {
+                // get question counts for decks
+                let questionCounts = {};
+                let questionsPromise = getQuestionsCount(deckIds).then( (questionCountsFromService) => {
+                    questionCounts = questionCountsFromService;
+                });
+
+                Promise.all([userPromise, deckPromise, forksPromise, likesPromise, questionsPromise]).then( () => {
                     response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
@@ -213,6 +241,7 @@ export default {
 
                             //fill number of likes
                             returnItem.noOfLikes = likes[returnItem.db_id];
+                            returnItem.questionsCount = questionCounts[returnItem.db_id];
                         }
                         else if(returnItem.kind === 'Slide'){
                             returnItem.subItems = returnItem.usage.filter( (usageItem) => {
