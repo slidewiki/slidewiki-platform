@@ -2,27 +2,15 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import moment from 'moment';
 
-const fillMissingDates = (results) => {
-    let minDate = null;
-    let today = moment().utc().endOf('day');
-
-    results.forEach((result) => {
-        const resultDate = moment(result._id);
-        minDate = minDate ? moment.min(minDate, resultDate) : resultDate;
-    });
-
-    if (!minDate && !today) {
-        return results;
-    }
-
-    const dateDiff = today.diff(minDate, 'days');
+const fillMissingDates = (fromDate, results) => {
+    const dateDiff = moment().utc().endOf('day').diff(fromDate, 'days');
     let newResults = [];
+
     for (let i = 0; i < dateDiff; i++) {
-        let date = minDate.clone().add(i, 'day');
+        let date = fromDate.clone().add(i, 'day');
         let found = results.find((result) => {
             return date.isSame(result._id, 'day');
         });
-
         newResults.push({date: date.valueOf(), value: found != null ? found.count : 0});
     }
     return newResults;
@@ -52,13 +40,26 @@ export default {
     name: 'stats',
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
-        let fromDate = periodToDate(args.datePeriod);
-        let username = args.username;
+        let {username, activityType, datePeriod} = args;
+        let fromDate = periodToDate(datePeriod);
+        let verbId;
+        switch (activityType) {
+            case 'edit':
+                verbId = 'https://w3id.org/xapi/acrossx/verbs/edited';
+                break;
+            case 'like':
+                verbId = 'https://w3id.org/xapi/acrossx/verbs/liked';
+                break;
+            default:
+                callback(null, []);
+        }
+
 
         if (resource === 'stats.userActivitiesByTime') {
             let pipeline = [{
                 '$match': {
                     'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
+                    'statement.verb.id': verbId,
                     'statement.actor.account.name': username
                 }
             }, {
@@ -90,7 +91,7 @@ export default {
                 },
                 headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
                 json: true
-            }).then((response) => callback(null, fillMissingDates(response)))
+            }).then((response) => callback(null, fillMissingDates(fromDate, response)))
               .catch((err) => callback(err));
         } else if (resource === 'stats.userActivitiesByCategory') {
             let pipeline = [

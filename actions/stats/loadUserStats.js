@@ -7,13 +7,15 @@ import UserProfileStore from '../../stores/UserProfileStore';
 
 
 export default function loadUserStats(context, payload, done) {
-    let datePeriod = context.getStore(UserStatsStore).datePeriod;
     let username = context.getStore(UserProfileStore).username;
+    let datePeriod = context.getStore(UserStatsStore).datePeriod;
+    let activityType = context.getStore(UserStatsStore).activityType;
+
 
     log.info(context);
     async.parallel([
         (callback) => {
-            context.executeAction(loadActivityStatsByTime, {datePeriod, username}, callback);
+            context.executeAction(loadActivityStatsByTime, {datePeriod, username, activityType}, callback);
         },
     ], (err, results) => {
         if (err) {
