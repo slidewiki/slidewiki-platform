@@ -118,10 +118,10 @@ class PresentationPrint extends React.Component{
                     notes = <div className="ui segment"><b><i className="ui icon caret square up"></i> Speaker Notes</b><div dangerouslySetInnerHTML={{__html: slide.speakernotes.replace('position: absolute;','')}}></div></div>;
                 }
                 let content = slide.content + notes;
-                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
+                returnList.push(<div key={slide.id + '-' + i} style={{pageBreakAfter : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
             }
             //add last slide for licensing
-            returnList.push(<div key={'end-slide'} style={{'page-break-after' : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
+            returnList.push(<div key={'end-slide'} style={{pageBreakAfter : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
 
             return returnList;
 

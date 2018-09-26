@@ -37,7 +37,7 @@ class Application extends React.Component {
         content = (this.props.ErrorStore.error) ? <Error error={this.props.ErrorStore.error} /> : <Handler />;
 
         if (!this.state.user_cookies) {
-            cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies to ensure you get the best experience on our website.'>
+            cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies.'>
                 {(message) =>
                   <CookieBanner message={message} cookie='user-has-accepted-cookies' dismissOnScroll={false} onAccept={() => {}}/>}
                 </FormattedMessage>;
