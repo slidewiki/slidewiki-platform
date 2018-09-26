@@ -85,7 +85,8 @@ class AttachQuestionsModal extends React.Component{
             id:this.props.UserProfileStore.userid,
             jwt:this.props.UserProfileStore.jwt,
             loggedInUser:this.props.UserProfileStore.username,
-            username:this.props.UserProfileStore.username
+            username:this.props.UserProfileStore.username,
+            showQuestionCounts: true,
         }};
         this.context.executeAction(loadUserDecks, payload); //should this go into the mydecksclick?
         let payload2 = {params: {
