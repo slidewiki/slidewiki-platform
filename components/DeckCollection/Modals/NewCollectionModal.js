@@ -73,7 +73,8 @@ class NewCollectionModal extends React.Component {
         this.context.executeAction(addNewCollection, {
             title: this.state.title, 
             description: this.state.description,
-            userGroup: this.state.userGroup
+            userGroup: this.state.userGroup, 
+            deckId: this.props.deckId
         });
 
         this.handleClose();

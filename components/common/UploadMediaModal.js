@@ -3,9 +3,13 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
+import updateGraphic from '../../actions/media/updateGraphic';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import {isEmpty} from '../../common';
+import cancelUploadMediaFile from '../../actions/media/cancelUploadMediaFile';
+import SlideEditStore from '../../stores/SlideEditStore';
+import MediaStore from '../../stores/MediaStore';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 class UploadMediaModal extends React.Component {
@@ -30,6 +34,7 @@ class UploadMediaModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.showLicense = this.showLicense.bind(this);
+        this.receiveDroppedFile = this.receiveDroppedFile.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
         this.messages = defineMessages({
             swal_error_title : {
@@ -191,6 +196,7 @@ class UploadMediaModal extends React.Component {
     }
 
     handleClose(){
+        this.context.executeAction(cancelUploadMediaFile, {});
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,
@@ -224,6 +230,11 @@ class UploadMediaModal extends React.Component {
         });
     }
 
+    receiveDroppedFile(file) {
+        this.handleOpen();
+        this.onDrop([file]);
+    }
+
     changeLicense(event, data) {
         this.setState({
             licenseValue: data.value
@@ -232,32 +243,34 @@ class UploadMediaModal extends React.Component {
 
     submitPressed(e) {
         e.preventDefault();
-        let that = this;
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
-        console.log('copyrightholder: ' + this.state.copyrightHolder);
-        console.log('checkbox_backgroundImage: ' + $('#checkbox_backgroundImage')[0].checked);
-        let payload = {
-            type: this.state.files[0].type,
-            license: this.state.licenseValue,
-            copyrightHolder: this.state.copyrightHolder,
-            title: this.state.title || this.state.files[0].name,
-            text: this.state.alt,
-            filesize: this.state.files[0].size,
-            filename: this.state.files[0].name,
-            checkbox_backgroundImage: $('#checkbox_backgroundImage')[0].checked,
-            bytes: null
-        };
-        console.log(this.state, payload);
+        let fileType = this.state.files[0].type;
+
         let reader = new FileReader();
 
-        reader.onloadend = function (evt) {
+        reader.onloadend = (evt) => {
             console.log('read total length from file: ', reader.result.length, evt.target.readyState);
-
             if (evt.target.readyState === FileReader.DONE) {
-                payload.bytes = reader.result;
-                that.context.executeAction(uploadMediaFiles, payload);
+                let payload = {
+                    type: this.state.files[0].type,
+                    license: this.state.licenseValue,
+                    copyrightHolder: this.state.copyrightHolder,
+                    title: this.state.title || this.state.files[0].name,
+                    text: this.state.alt,
+                    filesize: this.state.files[0].size,
+                    filename: this.state.files[0].name,
+                    checkbox_backgroundImage: $('#checkbox_backgroundImage')[0].checked,
+                    bytes: null
+                };
 
-                that.setState({
+                if (fileType === 'image/svg+xml') {
+                    payload.bytes = atob(reader.result.split('base64,')[1]);
+                    payload.svg = payload.bytes;
+                } else {
+                    payload.bytes = reader.result;
+                }
+                this.context.executeAction(uploadMediaFiles, payload);
+                this.setState({
                     isLoading: true
                 });
             }
@@ -282,6 +295,24 @@ class UploadMediaModal extends React.Component {
         reader.readAsDataURL(this.state.files[0]);
 
         return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick) {
+            this.handleOpen();
+        }
+
+        if (this.props.MediaStore.status === 'uploading') {
+            if (nextProps.MediaStore.status === 'success') {
+                this.handleClose();
+            } else if (nextProps.MediaStore.status === 'error') {
+                this.handleClose();
+            }
+        }
+
+        if (nextProps.MediaStore.status === 'dropped') {
+            this.receiveDroppedFile(nextProps.MediaStore.file);
+        }
     }
 
     render() {
@@ -323,7 +354,7 @@ class UploadMediaModal extends React.Component {
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field">
             <label htmlFor="copyrightHolder">{this.context.intl.formatMessage(this.messages.copyrightHolder_label)}</label>
-            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.defaultMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
+            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
               <TextArea className="sr-only" id="UploadMediaModalDescription" value={this.context.intl.formatMessage(this.messages.modal_description2)} />
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
@@ -469,5 +500,13 @@ UploadMediaModal.contextTypes = {
     getUser: PropTypes.func,
     intl: PropTypes.object.isRequired
 };
+
+UploadMediaModal = connectToStores(UploadMediaModal, [SlideEditStore, MediaStore], (context, props) => {
+
+    return {
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
+    };
+});
 
 export default UploadMediaModal;
