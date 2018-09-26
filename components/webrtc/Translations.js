@@ -33,15 +33,15 @@ class Translations extends React.Component {
         let languages = [];
 
         let result = this.processPrimaryLangauge(deckID, translationMap, languages); //translationMap: MAP{INT -> MAP{LANG -> slideID}}
-        this.deckLanguage = (deckLanguage) ? deckLanguage : result[0];
-        this.chosenLanguage = this.deckLanguage;
+        this.deckLanguage = (deckLanguage) ? deckLanguage : result[0]; //primary lang if no lang provided by URL
+        this.chosenLanguage = this.deckLanguage; //default lang is the deck lang
         languages = result[1];
         translationMap = result[2];
 
         console.log(languages, this.deckLanguage, translationMap);
 
         languages.forEach((lang) => {
-            translationMap = this.processTranslation(translationMap, lang);
+            translationMap = this.processTranslation(translationMap, lang); //add data to the map for all translations
         });
 
 
@@ -95,7 +95,7 @@ class Translations extends React.Component {
         return translationMap;
     }
 
-    setTranslationMapWithInitialLanguage(lang) {
+    setTranslationMapWithInitialLanguage(lang) {//NOTE this code properly copies the map of maps and alters it
         let translationMapByLanguage = new Map();
         this.translationMap.forEach((el, index) => {
             let key = el.get(lang);
@@ -109,6 +109,7 @@ class Translations extends React.Component {
     modifyURLtoLoad(url){
         if(this.chosenLanguage === this.deckLanguage)
             return url;
+        //TODO the following code is a bit hacky
         let currentSlide = url.split('slide-')[1];
         let newURL = url.split('slide-')[0] + 'slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
         newURL = newURL.replace('language='+this.deckLanguage, 'language='+this.chosenLanguage);
@@ -116,9 +117,9 @@ class Translations extends React.Component {
     }
 
     changeLanguage(lang){
-        console.log(lang);
+        console.log('Changing language to ', lang);
         this.chosenLanguage = lang;
-        this.props.triggerReloadIframe();
+        this.props.triggerReloadIframe();//TODO there is currently a bug preventing the iframe to being loaded at the current slide. It always loads the initial slide of the slideshow
     }
 
     openChooseLanguageModal() {
