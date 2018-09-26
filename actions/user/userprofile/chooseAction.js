@@ -1,6 +1,6 @@
 import async from 'async';
 import fetchUser from './fetchUser';
-import { fetchUserDecks } from './fetchUserDecks';
+import fetchUserDecks from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';

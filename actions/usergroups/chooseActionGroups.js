@@ -1,7 +1,8 @@
 import async from 'async';
+import UserProfileStore from '../../stores/UserProfileStore';
 import updateUsergroup from './updateUsergroup';
-import { fetchUserDecks } from '../user/userprofile/fetchUserDecks';
-import { fetchUser } from '../user/userprofile/fetchUser';
+import fetchUserDecks from '../user/userprofile/fetchUserDecks';
+import fetchUser from '../user/userprofile/fetchUser';
 import notFoundError from '../error/notFoundError';
 const log = require('../log/clog');
 import loadUserCollections from '../collections/loadUserCollections';
@@ -11,7 +12,7 @@ export const categories = {
     categories: ['settings', 'decks', 'playlists']
 };
 
-export function chooseActionGroups(context, payload, done) {
+export default function chooseActionGroups(context, payload, done) {
     log.info(context);
 
     let title = shortTitle + ' | ';
@@ -31,14 +32,14 @@ export function chooseActionGroups(context, payload, done) {
     };
 
     console.log('choose action', payload.params.category, payload.params.id);
-    
+
 
     async.series([
         (callback) => {
             context.executeAction(updateUsergroup, {group: {_id: payload.params.id}}, callback);
         },
         (callback) => {
-            context.executeAction(fetchUser, {}, callback);
+            context.executeAction(fetchUser, {params: {username: context.getStore(UserProfileStore).username}}, callback);
         },
         (callback) => {
             context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title}, callback);
@@ -50,7 +51,7 @@ export function chooseActionGroups(context, payload, done) {
             switch (payload.params.category) {
                 case categories.categories[0]:
                 case undefined:
-                    
+
                     callback()
                     break;
                 case categories.categories[1]:
