@@ -91,7 +91,8 @@ class AttachQuestionsModal extends React.Component{
         this.context.executeAction(loadUserDecks, payload); //should this go into the mydecksclick?
         let payload2 = {params: {
             limit: 20,
-            offset: 0
+            offset: 0,
+            showQuestionCounts: true,
         }};
         this.context.executeAction(loadRecentDecks, payload2); //should this go into the slidewikiclick?
         let payload3  = {

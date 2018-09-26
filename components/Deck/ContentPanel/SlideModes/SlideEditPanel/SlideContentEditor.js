@@ -911,7 +911,7 @@ class SlideContentEditor extends React.Component {
     }
     /*nikki no longer used?? */
     handleAddQuestionsClick(questions){
-        let html = "<div id='slide_questions' style='font-family:sans-serif'>";
+        let html = '<div id="slide_questions" style="font-family:sans-serif">';
         let questionsList = questions.questions;
         let uniqueID = this.getuniqueID();
 
@@ -919,16 +919,16 @@ class SlideContentEditor extends React.Component {
             let currentQuestion = questionsList[i];
             let currentAnswers = currentQuestion.answers;
 
-            html += "<div class='slide_question'><div>" + currentQuestion.title + "</div>";
+            html += '<div class="slide_question"><div>' + currentQuestion.title + '</div>';
 
             for (let j = 0; j < currentAnswers.length; j++){
-                html += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>";
+                html += '<input type="checkbox" name="answer' + j + '" value="' + currentAnswers[j].answer + '">' + currentAnswers[j].answer + '</br>';
             }
 
-            html += "</br></div>";
+            html += '</br></div>';
         }
 
-        html += "</div>";
+        html += '</div>';
         let iframe = '<iframe width="800" height="400" srcdoc="'+ html + '"></iframe>';
 
         if($('.pptx2html').length) //if slide is in canvas mode

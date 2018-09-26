@@ -62,14 +62,23 @@ export default {
             }).then((res) => {
                 // get unique creator ids
                 let userIds = new Set(res.map((deck) => deck.user));
-                return rp.post({
+                let usersPromise = rp.post({
                     uri: Microservices.user.uri + '/users',
                     json: true,
                     body: [...userIds],
-                }).then((users) => {
+                });
+
+                let deckIds = res.map( (deck) => deck._id);
+                let questionsPromise = (args.showQuestionCounts === true) ? getQuestionsCount(deckIds) : Promise.resolve();
+                
+                return Promise.all([usersPromise, questionsPromise]).then( ([users, questionCounts]) => {
                     let usernames = users.reduce((acc, user) => ({...acc, [user._id]: user.username}), {});
                     res.forEach((deck) => {
                         deck.username = usernames[deck.user] || 'Unknown User';
+
+                        if (args.showQuestionCounts === true) {
+                            deck.questionsCount = questionCounts[deck._id];
+                        }
                     });
                     return res;
                 });
@@ -515,4 +524,26 @@ function addSlug(deck) {
         addSlug(deck.origin);
     };
     return deck;
+}
+
+function getQuestionsCount(deckIds) {
+    let questionsCount = {};
+    let questionsPromises = [];
+
+    for(let deckId of deckIds){
+        let qPromise = rp.get({
+            uri: `${Microservices.questions.uri}/deck/${deckId}/questions`,
+            qs: {
+                metaonly: true,
+                include_subdecks_and_slides: true,
+            },
+            json: true,
+        }).then( (response) => {
+            questionsCount[deckId] = response.count;
+        }).catch( (err) => {
+            questionsCount[deckId] = 0;
+        });
+        questionsPromises.push(qPromise);
+    }
+    return Promise.all(questionsPromises).then( () => { return questionsCount; });
 }
