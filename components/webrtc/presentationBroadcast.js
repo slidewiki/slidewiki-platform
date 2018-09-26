@@ -8,6 +8,7 @@ import { Grid, Button, Popup, Label } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
 import SocialSharing from './SocialSharing.js';
+import Translation from './Translations';
 import Chat from './Chat.js';
 import { QRCode } from 'react-qr-svg';
 
@@ -41,6 +42,8 @@ class presentationBroadcast extends React.Component {
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
         this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
         this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];//['#javascript'];
+        let lang = this.props.currentRoute.query.presentation.split('language=')[1];
+        this.deckLanguage = (lang === undefined) ? lang : lang.slice(0,2);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -51,6 +54,8 @@ class presentationBroadcast extends React.Component {
     componentDidMount() {
 
         let that = this;
+
+        that.refs.translation.createTranslationMap(that.deckID, this.deckLanguage);
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
             console.log('Navigating away because of missing paramenters in URL');
             swal({
@@ -780,24 +785,6 @@ class presentationBroadcast extends React.Component {
             $('#slidewikiPresentation').off('load');
         }
 
-        function changeSlide(slideID) { // called by peers
-            that.lastRemoteSlide = slideID;
-            if (!that.state.paused) {
-                let doc = document.getElementById('slidewikiPresentation');
-                if(doc.contentDocument.readyState === 'complete'){
-                    console.log('Changing to slide: ', slideID);
-                    that.iframesrc = slideID;
-                    doc.contentWindow.location.assign(slideID);
-                } else { //if readyState === 'loading' || readyState === 'interactive'
-                    setTimeout(() => {
-                        changeSlide(slideID);
-                    }, 20);
-                }
-            }
-        }
-        that.changeSlide = changeSlide;
-
-
         function handleNewUsername(username, peerID) {
             if(isEmpty(username) || username === 'undefined')
                 that.pcs[peerID].username = 'Participant ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
@@ -848,6 +835,23 @@ class presentationBroadcast extends React.Component {
         function closeModal() {
             that.setState({showReopenModalButton: false});
             swal.closeModal();
+        }
+    }
+
+    changeSlide(slideID) { // called by peers
+        let newSlideID = this.refs.translation.modifyURLtoLoad(slideID);
+        this.lastRemoteSlide = newSlideID;
+        if (!this.state.paused) {
+            let doc = document.getElementById('slidewikiPresentation');
+            if(doc.contentDocument.readyState === 'complete'){
+                console.log('Changing to slide: ', newSlideID);
+                this.iframesrc = newSlideID;
+                doc.contentWindow.location.assign(newSlideID);
+            } else { //if readyState === 'loading' || readyState === 'interactive'
+                setTimeout(() => {
+                    changeSlide(slideID);
+                }, 20);
+            }
         }
     }
 
@@ -1030,6 +1034,7 @@ class presentationBroadcast extends React.Component {
                   {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
                   ) : ''}
+                  <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={() => this.changeSlide.bind(this, this.lastRemoteSlide)}/>
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>
