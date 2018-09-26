@@ -112,7 +112,7 @@
   cursor: pointer;
 }
 .ui.comments .comment a.author:hover {
-  color: #1e70bf;
+  color: #0769b1;
 }
 
 /*--------------
@@ -234,7 +234,7 @@
 --------------------*/
 
 .ui.mini.comments {
-  font-size: 0.78571429rem;
+  font-size: 0.71428571rem;
 }
 .ui.tiny.comments {
   font-size: 0.85714286rem;

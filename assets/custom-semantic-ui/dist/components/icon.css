@@ -221,27 +221,27 @@ i.inverted.icon {
 
 /* Red */
 i.red.icon {
-  color: #DB2828 !important;
+  color: #C42424 !important;
 }
 i.inverted.red.icon {
-  color: #E76A6A !important;
+  color: #DEA7A7 !important;
 }
 i.inverted.bordered.red.icon,
 i.inverted.circular.red.icon {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
   color: #FFFFFF !important;
 }
 
 /* Orange */
 i.orange.icon {
-  color: #DA6619 !important;
+  color: #CA5010 !important;
 }
 i.inverted.orange.icon {
-  color: #E28447 !important;
+  color: #D98658 !important;
 }
 i.inverted.bordered.orange.icon,
 i.inverted.circular.orange.icon {
-  background-color: #DA6619 !important;
+  background-color: #CA5010 !important;
   color: #FFFFFF !important;
 }
 
@@ -273,14 +273,14 @@ i.inverted.circular.olive.icon {
 
 /* Green */
 i.green.icon {
-  color: #188130 !important;
+  color: #158538 !important;
 }
 i.inverted.green.icon {
-  color: #74B584 !important;
+  color: #88C19C !important;
 }
 i.inverted.bordered.green.icon,
 i.inverted.circular.green.icon {
-  background-color: #188130 !important;
+  background-color: #158538 !important;
   color: #FFFFFF !important;
 }
 

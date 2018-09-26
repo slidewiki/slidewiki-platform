@@ -327,41 +327,41 @@ h5.ui.header .sub.header {
 /*--- Red ---*/
 
 .ui.red.header {
-  color: #DB2828 !important;
+  color: #C42424 !important;
 }
 a.ui.red.header:hover {
-  color: #d01919 !important;
+  color: #b61919 !important;
 }
 .ui.red.dividing.header {
-  border-bottom: 2px solid #DB2828;
+  border-bottom: 2px solid #C42424;
 }
 
 /* Inverted */
 .ui.inverted.red.header {
-  color: #E76A6A !important;
+  color: #DEA7A7 !important;
 }
 a.ui.inverted.red.header:hover {
-  color: #eb4d4d !important;
+  color: #da9191 !important;
 }
 
 /*--- Orange ---*/
 
 .ui.orange.header {
-  color: #DA6619 !important;
+  color: #CA5010 !important;
 }
 a.ui.orange.header:hover {
-  color: #cc5a0e !important;
+  color: #bb4406 !important;
 }
 .ui.orange.dividing.header {
-  border-bottom: 2px solid #DA6619;
+  border-bottom: 2px solid #CA5010;
 }
 
 /* Inverted */
 .ui.inverted.orange.header {
-  color: #E28447 !important;
+  color: #D98658 !important;
 }
 a.ui.inverted.orange.header:hover {
-  color: #e77328 !important;
+  color: #dc753c !important;
 }
 
 /*--- Olive ---*/
@@ -407,21 +407,21 @@ a.ui.inverted.yellow.header:hover {
 /*--- Green ---*/
 
 .ui.green.header {
-  color: #188130 !important;
+  color: #158538 !important;
 }
 a.ui.green.header:hover {
-  color: #107026 !important;
+  color: #0d742d !important;
 }
 .ui.green.dividing.header {
-  border-bottom: 2px solid #188130;
+  border-bottom: 2px solid #158538;
 }
 
 /* Inverted */
 .ui.inverted.green.header {
-  color: #74B584 !important;
+  color: #88C19C !important;
 }
 a.ui.inverted.green.header:hover {
-  color: #60b073 !important;
+  color: #74bc8d !important;
 }
 
 /*--- Teal ---*/

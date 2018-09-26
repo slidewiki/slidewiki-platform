@@ -104,68 +104,6 @@
 
 
 /*-------------------
-     Placeholder
---------------------*/
-
-.ui.placeholder.segment {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: stretch;
-      -ms-flex-align: stretch;
-          align-items: stretch;
-  max-width: initial;
-  -webkit-animation: none;
-          animation: none;
-  overflow: visible;
-  padding: 1em 1em;
-  min-height: 18rem;
-  background: #F9FAFB;
-  border-color: rgba(34, 36, 38, 0.15);
-  -webkit-box-shadow: 0px 2px 25px 0 rgba(34, 36, 38, 0.05) inset;
-          box-shadow: 0px 2px 25px 0 rgba(34, 36, 38, 0.05) inset;
-}
-.ui.placeholder.segment .button,
-.ui.placeholder.segment textarea {
-  display: block;
-}
-.ui.placeholder.segment .field,
-.ui.placeholder.segment textarea,
-.ui.placeholder.segment > .ui.input,
-.ui.placeholder.segment .button {
-  max-width: 15rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-.ui.placeholder.segment .column .button,
-.ui.placeholder.segment .column .field,
-.ui.placeholder.segment .column textarea,
-.ui.placeholder.segment .column > .ui.input {
-  max-width: 15rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-.ui.placeholder.segment > .inline {
-  -ms-flex-item-align: center;
-      align-self: center;
-}
-.ui.placeholder.segment > .inline > .button {
-  display: inline-block;
-  width: auto;
-  margin: 0px 0.35714286rem 0px 0px;
-}
-.ui.placeholder.segment > .inline > .button:last-child {
-  margin-right: 0px;
-}
-
-/*-------------------
         Piled
 --------------------*/
 
@@ -329,8 +267,8 @@
 
 .ui.raised.segments,
 .ui.raised.segment {
-  -webkit-box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
-          box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+  -webkit-box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.08);
+          box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.08);
 }
 
 
@@ -582,28 +520,28 @@
 
 /* Red */
 .ui.red.segment:not(.inverted) {
-  border-top: 2px solid #DB2828 !important;
+  border-top: 2px solid #C42424 !important;
 }
 .ui.inverted.red.segment {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
   color: #FFFFFF !important;
 }
 
 /* Orange */
 .ui.orange.segment:not(.inverted) {
-  border-top: 2px solid #F2711C !important;
+  border-top: 2px solid #CA5010 !important;
 }
 .ui.inverted.orange.segment {
-  background-color: #F2711C !important;
+  background-color: #CA5010 !important;
   color: #FFFFFF !important;
 }
 
 /* Yellow */
 .ui.yellow.segment:not(.inverted) {
-  border-top: 2px solid #FBBD08 !important;
+  border-top: 2px solid #FFD900 !important;
 }
 .ui.inverted.yellow.segment {
-  background-color: #FBBD08 !important;
+  background-color: #FFD900 !important;
   color: #FFFFFF !important;
 }
 
@@ -618,28 +556,28 @@
 
 /* Green */
 .ui.green.segment:not(.inverted) {
-  border-top: 2px solid #21BA45 !important;
+  border-top: 2px solid #158538 !important;
 }
 .ui.inverted.green.segment {
-  background-color: #21BA45 !important;
+  background-color: #158538 !important;
   color: #FFFFFF !important;
 }
 
 /* Teal */
 .ui.teal.segment:not(.inverted) {
-  border-top: 2px solid #00B5AD !important;
+  border-top: 2px solid #158570 !important;
 }
 .ui.inverted.teal.segment {
-  background-color: #00B5AD !important;
+  background-color: #158570 !important;
   color: #FFFFFF !important;
 }
 
 /* Blue */
 .ui.blue.segment:not(.inverted) {
-  border-top: 2px solid #2185D0 !important;
+  border-top: 2px solid #1E78BB !important;
 }
 .ui.inverted.blue.segment {
-  background-color: #2185D0 !important;
+  background-color: #1E78BB !important;
   color: #FFFFFF !important;
 }
 
@@ -835,7 +773,7 @@
 
 .ui.mini.segments .segment,
 .ui.mini.segment {
-  font-size: 0.78571429rem;
+  font-size: 0.71428571rem;
 }
 .ui.tiny.segments .segment,
 .ui.tiny.segment {
