@@ -155,7 +155,7 @@ class ContentActionsFooter extends React.Component {
             if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
                 iconFollowButton = <Icon.Group >
                     <Icon size='large' name='circle' color='blue'/>
-                    <Icon name='rss' inverted='true'/>
+                    <Icon name='rss' inverted={true}/>
                 </Icon.Group>;
                 tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
             }
