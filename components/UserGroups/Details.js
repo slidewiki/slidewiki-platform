@@ -115,11 +115,12 @@ class Details extends React.Component {
             this.refs.GroupName.value = this.props.currentUsergroup.name || '';
             this.refs.GroupDescription.value = this.props.currentUsergroup.description || '';
         } catch (error) {
-            
+
         }
     }
 
     componentDidMount() {
+        console.log('Details componentDidMount');
         $('#usergoup_edit_dropdown_usernames_remote')
             .dropdown({
                 apiSettings: {
@@ -172,7 +173,7 @@ class Details extends React.Component {
                 creator: this.props.currentUsergroup.creator || this.props.userid
             };
         } catch (error) {
-            
+
         }
 
         if (this.props.currentUsergroup._id)
@@ -261,21 +262,21 @@ class Details extends React.Component {
     }
 
     render() {
-        if (!this.props.group || !this.props.group.creator)
+        if (!this.props.currentUsergroup || !this.props.currentUsergroup.creator || !this.props.currentUsergroup.creator.userid)
             return null;
 
         let userlist = [];
         //add creator as default member
         userlist.push(
-          <div className="item" key={this.props.userid}>
+          <div className="item" key={this.props.currentUsergroup.creator.userid}>
             <div className="ui grid">
               <div className="one wide column middle aligned">
-                <UserPicture picture={ this.props.picture } username={ this.props.username } avatar={ true } width= { 24 } />
+                <UserPicture picture={ this.props.currentUsergroup.creator.picture } username={ this.props.currentUsergroup.creator.username } avatar={ true } width= { 24 } />
               </div>
               <div className="fourteen wide column">
                 <div className="content">
-                    <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.userid} value={this.context.intl.formatMessage(this.messages.messageUsericon)} tabIndex ='-1'/>
-                    <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.displayName || this.props.username}</a>
+                    <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.currentUsergroup.creator.userid} value={this.context.intl.formatMessage(this.messages.messageUsericon)} tabIndex ='-1'/>
+                    <a className="header" href={'/user/' + this.props.currentUsergroup.creator.username} target="_blank">{this.props.currentUsergroup.creator.displayName || this.props.currentUsergroup.creator.username}</a>
                     <div className="description">{this.context.intl.formatMessage(this.messages.groupOwner)}</div>
                 </div>
               </div>
@@ -356,9 +357,10 @@ class Details extends React.Component {
                             <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                                 <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
                             </button>
+
                             {(this.props.userid && (this.props.isMember || this.props.isCreator)) ?
                                 <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
-                                    <i className="remove icon"></i>{this.props.isCreator ? 
+                                    <i className="remove icon"></i>{this.props.isCreator ?
                                         this.context.intl.formatMessage(this.messages.deleteGroup)
                                         : this.context.intl.formatMessage(this.messages.leaveGroup)}
                                 </button>

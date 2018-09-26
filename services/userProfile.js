@@ -121,7 +121,7 @@ export default {
                 body: tosend,
                 timeout: body.timeout
             })
-            .then((body) => callback(null, body))
+            .then((ret) => callback(null, ret))
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.deleteUsergroup') {
             rp({

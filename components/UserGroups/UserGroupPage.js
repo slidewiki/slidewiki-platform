@@ -47,17 +47,18 @@ class UserGroupPage extends React.Component {
         const isMember = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid;
         });
-        return <Details currentUsergroup={ this.props.UserGroupsStore.currentUsergroup } 
+        return <Details currentUsergroup={ this.props.UserGroupsStore.currentUsergroup }
             isAdmin={ isAdmin } isCreator={ isCreator } isMember={isMember}
-            saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError} 
-            username={this.props.UserProfileStore.username} 
+            saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError}
+            username={this.props.UserProfileStore.username}
             displayName={this.props.UserProfileStore.user.displayName}
-            userid={this.props.UserProfileStore.userid} 
-            saveUsergroupIsLoading={this.props.UserGroupsStore.saveUsergroupIsLoading} 
+            userid={this.props.UserProfileStore.userid}
+            saveUsergroupIsLoading={this.props.UserGroupsStore.saveUsergroupIsLoading}
             picture={this.props.UserProfileStore.user.picture} />;
     }
 
     chooseView(){
+      console.log('chooseView', this.props.UserGroupsStore.category);
         switch(this.props.UserGroupsStore.category){
             case 'settings':
                 return this.showDetails();

@@ -93,13 +93,13 @@ class UserGroupsStore extends BaseStore {
 
     changeTo(category) {
         this.category = category;
-        console.log('UserGroupsStore: changeTo', category);
+        // console.log('UserGroupsStore: changeTo', category);
         this.emitChange();
     }
 
     updateUsergroup(group) {
         this.currentUsergroup = group;
-        console.log('UserGroupsStore: updateUsergroup', group);
+        // console.log('UserGroupsStore: updateUsergroup', group);
         this.saveUsergroupError = '';
         this.deleteUsergroupError = '';
         this.emitChange();
@@ -123,7 +123,6 @@ class UserGroupsStore extends BaseStore {
 
     saveUsergroupSuccess() {
         this.saveUsergroupIsLoading = false;
-        this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.emitChange();
     }
@@ -156,7 +155,7 @@ class UserGroupsStore extends BaseStore {
 
 
 
-    
+
 
     successMessage() {
         this.dimmer.success = true;

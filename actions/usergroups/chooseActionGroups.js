@@ -39,13 +39,12 @@ export default function chooseActionGroups(context, payload, done) {
             context.executeAction(updateUsergroup, {group: {_id: payload.params.id}}, callback);
         },
         (callback) => {
+            context.dispatch('USERGROUP_CATEGORY', payload.params.category);
             context.executeAction(fetchUser, {params: {username: context.getStore(UserProfileStore).username}}, callback);
         },
         (callback) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title}, callback);
-        },
-        (callback) => {
-            context.dispatch('USERGROUP_CATEGORY', payload.params.category, callback);
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
+            callback();
         },
         (callback) => {
             switch (payload.params.category) {

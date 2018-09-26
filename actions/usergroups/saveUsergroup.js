@@ -9,10 +9,12 @@ export default function saveUsergroup(context, payload, done) {
             context.dispatch('SAVE_USERGROUP_FAILED', err);
         } else {
             context.dispatch('SAVE_USERGROUP_SUCCESS', res);
-            if (payload.isNew)
+            // console.log('updated usergroup from to', payload, res);
+            if (!payload.id) {
                 context.executeAction(navigateAction, {
-                    url: '/usergroup/' + payload.id
+                    url: '/usergroup/' + res.id + '/settings'
                 });
+            }
         }
         done();
     });
