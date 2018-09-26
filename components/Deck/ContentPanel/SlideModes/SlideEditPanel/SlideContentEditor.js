@@ -193,8 +193,8 @@ class SlideContentEditor extends React.Component {
             console.log('questions template');
             let keepExistingContent = false;
             let pptx2htmlStartDiv = templateQuestionsContent.htmlstart;
-            let pptx2htmlcontent = templateQuestionsContent.html
-            let pptx2htmlCloseDiv = templateQuestionsContent.htmlend
+            let pptx2htmlcontent = templateQuestionsContent.html;
+            let pptx2htmlCloseDiv = templateQuestionsContent.htmlend;
             this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
             
         }

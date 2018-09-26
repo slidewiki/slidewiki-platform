@@ -29,7 +29,7 @@ export default function embedQuestions(context,payload,done){
             html += '<input type="checkbox" name="answer' + j + '" value="' + currentAnswers[j].answer + '">' + currentAnswers[j].answer + '</br>' ;
         }
         html += '</br></div>';
-        }
+    }
 
     let htmlend = '</div>';
     //let iframe = '<iframe width="800" height="400" srcdoc="'+ html + '"></iframe>';

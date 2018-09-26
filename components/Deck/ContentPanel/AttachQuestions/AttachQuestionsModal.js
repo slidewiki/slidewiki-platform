@@ -96,7 +96,7 @@ class AttachQuestionsModal extends React.Component{
         let payload3  = {
             selectedDeckId: this.props.selector.id, /*nikki should this be set to the current deck?  was this.state.selectedDeckId*/
             selectedDeckTitle: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', this.props.selector.id)//'First select the deck which contains the questions you wish to attach...'
-            }; //*nikki what is this doing? */
+        }; //*nikki what is this doing? */
         //console.log(`id ${this.props.selector.id}`);
         //console.log(`Deck title: ${this.getTitle(this.props.currentDeck.DeckTreeStore.deckTree, 'deck', this.props.selector.id)}`);
         this.context.executeAction(updateSelectedDeck,payload3);
@@ -121,7 +121,7 @@ class AttachQuestionsModal extends React.Component{
             //showQuestions:true, /*nikki should this be false instead? */
             selectedDeckId: -1
         });
-      this.context.executeAction(initModal,[]);
+        this.context.executeAction(initModal,[]);
     }
 
     unmountTrap(){
@@ -135,7 +135,7 @@ class AttachQuestionsModal extends React.Component{
         //nikki should reset the selected questions to empty
         this.setState({
             selectedQuestions:[]
-        })
+        });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
         let deckSelector = {id:this.state.selectedDeckId, stype:'deck', sid:this.state.selectedDeckId}; //not being set correctly by the mydecks/search?
         this.context.executeAction(loadQuestions,{params:deckSelector});

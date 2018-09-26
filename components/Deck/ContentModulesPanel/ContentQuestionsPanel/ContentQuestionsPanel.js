@@ -156,7 +156,7 @@ class ContentQuestionsPanel extends React.Component {
                                 </div>
                                 <div className="column right aligned" >
                                 {addQuestionButton}
-                                {this.props.ContentModulesStore.selector.stype === "deck" ? downloadQuestionButton : ''} {/*nikki buttons are displayed the wrong way round*/}
+                                {this.props.ContentModulesStore.selector.stype === 'deck' ? downloadQuestionButton : ''} {/*nikki buttons are displayed the wrong way round*/}
                                 </div>
                             </div>
                         </div>

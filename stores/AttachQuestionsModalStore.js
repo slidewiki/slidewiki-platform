@@ -211,8 +211,8 @@ class AttachQuestionsModalStore extends BaseStore{
             this.deckQuestions = [];
             this.deckQuestionsCount = 0;
         }else{
-        this.deckQuestions = payload.questions;
-        this.deckQuestionsCount = this.deckQuestions.length;
+            this.deckQuestions = payload.questions;
+            this.deckQuestionsCount = this.deckQuestions.length;
         }
         this.emitChange();
     }

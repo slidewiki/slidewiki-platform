@@ -43,14 +43,14 @@ class AttachCurrentDeck extends React.Component{
                 <AttachQuestionsList deckQuestions={this.props.deckQuestions} selectedDeckId={this.props.currentDeckID} maxHeight='350px'/>
             ); /*nikki does it need all of these parameters? removed: user={userInfo} actionButtonId={this.props.actionButtonId}*/ 
         }
-/*nikki removed segment */
- //<Segment id="panelCurrentDeckContent">
- //</Segment>
- { /*  <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-               <Label  id="selectedDeckTitleId" content={this.props.currentDeckID} role='alert' aria-live='polite' basic />*/}
+        /*nikki removed segment */
+        //<Segment id="panelCurrentDeckContent">
+        //</Segment>
+        { /*  <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+        <Label  id="selectedDeckTitleId" content={this.props.currentDeckID} role='alert' aria-live='polite' basic />*/}
     
 
-    return currentDeckContent;
+        return currentDeckContent;
 
     }
 }
