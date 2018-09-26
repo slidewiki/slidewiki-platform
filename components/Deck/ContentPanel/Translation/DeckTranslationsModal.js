@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -181,8 +182,8 @@ class DeckTranslationsModal extends React.Component {
 }
 
 DeckTranslationsModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DeckTranslationsModal = connectToStores(DeckTranslationsModal, [TranslationStore], (context, props) => {
     return {
