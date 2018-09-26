@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Form
+ * # Semantic UI 2.4.0 - Form
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -85,7 +85,7 @@
 /* Set max height on unusual input */
 .ui.form ::-webkit-datetime-edit,
 .ui.form ::-webkit-inner-spin-button {
-  height: 1.2142em;
+  height: 1.21428571em;
 }
 .ui.form input:not([type]),
 .ui.form input[type="date"],
@@ -104,8 +104,8 @@
   outline: none;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
-  line-height: 1.2142em;
-  padding: 0.67861429em 1em;
+  line-height: 1.21428571em;
+  padding: 0.67857143em 1em;
   font-size: 1em;
   background: #FFFFFF;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -260,8 +260,8 @@
 .ui.form .field .prompt.label {
   white-space: normal;
   background: #FFFFFF !important;
-  border: 1px solid #991C1C !important;
-  color: #991C1C !important;
+  border: 1px solid #E0B4B4 !important;
+  color: #9F3A38 !important;
 }
 .ui.form .inline.fields .field .prompt,
 .ui.form .inline.field .prompt {
@@ -317,7 +317,7 @@
   color: rgba(191, 191, 191, 0.87);
 }
 .ui.form :-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(191, 191, 191, 0.87) !important;
 }
 .ui.form ::-moz-placeholder {
   color: rgba(191, 191, 191, 0.87);
@@ -326,7 +326,7 @@
   color: rgba(115, 115, 115, 0.87);
 }
 .ui.form :focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(115, 115, 115, 0.87) !important;
 }
 .ui.form :focus::-moz-placeholder {
   color: rgba(115, 115, 115, 0.87);
@@ -334,22 +334,22 @@
 
 /* Error Placeholder */
 .ui.form .error ::-webkit-input-placeholder {
-  color: #ec9595;
+  color: #e7bdbc;
 }
 .ui.form .error :-ms-input-placeholder {
-  color: #ec9595 !important;
+  color: #e7bdbc !important;
 }
 .ui.form .error ::-moz-placeholder {
-  color: #ec9595;
+  color: #e7bdbc;
 }
 .ui.form .error :focus::-webkit-input-placeholder {
-  color: #e46a6a;
+  color: #da9796;
 }
 .ui.form .error :focus:-ms-input-placeholder {
-  color: #e46a6a !important;
+  color: #da9796 !important;
 }
 .ui.form .error :focus::-moz-placeholder {
-  color: #e46a6a;
+  color: #da9796;
 }
 
 /*--------------------
@@ -444,11 +444,11 @@
 .ui.form .field.error label,
 .ui.form .fields.error .field .input,
 .ui.form .field.error .input {
-  color: #991C1C;
+  color: #9F3A38;
 }
 .ui.form .fields.error .field .corner.label,
 .ui.form .field.error .corner.label {
-  border-color: #991C1C;
+  border-color: #9F3A38;
   color: #FFFFFF;
 }
 .ui.form .fields.error .field textarea,
@@ -480,8 +480,8 @@
 .ui.form .field.error input[type="file"],
 .ui.form .field.error input[type="url"] {
   background: #FFF6F6;
-  border-color: #991C1C;
-  color: #991C1C;
+  border-color: #E0B4B4;
+  color: #9F3A38;
   border-radius: '';
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -501,8 +501,8 @@
 .ui.form .field.error input[type="file"]:focus,
 .ui.form .field.error input[type="url"]:focus {
   background: #FFF6F6;
-  border-color: #991C1C;
-  color: #991C1C;
+  border-color: #E0B4B4;
+  color: #9F3A38;
   -webkit-appearance: none;
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -523,24 +523,24 @@
 .ui.form .field.error .ui.dropdown .text,
 .ui.form .field.error .ui.dropdown .item {
   background: #FFF6F6;
-  color: #991C1C;
+  color: #9F3A38;
 }
 .ui.form .fields.error .field .ui.dropdown,
 .ui.form .field.error .ui.dropdown {
-  border-color: #991C1C !important;
+  border-color: #E0B4B4 !important;
 }
 .ui.form .fields.error .field .ui.dropdown:hover,
 .ui.form .field.error .ui.dropdown:hover {
-  border-color: #991C1C !important;
+  border-color: #E0B4B4 !important;
 }
 .ui.form .fields.error .field .ui.dropdown:hover .menu,
 .ui.form .field.error .ui.dropdown:hover .menu {
-  border-color: #991C1C;
+  border-color: #E0B4B4;
 }
 .ui.form .fields.error .field .ui.multiple.selection.dropdown > .label,
 .ui.form .field.error .ui.multiple.selection.dropdown > .label {
   background-color: #EACBCB;
-  color: #991C1C;
+  color: #9F3A38;
 }
 
 /* Hover */
@@ -569,20 +569,20 @@
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) label,
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) .box,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) .box {
-  color: #991C1C;
+  color: #9F3A38;
 }
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) label:before,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) label:before,
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) .box:before,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) .box:before {
   background: #FFF6F6;
-  border-color: #991C1C;
+  border-color: #E0B4B4;
 }
 .ui.form .fields.error .field .checkbox label:after,
 .ui.form .field.error .checkbox label:after,
 .ui.form .fields.error .field .checkbox .box:after,
 .ui.form .field.error .checkbox .box:after {
-  color: #991C1C;
+  color: #9F3A38;
 }
 
 /*--------------------
@@ -1043,7 +1043,7 @@
 ---------------------*/
 
 .ui.mini.form {
-  font-size: 0.71428571rem;
+  font-size: 0.78571429rem;
 }
 .ui.tiny.form {
   font-size: 0.85714286rem;

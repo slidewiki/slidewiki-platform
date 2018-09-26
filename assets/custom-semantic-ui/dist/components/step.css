@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Step
+ * # Semantic UI 2.4.0 - Step
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -361,7 +361,7 @@
   background: #F3F4F5;
 }
 .ui.steps .step.active .title {
-  color: #1E78BB;
+  color: #4183C4;
 }
 .ui.ordered.steps .step.active:before,
 .ui.steps .active.step .icon {
@@ -388,14 +388,14 @@
 .ui.steps a.active.step:hover::after,
 .ui.steps a.active.step:hover {
   cursor: pointer;
-  background: #E6E6E6;
+  background: #DCDDDE;
   color: rgba(0, 0, 0, 0.87);
 }
 
 /* Completed */
 .ui.steps .step.completed > .icon:before,
 .ui.ordered.steps .step.completed:before {
-  color: #188130;
+  color: #21BA45;
 }
 
 /* Disabled */
@@ -571,7 +571,7 @@
 
 .ui.mini.steps .step,
 .ui.mini.step {
-  font-size: 0.71428571rem;
+  font-size: 0.78571429rem;
 }
 .ui.tiny.steps .step,
 .ui.tiny.step {
