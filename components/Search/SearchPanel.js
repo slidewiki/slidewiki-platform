@@ -190,11 +190,6 @@ class SearchPanel extends React.Component {
 
         this.handleRedirect();
     }
-    handleKeyPress(event){
-        if(event.key === 'Enter'){
-            this.handleRedirect();
-        }
-    }
     handleRedirect(params){
 
         // form the query parameters to send to search service
@@ -342,7 +337,7 @@ class SearchPanel extends React.Component {
                         <form className="ui form success">
                             <div className="field">
                                 <label htmlFor="SearchTerm"><FormattedMessage {...this.messages.searchTerm} /></label>
-                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
+                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} handleRedirect={this.handleRedirect.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
                             </div>
                             <MediaQuery minDeviceWidth={768}>
                                 {advanced_options}

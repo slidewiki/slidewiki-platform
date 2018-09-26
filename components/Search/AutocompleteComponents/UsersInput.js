@@ -10,13 +10,10 @@ import suggestUsers from '../../../actions/search/suggestUsers';
 
 class UsersInput extends React.Component {
     initDropdown(){
-        let returnType = (this.props.returnType === 'username') ? 'username' : 'db_id';
-
         $('#users_input_div').dropdown({
             fields: {
-                name: 'highlight',
-                value: returnType,
-                text: 'username'
+                name: 'displayName',
+                value: 'userId',
             },
             minCharacters: 1,
             allowAdditions: false,
@@ -27,6 +24,14 @@ class UsersInput extends React.Component {
                     context.executeAction(suggestUsers, {
                         query: encodeURIComponent(query),
                     }).then( (response) => {
+                        
+                        response.results = response.results.map( (user) => {
+                            return {
+                                displayName: user.name, 
+                                userId: JSON.parse(decodeURIComponent(user.value)).userid,
+                            };
+                        });
+
                         callback(response);
                     });
                 }

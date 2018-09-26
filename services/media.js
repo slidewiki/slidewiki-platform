@@ -33,9 +33,10 @@ export default {
                 '----jwt----': params.jwt,
                 'content-type': params.type
             };
+            let body = params.type === 'image/svg+xml' ? params.bytes : new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64');
             rp.post({
                 uri: url,
-                body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
+                body: body,
                 headers: headers,
                 json: false
             })
@@ -68,6 +69,44 @@ export default {
                     // console.log('media: Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
                     callback(err, null);
                 });
+        }
+    },
+    read: (req, resource, params, config, callback) => {
+        if (resource === 'media.readCSV') {
+            rp.get({uri: params.url, proxy: ''}).then((res) => {
+                callback(null, res);
+            });
+        } else if (resource === 'media.readMetadata') {
+            let fileName = params.url.split('/').slice(-1).pop();
+            let url = Microservices.file.uri + '/metadata/' + fileName;
+            rp.get({uri: url, proxy: ''}).then((res) => {
+                callback(null, res);
+            })
+            .catch((err) => {
+                callback(err, null);
+            });
+        }
+    },
+    update: (req, resource, params, body, config, callback) => {
+        if(resource === 'media.updateGraphic') {
+            let headers = {
+                '----jwt----': params.jwt,
+                'content-type': params.type
+            };
+            let url = params.url + '?title=' + encodeURIComponent(params.title) + '&altText='+encodeURIComponent(params.text);
+            let body = params.bytes;
+            rp.put({
+                uri: url,
+                body: body,
+                headers: headers
+            }).then((res) => {
+                callback(null, Microservices.file.uri + JSON.parse(res).url);
+            })
+            .catch((err) => {
+                // console.log('media: Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
+                callback(err, null);
+            });
+
         }
     }
 };
