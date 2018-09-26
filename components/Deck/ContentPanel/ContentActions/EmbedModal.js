@@ -1,5 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
+import PropTypes from 'prop-types';
 import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {connectToStores} from 'fluxible-addons-react';
@@ -312,8 +313,8 @@ class EmbedModal extends React.Component {
 }
 
 EmbedModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 EmbedModal = connectToStores(EmbedModal, [ContentStore, UserProfileStore, DeckViewStore, SlideViewStore,
