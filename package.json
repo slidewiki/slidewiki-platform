@@ -149,7 +149,7 @@
     "react-responsive": "^1.2.6",
     "react-share": "^1.16.0",
     "react-tweet-embed": "^1.0.8",
-    "recharts": "^1.1.0",
+    "recharts": "^1.2.0",
     "request": "^2.80.0",
     "request-promise": "^4.1.1",
     "reveal": "0.0.4",
