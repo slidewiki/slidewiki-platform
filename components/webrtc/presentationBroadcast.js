@@ -55,7 +55,6 @@ class presentationBroadcast extends React.Component {
 
         let that = this;
 
-        that.refs.translation.createTranslationMap(that.deckID, this.deckLanguage);
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
             console.log('Navigating away because of missing paramenters in URL');
             swal({
@@ -145,6 +144,7 @@ class presentationBroadcast extends React.Component {
                 allowEscapeKey: false,
                 onOpen: () => {
                     swal.showLoading();
+                    that.refs.translation.createTranslationMap(that.deckID, this.deckLanguage);
                 },
                 preConfirm: () => {
                     return new Promise((resolve) => {
@@ -603,7 +603,7 @@ class presentationBroadcast extends React.Component {
             switch (data.cmd) {
                 case 'gotoslide':
                     if (!that.isInitiator)
-                        changeSlide(data.data);
+                        this.changeSlide(data.data);
                     break;
                 case 'toggleblackscreen':
                     if (!that.isInitiator)
@@ -643,7 +643,7 @@ class presentationBroadcast extends React.Component {
                 case 'statusObject':
                     if(!that.isInitiator){
                         this.setState({subtitle: data.data.subtitle});
-                        changeSlide(data.data.slide);
+                        this.changeSlide(data.data.slide);
                     }
                     break;
                 case 'new tweets':
@@ -849,7 +849,7 @@ class presentationBroadcast extends React.Component {
                 doc.contentWindow.location.assign(newSlideID);
             } else { //if readyState === 'loading' || readyState === 'interactive'
                 setTimeout(() => {
-                    changeSlide(slideID);
+                    this.changeSlide(slideID);
                 }, 20);
             }
         }
@@ -1034,7 +1034,7 @@ class presentationBroadcast extends React.Component {
                   {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
                   ) : ''}
-                  <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={() => this.changeSlide.bind(this, this.lastRemoteSlide)}/>
+                  <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide)}/>
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>
