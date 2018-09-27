@@ -5,7 +5,7 @@ import fetchUserDecks from '../user/userprofile/fetchUserDecks';
 import fetchUser from '../user/userprofile/fetchUser';
 import notFoundError from '../error/notFoundError';
 const log = require('../log/clog');
-import loadUserCollections from '../collections/loadUserCollections';
+import loadGroupCollections from '../collections/loadGroupCollections';
 import { shortTitle } from '../../configs/general';
 
 export const categories = {
@@ -60,7 +60,7 @@ export default function chooseActionGroups(context, payload, done) {
 
                     break;
                 case categories.categories[2]:
-                    context.executeAction(loadUserCollections, {}, callback);
+                    context.executeAction(loadGroupCollections, {groupid: payload.params.id}, callback);
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);

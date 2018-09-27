@@ -8,7 +8,6 @@ import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
-import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserGroupsStore from '../../../stores/UserGroupsStore';
@@ -108,9 +107,6 @@ class UserProfile extends React.Component {
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
                         return this.displayGroups();
-                        break;
-                    case categories.groups[1]:
-                        return this.displayGroupedit();
                         break;
                     default:
                         return this.notImplemented();
@@ -232,10 +228,6 @@ class UserProfile extends React.Component {
 
     displayGroups() {
         return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserGroupsStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
-    }
-
-    displayGroupedit() {
-        return (<UserGroupEdit saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError} username={this.props.UserProfileStore.username} displayName={this.props.UserProfileStore.user.displayName} currentUsergroup={this.props.UserGroupsStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserGroupsStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
     notImplemented() {

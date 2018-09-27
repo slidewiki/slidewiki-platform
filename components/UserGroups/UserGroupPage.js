@@ -8,10 +8,8 @@ import Info from './Info';
 import Menu from './Menu';
 import Details from './Details';
 
-
-
 //import UserDecks from './UserDecks';
-//import UserCollections from '../../../DeckCollection/UserCollections';
+import GroupCollections from '../DeckCollection/GroupCollections';
 
 class UserGroupPage extends React.Component {
     constructor(props){
@@ -30,12 +28,14 @@ class UserGroupPage extends React.Component {
 
     showCollections(){
         let group = this.props.UserGroupsStore.currentUsergroup;
-        const isCreator = group.creator.userid === this.props.UserProfileStore.userid;
-        const isAdmin = group.members.find((m) => {
+        const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
+        const isAdmin = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
         });
-        return '';
-        // return <UserCollections user={this.props.user} loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} isAdmin={ isAdmin } isCreator={ isCreator } />;
+
+        return <GroupCollections group={this.props.UserGroupsStore.currentUsergroup}
+            isAdmin={ isAdmin }
+            isCreator={ isCreator } />;
     }
 
     showDetails(){

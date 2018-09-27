@@ -416,11 +416,15 @@ class Details extends React.Component {
                                 <label htmlFor="usergroupedit_input_GroupDescription">{this.context.intl.formatMessage(this.messages.description)}</label>
                                 <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={this.props.currentUsergroup.description || ''} ></textarea>
                             </div>
-                            <div className="field">
-                                <label htmlFor="usergroupedit_input_AddUserGr">{this.context.intl.formatMessage(this.messages.addUser)}</label>
-                                <select className="ui search dropdown" aria-labelledby="AddUserGr" id="usergroupedit_input_AddUserGr" name="AddUserGr" ref="AddUserGr" id="usergoup_edit_dropdown_usernames_remote">
-                                </select>
-                            </div>
+                            {
+                              (this.props.isAdmin || this.props.isCreator) ?
+                                <div className="field">
+                                    <label htmlFor="usergroupedit_input_AddUserGr">{this.context.intl.formatMessage(this.messages.addUser)}</label>
+                                    <select className="ui search dropdown" aria-labelledby="AddUserGr" id="usergroupedit_input_AddUserGr" name="AddUserGr" ref="AddUserGr" id="usergoup_edit_dropdown_usernames_remote">
+                                    </select>
+                                </div>
+                              : ''
+                            }
                         </form>
                         <div className="ui hidden divider">
                         </div>

@@ -11,7 +11,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'create'],
+    groups: ['overview'],
     decks: ['shared'],
 };
 
@@ -40,9 +40,6 @@ export function chooseAction(context, payload, done) {
             switch(payload.params.item){
                 case categories.groups[0]:
                     title += 'My Groups';
-                    break;
-                case categories.groups[1]:
-                    title += 'Create Group';
                     break;
                 default:
                     title = shortTitle;

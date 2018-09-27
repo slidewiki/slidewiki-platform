@@ -13,12 +13,11 @@ export default {
         let authToken = params.jwt;
         let args = params.params? params.params : params;
 
-        let usergroups = (params.usergroups || []).map( (usergroup) => {
-            return usergroup._id;
-        }).join('&usergroup=');
-
         // suggest deck collections that this user can add decks to
         if(resource === 'deckgroups.forUser'){
+            let usergroups = (params.usergroups || []).map( (usergroup) => {
+                return usergroup._id;
+            }).join('&usergroup=');
 
             // form request call
             let uri = `${Microservices.deck.uri}/groups?user=${args.userId}`;
@@ -26,6 +25,19 @@ export default {
                 uri += `&usergroup=${usergroups}`;
             }
             uri += '&page=0&per_page=100';
+
+            // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
+            rp({
+                method: 'GET',
+                uri: uri,
+                json: true
+            }).then( (deckGroups) => callback(null, deckGroups))
+            .catch( (err) => callback(err));
+
+        // get deck collections assigned to a user group
+      } else if(resource === 'deckgroups.forGroup'){
+            // form request call
+            let uri = `${Microservices.deck.uri}/groups?usergroup=${args.groupid}&page=0&per_page=100`;
 
             // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
             rp({
@@ -82,7 +94,7 @@ export default {
                     json: true
                 }).then( (user) => {
                     return {
-                        username: user.username, 
+                        username: user.username,
                         displayName: user.displayName || user.username
                     };
                 });
@@ -91,7 +103,7 @@ export default {
                     group.decks = decks;
                     group.user = {
                         id: group.user,
-                        username: user.username, 
+                        username: user.username,
                         displayName: user.displayName
                     };
 
@@ -165,7 +177,7 @@ export default {
                 headers: {'----jwt----': args.jwt},
                 body: [
                     {
-                        op: args.op, 
+                        op: args.op,
                         deckId: args.deckId
                     }
                 ]

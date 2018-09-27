@@ -103,7 +103,7 @@ class UserGroupsStore extends BaseStore {
 
     updateUsergroup(group) {
         this.currentUsergroup = group;
-        console.log('UserGroupsStore: updateUsergroup', group);
+        // console.log('UserGroupsStore: updateUsergroup', group);
         this.saveUsergroupError = '';
         this.deleteUsergroupError = '';
         this.emitChange();
