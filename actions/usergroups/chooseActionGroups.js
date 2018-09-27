@@ -51,7 +51,7 @@ export default function chooseActionGroups(context, payload, done) {
                 case categories.categories[0]:
                 case undefined:
 
-                    callback()
+                    callback();
                     break;
                 case categories.categories[1]:
 

@@ -161,6 +161,57 @@ class Details extends React.Component {
             });
     }
 
+    componentWillreceiveProps(nextprops) {
+        if (nextprops.UserGroupsStore.errorMessage !== this.props.UserGroupsStore.errorMessage && nextprops.UserGroupsStore.errorMessage) {
+            swal({
+                title: this.context.intl.formatMessage(this.messages.error),
+                text: nextprops.UserGroupsStore.errorMessage,
+                type: 'error',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.close),
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: true,
+                allowOutsideClick: true,
+                buttonsStyling: false
+            })
+            .then(() => {
+                return true;
+            })
+            .catch();
+        }
+        else if (nextprops.UserGroupsStore.deleteUsergroupError !== this.props.UserGroupsStore.deleteUsergroupError && nextprops.UserGroupsStore.deleteUsergroupError) {
+            swal({
+                title: this.context.intl.formatMessage(this.messages.error),
+                text: nextprops.UserGroupsStore.deleteUsergroupError,
+                type: 'error',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.close),
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: true,
+                allowOutsideClick: true,
+                buttonsStyling: false
+            })
+            .then(() => {
+                return true;
+            })
+            .catch();
+        }
+        else if (nextprops.UserGroupsStore.leaveUsergroupError !== this.props.UserGroupsStore.leaveUsergroupError && nextprops.UserGroupsStore.leaveUsergroupError) {
+            swal({
+                title: this.context.intl.formatMessage(this.messages.error),
+                text: nextprops.UserGroupsStore.leaveUsergroupError,
+                type: 'error',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.close),
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: true,
+                allowOutsideClick: true,
+                buttonsStyling: false
+            })
+            .then(() => {
+                return true;
+            })
+            .catch();
+        }
+    }
+
     getGroup(members = undefined) {
         let group = {};
         try {
@@ -178,8 +229,6 @@ class Details extends React.Component {
 
         if (this.props.currentUsergroup._id)
             group.id = group._id;
-
-        //TODO get members from list
 
         return group;
     }
@@ -214,10 +263,6 @@ class Details extends React.Component {
 
     handleExitGroup(e) {
         e.preventDefault();
-        console.log('handleExitGroup:', e.target.attributes.name.value);
-
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
-        const groupid = action.split('_')[1];
 
         if (this.props.isCreator) {//remove
             swal({
@@ -228,8 +273,7 @@ class Details extends React.Component {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
             }).then((accepted) => {
-                this.context.executeAction(deleteUsergroup, {groupid: groupid});
-                swal('User group successfully deleted');
+                this.context.executeAction(deleteUsergroup, {groupid: this.props.currentUsergroup.id});
             }, (cancelled) => {/*do nothing*/})
                 .catch(swal.noop);
         }
@@ -242,8 +286,7 @@ class Details extends React.Component {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, remove me'
             }).then((accepted) => {
-                this.context.executeAction(leaveUsergroup, {groupid: groupid});
-                swal('User group successfully removed you');
+                this.context.executeAction(leaveUsergroup, {groupid: this.props.currentUsergroup.id});
             }, (cancelled) => {/*do nothing*/})
                 .catch(swal.noop);
         }
@@ -262,6 +305,7 @@ class Details extends React.Component {
     }
 
     render() {
+        // console.log('Details render', this.props.currentUsergroup);
         if (!this.props.currentUsergroup || !this.props.currentUsergroup.creator || !this.props.currentUsergroup.creator.userid)
             return null;
 
@@ -329,6 +373,33 @@ class Details extends React.Component {
             });
         }
 
+        let buttons = '';
+        if (this.props.userid && this.props.isMember && !this.props.isAdmin) {
+            buttons = <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
+                <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
+            </button>;
+        }
+        else if (this.props.userid && this.props.isAdmin) {
+            buttons = <div>
+              <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
+                  <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
+              </button>
+              <button className="ui labeled icon button" name="" onClick={this.handleExitGroup.bind(this)} >
+                  <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
+              </button>
+            </div>;
+        }
+        else if (this.props.userid && this.props.isCreator) {
+            buttons = <div>
+              <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
+                  <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
+              </button>
+              <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
+                  <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.deleteGroup)}
+              </button>
+            </div>;
+        }
+
         return (
             <div className="ui container">
                 <div className="ui two column vertically padded grid container">
@@ -354,17 +425,7 @@ class Details extends React.Component {
                         <div className="ui hidden divider">
                         </div>
                         <div className="ui buttons">
-                            <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
-                                <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
-                            </button>
-
-                            {(this.props.userid && (this.props.isMember || this.props.isCreator)) ?
-                                <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
-                                    <i className="remove icon"></i>{this.props.isCreator ?
-                                        this.context.intl.formatMessage(this.messages.deleteGroup)
-                                        : this.context.intl.formatMessage(this.messages.leaveGroup)}
-                                </button>
-                            : ''}
+                          {buttons}
                         </div>
                         {(this.props.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
 
@@ -386,7 +447,7 @@ class Details extends React.Component {
 
 Details.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 
 export default Details;

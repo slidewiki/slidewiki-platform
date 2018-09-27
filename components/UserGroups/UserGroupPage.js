@@ -58,7 +58,7 @@ class UserGroupPage extends React.Component {
     }
 
     chooseView(){
-      console.log('chooseView', this.props.UserGroupsStore.category);
+        // console.log('chooseView', this.props.UserGroupsStore.category);
         switch(this.props.UserGroupsStore.category){
             case 'settings':
                 return this.showDetails();

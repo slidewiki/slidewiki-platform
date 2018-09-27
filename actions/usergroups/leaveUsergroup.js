@@ -1,4 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import {navigateAction} from 'fluxible-router';
 const log = require('../log/clog');
 
 export default function leaveUsergroup(context, payload, done) {
@@ -11,6 +12,9 @@ export default function leaveUsergroup(context, payload, done) {
             context.dispatch('LEAVE_USERGROUP_FAILED', err);
         } else {
             context.dispatch('LEAVE_USERGROUP_SUCCESS', payload.groupid);
+            context.executeAction(navigateAction, {
+                url: `/user/${context.getStore(UserProfileStore).username}/groups/overview`
+            });
         }
         done();
     });

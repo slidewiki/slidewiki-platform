@@ -25,6 +25,7 @@ class UserGroupsStore extends BaseStore {
         this.saveUsergroupIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.leaveUsergroupError = '';
     }
 
     destructor() {
@@ -50,6 +51,7 @@ class UserGroupsStore extends BaseStore {
         this.saveUsergroupIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.leaveUsergroupError = '';
     }
 
     getState() {
@@ -67,7 +69,8 @@ class UserGroupsStore extends BaseStore {
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
             saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
-            usergroupsViewStatus: this.usergroupsViewStatus
+            usergroupsViewStatus: this.usergroupsViewStatus,
+            leaveUsergroupError: this.leaveUsergroupError
         };
     }
 
@@ -89,6 +92,7 @@ class UserGroupsStore extends BaseStore {
         this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
+        this.leaveUsergroupError = state.leaveUsergroupError;
     }
 
     changeTo(category) {
@@ -99,7 +103,7 @@ class UserGroupsStore extends BaseStore {
 
     updateUsergroup(group) {
         this.currentUsergroup = group;
-        // console.log('UserGroupsStore: updateUsergroup', group);
+        console.log('UserGroupsStore: updateUsergroup', group);
         this.saveUsergroupError = '';
         this.deleteUsergroupError = '';
         this.emitChange();
@@ -133,16 +137,25 @@ class UserGroupsStore extends BaseStore {
     }
 
     deleteUsergroupFailed(error) {
-        this.deleteUsergroupError = {
-            action: 'delete',
-            message: error.message
-        };
+        this.deleteUsergroupError = error.message;
         this.usergroupsViewStatus = '';
         this.emitChange();
     }
 
     deleteUsergroupSuccess(groupid) {
         this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
+        this.emitChange();
+    }
+
+    leaveUsergroupFailed(error) {
+        this.leaveUsergroupError = error.message;
+        this.usergroupsViewStatus = '';
+        this.emitChange();
+    }
+
+    leaveUsergroupSuccess(groupid) {
+        this.leaveUsergroupError = '';
         this.usergroupsViewStatus = '';
         this.emitChange();
     }
@@ -243,8 +256,8 @@ UserGroupsStore.handlers = {
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
-    'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
-    'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
+    'LEAVE_USERGROUP_FAILED': 'leaveUsergroupFailed',
+    'LEAVE_USERGROUP_SUCCESS': 'leaveUsergroupSuccess',
 
 /*
     //old ones

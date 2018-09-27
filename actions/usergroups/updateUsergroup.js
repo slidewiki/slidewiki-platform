@@ -5,6 +5,7 @@ export default function updateUsergroup(context, payload, done) {
     log.info(context);
 
     if (payload.offline) {
+        console.warn('updateUsergroup does it offline');
         context.dispatch('UPDATE_USERGROUP', payload.group);
         context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Details of user group ' + payload.group.name});
         return done();
