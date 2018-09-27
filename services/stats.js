@@ -11,7 +11,7 @@ const fillMissingDates = (fromDate, results) => {
         let found = results.find((result) => {
             return date.isSame(result._id, 'day');
         });
-        newResults.push({date: date.valueOf(), value: found != null ? found.count : 0});
+        newResults.push({date: date.valueOf(), count: found != null ? found.count : 0});
     }
     return newResults;
 };
@@ -41,21 +41,24 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
         let {username, activityType, datePeriod} = args;
-        let fromDate = periodToDate(datePeriod);
-        let verbId;
-        switch (activityType) {
-            case 'edit':
-                verbId = 'https://w3id.org/xapi/acrossx/verbs/edited';
-                break;
-            case 'like':
-                verbId = 'https://w3id.org/xapi/acrossx/verbs/liked';
-                break;
-            default:
-                callback(null, []);
-        }
 
+        if (resource === 'stats.userStatsByTime') {
+            let fromDate = periodToDate(datePeriod);
+            let verbId;
+            switch (activityType) {
+                case 'edit':
+                    verbId = 'https://w3id.org/xapi/acrossx/verbs/edited';
+                    break;
+                case 'like':
+                    verbId = 'https://w3id.org/xapi/acrossx/verbs/liked';
+                    break;
+                case 'view':
+                    verbId = 'http://adlnet.gov/expapi/verbs/experienced';
+                    break;
+                default:
+                    callback(null, []);
+            }
 
-        if (resource === 'stats.userActivitiesByTime') {
             let pipeline = [{
                 '$match': {
                     'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
@@ -93,46 +96,48 @@ export default {
                 json: true
             }).then((response) => callback(null, fillMissingDates(fromDate, response)))
               .catch((err) => callback(err));
-        } else if (resource === 'stats.userActivitiesByCategory') {
+        } else if (resource === 'stats.userStatsByTag') {
             let pipeline = [
                 {
-                    '$match ': {
-                        'timestamp ': {
-                            '$gte ': {
-                                '$dte ': fromDate.toISOString()
-                            }
+                    '$match': {
+                        'statement.context.contextActivities.category': {
+                            '$exists': true
+                        },
+                        'statement.actor.account.name': username
+                    }
+                },
+                {
+                    '$unwind': {
+                        'path': '$statement.context.contextActivities.category'
+                    }
+                },
+                {
+                    '$project': {
+                        'tag': '$statement.context.contextActivities.category.definition.name.en'
+                    }
+                },
+                {
+                    '$group': {
+                        '_id': '$tag',
+                        'count': {
+                            '$sum': 1
                         }
                     }
                 },
                 {
-                    '$match ': {
-                        'statement.verb ': {
-                            '$exists ': true
-                        }
+                    '$project': {
+                        '_id': false,
+                        'value': '$_id',
+                        'count': true
                     }
                 },
                 {
-                    '$project ': {
-                        'verb ': '$statement.verb.id '
+                    '$sort': {
+                        'count': -1
                     }
                 },
                 {
-                    '$group ': {
-                        '_id ': '$verb ',
-                        'value ': {
-                            '$sum ': 1
-                        }
-                    }
-                }, {
-                    '$project ': {
-                        '_id ': false,
-                        'category ': '$_id ',
-                        'value ': true
-                    }
-                }, {
-                    '$sort ': {
-                        'count ': -1
-                    }
+                    '$limit': 30
                 }
             ];
             rp({
@@ -145,8 +150,6 @@ export default {
                 json: true
             }).then((response) => callback(null, response))
               .catch((err) => callback(err));
-
-
         }
     }
 };

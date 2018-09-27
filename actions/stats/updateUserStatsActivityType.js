@@ -1,16 +1,16 @@
 import async from 'async';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
-import loadUserStats from '../stats/loadUserStats';
+import loadUserStatsByTime from '../stats/loadUserStatsByTime';
 
 
-export default function updateUserStatsPeriod(context, payload, done) {
+export default function updateUserStatsActivityType(context, payload, done) {
     log.info(context);
     context.dispatch('UPDATE_USER_STATS_ACTIVITY_TYPE', payload);
 
     async.parallel([
         (callback) => {
-            context.executeAction(loadUserStats, payload, callback);
+            context.executeAction(loadUserStatsByTime, payload, callback);
         },
     ], (err, results) => {
         if (err) {

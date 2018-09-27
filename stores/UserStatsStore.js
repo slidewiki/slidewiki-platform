@@ -4,14 +4,19 @@ class UserStatsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.datePeriod = 'LAST_7_DAYS';
-        this.activityType = 'edit';
-        this.activitiesByTime = [];
-        this.activitiesByCategory = [];
+        this.activityType = 'view';
+        this.statsByTime = [];
+        this.statsByTag = [];
         this.chartHeight = 450;
     }
 
-    updateActivityStatsByTime(payload) {
-        this.activitiesByTime = payload.activitiesByTime;
+    updateStatsByTime(payload) {
+        this.statsByTime = payload.statsByTime;
+        this.emitChange();
+    }
+
+    updateStatsByTag(payload) {
+        this.statsByTag = payload.statsByTag;
         this.emitChange();
     }
 
@@ -24,17 +29,13 @@ class UserStatsStore extends BaseStore {
         this.activityType = payload.activityType;
         this.emitChange();
     }
-    updateActivityStatsByCategory(payload) {
-        this.activitiesByCategory = payload.activitiesByCategory;
-        this.emitChange();
-    }
 
     getState() {
         return {
             datePeriod: this.datePeriod,
             activityType: this.activityType,
-            activitiesByTime: this.activitiesByTime,
-            activitiesByCategory: this.activitiesByCategory,
+            statsByTime: this.statsByTime,
+            statsByTag: this.statsByTag,
             chartHeight: this.chartHeight
         };
     }
@@ -46,8 +47,8 @@ class UserStatsStore extends BaseStore {
     rehydrate(state) {
         this.datePeriod = state.datePeriod;
         this.activityType = state.activityType;
-        this.activitiesByTime = state.activitiesByTime;
-        this.activitiesByCategory = state.activitiesByCategory;
+        this.statsByTime = state.statsByTime;
+        this.statsByTag = state.statsByTag;
         this.chartHeight = state.chartHeight;
     }
 }
@@ -56,8 +57,8 @@ UserStatsStore.storeName = 'UserStatsStore';
 UserStatsStore.handlers = {
     'UPDATE_USER_STATS_PERIOD': 'updateDatePeriod',
     'UPDATE_USER_STATS_ACTIVITY_TYPE': 'updateActivityType',
-    'LOAD_ACTIVITY_STATS_BY_TIME': 'updateActivityStatsByTime',
-    'LOAD_ACTIVITY_STATS_BY_CATEGORY': 'updateActivityStatsByCategory'
+    'LOAD_USER_STATS_BY_TIME': 'updateStatsByTime',
+    'LOAD_USER_STATS_BY_TAG': 'updateStatsByTag'
 };
 
 export default UserStatsStore;
