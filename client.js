@@ -7,6 +7,7 @@ import { IntlProvider } from 'react-intl';
 import { loadLocale } from './configs/locales';
 import es6Promise from 'es6-promise';
 es6Promise.polyfill();
+import '@babel/polyfill';
 
 const debugClient = debug('slidewiki-platform');
 const dehydratedState = window.App; // Sent from the server
