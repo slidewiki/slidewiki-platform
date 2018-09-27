@@ -44,7 +44,7 @@ class PresentationIE extends React.Component{
                 height: '100%',
             });
         }
-        MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
+        //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
     }
 
 
