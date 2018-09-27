@@ -65,7 +65,7 @@ class PresentationIE extends React.Component{
         if(slides){
             html = slides.map((slide) => {
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
-                return <section id={'slide-' + slide.id} key={slide.id}><div dangerouslySetInnerHTML={{__html:content}}></div></section>;
+                return <section id={'slide-' + slide.id} key={slide.id} dangerouslySetInnerHTML={{__html:content}}></section>;
             });
         }
         return html;
