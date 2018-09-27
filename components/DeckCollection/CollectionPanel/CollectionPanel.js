@@ -42,6 +42,10 @@ class CollectionPanel extends React.Component {
     setEditMode(value){
         this.setState({
             editMode: value
+        }, () => {
+            if (value === true) {
+                this.saveButton.focus();
+            }
         });
     }
     handleCancelEditOrder(){
@@ -65,14 +69,18 @@ class CollectionPanel extends React.Component {
         let tmp = newState.decksOrder[index];
         newState.decksOrder[index] = newState.decksOrder[index - 1];
         newState.decksOrder[index - 1] = tmp;
-        this.setState(newState);
+        this.setState(newState, () => {
+            $(`#deck_${index - 1}`).transition('glow');
+        });
     }
     handleMoveDown(index){
         let newState = Object.assign({}, this.state);
         let tmp = newState.decksOrder[index];
         newState.decksOrder[index] = newState.decksOrder[index + 1];
         newState.decksOrder[index + 1] = tmp;
-        this.setState(newState);
+        this.setState(newState, () => {
+            $(`#deck_${index + 1}`).transition('glow');
+        });
     }
     handleFollowCollection() {
         if (this.props.UserFollowingsStore.selectedFollowingId !== null) {
@@ -238,8 +246,8 @@ class CollectionPanel extends React.Component {
                             }
                             { (this.state.editMode) && 
                                 <div className="ui right floated">
-                                    <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
-                                    <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
+                                    <Button ref={ (saveButton) => { this.saveButton = saveButton; }} primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
+                                    <Button ref={ (cancelButton) => { this.cancelButton = cancelButton; }} as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
                                     <AddDecksModal selectedDecks={this.state.decksOrder} handleAdd={this.handleAdd.bind(this)} loggedInDisplayName={data.user.displayName} />
                                 </div>
                             }

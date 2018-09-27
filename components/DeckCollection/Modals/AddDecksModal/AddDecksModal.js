@@ -70,7 +70,7 @@ class AddDecksModal extends React.Component {
         return defineMessages({
             modalTitle: {
                 id: 'AddDecksToCollectionModal.title',
-                defaultMessage: 'Add decks to playlist'
+                defaultMessage: 'Add/remove decks'
             }, 
             fromMyDecksTitle: {
                 id: 'AddDecksToCollectionModal.fromMyDecks',
@@ -82,11 +82,11 @@ class AddDecksModal extends React.Component {
             },
             buttonAdd: {
                 id: 'AddDecksToCollectionModal.button.add',
-                defaultMessage: 'Add'
+                defaultMessage: 'Save'
             }, 
             buttonClose: {
                 id: 'AddDecksToCollectionModal.button.close',
-                defaultMessage: 'Close'
+                defaultMessage: 'Cancel'
             }, 
 
         });
@@ -177,7 +177,7 @@ class AddDecksModal extends React.Component {
                             <Modal.Actions>
                                 <Segment basic textAlign="center">
                                     <div>
-                                        <Button id="addDecksButton" primary as='button' onClick={this.handleSave}><Icon name='plus'/><FormattedMessage {...this.messages.buttonAdd} /></Button>
+                                        <Button id="addDecksButton" primary as='button' onClick={this.handleSave}><Icon name='save'/><FormattedMessage {...this.messages.buttonAdd} /></Button>
                                         <Button as='button' onClick={this.handleClose}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
                                     </div>
                                 </Segment>

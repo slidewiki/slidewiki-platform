@@ -58,6 +58,7 @@ class CollectionDecksReorder extends React.Component {
         };
 
         
+        let tabIndex = 0;
 
         content = this.props.decks.map( (deck, index) => {
 
@@ -71,22 +72,24 @@ class CollectionDecksReorder extends React.Component {
                 disabled: (index === this.props.decks.length-1),
             };
 
+            let titleTabIndex = tabIndex;
 
             return (
                 <div id={`deck_${index}`} key={deck.deckID} className="ui vertical segment">
-                    <div className="ui two column stackable grid container">
-                        <div className="column">
-                            <div className="ui header"><h3><a href={`/deck/${deck.deckID}`}>{deck.title}</a></h3></div>
-                            <div className="meta">{deck.description || this.context.intl.formatMessage(this.messages.noDescription)}</div>
-                        </div>
-
-                        <div className="right aligned column">
-                            <button className={classNames(moveUpButtonClasses)} data-tooltip={this.context.intl.formatMessage(this.messages.moveUp)} aria-label={this.context.intl.formatMessage(this.messages.moveUp)} onClick={this.handleMoveUp.bind(this, index)} >
+                    <div className="ui stackable grid container">
+                        <div className="left aligned three wide column">
+                             <button className={classNames(moveUpButtonClasses)} data-tooltip={this.context.intl.formatMessage(this.messages.moveUp)} aria-label={this.context.intl.formatMessage(this.messages.moveUp)} onClick={this.handleMoveUp.bind(this, index)} >
                                 <i className="arrow up icon" name={'orderUp' + deck.deckID} ></i>
                             </button>
                             <button className={classNames(moveDownButtonClasses)} data-tooltip={this.context.intl.formatMessage(this.messages.moveDown)} aria-label={this.context.intl.formatMessage(this.messages.moveDown)} onClick={this.handleMoveDown.bind(this, index)} >
                                 <i className="arrow down icon" name={'orderDown' + deck.deckID} ></i>
                             </button>
+                        </div>
+                        <div className="eleven wide column">
+                            <div className="ui header"><h3><a tabIndex={titleTabIndex} href={`/deck/${deck.deckID}`}>{deck.title}</a></h3></div>
+                            <div className="meta">{deck.description || this.context.intl.formatMessage(this.messages.noDescription)}</div>
+                        </div>
+                        <div className="right aligned two wide column">
                             <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.remove)} aria-label={this.context.intl.formatMessage(this.messages.remove)} onClick={this.handlRemove.bind(this, index)} >
                                 <i className="remove icon" name={'remove' + deck.deckID} ></i>
                             </button>
