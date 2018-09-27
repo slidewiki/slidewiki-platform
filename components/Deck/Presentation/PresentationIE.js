@@ -12,39 +12,6 @@ class PresentationIE extends React.Component{
         super(props);
     }
     componentDidMount(){
-        if(process.env.BROWSER){
-            let all = document.getElementsByTagName('div');
-            for (let i = 0; i < all.length; i++) {
-                if ($(all[i]).html().trim().length < 1) {
-                    all[i].innerHTML = '';
-                }
-            };
-        }
-        let pptxwidth = 0;
-        let pptxheight = 0;
-        let elements = document.getElementsByClassName('pptx2html');
-        for (let i = 0; i < elements.length; i++) {
-            let eltWidth = parseInt(elements[i].style.width.replace('px', ''));
-            let eltHeight = parseInt(elements[i].style.height.replace('px', ''));
-            if (eltWidth > pptxwidth) {
-                pptxwidth = eltWidth;
-            }
-            if (eltHeight > pptxheight) {
-                pptxheight = eltHeight;
-            }
-        }
-        if (pptxwidth !== 0 && pptxheight !== 0) {
-            Reveal.initialize({
-                width: pptxwidth,
-                height: pptxheight,
-            });
-        } else {
-            Reveal.initialize({
-                width: '100%',
-                height: '100%',
-            });
-        }
-        //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
     }
 
 
