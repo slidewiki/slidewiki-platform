@@ -7,6 +7,7 @@ import SearchBox from '../Search/AutocompleteComponents/HeaderSearchBox';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {Button} from 'semantic-ui-react';
+import updateTrap from '../../actions/loginModal/updateTrap';
 
 class Home extends React.Component {
 
@@ -15,6 +16,22 @@ class Home extends React.Component {
             url: '/featured'
         });
     };
+
+    handleSignUpButton() {
+        this.context.executeAction(navigateAction, {
+            url: '/signup'
+        });
+    }
+
+    handleLoginButton() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('toggle');
+
+        this.closeSidebar({target: '<a className="item"></a>'});
+    }
+
     render() {
         return (
             <div ref='home'>
@@ -27,7 +44,7 @@ class Home extends React.Component {
                                     <div className='column '>
                                         <SearchBox type='home'/>
                                         <div className='button-blk'>
-                                            <button className='ui primary button'>
+                                            <button className='ui primary button' onClick={this.handleSignUpButton.bind(this)}>
                                                 Sign up
                                             </button>
                                             <button className='ui secondary  button'>
@@ -86,7 +103,7 @@ class Home extends React.Component {
                     <div className='signin-outer'>
                         <div className='wrapper'>
                             <div className='signin-blk'>
-                                <span>Get started right away.  <a href='#'>Sign in</a></span>
+                                <span>Get started right away.  <a onClick={this.handleLoginButton.bind(this)} >Sign in</a></span>
                                 <p>Create an account to start creating and sharing your decks. </p>
                             </div>
                         </div>
