@@ -3,6 +3,7 @@ import React from 'react';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
 import {NavLink, navigateAction} from 'fluxible-router';
+import SearchBox from '../Search/AutocompleteComponents/HeaderSearchBox';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {Button} from 'semantic-ui-react';
@@ -15,8 +16,6 @@ class Home extends React.Component {
         });
     };
     render() {
-
-
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
@@ -26,13 +25,7 @@ class Home extends React.Component {
                             <div className='ui container'>
                                 <div className='ui  column  grid'>
                                     <div className='column '>
-                                        <div className='ui fluid category search'>
-                                            <div className='ui fluid icon input'>
-                                                <input className='prompt' type='text' placeholder='Search for decks or people'/>
-                                                    <i className='search icon'/>
-                                            </div>
-                                            <div className='results'/>
-                                        </div>
+                                        <SearchBox type='home'/>
                                         <div className='button-blk'>
                                             <button className='ui primary button'>
                                                 Sign up
