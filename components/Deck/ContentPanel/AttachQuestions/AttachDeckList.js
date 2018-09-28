@@ -136,6 +136,7 @@ class AttachDeckList extends React.Component {
                     selectedDeckTitle:deck.title,
                     selectedDeckId: deck.deckID+'-'+deck.countRevisions
                 };
+                /*nikki only return if the deck.questionsCount is not 0? - will only work once the recentDecks also returns the questionsCount*/
                 return (
                        <Item key={index}
                               id={'deckItemList'+index}

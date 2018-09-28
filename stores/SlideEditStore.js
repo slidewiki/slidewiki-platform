@@ -13,7 +13,8 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
-        this.templateQuestionsContent = ''; //contains the content for the question embedding
+        this.embedQuestionsClick = 'false';
+        this.embedQuestionsContent = ''; //contains the content for the question embedding
         this.slideSize = '';
         this.saveSlideClick = 'false';
         this.cancelClick = 'false';
@@ -33,8 +34,7 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
-        this.AddQuestionsClick = 'false';
-        this.questions = [];
+        //this.questions = [];
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -55,21 +55,10 @@ class SlideEditStore extends BaseStore {
         this.emitChange();
     }
     changeTemplate(payload){
-        if (payload.template === 'questions'){
-            this.template = payload.template;
-            this.templateQuestionsContent = payload.templateQuestionsContent;
-            this.emitChange();
-            this.template = '';
-            this.templateContent = '';
-            this.emitChange();
-        }
-        else {
             this.template = payload.template;
             this.emitChange();
             this.template = '';
             this.emitChange();
-        }
-        
     }
     changeSlideSize(payload){
         this.slideSize = payload.slideSize;
@@ -171,13 +160,33 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.emitChange();
     }
-    handleAddQuestionsClick(payload){
+    handleEmbedQuestions(payload){
+        //embedQuestionsContent - this is the content that will be embedded (questions and options)
+        //embedQuestions - this will be the trigger that causes the questions to be embedded.
+        //add some form of logic/error handling here?
+        this.embedQuestionsContent = payload; 
+        this.embedQuestionsClick = 'true';
+        this.emitChange();
+
+        this.embedQuestionsClick = 'false';
+        this.embedQuestionsContent = '';
+        this.emitChange();
+    }
+    /*   if (payload.template === 'questions'){
+            this.template = payload.template;
+            this.templateQuestionsContent = payload.templateQuestionsContent;
+            this.emitChange();
+            this.template = '';
+            this.templateContent = '';
+            this.emitChange();
+        */
+   /* handleAddQuestionsClick(payload){
         this.questions = payload.questions;
         this.AddQuestionsClick = 'true';
         this.emitChange();
         this.AddQuestionsClick = 'false';
         this.emitChange();
-    }
+    }*/
     getState() {
         return {
             id: this.id,
@@ -194,7 +203,8 @@ class SlideEditStore extends BaseStore {
             undoClick: this.undoClick,
             redoClick: this.redoClick,
             template: this.template,
-            templateQuestionsContent: this.templateQuestionsContent,
+            embedQuestionsClick: this.embedQuestionsClick,
+            embedQuestionsContent: this.embedQuestionsContent,
             slideSize: this.slideSize,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
@@ -209,8 +219,7 @@ class SlideEditStore extends BaseStore {
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
             HTMLEditorClick: this.HTMLEditorClick,
-            AddQuestionsClick: this.AddQuestionsClick,
-            questions: this.questions
+            //questions: this.questions
         };
     }
     dehydrate() {
@@ -231,7 +240,8 @@ class SlideEditStore extends BaseStore {
         this.undoClick = state.undoClick;
         this.redoClick = state.redoClick;
         this.template = state.template;
-        this.templateQuestionsContent = state.templateQuestionsContent;
+        this.embedQuestionsClick = state.embedQuestionsClick;
+        this.embedQuestionsContent = state.embedQuestionsContent;
         this.slideSize = state.slideSize;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
@@ -246,8 +256,7 @@ class SlideEditStore extends BaseStore {
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
-        this.AddQuestionsClick = state.AddQuestionsClick;
-        this.questions = state.questions;
+        //this.questions = state.questions;
     }
 }
 
@@ -270,7 +279,7 @@ SlideEditStore.handlers = {
     'EMBED_CLICK': 'handleEmbedClick',
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
-    'ADD_QUESTIONS_CLICK': 'handleAddQuestionsClick',
+    'SLIDE_EMBED_QUESTIONS': 'handleEmbedQuestions',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
 };

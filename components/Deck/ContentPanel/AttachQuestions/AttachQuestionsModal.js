@@ -191,34 +191,6 @@ class AttachQuestionsModal extends React.Component{
 
     handleAttachButton(){
         /*nikki need to change this bit */
-        //call action that produces the slide content and then calls the changeTemplate action? or just dispatches to the store? 
-        /*nikki can it have an extra parameter? */
-
-        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
-        //each element of the payload.selectedSlides array is like 11225-2-6 (slideId-revisionId-orderInDeck)
-        //we need to remove the order in Deck
-        /*let nodeSpec = this.state.selectedSlides.map((slideIdWithOrder) => {
-            let pos = slideIdWithOrder.lastIndexOf('-');
-            let slideId = slideIdWithOrder.substring(0,pos);
-            return {
-                type:'slide',
-                id:slideId
-            };
-        });
-        this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec, attach: true});
-
-        //find target deck id
-        let targetDeckId = this.props.selector.sid; */ /*nikki not correct as it is coming from a slide */
-        /*if (this.props.selector.stype === 'slide') {
-            const pathArray = this.props.selector.spath.split(';');
-            if (pathArray.length > 1) {
-                const parentDeck = pathArray[pathArray.length - 2];
-                targetDeckId = parentDeck.split(':')[0];
-            } else {
-                targetDeckId = this.props.selector.id;
-            }
-        }*/
 
         /*nikki do we need this bit? what does it do? */
         /*let activities = nodeSpec.map((node) => {
@@ -237,11 +209,14 @@ class AttachQuestionsModal extends React.Component{
 
         /*nikki change comments below */
         //set some content
+        console.log('in attach');
         let embedContent = {
-            title: 'title',
+            //title: 'title',
             questions: this.props.AttachQuestionsModalStore.selectedQuestions,
+            options: this.props.AttachQuestionsModalStore.embedOptions,
             //insert additional options here
-        };
+        }; 
+        console.log(embedContent);
         /*nikki need error handling before doing the close action? */
         //TODO: internationalise these messages?
         swal({
@@ -263,8 +238,7 @@ class AttachQuestionsModal extends React.Component{
             this.handleClose();
             console.log(embedContent);
             this.context.executeAction(embedQuestions, embedContent);
-            //this.applyTemplate(template, true); //keep existing content
-        }, (reason) => {
+            }, (reason) => {
             if (reason === 'cancel') {
                 
                 console.log('cancel pressed - do nothing/close dialog?');

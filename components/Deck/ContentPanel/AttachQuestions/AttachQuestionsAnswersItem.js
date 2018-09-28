@@ -6,21 +6,21 @@ class AttachQuestionsAnswersItem extends React.Component {
         const answer = this.props.answer;
         //const name = this.props.name;
 
-        // let rightIcon = (<i className="icon"></i>);
-        // switch (answer.correct) {
-        //     case true:
-        //         rightIcon = (<i className="checkmark icon teal"></i>);
-        //         break;
-        // }
+        let rightIcon = (<i className="icon"></i>);
+        switch (answer.correct) {
+            case true:
+            rightIcon = (<i className="checkmark icon teal"></i>);
+            break;
+        }
 
+        /*nikki should this be classname ui item below? or just item? want these next to each other*/
+        //add some aria stuff to this
         return (
-            //<div className="item"> {rightIcon}
-            //        <div className="content"> {answer.answer} </div>
-            //    </div>
+                <div className="content">{rightIcon} {answer.answer} </div>
 
-            <div className="ui item">
-                {answer.answer}
-            </div>
+            // <div className="ui item">
+            //     {answer.answer}
+            // </div>
 
         );
     }

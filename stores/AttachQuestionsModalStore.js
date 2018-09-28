@@ -21,6 +21,12 @@ class AttachQuestionsModalStore extends BaseStore{
         this.currentDeckId = '';
         this.currentDeckTitle = '';
         this.questionsCount = '';
+        this.embedOptions = {
+            title: '',
+            showNumbers: false,
+            showAnswers: false,
+            showExplanation: false,
+        };
     }
 
     getState(){ //should this be getInitialState?
@@ -40,6 +46,7 @@ class AttachQuestionsModalStore extends BaseStore{
             deckQuestionsCount: this.deckQuestionsCount,
             selectedQuestions: this.selectedQuestions,
             questionsCount: this.questionsCount,
+            embedOptions: this.embedOptions,
         };
     }
     dehydrate() {
@@ -78,6 +85,12 @@ class AttachQuestionsModalStore extends BaseStore{
         this.deckQuestionsCount = '';
         this.selectedQuestions = [];
         this.questionsCount = '';//nikki 
+        this.embedOptions = {
+            title: '',
+            showNumbers: false,
+            showAnswers: false,
+            showExplanation: false,
+        };
 
         this.emitChange();
     }
@@ -93,6 +106,12 @@ class AttachQuestionsModalStore extends BaseStore{
         this.deckQuestions = [];
         this.deckQuestionsCount = ''; 
         this.selectedQuestions = []; 
+        this.embedOptions = {
+            title: '',
+            showNumbers: false,
+            showAnswers: false,
+            showExplanation: false,
+        }; //is this needed in this bit?
     
         this.emitChange();
     }
@@ -231,6 +250,32 @@ class AttachQuestionsModalStore extends BaseStore{
         }
         this.emitChange();  
     }
+
+    updateOptions(payload){
+        //gets payload type (option) and the value?
+        //options.title , options.showAnswers , options.showExplanation
+        console.log(payload);
+        switch(payload.option){
+            case 'title':
+                //update here
+                this.embedOptions.title = payload.value;
+                break;
+            case 'showNumbers':
+                this.embedOptions.showNumbers = payload.value;
+                break;
+            case 'showAnswers':
+                this.embedOptions.showAnswers = payload.value;
+                break;
+            case 'showExplanation':
+                this.embedOptions.showExplanation = payload.value;
+                break;
+            default:
+                //does it need anything here?
+                break;
+        }
+        console.log(this.embedOptions);
+        this.emitChange();
+    }
 /* nikki - remove this?    updateSelectedSlides(payload){
         if((payload.selectedSlides===[])||(typeof payload.selectedSlides === 'undefined')){
             this.selectedSlides =[];
@@ -258,6 +303,7 @@ AttachQuestionsModalStore.handlers = {
     'ATTACHQUESTIONS_SHOW_QUESTIONS' : 'updateShowQuestions', //new
     'ATTACHQUESTIONS_SHOW_OPTIONS'  : 'updateShowOptions',  //new
     'ATTACHQUESTIONS_QUESTIONS_COUNT': 'getQuestionsCount', //new
+    'ATTACHQUESTIONS_UPDATE_OPTIONS': 'updateOptions',
 //    'ATTACHQUESTIONS_SELECTED_SLIDES' :'updateSelectedSlides'
 };
 

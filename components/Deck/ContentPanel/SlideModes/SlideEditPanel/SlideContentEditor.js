@@ -11,7 +11,7 @@ import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import AddQuestionsClick from '../../../../../actions/slide/AddQuestionsClick';
+//import AddQuestionsClick from '../../../../../actions/slide/AddQuestionsClick';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
@@ -177,7 +177,7 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
-    handleTemplatechange(template, templateQuestionsContent){
+    handleTemplatechange(template){
         /*
         if (this.showTemplates === false){
             this.refs.template.showOptions();
@@ -188,15 +188,6 @@ class SlideContentEditor extends React.Component {
         //let template = this.refs.template.value;
         if (template === '2'){
             this.applyTemplate(template, false); //remove existing content
-        }
-        else if (template === 'questions'){ /*nikki should this go here, or does it want a different nextProps thing? */
-            console.log('questions template');
-            let keepExistingContent = false;
-            let pptx2htmlStartDiv = templateQuestionsContent.htmlstart;
-            let pptx2htmlcontent = templateQuestionsContent.html;
-            let pptx2htmlCloseDiv = templateQuestionsContent.htmlend;
-            this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
-            
         }
         else if (template !== '')
         {
@@ -267,7 +258,6 @@ class SlideContentEditor extends React.Component {
         else{
             this.refs.inlineContent.innerHTML = pptx2htmlStartDiv + pptx2htmlcontent + pptx2htmlCloseDiv;
         }
-
     }
 
     applyTemplate(template, keepExistingContent){
@@ -909,38 +899,54 @@ class SlideContentEditor extends React.Component {
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
         return '<div id=\"' + id + '\" style="position: absolute; top: 300px; left: 250px; width: 300px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
-    /*nikki no longer used?? */
-    handleAddQuestionsClick(questions){
-        let html = '<div id="slide_questions" style="font-family:sans-serif">';
-        let questionsList = questions.questions;
+    handleEmbedQuestionsClick(content){
+
+        let title = content.options.title; 
+        let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; left: 66px; width: 828px; height: 10%;"><h3>'+title+'</h3></div>';
+
+        let questionhtml = "<div id='slide_questions' style='font-family:sans-serif'>";
+        let questionsList = content.questions;
         let uniqueID = this.getuniqueID();
 
+        let showNumbers = content.options.showNumbers;
+        //need to include options logic in here.
         for (let i = 0; i < questionsList.length; i++){
             let currentQuestion = questionsList[i];
             let currentAnswers = currentQuestion.answers;
 
-            html += '<div class="slide_question"><div>' + currentQuestion.title + '</div>';
-
-            for (let j = 0; j < currentAnswers.length; j++){
-                html += '<input type="checkbox" name="answer' + j + '" value="' + currentAnswers[j].answer + '">' + currentAnswers[j].answer + '</br>';
+            if(showNumbers){
+                let questionNum = i + 1;
+                questionhtml += "<div class='slide_question'><div>" + questionNum + ". " + currentQuestion.title + "</div>";
+            }
+            else {
+                questionhtml += "<div class='slide_question'><div>" + currentQuestion.title + "</div>";
             }
 
-            html += '</br></div>';
+            for (let j = 0; j < currentAnswers.length; j++){
+                questionhtml += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>";
+            }
+            questionhtml += "</div>";
         }
+        questionhtml += "</div>";
 
-        html += '</div>';
-        let iframe = '<iframe width="800" height="400" srcdoc="'+ html + '"></iframe>';
 
+        let iframetest = '<div class="iframe" style="overflow:auto; height:80%; max-height:800px; position: absolute; top: 100px; left:80px; ">'+questionhtml+'</div>';
+        //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
+        //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
+        let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframetest+'</div>';
+        
         if($('.pptx2html').length) //if slide is in canvas mode
         {
-            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+            /*$('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
             this.hasChanges = true;
-            //this.correctDimensionsBoxes('iframe');
+            //this.correctDimensionsBoxes('iframe'); */
+            this.refs.inlineContent.innerHTML = pptx2htmlDiv;
+        
         } else { //if slide is in non-canvas mode
-            this.refs.inlineContent.innerHTML += iframe;
+            this.refs.inlineContent.innerHTML += iframe; //does this want += or should it just be =? how does a canvas mode slide even work...
         }
 
-        console.log(iframe);
+        console.log(pptx2htmlDiv);
     }
     componentDidMount() {
         window.onbeforeunload = () => {
@@ -1958,12 +1964,7 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {
-            if (nextProps.SlideEditStore.template === 'questions'){
-                this.handleTemplatechange(nextProps.SlideEditStore.template, nextProps.SlideEditStore.templateQuestionsContent);
-            }
-            else {/*nikki nested if here? to see if the template change is a question? is this actually needed?*/
-                this.handleTemplatechange(nextProps.SlideEditStore.template, nextProps.SlideEditStore.templateQuestionsContent);
-            }
+            this.handleTemplatechange(nextProps.SlideEditStore.template);
         }
         if (nextProps.SlideEditStore.HTMLEditorClick === 'true' && nextProps.SlideEditStore.HTMLEditorClick !== this.props.SlideEditStore.HTMLEditorClick)
         {
@@ -1995,8 +1996,8 @@ class SlideContentEditor extends React.Component {
             }
         }
         //do something to change code for questions
-        if (nextProps.SlideEditStore.AddQuestionsClick === 'true' && nextProps.SlideEditStore.AddQuestionsClick !== this.props.SlideEditStore.AddQuestionsClick){
-            this.handleAddQuestionsClick(nextProps.SlideEditStore.questions);
+        if (nextProps.SlideEditStore.embedQuestionsClick === 'true' && nextProps.SlideEditStore.embedQuestionsClick !== this.props.SlideEditStore.embedQuestionsClick){
+            this.handleEmbedQuestionsClick(nextProps.SlideEditStore.embedQuestionsContent);
         }
     }
     addBorders() { //not used at the moment
@@ -2384,7 +2385,7 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
-        const questions = this.props.SlideEditStore.questions;
+        //nikki const questions = this.props.SlideEditStore.questions;
 
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
