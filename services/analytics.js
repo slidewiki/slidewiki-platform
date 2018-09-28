@@ -73,6 +73,7 @@ export default {
                 body:JSON.stringify({
                     user_id: uid,
                     deck_id: deckId,
+                    jwt: args.jwt,
                     dummy: dummy
                 }),
                 timeout: body.timeout
