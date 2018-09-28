@@ -12,7 +12,7 @@ class CategoryBox extends React.Component {
     }
 
     render() {
-        let analyticsDiv = (Microservices.analytics !== undefined && Microservices.analytics.uri === 'http://slidewiki.imp.bg.ac.rs') ?
+        let analyticsDiv = (Microservices.analytics !== undefined && Microservices.analytics.uri === 'http://localhost:80') ?
             <div className="ui vertical menu">
               <div className="item" style={ this.headerStyle }>
                 <table><tr><td>

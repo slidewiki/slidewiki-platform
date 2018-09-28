@@ -15,9 +15,7 @@ export default {
         }
         if (resource === 'analytics.predictionslist'){
 
-            const analyticsServiceUri = Microservices.analytics.uri;
-
-            rp.get({uri: analyticsServiceUri + '/analytics/webresources/predictionjob/' + uid, proxy: '' }).then((res) => {
+            rp.get({uri: Microservices.analytics.uri + '/analytics/webresources/predictionjob/' + uid, proxy: '' }).then((res) => {
 
                 let predictions = JSON.parse(res);
 
@@ -70,7 +68,7 @@ export default {
 
         if(resource === 'analytics.prediction'){
             rp.post({
-                uri: analyticsServiceUri + '/analytics/webresources/predictionjob/',
+                uri: Microservices.analytics.uri + '/analytics/webresources/predictionjob/',
                 proxy: '',
                 body:JSON.stringify({
                     user_id: uid,
@@ -130,7 +128,7 @@ export default {
         if(resource === 'analytics.prediction'){
             let options = {
                 method: 'DELETE',
-                uri:  analyticsServiceUri + '/analytics/webresources/predictionjob/' + pid,
+                uri:  Microservices.analytics.uri + '/analytics/webresources/predictionjob/' + pid,
                 // body:JSON.stringify({
                 //     content_kind: 'deck',
                 //     content_id: String(targetDeckID),

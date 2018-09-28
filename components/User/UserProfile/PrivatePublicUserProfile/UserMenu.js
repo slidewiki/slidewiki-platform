@@ -54,7 +54,7 @@ class UserMenu extends React.Component {
         let deckCollectionsMsg = this.context.intl.formatMessage(this.messages.collections);
 
         //Remove link if it's not user's own page //Until analytics service is properly integrated into the system, show only on experimental
-        if(this.props.user.uname !== this.props.loggedinuser || Microservices.analytics === undefined || Microservices.analytics.uri !== 'http://slidewiki.imp.bg.ac.rs') {
+        if(this.props.user.uname !== this.props.loggedinuser || Microservices.analytics === undefined || Microservices.analytics.uri !== 'http://localhost:80') {
             decksMsg = this.context.intl.formatMessage(this.messages.ownedDecks);
             deckCollectionsMsg = this.context.intl.formatMessage(this.messages.ownedCollections);
             deckRecommendationNavLink = '';
