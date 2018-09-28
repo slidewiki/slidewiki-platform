@@ -24,9 +24,7 @@ class UserPerformancePredictionItem extends React.Component {
             showConfirmButton: true
         })
         .then(() => {
-            this.context.executeAction(deletePerformancePredictionJob, {
-                predictionId: this.props.prediction.id
-            });
+            this.context.executeAction(deletePerformancePredictionJob, this.props.prediction);
         }, (reason) => { // canceled
         });
     }
