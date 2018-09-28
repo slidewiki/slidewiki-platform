@@ -579,7 +579,8 @@ export default {
             async.series([
                 (callback) => {
                     // add missing sid in order to load the deck's title
-                    payload.params.sid = payload.params.id;
+                    if(payload.params.sid === undefined)
+                        payload.params.sid = payload.params.id;
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     payload.params.presentation = true;
