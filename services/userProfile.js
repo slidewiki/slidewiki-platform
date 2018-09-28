@@ -245,7 +245,7 @@ export default {
             }).catch((err) => callback(err));
         }  else if (resource === 'userProfile.fetchGroupOwnedDecks'){
             let requestCall = '';
-console.log('userProfile.fetchGroupOwnedDecks', params);
+
             // if we want to load more results, we already have a next link
             // from the previous response of the deck-service
             if (params.nextLink){

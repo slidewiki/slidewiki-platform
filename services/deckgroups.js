@@ -35,7 +35,7 @@ export default {
             .catch( (err) => callback(err));
 
         // get deck collections assigned to a user group
-      } else if(resource === 'deckgroups.forGroup'){
+        } else if(resource === 'deckgroups.forGroup'){
             // form request call
             let uri = `${Microservices.deck.uri}/groups?usergroup=${args.groupid}&page=0&per_page=100`;
 
@@ -47,7 +47,7 @@ export default {
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
 
-        // get deck collections assigned to a specified deck
+          // get deck collections assigned to a specified deck
         } else if (resource === 'deckgroups.forDeck'){
 
             let deckId = args.sid;
