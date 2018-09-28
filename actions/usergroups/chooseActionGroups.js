@@ -1,7 +1,7 @@
 import async from 'async';
 import UserProfileStore from '../../stores/UserProfileStore';
 import updateUsergroup from './updateUsergroup';
-import fetchUserDecks from '../user/userprofile/fetchUserDecks';
+import fetchGroupDecks from './fetchGroupDecks';
 import fetchUser from '../user/userprofile/fetchUser';
 import notFoundError from '../error/notFoundError';
 const log = require('../log/clog');
@@ -55,8 +55,7 @@ export default function chooseActionGroups(context, payload, done) {
                     break;
                 case categories.categories[1]:
 
-                    let deckListType = payload.params.item === categories.decks[0] ? 'shared' : undefined;
-                    context.executeAction(fetchUserDecks, {deckListType, params: {username: payload.params.username}}, callback);
+                    context.executeAction(fetchGroupDecks, {params: {groupid: payload.params.id}}, callback);
 
                     break;
                 case categories.categories[2]:

@@ -7,8 +7,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import Info from './Info';
 import Menu from './Menu';
 import Details from './Details';
-
-//import UserDecks from './UserDecks';
+import Decks from './Decks';
 import GroupCollections from '../DeckCollection/GroupCollections';
 
 class UserGroupPage extends React.Component {
@@ -18,12 +17,20 @@ class UserGroupPage extends React.Component {
 
     showDecks(){
         let group = this.props.UserGroupsStore.currentUsergroup;
-        const isCreator = group.creator.userid === this.props.UserProfileStore.userid;
-        const isAdmin = group.members.find((m) => {
+        const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
+        const isAdmin = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
         });
-        return '';
-        // return <UserDecks decks={this.props.decks} decksMeta={this.props.decksMeta} deckListType={this.props.categoryItem} loadMoreLoading={this.props.loadMoreLoading} loadMoreError={this.props.loadMoreError} user={this.props.user} loggedinuser={this.props.loggedinuser} isAdmin={ isAdmin } isCreator={ isCreator } />;
+
+        return <Decks decks={this.props.UserProfileStore.userDecks}
+            decksMeta={this.props.UserProfileStore.userDecksMeta}
+            loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading}
+            loadMoreError={this.props.UserProfileStore.nextUserDecksError}
+            user={this.props.UserProfileStore.user}
+            loggedinuser={this.props.UserProfileStore.username}
+            groupid={this.props.UserGroupsStore.currentUsergroup.id}
+            isAdmin={ isAdmin }
+            isCreator={ isCreator } />;
     }
 
     showCollections(){
@@ -52,6 +59,7 @@ class UserGroupPage extends React.Component {
             saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError}
             username={this.props.UserProfileStore.username}
             displayName={this.props.UserProfileStore.user.displayName}
+            user={this.props.UserProfileStore.user}
             userid={this.props.UserProfileStore.userid}
             saveUsergroupIsLoading={this.props.UserGroupsStore.saveUsergroupIsLoading}
             picture={this.props.UserProfileStore.user.picture} />;

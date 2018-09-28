@@ -243,6 +243,66 @@ export default {
                     });
                 });
             }).catch((err) => callback(err));
+        }  else if (resource === 'userProfile.fetchGroupOwnedDecks'){
+            let requestCall = '';
+console.log('userProfile.fetchGroupOwnedDecks', params);
+            // if we want to load more results, we already have a next link
+            // from the previous response of the deck-service
+            if (params.nextLink){
+                requestCall = {
+                    uri: `${Microservices.deck.uri}${params.nextLink}`,
+                    json: true
+                };
+            } else {
+                requestCall = {
+                    method: 'GET',
+                    uri: `${Microservices.deck.uri}/decks`,
+                    qs: {
+                        usergroup: params.id,
+                        rootsOnly: true,
+                        sort: (params.sort || 'lastUpdate'),
+                        status: params.status || 'any',
+                        page: params.page,
+                        pageSize: 30
+                    },
+                    json: true
+                };
+            }
+
+            if(params.jwt){
+                requestCall.headers = { '----jwt----': params.jwt };
+            }
+
+            rp(requestCall).then( (response) => {
+                let decks = response.items;
+
+                //get the number of likes
+                let arrayOfPromises = [];
+                decks.forEach((deck) => {
+                    let promise = rp.get({
+                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
+                        qs: {
+                            metaonly: true,
+                            activity_type: 'react',
+                            all_revisions: true
+                        }
+                    });
+                    arrayOfPromises.push(promise);
+                });
+
+                return Promise.all(arrayOfPromises).then((numbers) => {
+                    for (let i = 0; i < numbers.length; i++) {
+                        decks[i].noOfLikes = numbers[i];
+                    }
+
+                    let converted = decks.map((deck) => { return transform(deck); });
+
+                    callback(null, {
+                        metadata: response._meta,
+                        decks: converted
+                    });
+                });
+            }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);

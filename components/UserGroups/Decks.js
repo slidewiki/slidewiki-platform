@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import PopularDecks from '../PopularDecks';
+import PopularDecks from '../User/UserProfile/PopularDecks';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Icon } from 'semantic-ui-react';
-import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
-import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
+import fetchGroupDecks from '../../actions/usergroups/fetchGroupDecks';
+import { fetchNextUserDecks } from '../../actions/user/userprofile/fetchNextUserDecks';
 
-class UserDecks extends React.Component {
+class Decks extends React.Component {
     constructor(props){
         super(props);
         this.messages = this.getIntlMessages();
@@ -19,44 +19,35 @@ class UserDecks extends React.Component {
     componentDidUpdate() { }
 
     dropdownSelect(value) {
-        this.context.executeAction(fetchUserDecks, {
-            deckListType: this.props.deckListType,
+        this.context.executeAction(fetchGroupDecks, {
             params: {
-                username: this.props.user.uname,
+                groupid: this.props.groupid,
                 sort: value,
                 status: this.props.decksMeta.status,
             }
         });
     }
-    loadMore(nextLink){
-        this.context.executeAction(fetchNextUserDecks, {
-            nextLink: nextLink
-        });
+    loadMore(nextLink){ //TODO
+        // this.context.executeAction(fetchNextUserDecks, {
+        //     nextLink: nextLink
+        // });
     }
     getIntlMessages(){
         return defineMessages({
             sortLastUpdated: {
-                id: 'UserDecks.sort.lastUpdated',
+                id: 'GroupDecks.sort.lastUpdated',
                 defaultMessage: 'Last updated'
             },
             sortCreationDate: {
-                id: 'UserDecks.sort.date',
+                id: 'GroupDecks.sort.date',
                 defaultMessage: 'Creation date'
             },
             sortTitle: {
-                id: 'UserDecks.sort.title',
+                id: 'GroupDecks.sort.title',
                 defaultMessage: 'Title'
             },
-            myDecks: {
-                id: 'UserDecks.header.myDecks',
-                defaultMessage: 'My Decks'
-            },
-            ownedDecks: {
-                id: 'UserDecks.header.ownedDecks',
-                defaultMessage: 'Owned Decks'
-            },
             sharedDecks: {
-                id: 'UserDecks.header.sharedDecks',
+                id: 'GroupDecks.header.sharedDecks',
                 defaultMessage: 'Shared Decks'
             }
         });
@@ -92,14 +83,7 @@ class UserDecks extends React.Component {
         let sortBy = meta.sort;
         let showHidden = meta.status && meta.status !== 'public';
 
-        let headerMessage;
-        if (this.props.deckListType === 'shared') {
-            headerMessage = this.messages.sharedDecks;
-        } else if (this.props.loggedinuser === this.props.user.uname) {
-            headerMessage = this.messages.myDecks;
-        } else {
-            headerMessage = this.messages.ownedDecks;
-        }
+        let headerMessage = this.messages.sharedDecks;
         let header = this.context.intl.formatMessage(headerMessage);
 
         return (
@@ -133,9 +117,9 @@ class UserDecks extends React.Component {
     }
 }
 
-UserDecks.contextTypes = {
+Decks.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 
-export default UserDecks;
+export default Decks;
