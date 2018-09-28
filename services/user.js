@@ -36,11 +36,13 @@ export default {
                 resolveWithFullResponse: true
             })
                 .then((res) => {
+                    const data = JSON.parse(res.body);
                     callback(null, {
-                        username: JSON.parse(res.body).username,
-                        userid: JSON.parse(res.body).userid,
+                        username: data.username,
+                        userid: data.userid,
                         jwt: res.headers['----jwt----'],
-                        displayName: JSON.parse(res.body).displayName
+                        displayName: data.displayName,
+                        isReviewer: data.isReviewer
                     });
                 })
                 .catch((err) => {
@@ -98,11 +100,13 @@ export default {
                 resolveWithFullResponse: true
             })
                 .then((res) => {
+                    const data = JSON.parse(res.body);
                     callback(null, {
-                        username: JSON.parse(res.body).username,
-                        userid: JSON.parse(res.body).userid,
+                        username: data.username,
+                        userid: data.userid,
                         jwt: res.headers['----jwt----'],
-                        displayName: JSON.parse(res.body).displayName
+                        displayName: data.displayName,
+                        isReviewer: data.isReviewer
                     });
                 })
                 .catch((err) => {
@@ -231,10 +235,13 @@ export default {
             })
               .then((res) => {
                   // console.log('And we got', res.body);
+                  const data = JSON.parse(res.body);
                   callback(null, {
-                      username: JSON.parse(res.body).username,
-                      userid: JSON.parse(res.body).userid,
-                      jwt: res.headers['----jwt----']
+                      username: data.username,
+                      userid: data.userid,
+                      jwt: res.headers['----jwt----'],
+                      displayName: data.displayName,
+                      isReviewer: data.isReviewer
                   });
               })
               .catch((err) => {

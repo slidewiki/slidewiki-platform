@@ -9,6 +9,8 @@ import UserMenu from './UserMenu';
 import UserRecommendations from '../UserRecommendations';
 import classNames from 'classnames/bind';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
+import approveUser from '../../../../actions/userReview/approveUser';
+import suspendUser from '../../../../actions/userReview/suspendUser';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
@@ -50,6 +52,28 @@ class PrivatePublicUserProfile extends React.Component {
         });
     }
 
+    handleApproveClick() {
+        this.askForSecret(approveUser);
+    }
+    handleSuspendClick() {
+        this.askForSecret(suspendUser);
+    }
+
+    askForSecret(action) {
+        swal({
+            input: 'password',
+            text: 'What is the secret?',
+            title: 'Secret',
+            showCancelButton: true
+        })
+        .then((secret) => {
+            this.context.executeAction(action, {
+                secret: secret,
+                userid: this.props.user.id,
+            });
+        }).catch(swal.noop);
+    }
+
     render() {
         let meta = this.props.decksMeta;
         let profileClasses = classNames({
@@ -60,12 +84,33 @@ class PrivatePublicUserProfile extends React.Component {
             'wide': true,
             'column': true
         });
+        let btn_classes = classNames({
+            'ui': true,
+            'labeled': true,
+            'icon': true,
+            'basic': true,
+            'button': true
+        });
+        let approveBtn_classes = classNames({'green': true}, btn_classes);
+        let suspendBtn_classes = classNames({'red': true}, btn_classes);
         return (
           <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
                 <div className = "ui stackable grid ">
                   <div className = {profileClasses}>
                       <PublicUserData user={ this.props.user } loggedinuser={ this.props.loggedinuser } />
+                      { (!this.props.isReviewer) ?
+                        <div className="vertical ui buttons">
+                            <button tabIndex="0" type="button" onClick={this.handleApproveClick.bind(this)} className={approveBtn_classes} >
+                                <i className="icon check"/> APPROVE USER
+                            </button>
+                            <div className="or"/>
+                            <button tabIndex="0" type="button" onClick={this.handleSuspendClick.bind(this)} className={suspendBtn_classes}>
+                                <i className="icon close"/> SUSPEND USER
+                            </button>
+                        </div>
+                        : ''
+                      }
                   </div>
                   <div className = "sixteen wide column">
                       <UserMenu user={ this.props.user } loggedinuser={this.props.loggedinuser} choice={ this.props.category } />

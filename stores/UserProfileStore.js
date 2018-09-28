@@ -33,6 +33,7 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.username = '';
         this.userid = '';
+        this.isReviewer = false;
         this.jwt = '';
         this.userpicture = undefined;
         this.errorMessage = '';
@@ -102,6 +103,7 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.isReviewer = false;
 
         //LoginModal
         this.showLoginModal = false;
@@ -122,6 +124,7 @@ class UserProfileStore extends BaseStore {
             dimmer: this.dimmer,
             username: this.username,
             userid: this.userid,
+            isReviewer: this.isReviewer,
             jwt: this.jwt,
             userpicture: this.userpicture,
             errorMessage: this.errorMessage,
@@ -158,6 +161,7 @@ class UserProfileStore extends BaseStore {
         this.dimmer = state.dimmer;
         this.username = state.username;
         this.userid = state.userid;
+        this.isReviewer = state.isReviewer;
         this.jwt = state.jwt;
         this.userpicture = state.userpicture;
         this.errorMessage = state.errorMessage;
@@ -243,6 +247,7 @@ class UserProfileStore extends BaseStore {
     handleSignInSuccess(payload) {
         this.username = payload.username;
         this.userid = payload.userid;
+        this.isReviewer = payload.isReviewer;
         this.jwt = payload.jwt;
         this.errorMessage = '';
         this.emitChange();

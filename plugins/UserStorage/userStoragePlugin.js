@@ -74,7 +74,8 @@ module.exports = function userStoragePlugin(options) {
                             username: newUser.username,
                             userid: newUser.userid,
                             displayName: newUser.displayName,
-                            jwt: newUser.jwt
+                            jwt: newUser.jwt,
+                            isReviewer: newUser.isReviewer
                         };
 
                         // console.log('userStoragePlugin actionContext setUser:', preparedUser);
