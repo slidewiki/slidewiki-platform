@@ -21,40 +21,28 @@ class Presentation extends React.Component{
         this.id = props.currentRoute.query.id;
     }
 
-    //setting/reading a cookie is needed so SWIK-2088 is fixable
-    setCookie(name,value,seconds) {
-        let expires = '';
-        if (seconds) {
-            let date = new Date();
-            date.setTime(date.getTime() + (seconds*1000));
-            expires = '; expires=' + date.toUTCString();
-        }
-        document.cookie = name + '=' + (value || '')  + expires + '; path=/';
-    }
-    getCookie(name) {
-        let nameEQ = name + '=';
-        let ca = document.cookie.split(';');
-        for(let i=0;i < ca.length;i++) {
-            let c = ca[i];
-            while (c.charAt(0)===' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
-        }
-        return undefined;
-    }
-    eraseCookie(name) {
-        document.cookie = name+'=; Max-Age=-99999999;';
-    }
-
     componentDidMount(){
         if(process.env.BROWSER){
 
             window.addEventListener('beforeunload', (event) => {
-                this.setCookie('lastHash',window.location.hash, 15);
+                if(window.localStorage)
+                    window.localStorage.setItem('lastHash', JSON.stringify({'hash': window.location.hash, 'time': new Date().getTime(), 'deckID': this.props.PresentationStore.selector.id}) );//safe current slide for page refresh
             });
 
-            let lastRevealHash = this.getCookie('lastHash');
-            console.log(lastRevealHash);
-            this.eraseCookie('lastHash');
+            let lastRevealHash = undefined;
+            if(window.localStorage) {
+                lastRevealHash = window.localStorage.getItem('lastHash');
+                lastRevealHash = (lastRevealHash) ? JSON.parse(lastRevealHash) : undefined;
+                if(lastRevealHash) {
+                    if(lastRevealHash.deckID !== this.props.PresentationStore.selector.id){ //check that it is still the same deck, cause 15 secs is rather long
+                        lastRevealHash = undefined;
+                    } else {
+                        let timePassed = (new Date().getTime()) - lastRevealHash.time;
+                        lastRevealHash = (timePassed > 0 && timePassed <= 15*1000) ? lastRevealHash.hash : undefined;//not older than 15 secs ... just for reload of the page
+                    }
+                }
+                window.localStorage.removeItem('lastHash');
+            }
 
             //$('[style*="absolute"]').children().attr('tabindex', 0);
 
