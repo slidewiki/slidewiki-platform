@@ -21,8 +21,41 @@ class Presentation extends React.Component{
         this.id = props.currentRoute.query.id;
     }
 
+    //setting/reading a cookie is needed so SWIK-2088 is fixable
+    setCookie(name,value,seconds) {
+        let expires = '';
+        if (seconds) {
+            let date = new Date();
+            date.setTime(date.getTime() + (seconds*1000));
+            expires = '; expires=' + date.toUTCString();
+        }
+        document.cookie = name + '=' + (value || '')  + expires + '; path=/';
+    }
+    getCookie(name) {
+        let nameEQ = name + '=';
+        let ca = document.cookie.split(';');
+        for(let i=0;i < ca.length;i++) {
+            let c = ca[i];
+            while (c.charAt(0)===' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+        }
+        return undefined;
+    }
+    eraseCookie(name) {
+        document.cookie = name+'=; Max-Age=-99999999;';
+    }
+
     componentDidMount(){
         if(process.env.BROWSER){
+
+            window.addEventListener('beforeunload', (event) => {
+                this.setCookie('lastHash',window.location.hash, 15);
+            });
+
+            let lastRevealHash = this.getCookie('lastHash');
+            console.log(lastRevealHash);
+            this.eraseCookie('lastHash');
+
             //$('[style*="absolute"]').children().attr('tabindex', 0);
 
             //remove existing tabindices
@@ -62,7 +95,10 @@ class Presentation extends React.Component{
                 pptxheight = '100%';
             }
 
-            window.location.hash = '#slide-' + this.startingSlide;
+            if(lastRevealHash === undefined)
+                window.location.hash = '#slide-' + this.startingSlide;
+            else
+                window.location.hash = lastRevealHash;
 
             let multiplexFileToLoad = (this.secret) ? '/custom_modules/reveal.js/plugin/multiplex/master.js' : '/custom_modules/reveal.js/plugin/multiplex/client.js' ;
             multiplexFileToLoad = (this.id) ? multiplexFileToLoad : '' ;
