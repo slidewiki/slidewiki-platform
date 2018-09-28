@@ -579,8 +579,8 @@ export default {
             async.series([
                 (callback) => {
                     // add missing sid in order to load the deck's title
-                    if(payload.params.sid === undefined)
-                        payload.params.sid = payload.params.id;
+                    payload.params.slideID = payload.params.sid;
+                    payload.params.sid = payload.params.id;//this is needed to have loadDeckView working correctly
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     payload.params.presentation = true;
@@ -588,6 +588,7 @@ export default {
                 },
                 (callback) => {
                     // adding language to the params
+                    payload.params.sid = payload.params.slideID;//needs to be reset for loadPresentation
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
                 },
