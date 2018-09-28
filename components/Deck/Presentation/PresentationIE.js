@@ -17,11 +17,19 @@ class PresentationIE extends React.Component{
 
     render(){
         let slides = this.getSlides();
+        // Load the theme stylesheet
+        let styleName = 'default';
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined')
+            styleName = this.props.PresentationStore.theme;
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')//if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+
         return(
           <div className={'reveal'} style={{position: 'absolute', top: 0}}>
               <div className={'slides'}>
                  {slides}
               </div>
+              <span className="revealTheme" style={{display: 'none'}}>{styleName}</span>
           </div>
         );
     }

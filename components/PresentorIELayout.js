@@ -18,7 +18,6 @@ class PresentorHTMLLayout extends React.Component {
                   <meta name="viewport" content="width=device-width" />
                   <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />{/*NOTE needed, otherwise a horizontal scrollbar appears. TODO get rid of this*/}
                   <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
-                  <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />
                   {/*<link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />*/}
                   {/* we add this config option for mathjax so we can better control when the typesetting will occur */}
                   <script type="text/x-mathjax-config" dangerouslySetInnerHTML={{__html:'MathJax.Hub.Config({skipStartupTypeset: true});'}} defer></script>
@@ -50,6 +49,14 @@ class PresentorHTMLLayout extends React.Component {
                   <script src={'/public/js/' + this.props.clientFile} defer></script>
                   {/* <script dangerouslySetInnerHTML={ {__html: ga} } />*/}
                   <script dangerouslySetInnerHTML= { {__html: `
+                   var styleName = $('.revealTheme').text();
+                   var head  = document.getElementsByTagName('head')[0];
+                   var link  = document.createElement('link');
+                   link.rel  = 'stylesheet';
+                   link.type = 'text/css';
+                   link.href = '/custom_modules/reveal.js/css/theme/'+styleName+'.css';
+                   link.media = 'all';
+                   head.appendChild(link);
                   window.onload = function() {
                   var pptxwidth = 0;
                   var pptxheight = 0;
