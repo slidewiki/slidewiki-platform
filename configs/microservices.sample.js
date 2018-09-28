@@ -85,7 +85,7 @@ export default {
             uri: 'https://nlpservice.experimental.slidewiki.org'
         },
         'analytics': {
-            uri: 'http://slidewiki.imp.bg.ac.rs'
+            uri: 'http://localhost:80'
         }
     }
 };

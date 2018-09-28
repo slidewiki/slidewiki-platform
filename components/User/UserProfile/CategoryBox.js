@@ -12,7 +12,7 @@ class CategoryBox extends React.Component {
     }
 
     render() {
-        let analyticsDiv = (Microservices.analytics !== undefined && Microservices.analytics.uri === 'http://localhost:80') ?
+        let analyticsDiv = (
             <div className="ui vertical menu">
               <div className="item" style={ this.headerStyle }>
                 <table><tr><td>
@@ -39,7 +39,7 @@ class CategoryBox extends React.Component {
                   />
                 </p>
               </NavLink>
-            </div> : '' ;
+            </div>);
 
         return (
           <div ref="menus">
