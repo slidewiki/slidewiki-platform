@@ -90,19 +90,13 @@ class InfoPanelInfoView extends React.Component {
         // first, check selector type
         if (selector.stype === 'slide') {
             variant = this.props.TranslationStore.nodeVariants.find((v) => v.language === language);
-            if (!variant) {
-                let href = Util.makeNodeURL({id: selector.id}, 'plaindeck', '', this.props.DeckTreeStore.slug, language);
-
-                this.context.executeAction(navigateAction, { url: href });
-
-                return;
+            if (variant) {
+                let oldSlideId = selector.sid;
+                selector.sid = `${variant.id}-${variant.revision}`;
+                // replace current slide id with translation slide id in spath as well
+                selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
             }
-
-            let oldSlideId = selector.sid;
-            selector.sid = `${variant.id}-${variant.revision}`;
-            // replace current slide id with translation slide id in spath as well
-            selector.spath = selector.spath.replace(new RegExp(oldSlideId, 'g'), selector.sid);
-        } // else it's a deck, no spath replacing needed
+        }
 
         let href = Util.makeNodeURL(selector, 'deck', '', this.props.DeckTreeStore.slug, language);
 
