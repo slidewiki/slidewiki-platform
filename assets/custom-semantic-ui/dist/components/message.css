@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.2 - Message
+ * # Semantic UI 2.4.0 - Message
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -276,15 +276,15 @@
 /* Positive */
 .ui.positive.message {
   background-color: #FCFFF5;
-  color: #146726;
+  color: #265326;
 }
 .ui.positive.message,
 .ui.attached.positive.message {
-  -webkit-box-shadow: 0px 0px 0px 1px #146726 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #146726 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px 1px #265326 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #265326 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.positive.message .header {
-  color: #146726;
+  color: #265326;
 }
 
 /* Negative */
@@ -304,15 +304,15 @@
 /* Info */
 .ui.info.message {
   background-color: #F8FFFF;
-  color: #155482;
+  color: #1E78BB;
 }
 .ui.info.message,
 .ui.attached.info.message {
-  -webkit-box-shadow: 0px 0px 0px 1px #155482 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #155482 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px 1px #1E78BB inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #1E78BB inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.info.message .header {
-  color: #155482;
+  color: #1E78BB;
 }
 
 /* Warning */
@@ -322,11 +322,11 @@
 }
 .ui.warning.message,
 .ui.attached.warning.message {
-  -webkit-box-shadow: 0px 0px 0px 1px #984810 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #984810 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px 1px #8E380A inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #8E380A inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.warning.message .header {
-  color: #984810;
+  color: #8E380A;
 }
 
 /* Error */
@@ -346,15 +346,15 @@
 /* Success */
 .ui.success.message {
   background-color: #FCFFF5;
-  color: #146726;
+  color: #265326;
 }
 .ui.success.message,
 .ui.attached.success.message {
-  -webkit-box-shadow: 0px 0px 0px 1px #146726 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #146726 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 0px 1px #265326 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #265326 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.success.message .header {
-  color: #146726;
+  color: #265326;
 }
 
 /* Colors */
@@ -365,21 +365,21 @@
 }
 .ui.red.message {
   background-color: #FFE8E6;
-  color: #DB2828;
-  -webkit-box-shadow: 0px 0px 0px 1px #DB2828 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #DB2828 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  color: #C42424;
+  -webkit-box-shadow: 0px 0px 0px 1px #C42424 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #C42424 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.red.message .header {
-  color: #c82121;
+  color: #ae2020;
 }
 .ui.orange.message {
   background-color: #FFEDDE;
-  color: #DA6619;
-  -webkit-box-shadow: 0px 0px 0px 1px #DA6619 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #DA6619 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  color: #CA5010;
+  -webkit-box-shadow: 0px 0px 0px 1px #CA5010 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #CA5010 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.orange.message .header {
-  color: #c35b16;
+  color: #b2470e;
 }
 .ui.yellow.message {
   background-color: #FFF8DB;
@@ -401,12 +401,12 @@
 }
 .ui.green.message {
   background-color: #E5F9E7;
-  color: #188130;
-  -webkit-box-shadow: 0px 0px 0px 1px #188130 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
-          box-shadow: 0px 0px 0px 1px #188130 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  color: #158538;
+  -webkit-box-shadow: 0px 0px 0px 1px #158538 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
+          box-shadow: 0px 0px 0px 1px #158538 inset, 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
 .ui.green.message .header {
-  color: #146c28;
+  color: #126f2f;
 }
 .ui.teal.message {
   background-color: #E1F7F7;

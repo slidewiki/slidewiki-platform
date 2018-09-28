@@ -17,12 +17,16 @@ import fetchUser from './user/userprofile/fetchUser';
 import UserProfileStore from '../stores/UserProfileStore';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
+import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
+import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
+import validateUsedLanguage from './translation/validateUsedLanguage';
+import loadNodeTranslations from './translation/loadNodeTranslations';
 
 const log = require('./log/clog');
 
@@ -54,6 +58,14 @@ export default function loadDeck(context, payload, done) {
         context.executeAction(deckModeError, payload, done);
         return;
     }
+
+    //language/translation stuff
+    payload.params.language = payload.query.language;
+    if (payload.params.language && payload.params.language.startsWith('_')) {
+        payload.params.language = payload.params.language.substring(1);
+    }
+    if (payload.params.language && payload.params.language.length > 5)
+        payload.params.language = payload.params.language.substring(0,5);
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
@@ -103,113 +115,139 @@ export default function loadDeck(context, payload, done) {
         runNonContentActions = 0;
     }
 
-    //load all required actions in parallel
-    async.parallel([
-        (callback) => {
-            context.executeAction(fetchUser, {
-                params: {
-                    username: context.getStore(UserProfileStore).getState().username
-                }
-            }, callback);
-        },
-        (callback) => {
-            permissionsPromise.then(() => {
-                let permissions = context.getStore(PermissionsStore).getState().permissions;
-                //special handling for special case: Link from email for deck owner to add new editor
-                context.dispatch('DECKEDIT_START_QUERY_PARAMS', payload.query);
-                if (payloadCustom.params.mode === 'edit' && (!permissions.edit || permissions.readOnly)){
-                    if (!(payloadCustom.params.stype === 'deck' && payload.query.interestedUser))
-                        payloadCustom.params.mode = 'view';
-                }
-                // console.log('now mode is', payloadCustom.params.mode);
-                context.executeAction(loadContent, payloadCustom, callback);
-            });
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadDeckTree, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadActivities, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadContentModules, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadLikes, {selector: payload.params}, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
-                context.executeAction(loadContributors, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            //if user is logged is and root deck changed load forks of this deck owned by the user
-            if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
-                context.executeAction(loadForks, {
-                    selector: payload.params,
-                    user: context.getStore(UserProfileStore).getState().userid
-                }, callback);
-            }else{
-                callback();
-            }
+    let currentLang = context.getStore(TranslationStore).getState().currentLang;
+    let languageWillChange = (currentLang || '') !== (payload.params.language || '');
+    // need to set this for some reason otherwise deck tree does not reload on language change
+    if (languageWillChange) {
+        if (payloadCustom.navigate) {
+            payloadCustom.navigate.runFetchTree = true;
+        } else {
+            payloadCustom.navigate = { runFetchTree : true };
         }
-    ],
-    // final callback
-    (err, results) => {
-        if (err) {
-            log.error(context, {filepath: __filename});
-            context.executeAction(serviceUnavailable, payload, done);
-            return;
-        }
-        if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
-            context.executeAction(notFoundError, payload, done);
-            return;
-        }
-        // context.dispatch('UPDATE_PAGE_TITLE', {
-        //     pageTitle: pageTitle
-        // });
-        if (payload.query.interestedUser)
-            context.executeAction(fetchUser, {
-                params: {
-                    username: payload.query.interestedUser
-                }
-            }, done);
-        else {
-            if (payload.params.mode !== 'edit') {
-                //Create activity
-                let userId = String(context.getStore(UserProfileStore).userid);
-                if (userId === '') {
-		                userId = '0';//Unknown - not logged in
-		            }
-		            let activity = {
-		                activity_type: 'view',
-		                user_id: userId,
-		                content_id: payload.params.sid,
-		                content_kind: payload.params.stype
-		            };
-		            context.executeAction(addActivity, {activity: activity});
-            }
+    }
 
-            done();
-        }
+    // load translation stuff
+    context.executeAction(loadNodeTranslations, payload.params, (err, results) => {
+        //load all required actions in parallel
+        async.parallel([
+            (callback) => {
+                context.executeAction(fetchUser, {
+                    params: {
+                        username: context.getStore(UserProfileStore).getState().username
+                    }
+                }, callback);
+            },
+            (callback) => {
+                permissionsPromise.then(() => {
+                    let permissions = context.getStore(PermissionsStore).getState().permissions;
+                    //special handling for special case: Link from email for deck owner to add new editor
+                    context.dispatch('DECKEDIT_START_QUERY_PARAMS', payload.query);
+                    if (payloadCustom.params.mode === 'edit' && (!permissions.edit || permissions.readOnly)){
+                        if (!(payloadCustom.params.stype === 'deck' && payload.query.interestedUser))
+                            payloadCustom.params.mode = 'view';
+                    }
+                    // console.log('now mode is', payloadCustom.params.mode);
+                    context.executeAction(loadContent, payloadCustom, callback);
+                });
+            },
+            (callback) => {
+                if(runNonContentActions || languageWillChange){
+                    context.executeAction(loadDeckTree, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadActivities, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadContentModules, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadLikes, {selector: payload.params}, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    const userId = context.getStore(UserProfileStore).getState().userid;
+                    if (userId !== undefined && userId !== null && userId !== '') {
+                        context.executeAction(getFollowing, {selector: payload.params, userId: userId, followed_type: 'deck'}, callback);
+                    }
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions || languageWillChange){
+                    //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
+                    context.executeAction(loadContributors, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                //if user is logged is and root deck changed load forks of this deck owned by the user
+                if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
+                    context.executeAction(loadForks, {
+                        selector: payload.params,
+                        user: context.getStore(UserProfileStore).getState().userid
+                    }, callback);
+                }else{
+                    callback();
+                }
+            }
+        ],
+        // final callback
+        (err, results) => {
+            if (err) {
+                log.error(context, {filepath: __filename});
+                context.executeAction(serviceUnavailable, payload, done);
+                return;
+            }
+            if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
+                // console.log('loadDeck isSelectorValid=false, selector ', context.getStore(DeckTreeStore).getState().selector, '\npayload: ', payload);
+                context.executeAction(notFoundError, payload, done);
+                return;
+            }
+            // context.dispatch('UPDATE_PAGE_TITLE', {
+            //     pageTitle: pageTitle
+            // });
+            // context.executeAction(validateUsedLanguage, {language: payload.params.language});
+            if (payload.query.interestedUser)
+                context.executeAction(fetchUser, {
+                    params: {
+                        username: payload.query.interestedUser
+                    }
+                }, done);
+            else {
+                if (payload.params.mode !== 'edit') {
+                    //Create activity
+                    let userId = String(context.getStore(UserProfileStore).userid);
+                    if (userId === '') {
+                        userId = '0';//Unknown - not logged in
+                    }
+                    let activity = {
+                        activity_type: 'view',
+                        user_id: userId,
+                        content_id: payload.params.sid,
+                        content_kind: payload.params.stype
+                    };
+                    context.executeAction(addActivity, {activity: activity});
+                }
+
+                done();
+            }
+        });
     });
 }

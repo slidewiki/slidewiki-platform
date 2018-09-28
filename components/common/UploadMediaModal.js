@@ -3,9 +3,13 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
+import updateGraphic from '../../actions/media/updateGraphic';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import {isEmpty} from '../../common';
+import cancelUploadMediaFile from '../../actions/media/cancelUploadMediaFile';
+import SlideEditStore from '../../stores/SlideEditStore';
+import MediaStore from '../../stores/MediaStore';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 class UploadMediaModal extends React.Component {
@@ -30,6 +34,7 @@ class UploadMediaModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.showLicense = this.showLicense.bind(this);
+        this.receiveDroppedFile = this.receiveDroppedFile.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
         this.messages = defineMessages({
             swal_error_title : {
@@ -156,9 +161,15 @@ class UploadMediaModal extends React.Component {
             cancel_button:{
                 id:'uploadMediaModal.cancel_button',
                 defaultMessage:'Cancel'
+            },
+            background_aria:{
+                id:'uploadMediaModal.background_aria',
+                defaultMessage:'Use as background image?'
+            },
+            background_message1:{
+                id:'uploadMediaModal.background_message1',
+                defaultMessage:'Use as background image?'
             }
-
-
         });
     }
 
@@ -185,6 +196,7 @@ class UploadMediaModal extends React.Component {
     }
 
     handleClose(){
+        this.context.executeAction(cancelUploadMediaFile, {});
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,
@@ -218,6 +230,11 @@ class UploadMediaModal extends React.Component {
         });
     }
 
+    receiveDroppedFile(file) {
+        this.handleOpen();
+        this.onDrop([file]);
+    }
+
     changeLicense(event, data) {
         this.setState({
             licenseValue: data.value
@@ -226,31 +243,34 @@ class UploadMediaModal extends React.Component {
 
     submitPressed(e) {
         e.preventDefault();
-        let that = this;
         if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
-        console.log('copyrighthodler: ' + this.state.copyrightHolder);
-        let payload = {
-            type: this.state.files[0].type,
-            license: this.state.licenseValue,
-            copyrightHolder: this.state.copyrightHolder,
-            title: this.state.title || this.state.files[0].name,
-            text: this.state.alt,
-            filesize: this.state.files[0].size,
-            filename: this.state.files[0].name,
-            bytes: null
-        };
-        console.log(this.state, payload);
+        let fileType = this.state.files[0].type;
 
         let reader = new FileReader();
 
-        reader.onloadend = function (evt) {
+        reader.onloadend = (evt) => {
             console.log('read total length from file: ', reader.result.length, evt.target.readyState);
-
             if (evt.target.readyState === FileReader.DONE) {
-                payload.bytes = reader.result;
-                that.context.executeAction(uploadMediaFiles, payload);
+                let payload = {
+                    type: this.state.files[0].type,
+                    license: this.state.licenseValue,
+                    copyrightHolder: this.state.copyrightHolder,
+                    title: this.state.title || this.state.files[0].name,
+                    text: this.state.alt,
+                    filesize: this.state.files[0].size,
+                    filename: this.state.files[0].name,
+                    checkbox_backgroundImage: $('#checkbox_backgroundImage')[0].checked,
+                    bytes: null
+                };
 
-                that.setState({
+                if (fileType === 'image/svg+xml') {
+                    payload.bytes = atob(reader.result.split('base64,')[1]);
+                    payload.svg = payload.bytes;
+                } else {
+                    payload.bytes = reader.result;
+                }
+                this.context.executeAction(uploadMediaFiles, payload);
+                this.setState({
                     isLoading: true
                 });
             }
@@ -277,6 +297,24 @@ class UploadMediaModal extends React.Component {
         return false;
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick) {
+            this.handleOpen();
+        }
+
+        if (this.props.MediaStore.status === 'uploading') {
+            if (nextProps.MediaStore.status === 'success') {
+                this.handleClose();
+            } else if (nextProps.MediaStore.status === 'error') {
+                this.handleClose();
+            }
+        }
+
+        if (nextProps.MediaStore.status === 'dropped') {
+            this.receiveDroppedFile(nextProps.MediaStore.file);
+        }
+    }
+
     render() {
         this.context.getUser().username;
         let dropzone = '';
@@ -287,7 +325,7 @@ class UploadMediaModal extends React.Component {
                 <p>{this.context.intl.formatMessage(this.messages.drop_message1)}</p>
                 <p>{this.context.intl.formatMessage(this.messages.drop_message2)}
                 <button id="upload" className="ui button" aria-label={this.context.intl.formatMessage(this.messages.upload_button_aria)}>
-                <i className="outline upload icon large black"></i>
+                <i className="upload icon large"></i>
                 <label htmlFor="upload">{this.context.intl.formatMessage(this.messages.upload_button_label)}</label></button>
                 {this.context.intl.formatMessage(this.messages.drop_message3)}</p>
 
@@ -316,7 +354,7 @@ class UploadMediaModal extends React.Component {
             //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field">
             <label htmlFor="copyrightHolder">{this.context.intl.formatMessage(this.messages.copyrightHolder_label)}</label>
-            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.defaultMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
+            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
               <TextArea className="sr-only" id="UploadMediaModalDescription" value={this.context.intl.formatMessage(this.messages.modal_description2)} />
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
@@ -362,6 +400,15 @@ class UploadMediaModal extends React.Component {
                       <a href="/license"> {this.context.intl.formatMessage(this.messages.media_terms_label4)} </a>
                       {this.context.intl.formatMessage(this.messages.media_terms_label5)}
                     </label>
+                  </div>
+                  <div className="field">
+                    <div className="ui checkbox">
+                      <input id="checkbox_backgroundImage" type="checkbox" tabIndex="0" id="checkbox_backgroundImage" ref="checkbox_backgroundImage"
+                         aria-label={this.context.intl.formatMessage(this.messages.background_aria)}
+                         aria-required="false"/>
+                      <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)} (beta feature <i className="yellow warning sign icon"></i>)
+                      </label>
+                    </div>
                   </div>
                 </div>
                 <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
@@ -453,5 +500,13 @@ UploadMediaModal.contextTypes = {
     getUser: PropTypes.func,
     intl: PropTypes.object.isRequired
 };
+
+UploadMediaModal = connectToStores(UploadMediaModal, [SlideEditStore, MediaStore], (context, props) => {
+
+    return {
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
+    };
+});
 
 export default UploadMediaModal;

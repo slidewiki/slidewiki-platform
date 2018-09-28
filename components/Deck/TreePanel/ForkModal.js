@@ -5,7 +5,7 @@ import forkDeck from '../../../actions/decktree/forkDeck';
 import {Button, Icon, Modal, Header} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import _ from 'lodash';
-
+import Util from '../../common/Util';
 
 class ForkModal extends React.Component {
 
@@ -31,8 +31,11 @@ class ForkModal extends React.Component {
 
     navigateToFork() {
         let lastUpdatedFork = _.maxBy(this.props.forks, (fork) => new Date(fork.lastUpdate));
+        let url = Util.makeNodeURL({
+            id: lastUpdatedFork.id
+        }, 'plaindeck');
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + lastUpdatedFork.id
+            url: url
         });
         this.props.handleClose();
     }

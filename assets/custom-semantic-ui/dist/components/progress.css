@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.2 - Progress Bar
+ * # Semantic UI 2.4.0 - Progress Bar
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -166,7 +166,7 @@
 
 /* Indicating Success */
 .ui.indicating.progress.success .label {
-  color: #146726;
+  color: #265326;
 }
 
 
@@ -180,7 +180,7 @@
 ---------------*/
 
 .ui.progress.success .bar {
-  background-color: #188130 !important;
+  background-color: #158538 !important;
 }
 .ui.progress.success .bar,
 .ui.progress.success .bar::after {
@@ -188,7 +188,7 @@
           animation: none !important;
 }
 .ui.progress.success > .label {
-  color: #146726;
+  color: #265326;
 }
 
 /*--------------
@@ -196,7 +196,7 @@
 ---------------*/
 
 .ui.progress.warning .bar {
-  background-color: #DA6619 !important;
+  background-color: #CA5010 !important;
 }
 .ui.progress.warning .bar,
 .ui.progress.warning .bar::after {
@@ -204,7 +204,7 @@
           animation: none !important;
 }
 .ui.progress.warning > .label {
-  color: #984810;
+  color: #8E380A;
 }
 
 /*--------------
@@ -212,7 +212,7 @@
 ---------------*/
 
 .ui.progress.error .bar {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
 }
 .ui.progress.error .bar,
 .ui.progress.error .bar::after {
@@ -302,13 +302,13 @@
   color: #FFFFFF;
 }
 .ui.inverted.progress.success > .label {
-  color: #188130;
+  color: #158538;
 }
 .ui.inverted.progress.warning > .label {
-  color: #DA6619;
+  color: #CA5010;
 }
 .ui.inverted.progress.error > .label {
-  color: #DB2828;
+  color: #C42424;
 }
 
 /*--------------
@@ -367,18 +367,18 @@
 
 /* Red */
 .ui.red.progress .bar {
-  background-color: #DB2828;
+  background-color: #C42424;
 }
 .ui.red.inverted.progress .bar {
-  background-color: #E76A6A;
+  background-color: #DEA7A7;
 }
 
 /* Orange */
 .ui.orange.progress .bar {
-  background-color: #DA6619;
+  background-color: #CA5010;
 }
 .ui.orange.inverted.progress .bar {
-  background-color: #E28447;
+  background-color: #D98658;
 }
 
 /* Yellow */
@@ -399,10 +399,10 @@
 
 /* Green */
 .ui.green.progress .bar {
-  background-color: #188130;
+  background-color: #158538;
 }
 .ui.green.inverted.progress .bar {
-  background-color: #74B584;
+  background-color: #88C19C;
 }
 
 /* Teal */

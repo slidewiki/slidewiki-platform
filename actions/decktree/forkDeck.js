@@ -3,6 +3,7 @@ import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
+import async from 'async';
 
 export default function forkDeck(context, payload, done) {
     log.info(context);
@@ -12,6 +13,7 @@ export default function forkDeck(context, payload, done) {
         context.executeAction(navigateAction, {
             url: '/'
         });
+        done();
     } else {
         let selector = payload.selector;
         context.service.update('deck.fork', {deckId: selector.id, jwt: context.getStore(UserProfileStore).jwt}, null, {timeout: 30 * 1000}, (err, res) => {
@@ -21,6 +23,7 @@ export default function forkDeck(context, payload, done) {
                 if (err.statusCode === 401) {
                     context.dispatch('FORK_DECK_FAILURE', err);
                 }
+                done();
             } else {
                 context.dispatch('FORK_DECK_SUCCESS', res);
                 console.log('res', res);
@@ -49,36 +52,40 @@ export default function forkDeck(context, payload, done) {
                         }
                     }
                 }
-                //update the URL
-                context.executeAction(navigateAction, {
-                    url: newURL
-                });
 
                 userid = String(context.getStore(UserProfileStore).userid);
-                //create a fork activity for the origin deck
-                let activity1 = {
-                    activity_type: 'fork',
-                    user_id: userid,
-                    content_id: selector.id,
-                    content_kind: 'deck',
-                    fork_info: {
-                        content_id: newId
-                    }
-                };
-                context.executeAction(addActivity, {activity: activity1});
 
-                //create an add activity for the new deck
-                let activity2 = {
-                    activity_type: 'add',
-                    user_id: userid,
-                    content_id: newId,
-                    content_owner_id: userid,
-                    content_kind: 'deck'
-                };
-                context.executeAction(addActivity, {activity: activity2});
-            }
-            done();
-        }
-        );
+                async.parallel([
+                    (callback) => {
+                        //create a fork activity for the origin deck
+                        let activity1 = {
+                            activity_type: 'fork',
+                            user_id: userid,
+                            content_id: selector.id,
+                            content_kind: 'deck',
+                            fork_info: {
+                                content_id: newId
+                            }
+                        };
+                        context.executeAction(addActivity, {activity: activity1}, callback);
+                    },
+                    (callback) => {
+                        //create an add activity for the new deck
+                        let activity2 = {
+                            activity_type: 'add',
+                            user_id: userid,
+                            content_id: newId,
+                            content_owner_id: userid,
+                            content_kind: 'deck'
+                        };
+                        context.executeAction(addActivity, {activity: activity2}, callback);
+                    }
+                ], (err, results) => {
+                    //update the URL
+                    location.pathname = newURL;
+                    done();
+                });
+            }          
+        });
     }
 }

@@ -33,20 +33,9 @@ class Chat extends React.Component {
 
     sendMessage(event) {
         event.preventDefault();
-        if(this.state.TextAreaContent.length < 15){
-            swal({
-                titleText: 'Message too short',
-                text: 'The message you tried to send is too short. Please write more than 15 characters.',
-                type: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Okay',
-                allowOutsideClick: false
-            });
-        } else {
-            this.props.sendRTCMessage('message', this.state.TextAreaContent, this.props.presenterID);
-            this.addMessage({sender: this.props.myID, data: this.state.TextAreaContent}, true);
-            this.setState({charCount: 0, TextAreaContent: ''});
-        }
+        this.props.sendRTCMessage('message', this.state.TextAreaContent, this.props.presenterID);
+        this.addMessage({sender: this.props.myID, data: this.state.TextAreaContent}, true);
+        this.setState({charCount: 0, TextAreaContent: ''});
         return false;
     }
 

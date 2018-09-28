@@ -18,7 +18,7 @@ RUN ./make_version.sh
 #   1. on travis the app is already built, no need to rebuild later here
 #      we either skip it altogether, or change travis so that it uses docker to build and test instead of npm on travis
 #   2. when not on travis, we need full install (with dev dependencies) because we build later here
-RUN if [ "$BUILD_ENV" != "travis" ] ; then rm -R node_modules; fi
+RUN if [ "$BUILD_ENV" != "travis" ] ; then rm -f -R node_modules; fi
 RUN npm install
 RUN npm run install
 

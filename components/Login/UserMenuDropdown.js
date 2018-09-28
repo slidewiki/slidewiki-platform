@@ -73,6 +73,15 @@ class UserMenuDropdown extends React.Component {
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className='item'
+                   key= {5}
+                   tag='li'
+                   value={'/user/' + this.props.UserProfileStore.username + '/playlists'}
+                   text='My Playlists'>
+                   <span style={{color:'black'}}>
+                   <i className="grid layout icon"  aria-hidden={true} />Playlists</span>
+                  </AriaMenuButton.MenuItem>
+                  <AriaMenuButton.MenuItem
+                   className='item'
                    key= {1}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}

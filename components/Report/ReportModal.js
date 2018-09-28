@@ -108,6 +108,9 @@ class ReportModal extends React.Component {
     }
 
     componentDidMount() {
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
         $(this.refs.reasonDropdown).dropdown();
         const reportValidation = {
             fields: {
