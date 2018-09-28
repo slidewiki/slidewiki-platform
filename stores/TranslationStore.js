@@ -5,7 +5,8 @@ class TranslationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.translations = [];
-        this.variants = [];
+        this.treeVariants = [];
+        this.nodeVariants = [];
         this.currentLang = '';
         this.supportedLangs = translationLanguages;
         this.inTranslationMode = false;
@@ -19,7 +20,8 @@ class TranslationStore extends BaseStore {
     getState() {
         return {
             translations: this.translations,
-            variants: this.variants,
+            treeVariants: this.treeVariants,
+            nodeVariants: this.nodeVariants,
             currentLang: this.currentLang,
             supportedLangs: this.supportedLangs,
             inTranslationMode: this.inTranslationMode,
@@ -36,7 +38,8 @@ class TranslationStore extends BaseStore {
     }
     rehydrate(state) {
         this.translations = state.translations;
-        this.variants = state.variants;
+        this.treeVariants = state.treeVariants;
+        this.nodeVariants = state.nodeVariants;
         this.currentLang = state.currentLang;
         this.supportedLangs = state.supportedLangs;
         this.inTranslationMode = state.inTranslationMode;
@@ -126,14 +129,14 @@ class TranslationStore extends BaseStore {
         }
 
         // set primary language
-        let primaryVariant = payload.translations.find((v) => !!v.original);
+        let primaryVariant = payload.translations.find((v) => v.original);
         if (primaryVariant) {
             this.originLanguage = primaryVariant.language.replace('_', '-');
         }
 
         // update translations
         this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
-        this.variants = payload.translations;
+        this.nodeVariants = payload.translations;
 
         // check if current language is part of translations...
         if (!this.currentLang || this.translations.indexOf(this.currentLang) < 0) {
@@ -160,9 +163,11 @@ class TranslationStore extends BaseStore {
         this.treeLanguage = data.deckTree.language.replace('_', '-');
 
         this.treeTranslations = data.deckTree.variants.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
+        this.treeVariants = data.deckTree.variants;
+        this.originLanguage = data.deckTree.variants.find((v) => v.original).language;
 
         this.emitChange();
-        // this.logState('deckTreeGotLoaded');
+        this.logState('deckTreeGotLoaded');
     }
 
     // TODO remove this
@@ -174,7 +179,8 @@ class TranslationStore extends BaseStore {
     // TODO remove this
     reset() {
         this.translations = [];
-        this.variants = [];
+        this.treeVariants = [];
+        this.nodeVariants = [];
         this.currentLang = '';
         this.inTranslationMode = false;
         this.originLanguage = '';

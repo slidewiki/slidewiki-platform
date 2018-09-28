@@ -81,7 +81,7 @@ class InfoPanelInfoView extends React.Component {
             return;
         }
 
-        // console.log('trying to find variant with language', language, 'in treeTranslations and variants', this.props.TranslationStore.treeTranslations, this.props.TranslationStore.variants);
+        // console.log('trying to find variant with language', language, 'in treeTranslations and variants', this.props.TranslationStore.treeTranslations, this.props.TranslationStore.treeVariants, this.props.TranslationStore.nodeVariants);
         let variant = (this.props.TranslationStore.treeTranslations.concat([this.props.TranslationStore.originLanguage])).find((l) => l === language);
         if (!variant) return;
 
@@ -89,7 +89,7 @@ class InfoPanelInfoView extends React.Component {
         let selector = this.props.DeckTreeStore.selector.toJS();
         // first, check selector type
         if (selector.stype === 'slide') {
-            variant = this.props.TranslationStore.variants.find((v) => v.language === language);
+            variant = this.props.TranslationStore.nodeVariants.find((v) => v.language === language);
             if (!variant) {
                 let href = Util.makeNodeURL({id: selector.id}, 'plaindeck', '', this.props.DeckTreeStore.slug, language);
 
@@ -200,6 +200,11 @@ class InfoPanelInfoView extends React.Component {
 
         let language = this.props.TranslationStore.nodeLanguage;
         let primaryLanguage = this.props.TranslationStore.originLanguage;
+        if (this.props.TranslationStore.treeVariants && this.props.TranslationStore.treeVariants.length > 0) {
+            let variant = this.props.TranslationStore.treeVariants.find((v) => v.original);
+            if (variant)
+                primaryLanguage = variant.language;
+        }
         let activeLanguage = this.props.TranslationStore.currentLang || language;
 
         // let's see if the user wants something we don't have
@@ -230,7 +235,7 @@ class InfoPanelInfoView extends React.Component {
                 icon: 'translate',
                 key: 'placeholderForAddANewTranslation'
             });
-        let translationOptions = this.props.TranslationStore.variants.map((t) => {
+        let translationOptions = this.props.TranslationStore.treeVariants.map((t) => {
             // skip same language
             if (t.language === language) return;
 
@@ -327,7 +332,7 @@ class InfoPanelInfoView extends React.Component {
                             <div className="ui selection list">
                                 <h5 className="ui small header">{this.context.intl.formatMessage(this.messages.alsoAvailableIn)}:</h5>
                                 {
-                                    this.props.TranslationStore.variants.map((variant, index) => {
+                                    this.props.TranslationStore.nodeVariants.map((variant, index) => {
                                         // skip same language
                                         if (variant.language === language) return '';
 
