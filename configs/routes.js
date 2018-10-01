@@ -597,6 +597,33 @@ export default {
             ]);
         }
     },
+    presentationIE: {
+        path: '/presentationIE/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'presentationIE',
+        handler: require('../components/Deck/Presentation/PresentationIE'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.sid = payload.params.id;
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
     print: {
         path: '/print/:id:slug(/[^/]+)?/:subdeck?/:sid?',
         method: 'get',
