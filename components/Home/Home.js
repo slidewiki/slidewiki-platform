@@ -33,6 +33,7 @@ class Home extends React.Component {
     }
 
     render() {
+        let signInStyle = {cursor: 'pointer'};
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
@@ -103,7 +104,7 @@ class Home extends React.Component {
                     <div className='signin-outer'>
                         <div className='wrapper'>
                             <div className='signin-blk'>
-                                <span>Get started right away.  <a onClick={this.handleLoginButton.bind(this)} >Sign in</a></span>
+                                <span>Get started right away.  <a onClick={this.handleLoginButton.bind(this)} style={signInStyle} >Sign in</a></span>
                                 <p>Create an account to start creating and sharing your decks. </p>
                             </div>
                         </div>
