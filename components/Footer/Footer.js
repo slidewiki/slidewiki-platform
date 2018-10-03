@@ -22,7 +22,7 @@ class Footer extends React.Component {
         window.open('https://twitter.com/slidewiki', '_blank');
     }
     render() {
-        let rowClasses = {paddingTop: '0px', paddingBottom: '0px'}
+        let rowClasses = {paddingTop: '0px', paddingBottom: '0px'};
         return (
             <div className='footer-container'>
                 <div className='ui container'>
