@@ -3,7 +3,24 @@ import { NavLink } from 'fluxible-router';
 
 
 class Footer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.openFacebook = this.openFacebook.bind(this);
+        this.openLinkedIn = this.openLinkedIn.bind(this);
+        this.openTwitter = this.openTwitter.bind(this);
+    }
 
+    openFacebook() {
+        window.open('https://www.facebook.com/slidewiki/', '_blank');
+    }
+
+    openLinkedIn() {
+        window.open('https://www.linkedin.com/company/slidewiki-eu', '_blank');
+    }
+
+    openTwitter() {
+        window.open('https://twitter.com/slidewiki', '_blank');
+    }
     render() {
         let rowClasses = {paddingTop: '0px', paddingBottom: '0px'}
         return (
@@ -41,9 +58,9 @@ class Footer extends React.Component {
                                     <div className='social-link'>
                                         <ul>
                                             <li><span>Follow us</span></li>
-                                            <li><button className='ui circular facebook icon button'><i className='facebook f icon'/></button></li>
-                                            <li><button className='ui circular linkedin icon button'><i className='linkedin icon'/></button> </li>
-                                            <li><button className='ui circular twitter icon button' href='https://twitter.com/slidewiki'><i className='twitter icon'/></button></li>
+                                            <li><button className='ui circular facebook icon button' onClick={this.openFacebook}><i className='facebook f icon'/></button></li>
+                                            <li><button className='ui circular linkedin icon button' onClick={this.openLinkedIn}><i className='linkedin icon'/></button> </li>
+                                            <li><button className='ui circular twitter icon button' onClick={this.openTwitter}><i className='twitter icon'/></button></li>
                                         </ul>
                                     </div>
                                 </div>
