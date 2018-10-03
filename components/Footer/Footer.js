@@ -5,11 +5,12 @@ import { NavLink } from 'fluxible-router';
 class Footer extends React.Component {
 
     render() {
+        let rowClasses = {paddingTop: '0px', paddingBottom: '0px'}
         return (
             <div className='footer-container'>
                 <div className='ui container'>
                     <div className='ui two column stackable grid'>
-                        <div className='row'>
+                        <div className='row' style={rowClasses}>
                             <div className='seven wide column'>
                                 <div className='footer-left'>
                                     <div className='footer-menu'>
