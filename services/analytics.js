@@ -22,8 +22,9 @@ export default {
                     if (currentPredictionActivity.prediction_info.prediction_activity_type === 'start') {
                         //check whether this prediction has been deleted
                         let predictionDeleteActivity = findActivityWithIdAndType(activities, currentPredictionActivity.id, 'delete');
-                        if (predictionDeleteActivity) {
+                        if (!predictionDeleteActivity) {
                             let prediction = {
+                                id: currentPredictionActivity.id,
                                 userId: uid,
                                 deckId: currentPredictionActivity.content_id,
                                 started: currentPredictionActivity.timestamp
@@ -33,10 +34,10 @@ export default {
                             let predictionEndActivity = findActivityWithIdAndType(activities, currentPredictionActivity.id, 'end');
                             if (predictionEndActivity) {//it has not been deletePrediction_
                                 prediction.finished = predictionEndActivity.timestamp;
-                                prediction.result = predictionEndActivity.result;
-                                prediction.accuracy = predictionEndActivity.accuracy;
-                                prediction.noOfUsers = predictionEndActivity.noOfUsers;
-                                prediction.noOfDecks = predictionEndActivity.noOfDecks;
+                                prediction.result = parseFloat(predictionEndActivity.prediction_info.result);
+                                prediction.accuracy = parseFloat(predictionEndActivity.prediction_info.accuracy);
+                                prediction.noOfUsers = parseInt(predictionEndActivity.prediction_info.no_of_users);
+                                prediction.noOfDecks = parseInt(predictionEndActivity.prediction_info.no_of_decks);
                             }
                             predictions.push(prediction);
                         }
