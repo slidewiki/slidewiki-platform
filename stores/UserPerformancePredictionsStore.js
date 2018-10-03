@@ -6,7 +6,7 @@ class UserPerformancePredictionsStore extends BaseStore {
         this.predictions = undefined;
         this.loading = true;
     }
-    showLoading(payload){
+    showLoading(){
         this.loading = true;
         this.emitChange();
     }
@@ -20,8 +20,22 @@ class UserPerformancePredictionsStore extends BaseStore {
         // this.showAddBox = false;
         this.emitChange();
     }
+    performancePredictionCompleted(payload) {
+        if (payload.predictions && payload.predictions.length > 0) {
+            const newPrediction = payload.predictions[0];
+            let index = this.predictions.findIndex((prediction) => {return (prediction.id === newPrediction.relatedPredictionActivityId);});
+            if (index !== -1) {
+                this.predictions[index].finished = newPrediction.finished;
+                this.predictions[index].result = newPrediction.result;
+                this.predictions[index].accuracy = newPrediction.accuracy;
+                this.predictions[index].noOfUsers = newPrediction.noOfUsers;
+                this.predictions[index].noOfDecks = newPrediction.noOfDecks;
+            }
+            this.emitChange();
+        }
+    }
     deletePredictionJob(payload) {
-        let index = this.predictions.findIndex((prediction) => {return (prediction.id === payload.predictionId);});
+        let index = this.predictions.findIndex((prediction) => {return (prediction.id === payload.id);});
         if (index !== -1) {
             this.predictions.splice(index, 1);
         }
@@ -47,7 +61,8 @@ UserPerformancePredictionsStore.handlers = {
     'LOAD_USER_PERFORMANCE_PREDICTIONS_SUCCESS': 'loadPredictions',
     'SHOW_PERFORMANCE_PREDICTIONS_LOADING': 'showLoading',
     'ADD_PERFORMANCE_PREDICTION_SUCCESS': 'addPredictionJob',
-    'DELETE_PERFORMANCE_PREDICTION_SUCCESS': 'deletePredictionJob'
+    'DELETE_PERFORMANCE_PREDICTION_SUCCESS': 'deletePredictionJob',
+    'PERFORMANCE_PREDICTION_COMPLETED': 'performancePredictionCompleted'
 };
 
 export default UserPerformancePredictionsStore;

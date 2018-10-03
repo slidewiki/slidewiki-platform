@@ -14,12 +14,36 @@ export default {
             uid = 0;
         }
         if (resource === 'analytics.predictionslist'){
-
-            rp.get({uri: Microservices.analytics.uri + '/analytics/webresources/predictionjob/' + uid, proxy: '' }).then((res) => {
-
-                let predictions = JSON.parse(res);
-
-                //GET DATA FOR DECKS FROM DECK SERVICE
+            rp.get({uri: Microservices.activities.uri + '/activities/user/' + uid + '?activity_type=prediction'}).then((res) => {
+                let activities = JSON.parse(res).items;
+                let predictions = [];
+                for (let i = 0; i < activities.length; i++) {
+                    let currentPredictionActivity = activities[i];
+                    if (currentPredictionActivity.prediction_info.prediction_activity_type === 'start') {
+                        //check whether this prediction has been deleted
+                        let predictionDeleteActivity = findActivityWithIdAndType(activities, currentPredictionActivity.id, 'delete');
+                        if (predictionDeleteActivity) {
+                            let prediction = {
+                                userId: uid,
+                                deckId: currentPredictionActivity.content_id,
+                                started: currentPredictionActivity.timestamp
+                            };
+                            
+                            //check whether this prediction has been completed
+                            let predictionEndActivity = findActivityWithIdAndType(activities, currentPredictionActivity.id, 'end');
+                            if (predictionEndActivity) {//it has not been deletePrediction_
+                                prediction.finished = predictionEndActivity.timestamp;
+                                prediction.result = predictionEndActivity.result;
+                                prediction.accuracy = predictionEndActivity.accuracy;
+                                prediction.noOfUsers = predictionEndActivity.noOfUsers;
+                                prediction.noOfDecks = predictionEndActivity.noOfDecks;
+                            }
+                            predictions.push(prediction);
+                        }
+                    }
+                }
+          
+                //GET DECK DATA FROM DECK SERVICE
                 let deckPromises = [];
                 for(let prediction of predictions){
                     let deckId = prediction.deckId;
@@ -66,11 +90,36 @@ export default {
             uid = 0;
         }
 
-        if(resource === 'analytics.prediction'){
+        if(resource === 'analytics.predictionActivity'){
+            //create prediction activity
+            let activity = {
+                activity_type: 'prediction',
+                user_id: String(uid),
+                content_id: String(deckId),
+                content_name: args.prediction.deckTitle,
+                content_kind: 'deck',
+                prediction_info: {
+                    prediction_activity_type: 'start'
+                }
+            };
+            let headers = {};
+            if (args.jwt) headers['----jwt----'] = args.jwt;
+            rp.post({
+                uri: Microservices.activities.uri + '/activity/new',
+                body: JSON.stringify(activity),
+                headers,
+            }).then((res) => {
+                callback(null, {activity: JSON.parse(res)});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {activity: {}});
+            });
+        } else if(resource === 'analytics.prediction'){
             rp.post({
                 uri: Microservices.analytics.uri + '/analytics/webresources/predictionjob/',
                 proxy: '',
                 body:JSON.stringify({
+                    related_prediction_activity_id: args.prediction.id,
                     user_id: uid,
                     deck_id: deckId,
                     jwt: args.jwt,
@@ -114,37 +163,42 @@ export default {
                 console.log(err);
                 callback(err, {predictions: []});
             });
+        
         }
     },
 
-    delete: (req, resource, params, config, callback) => {
-        req.reqId = req.reqId ? req.reqId : -1;
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
-        let args = params.params? params.params : params;
-        let pid = args.predictionId;
-        if (pid === undefined) {
-            pid = 0;
-        }
-
-        if(resource === 'analytics.prediction'){
-            let options = {
-                method: 'DELETE',
-                uri:  Microservices.analytics.uri + '/analytics/webresources/predictionjob/' + pid,
-                // body:JSON.stringify({
-                //     content_kind: 'deck',
-                //     content_id: String(targetDeckID),
-                //     activity_type: 'react',
-                //     user_id: String(params.userid),
-                //     all_revisions: true
-                // })
-            };
-            rp(options).then((res) => {
-                callback(null, {});
-                // console.log('success', res);
-            }).catch((err) => {
-                console.log(err);
-                callback(err, {});
-            });
-        }
-    }
+    // delete: (req, resource, params, config, callback) => {
+    //     req.reqId = req.reqId ? req.reqId : -1;
+    //     log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+    //     let args = params.params? params.params : params;
+    //     let pid = args.predictionId;
+    //     if (pid === undefined) {
+    //         pid = 0;
+    //     }
+    // 
+    //     if(resource === 'analytics.prediction'){
+    //         let options = {
+    //             method: 'DELETE',
+    //             uri:  Microservices.analytics.uri + '/analytics/webresources/predictionjob/' + pid,
+    //             // body:JSON.stringify({
+    //             //     content_kind: 'deck',
+    //             //     content_id: String(targetDeckID),
+    //             //     activity_type: 'react',
+    //             //     user_id: String(params.userid),
+    //             //     all_revisions: true
+    //             // })
+    //         };
+    //         rp(options).then((res) => {
+    //             callback(null, {});
+    //             // console.log('success', res);
+    //         }).catch((err) => {
+    //             console.log(err);
+    //             callback(err, {});
+    //         });
+    //     }
+    // }
 };
+
+function findActivityWithIdAndType(activities, id, type) {
+    return activities.find((activity) => {return (activity.prediction_info.related_prediction_activity_id === id && activity.prediction_info.prediction_activity_type === type);});
+}

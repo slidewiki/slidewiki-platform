@@ -49,16 +49,16 @@ class ContentChangeItem extends React.Component {
         let description, actionText;
         let iconName = 'write';
 
-        if (change.value && change.value.ref) {
+        if (change.value && change.value.ref && change.value.ref.title) {
             change.value.ref.title = cheerio.load(change.value.ref.title).text();
         }
-        if (change.value && change.value.origin) {
+        if (change.value && change.value.origin && change.value.origin.title) {
             change.value.origin.title = cheerio.load(change.value.origin.title).text();
         }
-        if (change.oldValue && change.oldValue.ref) {
+        if (change.oldValue && change.oldValue.ref && change.oldValue.ref.title) {
             change.oldValue.ref.title = cheerio.load(change.oldValue.ref.title).text();
         }
-        if (change.translated) {
+        if (change.translated && change.translated.title) {
             change.translated.title = cheerio.load(change.translated.title).text();
         }
         switch (change.action) {

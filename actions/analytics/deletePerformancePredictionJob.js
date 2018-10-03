@@ -12,7 +12,7 @@ export default function deletePerformancePredictionJob(context, payload, done) {
         content_kind: 'deck',
         prediction_info: {
             prediction_activity_type: 'delete',
-            related_prediction_activity_id: payload.activityId
+            related_prediction_activity_id: payload.id
         }
     };
     context.executeAction(addActivity, {activity: activity});
