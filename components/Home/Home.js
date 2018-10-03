@@ -192,7 +192,13 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='about-block'>
                                             <h4>About SlideWiki</h4>
-                                            <p>SlideWiki is an open source development project, funded from the European Union's Horizon 2020 research and innovation programme. The project involves 17 partners to develop, test and trial SlideWiki. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget elit sapien. Nunc semper urna in lectus consectetur fermentum. Vestibulum eu sem pulvinar, sollicitudin ipsum eu, porttitor elit. Maecenas bibendum congue lectus, vitae. SlideWiki is an open source development project, funded from the European Union's Horizon 2020 research and innovation programme. The project involves 17 partners to develop, test and trial SlideWiki. To find out more or get involved <a href='#'>visit the project webiste.</a></p>
+                                            <p>SlideWiki is an open source development project, funded from the European Union's Horizon 2020 research and innovation programme.
+                                                The project involves 17 partners to develop, test and trial SlideWiki. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                Aenean eget elit sapien. Nunc semper urna in lectus consectetur fermentum. Vestibulum eu sem pulvinar, sollicitudin ipsum eu, porttitor elit. Maecenas bibendum congue lectus, vitae.
+                                                SlideWiki is an open source development project, funded from the European Union's Horizon 2020 research and innovation programme.
+                                                The project involves 17 partners to develop, test and trial SlideWiki.
+                                                To find out more or get involved <a href='https://slidewiki.eu/' target='_blank'>visit the project webiste.</a>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
