@@ -227,7 +227,7 @@ class SearchResultsPanel extends React.Component {
                         <Default>
                             <Grid.Row>
                                 <Grid.Column width={4}>
-                                    <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
+                                    <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
                                 </Grid.Column>
                                 <Grid.Column width={12}>
                                     { 

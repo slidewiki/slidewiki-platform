@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { Menu, Label, Icon, Container }  from 'semantic-ui-react';
+import { Menu, Label, Icon, Container, Input, But }  from 'semantic-ui-react';
 import { getLanguageName }  from '../../../common';
 import { isEmpty } from 'lodash';
 import { NavLink } from 'fluxible-router';
+import { debounce } from 'lodash';
+// import loadFacetWithPrefix from '../../../actions/search/loadFacetWithPrefix';
+import loadFacetsFilter from '../../../actions/search/loadFacetsFilter';
 
 class Facets extends React.Component {
     constructor(props) {
@@ -12,7 +15,9 @@ class Facets extends React.Component {
         this.messages = this.getIntlMessages();
         this.state = {
             expanded: [],
+            showSearch: [],
         };
+        // this.handleFacetPrefix = debounce(this.handleFacetPrefix.bind(this), 300);
     }
     getIntlMessages(){
         return defineMessages({
@@ -38,19 +43,24 @@ class Facets extends React.Component {
             },
         });
     }
+    collapseFacets() {
+        this.setState({
+            expanded: [],
+            showSearch: []
+        });
+    }
     handleFacetClick(e, { name }) {
         e.preventDefault();
-        this.props.handleFacetClick(JSON.parse(name));
-    }
-
-    getLanguageName(languageCode) {
-        let language = languageCode === undefined ? '' : getLanguageName(languageCode);
-        return (language === '' ? 'English' : language);
+        let data = JSON.parse(name);
+        // this.handleShowFacetSearch(data.field, null);
+        this.props.handleFacetClick(data);
+        this.collapseFacets();
     }
     handleKeyPress(name, event) {
         if (event.key === 'Enter') {
             event.preventDefault();
             this.props.handleFacetClick(JSON.parse(name));
+            this.collapseFacets();
         }
     }
     clearFacets(fieldName, e) {
@@ -89,7 +99,22 @@ class Facets extends React.Component {
                 return 1;
             }
 
-            return (b.rowCount - a.rowCount);
+            if (b.rowCount - a.rowCount !== 0) {
+                return (b.rowCount - a.rowCount);
+            }
+
+            let aText = a.text.toLowerCase();
+            let bText = b.text.toLowerCase();
+
+            if (aText < bText) {
+                return -1;
+            }
+
+            if (aText > bText) {
+                return 1;
+            }
+
+            return 0;
         }).map( (item, index) => {
             let isActive = selected.includes(item.val);
             let labelColor = (isActive) ? 'blue' : 'grey';
@@ -98,18 +123,9 @@ class Facets extends React.Component {
                 value: item.val
             });
 
-            let facetText;
-            if (facetField === 'language') {
-                facetText = this.getLanguageName(item.val);
-            } else if (facetField === 'user') {
-                facetText = item.user.displayName;
-            } else if (facetField === 'tag') {
-                facetText = item.defaultName;
-            }
-
             return <Menu.Item disabled={this.props.loading} key={`${facetField}_${index}`} name={ name } active={ isActive } onClick={this.handleFacetClick.bind(this)} onKeyPress={this.handleKeyPress.bind(this, name)} tabIndex="0">
                 <Label color={ labelColor }>{ item.rowCount }</Label>
-                { facetText }
+                { item.text }
             </Menu.Item>;
         });
 
@@ -132,7 +148,58 @@ class Facets extends React.Component {
             );
         }
 
+        if (facetItems.length === 0) {
+            facetItems = [
+                <Menu.Item disabled={true} key={`no_tags_${facetField}`} active={false} tabIndex="0">
+                    No facets available
+                </Menu.Item>
+            ];
+        }
+
         return facetItems;
+    }
+    handleShowFacetSearch(facetField, e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        let op;
+        let showSearch;
+        if (this.state.showSearch.includes(facetField)) {
+            showSearch = this.state.showSearch.filter( (f) => f !== facetField);
+            op = 'delete';
+            this.handleFacetsFilter(facetField, null, {
+                name: facetField,
+                value: '',
+            });
+        } else {
+            showSearch = [
+                ...this.state.showSearch, 
+                facetField
+            ];
+            op = 'add';
+        }
+
+        this.setState({
+            showSearch
+        }, () => {
+            if (op === 'add') {
+                $(`#${facetField}_input`).focus();
+            }
+        });
+    }
+    // handleFacetPrefix(e, data) {
+    //     this.context.executeAction(loadFacetWithPrefix, {
+    //         request: this.props.request,
+    //         facet_prefix_field: data.name,
+    //         facet_prefix_value: data.value,
+    //     });
+    // }
+    handleFacetsFilter(field, e, data){
+        this.context.executeAction(loadFacetsFilter, {
+            facetField: field,
+            facetValue: data.value,
+        });    
     }
     render() {
         const data = this.props.data;
@@ -143,11 +210,15 @@ class Facets extends React.Component {
 
         return (
             <div id="facets">
-
                 {
                     (languageItems.length > 0) &&
                         <Menu fluid vertical>
-                            <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} { (!isEmpty(selected.languages) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
+                            <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'language')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.languages) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
+                            { (this.state.showSearch.includes('language')) && 
+                                <Menu.Item>
+                                    <Input id="language_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'language')}/>
+                                    </Menu.Item>
+                            }
                             { languageItems }
                         </Menu>
                 }
@@ -155,17 +226,26 @@ class Facets extends React.Component {
                 {
                     (userItems.length > 0) &&
                         <Menu fluid vertical>
-                            <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} { (!isEmpty(selected.users) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear users"/></NavLink></span> : ''}</Menu.Item>
+                            <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'creator')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.users) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
+                            { (this.state.showSearch.includes('creator')) && 
+                                <Menu.Item>
+                                    <Input id="creator_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'creator')}/>
+                                    </Menu.Item>
+                            }
                             { userItems }
                         </Menu>
                 }
 
                 {
-                    (tagItems.length > 0) && 
-                        <Menu fluid vertical>
-                            <Menu.Item key="tagFacetHeader" header>{this.context.intl.formatMessage(this.messages.tagsFacet)} { (!isEmpty(selected.tags) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}><Icon name="cancel" aria-label="clear tags"/></NavLink></span> : ''}</Menu.Item>
-                            { tagItems }
-                        </Menu>
+                    <Menu fluid vertical>
+                        <Menu.Item key="tagFacetHeader" header>{this.context.intl.formatMessage(this.messages.tagsFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.tags) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
+                        { (this.state.showSearch.includes('tags')) && 
+                            <Menu.Item>
+                                <Input id="tags_input" name="tag" placeholder='Search for tags' onChange={this.handleFacetsFilter.bind(this, 'tags')}/>
+                                </Menu.Item>
+                        }
+                        { tagItems }
+                    </Menu>
                 }
             </div>
         );
@@ -174,6 +254,7 @@ class Facets extends React.Component {
 
 Facets.contextTypes = {
     intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired,
 };
 
 export default Facets;

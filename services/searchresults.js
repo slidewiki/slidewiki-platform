@@ -2,7 +2,8 @@ import { Microservices } from '../configs/microservices';
 import rp from 'request-promise-native';
 import customDate from '../components/Deck/util/CustomDate';
 import slugify from 'slugify';
-import { isEmpty, compact, flatten, uniq, keyBy } from 'lodash';
+import { isEmpty, compact, flatten, uniq, keyBy, pick } from 'lodash';
+import { getLanguageName }  from '../common';
 
 const log = require('../configs/log').log;
 
@@ -67,7 +68,7 @@ function getUsers(userIds){
             if (!user) {
                 users[userId] = {
                     displayName: `Unknown user ${userId}`, 
-                    username: userId
+                    username: userId.toString()
                 };
             } else {
                 users[userId] = { 
@@ -147,13 +148,24 @@ function getUserIds(docs, facets, selectedUserIds){
     return uniq(userIds);
 }
 
+function getLanguageFromCode(languageCode) {
+    let language = languageCode === undefined ? '' : getLanguageName(languageCode);
+    return (language === '' ? 'English' : language);
+}   
+
 function fillFacetsInfo(facets, usernames, tags) {
+    facets.language.forEach( (item) => {
+        item.text = getLanguageFromCode(item.val);
+    });
+
     facets.creator.forEach( (item) => {
-        item.user = usernames[item.val];
+        let user = usernames[item.val];
+        item.text = user.displayName || user.username;
+        item.user = user;
     });
 
     facets.tags.forEach( (item) => {
-        item.defaultName = tags[item.val];
+        item.text = tags[item.val];
     });
 }
 
@@ -231,7 +243,7 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
 
-        if(resource === 'searchresults.list'){
+        if (resource === 'searchresults.list') {
 
             let options = getRequestOptions(params);
 
@@ -287,12 +299,34 @@ export default {
                         spellcheck: response.spellcheck,
                         facets: response.facets,
                         page: response.page,
+                        request: options,
                         docs: response.docs
                     });
                 }).catch(callback);
 
             }).catch(callback);
+        } else if (resource === 'searchresults.prefixFacet') {
+            let request = { ...params.request };
 
+            if (params.facet_prefix_value !== '') {
+                request.qs.facet_prefix_field = params.facet_prefix_field;
+                request.qs.facet_prefix_value = params.facet_prefix_value;
+            }
+
+            rp.get(request).then( (response) => {
+                if (params.facet_prefix_field === 'tag') {
+                    getTags(response.facets).then( (tags) => {
+                        fillFacetsInfo(response.facets, [], tags);
+                        callback(null, {
+                            facetName: 'tags', 
+                            facets: response.facets.tags,
+                        });
+                    }).catch(callback);
+                } else if (params.facet_prefix_field === 'user') {
+                    let userIds = getUserIds([], response.facets, []);
+
+                }
+            }).catch(callback);
         }
     }
 };

@@ -333,6 +333,7 @@ class SearchPanel extends React.Component {
                             facets={this.props.SearchResultsStore.facets}
                             numFound={this.props.SearchResultsStore.numFound}
                             sort={this.props.SearchResultsStore.queryparams.sort}
+                            request={this.props.SearchResultsStore.request}
                             handleRedirect={this.handleRedirect.bind(this)}
                             changeSort={this.changeSort.bind(this)}
                             hasMore={this.props.SearchResultsStore.hasMore}
