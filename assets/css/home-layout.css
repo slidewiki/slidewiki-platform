@@ -172,7 +172,7 @@
     .feature-content p {font-size: 14px;line-height: 20px;}
     .feature-right img{width: 55px;}
     .banner-content .ui.input > input{line-height: 30px;font-size: 24px;}
-    .ui.secondary.button,.ui.primary.button{line-height: 59px;font-size: 20px;}
+    .home.secondary.button,.home.primary.button{line-height: 59px;font-size: 20px;}
     .footer-container{padding: 40px 0 0 0;}
     .footer-right{padding: 0 0 100px 0;}
     .footer-menu h6{font-size: 14px;}
@@ -263,7 +263,7 @@
     .feature-content p {font-size: 14px;line-height: 20px;}
     .feature-right img{width: 60px;}
     .banner-content .ui.input > input{line-height: 30px;font-size: 16px;}
-    .ui.secondary.button,.ui.primary.button{line-height: 39px;font-size: 16px;min-width: 100px;}
+    .home.secondary.button,.home.primary.button{line-height: 39px;font-size: 16px;min-width: 100px;}
 
     .feature-content.green-block{border-left: 3px solid #128571;}
     .feature-content.red-block{border-left: 3px solid #981d1f;}
@@ -303,7 +303,7 @@
     .post-button .right-btn{padding-right: 20px;}
     .post-button a{padding: 5px 10px;}
     .social-link ul li span{margin-right: 10px;}
-    .ui.secondary.button, .ui.primary.button{line-height: 36px;font-size: 16px;}
+    .home.secondary.button, .home.primary.button{line-height: 36px;font-size: 16px;}
 
     .feature-content.green-block{border: 1px solid #128571;}
     .feature-content.blue-block{border: 1px solid #1d78ba;}
@@ -314,8 +314,8 @@
     .banner-content .ui.icon.input > i.icon{font-size: 18px;}
     .search.top-head .ui.icon.input > i.icon:before, .search.top-head .ui.icon.input > i.icon:after{left: 6px;}
     .header-container .wrapper {padding: 0 15px;}
-    .banner-content .ui.secondary.button {margin-left: 5px;}
-    .banner-content .ui.primary.button {margin-right: 5px;}
+    .banner-content .home.secondary.button {margin-left: 5px;}
+    .banner-content .home.primary.button {margin-right: 5px;}
 }
 
 
@@ -327,7 +327,7 @@
     .feature-block{padding: 0;}
     .feature-block .wrapper {padding: 0;}
     .presentation-block h2{padding: 0 0 20px 0;font-size: 22px;line-height: 24px;}
-    .ui.secondary.button, .ui.primary.button{line-height: 36px;font-size: 16px;}
+    .home.secondary.button, .home.primary.button{line-height: 36px;font-size: 16px;}
 }
 
 

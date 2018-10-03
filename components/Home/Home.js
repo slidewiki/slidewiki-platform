@@ -45,10 +45,10 @@ class Home extends React.Component {
                                     <div className='column '>
                                         <SearchBox type='home'/>
                                         <div className='button-blk'>
-                                            <button className='ui primary button' onClick={this.handleSignUpButton.bind(this)}>
+                                            <button className='home primary button' onClick={this.handleSignUpButton.bind(this)}>
                                                 Sign up
                                             </button>
-                                            <button className='ui secondary  button'>
+                                            <button className='home secondary  button'>
                                                 Learn more
                                             </button>
                                         </div>

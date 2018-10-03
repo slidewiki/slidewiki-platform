@@ -515,9 +515,9 @@ textarea:focus{
     font-size: 34px;
 }
 
-.ui.primary.buttons .button,
-.ui.primary.button,
-.button {
+.home.primary.button {
+    cursor: pointer;
+    border-radius: 0.28571429rem;
     background: #128571;
     border: 1px solid #fff;
     color: #fff;
@@ -527,12 +527,17 @@ textarea:focus{
     padding: 0 20px;
     min-width: 210px;
 }
-.ui.primary.button:hover {
+
+.home.primary.button:hover {
     background: #fff;
     color: #128571;
     border: 1px solid #128571;
 }
-.ui.secondary.button {
+
+.home.secondary.button {
+    margin-left: 1.5em;
+    cursor: pointer;
+    border-radius: 0.28571429rem;
     background: #fff;
     color: #128571;
     border: 1px solid #128571;
@@ -542,11 +547,12 @@ textarea:focus{
     font-size: 24px;
     font-weight: 700;
 }
-.ui.secondary.button:hover {
+.home.secondary.button:hover {
     background: #128571;
     border: 1px solid #fff;
     color: #fff;
 }
+
 .button-blk {
     display: -webkit-box;
     display: -ms-flexbox;
