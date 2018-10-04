@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import fetchUser from '../../../../actions/user/userprofile/fetchUser';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
@@ -61,12 +60,16 @@ class ContentQuestionsPanel extends React.Component {
     handleAddButtonClick() {
         this.context.executeAction(invertAddQuestionBoxFlag, {});
     }
-
+    
+    handleExamClick() {
+        this.context.executeAction(navigateAction, {
+            url: '/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid
+        });
+    }
+    
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
-        const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
-        const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
         const questionsCount = this.props.ContentQuestionsStore.questionsCount;
         const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
@@ -76,24 +79,16 @@ class ContentQuestionsPanel extends React.Component {
         switch(selector.stype) {
             case 'slide':
                 buttonBar = '';
-                /* (
-                    <button className='ui button blue'>
-                        <i className='plus icon'></i>
-                        Add question
-                    </button>
-                );*/
                 break;
             case 'deck':
-                buttonBar = (
+                buttonBar = (userId !== '' && questions.length > 0) ? (
                     <div className='ui buttons'>
-                        <button className='ui button'>Exam mode</button>
-                        <button className='ui button'>Test mode</button>
-                        <button className='ui button blue'>
-                            <i className='file pdf outline icon'></i>
-                            Export to PDF
+                        <button className='ui button blue' onClick={this.handleExamClick.bind(this)}>
+                            <i className='clipboard icon'></i>
+                            Exam mode
                         </button>
                     </div>
-                );
+                ) : '';
                 break;
         }
 
@@ -141,7 +136,7 @@ class ContentQuestionsPanel extends React.Component {
                                 {addQuestionButton}
                             </div>
                         </div>
-                        {content}
+                        
                     </div>
                 </div>
             </div>
@@ -196,7 +191,7 @@ class ContentQuestionsPanel extends React.Component {
         let questionsList = (<ContentQuestionsList items={questions} selector={selector} editPermission={editPermission}/>);
         let content = (
             <div>
-                {/* {buttonBar} */}
+                {buttonBar}
                 {questionsHeader}
                 {questions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
                 {/* {pagination} */}
