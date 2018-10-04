@@ -39,7 +39,7 @@ class Home extends React.Component {
                 {/*<!-- presentation starts -->*/}
                 <section className='banner-container'>
                     <img src='/assets/images/home/banner.jpg' alt=''/>
-                        <div className='banner-content'>
+                        <div className='banner-content' style={{zIndex: 0}}>
                             <div className='ui container'>
                                 <div className='ui  column  grid'>
                                     <div className='column '>
