@@ -45,9 +45,10 @@ export default function fetchUser(context, payload, done) {
                 return;
             }
         } else {
+            console.log(payload.params);
             if(!isEmpty(payload.params.category)){
                 if(context.getStore(UserProfileStore).username === payload.params.username
-                    || payload.params.category === 'playlists' || payload.params.category === 'stats')  // allow route /{username}/playlists
+                    || payload.params.category === 'playlists')  // allow route /{username}/playlists
                     res.category = isEmpty(payload.params.category) ? '' : payload.params.category;
                 else{
                     context.executeAction(notFoundError, {}, done);
