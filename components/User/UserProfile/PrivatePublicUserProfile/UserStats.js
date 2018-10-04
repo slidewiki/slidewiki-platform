@@ -5,11 +5,40 @@ import moment from 'moment';
 import updateUserStatsPeriod from '../../../../actions/stats/updateUserStatsPeriod';
 import updateUserStatsActivityType from '../../../../actions/stats/updateUserStatsActivityType';
 import {TagCloud} from 'react-tagcloud';
+import {defineMessages} from 'react-intl';
 
 
 import PropTypes from 'prop-types';
 
 class UserStats extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.messages = this.getIntlMessages();
+    }
+
+    getIntlMessages() {
+        return defineMessages({
+            activityTimelineTitle: {
+                id: 'Stats.activityTimelineTitle',
+                defaultMessage: 'Activity Timeline'
+            },
+            tagCloudTitle: {
+                id: 'Stats.tagCloudTitle',
+                defaultMessage: 'Popular Tags'
+            },
+            last7Days: {id: 'Stats.period.last7Days', defaultMessage: 'Last 7 days'},
+            last30Days: {id: 'Stats.period.last30Days', defaultMessage: 'Last 30 days'},
+            last2Months: {id: 'Stats.period.last2Months', defaultMessage: 'Last 2 months'},
+            last6Months: {id: 'Stats.period.last6Months', defaultMessage: 'Last 6 months'},
+            last1Year: {id: 'Stats.period.last1Year', defaultMessage: 'Last 1 year'},
+            last2Years: {id: 'Stats.period.last2Years', defaultMessage: 'Last 2 years'},
+            edits: {id: 'Stats.activityType.edits', defaultMessage: 'Edits'},
+            likes: {id: 'Stats.activityType.likes', defaultMessage: 'Likes'},
+            views: {id: 'Stats.activityType.views', defaultMessage: 'Views'},
+
+        });
+    }
 
     handleDatePeriodChange(event, {value}) {
         this.context.executeAction(updateUserStatsPeriod, {
@@ -24,16 +53,23 @@ class UserStats extends React.Component {
     }
 
     render() {
-        const periodOptions = [{value: 'LAST_7_DAYS', text: 'Last 7 days'},
-            {value: 'LAST_30_DAYS', text: 'Last 30 days'},
-            {value: 'LAST_2_MONTHS', text: 'Last 2 months'},
-            {value: 'LAST_6_MONTHS', text: 'Last 6 months'},
-            {value: 'LAST_1_YEAR', text: 'Last 1 year'},
-            {value: 'LAST_2_YEARS', text: 'Last 2 years'},];
+        const periodOptions = [{value: 'LAST_7_DAYS', text: this.context.intl.formatMessage(this.messages.last7Days)},
+            {value: 'LAST_30_DAYS', text: this.context.intl.formatMessage(this.messages.last30Days)},
+            {value: 'LAST_2_MONTHS', text: this.context.intl.formatMessage(this.messages.last2Months)},
+            {value: 'LAST_6_MONTHS', text: this.context.intl.formatMessage(this.messages.last6Months)},
+            {value: 'LAST_1_YEAR', text: this.context.intl.formatMessage(this.messages.last1Year)},
+            {value: 'LAST_2_YEARS', text: this.context.intl.formatMessage(this.messages.last2Years)},
+        ];
 
-        const typeOptions = [{value: 'edit', text: 'Edits'}, {value: 'like', text: 'Likes'}, {
+        const typeOptions = [{
+            value: 'edit',
+            text: this.context.intl.formatMessage(this.messages.edits)
+        }, {
+            value: 'like',
+            text: this.context.intl.formatMessage(this.messages.likes)
+        }, {
             value: 'view',
-            text: 'Views'
+            text: this.context.intl.formatMessage(this.messages.views)
         }];
         return (
           <Grid relaxed padded>
@@ -42,7 +78,7 @@ class UserStats extends React.Component {
                   <Grid.Column>
                       <Message
                         attached
-                        header='Activity Timeline'
+                        header={this.context.intl.formatMessage(this.messages.activityTimelineTitle)}
                       />
                       <Segment attached padded>
                           <span>
@@ -84,7 +120,7 @@ class UserStats extends React.Component {
                   <Grid.Column>
                       <Message
                         attached
-                        header='Popular Tags'
+                        header={this.context.intl.formatMessage(this.messages.tagCloudTitle)}
                       />
                       <Segment attached textAlign='center' padded='very'>
                           <TagCloud minSize={16} maxSize={40} tags={this.props.userStats.statsByTag}/>
