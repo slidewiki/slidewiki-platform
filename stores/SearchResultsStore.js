@@ -54,7 +54,7 @@ class SearchResultsStore extends BaseStore {
         this.docs = this.docs.concat(payload.docs);     // append more results
         this.spellcheck = payload.spellcheck;
         this.facets = payload.facets;
-        this.initialFacets = Object.assign(payload.facets);
+        this.initialFacets = Object.assign({}, payload.facets);
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.links = payload.links;

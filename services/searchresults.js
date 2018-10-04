@@ -4,7 +4,8 @@ import customDate from '../components/Deck/util/CustomDate';
 import slugify from 'slugify';
 import { isEmpty, compact, flatten, uniq, keyBy, pick } from 'lodash';
 import { getLanguageName }  from '../common';
-
+const url = require('url');
+const querystring = require('querystring');
 const log = require('../configs/log').log;
 
 function parseSlide(slide){
@@ -171,9 +172,26 @@ function fillFacetsInfo(facets, usernames, tags) {
 
 function getRequestOptions(params) {
     if (params.nextLink) {
+        let { pathname, query } = url.parse(params.nextLink); 
+        let qs = querystring.parse(query);
+
+        if (qs.language) {
+            qs.language = (qs.language instanceof Array) ? qs.language : [qs.language];
+        }
+
+        if (qs.user) {
+            qs.user = (qs.user instanceof Array) ? qs.user : [qs.user];
+        }
+
+        if (qs.tag) {
+            qs.tag = (qs.tag instanceof Array) ? qs.tag : [qs.tag];
+        }
+
         return {
-            uri: `${Microservices.search.uri}${params.nextLink}`, 
+            uri: `${Microservices.search.uri}${pathname}`, 
+            qs: qs,
             json: true,
+            useQuerystring: true,
         };
     } else {
 
@@ -253,9 +271,9 @@ export default {
                 let deckIds = response.docs.map( (result) => result.db_id);
 
                 // add selected filters to facets with zero facet count
-                addSelectedToFacets(response.facets, params.query);
+                addSelectedToFacets(response.facets, options.qs);
 
-                let userIds = getUserIds(response.docs, response.facets, params.query.user);
+                let userIds = getUserIds(response.docs, response.facets, options.qs.user);
 
                 Promise.all([ 
                     getUsers(userIds), 
@@ -324,7 +342,6 @@ export default {
                     }).catch(callback);
                 } else if (params.facet_prefix_field === 'user') {
                     let userIds = getUserIds([], response.facets, []);
-
                 }
             }).catch(callback);
         }

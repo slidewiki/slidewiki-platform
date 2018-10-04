@@ -201,6 +201,13 @@ class Facets extends React.Component {
             facetValue: data.value,
         });    
     }
+    handleFacetsFilterKeyPress(field, e) {
+
+        // escape button pressed
+        if (e.keyCode === 27) {
+            this.handleShowFacetSearch(field);
+        }
+    }
     render() {
         const data = this.props.data;
         const selected = this.props.selectedFacets;
@@ -216,7 +223,7 @@ class Facets extends React.Component {
                             <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'language')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.languages) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
                             { (this.state.showSearch.includes('language')) && 
                                 <Menu.Item>
-                                    <Input id="language_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'language')}/>
+                                    <Input id="language_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'language')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'language')}/>
                                     </Menu.Item>
                             }
                             { languageItems }
@@ -229,7 +236,7 @@ class Facets extends React.Component {
                             <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'creator')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.users) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
                             { (this.state.showSearch.includes('creator')) && 
                                 <Menu.Item>
-                                    <Input id="creator_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'creator')}/>
+                                    <Input id="creator_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'creator')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'creator')}/>
                                     </Menu.Item>
                             }
                             { userItems }
@@ -241,7 +248,7 @@ class Facets extends React.Component {
                         <Menu.Item key="tagFacetHeader" header>{this.context.intl.formatMessage(this.messages.tagsFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.tags) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
                         { (this.state.showSearch.includes('tags')) && 
                             <Menu.Item>
-                                <Input id="tags_input" name="tag" placeholder='Search for tags' onChange={this.handleFacetsFilter.bind(this, 'tags')}/>
+                                <Input id="tags_input" name="tag" placeholder='Search for tags' onChange={this.handleFacetsFilter.bind(this, 'tags')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'tags')}/>
                                 </Menu.Item>
                         }
                         { tagItems }
