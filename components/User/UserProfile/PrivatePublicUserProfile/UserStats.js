@@ -80,7 +80,7 @@ class UserStats extends React.Component {
                         attached
                         header={this.context.intl.formatMessage(this.messages.activityTimelineTitle)}
                       />
-                      <Segment attached padded>
+                      <Segment attached padded loading={this.props.userStats.statsByTimeLoading}>
                           <span>
                               <Grid>
                                   <Grid.Row columns={2}>
@@ -122,7 +122,7 @@ class UserStats extends React.Component {
                         attached
                         header={this.context.intl.formatMessage(this.messages.tagCloudTitle)}
                       />
-                      <Segment attached textAlign='center' padded='very'>
+                      <Segment attached textAlign='center' padded='very' loading={this.props.userStats.statsByTagLoading}>
                           <TagCloud minSize={16} maxSize={40} tags={this.props.userStats.statsByTag}/>
                       </Segment>
                   </Grid.Column>

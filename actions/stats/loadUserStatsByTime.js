@@ -10,6 +10,8 @@ export default function loadUserStatsByTime(context, payload, done) {
     let activityType = context.getStore(UserStatsStore).activityType;
     log.info(context);
 
+    context.dispatch('SET_USER_STATS_BY_TIME_LOADING');
+
     context.service.read('stats.userStatsByTime', {datePeriod, username, activityType}, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});

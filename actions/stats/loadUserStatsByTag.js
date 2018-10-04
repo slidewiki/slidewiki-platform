@@ -7,6 +7,8 @@ export default function loadUserStatsByTag(context, payload, done) {
     log.info(context);
     let username = context.getStore(UserProfileStore).username;
 
+    context.dispatch('SET_USER_STATS_BY_TAG_LOADING');
+
     context.service.read('stats.userStatsByTag', {username}, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
