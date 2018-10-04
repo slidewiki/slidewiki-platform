@@ -112,7 +112,6 @@ class HeaderSearchBox extends React.Component {
         this.handleRedirect();
     }
     render() {
-
         if (this.props.type === 'home') {
             return (
                 <div className='ui fluid category search'>
@@ -120,8 +119,8 @@ class HeaderSearchBox extends React.Component {
                         <label htmlFor="searchHomeString" hidden/>
                         <input className='prompt' placeholder='Search for decks or people' ref='searchHomeString' type='text' value={this.state.searchHomeString} onChange={this.onChangeHome.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
                         <i className='search link icon' onClick={this.handleRedirect.bind(this)}/>
+                        <div className='results home' style={{position: 'absolute', backgroundColor: 'white', borderRadius:'0.2px'}}/>
                     </div>
-                    <div className='results'/>
                 </div>
             );
         } else {

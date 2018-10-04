@@ -17,13 +17,11 @@
     .presentation-block{border-top: 1px solid #68a5d1;}
     .text-blk a:hover{border: 1px solid #128571;}
     .text-blk a{border: 1px solid transparent;}
-
 }
 @media only screen and (min-width: 2500px) {
     .banner-container > img {width: 100%;position: static;left: 0;
         -webkit-transform: none;
         transform: none;margin-left: 0;}
-
 }
 
 @media only screen and (min-width: 2400px) {
@@ -32,7 +30,6 @@
     .featured-img img{width:auto;}
     .featured-img{width: 38%;}
     .featured-content{padding-left: 0;}
-
 }
 @media only screen and (min-width: 1200px) and (max-width: 1449px) {
     .logo img{width: 270px;}
@@ -65,7 +62,9 @@
     .feature-content.blue-block{border: 1px solid #1d78ba;}
     .feature-content.red-block{border: 1px solid #981d1f;border-left: none;}
 }
-
+@media only screen and (min-width: 1199px) {
+    .results.home{margin-top: 5rem}
+}
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
     .header-inner{padding: 25px 0 30px;}
     .logo{width: 62%;}
@@ -131,8 +130,7 @@
     .feature-content.green-block{border: 1px solid #128571;border-left: none;}
     .feature-content.blue-block{border: 1px solid #1d78ba;}
     .feature-content.red-block{border: 1px solid #981d1f;border-left: none;}
-
-
+    .results.home{margin-top: 4rem}
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -172,6 +170,7 @@
     .feature-content p {font-size: 14px;line-height: 20px;}
     .feature-right img{width: 55px;}
     .banner-content .ui.input > input{line-height: 30px;font-size: 24px;}
+    .results.home{margin-top: 4rem}
     .home.secondary.button,.home.primary.button{line-height: 59px;font-size: 20px;}
     .footer-container{padding: 40px 0 0 0;}
     .footer-right{padding: 0 0 100px 0;}
@@ -263,6 +262,7 @@
     .feature-content p {font-size: 14px;line-height: 20px;}
     .feature-right img{width: 60px;}
     .banner-content .ui.input > input{line-height: 30px;font-size: 16px;}
+    .results.home{margin-top: 3.6rem}
     .home.secondary.button,.home.primary.button{line-height: 39px;font-size: 16px;min-width: 100px;}
 
     .feature-content.green-block{border-left: 3px solid #128571;}
