@@ -15,7 +15,7 @@ export default {
         const content_id = selector.sid;
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
-            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=false'}).then((res) => {
+            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=false&all_revisions=true'}).then((res) => {
                 callback(null, {discussion: JSON.parse(res).items, selector: selector});
             }).catch((err) => {
                 // console.log(err);
