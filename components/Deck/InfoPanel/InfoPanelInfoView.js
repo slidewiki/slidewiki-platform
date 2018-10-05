@@ -16,7 +16,6 @@ import {defineMessages} from 'react-intl';
 import {flagForLocale} from '../../../configs/locales';
 import Util from '../../common/Util';
 import TranslationItem from './TranslationItem';
-import loadDecktreeAndSwitchLanguage from '../../../actions/translation/loadDecktreeAndSwitchLanguage';
 import addDeckTranslation from '../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../actions/translation/addSlideTranslation';
 import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';

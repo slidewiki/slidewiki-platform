@@ -8,7 +8,6 @@ import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageNativeName, compareLanguageCodes} from '../../../../common';
 import {navigateAction} from 'fluxible-router';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
-import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';
 import loadDecktreeAndSwitchLanguage from '../../../../actions/translation/loadDecktreeAndSwitchLanguage';
 
 class DeckTranslationsModal extends React.Component {
