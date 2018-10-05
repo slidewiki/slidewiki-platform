@@ -1,6 +1,6 @@
 import React from 'react';
 import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
-import {Dropdown, Grid, Message, Segment} from 'semantic-ui-react';
+import {Dropdown, Grid, Message, Segment, Table} from 'semantic-ui-react';
 import moment from 'moment';
 import updateUserStatsPeriod from '../../../../actions/stats/updateUserStatsPeriod';
 import updateUserStatsActivityType from '../../../../actions/stats/updateUserStatsActivityType';
@@ -71,6 +71,24 @@ class UserStats extends React.Component {
             value: 'view',
             text: this.context.intl.formatMessage(this.messages.views)
         }];
+
+        let statsByTimeRows = this.props.userStats.statsByTime.map((stat, index) => {
+            return (
+              <Table.Row key={index}>
+                  <Table.Cell>{new Date(stat.date).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>{stat.count}</Table.Cell>
+              </Table.Row>
+            );
+        });
+
+        let statsByTagRows = this.props.userStats.statsByTag.map((stat, index) => {
+            return (
+              <Table.Row key={index}>
+                  <Table.Cell>{stat.value}</Table.Cell>
+                  <Table.Cell>{stat.count}</Table.Cell>
+              </Table.Row>
+            );
+        });
         return (
           <Grid relaxed padded>
               {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
@@ -98,17 +116,32 @@ class UserStats extends React.Component {
                                       </Grid.Column>
                                   </Grid.Row>
                                   <Grid.Row columns={1}>
-                                      <ResponsiveContainer height={300}>
-                                          <LineChart data={this.props.userStats.statsByTime}
-                                                     margin={{top: 5, right: 30, left: 30, bottom: 5}}>
-                                              <YAxis type="number" width={10} allowDecimals={false}/>
-                                              <XAxis dataKey='date' name='Date'
-                                                     type='category'
-                                                     tickFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
-                                              <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
-                                              <Line dataKey="count" dot={false} type="monotone"/>
-                                          </LineChart>
-                                      </ResponsiveContainer>
+                                      <Grid.Column aria-describedby='userStatsByDateTable'>
+                                          <ResponsiveContainer height={300}>
+                                              <LineChart data={this.props.userStats.statsByTime}
+                                                         margin={{top: 5, right: 30, left: 30, bottom: 5}}>
+                                                  <YAxis type="number" width={10} allowDecimals={false}/>
+                                                  <XAxis dataKey='date' name='Date'
+                                                         type='category'
+                                                         tickFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
+                                                  <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
+                                                  <Line dataKey="count" dot={false} type="monotone"/>
+                                              </LineChart>
+                                          </ResponsiveContainer>
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                          <Table id='userStatsByDateTable' className="sr-only">
+                                              <Table.Header>
+                                                  <Table.Row>
+                                                      <Table.HeaderCell>Date</Table.HeaderCell>
+                                                      <Table.HeaderCell>Count</Table.HeaderCell>
+                                                  </Table.Row>
+                                              </Table.Header>
+                                              <Table.Body>
+                                                  {statsByTimeRows}
+                                              </Table.Body>
+                                          </Table>
+                                      </Grid.Column>
                                   </Grid.Row>
                               </Grid>
                           </span>
@@ -122,9 +155,21 @@ class UserStats extends React.Component {
                         attached
                         header={this.context.intl.formatMessage(this.messages.tagCloudTitle)}
                       />
-                      <Segment attached textAlign='center' padded='very' loading={this.props.userStats.statsByTagLoading}>
+                      <Segment aria-describedby='userStatsByTagTable' attached textAlign='center' padded='very'
+                               loading={this.props.userStats.statsByTagLoading}>
                           <TagCloud minSize={16} maxSize={40} tags={this.props.userStats.statsByTag}/>
                       </Segment>
+                      <Table id='userStatsByTagTable' className="sr-only">
+                          <Table.Header>
+                              <Table.Row>
+                                  <Table.HeaderCell>Tag</Table.HeaderCell>
+                                  <Table.HeaderCell>Count</Table.HeaderCell>
+                              </Table.Row>
+                          </Table.Header>
+                          <Table.Body>
+                              {statsByTagRows}
+                          </Table.Body>
+                      </Table>
                   </Grid.Column>
               </Grid.Row>}
           </Grid>
