@@ -121,8 +121,8 @@ class TreePanel extends React.Component {
             //if it is a slide, also add ID of slide
             presLocation += this.props.DeckTreeStore.selector.toJS().sid;// + '/';
         }
-        if (this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage) {
-            presLocation += '?language=' + (this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage);
+        if (this.props.TranslationStore.currentLang) {
+            presLocation += '?language=' + (this.props.TranslationStore.currentLang);
         }
         return presLocation;
     }
@@ -209,14 +209,6 @@ class TreePanel extends React.Component {
             'button': true
         });
 
-        let classes_translatebtn = classNames({
-            'ui': true,
-            'basic': true,
-            'attached': true,
-            'disabled': true, //(!(this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)),
-            'button': true
-        });
-
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
@@ -225,11 +217,6 @@ class TreePanel extends React.Component {
         let rootNodeTitle = <strong>{rootNode.title} </strong>;
         // console.log('TreePanel render decktree infos (decktree, selector)', deckTree, '!!!\n!!!', selector);
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
-        /*                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
-                                    onClick={this.handleTranslation.bind(this)} tabIndex="1">
-                                    <i className="translate blue large icon"></i>
-                                </div>
-        */
 
         let ShowThumbnailsCheckBoxClasses = classNames({
             'ui': true,
@@ -255,9 +242,6 @@ class TreePanel extends React.Component {
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck (create a copy)" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
                             <i className="large blue fork icon"></i>
                         </div>
-                        {/*<div className={classes_translatebtn} aria-label="Translations and languages of this deck" tabIndex="0" role="button" data-tooltip="Translations of this deck" onClick={this.handleTranslations.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTranslations')} >
-                            <i className="translate blue large icon"></i>
-                        </div>*/}
                     </div>
 
                     <div className="ui attached segment" style={treeDIVStyles}>
