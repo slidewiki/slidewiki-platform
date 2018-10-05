@@ -9,9 +9,9 @@ export default function addTreeNode(context, payload, done) {
     if (userid != null && userid !== '') {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
-        context.service.create('decktree.node', payload, {timeout: 20 * 1000}, (err, res) => {
+        context.service.create('decktree.node', payload, { timeout: 20 * 1000 }, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename});
+                log.error(context, { filepath: __filename });
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('ADD_TREE_NODE_FAILURE', err);
             } else {
@@ -25,7 +25,8 @@ export default function addTreeNode(context, payload, done) {
                     content_id: String(res.node.id),
                     content_kind: res.node.type
                 };
-                context.executeAction(addActivity, {activity: activity});
+                console.log(activity);
+                context.executeAction(addActivity, { activity: activity });
             }
             done(null, res);
         });
