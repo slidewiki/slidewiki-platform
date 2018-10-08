@@ -118,7 +118,7 @@ class InfoPanelInfoView extends React.Component {
             });
         } else {
             this.context.executeAction(addDeckTranslation, {
-                id: selector.sid || selector.id,
+                selector,
                 language: this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage,
             });
         }

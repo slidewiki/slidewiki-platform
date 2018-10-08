@@ -21,8 +21,6 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
-import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
-
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
