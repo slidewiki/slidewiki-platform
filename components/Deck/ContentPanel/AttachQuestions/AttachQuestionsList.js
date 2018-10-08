@@ -69,8 +69,8 @@ class AttachQuestionsList extends React.Component {
                 firstTime:false
             });
         } else if (this.state.deckQuestions.length === this.state.selectedQuestions.length) {
-            //all all questions are selected...moves focus to the attachButton
-            $('#attachAttachModal').focus(); /*nikki maybe change button id? should be a next button now */
+            //all questions are selected...moves focus to the attachButton
+            $('#attachAttachModal').focus(); /*nikki change button id? should be a next button now */
         }
         this.refreshAccordion();    
     }
@@ -93,19 +93,20 @@ class AttachQuestionsList extends React.Component {
         $(accordionDIV).find('.ui.accordion').accordion('refresh');
     }
 
-    /*nikki do we need a checkNoEmpty function?? */
-    checkNoEmpty(element){
+    /*checkNoEmpty(element){
         return (element.toString().length>0);
-    }
+    }*/
 
-    handleOnclick(selectedQuestion){
+    //handleOnclick(selectedQuestion){
         /*This method:
        - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
        - removes the selectedQuestion from the selectedQuestions list if it was already selected
       */
-     //not being used?? nikki
-        console.log(this);
-        let questions = this.state.selectedQuestions;
+     /*nikki this method isn't used atm?? */
+        //console.log(this);
+        //console.log(`handleonclick`);
+        //console.log(this.state.selectedQuestions);
+    /*    let questions = this.state.selectedQuestions;
         let index = questions.indexOf(selectedQuestion);
         if(index === -1){//It was not selected
             questions.push(selectedQuestion);
@@ -119,20 +120,17 @@ class AttachQuestionsList extends React.Component {
         });
 
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
-        console.log(this.props.AttachQuestionsModalStore.selectedQuestions);/*nikki remove after */
-    }
+    }*/
 
 
-    handleAllQuestions(){/*nikki need to check this - how does it change for questions */
-        //let selectedIds = this.state.deckQuestions.map((question,index) => {
-        //    return question.id+'-'+index;
-        //});
-        let allQuestions = this.state.deckQuestions;
+    handleAllQuestions(){
+        let allQuestions = this.props.AttachQuestionsModalStore.deckQuestions; //should this have another layer?
+        console.log(allQuestions);
+
         this.setState({
             selectedQuestions:allQuestions,
         });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:allQuestions},null);
-        console.log(this.props.AttachQuestionsModalStore.selectedQuestions);/*nikki remove after */
     
     }
 
@@ -142,15 +140,14 @@ class AttachQuestionsList extends React.Component {
         });
 
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]},null);
-        console.log(this.props.AttachQuestionsModalStore.selectedQuestions);
     }
 
-    handleKeyPress(selectedQuestion,event){
+    /*handleKeyPress(selectedQuestion,event){
         if(event.key === 'Enter'){
             event.preventDefault();
             this.handleOnclick(selectedQuestion);
         }
-    } //not being used? nikki
+    }*/ //not being used? nikki
 
     getNextPos(pos,numItems,eventKeyCode){
         /*******************************************
@@ -170,10 +167,8 @@ class AttachQuestionsList extends React.Component {
                 break;
         }
         return nextPos;
-
     }
     handleKeyDown(pos,numItems,event){
-
         if(event.keyCode === KEY_CODE.UP ||
            event.keyCode === KEY_CODE.DOWN ){
            //the user wants to navigate through the list
@@ -189,12 +184,21 @@ class AttachQuestionsList extends React.Component {
                 $('#cancelAttachModal').focus();
             }
         }
-
+    }
+    inSelectedQuestions(question){
+        let questions = this.props.AttachQuestionsModalStore.selectedQuestions;
+        let qindex = questions.indexOf(question);
+        if(qindex === -1){
+            return false;
+        } else { 
+            return true;
+        };
+        
     }
 
+
     render() {
-        let deckQuestions = this.state.deckQuestions; //nikki should this be changed from state.
- //       let activeItemStyle = {backgroundColor:'#f8ffff', color:'#2185d0'};
+        let deckQuestions = this.props.AttachQuestionsModalStore.deckQuestions; //nikki should this be changed from state?
 
         let questionsContent;
         if(deckQuestions.length === 0){ //No questions loaded
@@ -234,9 +238,10 @@ class AttachQuestionsList extends React.Component {
                                       </Grid.Column>
                                     </Grid.Row>
                                   </Grid>;
+
             let questionListItems = deckQuestions.map((node, index) => {
                 return (
-                    <AttachQuestionsItem question={node} key={index} questionIndex={index} selector={this.props.selector} selectedQuestions={this.props.AttachQuestionsModalStore.selectedQuestions}/>//showCorrectAnswers={showCorrectAnswers} //remove as showCorrectAnswers will come from a different part.
+                    <AttachQuestionsItem question={node} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
                 );
             });
             

@@ -902,9 +902,9 @@ class SlideContentEditor extends React.Component {
     handleEmbedQuestionsClick(content){
 
         let title = content.options.title; 
-        let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; left: 66px; width: 828px; height: 10%;"><h3>'+title+'</h3></div>';
+        let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; left: 66px; width: 100%; height: 10%;"><h3>'+title+'</h3></div>';
 
-        let questionhtml = "<div id='slide_questions' style='font-family:sans-serif'>";
+        let questionhtml = "<div id='slide_questions' class='slide_questions' style='font-family:sans-serif'>";
         let questionsList = content.questions;
         let uniqueID = this.getuniqueID();
 
@@ -916,24 +916,25 @@ class SlideContentEditor extends React.Component {
 
             if(showNumbers){
                 let questionNum = i + 1;
-                questionhtml += "<div class='slide_question'><div>" + questionNum + ". " + currentQuestion.title + "</div>";
+                questionhtml += "<div class='slide_question'><div>" + questionNum + ". " + currentQuestion.title + "</div><ul>";
             }
             else {
-                questionhtml += "<div class='slide_question'><div>" + currentQuestion.title + "</div>";
+                questionhtml += "<div class='slide_question'><div>" + currentQuestion.title + "</div><ul>";
             }
 
             for (let j = 0; j < currentAnswers.length; j++){
-                questionhtml += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>";
+                //questionhtml += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>";
+                questionhtml += "<li>"+currentAnswers[j].answer + "</li>";
             }
-            questionhtml += "</div>";
+            questionhtml += "</ul></div>";
         }
         questionhtml += "</div>";
 
 
-        let iframetest = '<div class="iframe" style="overflow:auto; height:80%; max-height:800px; position: absolute; top: 100px; left:80px; ">'+questionhtml+'</div>';
+        let scrolltest = '<div class="iframe" style="overflow:auto; height:80%; max-height:800px; position: relative; top: 15%; ">'+questionhtml+'</div>';
         //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
         //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
-        let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframetest+'</div>';
+        let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + scrolltest+'</div>';
         
         if($('.pptx2html').length) //if slide is in canvas mode
         {

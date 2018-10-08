@@ -9,9 +9,11 @@ import AttachQuestionsModalStore from '../../../../stores/AttachQuestionsModalSt
 class AttachQuestionsItem extends React.Component {
     /* This component receives:
         question: a single question from the deckQuestions object
+        selectedQ: whether or not the question is selected
         key: the key for the question
-        questionIndex: the index for the question
+        questionIndex: the index for the question (same as key?)
         selector: the deck from which the question comes
+        selectedQuestions: the currently selected questions
     */
     checkNoEmpty(element){
         return (element.toString().length>0);
@@ -22,25 +24,23 @@ class AttachQuestionsItem extends React.Component {
        - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
        - removes the selectedQuestion from the selectedQuestions list if it was already selected
       */
+        //console.log(`handleCheckboxClick`);
         console.log(selectedQuestion);
-        let questions = this.props.selectedQuestions; //has this been passed?
-        let index = questions.indexOf(selectedQuestion);
-        if(index === -1){//It was not selected
-            questions.push(selectedQuestion);
+        let tempQuestions = this.props.AttachQuestionsModalStore.selectedQuestions; //has this been passed? change to the store
+        let qindex = tempQuestions.indexOf(selectedQuestion);
+        if(qindex === -1){//It was not selected
+            tempQuestions.push(selectedQuestion);
         } else { //It was selected...remove from it
-            questions[index]='';
-            questions = questions.filter(this.checkNoEmpty);
+            tempQuestions[qindex]='';
+            tempQuestions = tempQuestions.filter(this.checkNoEmpty);
         };
 
-        this.setState({
-            selectedQuestions: questions
-        });
+        //this.setState({ //does it have this in state?
+        //    selectedQuestions: questions
+        //});
 
-        this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
-        //console.log(this.props.AttachQuestionsModalStore.selectedQuestions);/*nikki remove after */
-        //console.log(this);
+        this.context.executeAction(updateSelectedQuestions,{selectedQuestions: tempQuestions},null);    
     }
-
 
     render(){
         const question = this.props.question;
@@ -68,17 +68,14 @@ class AttachQuestionsItem extends React.Component {
             return difficultyStars;
         };
 
-        //let activeIfFirst = this.props.index === 0 ? 'active' : ''; // something wrong with accordion - doesn't expand
-        /*nikki check back here */    
-
         const name = 'question' + this.props.questionIndex;
- //needs some form of checkboxes
+
         return (
 
             <div className = "ui segments">
                 <div className="ui two column vertically divided segment">
                     <div className="ui checkbox">
-                        <input type="checkbox" ref={name} name={name} id={name} onChange={this.handleCheckboxClick.bind(this,question)}/> 
+                        <input type="checkbox"  checked={this.props.selectedQ} ref={name} name={name} id={name} onChange={this.handleCheckboxClick.bind(this, question)}/> 
                         <label htmlFor='name'>
                             {question.title}
                         </label>
@@ -94,7 +91,6 @@ class AttachQuestionsItem extends React.Component {
     }
 }
 /*nikki put in the accordion here? for the answers */
-/*nikki  //onChange={this.handleOnClick.bind(this)}*/
 
 AttachQuestionsItem.contextTypes = {
     executeAction: PropTypes.func.isRequired

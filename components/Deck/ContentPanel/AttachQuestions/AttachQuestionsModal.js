@@ -209,14 +209,14 @@ class AttachQuestionsModal extends React.Component{
 
         /*nikki change comments below */
         //set some content
-        console.log('in attach');
+        //console.log('in attach');
         let embedContent = {
             //title: 'title',
             questions: this.props.AttachQuestionsModalStore.selectedQuestions,
             options: this.props.AttachQuestionsModalStore.embedOptions,
             //insert additional options here
         }; 
-        console.log(embedContent);
+        //console.log(embedContent);
         /*nikki need error handling before doing the close action? */
         //TODO: internationalise these messages?
         swal({
@@ -250,8 +250,6 @@ class AttachQuestionsModal extends React.Component{
         setTimeout(() => {
             $('.swal2-confirm').focus();
         }, 500);
-
-        
 
     }
 

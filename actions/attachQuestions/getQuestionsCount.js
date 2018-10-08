@@ -2,6 +2,7 @@ import log from '../log/clog';
 import notFoundError from '../error/notFoundError';
 import methodNotAllowedError  from '../error/methodNotAllowedError';
 
+/*nikki no longer needed - service modified instead */
 export default function getQuestionsCount(context,payload,done){
     /*nikki trying to pull back the questions count so it can be displayed in the search results */
     log.info(context);

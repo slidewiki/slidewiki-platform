@@ -247,6 +247,7 @@ class AttachQuestionsModalStore extends BaseStore{
             this.selectedQuestions =[];
         }else{
             this.selectedQuestions = payload.selectedQuestions;
+            console.log(payload.selectedQuestions);
         }
         this.emitChange();  
     }
