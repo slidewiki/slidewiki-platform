@@ -62,7 +62,7 @@ class TranslationStore extends BaseStore {
 
     deckGotLoaded(data) {
         // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
-        this.nodeLanguage = data.deckData.language.replace('_', '-');
+        this.nodeLanguage = data.deckData.language.substring(0, 2);
 
         this.emitChange();
         // this.logState('deckGotLoaded');
@@ -70,7 +70,7 @@ class TranslationStore extends BaseStore {
 
     deckPropsGotLoaded(data) {
         // console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
-        this.nodeLanguage = data.deckProps.language.replace('_', '-');
+        this.nodeLanguage = data.deckProps.language.substring(0, 2);
 
         this.emitChange();
         // this.logState('deckPropsGotLoaded');
@@ -78,7 +78,7 @@ class TranslationStore extends BaseStore {
 
     slideLoaded(data) {
         // console.log('TranslationStore slideLoaded slide', data.slide);
-        this.nodeLanguage = data.slide.language.replace('_', '-') ;
+        this.nodeLanguage = data.slide.language.substring(0, 2) ;
 
         this.emitChange();
         // this.logState('slideLoaded');
@@ -91,17 +91,17 @@ class TranslationStore extends BaseStore {
         if (!payload.language) {
             this.currentLang = '';
         } else {
-            this.currentLang = payload.language.replace('_', '-');
+            this.currentLang = payload.language.substring(0, 2);
         }
 
         // set primary language
         let primaryVariant = payload.translations.find((v) => v.original);
         if (primaryVariant) {
-            this.originLanguage = primaryVariant.language.replace('_', '-');
+            this.originLanguage = primaryVariant.language.substring(0, 2);
         }
 
         // update translations
-        this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
+        this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.substring(0, 2));
         this.nodeVariants = payload.translations;
 
         // always recompute translation mode based on current language
@@ -113,7 +113,7 @@ class TranslationStore extends BaseStore {
 
     deckTreeGotLoaded(data) {
         this.treeLanguage = data.deckTree.variants.find((v) => v.original).language;
-        this.treeTranslations = data.deckTree.variants.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
+        this.treeTranslations = data.deckTree.variants.filter((v) => !v.original).map((cur) => cur.language.substring(0, 2));
 
         this.emitChange();
         // this.logState('deckTreeGotLoaded');
