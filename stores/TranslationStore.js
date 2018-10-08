@@ -60,6 +60,22 @@ class TranslationStore extends BaseStore {
         }
     }
 
+    deckGotLoaded(data) {
+        // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
+        this.nodeLanguage = data.deckData.language.replace('_', '-');
+
+        this.emitChange();
+        // this.logState('deckGotLoaded');
+    }
+
+    deckPropsGotLoaded(data) {
+        // console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
+        this.nodeLanguage = data.deckProps.language.replace('_', '-');
+
+        this.emitChange();
+        // this.logState('deckPropsGotLoaded');
+    }
+
     slideLoaded(data) {
         // console.log('TranslationStore slideLoaded slide', data.slide);
         this.nodeLanguage = data.slide.language.replace('_', '-') ;
@@ -88,18 +104,6 @@ class TranslationStore extends BaseStore {
         this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.replace('_', '-'));
         this.nodeVariants = payload.translations;
 
-        // if it's a deck node, set the nodeLanguage property accordingly
-        if (payload.selector.stype === 'deck') {
-            // check if current language is part of translations...
-            if (!this.currentLang || this.translations.indexOf(this.currentLang) < 0) {
-                // set to original if not a translation, or if it's missing from the request
-                this.nodeLanguage = this.originLanguage;
-            } else {
-                // otherwise it's it
-                this.nodeLanguage = this.currentLang;
-            }
-        }
-
         // always recompute translation mode based on current language
         this.inTranslationMode = this.recomputeTranslationMode();
 
@@ -118,13 +122,17 @@ class TranslationStore extends BaseStore {
     //-- util functions --
 
     logState(functionName = '') {
-        console.log(functionName, this.getState());
+        let state = this.getState();
+        delete state.supportedLangs;
+        console.log(functionName, state);
     }
 
 }
 
 TranslationStore.storeName = 'TranslationStore';
 TranslationStore.handlers = {
+    'LOAD_DECK_CONTENT_SUCCESS': 'deckGotLoaded',
+    'LOAD_DECK_PROPS_SUCCESS': 'deckPropsGotLoaded',
     'LOAD_SLIDE_CONTENT_SUCCESS': 'slideLoaded',
     'LOAD_SLIDE_EDIT_SUCCESS': 'slideLoaded',
     'LOAD_TRANSLATIONS_SUCCESS': 'translationsLoaded',
