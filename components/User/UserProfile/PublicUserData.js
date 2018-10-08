@@ -3,9 +3,23 @@ import React from 'react';
 import { NavLink } from 'fluxible-router';
 import UserPicture from '../../common/UserPicture';
 import { isEmpty } from '../../../common.js';
+import {defineMessages} from 'react-intl';
 
 class PublicUserData extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.messages = this.getIntlMessages();
+    }
+
+    getIntlMessages(){
+        return defineMessages({
+            stats: {
+                id: 'UserMenu.stats',
+                defaultMessage: 'User Stats'
+            },
+        });
+    }
     render() {
         let content1 = <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ false } width={ 150 } centered={ false } size={ 'small' } aria-hidden={ 'true' } />;
         let content2 = <div><h2>{ this.props.user.displayName }</h2>
@@ -28,7 +42,7 @@ class PublicUserData extends React.Component {
             </div>
         </div>
         <div className = "ui divider" />
-        <div className="ui list">
+        <div className="ui list attached">
             { !isEmpty(this.props.user.organization) ?
                 <div className="item">
                     <i className="user circle outline icon" aria-label="organisation"/> { this.props.user.organization }
@@ -48,7 +62,14 @@ class PublicUserData extends React.Component {
                 <i className="clock icon" aria-label="user since"/> { this.props.user.joined }
             </div>
             : '' }
-        </div></div>;
+            </div>
+            {(this.props.user.uname === this.props.loggedinuser) &&
+            <NavLink className="ui basic button bottom attached" href={'/user/' + this.props.user.uname + '/stats'}
+                     role="button">
+                <p><i className="icon chart line"/>{this.context.intl.formatMessage(this.messages.stats)}</p>
+            </NavLink>
+            }
+        </div>;
 
         return (
             <div className="ui two column grid">
@@ -71,7 +92,8 @@ class PublicUserData extends React.Component {
 }
 
 PublicUserData.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default PublicUserData;
