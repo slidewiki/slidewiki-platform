@@ -94,10 +94,9 @@ class UserStats extends React.Component {
               {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
               <Grid.Row columns={1}>
                   <Grid.Column>
-                      <Message
-                        attached
-                        header={this.context.intl.formatMessage(this.messages.activityTimelineTitle)}
-                      />
+                      <Message attached>
+                          <h3>{this.context.intl.formatMessage(this.messages.activityTimelineTitle)}</h3>
+                      </Message>
                       <Segment attached padded loading={this.props.userStats.statsByTimeLoading}>
                           <span>
                               <Grid>
@@ -116,15 +115,16 @@ class UserStats extends React.Component {
                                       </Grid.Column>
                                   </Grid.Row>
                                   <Grid.Row columns={1}>
-                                      <Grid.Column aria-describedby='userStatsByDateTable'>
+                                      <Grid.Column aria-describedby='userStatsByDateTable' aria-label='Data table for graph' tabIndex='0' aria-hidden='true'>
                                           <ResponsiveContainer height={300}>
                                               <LineChart data={this.props.userStats.statsByTime}
                                                          margin={{top: 5, right: 30, left: 30, bottom: 5}}>
-                                                  <YAxis type="number" width={10} allowDecimals={false}/>
+                                                  <YAxis type="number" width={10} allowDecimals={false} stroke='#767676'/>
                                                   <XAxis dataKey='date' name='Date'
-                                                         type='category'
+                                                         type='category' stroke='#767676'
                                                          tickFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
-                                                  <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
+                                                  <Tooltip
+                                                    labelFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
                                                   <Line dataKey="count" dot={false} type="monotone"/>
                                               </LineChart>
                                           </ResponsiveContainer>
@@ -151,13 +151,10 @@ class UserStats extends React.Component {
               {this.props.userStats.statsByTag && this.props.userStats.statsByTag.length > 0 &&
               <Grid.Row centered columns={1}>
                   <Grid.Column>
-                      <Message
-                        attached
-                        header={this.context.intl.formatMessage(this.messages.tagCloudTitle)}
-                      />
+                      <Message attached><h3>{this.context.intl.formatMessage(this.messages.tagCloudTitle)}</h3></Message>
                       <Segment aria-describedby='userStatsByTagTable' attached textAlign='center' padded='very'
-                               loading={this.props.userStats.statsByTagLoading}>
-                          <TagCloud minSize={16} maxSize={40} tags={this.props.userStats.statsByTag}/>
+                               loading={this.props.userStats.statsByTagLoading} aria-label='Data table for popular tags' tabIndex='0' aria-hidden='true'>
+                          <TagCloud minSize={16} maxSize={40} tags={this.props.userStats.statsByTag} colorOptions={{luminosity: 'dark'}} />
                       </Segment>
                       <Table id='userStatsByTagTable' className="sr-only">
                           <Table.Header>
