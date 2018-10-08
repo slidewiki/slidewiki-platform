@@ -25,6 +25,10 @@ export default function loadSearchResults(context, payload, done) {
         payload.query.tag = [payload.query.tag];
     }
 
+    if (payload.query.facet_exclude && !isArray(payload.query.facet_exclude)) {
+        payload.query.facet_exclude = [payload.query.facet_exclude];
+    }
+
     // start loading ans set search params
     context.dispatch('SHOW_LOADING');
     context.dispatch('SET_SEARCH_PARAMS', payload.query);

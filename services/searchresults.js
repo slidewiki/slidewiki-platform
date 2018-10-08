@@ -270,8 +270,11 @@ export default {
 
                 let deckIds = response.docs.map( (result) => result.db_id);
 
-                // add selected filters to facets with zero facet count
-                addSelectedToFacets(response.facets, options.qs);
+                if (response.facets) {
+
+                    // add selected filters to facets with zero facet count
+                    addSelectedToFacets(response.facets, options.qs);
+                }
 
                 let userIds = getUserIds(response.docs, response.facets, options.qs.user);
 

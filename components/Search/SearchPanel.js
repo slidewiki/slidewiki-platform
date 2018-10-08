@@ -13,7 +13,7 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
-import { isEmpty, pick, pickBy, isArray, filter } from 'lodash';
+import { isEmpty, pick, pickBy, isArray, filter, uniq } from 'lodash';
 import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
@@ -129,7 +129,7 @@ class SearchPanel extends React.Component {
             },
             usersFilterTitle: {
                 id: 'SearchPanel.filters.users.title',
-                defaultMessage: 'User'
+                defaultMessage: 'Owners'
             },
             usersFilterPlaceholder: {
                 id: 'SearchPanel.filters.users.placeholder',
@@ -150,13 +150,13 @@ class SearchPanel extends React.Component {
         });
     }
     initDropdown(){
-        $('#field').dropdown();
-        $('#kind').dropdown();
-        $('#language').dropdown();
+        $('#languageDropdown').dropdown();
+        $('#advanced_options').accordion({
+            'collapsible': true
+        });
     }
     componentDidMount(){
         this.initDropdown();
-        $('.ui.accordion').accordion();
     }
     componentDidUpdate(){
         this.initDropdown();
@@ -191,20 +191,103 @@ class SearchPanel extends React.Component {
             this.handleRedirect();
         }
     }
-    handleRedirect(params, source){
+    getAdvancedFilters() {
+        let advancedFilters = {
+            language: null, 
+            user: null, 
+            tag: null, 
+            facet_exclude: [],
+        };
 
-        if (source !== 'facets') {
-            this.setState({
-                ...this.state, 
-                language: [], 
-                tag: [], 
-                user: [], 
-                facet_exclude: undefined,
-            }, () => {
-                this.handleSearch(params);
-            });
-        } else {
+        let languageDropdown = document.getElementById('languageDropdown');
+        let selectedLanguage = languageDropdown.options[languageDropdown.selectedIndex].value;
+
+        if (selectedLanguage.trim() !== '') {
+            advancedFilters.language = selectedLanguage;
+            advancedFilters.facet_exclude.push('language');
+            $('#languageDropdown').dropdown('set selected', ' ');
+        }
+
+        let users = this.userDropdown.getSelected();
+        if(users){
+            advancedFilters.user = users.split(',').map( (u) => parseInt(u));
+            advancedFilters.facet_exclude.push('user');
+            this.userDropdown.clear();
+        }
+        let tags = this.tagDropdown.getSelected();
+        if(tags){
+            advancedFilters.tag = tags.split(',');    
+            advancedFilters.facet_exclude.push('tag');
+            this.tagDropdown.clear();
+        }
+
+        return advancedFilters;
+    }
+    applyAdvancedFilters(filters) {
+        let newState = Object.assign({}, this.state);
+
+        if (filters.language) {
+            if (newState.language) {
+                newState.language.push(filters.language);
+                newState.language = uniq(newState.language);
+            } else {
+                newState.language = [filters.language];
+            }
+        }
+
+        if (filters.user) {
+            if (newState.user) {
+                newState.user = newState.user.concat(filters.user);
+                newState.user = uniq(newState.user);
+            } else {
+                newState.user = filters.user;
+            }
+        }
+
+        if (filters.tag) {
+            if (newState.tag) {
+                newState.tag = newState.tag.concat(filters.tag);
+                newState.tag = uniq(newState.tag);
+            } else {
+                newState.tag = filters.tag;
+            }
+        }
+
+        if (filters.facet_exclude) {
+            newState.facet_exclude = filters.facet_exclude;
+        }
+
+        return newState;
+    }
+    handleRedirect(params, source){
+        
+        if (source === 'facets') {
             this.handleSearch(params);
+        } else {
+            let filters = this.getAdvancedFilters();
+            let curKeywords = (this.state.keywords === '*:*') ? '' : this.state.keywords;
+            let prevKeywords = (this.props.SearchResultsStore.request.qs.keywords === '*:*')
+                ? '' : this.props.SearchResultsStore.request.qs.keywords;
+
+            // keywords are the same as the previous search
+            if (curKeywords === prevKeywords) {
+                let newState = this.applyAdvancedFilters(filters);
+                this.setState(newState, () => {
+                    this.handleSearch(params);
+                });
+
+            // new keywords
+            } else {
+                this.setState({
+                    ...this.state, 
+                    language: filters.language || [], 
+                    tag: filters.tag || [], 
+                    user: filters.user || [], 
+                    facet_exclude: filters.facet_exclude || [],
+                }, () => {
+                    this.handleSearch(params);
+                });
+            }
         }
         
         return false;
@@ -230,6 +313,7 @@ class SearchPanel extends React.Component {
         });
 
         this.keywordsInput.blur();
+        $('#advanced_options').accordion('close', 0);
     }
     changeSort(_sort){
         this.setState({
@@ -312,13 +396,43 @@ class SearchPanel extends React.Component {
         });
     }
     render() {      
+        let advanced_options = <div className="three fields">
+            <div className="field">
+                <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
+                <select id='languageDropdown' name='language' multiple='' className='ui fluid search dropdown' ref='language'>
+                  <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
+                  {translationLanguages.reduce((arr, curr) => { //<div className="menu">
+                      arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
+                      return arr;
+                  }, [])}
+                </select>
+            </div>
+            <div className="field">
+                <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
+                <UsersInput ref={ (e) => { this.userDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
+            </div>
+
+            <div className="field">
+                <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
+                <TagsInput ref={ (e) => { this.tagDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
+            </div>
+        </div>;
+
         return (
             <div className="ui container">
                 <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
                 <form className="ui form success">
                     <div className="field">
                         <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
-
+                        <div id="advanced_options" className="ui accordion">
+                            <div className="title">
+                                <i className="icon dropdown"></i>
+                                Advanced Options
+                            </div>
+                            <div className="content field">
+                                { advanced_options } 
+                            </div>
+                        </div>
                     </div>
                 </form>
                 <Divider hidden />

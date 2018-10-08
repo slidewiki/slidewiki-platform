@@ -218,34 +218,80 @@ class Facets extends React.Component {
         return (
             <div id="facets">
                 {
-                    (languageItems.length > 0) &&
-                        <Menu fluid vertical>
-                            <Menu.Item key="languagesFacetHeader" header>{this.context.intl.formatMessage(this.messages.languagesFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'language')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.languages) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
-                            { (this.state.showSearch.includes('language')) && 
-                                <Menu.Item>
-                                    <Input id="language_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'language')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'language')}/>
-                                    </Menu.Item>
+                    <Menu fluid vertical>
+                        <Menu.Item key="languagesFacetHeader" header>
+                            {this.context.intl.formatMessage(this.messages.languagesFacet)} 
+                            {
+                                // <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'language')}>
+                                //     <Icon name="search" />
+                                // </NavLink>
                             }
-                            { languageItems }
-                        </Menu>
-                }
-
-                {
-                    (userItems.length > 0) &&
-                        <Menu fluid vertical>
-                            <Menu.Item key="userFacetHeader" header>{this.context.intl.formatMessage(this.messages.ownersFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'creator')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.users) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
-                            { (this.state.showSearch.includes('creator')) && 
-                                <Menu.Item>
-                                    <Input id="creator_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'creator')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'creator')}/>
-                                    </Menu.Item>
+                            { 
+                                (!isEmpty(selected.languages) && !this.props.loading) 
+                                ? <span  style={{float: 'right'}}>
+                                        <NavLink href="#" onClick={this.clearFacets.bind(this, 'language')}>
+                                            <Icon name="cancel" aria-label="clear languages"/>
+                                        </NavLink>
+                                    </span> 
+                                : ''
                             }
-                            { userItems }
-                        </Menu>
+                        </Menu.Item>
+                        { (this.state.showSearch.includes('language')) && 
+                            <Menu.Item>
+                                <Input id="language_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'language')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'language')}/>
+                            </Menu.Item>
+                        }
+                        { languageItems }
+                    </Menu>
                 }
 
                 {
                     <Menu fluid vertical>
-                        <Menu.Item key="tagFacetHeader" header>{this.context.intl.formatMessage(this.messages.tagsFacet)} <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}><Icon name="search" /></NavLink>{ (!isEmpty(selected.tags) && !this.props.loading) ? <span  style={{float: 'right'}}><NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}><Icon name="cancel" aria-label="clear languages"/></NavLink></span> : ''}</Menu.Item>
+                        <Menu.Item key="userFacetHeader" header>
+                            {this.context.intl.formatMessage(this.messages.ownersFacet)} 
+                            {
+                                // <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'creator')}>
+                                //     <Icon name="search" />
+                                // </NavLink>
+                            }
+                            { 
+                                (!isEmpty(selected.users) && !this.props.loading) 
+                                ? <span  style={{float: 'right'}}>
+                                        <NavLink href="#" onClick={this.clearFacets.bind(this, 'user')}>
+                                            <Icon name="cancel" aria-label="clear languages"/>
+                                        </NavLink>
+                                    </span> 
+                                : ''
+                            }
+                        </Menu.Item>
+                        { (this.state.showSearch.includes('creator')) && 
+                            <Menu.Item>
+                                <Input id="creator_input" name="user" placeholder='Search for users' onChange={this.handleFacetsFilter.bind(this, 'creator')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'creator')}/>
+                            </Menu.Item>
+                        }
+                        { userItems }
+                    </Menu>
+                }
+
+                {
+                    <Menu fluid vertical>
+                        <Menu.Item key="tagFacetHeader" header>
+                            {this.context.intl.formatMessage(this.messages.tagsFacet)}
+                            {
+                                // <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}>
+                                //    <Icon name="search" />
+                                // </NavLink>
+                            }
+                            { 
+                                (!isEmpty(selected.tags) && !this.props.loading) 
+                                ? <span  style={{float: 'right'}}>
+                                        <NavLink href="#" onClick={this.clearFacets.bind(this, 'tag')}>
+                                            <Icon name="cancel" aria-label="clear languages"/>
+                                        </NavLink>
+                                    </span> 
+                                : ''
+                            }
+                        </Menu.Item>
                         { (this.state.showSearch.includes('tags')) && 
                             <Menu.Item>
                                 <Input id="tags_input" name="tag" placeholder='Search for tags' onChange={this.handleFacetsFilter.bind(this, 'tags')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'tags')}/>
