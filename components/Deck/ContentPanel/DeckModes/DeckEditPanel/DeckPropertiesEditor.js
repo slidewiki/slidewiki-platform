@@ -19,6 +19,7 @@ import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import LanguageDropdown from '../../../../common/LanguageDropdown';
+import ThemeDropdown from '../../../../common/ThemeDropdown';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 
 class DeckPropertiesEditor extends React.Component {
@@ -407,24 +408,6 @@ class DeckPropertiesEditor extends React.Component {
         });
 
         //content elements
-        let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
-                               value={this.state.theme}
-                               onChange={this.handleChange.bind(this, 'theme')}>
-                <option value="default">White - Default</option>
-                <option value="beige">Cream</option>
-                <option value="black">Black</option>
-                <option value="league">Dark Grey</option>
-                <option value="sky">Pale Blue</option>
-                <option value="solarized">Beige</option>
-                <option value="moon">Dark Slate Blue</option>
-                <option value="night">High Contrast 1</option>
-                <option value="blood">High Contrast 2</option>
-                <option value="serif">Serif</option>
-                <option value="simple">Simple</option>
-                <option value="openuniversity">Open University</option>
-                <option value="odimadrid">ODI Madrid</option>
-                <option value="oeg">OEG</option>
-            </select>;
         let licenseOptions = <a className="ui label">
                 <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
             </a>;
@@ -539,7 +522,7 @@ class DeckPropertiesEditor extends React.Component {
         let themeAndLicence = <div className="two fields">
             <div className="field">
                 <label htmlFor="theme" id="theme">Choose deck theme</label>
-                {themeOptions}
+                <ThemeDropdown value={this.state.theme} onChange={this.handleChange.bind(this, 'theme')}  />
             </div>
             <div className="field">
                 <label htmlFor="license" id="license_label">License</label>

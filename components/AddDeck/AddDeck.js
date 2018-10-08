@@ -18,6 +18,7 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import LanguageDropdown from '../common/LanguageDropdown';
+import ThemeDropdown from '../common/ThemeDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import classNames from 'classnames';
 
@@ -76,7 +77,7 @@ class AddDeck extends React.Component {
         const title = this.refs.input_title.value;
         const language = this.refs.div_languages.getSelected();
         const description = this.refs.textarea_description.value;
-        const theme = this.refs.select_themes.value;
+        const theme = this.refs.select_themes.getSelected();
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
         //const tags = this.refs.input_tags.value.split(', ');
@@ -478,22 +479,6 @@ class AddDeck extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
         */
-        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
-                <option value="default">White - Default</option>
-                <option value="beige">Cream</option>
-                <option value="black">Black</option>
-                <option value="league">Dark Grey</option>
-                <option value="sky">Pale Blue</option>
-                <option value="solarized">Beige</option>
-                <option value="moon">Dark Slate Blue</option>
-                <option value="night">High Contrast 1</option>
-                <option value="blood">High Contrast 2</option>
-                <option value="serif">Serif</option>
-                <option value="simple">Simple</option>
-                <option value="openuniversity">Open University</option>
-                <option value="odimadrid">ODI Madrid</option>
-                <option value="oeg">OEG</option>
-            </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
         //   <option value="CC BY" >Creative Commons Attribution</option>
@@ -578,7 +563,7 @@ class AddDeck extends React.Component {
                                         id='AddDeck.form.label_themes'
                                         defaultMessage='Choose deck theme' />
                                 </label>
-                                {themeOptions}
+                                <ThemeDropdown ref="select_themes" />
                             </div>
 
                         </div>
