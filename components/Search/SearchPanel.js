@@ -29,7 +29,7 @@ class SearchPanel extends React.Component {
         return defineMessages({
             header: {
                 id: 'SearchPanel.header',
-                defaultMessage: 'Search'
+                defaultMessage: 'Search SlideWiki'
             },
             searchTerm: {
                 id: 'SearchPanel.searchTerm',
@@ -37,7 +37,7 @@ class SearchPanel extends React.Component {
             },
             keywordsInputPlaceholder: {
                 id: 'SearchPanel.KeywordsInput.placeholder',
-                defaultMessage: 'Type your keywords here'
+                defaultMessage: 'Type your search terms here'
             },
             searchFieldTitle: {
                 id: 'SearchPanel.filters.searchField.title',
@@ -420,13 +420,13 @@ class SearchPanel extends React.Component {
 
         return (
             <div className="ui container">
-                <h2 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h2>
+                <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
                 <form className="ui form success">
                     <div className="field">
                         <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
                         <div id="advanced_options" className="ui accordion">
                             <div className="title">
-                                <i className="icon dropdown"></i>
+                                <i className="icon dropdown" ></i>
                                 Advanced Options
                             </div>
                             <div className="content field">
