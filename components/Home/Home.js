@@ -31,12 +31,17 @@ class Home extends React.Component {
 
         this.closeSidebar({target: '<a className="item"></a>'});
     }
+    
+
 
     render() {
         let signInStyle = {cursor: 'pointer'};
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
+                <div className='sr-only' role='main'>
+                    <h1>Welcome to SlideWiki</h1>
+                </div>
                 <section className='banner-container'>
                     <img src='/assets/images/home/banner.jpg' alt=''/>
                         <div className='banner-content' style={{zIndex: 0}}>
