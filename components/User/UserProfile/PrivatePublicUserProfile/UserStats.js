@@ -53,6 +53,16 @@ class UserStats extends React.Component {
     }
 
     render() {
+        const customTagRenderer = (tag, size, color) => {
+            return <span key={tag.value} style={{
+                color,
+                fontSize: size,
+                margin: '5px',
+                verticalAlign: 'middle',
+                display: 'inline-block'
+            }}>{tag.value}</span>;
+        };
+
         const periodOptions = [{value: 'LAST_7_DAYS', text: this.context.intl.formatMessage(this.messages.last7Days)},
             {value: 'LAST_30_DAYS', text: this.context.intl.formatMessage(this.messages.last30Days)},
             {value: 'LAST_2_MONTHS', text: this.context.intl.formatMessage(this.messages.last2Months)},
@@ -154,7 +164,7 @@ class UserStats extends React.Component {
                       <Message attached><h3>{this.context.intl.formatMessage(this.messages.tagCloudTitle)}</h3></Message>
                       <Segment aria-describedby='userStatsByTagTable' attached textAlign='center' padded='very'
                                loading={this.props.userStats.statsByTagLoading} aria-label='Data table for popular tags' tabIndex='0' aria-hidden='true'>
-                          <TagCloud minSize={16} maxSize={40} tags={this.props.userStats.statsByTag} colorOptions={{luminosity: 'dark'}} />
+                          <TagCloud minSize={14} maxSize={38} tags={this.props.userStats.statsByTag} colorOptions={{luminosity: 'dark'}} renderer={customTagRenderer} />
                       </Segment>
                       <Table id='userStatsByTagTable' className="sr-only">
                           <Table.Header>
