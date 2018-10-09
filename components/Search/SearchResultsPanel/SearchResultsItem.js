@@ -92,11 +92,11 @@ class SearchResultsItem extends React.Component {
                         <Grid.Row>
                             <Grid.Column width={3}>
                                 <NavLink href={result.link}>
-                                    <Image bordered src={`${Microservices.file.uri}/thumbnail/slide/${result.firstSlide}${(result.theme) ? '/' + result.theme : ''}`} alt={result.title} size="small"/>
+                                    <Image bordered src={`${Microservices.file.uri}/thumbnail/slide/${result.firstSlide}${(result.theme) ? '/' + result.theme : ''}`} alt={result.title} size="small" aria-hidden="true" />
                                 </NavLink>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <div className="ui header"><NavLink href={result.link}>{result.title}</NavLink></div>
+                                <h3 className="ui header"><NavLink href={result.link}>{result.title}</NavLink></h3>
                                 <div className="meta"><strong><FormattedMessage {...this.messages.by} /></strong>
                                     <NavLink href={result.user.link}>{result.user.displayName || result.user.username}</NavLink>
                                 </div>
@@ -104,7 +104,7 @@ class SearchResultsItem extends React.Component {
                                 <div className="meta"><strong>{this.context.intl.formatMessage(this.messages.description)}:</strong> {result.description}</div>
                             </Grid.Column>
                              <Grid.Column width={5}>
-                                <div className="ui labels">
+                                <div className="ui orange labels">
                                     <Label  size="small">
                                        <Icon name="fork" aria-label="Number of forks"/>{result.fork_count - 1}
                                     </Label>
@@ -119,7 +119,7 @@ class SearchResultsItem extends React.Component {
                                     </Label>
                                 </div>
 
-                                <Label  size="small">
+                                <Label size="small" color="orange">
                                    <Icon name="comments" aria-label="Language"/>{ this.getLanguageName(result.language) }
                                 </Label>
                                 <Divider hidden />

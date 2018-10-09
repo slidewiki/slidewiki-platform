@@ -131,7 +131,7 @@ class SearchResultsPanel extends React.Component {
                 <Grid.Row as='span'>
                     <Grid.Column as='span' width={8} floated="left">
                         <Default>
-                            <h2 className="ui header"><FormattedMessage {...this.messages.header} /></h2> 
+                            <h2 className="ui header" role="main"><FormattedMessage {...this.messages.header} /></h2> 
                             {
                                 this.context.intl.formatMessage(this.messages.resultsMsg, {
                                     resultsNum: results.length,
@@ -161,7 +161,7 @@ class SearchResultsPanel extends React.Component {
             <p></p>
             <p></p>
             <div className="ui active inverted dimmer">
-                <div className="ui medium text loader">Loading</div>
+                <div className="ui medium text loader" role="progressbar">Loading</div>
             </div>
             <p></p>
             <p></p>
