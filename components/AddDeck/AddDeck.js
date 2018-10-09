@@ -20,6 +20,7 @@ import ImportModal from '../Import/ImportModal';
 import LanguageDropdown from '../common/LanguageDropdown';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import classNames from 'classnames';
+import ThemePreviewCarousel from './ThemePreviewCarousel';
 
 //TODO: update link to terms of use;
 
@@ -76,7 +77,7 @@ class AddDeck extends React.Component {
         const title = this.refs.input_title.value;
         const language = this.refs.div_languages.getSelected();
         const description = this.refs.textarea_description.value;
-        const theme = this.refs.select_themes.value;
+        const theme = this.theme;
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
         //const tags = this.refs.input_tags.value.split(', ');
@@ -406,6 +407,10 @@ class AddDeck extends React.Component {
         }
     }
 
+    onThemeModalChanged(themeValue) {
+        this.theme = themeValue;
+    }
+
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
@@ -464,36 +469,6 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        /*    let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
-        </select>;
-        */
-        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
-                <option value="default">White - Default</option>
-                <option value="beige">Cream</option>
-                <option value="black">Black</option>
-                <option value="league">Dark Grey</option>
-                <option value="sky">Pale Blue</option>
-                <option value="solarized">Beige</option>
-                <option value="moon">Dark Slate Blue</option>
-                <option value="night">High Contrast 1</option>
-                <option value="blood">High Contrast 2</option>
-                <option value="serif">Serif</option>
-                <option value="simple">Simple</option>
-                <option value="openuniversity">Open University</option>
-                <option value="odimadrid">ODI Madrid</option>
-                <option value="oeg">OEG</option>
-            </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
         //   <option value="CC BY" >Creative Commons Attribution</option>
@@ -578,9 +553,23 @@ class AddDeck extends React.Component {
                                         id='AddDeck.form.label_themes'
                                         defaultMessage='Choose deck theme' />
                                 </label>
-                                {themeOptions}
+                                <ThemePreviewCarousel callback={this.onThemeModalChanged.bind(this)} slides={[
+                                    {img: '/assets/images/themes/beige.png', value: 'solarized'},
+                                    {img: '/assets/images/themes/black.png', value: 'black'},
+                                    {img: '/assets/images/themes/cream.png', value: 'beige'},
+                                    {img: '/assets/images/themes/dark_grey.png', value: 'league'},
+                                    {img: '/assets/images/themes/dark_slate_blue.png', value: 'moon'},
+                                    {img: '/assets/images/themes/default.png', value: 'default'},
+                                    {img: '/assets/images/themes/high_contrast1.png', value: 'night'},
+                                    {img: '/assets/images/themes/high_contrast2.png', value: 'blood'},
+                                    {img: '/assets/images/themes/odi_madrid.png', value: 'odimadrid'},
+                                    {img: '/assets/images/themes/oeg.png', value: 'oeg'},
+                                    {img: '/assets/images/themes/open_university.png', value: 'openuniversity'},
+                                    {img: '/assets/images/themes/pale_blue.png', value: 'sky'},
+                                    {img: '/assets/images/themes/simple.png', value: 'simple'},
+                                    {img: '/assets/images/themes/simple.png', value: 'serif'}  // # TODO: use real thumbnail for serif once SWAQ-973 is solved
+                                ]}/>
                             </div>
-
                         </div>
 
                         <div className="ui message" id="uploadDesc">

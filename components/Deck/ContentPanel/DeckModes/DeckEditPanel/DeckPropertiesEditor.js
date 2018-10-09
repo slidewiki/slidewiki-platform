@@ -20,6 +20,7 @@ import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import LanguageDropdown from '../../../../common/LanguageDropdown';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
+import ThemePreviewCarousel from '../../../../AddDeck/ThemePreviewCarousel';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -537,9 +538,26 @@ class DeckPropertiesEditor extends React.Component {
         </div>;
 
         let themeAndLicence = <div className="two fields">
-            <div className="field">
-                <label htmlFor="theme" id="theme">Choose deck theme</label>
-                {themeOptions}
+            <div className="field" ref="div_themes_preview">
+                <label htmlFor="themes" id="theme-preview">Select theme</label>
+                <ThemePreviewCarousel callback={this.onThemeModalChanged.bind(this)}
+                                      initialTheme={this.state.theme}
+                                      slides={[
+                    {img: '/assets/images/themes/beige.png', value: 'solarized'},
+                    {img: '/assets/images/themes/black.png', value: 'black'},
+                    {img: '/assets/images/themes/cream.png', value: 'beige'},
+                    {img: '/assets/images/themes/dark_grey.png', value: 'league'},
+                    {img: '/assets/images/themes/dark_slate_blue.png', value: 'moon'},
+                    {img: '/assets/images/themes/default.png', value: 'default'},
+                    {img: '/assets/images/themes/high_contrast1.png', value: 'night'},
+                    {img: '/assets/images/themes/high_contrast2.png', value: 'blood'},
+                    {img: '/assets/images/themes/odi_madrid.png', value: 'odimadrid'},
+                    {img: '/assets/images/themes/oeg.png', value: 'oeg'},
+                    {img: '/assets/images/themes/open_university.png', value: 'openuniversity'},
+                    {img: '/assets/images/themes/pale_blue.png', value: 'sky'},
+                    {img: '/assets/images/themes/simple.png', value: 'simple'},
+                    {img: '/assets/images/themes/simple.png', value: 'serif'}  // # TODO: use real thumbnail for serif once SWAQ-973 is solved
+                                      ]}/>
             </div>
             <div className="field">
                 <label htmlFor="license" id="license_label">License</label>
@@ -595,6 +613,11 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         );
 
+    }
+
+    onThemeModalChanged(themeValue) {
+        this.handleChange('theme', {target: {value: themeValue}});
+        // this.setState({ theme: themeValue });
     }
 }
 
