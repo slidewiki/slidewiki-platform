@@ -96,7 +96,7 @@ class UserGroupPage extends React.Component {
                       <Info group={ this.props.UserGroupsStore.currentUsergroup } />
                   </div>
                   <div className = "sixteen wide column">
-                      <Menu group={ this.props.UserGroupsStore.currentUsergroup } />
+                      <Menu group={ this.props.UserGroupsStore.currentUsergroup } username={this.props.UserProfileStore.username} />
                   </div>
                 </div>
               </div>

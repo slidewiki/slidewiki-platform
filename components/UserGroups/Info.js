@@ -13,9 +13,19 @@ class Info extends React.Component {
                 <div className="item">
                     <div className="content">
                         <div className="header">
-                            Creator: <a href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.displayName || this.props.group.creator.username}</a>
+                            <b>Description:</b>
                             <br />
-                            Members: {this.props.group.members.length + 1}
+                            {this.props.group.description}
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div className="item">
+                    <div className="content">
+                        <div className="header">
+                            <b>Creator:</b> <a href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.displayName || this.props.group.creator.username}</a>
+                            <br />
+                            <b>Members:</b> {this.props.group.members.length + 1}
                         </div>
                     </div>
                 </div>

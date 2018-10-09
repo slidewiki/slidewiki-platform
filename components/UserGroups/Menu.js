@@ -23,12 +23,17 @@ class Menu extends React.Component {
                 id: 'GroupMenu.collections',
                 defaultMessage: 'Playlists'
             },
+            goBack: {
+                id: 'GroupMenu.goBack',
+                defaultMessage: 'Back to list'
+            }
         });
     }
     render() {
         let memberMsg = this.context.intl.formatMessage(this.messages.members);
         let sharedDecksMsg = this.context.intl.formatMessage(this.messages.sharedDecks);
         let deckCollectionsMsg = this.context.intl.formatMessage(this.messages.collections);
+        let goBackMsg = this.context.intl.formatMessage(this.messages.goBack);
 
         return (
           <div role="navigation">
@@ -44,6 +49,8 @@ class Menu extends React.Component {
                     </NavLink>
                   <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
+                  </NavLink><NavLink className="item" href={'/user/' + this.props.username + '/groups/overview'} activeStyle={this.styles} role="menuitem">
+                      <p><i className="icon users"/> {goBackMsg}</p>
                   </NavLink>
               </div>
           </div>

@@ -48,7 +48,7 @@ class Decks extends React.Component {
             },
             sharedDecks: {
                 id: 'GroupDecks.header.sharedDecks',
-                defaultMessage: 'Shared Decks'
+                defaultMessage: 'Shared decks edited by this group'
             }
         });
     }

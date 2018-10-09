@@ -131,7 +131,7 @@ class GroupCollections extends React.Component {
             },
             groupCollectionsTitle: {
                 id: 'GroupCollections.collections.group',
-                defaultMessage: 'Groups Playlists'
+                defaultMessage: 'Playlists linked to this group'
             },
             deckText: {
                 id: 'GroupCollections.deck',

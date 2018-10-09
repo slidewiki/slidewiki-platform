@@ -403,21 +403,6 @@ class Details extends React.Component {
 
         return (
           <div>
-            {(this.props.isAdmin || this.props.isCreator) ?
-              <div className="ui segments">
-                <div className="ui secondary segment">
-                    <h3>
-                      <FormattedMessage
-                        id='GroupDetails.exchangePicture'
-                        defaultMessage='Group picture'
-                      />
-                    </h3>
-                </div>
-                <div className="ui segment">
-                    <ChangePicture user={ this.props.user }/>
-                </div>
-              </div>
-            : '' }
             <div className="ui segments">
               <div className="ui secondary segment">
                   <h3>
@@ -474,6 +459,21 @@ class Details extends React.Component {
                 </div>
               </div>
             </div>
+            {(this.props.isAdmin || this.props.isCreator) ?
+              <div className="ui segments">
+                <div className="ui secondary segment">
+                    <h3>
+                      <FormattedMessage
+                        id='GroupDetails.exchangePicture'
+                        defaultMessage='Group picture'
+                      />
+                    </h3>
+                </div>
+                <div className="ui segment">
+                    <ChangePicture user={ this.props.user }/>
+                </div>
+              </div>
+            : '' }
           </div>
         );
     }
