@@ -160,7 +160,6 @@ class ContentActionsHeader extends React.Component {
             || !this.props.PermissionsStore.permissions.edit
             || contentDetails.mode ==='edit'
             || contentDetails.mode ==='markdownEdit'
-            || this.props.TranslationStore.inTranslationMode
         ;
         const buttonsAreHidden = this.props.UserProfileStore.username === '' || buttonsAreDisabled;
 
@@ -205,7 +204,6 @@ class ContentActionsHeader extends React.Component {
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
         let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
-        let currentlyEditingTranslation = (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage === this.props.TranslationStore.currentLang);
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -219,7 +217,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save{currentlyEditingTranslation ? ' translation' : ''}
+                        Save
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
@@ -259,7 +257,7 @@ class ContentActionsHeader extends React.Component {
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
                         <i className="icons">
-                            <i className={'large blue ' + (currentlyEditingTranslation ? 'translate' : 'edit') + ' icon'}></i>
+                            <i className="large blue edit icon"></i>
                             <i className=""></i>
                         </i>
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
