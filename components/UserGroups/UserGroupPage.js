@@ -9,6 +9,9 @@ import Menu from './Menu';
 import Details from './Details';
 import Decks from './Decks';
 import GroupCollections from '../DeckCollection/GroupCollections';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import {navigateAction} from 'fluxible-router';
+import { NavLink } from 'fluxible-router';
 
 class UserGroupPage extends React.Component {
     constructor(props){
@@ -79,6 +82,10 @@ class UserGroupPage extends React.Component {
         }
     }
 
+    handleGoBack() {
+        this.context.executeAction(navigateAction, {url: `/user/${this.props.UserProfileStore.username}/groups/overview`});
+    }
+
     render() {
         let profileClasses = classNames({
             'tablet': true,
@@ -87,6 +94,12 @@ class UserGroupPage extends React.Component {
             'sixteen': true,
             'wide': true,
             'column': true
+        });
+        const messages = defineMessages({
+            goBack: {
+                id: 'UserGroupPage.goBack',
+                defaultMessage: 'My Groups',
+            },
         });
         return (
           <div className = "ui vertically padded stackable grid container" >
@@ -97,6 +110,18 @@ class UserGroupPage extends React.Component {
                   </div>
                   <div className = "sixteen wide column">
                       <Menu group={ this.props.UserGroupsStore.currentUsergroup } username={this.props.UserProfileStore.username} />
+                      <br />
+                      <div className="ui vertical fluid menu">
+                        <NavLink className="item" href={`/user/${this.props.UserProfileStore.username}/groups/overview`} activeStyle={this.styles}>
+                          <p>
+                            <i className="icon users"/>
+                            {this.context.intl.formatMessage(messages.goBack)}
+                          </p>
+                        </NavLink>
+                      </div>
+                      <button className="ui labeled icon button" onClick={this.handleGoBack.bind(this)} >
+                          <i className="users icon"></i>{this.context.intl.formatMessage(messages.goBack)}
+                      </button>
                   </div>
                 </div>
               </div>
@@ -110,7 +135,8 @@ class UserGroupPage extends React.Component {
 }
 
 UserGroupPage.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 UserGroupPage = connectToStores(UserGroupPage, [UserGroupsStore, UserProfileStore], (context, props) => {
