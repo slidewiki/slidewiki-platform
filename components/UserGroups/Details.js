@@ -9,7 +9,7 @@ import saveUsergroup from '../../actions/usergroups/saveUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import deleteUsergroup from '../../actions/usergroups/deleteUsergroup';
 import leaveUsergroup from '../../actions/usergroups/leaveUsergroup';
-import ChangePicture from '../User/UserProfile/ChangePicture';
+import ChangePicture from './ChangePicture';
 
 class Details extends React.Component {
     constructor(props){
@@ -470,7 +470,7 @@ class Details extends React.Component {
                     </h3>
                 </div>
                 <div className="ui segment">
-                    <ChangePicture user={ this.props.user }/>
+                    <ChangePicture group={ this.props.currentUsergroup }/>
                 </div>
               </div>
             : '' }
