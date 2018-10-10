@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
+import {defineMessages} from 'react-intl';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
 import {NavLink, navigateAction} from 'fluxible-router';
@@ -7,7 +9,7 @@ import SearchBox from '../Search/AutocompleteComponents/HeaderSearchBox';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {Button} from 'semantic-ui-react';
 import updateTrap from '../../actions/loginModal/updateTrap';
-import {defineMessages} from 'react-intl';
+import UserProfileStore from '../../stores/UserProfileStore';
 
 class Home extends React.Component {
 
@@ -118,6 +120,10 @@ class Home extends React.Component {
             slideWikiAboutVisit: {
                 id: 'home.slideWikiAboutVisit',
                 defaultMessage: 'visit the project webiste.'
+            },
+            myDecks: {
+                id: 'home.myDecks',
+                defaultMessage: 'My Decks.'
             }
         });
     }
@@ -147,6 +153,11 @@ class Home extends React.Component {
 
     render() {
         let signInStyle = {cursor: 'pointer'};
+        let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
+            <a onClick={this.handleLoginButton.bind(this)} style={signInStyle} >{this.context.intl.formatMessage(this.messages.signIn)}</a> :
+            <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
+                {this.context.intl.formatMessage(this.messages.myDecks)}
+            </NavLink>;
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
@@ -218,7 +229,9 @@ class Home extends React.Component {
                     <div className='signin-outer'>
                         <div className='wrapper'>
                             <div className='signin-blk'>
-                                <span>{this.context.intl.formatMessage(this.messages.getStarted)}<a onClick={this.handleLoginButton.bind(this)} style={signInStyle} >{this.context.intl.formatMessage(this.messages.signIn)}</a></span>
+                                <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
+                                    {signInOrMyDecksElement}
+                                </span>
                                 <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
                             </div>
                         </div>
@@ -330,6 +343,11 @@ Home.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
+Home = connectToStores(Home, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 
 export default Home;
 
