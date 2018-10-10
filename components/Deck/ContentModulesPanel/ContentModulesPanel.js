@@ -234,7 +234,7 @@ class ContentModulesPanel extends React.Component {
         );
         
         let mobileMenu = (
-            <Dropdown fluid pointing button value={this.props.ContentModulesStore.moduleType} options={this.getContentModuleOptions(false)} onChange={this.handleDropdownChange.bind(this)}/>
+            <Dropdown fluid pointing button text='Tools' value={this.props.ContentModulesStore.moduleType} options={this.getContentModuleOptions(false)} onChange={this.handleDropdownChange.bind(this)}/>
         );
         
         //make sure element is still rendered by the browser, in order to get the dimensions to detect overflowing children
