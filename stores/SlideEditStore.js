@@ -31,11 +31,25 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+
+
+        this.ltiClick = 'false';
+        this.ltiWidth = '';
+        this.ltiHeight = '';
+        this.ltiURL = '';
+        this.ltiKey = '';
+        this.ltiResponseURL = '',
+        this.ltiResponseHTML = '',
+
+
         this.HTMLEditorClick = 'false';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
         //console.log('test' + payload.slide.title + ' id: ' + payload.slide.id);
+      //  console.log('SlideEditStore.updateContent.payload.slide.ltURL' + payload.slide.ltiURL);
+      //  console.log('SlideEditStore.updateContent.payload.slide.ltikey' + payload.slide.ltiKey);
+
         this.id = payload.slide.id;
         this.slideId = payload.selector.sid;
         this.title = payload.slide.title || ' ';
@@ -43,9 +57,18 @@ class SlideEditStore extends BaseStore {
         this.markdown = payload.slide.markdown || ' ';
         this.speakernotes = payload.slide.speakernotes || ' ';
 
+/*
+        this.ltiWidth = payload.slide.ltiWidth || ' ';
+        this.ltiHeight = payload.slide.ltiHeight || ' ';
+        this.ltiURL = payload.slide.ltiURL || ' ';
+        this.ltiKey = payload.slide.ltiKey || ' ';
+    //    this.ltiResponseURL = payload.slide.ltiResponseURL || ' ';
+    //    this.ltiResponseHTML = payload.slide.ltiResponseHTML || ' ';
+*/
         this.emitChange();
     }
     saveSlide() {
+        console.log('SlideEditStore.saveSlide');
         this.emitChange();
     }
     addSlide() {
@@ -64,6 +87,7 @@ class SlideEditStore extends BaseStore {
         this.emitChange();
     }
     handleSaveSlideClick(){
+        console.log('SlideEditorStore.handleSaveSlideClick');
         this.saveSlideClick = 'true';
         this.emitChange();
         this.saveSlideClick = 'false';
@@ -158,6 +182,36 @@ class SlideEditStore extends BaseStore {
         this.emitChange();
     }
 
+
+    handleLTIAddClick(payload){
+        console.log('handleLTIAddClick.payload...='+JSON.stringify(payload));
+        console.log('handleLTIAddClick.payload.ltiResponseURL='+payload.ltiResponseURL);
+        console.log('handleLTIAddClick.payload.ltiResponseHTML='+payload.ltiResponseHTML);
+        console.log('handleLTIAddClick.this.ltiWidth ='+payload.ltiWidth);
+        console.log('handleLTIAddClick.this.ltiHeight ='+payload.ltiHeight);
+
+        this.ltiURL = payload.ltiURL;
+        this.ltiKey = payload.ltiKey;
+        this.ltiWidth = payload.ltiWidth;
+        this.ltiHeight = payload.ltiHeight;
+        this.ltiResponseURL = payload.ltiResponseURL;
+        this.ltiResponseHTML = payload.ltiResponseHTML;
+
+        this.ltiClick = 'true';
+        this.emitChange();
+        this.ltiClick = 'false';
+        /*
+        this.ltiURL = '';
+        this.ltiKey = '';
+        this.ltiWidth = '';
+        this.ltiHeight = '';
+        this.ltiResponseURL = '';
+        this.ltiResponseHTML = '';
+        */
+        this.emitChange();
+
+    }
+
     getState() {
         return {
             id: this.id,
@@ -187,6 +241,15 @@ class SlideEditStore extends BaseStore {
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
+
+            ltiClick: this.ltiClick,
+            ltiURL: this.ltiURL,
+            ltiKey: this.ltiKey,
+            ltiWidth: this.ltiWidth,
+            ltiHeight: this.ltiHeight,
+            ltiResponseURL: this.ltiResponseURL,
+            ltiResponseHTML: this.ltiResponseHTML,
+
             HTMLEditorClick: this.HTMLEditorClick
         };
     }
@@ -221,6 +284,15 @@ class SlideEditStore extends BaseStore {
         this.embedCode = state.embedCode;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
+
+        this.ltiClick = state.ltiClick;
+        this.ltiURL = state.ltiURL;
+        this.ltiKey = state.ltiKey;
+        this.ltiWidth = state.ltiWidth;
+        this.ltiHeight = state.ltiHeight;
+        this.ltiResponseURL = state.ltiResponseURL;
+        this.ltiResponseHTML = state.ltiResponseHTML;
+
         this.HTMLEditorClick = state.HTMLEditorClick;
     }
 }
@@ -242,6 +314,9 @@ SlideEditStore.handlers = {
     'CODE_CLICK': 'handleCodeClick',
     'REMOVE_BACKGROUND_CLICK': 'handleRemoveBackgroundClick',
     'EMBED_CLICK': 'handleEmbedClick',
+
+    'ADD_LTI_SUCCESS': 'handleLTIAddClick',
+
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
     'UNDO_CLICK': 'handleUndoClick',

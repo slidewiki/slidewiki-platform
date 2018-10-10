@@ -709,6 +709,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     handleSaveButton(){
+        console.log('SlideContentEditor.handleSaveButton');
         if (this.props.UserProfileStore.username !== '') {
             // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             // TODO: wait for successfull save signal from
@@ -771,6 +772,22 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
 
+
+            let ltiWidth =   this.props.SlideEditStore.ltiWidth;
+            let ltiHeight = this.props.SlideEditStore.ltiHeight;
+            let ltiURL = this.props.SlideEditStore.ltiURL;
+            let ltiKey = this.props.SlideEditStore.ltiKey;
+            let ltiResponseURL = this.props.SlideEditStore.ltiResponseURL;
+            let ltiResponseHTML = this.props.SlideEditStore.ltiResponseHTML;
+
+            /*
+            console.log('SlideContentEditor.ltiHeight='+ltiHeight);
+            console.log('SlideContentEditor.ltiURL='+ltiURL);
+            console.log('SlideContentEditor.ltiKey='+ltiKey);
+            console.log('SlideContentEditor.ltiResponseURL='+ltiResponseURL);
+            console.log('SlideContentEditor.ltiResponseHTML='+ltiResponseHTML);
+            */
+
             //setTimeout(function() {
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
@@ -780,7 +797,15 @@ class SlideContentEditor extends React.Component {
                 speakernotes: speakernotes,
                 dataSources: dataSources,
                 selector: currentSelector,
-                tags: tags
+                tags: tags,
+
+                ltiWidth: ltiWidth,
+                ltiHeight: ltiHeight,
+                ltiURL: ltiURL,
+                ltiKey: ltiKey,
+                ltiResponseURL: ltiResponseURL,
+                ltiResponseHTML: ltiResponseHTML
+
             });
             //},500);
 
@@ -1086,7 +1111,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').each(function () {
             if($(this).find('iframe:first').length)
             {
-                //console.log('iframe found');
+                console.log('iframe found');
                 //console.log($(this).find('iframe:first').attr('width'));
                 //console.log($(this).find('iframe:first').width());
                 if ($(this).width() < $(this).find('iframe:first').attr('width'))
@@ -1099,6 +1124,9 @@ class SlideContentEditor extends React.Component {
                     $(this).height($(this).find('iframe:first').attr('height'));
                     //console.log('adjust iframe height');
                 }
+            }
+            else {
+              console.log('iframe not found');
             }
         });
     }
@@ -1892,6 +1920,45 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
             }
         }
+
+        console.log('SlideContentEditor.nextProps.SlideEditStore.ltiClick='+nextProps.SlideEditStore.ltiClick);
+        console.log('SlideContentEditor.this.SlideEditStore.ltiClick='+this.props.SlideEditStore.ltiClick);
+        if (nextProps.SlideEditStore.ltiClick === 'true' && nextProps.SlideEditStore.ltiClick !== this.props.SlideEditStore.ltiClick)
+        {
+            let uniqueID = this.getuniqueID();
+            //console.log('SlideContentEditor.length='+$('.pptx2html').length);
+            let iframe;
+            //console.log('nextProps.SlideEditStore.ltiResponseURL='+nextProps.SlideEditStore.ltiResponseURL);
+            //console.log('nextProps.SlideEditStore.ltiResponseHTML='+nextProps.SlideEditStore.ltiResponseHTML);
+            if(nextProps.SlideEditStore.ltiResponseURL !== '') {
+              iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
+            }
+            else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
+              var newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
+              //console.log("newHTML="+newHTML);  // "this-is-a-test"
+              //nextProps.SlideEditStore.ltiResponseHTML = '<html> <head> <title> LTI </title> </head> <body><div></div><p>This web page provides a gateway to the  of what it can do, or see the  for help with syntax.</p> </body> </html>';
+              iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" srcdoc="'+newHTML+'"></iframe>';
+              //iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" ></iframe>';
+
+            }
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: '+nextProps.SlideEditStore.ltiWidth+'px; height: '+nextProps.SlideEditStore.ltiHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+                this.hasChanges = true;
+                //this.correctDimensionsBoxes('iframe');
+            } else { //if slide is in non-canvas mode
+                this.refs.inlineContent.innerHTML += iframe;
+            }
+
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                //this.uniqueIDAllElements();
+                this.resizeDrag();
+            }
+        }
+
+
+
         if (nextProps.SlideEditStore.title !== '' &&
         nextProps.SlideEditStore.title !== this.props.SlideEditStore.title &&
         nextProps.SlideEditStore.LeftPanelTitleChange !== false)
