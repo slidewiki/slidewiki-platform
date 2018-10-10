@@ -181,7 +181,7 @@ class ContentActionsFooter extends React.Component {
           
         let listStyle = {
             listStyle: 'none'
-        }
+        };
         
         let mobileButtons = <AriaMenuButton.Wrapper>
             <AriaMenuButton.Button >
