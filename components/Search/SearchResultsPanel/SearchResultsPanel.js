@@ -127,34 +127,29 @@ class SearchResultsPanel extends React.Component {
 
         let resultsHeader = '';
         if (!this.props.loading) {
-            resultsHeader = <Grid>
-                <Grid.Row as='span'>
-                    <Grid.Column as='span' width={8} floated="left">
-                        <Default>
-                            <h2 className="ui header" role="main"><FormattedMessage {...this.messages.header} /></h2> 
-                            {
-                                this.context.intl.formatMessage(this.messages.resultsMsg, {
-                                    resultsNum: results.length,
-                                    totalResults: this.props.numFound
-                                })
-                            }
-                        </Default>
-                        <Mobile>
-                            <Button onClick={this.toggleSidebar.bind(this)}>
-                                <Icon name="filter" aria-label="show filters"/>
-                                {this.context.intl.formatMessage(this.messages.filters)}
-                            </Button>
-                        </Mobile>
-                    </Grid.Column>
-                    <Grid.Column as='span' width={8} floated="left">
-                        <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
-                        <i className="sort content ascending icon"/>
-                        <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
-                        {this.renderSortDropdownItems()}
-                    </div>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>;
+            resultsHeader = <div>
+                <Default style={{display: 'inline-block'}}>
+                    <h2 className="ui header" role="main"><FormattedMessage {...this.messages.header} /></h2> 
+                    {
+                        this.context.intl.formatMessage(this.messages.resultsMsg, {
+                            resultsNum: results.length,
+                            totalResults: this.props.numFound
+                        })
+                    }
+                    
+                </Default>
+                <Mobile>
+                    <Button onClick={this.toggleSidebar.bind(this)}>
+                        <Icon name="filter" aria-label="show filters"/>
+                        {this.context.intl.formatMessage(this.messages.filters)}
+                    </Button>
+                </Mobile>
+                <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
+                    <i className="sort content ascending icon"/>
+                    <div className="text">{(this.props.sort === 'lastUpdate') ? this.context.intl.formatMessage(this.messages.lastUpdatedSort) : this.context.intl.formatMessage(this.messages.relevanceSort)}</div>
+                    {this.renderSortDropdownItems()}
+                </div>
+            </div>;
         }
 
         const loadingDiv = <div className="ui basic segment">
@@ -194,42 +189,27 @@ class SearchResultsPanel extends React.Component {
             {
                 (!showLoading && !this.props.error && !emptyFacets) &&
                 <div>
-                    <Grid>
-                        <Default>
-                            <div className="ui row" style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
-                                <Grid.Column width={4}>
+                    <Default>
+                        <Grid>
+                            <Grid.Column width={4}>
+                                <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
                                     <h2 className="ui header"><FormattedMessage {...this.messages.filters} /></h2> 
-                                </Grid.Column>
-                                <Grid.Column width={12}>
-                                    { 
-                                        (this.props.numFound === 0)
-                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
-                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
-                                                </div>
-                                            : resultsHeader
-                                    }
-                                </Grid.Column>
-                            </div>
-                        </Default>
-                        <Mobile>
-                            <div className="ui row" style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
-                                <Grid.Column width={16}>
-                                    { 
-                                        (this.props.numFound === 0)
-                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
-                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
-                                                </div>
-                                            : resultsHeader
-                                    }
-                                </Grid.Column>
-                            </div>
-                        </Mobile>
-                        <Default>
-                            <Grid.Row>
-                                <Grid.Column width={4}>
+                                </Grid.Row>
+                                <Grid.Row>
                                     <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
-                                </Grid.Column>
-                                <Grid.Column width={12}>
+                                </Grid.Row>
+                            </Grid.Column>
+                            <Grid.Column width={12}>
+                                <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                    { 
+                                        (this.props.numFound === 0)
+                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                </div>
+                                            : resultsHeader
+                                    }
+                                </Grid.Row>
+                                <Grid.Row>
                                     { 
                                         // if we are come from facets, then load only search results panel
                                         (this.props.loading && this.props.fromFacets) ? (
@@ -241,10 +221,23 @@ class SearchResultsPanel extends React.Component {
                                             </div>
                                         )
                                     }
+                                </Grid.Row>
+                            </Grid.Column>
+                        </Grid>
+                    </Default>
+                    <Mobile>
+                        <Grid>
+                            <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                <Grid.Column width={16}>
+                                    { 
+                                        (this.props.numFound === 0)
+                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                </div>
+                                            : resultsHeader
+                                    }
                                 </Grid.Column>
                             </Grid.Row>
-                        </Default>
-                        <Mobile>
                             <Grid.Row>
                                 <Grid.Column width={16}>
                                     { 
@@ -259,9 +252,7 @@ class SearchResultsPanel extends React.Component {
                                     }
                                 </Grid.Column>
                             </Grid.Row>  
-                        </Mobile>
-                    </Grid>
-                    <Mobile>
+                        </Grid>
                         <div className="ui left dimmed sidebar vertical menubar" ref="menubar" >
                             <Segment basic>
                                 <h2 className="ui header">{this.context.intl.formatMessage(this.messages.filters)}</h2>
