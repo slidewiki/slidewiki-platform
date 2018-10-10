@@ -87,15 +87,31 @@ class SocialShare extends React.Component {
         const shareMessage = 'I have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.';
         const emailShareMessage = 'Hi.\nI have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.\n' + shareUrl;
         const emailShareSubject = 'Interesting ' + this.props.selector.stype + ' on SlideWiki';
-
+        
+        const dropdownStyle = this.props.textOnly ? {
+            width: '100%'
+        } : {};
+        
+        const dropdownMenuStyle =  this.props.textOnly ? {
+            left: 20, 
+            right: 'auto'
+        } : {};
+        
         return(
-            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share">
-                <div className="text">
-                    <button className="ui button" type="button" >
-                        <i className="share alternate large icon" />
-                    </button>
-                </div>
-                <div className="menu" role="menu" >
+            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share" style={dropdownStyle}>            
+                { !this.props.textOnly ?
+                    <div className="text">
+                        <button className="ui button" type="button" >
+                            <i className="share alternate large icon" />
+                        </button>
+                    </div>
+                    :
+                    <div className={this.props.className} aria-label="Share" data-tooltip="Share">
+                        <span><Icon name='share' size='large'/> Share</span>
+                    </div>
+                }
+            
+                <div className="menu" role="menu" style={dropdownMenuStyle}>
                     <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}
