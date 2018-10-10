@@ -18,7 +18,6 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
-import LanguageDropdown from '../../../../common/LanguageDropdown';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 
 class DeckPropertiesEditor extends React.Component {
