@@ -15,16 +15,16 @@ class AttachQuestionsItem extends React.Component {
         selector: the deck from which the question comes
         selectedQuestions: the currently selected questions
     */
+
     checkNoEmpty(element){
         return (element.toString().length>0);
     }
 
-    handleCheckboxClick(selectedQuestion){ //does it need the param? this is bound to it...
+    handleCheckboxClick(selectedQuestion){ //not currently being used - moved up to the parent component
         /*This method:
        - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
        - removes the selectedQuestion from the selectedQuestions list if it was already selected
       */
-        //console.log(`handleCheckboxClick`);
         console.log(selectedQuestion);
         let tempQuestions = this.props.AttachQuestionsModalStore.selectedQuestions; //has this been passed? change to the store
         let qindex = tempQuestions.indexOf(selectedQuestion);
@@ -40,12 +40,13 @@ class AttachQuestionsItem extends React.Component {
         //});
 
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions: tempQuestions},null);    
+        console.log(this.props.AttachQuestionsModalStore.deckQuestions)
     }
 
     render(){
         const question = this.props.question;
         const answers = (
-            <AttachQuestionsAnswersList questionIndex={this.props.questionIndex} items={question.answers} explanation={question.explanation}/>//showCorrectAnswers={this.props.showCorrectAnswers} explanation={question.explanation}
+            <AttachQuestionsAnswersList questionIndex={this.props.questionIndex} items={question.answers} explanation={question.explanation}/>//showCorrectAnswers={this.props.showCorrectAnswers}
         );
 
         let difficultyStars = (difficulty) => {
@@ -70,12 +71,13 @@ class AttachQuestionsItem extends React.Component {
 
         const name = 'question' + this.props.questionIndex;
 
+        //onChange={this.handleCheckboxClick.bind(this, question)} //from input
         return (
 
             <div className = "ui segments">
                 <div className="ui two column vertically divided segment">
                     <div className="ui checkbox">
-                        <input type="checkbox"  checked={this.props.selectedQ} ref={name} name={name} id={name} onChange={this.handleCheckboxClick.bind(this, question)}/> 
+                        <input type="checkbox" onChange={this.props.onClick.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
                         <label htmlFor='name'>
                             {question.title}
                         </label>

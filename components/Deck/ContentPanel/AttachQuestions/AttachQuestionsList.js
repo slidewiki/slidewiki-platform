@@ -43,6 +43,7 @@ class AttachQuestionsList extends React.Component {
         };
         this.handleAllQuestions = this.handleAllQuestions.bind(this);
         this.handleNone = this.handleNone.bind(this);
+        //this.handleOnClick = this.handleOnClick.bind(this);
 
     }
     /*nikki does this need componentWillReceiveProps? */
@@ -61,7 +62,7 @@ class AttachQuestionsList extends React.Component {
 
     }
 
-    /*nikki componentDidUpdate? */
+    /*nikki componentDidUpdate? is this really necessary? */
     componentDidUpdate(){
         if((this.state.deckQuestions.length !== 0) && this.state.firstTime){ //We have the questions rendered
             //$('#selectedDeckTitleId').focus(); /*nikki need to change this line */
@@ -76,7 +77,6 @@ class AttachQuestionsList extends React.Component {
     }
 
     //acccordion functions
-
     componentDidMount() {
         this.enableAccordion();
     }
@@ -93,20 +93,20 @@ class AttachQuestionsList extends React.Component {
         $(accordionDIV).find('.ui.accordion').accordion('refresh');
     }
 
-    /*checkNoEmpty(element){
+    checkNoEmpty(element){
         return (element.toString().length>0);
-    }*/
+    }
 
-    //handleOnclick(selectedQuestion){
+    handleOnClick(selectedQuestion){
         /*This method:
        - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
        - removes the selectedQuestion from the selectedQuestions list if it was already selected
       */
-     /*nikki this method isn't used atm?? */
+     /*nikki this method isn't used atm?? moved into component*/
         //console.log(this);
-        //console.log(`handleonclick`);
-        //console.log(this.state.selectedQuestions);
-    /*    let questions = this.state.selectedQuestions;
+        console.log(`handleOnClick`);
+        console.log(this.state.selectedQuestions);
+        let questions = this.state.selectedQuestions;
         let index = questions.indexOf(selectedQuestion);
         if(index === -1){//It was not selected
             questions.push(selectedQuestion);
@@ -120,7 +120,9 @@ class AttachQuestionsList extends React.Component {
         });
 
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
-    }*/
+        console.log(this.props.AttachQuestionsModalStore.deckQuestions)
+
+    }
 
 
     handleAllQuestions(){
@@ -145,7 +147,7 @@ class AttachQuestionsList extends React.Component {
     /*handleKeyPress(selectedQuestion,event){
         if(event.key === 'Enter'){
             event.preventDefault();
-            this.handleOnclick(selectedQuestion);
+            this.handleOnClick(selectedQuestion);
         }
     }*/ //not being used? nikki
 
@@ -198,7 +200,7 @@ class AttachQuestionsList extends React.Component {
 
 
     render() {
-        let deckQuestions = this.props.AttachQuestionsModalStore.deckQuestions; //nikki should this be changed from state?
+        let deckQuestions = this.state.deckQuestions; //nikki should this be changed from state? either state or props.AttachModalStore
 
         let questionsContent;
         if(deckQuestions.length === 0){ //No questions loaded
@@ -241,7 +243,7 @@ class AttachQuestionsList extends React.Component {
 
             let questionListItems = deckQuestions.map((node, index) => {
                 return (
-                    <AttachQuestionsItem question={node} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
+                    <AttachQuestionsItem onClick={() => this.handleOnClick(node)} question={node} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
                 );
             });
             
@@ -257,7 +259,6 @@ class AttachQuestionsList extends React.Component {
 
         }
 
-
         return (
             questionsContent
         );
@@ -266,6 +267,9 @@ class AttachQuestionsList extends React.Component {
 
 AttachQuestionsList.contextTypes = {
     executeAction: PropTypes.func.isRequired
+};
+AttachQuestionsList.PropTypes = {
+    handleOnClick: PropTypes.func
 };
 AttachQuestionsList = connectToStores(AttachQuestionsList,[UserProfileStore,AttachQuestionsModalStore],(context,props) => {
     return {

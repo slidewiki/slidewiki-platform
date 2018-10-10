@@ -148,7 +148,8 @@ class AttachQuestionsModal extends React.Component{
         this.context.executeAction(updateShowQuestions,true);
         /*nikki new action that sets the showQuestions flag in the store? */
         //console.log(this.state.showQuestions);
-        /*nikki need to change this bit? */
+        /*nikki should this also update the selected question label somehow...? */
+
     }
 
     handleOptionsButton(){
