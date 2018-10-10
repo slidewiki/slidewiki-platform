@@ -1921,25 +1921,16 @@ class SlideContentEditor extends React.Component {
             }
         }
 
-        console.log('SlideContentEditor.nextProps.SlideEditStore.ltiClick='+nextProps.SlideEditStore.ltiClick);
-        console.log('SlideContentEditor.this.SlideEditStore.ltiClick='+this.props.SlideEditStore.ltiClick);
         if (nextProps.SlideEditStore.ltiClick === 'true' && nextProps.SlideEditStore.ltiClick !== this.props.SlideEditStore.ltiClick)
         {
             let uniqueID = this.getuniqueID();
-            //console.log('SlideContentEditor.length='+$('.pptx2html').length);
             let iframe;
-            //console.log('nextProps.SlideEditStore.ltiResponseURL='+nextProps.SlideEditStore.ltiResponseURL);
-            //console.log('nextProps.SlideEditStore.ltiResponseHTML='+nextProps.SlideEditStore.ltiResponseHTML);
             if(nextProps.SlideEditStore.ltiResponseURL !== '') {
               iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
             }
             else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
               var newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
-              //console.log("newHTML="+newHTML);  // "this-is-a-test"
-              //nextProps.SlideEditStore.ltiResponseHTML = '<html> <head> <title> LTI </title> </head> <body><div></div><p>This web page provides a gateway to the  of what it can do, or see the  for help with syntax.</p> </body> </html>';
               iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" srcdoc="'+newHTML+'"></iframe>';
-              //iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" ></iframe>';
-
             }
             if($('.pptx2html').length) //if slide is in canvas mode
             {
@@ -1956,8 +1947,6 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
             }
         }
-
-
 
         if (nextProps.SlideEditStore.title !== '' &&
         nextProps.SlideEditStore.title !== this.props.SlideEditStore.title &&

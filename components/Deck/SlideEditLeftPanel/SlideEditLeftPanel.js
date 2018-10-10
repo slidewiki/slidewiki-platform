@@ -159,16 +159,15 @@ class SlideEditLeftPanel extends React.Component {
     }
 
     handleLTIAddClick(){
-        console.log('handleLTIAddClick');
-            //if(this.state.ltiURL === '' && this.state.ltiKey === ''){
-        if(this.state.ltiURL === ''){
+        //console.log('handleLTIAddClick');
+        if(this.state.ltiURL === '' || this.state.ltiKey === ''){
             this.setState({ URLMissingError: true });
             this.setState({ ltiKeyMissingError: true });
             //console.log('errormissing');
             this.forceUpdate();
         }
         else {
-            console.log('post request');
+            //console.log('post request');
             var oauth = require('oauth-sign');
             var btoa = require('btoa');
             var timestamp = Math.round(Date.now() / 1000);
@@ -177,21 +176,6 @@ class SlideEditLeftPanel extends React.Component {
             var ltiURL = this.state.ltiURL;
             var key = this.state.ltiKey;
             var secret = this.state.ltiKey;
-/*
-            var ltiURL = 'https://lti.tools/saltire/tp';
-            var key = 'jisc.ac.uk';
-            var secret = 'secret';
-
-            var ltiURL = 'http://localhost:8882/lti/handle/6';
-            var key = 'CHANGEME';
-            var secret = 'CHANGEME';
-*/
-            var ltiURL = 'http://www.myopenmath.com/lti/sagecelllti.php';
-            var secret = 'LTKkey_030_1';
-            var key = 'LTKkey_030_1';
-
-            console.log('this.state.ltiURL='+this.state.ltiURL);
-            console.log('this.state.ltiKey='+this.state.ltiKey);
 
             var params = {
                 lti_message_type: 'basic-lti-launch-request',

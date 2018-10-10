@@ -25,12 +25,6 @@ export default function addLTI(context, payload, done) {
               //console.log('ADD_LTI_FAILURE');
               context.dispatch('ADD_LTI_FAILURE', err);
           } else {
-            /*
-              console.log("addLTI.js'.res="+res);
-              console.log('LTI_ADD_SUCCESS');
-              console.log('addLTI.requestPayload.ltiURL='+requestPayload.ltiURL);
-              console.log('addLTI.requestPayload.oauth_consumer_key='+requestPayload.params.oauth_consumer_key);
-              */
               context.dispatch('ADD_LTI_SUCCESS', res);
           }
           done();
