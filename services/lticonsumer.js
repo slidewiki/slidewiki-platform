@@ -15,27 +15,27 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         //console.log('params='+params);
         //console.log("params.ltiURL="+params.ltiURL);
-        var ltiURL = params.ltiURL;
-        var ltiKey = params.ltiKey;
-        var ltiHeight = params.ltiHeight;
-        var ltiWidth = params.ltiWidth;
+        let ltiURL = params.ltiURL;
+        let ltiKey = params.ltiKey;
+        let ltiHeight = params.ltiHeight;
+        let ltiWidth = params.ltiWidth;
 
         // LTI paramters
-        var args = params.params? params.params : params;
+        let args = params.params? params.params : params;
 
-        var url = require('url');
-        var http = require('http');
-        var https = require('https');
-        var request = require('request');
-        var querystring = require('querystring');
-        var btoa = require("btoa");
-        var oauth = require('oauth-sign');
-        var fs = require("fs");
+        let url = require('url');
+        let http = require('http');
+        let https = require('https');
+        let request = require('request');
+        let querystring = require('querystring');
+        let btoa = require('btoa');
+        let oauth = require('oauth-sign');
+        let fs = require("fs");
 
-        var parseURL = url.parse(ltiURL, true);
-        var hostname = parseURL.hostname;
-        var port = parseURL.port;
-        var pathname = parseURL.pathname;
+        let parseURL = url.parse(ltiURL, true);
+        let hostname = parseURL.hostname;
+        let port = parseURL.port;
+        let pathname = parseURL.pathname;
 
         //console.log('hostname='+hostname);
         //console.log('path='+pathname);
@@ -43,59 +43,60 @@ export default {
 
         if(resource === 'lticonsumer'){
             /*********connect to LTI Provider*************/
-          var post_data = querystring.stringify(args);
-          //console.log('lticonsumer.js.args='+JSON.stringify(args));
-          var request_options = {
-            hostname:  hostname,
-            path: pathname,
-            port: port,
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          };
+            let post_data = querystring.stringify(args);
+            //console.log('lticonsumer.js.args='+JSON.stringify(args));
+            let request_options = {
+              hostname:  hostname,
+              path: pathname,
+              port: port,
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            };
 
-          var body = '';
-          //console.log('Setting up req');
-          //console.log('request_options='+JSON.stringify(request_options));
-          //console.log('post_data='+JSON.stringify(post_data));
-          var req = http.request(request_options, function(res) {
-          console.log('STATUS: ' + res.statusCode);
-          console.log('HEADERS: ' + JSON.stringify(res.headers));
-          var json = JSON.stringify(res.headers);
-          //console.log('res.headers.location: ' + res.headers.location);
-          res.setEncoding('utf8');
-          res.on('data', function (chunk) {
+            let body = '';
+            //console.log('Setting up req');
+            //console.log('request_options='+JSON.stringify(request_options));
+            //console.log('post_data='+JSON.stringify(post_data));
+            let req = http.request(request_options, function(res) {
+            console.log('STATUS: ' + res.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(res.headers));
+            let json = JSON.stringify(res.headers);
+            //console.log('res.headers.location: ' + res.headers.location);
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
               //console.log('BODY: ' + chunk);
               body += chunk;
-          }).on('end', () => {
-            //console.log("body="+body);
-            //console.log("res.headers.location="+res.headers.location);
+            }).on('end', () => {
+              //console.log("body="+body);
+              //console.log("res.headers.location="+res.headers.location);
 
-            if(res.headers.location!=null){
-              var ltiResponse = {
-                ltiResponseURL: res.headers.location,
-                ltiResponseHTML: ' ',
-                ltiURL : params.ltiURL,
-                ltiKey : params.ltiKey,
-                ltiWidth: params.ltiWidth,
-                ltiHeight : params.ltiHeight
-              };
-            }
-            else {
+              let ltiResponse;
+              if(res.headers.location!=null){
+                ltiResponse = {
+                  ltiResponseURL: res.headers.location,
+                  ltiResponseHTML: ' ',
+                  ltiURL : params.ltiURL,
+                  ltiKey : params.ltiKey,
+                  ltiWidth: params.ltiWidth,
+                  ltiHeight : params.ltiHeight
+                };
+              }
+              else {
               //callback(null, body);
-              var ltiResponse = {
-                ltiResponseURL: '',
-                ltiResponseHTML: body,
-                ltiURL : params.ltiURL,
-                ltiKey : params.ltiKey,
-                ltiWidth: params.ltiWidth,
-                ltiHeight : params.ltiHeight
-              };
-            }
-            callback(null, ltiResponse);
+                ltiResponse = {
+                  ltiResponseURL: '',
+                  ltiResponseHTML: body,
+                  ltiURL : params.ltiURL,
+                  ltiKey : params.ltiKey,
+                  ltiWidth: params.ltiWidth,
+                  ltiHeight : params.ltiHeight
+                };
+              }
+              callback(null, ltiResponse);
 
-       }); //end on
+          }); //end on
    });
 
    console.log('Setting req error callback');

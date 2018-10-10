@@ -1126,7 +1126,7 @@ class SlideContentEditor extends React.Component {
                 }
             }
             else {
-              console.log('iframe not found');
+                console.log('iframe not found');
             }
         });
     }
@@ -1927,10 +1927,9 @@ class SlideContentEditor extends React.Component {
             let iframe;
             if(nextProps.SlideEditStore.ltiResponseURL !== '') {
               iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
-            }
-            else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
-              var newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
-              iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" srcdoc="'+newHTML+'"></iframe>';
+            } else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
+                let newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
+                iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" srcdoc="'+newHTML+'"></iframe>';
             }
             if($('.pptx2html').length) //if slide is in canvas mode
             {

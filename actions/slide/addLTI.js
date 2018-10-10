@@ -12,22 +12,19 @@ export default function addLTI(context, payload, done) {
     //console.log('actions/slide/addLTI.js');
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
-    var requestPayload = payload;
-
-    //console.log('userid='+userid);
     if (userid != null && userid !== '') {
 
         context.service.create('lticonsumer', payload, {timeout: 20 * 1000}, (err, res) => {
-          console.log('addLTI.js');
-          //console.log('res='+res);
-          if (err) {
+            console.log('addLTI.js');
+            //console.log('res='+res);
+            if (err) {
               console.log(err);
               //console.log('ADD_LTI_FAILURE');
               context.dispatch('ADD_LTI_FAILURE', err);
-          } else {
+            } else {
               context.dispatch('ADD_LTI_SUCCESS', res);
-          }
-          done();
+            }
+            done();
         });
 
     } //end if (userid != null && userid !== '')

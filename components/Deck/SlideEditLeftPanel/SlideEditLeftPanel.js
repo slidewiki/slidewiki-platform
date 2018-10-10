@@ -71,21 +71,20 @@ class SlideEditLeftPanel extends React.Component {
             prevState.showProperties !== this.state.showProperties ||
             prevState.showTitleChange !== this.state.showTitleChange ||
             prevState.showSize !== this.state.showSize ||
-            prevState.showBackground !== this.state.showBackground)
-        {
+            prevState.showBackground !== this.state.showBackground){
             //set focus on buttons depending on submenu navigation
-            if (this.state.showTitleChange === true)
-            {
+              if (this.state.showTitleChange === true)
+              {
                 $('#slideTitle').focus();
-            } else if (this.state.showEmbed === true)
-            {
+              } else if (this.state.showEmbed === true)
+              {
                 $('#embedCode').focus();
-            } else if (this.state.showLTI === true)
-            {
-              $('#ltiKey').focus();
-            } else {
+              } else if (this.state.showLTI === true)
+              {
+                $('#ltiKey').focus();
+              } else {
                 $('#handleBackLink').focus();
-            }
+              }
         }
     }
     handleAddInputBox(){
@@ -168,16 +167,16 @@ class SlideEditLeftPanel extends React.Component {
         }
         else {
             //console.log('post request');
-            var oauth = require('oauth-sign');
-            var btoa = require('btoa');
-            var timestamp = Math.round(Date.now() / 1000);
-            var method = 'POST';
+            let oauth = require('oauth-sign');
+            let btoa = require('btoa');
+            let timestamp = Math.round(Date.now() / 1000);
+            let method = 'POST';
 
-            var ltiURL = this.state.ltiURL;
-            var key = this.state.ltiKey;
-            var secret = this.state.ltiKey;
+            let ltiURL = this.state.ltiURL;
+            let key = this.state.ltiKey;
+            let secret = this.state.ltiKey;
 
-            var params = {
+            let params = {
                 lti_message_type: 'basic-lti-launch-request',
                 lti_version: 'LTI-1p0',
                 resource_link_id: 'resourceLinkId',
