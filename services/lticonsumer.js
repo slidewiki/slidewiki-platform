@@ -68,30 +68,30 @@ export default {
                 }).on('end', () => {
                 //console.log("body="+body);
                 //console.log("res.headers.location="+res.headers.location);
-                let ltiResponse;
-                if(res.headers.location!=null){
+                    let ltiResponse;
+                    if(res.headers.location!=null){
                     ltiResponse = {
-                      ltiResponseURL: res.headers.location,
-                      ltiResponseHTML: ' ',
-                      ltiURL : params.ltiURL,
-                      ltiKey : params.ltiKey,
-                      ltiWidth: params.ltiWidth,
-                      ltiHeight : params.ltiHeight
-                  };
-                }
-                else {
+                        ltiResponseURL: res.headers.location,
+                        ltiResponseHTML: ' ',
+                        ltiURL : params.ltiURL,
+                        ltiKey : params.ltiKey,
+                        ltiWidth: params.ltiWidth,
+                        ltiHeight : params.ltiHeight
+                    };
+                  }
+                    else {
                     ltiResponse = {
-                      ltiResponseURL: '',
-                      ltiResponseHTML: body,
-                      ltiURL : params.ltiURL,
-                      ltiKey : params.ltiKey,
-                      ltiWidth: params.ltiWidth,
-                      ltiHeight : params.ltiHeight
-                  };
+                        ltiResponseURL: '',
+                        ltiResponseHTML: body,
+                        ltiURL : params.ltiURL,
+                        ltiKey : params.ltiKey,
+                        ltiWidth: params.ltiWidth,
+                        ltiHeight : params.ltiHeight
+                    };
                 }
-                callback(null, ltiResponse);
+                    callback(null, ltiResponse);
 
-            }); //end on
+                }); //end on
             });
 
             console.log('Setting req error callback');

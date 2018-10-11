@@ -11,9 +11,6 @@ import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
 import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
 import embedClick from '../../../actions/slide/embedClick';
-
-import addLTI from '../../../actions/slide/addLTI';
-
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
@@ -31,24 +28,11 @@ class SlideEditLeftPanel extends React.Component {
             embedCode: '',
             embedWidth: '400',
             embedHeight: '300',
-
-            ltiURL: '',
-            ltiKey: '',
-            ltiWidth: '400',
-            ltiHeight: '300',
-            ltiResponseURL: '',
-            ltiResponseHTML: '',
-
             URLMissingError: false,
             embedCodeMissingError: false,
-            ltiKeyMissingError: false,
-
             showOther: false,
             showTemplate: false,
             showEmbed: false,
-
-            showLTI: false,
-
             showProperties: false,
             showNameChange: false,
             showSize: false,
@@ -65,26 +49,21 @@ class SlideEditLeftPanel extends React.Component {
         if (prevState.showTemplate !== this.state.showTemplate ||
             prevState.showOther !== this.state.showOther ||
             prevState.showEmbed !== this.state.showEmbed ||
-
-            prevState.showLTI !== this.state.showLTI ||
-
             prevState.showProperties !== this.state.showProperties ||
             prevState.showTitleChange !== this.state.showTitleChange ||
             prevState.showSize !== this.state.showSize ||
-            prevState.showBackground !== this.state.showBackground){
+            prevState.showBackground !== this.state.showBackground)
+        {
             //set focus on buttons depending on submenu navigation
-              if (this.state.showTitleChange === true)
-              {
+            if (this.state.showTitleChange === true)
+            {
                 $('#slideTitle').focus();
-            }else if (this.state.showEmbed === true)
-              {
-                  $('#embedCode').focus();
-               } else if (this.state.showLTI === true)
-              {
-                $('#ltiKey').focus();
+            } else if (this.state.showEmbed === true)
+            {
+                $('#embedCode').focus();
             } else {
-                  $('#handleBackLink').focus();
-              }
+                $('#handleBackLink').focus();
+            }
         }
     }
     handleAddInputBox(){
@@ -149,60 +128,6 @@ class SlideEditLeftPanel extends React.Component {
             this.setState({showEmbed: false});
         }
     }
-
-    handleLTIClick(){
-        console.log('handleLTIClick');
-        this.setState({showLTI: true});
-        this.setState({showOther: false});
-        this.forceUpdate();
-    }
-
-    handleLTIAddClick(){
-        //console.log('handleLTIAddClick');
-        if(this.state.ltiURL === '' || this.state.ltiKey === ''){
-            this.setState({ URLMissingError: true });
-            this.setState({ ltiKeyMissingError: true });
-            //console.log('errormissing');
-            this.forceUpdate();
-        }
-        else {
-            //console.log('post request');
-            let oauth = require('oauth-sign');
-            let btoa = require('btoa');
-            let timestamp = Math.round(Date.now() / 1000);
-            let method = 'POST';
-
-            let ltiURL = this.state.ltiURL;
-            let key = this.state.ltiKey;
-            let secret = this.state.ltiKey;
-
-            let params = {
-                lti_message_type: 'basic-lti-launch-request',
-                lti_version: 'LTI-1p0',
-                resource_link_id: 'resourceLinkId',
-                oauth_consumer_key: key,
-                oauth_nonce: btoa(timestamp),
-                oauth_signature_method: 'HMAC-SHA1',
-                oauth_timestamp: timestamp,
-                oauth_version: '1.0',
-                ext_user_username: 'slidewiki'
-            };
-
-            let signature = oauth.hmacsign(method, ltiURL, params, secret);
-            params.oauth_signature = signature;
-            //console.log("params.oauth_signature="+params.oauth_signature);
-            this.context.executeAction(addLTI, {
-                ltiURL: ltiURL,
-                ltiKey: key,
-                ltiWidth : this.state.ltiWidth,
-                ltiHeight : this.state.ltiHeight,
-                params: params
-
-            });
-
-        }//end else
-    }
-
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -310,13 +235,6 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showEmbed: false});
         this.forceUpdate();
     }
-
-    handleBackLTI(){
-        this.setState({showOther: true});
-        this.setState({showLTI: false});
-        this.forceUpdate();
-    }
-
     handleTitleBack(){
         this.setState({showProperties: true});
         this.setState({showTitleChange: false});
@@ -326,9 +244,6 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showTemplate: false});
         this.setState({showOther: false});
         this.setState({showEmbed: false});
-
-        this.setState({showLTI: false});
-
         this.setState({showProperties: false});
         this.setState({showSize: false});
         this.forceUpdate();
@@ -369,19 +284,9 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleEmbedClick':
                     this.handleEmbedClick();
                     break;
-
-                case 'handleLTIClick':
-                    this.handleLTIClick();
-                    break;
-
                 case 'handleEmbedAddClick':
                     this.handleEmbedAddClick();
                     break;
-
-                case 'handleLTIAddClick':
-                    this.handleLTIAddClick();
-                    break;
-
                 case 'handleTemplateClick':
                     this.handleTemplateClick();
                     break;
@@ -444,11 +349,6 @@ class SlideEditLeftPanel extends React.Component {
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
                   </a>
-
-                  <a  className="item" id="handleLTIClick" role="button" onClick={this.handleLTIClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleLTIClick')}>
-                      <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.lti' defaultMessage='LTI' />
-                  </a>
-
                   <a className="item" id="handleTableClick" role="button" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
                       <i tabIndex="0" className="table icon"></i><FormattedMessage id='editpanel.table' defaultMessage='Table' />
                   </a>
@@ -512,58 +412,6 @@ class SlideEditLeftPanel extends React.Component {
                     <FormattedMessage id='editpanel.embedNote' defaultMessage='Not all website owners allow their content to be embedded. Using an embed code (instead of URL) often works best.' />
                   </label>
                 </form>);
-
-
-        let ltiOptions = (
-              <form className="ui form">
-                                <a className="item" id="handleBack" role="button" onClick={this.handleBackLTI.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackLTI')}>
-                                    <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
-                                </a>
-
-                                          <label htmlFor="ltiKey">
-                                            <FormattedMessage id='editpanel.ltiKey' defaultMessage='LTI Key:' />
-                                          </label>
-                                          <div className="field">
-                                            <i className="error">
-                                                {this.state.ltiKeyMissingError === false ? '' : <FormattedMessage id='editpanel.ltiKeyMissingError' defaultMessage='missing LTI key' />}
-                                            </i>
-                                            <Input onChange={this.handleChange.bind(this)} id="ltiKey" ref="ltiKey" name="ltiKey" aria-label="LTI Key" autoFocus />
-                                          </div>
-                                          <div>
-                                            <i>and</i>
-                                          </div>
-                                          <label htmlFor="ltiURL">
-                                            <FormattedMessage id='editpanel.ltiURL' defaultMessage='URL/Link to LTI content:' />
-                                          </label>
-                                          <div className="field">
-                                            <i className="error">
-                                                {this.state.URLMissingError === false ? '' : <FormattedMessage id='editpanel.URLMissingError' defaultMessage='missing URL/link to content' />}
-                                            </i>
-                                            <Input onChange={this.handleChange.bind(this)} id="ltiURL" ref="ltiURL" name="ltiURL" aria-label="URL (Link) to LTI content" autoFocus/>
-                                          </div>
-                                          <label htmlFor="ltiWidth">
-                                            <FormattedMessage id='editpanel.ltiWidth' defaultMessage='Width of LTI content:' />
-                                          </label>
-                                          <div className="required field">
-                                            <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="ltiWidth" ref="ltiWidth" name="ltiWidth" aria-label="Width of LTI content" aria-required="true" required />
-                                          </div>
-                                          <label htmlFor="ltiHeight">
-                                            <FormattedMessage id='editpanel.ltiHeight' defaultMessage='Height of LTI content:' />
-                                          </label>
-                                          <div className="required field">
-                                            <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="ltiHeight" ref="ltiHeight" name="ltiHeight" aria-label="Height of LTI content" aria-required="true" required />
-                                          </div>
-                                          <a className="item" id="handleLTIAddClick" role="button" onClick={this.handleLTIAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleLTIAddClick')}>
-                                              <i tabIndex="0" className="add square icon"></i><FormattedMessage id='editpanel.ltiAdd' defaultMessage='Add to Slide' />
-                                          </a>
-                                          <label htmlFor="handleLTIAddClick">
-                                            <FormattedMessage id='editpanel.ltiNote' defaultMessage='Use an LTI URL and key.' />
-                                          </label>
-                </form>);
-
-
-
-
 
         const templateListStyle = {
             maxHeight: 600,
@@ -755,8 +603,6 @@ class SlideEditLeftPanel extends React.Component {
             panelcontent = otherList;
         } else if (this.state.showEmbed) {
             panelcontent = embedOptions;
-        } else if (this.state.showLTI) {
-          panelcontent = ltiOptions;
         } else if (this.state.showProperties){
             panelcontent = propertiesContent;
         } else if (this.state.showTitleChange){

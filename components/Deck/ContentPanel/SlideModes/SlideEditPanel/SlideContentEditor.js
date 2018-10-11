@@ -1926,20 +1926,21 @@ class SlideContentEditor extends React.Component {
             let uniqueID = this.getuniqueID();
             let iframe;
             if(nextProps.SlideEditStore.ltiResponseURL !== '') {
-              iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
-                } else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
-            let newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
-                  iframe = '<iframe srcdoc=\"'+newHTML+'\" width=\"'+nextProps.SlideEditStore.ltiWidth+'\" height=\"'+nextProps.SlideEditStore.ltiHeight+'\" frameborder=\"0\" allow=\"encrypted-media\"></iframe>';
-                 }
-             if($('.pptx2html').length) //if slide is in canvas mode
+                iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
+            }
+            else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
+                let newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
+                iframe = '<iframe srcdoc=\"'+newHTML+'\" width=\"'+nextProps.SlideEditStore.ltiWidth+'\" height=\"'+nextProps.SlideEditStore.ltiHeight+'\" frameborder=\"0\" allow=\"encrypted-media\"></iframe>';
+            }
+            if($('.pptx2html').length) //if slide is in canvas mode
             {
                 $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: '+nextProps.SlideEditStore.ltiWidth+'px; height: '+nextProps.SlideEditStore.ltiHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
                 this.hasChanges = true;
                 //this.correctDimensionsBoxes('iframe');
-            } else { //if slide is in non-canvas mode
+            }
+            else { //if slide is in non-canvas mode
                 this.refs.inlineContent.innerHTML += iframe;
             }
-
             if($('.pptx2html').length) //if slide is in canvas mode
             {
                 //this.uniqueIDAllElements();
