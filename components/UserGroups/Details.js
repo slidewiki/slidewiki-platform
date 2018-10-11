@@ -385,7 +385,8 @@ class Details extends React.Component {
               <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                   <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
               </button>
-              <button className="ui labeled icon button" name="" onClick={this.handleExitGroup.bind(this)} >
+              &nbsp;
+              <button className="ui right labeled icon button" name="" onClick={this.handleExitGroup.bind(this)} >
                   <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
               </button>
             </div>;
@@ -395,7 +396,8 @@ class Details extends React.Component {
               <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                   <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
               </button>
-              <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
+              &nbsp;
+              <button className="ui right labeled icon button" onClick={this.handleExitGroup.bind(this)} >
                   <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.deleteGroup)}
               </button>
             </div>;

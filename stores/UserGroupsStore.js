@@ -125,9 +125,10 @@ class UserGroupsStore extends BaseStore {
         this.emitChange();
     }
 
-    saveUsergroupSuccess() {
+    saveUsergroupSuccess(res) {
         this.saveUsergroupIsLoading = false;
         this.saveUsergroupError = '';
+        this.currentUsergroup = res;
         this.emitChange();
     }
 

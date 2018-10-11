@@ -119,9 +119,6 @@ class UserGroupPage extends React.Component {
                           </p>
                         </NavLink>
                       </div>
-                      <button className="ui labeled icon button" onClick={this.handleGoBack.bind(this)} >
-                          <i className="users icon"></i>{this.context.intl.formatMessage(messages.goBack)}
-                      </button>
                   </div>
                 </div>
               </div>
