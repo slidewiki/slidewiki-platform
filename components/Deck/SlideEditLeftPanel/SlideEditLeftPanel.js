@@ -73,6 +73,9 @@ class SlideEditLeftPanel extends React.Component {
             if (this.state.showTitleChange === true)
             {
                 $('#slideTitle').focus();
+            } else if (this.state.showLTI === true)
+            {
+                  $('#ltiKey').focus();
             } else if (this.state.showEmbed === true)
             {
                 $('#embedCode').focus();
@@ -462,6 +465,9 @@ class SlideEditLeftPanel extends React.Component {
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
                   </a>
+                  <a  className="item" id="handleLTIClick" role="button" onClick={this.handleLTIClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleLTIClick')}>
+                      <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.lti' defaultMessage='LTI' />
+                  </a>
                   <a className="item" id="handleTableClick" role="button" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
                       <i tabIndex="0" className="table icon"></i><FormattedMessage id='editpanel.table' defaultMessage='Table' />
                   </a>
@@ -546,7 +552,7 @@ class SlideEditLeftPanel extends React.Component {
                 <div className="field">
                       <i className="error">
                             {this.state.ltiURLMissingError === false ? '' : <FormattedMessage id='editpanel.ltiURLMissingError' defaultMessage='missing URL/link to content' />}
-                </i>
+                      </i>
                       <Input onChange={this.handleChange.bind(this)} id="ltiURL" ref="ltiURL" name="ltiURL" aria-label="URL (Link) to LTI content" autoFocus/>
                 </div>
                     <label htmlFor="ltiWidth">

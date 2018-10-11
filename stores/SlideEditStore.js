@@ -164,8 +164,6 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.emitChange();
     }
-
-
     handleLTIAddClick(payload){
         this.ltiURL = payload.ltiURL;
         this.ltiKey = payload.ltiKey;
@@ -208,7 +206,6 @@ class SlideEditStore extends BaseStore {
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
-
             ltiClick: this.ltiClick,
             ltiURL: this.ltiURL,
             ltiKey: this.ltiKey,
@@ -216,7 +213,6 @@ class SlideEditStore extends BaseStore {
             ltiHeight: this.ltiHeight,
             ltiResponseURL: this.ltiResponseURL,
             ltiResponseHTML: this.ltiResponseHTML,
-
             HTMLEditorClick: this.HTMLEditorClick
         };
     }
@@ -251,7 +247,6 @@ class SlideEditStore extends BaseStore {
         this.embedCode = state.embedCode;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
-
         this.ltiClick = state.ltiClick;
         this.ltiURL = state.ltiURL;
         this.ltiKey = state.ltiKey;
@@ -259,7 +254,6 @@ class SlideEditStore extends BaseStore {
         this.ltiHeight = state.ltiHeight;
         this.ltiResponseURL = state.ltiResponseURL;
         this.ltiResponseHTML = state.ltiResponseHTML;
-
         this.HTMLEditorClick = state.HTMLEditorClick;
     }
 }
