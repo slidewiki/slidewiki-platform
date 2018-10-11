@@ -70,7 +70,7 @@ export default {
                 //console.log("res.headers.location="+res.headers.location);
                     let ltiResponse;
                     if(res.headers.location!=null){
-                    ltiResponse = {
+                       ltiResponse = {
                         ltiResponseURL: res.headers.location,
                         ltiResponseHTML: ' ',
                         ltiURL : params.ltiURL,
@@ -78,9 +78,9 @@ export default {
                         ltiWidth: params.ltiWidth,
                         ltiHeight : params.ltiHeight
                     };
-                  }
+                    }
                     else {
-                    ltiResponse = {
+                        ltiResponse = {
                         ltiResponseURL: '',
                         ltiResponseHTML: body,
                         ltiURL : params.ltiURL,
@@ -88,7 +88,7 @@ export default {
                         ltiWidth: params.ltiWidth,
                         ltiHeight : params.ltiHeight
                     };
-                }
+                    }
                     callback(null, ltiResponse);
 
                 }); //end on
