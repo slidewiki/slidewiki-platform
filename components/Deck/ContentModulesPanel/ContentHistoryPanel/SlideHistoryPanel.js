@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideHistoryStore from '../../../../stores/SlideHistoryStore';
@@ -26,7 +27,7 @@ class SlideHistoryPanel extends React.Component {
 }
 
 SlideHistoryPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 SlideHistoryPanel = connectToStores(SlideHistoryPanel, [SlideHistoryStore, UserProfileStore, PermissionsStore], (context, props) => {

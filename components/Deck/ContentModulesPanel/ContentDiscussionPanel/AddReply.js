@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import addReply from '../../../../actions/contentdiscussion/addReply';
@@ -56,7 +57,7 @@ class AddReply extends React.Component {
 }
 
 AddReply.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default AddReply;

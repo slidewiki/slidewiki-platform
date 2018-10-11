@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
+import { PhotoshopPicker } from 'react-color';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import {Button, Icon, Input, TextArea} from 'semantic-ui-react';
-import classNames from 'classnames';
+import {Button, Icon, Input, Popup, TextArea} from 'semantic-ui-react';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
@@ -9,6 +10,7 @@ import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
 import tableClick from '../../../actions/slide/tableClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
+import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
@@ -17,6 +19,7 @@ import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import changeSlideTransition from '../../../actions/slide/changeSlideTransition';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import PaintModal from '../../Paint/PaintModal';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -39,7 +42,12 @@ class SlideEditLeftPanel extends React.Component {
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
             LeftPanelTitleChange: false,
-            titleMissingError: false
+            titleMissingError: false,
+            paintButton: (<a className="item" id="paintModalTrigger" role="button" >
+                                <i tabIndex="0" className="paint brush icon"></i> Paint
+                               </a>),
+            backgroundColor: null,
+            colorPopupIsOpen: false
         };
     }
     componentDidUpdate(prevProps, prevState){
@@ -62,6 +70,14 @@ class SlideEditLeftPanel extends React.Component {
             } else {
                 $('#handleBackLink').focus();
             }
+        }
+
+        let backgroundColorInput = document.getElementById('changeBackgroundColorInput');
+
+        if (backgroundColorInput) {
+            backgroundColorInput.addEventListener('input', () => {
+                $('.pptx2html').css('background-color', backgroundColorInput.value);
+            });
         }
     }
     handleAddInputBox(){
@@ -86,6 +102,11 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleCodeClick(){
         this.context.executeAction(codeClick, {});
+    }
+    handleRemoveBackgroundClick(){
+        this.context.executeAction(removeBackgroundClick, {});
+        // Remove background color in case there is
+        $('.pptx2html').css({'background-color' : ''});
     }
     handleEmbedClick(){
         this.setState({showEmbed: true});
@@ -166,7 +187,12 @@ class SlideEditLeftPanel extends React.Component {
             //in content editor -> catch new value for title SlideEditStore.title -> manuall trigger save -> new revision??
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
-
+    }
+    handleOpenColorPopup(){
+        this.setState({
+            colorPopupIsOpen: true,
+            backgroundColor: $('.pptx2html').css('background-color')
+        });
     }
     changeSlideTransitionClick(){
         this.setState({showTransition: true});
@@ -205,6 +231,18 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showBackground: true});
         this.setState({showProperties: false});
         this.forceUpdate();
+    }
+    changeBackgroundColor(){
+        this.setState({
+            backgroundColor: $('.pptx2html').css('background-color'),
+            colorPopupIsOpen: false
+        });
+    }
+    cancelChangeBackgroundColor(){
+        $('.pptx2html').css('background-color', this.state.backgroundColor);
+        this.setState({
+            colorPopupIsOpen: false
+        });
     }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
@@ -259,6 +297,11 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showSize: false});
         this.setState({showTransition: false});
         this.forceUpdate();
+    }
+    handleChangeBackgroundColorClick(){
+        this.setState({
+            backgroundColor: $('.pptx2html').css('background-color')
+        });
     }
     handleKeyPress = (event, param, template) => {
         //console.log(event.key);
@@ -329,18 +372,25 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleSlideSizechange':
                     this.handleSlideSizechange(slideSize);
                     break;
-                case 'changeSlideBackgroundClick':
-                    this.changeSlideBackgroundClick();
-                    break;
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
                     break;
                 case 'handleHelpClick':
                     this.handleHelpClick();
                     break;
+                case 'handleChangeBackgroundColorClick':
+                    this.handleChangeBackgroundColorClick();
+                    break;
                 default:
             }
         }
+    }
+    componentDidMount(){
+        this.paintButton = (<PaintModal/>);
+    }
+
+    handleColorChange(color) {
+        $('.pptx2html').css('background-color', color.hex);
     }
 
     render() {
@@ -369,6 +419,9 @@ class SlideEditLeftPanel extends React.Component {
                   </a>
                   <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
+                  </a>
+                  <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
+                      <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
                   </a>
                 </div>);
 
@@ -514,12 +567,28 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="changeSlideTransitionClick" role="button" onClick={this.changeSlideTransitionClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideTransitionClick')}>
                       <i tabIndex="0" className="share square icon"></i><FormattedMessage id='editpanel.slideTransition' defaultMessage='Slide Transition' />
                   </a>
+                  <Popup id='colorpopup' trigger={
+                      <a className="item" id="handleChangeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
+                          <i tabIndexn="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
+                      </a>
+                    }
+                    content={
+                        <PhotoshopPicker onChange={ this.handleColorChange.bind(this) } header='Choose Background Color'
+                            onAccept={this.changeBackgroundColor.bind(this)}
+                            onCancel={this.cancelChangeBackgroundColor.bind(this)}
+                            color={this.state.backgroundColor}
+                        />
+                    }
+                    on='click'
+                    position='right center'
+                    open={this.state.colorPopupIsOpen}
+                    onOpen={this.handleOpenColorPopup.bind(this)}
+                  />
+                  <a className="item" id="handleRemoveBackgroundClick" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
+                      <i tabIndex="0"  className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
+                      {/*eraser*/}
+                  </a>
                 </form>);
-                /*
-                                  <a className="item" id="changeSlideBackgroundClick" role="button" onClick={this.changeSlideBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideBackgroundClick')}>
-                                      <i tabIndex="0" className="file image outline icon"></i>Background image
-                                  </a>
-                */
                 //better (not working) icons for change slide size
                 //window restore
                 //window restore icon
@@ -617,22 +686,20 @@ class SlideEditLeftPanel extends React.Component {
                 <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
             <a  className="item" id="handleUploadMediaClick" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
-                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Image' />
+                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Add image' />
             </a>
+            {this.paintButton}
             <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
-                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Video' />
+                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Add video' />
             </a>
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
-                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Other' />
+                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
             <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
-                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Slide Properties' />
-            </a>
-            <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
-                <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
+                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
             </a>
             <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
                 <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
@@ -674,8 +741,8 @@ class SlideEditLeftPanel extends React.Component {
 }
 
 SlideEditLeftPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
     return {

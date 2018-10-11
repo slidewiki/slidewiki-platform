@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import {updateAuthorizedUsers} from '../../../../../actions/updateDeckAuthorizations';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {Button, Modal, Header} from 'semantic-ui-react';
@@ -86,7 +87,7 @@ class DeckEditPanel extends React.Component {
         if (this.getParameterByName('interestedUser') && this.props.UserProfileStore.username === '') {
             return;
         }
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
+        const nodeURL = Util.makeNodeURL(selector, selector.page, 'view');
         //user is not logged in
         if (this.props.UserProfileStore.username === '') {
             this.context.executeAction(navigateAction, {
@@ -116,7 +117,7 @@ class DeckEditPanel extends React.Component {
             $('.ui.login.modal').modal('show');
             return;
         }
-        const nodeURL = ContentUtil.makeNodeURL(this.props.selector, 'view');
+        const nodeURL = Util.makeNodeURL(this.props.selector, this.props.selector.page, 'view');
         // console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
         if (interestedUser) {
             this.users = this.props.DeckEditStore.authorizedUsers;
@@ -178,7 +179,7 @@ class DeckEditPanel extends React.Component {
         this.isModalOpen = false;
         this.forceUpdate();
         this.context.executeAction(navigateAction, {
-            url: ContentUtil.makeNodeURL(this.props.selector, 'view')
+            url: Util.makeNodeURL(this.props.selector, this.props.selector.page, 'view')
         });
     }
 
@@ -252,8 +253,8 @@ class DeckEditPanel extends React.Component {
     }
 }
 DeckEditPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 DeckEditPanel = connectToStores(DeckEditPanel, [DeckEditStore, UserProfileStore], (context, props) => {

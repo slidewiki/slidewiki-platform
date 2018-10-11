@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import ISO6391 from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../common';
 import {NavLink, navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
@@ -36,7 +37,7 @@ class TranslationPanel extends React.Component {
         if (translation.language !== this.props.TranslationStore.currentLang.language){
             let languageName = '';
             if(translation.language){
-                languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+                languageName = getLanguageName(translation.language.toLowerCase().substr(0,2));
             }
             if (languageName){
                 return (
@@ -99,7 +100,7 @@ class TranslationPanel extends React.Component {
 
 
         let currentLang = deckLanguage ?
-            <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>
+            <span><i className='icon comments'/>{getLanguageName(deckLanguage.toLowerCase().substr(0,2))}</span>
             : <span>English</span>;
 
 
@@ -123,7 +124,7 @@ class TranslationPanel extends React.Component {
 }
 
 TranslationPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 TranslationPanel = connectToStores(TranslationPanel, [TranslationStore, UserProfileStore], (context, props) => {
     return {

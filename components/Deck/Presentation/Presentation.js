@@ -1,36 +1,24 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-//import ResizeAware from 'react-resize-aware';
-import {NavLink} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
+import PropTypes from 'prop-types';
+import { handleRoute } from 'fluxible-router';
 import PresentationSlide from './PresentationSlide';
-import DeckTreeStore from '../../../stores/DeckTreeStore';
+import { connectToStores } from 'fluxible-addons-react';
+import { Microservices } from '../../../configs/microservices';
 import PresentationStore from '../../../stores/PresentationStore';
-import loadPresentation from '../../../actions/loadPresentation';
+
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
 
-let playerCss = {
-    height: '100%',
-    position: 'absolute',
-    top: '0',
-};
-
-let clearStyle = {
-    clear: 'both'
-};
-
-
 class Presentation extends React.Component{
     constructor(props){
         super(props);
-        this.playerCss = playerCss;
-        this.slides = [];
+        this.playerCss = { height: '100%', position: 'absolute', top: '0' };
+        this.clearStyle = { clear: 'both' };
         this.startingSlide = this.props.PresentationStore.selector.sid;
-        this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
-
+        this.secret = props.currentRoute.query.secret;
+        this.id = props.currentRoute.query.id;
     }
 
     componentDidMount(){
@@ -39,10 +27,9 @@ class Presentation extends React.Component{
 
             //remove existing tabindices
             $('[style*="absolute"]').each(function () {
-                if($(this).attr('tabindex') !== 0)
-                {
-                    $(this).attr('tabindex', 0);
-                }
+                let el = $(this);
+                if(el.attr('tabindex') !== 0)
+                    el.attr('tabindex', 0);
             });
             //add tabindices to all children in absolute elements
             $('[style*="absolute"]').each(function () {
@@ -76,17 +63,28 @@ class Presentation extends React.Component{
             }
 
             window.location.hash = '#slide-' + this.startingSlide;
+
+            let multiplexFileToLoad = (this.secret) ? '/custom_modules/reveal.js/plugin/multiplex/master.js' : '/custom_modules/reveal.js/plugin/multiplex/client.js' ;
+            multiplexFileToLoad = (this.id) ? multiplexFileToLoad : '' ;
+            let multiplexConfig = (this.secret) ? {secret: this.secret, id: this.id} : {secret: null, id: this.id};
+            multiplexConfig.url = Microservices.webrtc.uri;
+            multiplexConfig = (this.id) ? multiplexConfig : {};
+            let dependencySocketIO = (this.id) ? Microservices.webrtc.uri.replace('http:','').replace('https:','') + '/socket.io/socket.io.js' : '' ;
             Reveal.initialize({
                 width: pptxwidth,
-			         height: pptxheight,
+                height: pptxheight,
                 // margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
                 viewDistance: 2,
                 dependencies: [
+                    { src: dependencySocketIO, async: true },
+                    { src: multiplexFileToLoad, async: true },
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    // { src: '/custom_modules/reveal.js/plugin/reveal.js-toolbar/toolbar.js', async: true},
+                    { src: '/reveal.js-menu/menu.js', async: true},
                     { src: '/custom_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     // Plugin from https://github.com/marcysutton/reveal-a11y
                     //{ src: '/custom_modules/reveal.js/plugin/accessibility/helper.js', async: false,condition: function() {return !!document.body.classList;}}
@@ -94,7 +92,52 @@ class Presentation extends React.Component{
                 keyboard: {
                     72: null,
                     78: null
-                }
+                },
+                toolbar: {
+                    captureMenu: false,  // set to false so it doesn't crash the plugin
+                    deckUrl: ['/deck', this.props.PresentationStore.selector.id, this.props.PresentationStore.deckSlug].join('/')
+                },
+                menu: {
+                    deckUrl: ['/deck', this.props.PresentationStore.selector.id, this.props.PresentationStore.deckSlug].join('/'),
+                    speakerNotes: '/custom_modules/reveal.js/plugin/notes/notes.html',
+                    overview: true,
+                    side: 'left',
+                    width: 'normal',
+                    numbers: false,
+                    titleSelector: 'h1, h2, h3, h4, h5, h6',
+                    useTextContentForMissingTitles: true,
+                    hideMissingTitles: false,
+                    markers: true,
+
+                    // Specify custom panels to be included in the menu, by
+                    // providing an array of objects with 'title', 'icon'
+                    // properties, and either a 'src' or 'content' property.
+                    custom: false,
+
+                    // Specifies the themes that will be available in the themes
+                    // menu panel. Set to 'true' to show the themes menu panel
+                    // with the default themes list. Alternatively, provide an
+                    // array to specify the themes to make available in the
+                    // themes menu panel, for example...
+                    // [
+                    //     { name: 'Black', theme: 'css/theme/black.css' },
+                    //     { name: 'White', theme: 'css/theme/white.css' },
+                    //     { name: 'League', theme: 'css/theme/league.css' }
+                    // ]
+                    themes: false,
+
+                    themesPath: 'css/theme/',
+                    transitions: false,
+                    openButton: true,
+                    openSlideNumber: false,
+                    keyboard: true,
+                    sticky: false,
+                    autoOpen: true,
+                    delayInit: false,
+                    openOnInit: false,
+                    loadIcons: true
+                },
+                multiplex: multiplexConfig
             });
 
 
@@ -134,29 +177,35 @@ class Presentation extends React.Component{
         if(process.env.BROWSER){
             let pptxwidth;
             let pptxheight;
-            if($('.present > .pptx2html').html()){
+            if( $('.present > .pptx2html').html() ){
                 pptxwidth = $('.present > .pptx2html').width();
                 pptxheight = $('.present > .pptx2html').height();
             } else {
+
                 pptxwidth = '100%';
                 pptxheight = '100%';
+
                 //resize non-pptx2html slide content based on current height of window
                 //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
-                let presentwidth = $('.present').width();
+                //let presentwidth = $('.present').width();
                 let presentheight = $('.present').height();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
-                let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                //let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                //let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                //let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                let screenheight = document.getElementsByClassName('reveal')[0].offsetHeight;
                 //console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
                 let heightratio = screenheight / presentheight ;
-                let widthratio = screenwidth / presentwidth;
+                //let widthratio = screenwidth / presentwidth;
                 let scaleratio = 1;
-                if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                //if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                if (presentheight > screenheight){scaleratio = heightratio;}
                 //console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
                 //console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
 
                 $('.present').css({'transform': '', 'transform-origin': ''});
-                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'center top'});
+
             }
             // event.previousSlide, event.currentSlide, event.indexh, event.indexv
             //let state = Reveal.getState();
@@ -170,36 +219,26 @@ class Presentation extends React.Component{
 
         }
     }
-    componentDidUpdate(){
 
-    }
     render(){
 
         // Load the theme stylesheet
         let styleName = 'default';
-        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined')
             styleName = this.props.PresentationStore.theme;
-        }
-        //console.log('styleName', styleName);
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme they will be legacy decks:
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')//if none of above yield a theme they will be legacy decks:
             styleName = 'white';
-        }
         let style = require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        //console.log(style);
-        this.slides = this.getSlides();
+        let slides = this.getSlides();
         return(
             //<ResizeAware ref='container' id='container'>
             <div ref='container' id='container'>
-                <div>
-                    <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                        <div className={['slides', style.slides].join(' ')}>
-            			     	{this.slides}
-            			      </div>
-                    </div>
-                    <br style={clearStyle} />
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                    <div className={['slides', style.slides].join(' ')}>
+      			     	     {slides}
+        			      </div>
                 </div>
+                <br style={this.clearStyle} />
             </div>
             //</ResizeAware>
         );
@@ -208,36 +247,26 @@ class Presentation extends React.Component{
     getSlides(){
         let slides = this.props.PresentationStore.content;
 
-        let returnList = [];
+        let html = <section />;
         if(slides){
-            for (let i = 0; i < slides.length; i++) {
-                let slide = slides[i];
-                let notes = '';
-                if(slide.speakernotes){
-                    notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
-                }
-                let content = slide.content.replace(' src=', ' data-src=') + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
-            }
-            return returnList;
-
+            html = slides.map((slide) => {
+                let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
+                let bgTemp = content.split('background-color: ');
+                //need to check if bg is provided
+                let backgroundColour = bgTemp.length > 1 ? content.split('background-color: ')[1].split(';')[0] : '';
+                return <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+            });
         }
-        else{
-            return (<section />);
-        }
+        return html;
     }
 
 }
-
-Presentation.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
-};
 
 Presentation = connectToStores(Presentation, [PresentationStore], (context, props) => {
     return {
         PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
-
+Presentation = handleRoute(Presentation);//NOTE add currentRoute attribute to constructor props
 
 export default Presentation;

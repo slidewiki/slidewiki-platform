@@ -1,7 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
 import addActivity from '../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
+import EmbedModal from '../Deck/ContentPanel/ContentActions/EmbedModal';
+import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
 
 class SocialShare extends React.Component {
 
@@ -16,6 +19,10 @@ class SocialShare extends React.Component {
     onEnterAndClick(text, value) {
         $(this.refs.shareDropDown).dropdown('hide');
         return false;
+    }
+
+    handleEmbedClick(){
+//        this.createShareActivity('Embed');
     }
 
     handleEmailClick(){
@@ -58,6 +65,7 @@ class SocialShare extends React.Component {
     }
 
     render() {
+        const iconSize = 33;
         let shareUrl = '';
         if (typeof window !== 'undefined') {
             shareUrl = window.location.href;
@@ -79,6 +87,7 @@ class SocialShare extends React.Component {
         const shareMessage = 'I have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.';
         const emailShareMessage = 'Hi.\nI have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.\n' + shareUrl;
         const emailShareSubject = 'Interesting ' + this.props.selector.stype + ' on SlideWiki';
+
         return(
             <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share">
                 <div className="text">
@@ -94,7 +103,7 @@ class SocialShare extends React.Component {
                             body={emailShareMessage}
                             className="Demo__some-network__share-button">
                             <EmailIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </EmailShareButton>
                     </div>
@@ -104,27 +113,27 @@ class SocialShare extends React.Component {
                             title={shareMessage}
                             className="Demo__some-network__share-button">
                             <TwitterIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </TwitterShareButton>
                     </div>
-                    <div className="item" data-value="Facebook" role="menuitem" aria-label="Facebook" data-tooltip="Facebook" tabIndex="0" onClick={this.handleFacebookClick.bind(this)}>
+                    {/*}<div className="item" data-value="Facebook" role="menuitem" aria-label="Facebook" data-tooltip="Facebook" tabIndex="0" onClick={this.handleFacebookClick.bind(this)}>
                         <FacebookShareButton
                             url={shareUrl}
                             quote={shareMessage}
                             className="Demo__some-network__share-button">
                             <FacebookIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </FacebookShareButton>
-                    </div>
+                    </div>*/}
                     <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" tabIndex="0" onClick={this.handleGooglePlusClick.bind(this)}>
                         <GooglePlusShareButton
                             url={shareUrl}
                             content={shareMessage}
                             className="Demo__some-network__share-button">
                             <GooglePlusIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </GooglePlusShareButton>
                     </div>
@@ -136,10 +145,12 @@ class SocialShare extends React.Component {
                             windowHeight={600}
                             className="Demo__some-network__share-button">
                             <LinkedinIcon
-                                size={33}
+                                size={iconSize}
                                 round />
                         </LinkedinShareButton>
                     </div>
+                    <EmbedModal size={iconSize} fontSize={14} color="white" backgroundColor="#1e78bb"
+                            embedPresentationHref={this.props.embedPresentationHref}/>
                 </div>
             </div>
         );
@@ -147,7 +158,7 @@ class SocialShare extends React.Component {
 }
 
 SocialShare.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default SocialShare;

@@ -34,7 +34,6 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
-import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -149,6 +148,17 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Contact Us'
             });
+            done();
+        }
+    },
+    help: {
+        path: '/help', // /playlist/26?sort=order
+        method: 'get',
+        page: 'help',
+        title: 'SlideWiki -- Guides and Help',
+        handler: require('../components/Home/GuidesHelp'),
+        action: (context, payload, done) => {
+            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
             done();
         }
     },
@@ -364,22 +374,7 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
-            async.series([
-                (callback) => {
-                    context.executeAction(loadDeck, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadTranslations, payload, callback);
-                },
-
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
+            context.executeAction(loadDeck, payload, done);
         }
     },
     oldSlugDeck: {
@@ -584,10 +579,75 @@ export default {
             async.series([
                 (callback) => {
                     // add missing sid in order to load the deck's title
-                    payload.params.sid = payload.params.id;
+                    payload.params.slideID = payload.params.sid;
+                    payload.params.sid = payload.params.id;//this is needed to have loadDeckView working correctly
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
                     context.executeAction(loadDeckView, payload, callback);
                 },
                 (callback) => {
+                    // adding language to the params
+                    payload.params.sid = payload.params.slideID;//needs to be reset for loadPresentation
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
+    presentationIE: {
+        path: '/presentationIE/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'presentationIE',
+        handler: require('../components/Deck/Presentation/PresentationIE'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.sid = payload.params.id;
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
+    print: {
+        path: '/print/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'print',
+        handler: require('../components/Deck/Presentation/PresentationPrint'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // handle sub deck sources
+                    payload.params.stype = 'deck';
+                    payload.params.sid = payload.params.subdeck ? payload.params.subdeck : payload.params.id;
+                    context.executeAction(loadDataSources, payload, callback);
+                },
+                (callback) => {
+                    // handle sub deck contributors
+                    payload.params.stype = 'deck';
+                    payload.params.sid = payload.params.subdeck ? payload.params.subdeck : payload.params.id;
+                    context.executeAction(loadContributors, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
                 },
                 (err, result) => {
@@ -645,7 +705,6 @@ export default {
         handler: require('../actions/loadImportFile'),
         action: (context, payload, done) => {
             context.executeAction(loadImportFile, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
         }
     },

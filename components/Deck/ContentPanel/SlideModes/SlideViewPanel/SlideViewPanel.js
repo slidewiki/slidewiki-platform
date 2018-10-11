@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideContentView from './SlideContentView';
@@ -10,34 +11,33 @@ class SlideViewPanel extends React.Component {
         this.currentID;
         this.slideContentView = '';
     }
-    componentWillReceiveProps(nextProps){
-        if (this.props.SlideViewStore.content !== nextProps.SlideViewStore.content)
-        {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.SlideViewStore.content !== nextProps.SlideViewStore.content) {
             this.slideContentView = '';
             this.forceUpdate();
         }
     }
     componentWillMount(){
-        if (this.currentID !== this.props.selector.sid)
-        {
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        if (selector && this.currentID !== selector.sid) {
             this.slideContentView = '';
-            this.currentID = this.props.selector.sid;
+            this.currentID = selector.sid;
             this.forceUpdate();
         }
     }
     componentDidUpdate(){
-        if (this.currentID !== this.props.selector.sid)
-        {
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        if (selector && this.currentID !== selector.sid) {
             this.slideContentView = '';
-            this.currentID = this.props.selector.sid;
-            //this.forceUpdate();
+            this.currentID = selector.sid;
         }
     }
     componentWillUnmount() {
     }
 
     render() {
-        let deckTheme = this.props.selector && this.props.selector.theme;
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        let deckTheme = selector && selector.theme;
         if (!deckTheme) {
             // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
             let treeNode = this.props.DeckTreeStore.flatTree
@@ -50,7 +50,7 @@ class SlideViewPanel extends React.Component {
                 deckTheme = this.props.DeckTreeStore.theme;
             }
         }
-        if (this.currentID === this.props.selector.sid){
+        if (this.currentID === selector.sid){
             this.slideContentView = (
                 <div className="ui bottom attached segment">
                     <SlideContentView content={this.props.SlideViewStore.content}
@@ -69,7 +69,7 @@ class SlideViewPanel extends React.Component {
         };
         return (
             <div className="ui bottom attached segment">
-                {(this.currentID !== this.props.selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {(this.currentID !== selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                 {this.slideContentView}
             </div>
         );
@@ -77,7 +77,7 @@ class SlideViewPanel extends React.Component {
 }
 
 SlideViewPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, DeckTreeStore], (context, props) => {

@@ -14,7 +14,7 @@ export default function createRevision(context, payload, done) {
             context.dispatch('CREATE_REVISION_SUCCESS', res);
             //navigate to the new revision
             context.executeAction(navigateAction, {
-                url: '/deck/' + res._id + '-' + res.revisions[0].id
+                url: `/deck/${res.id}`,
             });
         }
         done();

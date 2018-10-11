@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import { navigateAction } from 'fluxible-router';
@@ -12,6 +13,7 @@ import TagsInput from './AutocompleteComponents/TagsInput';
 import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import {translationLanguages, getLanguageNativeName} from '../../common';
 
 let MediaQuery = require ('react-responsive');
 
@@ -188,11 +190,6 @@ class SearchPanel extends React.Component {
 
         this.handleRedirect();
     }
-    handleKeyPress(event){
-        if(event.key === 'Enter'){
-            this.handleRedirect();
-        }
-    }
     handleRedirect(params){
 
         // form the query parameters to send to search service
@@ -313,16 +310,10 @@ class SearchPanel extends React.Component {
                 <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
                 <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                   <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
-                  <option value='en_GB'>{this.context.intl.formatMessage(this.messages.languageFilterOptionEnglish)}</option>
-                  <option value='de_DE'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGerman)}</option>
-                  <option value='fr_FR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionFrench)}</option>
-                  <option value='it_IT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionItalian)}</option>
-                  <option value='es_ES'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSpanish)}</option>
-                  <option value='nl_NL'>{this.context.intl.formatMessage(this.messages.languageFilterOptionDutch)}</option>
-                  <option value='el_GR'>{this.context.intl.formatMessage(this.messages.languageFilterOptionGreek)}</option>
-                  <option value='pt_PT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionPortuguese)}</option>
-                  <option value='sr_RS'>{this.context.intl.formatMessage(this.messages.languageFilterOptionSerbian)}</option>
-                  <option value='lt_LT'>{this.context.intl.formatMessage(this.messages.languageFilterOptionLithuanian)}</option>
+                  {translationLanguages.reduce((arr, curr) => { //<div className="menu">
+                      arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
+                      return arr;
+                  }, [])}
                 </select>
             </div>
         </div>
@@ -346,7 +337,7 @@ class SearchPanel extends React.Component {
                         <form className="ui form success">
                             <div className="field">
                                 <label htmlFor="SearchTerm"><FormattedMessage {...this.messages.searchTerm} /></label>
-                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
+                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} handleRedirect={this.handleRedirect.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} clearInputHandler={this.clearInput.bind(this)}/>
                             </div>
                             <MediaQuery minDeviceWidth={768}>
                                 {advanced_options}
@@ -381,8 +372,8 @@ class SearchPanel extends React.Component {
 }
 
 SearchPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
 };
 
 SearchPanel = connectToStores(SearchPanel, [SearchResultsStore, SearchParamsStore], (context, props) => {

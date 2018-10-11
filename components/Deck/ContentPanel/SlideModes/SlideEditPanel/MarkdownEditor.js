@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -9,7 +10,7 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import showdown from 'showdown';
 import turndown from 'turndown';
-import ContentUtil from '../../util/ContentUtil';
+import Util from '../../../../common/Util';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 
 let converter = new showdown.Converter();
@@ -83,7 +84,7 @@ class MarkdownEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.cancelClick === 'true')
         {
-            const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+            const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
@@ -110,7 +111,7 @@ class MarkdownEditor extends React.Component {
 }
 
 MarkdownEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 MarkdownEditor = connectToStores(MarkdownEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {

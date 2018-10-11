@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Container, Form, Modal, Radio, Icon, Segment, Grid } from 'semantic-ui-react';
@@ -8,7 +9,7 @@ import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import {FormattedMessage, defineMessages} from 'react-intl';
-
+import { makeNodeURL } from '../../../common/Util';
 
 class DownloadModal extends React.Component{
     constructor(props) {
@@ -18,7 +19,6 @@ class DownloadModal extends React.Component{
             modalOpen: false,
             activeTrap: false,
             radioValue: 'PDF'
-
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -26,7 +26,6 @@ class DownloadModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.handleRadioChange = this.handleRadioChange.bind(this);
-
 
         this.messages = defineMessages({
             downloadModal_header:{
@@ -61,7 +60,6 @@ class DownloadModal extends React.Component{
 
     }
 
-
     handleClose(){
         $('#app').attr('aria-hidden', 'false');
         this.setState({
@@ -70,18 +68,21 @@ class DownloadModal extends React.Component{
         });
 
     }
+
     unmountTrap() {
         if(this.state.activeTrap){
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
         }
     }
+
     handleRadioChange(event,data){
         this.setState({
             radioValue:data.value
         });
 
     }
+
     getExportHref(type){
         let splittedId;
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0){
@@ -93,7 +94,9 @@ class DownloadModal extends React.Component{
 
         switch (type) {
             case 'PDF':
-                return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+                //show print view instead of pdf export service
+                return makeNodeURL(this.props.ContentStore.selector, 'print', undefined, undefined, undefined);
+                //return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
                 break;
             case 'ePub':
                 return Microservices.pdf.uri + '/exportEPub/' + splittedId[0];
@@ -115,6 +118,7 @@ class DownloadModal extends React.Component{
 
 
     }
+
     createDownloadActivity() {
         //create new activity
         let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
@@ -131,6 +135,7 @@ class DownloadModal extends React.Component{
         this.context.executeAction(addActivity, {activity: activity});
         context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
+
     handleDownload(event,data){
         if(process.env.BROWSER){
             event.preventDefault();
@@ -142,6 +147,11 @@ class DownloadModal extends React.Component{
         this.handleClose();
 
 
+    }
+    componentDidMount(){
+        $('#inlineSpeakerNotes').each(function () {
+            $(this).css('z-index', 0);
+        });
     }
 
     render() {
@@ -312,6 +322,7 @@ class DownloadModal extends React.Component{
                                           onClick={this.handleClose}
                                           content={this.context.intl.formatMessage(this.messages.downloadModal_cancelButton)}
                                       />
+
                                       </Grid.Column>
                                       </Grid.Row>
 
@@ -337,8 +348,8 @@ class DownloadModal extends React.Component{
 }
 
 DownloadModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DownloadModal = connectToStores(DownloadModal,[ContentStore,UserProfileStore],(context,props) => {
     return{

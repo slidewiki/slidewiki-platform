@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form, Dropdown, Segment, TextArea} from 'semantic-ui-react';
@@ -72,7 +73,8 @@ class NewCollectionModal extends React.Component {
         this.context.executeAction(addNewCollection, {
             title: this.state.title, 
             description: this.state.description,
-            userGroup: this.state.userGroup
+            userGroup: this.state.userGroup, 
+            deckId: this.props.deckId
         });
 
         this.handleClose();
@@ -187,8 +189,8 @@ class NewCollectionModal extends React.Component {
 }
 
 NewCollectionModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired, 
+    intl: PropTypes.object.isRequired
 };
 
 export default NewCollectionModal;
