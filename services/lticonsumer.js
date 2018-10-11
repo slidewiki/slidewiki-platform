@@ -77,7 +77,7 @@ export default {
                             ltiKey : params.ltiKey,
                             ltiWidth: params.ltiWidth,
                             ltiHeight : params.ltiHeight
-                       };
+                        };
                     }
                     else {
                         ltiResponse = {
@@ -87,7 +87,7 @@ export default {
                             ltiKey : params.ltiKey,
                             ltiWidth: params.ltiWidth,
                             ltiHeight : params.ltiHeight
-                       };
+                        };
                     }
                     callback(null, ltiResponse);
 
