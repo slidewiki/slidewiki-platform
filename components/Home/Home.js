@@ -188,6 +188,9 @@ class Home extends React.Component {
                 {/*<!-- presentation End -->*/}
 
                 <section className='content-container'>
+                    <div className='sr-only'>
+                        <h2>Learn more about SlideWiki</h2>
+                    </div>
                     <div className='feature-block'>
                         <div className='wrapper'>
                             <div className='ui three column  stackable  grid'>
@@ -195,7 +198,7 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='feature-content blue-block'>
                                             <div className='feature-left'>
-                                                <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
+                                                <h3>{this.context.intl.formatMessage(this.messages.findSlides)}</h3>
                                                 <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                             </div>
@@ -205,7 +208,7 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='feature-content green-block'>
                                             <div className='feature-left'>
-                                                <h2>{this.context.intl.formatMessage(this.messages.createSlides)}Create slides</h2>
+                                                <h3>{this.context.intl.formatMessage(this.messages.createSlides)}Create slides</h3>
                                                 <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                             </div>
@@ -215,7 +218,7 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='feature-content red-block'>
                                             <div className='feature-left'>
-                                                <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
+                                                <h3>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h3>
                                                 <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
                                             </div>
@@ -297,7 +300,7 @@ class Home extends React.Component {
                                             <img src='/assets/images/home/featured-img.jpg' alt='Featured Image'/>
                                         </div>
                                         <div className='featured-content'>              // TODO: refactor this section to be a separated component based on a Carousel SWIK-2316
-                                            <h4>Featured deck</h4>
+                                            <h3>Featured deck</h3>
                                             <div className='featured-post'>
                                                 <h5>Introduction to Algebra</h5>
                                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur egestas in sapien in bibendum. Nam vulputate nunc a dictum aliquet. Morbi hendrerit enim in dolor condimentum faucibus. </p>
