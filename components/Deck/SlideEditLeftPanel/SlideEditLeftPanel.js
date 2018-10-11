@@ -11,6 +11,7 @@ import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
 import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
 import embedClick from '../../../actions/slide/embedClick';
+import addLTI from '../../../actions/slide/addLTI';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
@@ -37,6 +38,16 @@ class SlideEditLeftPanel extends React.Component {
             showNameChange: false,
             showSize: false,
             showBackground: false,
+
+            showLTI: false,
+            ltiURL: '',
+            ltiKey: '',
+            ltiWidth: '400',
+            ltiHeight: '300',
+            ltiResponseURL: '',
+            ltiResponseHTML: '',
+            ltiKeyMissingError: false,
+
             slideTitle: this.props.SlideEditStore.title,
             LeftPanelTitleChange: false,
             titleMissingError: false,
@@ -128,6 +139,64 @@ class SlideEditLeftPanel extends React.Component {
             this.setState({showEmbed: false});
         }
     }
+
+    //LTI handles
+    handleLTIClick(){
+        console.log('handleLTIClick');
+        this.setState({showLTI: true});
+        this.setState({showOther: false});
+        this.forceUpdate();
+    }
+    handleLTIAddClick(){
+        //console.log('handleLTIAddClick');
+        if(this.state.ltiURL === '' || this.state.ltiKey === ''){
+            this.setState({ URLMissingError: true });
+            this.setState({ ltiKeyMissingError: true });
+            //console.log('errormissing');
+            this.forceUpdate();
+        }
+        else {
+            //console.log('post request');
+            let oauth = require('oauth-sign');
+            let btoa = require('btoa');
+            let timestamp = Math.round(Date.now() / 1000);
+            let method = 'POST';
+
+            let ltiURL = this.state.ltiURL;
+            let key = this.state.ltiKey;
+            let secret = this.state.ltiKey;
+
+            let params = {
+                lti_message_type: 'basic-lti-launch-request',
+                lti_version: 'LTI-1p0',
+                resource_link_id: 'resourceLinkId',
+                oauth_consumer_key: key,
+                oauth_nonce: btoa(timestamp),
+                oauth_signature_method: 'HMAC-SHA1',
+                oauth_timestamp: timestamp,
+                oauth_version: '1.0',
+                ext_user_username: 'slidewiki'
+            };
+
+            let signature = oauth.hmacsign(method, ltiURL, params, secret);
+            params.oauth_signature = signature;
+            //console.log("params.oauth_signature="+params.oauth_signature);
+            this.context.executeAction(addLTI, {
+                ltiURL: ltiURL,
+                ltiKey: key,
+                ltiWidth : this.state.ltiWidth,
+                ltiHeight : this.state.ltiHeight,
+                params: params
+
+            });
+        }//end else
+    }
+    handleBackLTI(){
+        this.setState({showOther: true});
+        this.setState({showLTI: false});
+        this.forceUpdate();
+    }
+
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -323,6 +392,17 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleHelpClick':
                     this.handleHelpClick();
                     break;
+
+                case 'handleLTIClick':
+                    this.handleLTIClick();
+                    break;
+                case 'handleEmbedAddClick':
+                    this.handleEmbedAddClick();
+                    break;
+                case 'handleLTIAddClick':
+                    this.handleLTIAddClick();
+                    break;
+                    
                 default:
             }
         }
