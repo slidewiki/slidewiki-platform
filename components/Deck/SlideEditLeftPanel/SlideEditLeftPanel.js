@@ -75,7 +75,7 @@ class SlideEditLeftPanel extends React.Component {
                 $('#slideTitle').focus();
             } else if (this.state.showLTI === true)
             {
-                  $('#ltiKey').focus();
+                $('#ltiKey').focus();
             } else if (this.state.showEmbed === true)
             {
                 $('#embedCode').focus();
