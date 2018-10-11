@@ -1302,7 +1302,7 @@ class SlideContentEditor extends React.Component {
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
                 if (!id || id === 'inlineContent') {
-                    id = this.menuFocus; 
+                    id = this.menuFocus;
                 }
                 if (id && id !== 'inlineContent') {
                     /*
@@ -1930,7 +1930,7 @@ class SlideContentEditor extends React.Component {
                 iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
             }
             else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
-                //let newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
+                let newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
                 //iframe = '<iframe srcdoc=\"'+newHTML+'\" width=\"'+nextProps.SlideEditStore.ltiWidth+'\" height=\"'+nextProps.SlideEditStore.ltiHeight+'\" frameborder=\"0\" allow=\"encrypted-media\"></iframe>';
             }
             if($('.pptx2html').length) //if slide is in canvas mode
