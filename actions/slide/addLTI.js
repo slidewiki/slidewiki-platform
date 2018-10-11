@@ -15,14 +15,14 @@ export default function addLTI(context, payload, done) {
     if (userid != null && userid !== '') {
 
         context.service.create('lticonsumer', payload, {timeout: 20 * 1000}, (err, res) => {
-            console.log('addLTI.js');
+            //console.log('addLTI.js');
             //console.log('res='+res);
             if (err) {
-              console.log(err);
-              //console.log('ADD_LTI_FAILURE');
-              context.dispatch('ADD_LTI_FAILURE', err);
+                console.log(err);
+                //console.log('ADD_LTI_FAILURE');
+                context.dispatch('ADD_LTI_FAILURE', err);
             } else {
-              context.dispatch('ADD_LTI_SUCCESS', res);
+                context.dispatch('ADD_LTI_SUCCESS', res);
             }
             done();
         });

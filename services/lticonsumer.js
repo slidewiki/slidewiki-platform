@@ -30,7 +30,7 @@ export default {
         let querystring = require('querystring');
         let btoa = require('btoa');
         let oauth = require('oauth-sign');
-        let fs = require("fs");
+        let fs = require('fs');
 
         let parseURL = url.parse(ltiURL, true);
         let hostname = parseURL.hostname;
@@ -46,12 +46,12 @@ export default {
             let post_data = querystring.stringify(args);
             //console.log('lticonsumer.js.args='+JSON.stringify(args));
             let request_options = {
-              hostname:  hostname,
-              path: pathname,
-              port: port,
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                hostname:  hostname,
+                path: pathname,
+                port: port,
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
               }
             };
 
@@ -59,6 +59,7 @@ export default {
             //console.log('Setting up req');
             //console.log('request_options='+JSON.stringify(request_options));
             //console.log('post_data='+JSON.stringify(post_data));
+            //let req = http.request(request_options, function(res) {
             let req = http.request(request_options, function(res) {
             console.log('STATUS: ' + res.statusCode);
             console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -97,25 +98,23 @@ export default {
               callback(null, ltiResponse);
 
           }); //end on
-   });
+        });
 
-   console.log('Setting req error callback');
-   req.on('error', function(err) {
-     console.log('problem with request: ' + err.message);
-       callback(err);
-   });
+          console.log('Setting req error callback');
+          req.on('error', function(err) {
+            console.log('problem with request: ' + err.message);
+              callback(err);
+          });
 
-   // write data to request body
-   //req.write('query=' + encodeURIComponent(sparqlString));
-   req.write(post_data);
-   //req.write(encodeURIComponent(params));
-   //req.write(JSON.stringify(params));
-   //req.write(JSON.stringify(params));
-   console.log('Written to request.');
-   req.end();
-   console.log('Request ended.');
-
+          // write data to request body
+          //req.write('query=' + encodeURIComponent(sparqlString));
+          req.write(post_data);
+          //req.write(encodeURIComponent(params));
+          //req.write(JSON.stringify(params));
+          //req.write(JSON.stringify(params));
+          console.log('Written to request.');
+          req.end();
+          console.log('Request ended.');
         }//end if(resource=== 'lti')
     }
-
 };
