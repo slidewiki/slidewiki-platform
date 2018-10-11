@@ -31,7 +31,7 @@ class Footer extends React.Component {
                             <div className='seven wide column'>
                                 <div className='footer-left'>
                                     <div className='footer-menu'>
-                                        <h6>About</h6>
+                                        <h3 className="ui medium header">About</h3>
                                         <ul>
                                             <li><a href='/about'>About Us</a></li>
                                             <li><a href='/contactus'>Contact Us</a></li>
@@ -41,7 +41,7 @@ class Footer extends React.Component {
                                         </ul>
                                     </div>
                                     <div className='footer-menu'>
-                                        <h6>Terms &amp; Conditions</h6>
+                                        <h3 className="ui medium header">Terms &amp; Conditions</h3>
                                         <ul>
                                             <li><NavLink routeName='terms' href='/terms'>Terms</NavLink></li>
                                             <li><NavLink routeName='license' href='/license'>License</NavLink></li>
@@ -53,8 +53,10 @@ class Footer extends React.Component {
                             </div>
                             <div className='nine wide column'>
                                 <div className='footer-right'>
+                                    <h3 className="ui medium header">Funding</h3>
                                     <p>The SlideWiki project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 688095</p>
-                                    <p>Copyright &copy; 2018 · All Rights Reserved<br/> Build GIT_COMMIT&#64;GIT_BRANCH</p>
+                                    <p>Copyright &copy; 2018 All Rights Reserved<br/> Build GIT_COMMIT&#64;GIT_BRANCH</p>
+                                   {/*
                                     <div className='social-link'>
                                         <ul>
                                             <li><span>Follow us</span></li>
@@ -62,7 +64,7 @@ class Footer extends React.Component {
                                             <li><button className='ui circular linkedin icon button' onClick={this.openLinkedIn}><i className='linkedin icon'/></button> </li>
                                             <li><button className='ui circular twitter icon button' onClick={this.openTwitter}><i className='twitter icon'/></button></li>
                                         </ul>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
