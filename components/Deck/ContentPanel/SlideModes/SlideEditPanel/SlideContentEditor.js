@@ -1927,9 +1927,9 @@ class SlideContentEditor extends React.Component {
             let iframe;
             if(nextProps.SlideEditStore.ltiResponseURL !== '') {
               iframe = '<iframe src="'+nextProps.SlideEditStore.ltiResponseURL+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
-            } else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
+              } else if(nextProps.SlideEditStore.ltiResponseHTML !== '') {
                 let newHTML = nextProps.SlideEditStore.ltiResponseHTML.replace(/\"/g, "\'");
-                iframe = '<iframe width="'+nextProps.SlideEditStore.ltiWidth+'"  height="'+nextProps.SlideEditStore.ltiHeight+'" srcdoc="'+newHTML+'"></iframe>';
+                iframe = '<iframe srcdoc="'+newHTML+'" width="'+nextProps.SlideEditStore.ltiWidth+'" height="'+nextProps.SlideEditStore.ltiHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
             }
             if($('.pptx2html').length) //if slide is in canvas mode
             {

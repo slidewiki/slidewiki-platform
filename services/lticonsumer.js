@@ -51,70 +51,60 @@ export default {
                 port: port,
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded'
-              }
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             };
 
             let body = '';
-            //console.log('Setting up req');
-            //console.log('request_options='+JSON.stringify(request_options));
-            //console.log('post_data='+JSON.stringify(post_data));
-            //let req = http.request(request_options, function(res) {
-            let req = http.request(request_options, function(res) {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
-            let json = JSON.stringify(res.headers);
-            //console.log('res.headers.location: ' + res.headers.location);
-            res.setEncoding('utf8');
-            res.on('data', function (chunk) {
+            let req = http.request(request_options, res => {
+                console.log('STATUS: ' + res.statusCode);
+                console.log('HEADERS: ' + JSON.stringify(res.headers));
+                let json = JSON.stringify(res.headers);
+                //console.log('res.headers.location: ' + res.headers.location);
+                res.setEncoding('utf8');
+                res.on('data', chunk => {
               //console.log('BODY: ' + chunk);
-              body += chunk;
+                body += chunk;
             }).on('end', () => {
-              //console.log("body="+body);
-              //console.log("res.headers.location="+res.headers.location);
-
-              let ltiResponse;
-              if(res.headers.location!=null){
-                ltiResponse = {
-                  ltiResponseURL: res.headers.location,
-                  ltiResponseHTML: ' ',
-                  ltiURL : params.ltiURL,
-                  ltiKey : params.ltiKey,
-                  ltiWidth: params.ltiWidth,
-                  ltiHeight : params.ltiHeight
+                //console.log("body="+body);
+                //console.log("res.headers.location="+res.headers.location);
+                let ltiResponse;
+                if(res.headers.location!=null){
+                  ltiResponse = {
+                    ltiResponseURL: res.headers.location,
+                    ltiResponseHTML: ' ',
+                    ltiURL : params.ltiURL,
+                    ltiKey : params.ltiKey,
+                    ltiWidth: params.ltiWidth,
+                    ltiHeight : params.ltiHeight
                 };
               }
-              else {
-              //callback(null, body);
-                ltiResponse = {
-                  ltiResponseURL: '',
-                  ltiResponseHTML: body,
-                  ltiURL : params.ltiURL,
-                  ltiKey : params.ltiKey,
-                  ltiWidth: params.ltiWidth,
-                  ltiHeight : params.ltiHeight
+                else {
+                  ltiResponse = {
+                    ltiResponseURL: '',
+                    ltiResponseHTML: body,
+                    ltiURL : params.ltiURL,
+                    ltiKey : params.ltiKey,
+                    ltiWidth: params.ltiWidth,
+                    ltiHeight : params.ltiHeight
                 };
               }
-              callback(null, ltiResponse);
+                callback(null, ltiResponse);
 
-          }); //end on
-        });
+            }); //end on
+            });
 
-          console.log('Setting req error callback');
-          req.on('error', function(err) {
-            console.log('problem with request: ' + err.message);
+            console.log('Setting req error callback');
+            req.on('error', err => {
+              console.log('problem with request: ' + err.message);
               callback(err);
           });
 
-          // write data to request body
-          //req.write('query=' + encodeURIComponent(sparqlString));
-          req.write(post_data);
-          //req.write(encodeURIComponent(params));
-          //req.write(JSON.stringify(params));
-          //req.write(JSON.stringify(params));
-          console.log('Written to request.');
-          req.end();
-          console.log('Request ended.');
+            // write data to request body
+            req.write(post_data);
+            console.log('Written to request.');
+            req.end();
+            console.log('Request ended.');
         }//end if(resource=== 'lti')
     }
 };
