@@ -56,49 +56,49 @@ export default {
             };
 
             let body = '';
-            let req = http.request(request_options, res => {
+            let req = http.request(request_options, (res) => {
                 console.log('STATUS: ' + res.statusCode);
                 console.log('HEADERS: ' + JSON.stringify(res.headers));
                 let json = JSON.stringify(res.headers);
                 //console.log('res.headers.location: ' + res.headers.location);
                 res.setEncoding('utf8');
-                res.on('data', chunk => {
-              //console.log('BODY: ' + chunk);
-                body += chunk;
-            }).on('end', () => {
+                res.on('data', (chunk) => {
+                    //console.log('BODY: ' + chunk);
+                    body += chunk;
+                }).on('end', () => {
                 //console.log("body="+body);
                 //console.log("res.headers.location="+res.headers.location);
                 let ltiResponse;
                 if(res.headers.location!=null){
-                  ltiResponse = {
-                    ltiResponseURL: res.headers.location,
-                    ltiResponseHTML: ' ',
-                    ltiURL : params.ltiURL,
-                    ltiKey : params.ltiKey,
-                    ltiWidth: params.ltiWidth,
-                    ltiHeight : params.ltiHeight
-                };
-              }
+                    ltiResponse = {
+                      ltiResponseURL: res.headers.location,
+                      ltiResponseHTML: ' ',
+                      ltiURL : params.ltiURL,
+                      ltiKey : params.ltiKey,
+                      ltiWidth: params.ltiWidth,
+                      ltiHeight : params.ltiHeight
+                  };
+                }
                 else {
-                  ltiResponse = {
-                    ltiResponseURL: '',
-                    ltiResponseHTML: body,
-                    ltiURL : params.ltiURL,
-                    ltiKey : params.ltiKey,
-                    ltiWidth: params.ltiWidth,
-                    ltiHeight : params.ltiHeight
-                };
-              }
+                    ltiResponse = {
+                      ltiResponseURL: '',
+                      ltiResponseHTML: body,
+                      ltiURL : params.ltiURL,
+                      ltiKey : params.ltiKey,
+                      ltiWidth: params.ltiWidth,
+                      ltiHeight : params.ltiHeight
+                  };
+                }
                 callback(null, ltiResponse);
 
             }); //end on
             });
 
             console.log('Setting req error callback');
-            req.on('error', err => {
-              console.log('problem with request: ' + err.message);
-              callback(err);
-          });
+            req.on('error', (err) => {
+                console.log('problem with request: ' + err.message);
+                callback(err);
+            });
 
             // write data to request body
             req.write(post_data);
