@@ -64,6 +64,7 @@ class SlideEditLeftPanel extends React.Component {
         if (prevState.showTemplate !== this.state.showTemplate ||
             prevState.showOther !== this.state.showOther ||
             prevState.showEmbed !== this.state.showEmbed ||
+            prevState.showLTI !== this.state.showLTI ||
             prevState.showProperties !== this.state.showProperties ||
             prevState.showTitleChange !== this.state.showTitleChange ||
             prevState.showSize !== this.state.showSize ||
@@ -781,6 +782,8 @@ class SlideEditLeftPanel extends React.Component {
             panelcontent = otherList;
         } else if (this.state.showEmbed) {
             panelcontent = embedOptions;
+        } else if (this.state.showLTI) {
+            panelcontent = ltiOptions;
         } else if (this.state.showProperties){
             panelcontent = propertiesContent;
         } else if (this.state.showTitleChange){
