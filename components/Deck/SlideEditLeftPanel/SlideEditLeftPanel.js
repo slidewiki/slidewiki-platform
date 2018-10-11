@@ -46,6 +46,7 @@ class SlideEditLeftPanel extends React.Component {
             ltiHeight: '300',
             ltiResponseURL: '',
             ltiResponseHTML: '',
+            ltiURLMissingError: false,
             ltiKeyMissingError: false,
 
             slideTitle: this.props.SlideEditStore.title,
@@ -150,7 +151,7 @@ class SlideEditLeftPanel extends React.Component {
     handleLTIAddClick(){
         //console.log('handleLTIAddClick');
         if(this.state.ltiURL === '' || this.state.ltiKey === ''){
-            this.setState({ URLMissingError: true });
+            this.setState({ ltiURLMissingError: true });
             this.setState({ ltiKeyMissingError: true });
             //console.log('errormissing');
             this.forceUpdate();
@@ -402,7 +403,7 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleLTIAddClick':
                     this.handleLTIAddClick();
                     break;
-                    
+
                 default:
             }
         }
@@ -491,6 +492,53 @@ class SlideEditLeftPanel extends React.Component {
                   <label htmlFor="handleEmbedAddClick">
                     <FormattedMessage id='editpanel.embedNote' defaultMessage='Not all website owners allow their content to be embedded. Using an embed code (instead of URL) often works best.' />
                   </label>
+                </form>);
+
+        let ltiOptions = (
+             <form className="ui form">
+                <a className="item" id="handleBack" role="button" onClick={this.handleBackLTI.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackLTI')}>
+                    <i id="handleBackLTILink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                </a>
+
+                <label htmlFor="ltiKey">
+                      <FormattedMessage id='editpanel.ltiKey' defaultMessage='LTI Key:' />
+                </label>
+                <div className="field">
+                    <i className="error">
+                        {this.state.ltiKeyMissingError === false ? '' : <FormattedMessage id='editpanel.ltiKeyMissingError' defaultMessage='missing LTI key' />}
+                    </i>
+                    <Input onChange={this.handleChange.bind(this)} id="ltiKey" ref="ltiKey" name="ltiKey" aria-label="LTI Key" autoFocus />
+                </div>
+                <div>
+                    <i>and</i>
+                </div>
+                <label htmlFor="ltiURL">
+                    <FormattedMessage id='editpanel.ltiURL' defaultMessage='URL/Link to LTI content:' />
+                </label>
+                <div className="field">
+                      <i className="error">
+                            {this.state.ltiURLMissingError === false ? '' : <FormattedMessage id='editpanel.ltiURLMissingError' defaultMessage='missing URL/link to content' />}
+                </i>
+                      <Input onChange={this.handleChange.bind(this)} id="ltiURL" ref="ltiURL" name="ltiURL" aria-label="URL (Link) to LTI content" autoFocus/>
+                </div>
+                    <label htmlFor="ltiWidth">
+                          <FormattedMessage id='editpanel.ltiWidth' defaultMessage='Width of LTI content:' />
+                    </label>
+                <div className="required field">
+                    <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="ltiWidth" ref="ltiWidth" name="ltiWidth" aria-label="Width of LTI content" aria-required="true" required />
+                </div>
+                    <label htmlFor="ltiHeight">
+                          <FormattedMessage id='editpanel.ltiHeight' defaultMessage='Height of LTI content:' />
+                    </label>
+                <div className="required field">
+                      <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="ltiHeight" ref="ltiHeight" name="ltiHeight" aria-label="Height of LTI content" aria-required="true" required />
+                </div>
+                    <a className="item" id="handleLTIAddClick" role="button" onClick={this.handleLTIAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleLTIAddClick')}>
+                        <i tabIndex="0" className="add square icon"></i><FormattedMessage id='editpanel.ltiAdd' defaultMessage='Add to Slide' />
+                    </a>
+                    <label htmlFor="handleLTIAddClick">
+                        <FormattedMessage id='editpanel.ltiNote' defaultMessage='Use an LTI URL and key.' />
+                    </label>
                 </form>);
 
         const templateListStyle = {
