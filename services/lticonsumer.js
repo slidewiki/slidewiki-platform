@@ -70,24 +70,24 @@ export default {
                 //console.log("res.headers.location="+res.headers.location);
                     let ltiResponse;
                     if(res.headers.location!=null){
-                       ltiResponse = {
-                        ltiResponseURL: res.headers.location,
-                        ltiResponseHTML: ' ',
-                        ltiURL : params.ltiURL,
-                        ltiKey : params.ltiKey,
-                        ltiWidth: params.ltiWidth,
-                        ltiHeight : params.ltiHeight
-                    };
+                        ltiResponse = {
+                            ltiResponseURL: res.headers.location,
+                            ltiResponseHTML: ' ',
+                            ltiURL : params.ltiURL,
+                            ltiKey : params.ltiKey,
+                            ltiWidth: params.ltiWidth,
+                            ltiHeight : params.ltiHeight
+                       };
                     }
                     else {
                         ltiResponse = {
-                        ltiResponseURL: '',
-                        ltiResponseHTML: body,
-                        ltiURL : params.ltiURL,
-                        ltiKey : params.ltiKey,
-                        ltiWidth: params.ltiWidth,
-                        ltiHeight : params.ltiHeight
-                    };
+                            ltiResponseURL: '',
+                            ltiResponseHTML: body,
+                            ltiURL : params.ltiURL,
+                            ltiKey : params.ltiKey,
+                            ltiWidth: params.ltiWidth,
+                            ltiHeight : params.ltiHeight
+                       };
                     }
                     callback(null, ltiResponse);
 
