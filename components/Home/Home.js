@@ -149,6 +149,16 @@ class Home extends React.Component {
         this.closeSidebar({target: '<a className="item"></a>'});
     }
 
+    scrollToLearnMore() {
+        let pos = $('#learnMore').position();
+        if (window.innerWidth > 1200) {
+            pos.top = pos.top - 346;
+        } else if (window.innerWidth > 990) {
+            pos.top = pos.top -300;
+        }
+        window.scroll(pos);
+        $('#learnMore').focus();
+    }
 
 
     render() {
@@ -175,7 +185,7 @@ class Home extends React.Component {
                                             <button className='home primary button' onClick={this.handleSignUpButton.bind(this)}>
                                                 {this.context.intl.formatMessage(this.messages.signUp)}
                                             </button>
-                                            <button className='home secondary  button'>
+                                            <button className='home secondary  button' onClick={this.scrollToLearnMore.bind(this)}>
                                                 {this.context.intl.formatMessage(this.messages.learnMore)}
                                             </button>
                                         </div>
@@ -188,7 +198,7 @@ class Home extends React.Component {
                 {/*<!-- presentation End -->*/}
 
                 <section className='content-container'>
-                    <div className='sr-only'>
+                    <div id="learnMore" className='sr-only'>
                         <h2>Learn more about SlideWiki</h2>
                     </div>
                     <div className='feature-block'>
@@ -299,7 +309,7 @@ class Home extends React.Component {
                                         <div className='featured-img'>
                                             <img src='/assets/images/home/featured-img.jpg' alt='Featured Image'/>
                                         </div>
-                                        <div className='featured-content'>              // TODO: refactor this section to be a separated component based on a Carousel SWIK-2316
+                                        <div className='featured-content'>              {/*TODO: refactor this section to be a separated component based on a Carousel SWIK-2316*/}
                                             <h3>Featured deck</h3>
                                             <div className='featured-post'>
                                                 <h5>Introduction to Algebra</h5>
