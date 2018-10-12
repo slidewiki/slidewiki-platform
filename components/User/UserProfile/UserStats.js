@@ -2,8 +2,8 @@ import React from 'react';
 import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import {Dropdown, Grid, Message, Segment, Table} from 'semantic-ui-react';
 import moment from 'moment';
-import updateUserStatsPeriod from '../../../../actions/stats/updateUserStatsPeriod';
-import updateUserStatsActivityType from '../../../../actions/stats/updateUserStatsActivityType';
+import updateUserStatsPeriod from '../../../actions/stats/updateUserStatsPeriod';
+import updateUserStatsActivityType from '../../../actions/stats/updateUserStatsActivityType';
 import {TagCloud} from 'react-tagcloud';
 import {defineMessages} from 'react-intl';
 
@@ -100,7 +100,7 @@ class UserStats extends React.Component {
             );
         });
         return (
-          <Grid relaxed padded>
+          <Grid relaxed>
               {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
               <Grid.Row columns={1}>
                   <Grid.Column>

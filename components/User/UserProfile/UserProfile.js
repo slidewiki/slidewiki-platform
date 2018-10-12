@@ -16,6 +16,7 @@ import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUs
 import Integrations from './Integrations';
 import {defineMessages, FormattedMessage} from 'react-intl';
 import {categories} from '../../../actions/user/userprofile/chooseAction';
+import UserStats from './UserStats';
 
 let MediaQuery = require ('react-responsive');
 
@@ -115,6 +116,8 @@ class UserProfile extends React.Component {
                     default:
                         return this.notImplemented();
                 }});
+            case 'stats':
+                return this.addScaffold(() => this.displayUserStats());
             default:
                 return this.displayUserProfile();
         };
@@ -230,7 +233,7 @@ class UserProfile extends React.Component {
                                           loggedinUserId={this.props.UserProfileStore.userid}
                                           category={this.props.UserProfileStore.category}
                                           categoryItem={this.props.UserProfileStore.categoryItem}
-                                          userStats={this.props.UserStatsStore}/>);
+                                          />);
     }
 
     displayIntegrations() {
@@ -245,6 +248,10 @@ class UserProfile extends React.Component {
 
     displayGroupedit() {
         return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} displayName={this.props.UserProfileStore.user.displayName} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
+    }
+
+    displayUserStats(){
+        return (<UserStats userStats={this.props.UserStatsStore} />);
     }
 
     notImplemented() {

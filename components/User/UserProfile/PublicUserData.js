@@ -63,12 +63,6 @@ class PublicUserData extends React.Component {
             </div>
             : '' }
             </div>
-            {(this.props.user.uname === this.props.loggedinuser) &&
-            <NavLink className="ui basic button bottom attached" href={'/user/' + this.props.user.uname + '/stats'}
-                     role="button">
-                <p><i className="icon chart line"/>{this.context.intl.formatMessage(this.messages.stats)}</p>
-            </NavLink>
-            }
         </div>;
 
         return (

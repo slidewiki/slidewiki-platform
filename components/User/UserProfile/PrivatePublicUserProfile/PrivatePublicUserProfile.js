@@ -7,7 +7,6 @@ import UserDecks from './UserDecks';
 import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
 import UserRecommendations from '../UserRecommendations';
-import UserStats from './UserStats';
 import classNames from 'classnames/bind';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 
@@ -28,18 +27,12 @@ class PrivatePublicUserProfile extends React.Component {
         return <UserRecommendations loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} />;
     }
 
-    showUserStats(){
-        return (<UserStats userStats={this.props.userStats}></UserStats>);
-    }
-
     chooseView(){
         switch(this.props.category){
             case 'playlists':
                 return this.showUserCollections();
             case 'recommendations':
                 return this.showUserRecommendactions();
-            case 'stats':
-                return this.showUserStats();
             case 'deck':
             default:
                 return this.showUserDecks();
@@ -76,7 +69,7 @@ class PrivatePublicUserProfile extends React.Component {
                   </div>
                   <div className = "sixteen wide column">
                       <UserMenu user={ this.props.user } loggedinuser={this.props.loggedinuser} choice={ this.props.category } />
-                  { this.props.user.uname === this.props.loggedinuser && this.props.category !== 'playlists' && this.props.category !== 'recommendations' && this.props.category !== 'stats' &&
+                  { this.props.user.uname === this.props.loggedinuser && this.props.category !== 'playlists' && this.props.category !== 'recommendations' &&
                     <Segment>
                         <Header size='small' dividing >Publication status</Header>
                         <List>{

@@ -88,7 +88,7 @@ export default {
             }];
             rp({
                 method: 'GET',
-                uri: Microservices.lrs.uri + '/api/statements/aggregate',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
                 qs: {
                     pipeline: JSON.stringify(pipeline),
                 },
@@ -142,7 +142,7 @@ export default {
             ];
             rp({
                 method: 'GET',
-                uri: Microservices.lrs.uri + '/api/statements/aggregate',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
                 qs: {
                     pipeline: JSON.stringify(pipeline),
                 },
