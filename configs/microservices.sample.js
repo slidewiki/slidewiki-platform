@@ -86,6 +86,10 @@ export default {
         },
         'recommendation': {
             uri: 'http://slidewiki.imp.bg.ac.rs'
-        }
+        },
+        'lrs': {
+            uri: 'https://learninglocker.experimental.slidewiki.org',
+            basicAuth :'MWEwNTkwMTg5M2Y4ZjIyZTY4ZThkMzhlYWE0NDZkZjAxZWUyNjdhODo2YjE5MzAxODhmZWM0OTg0ZjE1YzVhODI1Njg2NTY5NDk5YzRmODEz'
+        },
     }
 };
