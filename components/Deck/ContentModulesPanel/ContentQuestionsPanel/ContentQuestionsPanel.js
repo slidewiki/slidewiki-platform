@@ -8,10 +8,11 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentModulesStore from '../../../../stores/ContentModulesStore';
 import loadContentQuestions from '../../../../actions/loadContentQuestions';
 import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
+import invertExamListFlag from '../../../../actions/questions/invertExamListFlag';
 import ContentQuestionsList from './ContentQuestionsList';
+import ExamQuestionsList from './ExamQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
 import ContentQuestionEdit from './ContentQuestionEdit';
-// import ContentQuestionForm from './ContentQuestionForm';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 
 class ContentQuestionsPanel extends React.Component {
@@ -25,6 +26,7 @@ class ContentQuestionsPanel extends React.Component {
         this.handlePreviousClick = this.handlePreviousClick.bind(this);
         this.updateQuestionsList = this.updateQuestionsList.bind(this);
         this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
+        this.handleExamListButtonClick = this.handleExamListButtonClick.bind(this);
     }
 
     updateQuestionsList(){
@@ -61,6 +63,10 @@ class ContentQuestionsPanel extends React.Component {
         this.context.executeAction(invertAddQuestionBoxFlag, {});
     }
     
+    handleExamListButtonClick() {
+        this.context.executeAction(invertExamListFlag, {});
+    }
+    
     handleExamClick() {
         this.context.executeAction(navigateAction, {
             url: '/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid
@@ -71,8 +77,8 @@ class ContentQuestionsPanel extends React.Component {
         const questions = this.props.ContentQuestionsStore.questions;
         const selector = this.props.ContentQuestionsStore.selector;
         const userId = this.props.UserProfileStore.userid;
-        const questionsCount = this.props.ContentQuestionsStore.questionsCount;
-        const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
+        // const questionsCount = this.props.ContentQuestionsStore.questionsCount;
+        // const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
 
         // Button bar differs for Slide and Folder
         let buttonBar = '';
@@ -93,17 +99,22 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
-        // console.log(editPermission);
-        let addQuestionButton = (editPermission) ?
+
+        let examQuestionsButton = (questions.length > 0) ?
+            <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
+                <i className="small check icon"  />
+                Exam questions
+            </button> : '';
+        let editButtons = (editPermission) ?
             <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                     <i className="small plus icon" data-reactid={640} />
                     Add question
                 </button>
+                {examQuestionsButton}
             </div>
             : '';
-        // console.log(addQuestionButton);
-
+        
         /*
         let addQuestionButton = (
             <div className="column right aligned" data-reactid={655}>
@@ -133,7 +144,7 @@ class ContentQuestionsPanel extends React.Component {
                                 <div className="column">
                                     <h3 className="ui  header">Questions</h3>
                                 </div>
-                                {addQuestionButton}
+                                {editButtons}
                             </div>
                         </div>
                         
@@ -142,53 +153,56 @@ class ContentQuestionsPanel extends React.Component {
             </div>
         );
 
-        class PaginationItem extends React.Component {
-            constructor(props){
-                super(props);
-                this._onClick = this._onClick.bind(this);
-            }
-            _onClick() {
-                this.props.onItemClick(this.props.pageNo);
-            }
+        // class PaginationItem extends React.Component {
+        //     constructor(props){
+        //         super(props);
+        //         this._onClick = this._onClick.bind(this);
+        //     }
+        //     _onClick() {
+        //         this.props.onItemClick(this.props.pageNo);
+        //     }
+        // 
+        //     render() {
+        //         let className = 'item';
+        //         if(this.props.isActiveItem){
+        //             className += ' active';
+        //         }
+        //         return (
+        //           <a className={className} onClick={this._onClick} >
+        //             {this.props.pageNo}
+        //           </a>
+        //         );
+        //     }
+        // }
 
-            render() {
-                let className = 'item';
-                if(this.props.isActiveItem){
-                    className += ' active';
-                }
-                return (
-                  <a className={className} onClick={this._onClick} >
-                    {this.props.pageNo}
-                  </a>
-                );
-            }
-        }
+        // let getItems = () => {
+        //     let noOfQuestions = questionsCount;
+        //     let items = [];
+        //     let pageNo = 1;
+        //     for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
+        //         items.push(
+        //           <PaginationItem key={pageNo} isActiveItem={this.state.pageNo === pageNo} pageNo={pageNo++} onItemClick={this.handlePageClick} />
+        //         );
+        //     }
+        //     return items;
+        // };
 
-        let getItems = () => {
-            let noOfQuestions = questionsCount;
-            let items = [];
-            let pageNo = 1;
-            for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
-                items.push(
-                  <PaginationItem key={pageNo} isActiveItem={this.state.pageNo === pageNo} pageNo={pageNo++} onItemClick={this.handlePageClick} />
-                );
-            }
-            return items;
-        };
-
-        let lastPageNo = parseInt(questionsCount / itemsPerPage) + 1;
-        let pagination = (
-            <div className="ui centered pagination menu">
-                <a className="icon item" onClick={this.handlePreviousClick}>
-                    <i className="left chevron icon" />
-                </a>
-                {getItems()}
-                <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
-                    <i className="right chevron icon" />
-                </a>
-            </div>
-        );
+        // let lastPageNo = parseInt(questionsCount / itemsPerPage) + 1;
+        // let pagination = (
+        //     <div className="ui centered pagination menu">
+        //         <a className="icon item" onClick={this.handlePreviousClick}>
+        //             <i className="left chevron icon" />
+        //         </a>
+        //         {getItems()}
+        //         <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
+        //             <i className="right chevron icon" />
+        //         </a>
+        //     </div>
+        // );
         let questionsList = (<ContentQuestionsList items={questions} selector={selector} editPermission={editPermission}/>);
+        let examQuestionsList = (<ExamQuestionsList items={questions} selector={selector} />);
+        let questionAdd = (<ContentQuestionAdd selector={this.props.selector} userId={userId} />);
+        let questionEdit = (<ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId}/>);
         let content = (
             <div>
                 {buttonBar}
@@ -198,18 +212,9 @@ class ContentQuestionsPanel extends React.Component {
             </div>
         );
 
-        //   if (question !== undefined && question !== null) {
-        // //Question is selected -> show its data
-        //       content = (
-        //   <div>
-        //     <ContentQuestionForm question={question} />
-        //   </div>
-        // );
-        //   }
-
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
-                { this.props.ContentQuestionsStore.showAddBox ? <ContentQuestionAdd selector={this.props.selector} userId={userId} /> : this.props.ContentQuestionsStore.question ? <ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId}/> : content }
+                { this.props.ContentQuestionsStore.showAddBox ? questionAdd : this.props.ContentQuestionsStore.question ? questionEdit : this.props.ContentQuestionsStore.showExamList ? examQuestionsList : content }
             </div>
         );
     }

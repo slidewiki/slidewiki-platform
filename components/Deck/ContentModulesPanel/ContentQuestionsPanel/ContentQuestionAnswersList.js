@@ -12,7 +12,6 @@ class ContentQuestionAnswersList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            // isEditButtonClicked: false,
             showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
@@ -26,10 +25,6 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
-        // this.setState({
-        //     isEditButtonClicked: true
-        // });
-
         this.context.executeAction(loadQuestion, {qstid: this.props.qstid});
     }
 

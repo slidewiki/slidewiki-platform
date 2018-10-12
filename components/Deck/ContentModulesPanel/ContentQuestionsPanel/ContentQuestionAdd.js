@@ -24,6 +24,7 @@ class ContentQuestionAdd extends React.Component {
             userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
             relatedObject: this.props.selector.stype,
+            isExamQuestion: false
         };
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
@@ -39,6 +40,7 @@ class ContentQuestionAdd extends React.Component {
         this.updateCorrect4 = this.updateCorrect4.bind(this);
 
         this.updateExplanation = this.updateExplanation.bind(this);
+        this.updateIsExamQuestion = this.updateIsExamQuestion.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
         this.cancelButtonClick = this.cancelButtonClick.bind(this);
     }
@@ -132,6 +134,10 @@ class ContentQuestionAdd extends React.Component {
     updateQuestionDifficulty(e) {
         this.setState({difficulty: e.target.value});
     }
+    
+    updateIsExamQuestion(e) {
+        this.setState({isExamQuestion: e.target.checked});
+    }
 
     render() {
         //const numAnswers = this.props.question.answers.length;
@@ -212,6 +218,12 @@ class ContentQuestionAdd extends React.Component {
                         <div className="field">
                             <label htmlFor="explanation">Explanation (optional)</label>
                             <textarea rows="2" id="explanation" onChange={this.updateExplanation}></textarea>
+                        </div>
+                        <div className="field">
+                            <div className="ui checkbox">
+                                <input type="checkbox" name="exam" id="exam" tabIndex="0" className="hidden" defaultChecked={this.state.isExamQuestion} onChange={this.updateIsExamQuestion}/>
+                                <label htmlFor="exam">This is an exam question</label>
+                            </div>
                         </div>
                         <div className="field">
                             <div className="ui container">
