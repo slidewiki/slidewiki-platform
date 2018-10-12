@@ -22,8 +22,8 @@ class AttachQuestionsModalStore extends BaseStore{
         this.embedOptions = {
             title: '',
             showNumbers: false,
-            showAnswers: false,
-            showExplanation: false,
+            showAnsExp: false,
+            //showExplanation: false,
         };
     }
 
@@ -80,8 +80,8 @@ class AttachQuestionsModalStore extends BaseStore{
         this.embedOptions = {
             title: '',
             showNumbers: false,
-            showAnswers: false,
-            showExplanation: false,
+            showAnsExp: false,
+            //showExplanation: false,
         };
 
         this.emitChange();
@@ -99,8 +99,8 @@ class AttachQuestionsModalStore extends BaseStore{
         this.embedOptions = {
             title: '',
             showNumbers: false,
-            showAnswers: false,
-            showExplanation: false,
+            showAnsExp: false,
+            //showExplanation: false,
         };
     
         this.emitChange();
@@ -225,7 +225,7 @@ class AttachQuestionsModalStore extends BaseStore{
 
     updateOptions(payload){
         //gets payload type (option) and the value?
-        //options.title , options.showAnswers , options.showExplanation
+        //options.title , options.showAnsExp 
         //console.log(payload);
         switch(payload.option){
             case 'title':
@@ -234,12 +234,14 @@ class AttachQuestionsModalStore extends BaseStore{
             case 'showNumbers':
                 this.embedOptions.showNumbers = payload.value;
                 break;
-            case 'showAnswers':
-                this.embedOptions.showAnswers = payload.value;
+            case 'showAnsExp':
+                this.embedOptions.showAnsExp = payload.value;
                 break;
+            /* Combined with showAnswers to become showAnsExp
             case 'showExplanation':
                 this.embedOptions.showExplanation = payload.value;
                 break;
+                */
             default:
                 break;
         }

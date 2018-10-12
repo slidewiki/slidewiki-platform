@@ -11,7 +11,6 @@ import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-//import AddQuestionsClick from '../../../../../actions/slide/AddQuestionsClick';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
@@ -909,6 +908,7 @@ class SlideContentEditor extends React.Component {
         let uniqueID = this.getuniqueID();
 
         let showNumbers = content.options.showNumbers;
+        let showAnsExp = content.options.showAnsExp;
         //need to include options logic in here.
         for (let i = 0; i < questionsList.length; i++){
             let currentQuestion = questionsList[i];
@@ -922,11 +922,31 @@ class SlideContentEditor extends React.Component {
                 questionhtml += "<div class='slide_question'><div>" + currentQuestion.title + "</div><ul>";
             }
 
-            for (let j = 0; j < currentAnswers.length; j++){
-                //questionhtml += "<input type='checkbox' name='answer" + j + "' value='" + currentAnswers[j].answer + "'>" + currentAnswers[j].answer + "</br>";
-                questionhtml += "<li>"+currentAnswers[j].answer + "</li>";
+            if(showAnsExp){
+                //if the answers and explanation should be shown for the embedded questions
+
+                for (let j = 0; j < currentAnswers.length; j++){
+                    let correctText = "";
+
+                    switch (currentAnswers[j].correct) {
+                        case true:
+                        correctText = " - correct";
+                        break;
+                    }
+                    questionhtml += "<li>"+ currentAnswers[j].answer + correctText + "</li>";
+                }
+                let explanation = currentQuestion.explanation ? "<div>Explanation: "+ currentQuestion.explanation + "</div>" : '';
+                questionhtml += "</ul>"+ explanation +"</div>";
             }
-            questionhtml += "</ul></div>";
+            else {
+                //if the answers and explanation shouldn't be included
+                for (let j = 0; j < currentAnswers.length; j++){
+                    questionhtml += "<li>"+currentAnswers[j].answer + "</li>";
+                }
+
+                questionhtml += "</ul></div>";
+            }
+            
         }
         questionhtml += "</div>";
 
@@ -2386,8 +2406,7 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
-        //nikki const questions = this.props.SlideEditStore.questions;
-
+        
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*

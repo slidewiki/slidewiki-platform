@@ -13,8 +13,8 @@ class AttachQuestionsOptions extends React.Component {
         this.state = {
             title: '',
             showNumbers: false,
-            showAnswers: false,
-            showExplanation: false,
+            showAnsExp: false,
+            //showExplanation: false,
         };
     }
     toggleShowNumbers() {
@@ -25,14 +25,15 @@ class AttachQuestionsOptions extends React.Component {
         this.setState({showNumbers: !this.state.showNumbers});
         this.context.executeAction(updateOptions, optionChange);
     }
-    toggleShowAnswers() {
+    toggleShowAnsExp() {
         let optionChange = {
-            option: 'showAnswers',
-            value: !this.state.showAnswers,
+            option: 'showAnsExp',
+            value: !this.state.showAnsExp,
         };
-        this.setState({showAnswers: !this.state.showAnswers});
+        this.setState({showAnsExp: !this.state.showAnsExp});
         this.context.executeAction(updateOptions, optionChange);
     }
+    /*Combined with the showAnswers to become showAnsExp
     toggleShowExplanation() {
         let optionChange = {
             option: 'showExplanation',
@@ -43,7 +44,7 @@ class AttachQuestionsOptions extends React.Component {
         this.context.executeAction(updateOptions, optionChange);
         
         console.log(this.state.showExplanation);
-    }
+    }*/
     onChange(event) {/*nikki does this need any error handling? */
         this.setState({title: event.target.value});
     }
@@ -57,8 +58,8 @@ class AttachQuestionsOptions extends React.Component {
     }
     
     render() {
-        let showAnswers = this.state.showAnswers;
-        let showExplanation = this.state.showExplanation;
+        let showAnsExp = this.state.showAnsExp;
+        //let showExplanation = this.state.showExplanation;
         let showNumbers = this.state.showNumbers;
     
         //TODO
@@ -76,21 +77,20 @@ class AttachQuestionsOptions extends React.Component {
                 </div>
                 <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}} >Number questions</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnswers' name='showNumbers' checked={showNumbers} onChange={this.toggleShowNumbers.bind(this)}/>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showNumbers' name='showNumbers' checked={showNumbers} onChange={this.toggleShowNumbers.bind(this)}/>
                 </div>
                 <div style={{marginBottom: '5px'}}>
-                    <label style={{marginRight: '20px'}}>Display correct answers</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnswers' name='showAnswers' checked={showAnswers} onChange={this.toggleShowAnswers.bind(this)}/>
+                    <label style={{marginRight: '20px'}}>Display correct answers and Explanation</label>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnsExp' name='showAnsExp' checked={showAnsExp} onChange={this.toggleShowAnsExp.bind(this)}/>
                 </div>
-                <div style={{marginBottom: '5px'}}>
-                    <label style={{marginRight: '20px'}}>Display explanation</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showExplanation' name='showExplanation' checked={showExplanation} onChange={this.toggleShowExplanation.bind(this)}/>
-                </div>
-                
             </Segment>
         );
     }
 }
+/*nikki removed <div style={{marginBottom: '5px'}}>
+                    <label style={{marginRight: '20px'}}>Display explanation</label>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showExplanation' name='showExplanation' checked={showExplanation} onChange={this.toggleShowExplanation.bind(this)}/>
+                </div> */
 
 AttachQuestionsOptions.contextTypes = {
     executeAction: PropTypes.func.isRequired

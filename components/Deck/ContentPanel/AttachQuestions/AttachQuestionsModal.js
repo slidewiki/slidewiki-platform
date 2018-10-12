@@ -187,7 +187,6 @@ class AttachQuestionsModal extends React.Component{
         });*/
         //this.context.executeAction(addActivities, {activities: activities});
 
-        /*nikki change comments below */
         let embedContent = {
             questions: this.props.AttachQuestionsModalStore.selectedQuestions,
             options: this.props.AttachQuestionsModalStore.embedOptions,
@@ -208,7 +207,6 @@ class AttachQuestionsModal extends React.Component{
             buttonsStyling: false,
             focusConfirm: true,
             allowEnterKey: true,
-            showCloseButton: true,
             allowEscapeKey: true,
         }).then((result) => {
             this.handleClose();

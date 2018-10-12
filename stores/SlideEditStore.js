@@ -34,7 +34,6 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
-        //this.questions = [];
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -172,21 +171,7 @@ class SlideEditStore extends BaseStore {
         this.embedQuestionsContent = '';
         this.emitChange();
     }
-    /*   if (payload.template === 'questions'){
-            this.template = payload.template;
-            this.templateQuestionsContent = payload.templateQuestionsContent;
-            this.emitChange();
-            this.template = '';
-            this.templateContent = '';
-            this.emitChange();
-        */
-   /* handleAddQuestionsClick(payload){
-        this.questions = payload.questions;
-        this.AddQuestionsClick = 'true';
-        this.emitChange();
-        this.AddQuestionsClick = 'false';
-        this.emitChange();
-    }*/
+
     getState() {
         return {
             id: this.id,
@@ -219,7 +204,6 @@ class SlideEditStore extends BaseStore {
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
             HTMLEditorClick: this.HTMLEditorClick,
-            //questions: this.questions
         };
     }
     dehydrate() {
@@ -256,7 +240,6 @@ class SlideEditStore extends BaseStore {
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
-        //this.questions = state.questions;
     }
 }
 
