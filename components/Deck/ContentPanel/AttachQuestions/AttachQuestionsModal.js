@@ -9,10 +9,8 @@ import FocusTrap from 'focus-trap-react';
 import loadUserDecks from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks from '../../../../actions/attachSubdeck/loadRecentDecks';
 import resetModalStore from '../../../../actions/attachQuestions/resetModalStore';
-//import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachQuestions/initModal';
-import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
-//import updateSelectedSlides from '../../../../actions/attachSubdeck/updateSelectedSlides';
+//import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
 import updateSelectedDeck from '../../../../actions/attachQuestions/updateSelectedDeck';
 import updateSelectedQuestions from '../../../../actions/attachQuestions/updateSelectedQuestions';
 import addActivities from '../../../../actions/activityfeed/addActivities';
@@ -30,24 +28,17 @@ import AttachQuestionsOptions from './AttachQuestionsOptions';
 import embedQuestions from '../../../../actions/attachQuestions/embedQuestions';
 
 class AttachQuestionsModal extends React.Component{
-  /*Props expected:
-    buttonStyle = {
-      classNames : string ->additional clases for the trigger button
-      iconSize:  enum {large|small} -> final size for displaying the icon of the button. Medium is not accepted by react-semantic-ui component
-   }*/
-
     constructor(props) {
         super(props);
-        /*nikki should this hold the state components for all of the question modal? then pass them down (along with handlers)  */
         this.state = {
             modalOpen: false,
-            activeItem: 'CurrentDeck', /*nikki changed to currentdeck */
+            activeItem: 'CurrentDeck', 
             activeTrap: false,
             selectedDeckId: -1,
             selectedQuestions:[],
             deckQuestions:[],
-            showQuestions: false, /*nikki changed away from true */
-            showOptions: false, /*nikki added, is this strictly necesary? */
+            showQuestions: false, 
+            showOptions: false, 
 
         };
 
@@ -61,9 +52,7 @@ class AttachQuestionsModal extends React.Component{
         this.handlePreviousQuestionsButton = this.handlePreviousQuestionsButton.bind(this);
     }
 
-    componentWillReceiveProps(nextProps){/*nikki shouldn't be used as it it legacy should this whole bit be removed??*/
-    //possibly should use the componentDidUpdate or Mount? feature instead?
-    /*nikki where are these even coming from? */
+    componentWillReceiveProps(nextProps){
         this.setState({
             selectedDeckId: nextProps.AttachQuestionsModalStore.selectedDeckId,
             activeItem: nextProps.AttachQuestionsModalStore.activeItem,
@@ -96,14 +85,13 @@ class AttachQuestionsModal extends React.Component{
         }};
         this.context.executeAction(loadRecentDecks, payload2); //should this go into the slidewikiclick?
         let payload3  = {
-            selectedDeckId: this.props.selector.id, /*nikki should this be set to the current deck?  was this.state.selectedDeckId*/
-            selectedDeckTitle: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', this.props.selector.id)//'First select the deck which contains the questions you wish to attach...'
-        }; //*nikki what is this doing? */
+            selectedDeckId: this.props.selector.id,
+            selectedDeckTitle: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', this.props.selector.id)
+        };
         //console.log(`id ${this.props.selector.id}`);
         //console.log(`Deck title: ${this.getTitle(this.props.currentDeck.DeckTreeStore.deckTree, 'deck', this.props.selector.id)}`);
         this.context.executeAction(updateSelectedDeck,payload3);
         let selector = this.props.selector;
-        //console.log(selector);
         this.context.executeAction(loadQuestions, {params:selector});
         $('#app').attr('aria-hidden','true');
         this.setState({
@@ -118,7 +106,7 @@ class AttachQuestionsModal extends React.Component{
         this.setState({
             modalOpen:false,
             activeTrap: false,
-            activeItem: 'CurrentDeck', /*nikki changed to CurrentDeck */
+            activeItem: 'CurrentDeck',
             selectedQuestions:[],
             //showQuestions:true, /*nikki should this be false instead? */
             selectedDeckId: -1
@@ -134,14 +122,12 @@ class AttachQuestionsModal extends React.Component{
     }
 
     handleNextButton(){
-        //nikki should reset the selected questions to empty
         this.setState({
             selectedQuestions:[]
         });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
         let deckSelector = {id:this.state.selectedDeckId, stype:'deck', sid:this.state.selectedDeckId}; //not being set correctly by the mydecks/search?
         this.context.executeAction(loadQuestions,{params:deckSelector});
-        //console.log(this.state.selectedDeckId);
         this.setState({
             showQuestions:true
         });
@@ -153,46 +139,39 @@ class AttachQuestionsModal extends React.Component{
     }
 
     handleOptionsButton(){
-        console.log('button - options!!');
+        //console.log('button - options!!');
         //console.log(this.state.selectedQuestions);
-        console.log(this.props.AttachQuestionsModalStore.selectedQuestions);
+        //console.log(this.props.AttachQuestionsModalStore.selectedQuestions);
         this.setState({
-            showOptions:true /*nikki is this necessary? */
+            showOptions:true
         });
         this.context.executeAction(updateShowOptions, true);
-        //console.log(this.props.AttachQuestionsModalStore.selectedQuestions);
     }
 
     handlePreviousDecksButton(){
-        console.log('previous decks button clicked');
+        /*nikki needs some additional handling here.  */
+        //console.log('previous decks button clicked');
         this.setState({
             showQuestions:false /*nikki needs checking */
         });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]},null);
         this.context.executeAction(updateShowQuestions, false);
-    /*nikki change this, updated questions instead */
-
     }
 
     handlePreviousQuestionsButton(){
-        console.log('previous questions button clicked');
+        //console.log('previous questions button clicked');
         this.setState({
             showQuestions:true,
             showOptions:false /*nikki is this necessary? */
         });
-        //this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]},null);
         this.context.executeAction(updateShowQuestions, true);
         this.context.executeAction(updateShowOptions, false);
         //console.log(this.state.activeItem);
-        console.log(this.state.selectedQuestions);
-        //console.log(this.props.AttachQuestionsModalStore.deckQuestions);
-        //console.log(this.state.deckQuestions);
+        //console.log(this.state.selectedQuestions);
         /*nikki is this all that's needed? */
     }
 
     handleAttachButton(){
-        /*nikki need to change this bit */
-
         /*nikki do we need this bit? what does it do? */
         /*let activities = nodeSpec.map((node) => {
             return {
@@ -209,15 +188,11 @@ class AttachQuestionsModal extends React.Component{
         //this.context.executeAction(addActivities, {activities: activities});
 
         /*nikki change comments below */
-        //set some content
-        //console.log('in attach');
         let embedContent = {
-            //title: 'title',
             questions: this.props.AttachQuestionsModalStore.selectedQuestions,
             options: this.props.AttachQuestionsModalStore.embedOptions,
             //insert additional options here
         }; 
-        //console.log(embedContent);
         /*nikki need error handling before doing the close action? */
         //TODO: internationalise these messages?
         swal({
@@ -237,13 +212,11 @@ class AttachQuestionsModal extends React.Component{
             allowEscapeKey: true,
         }).then((result) => {
             this.handleClose();
-            console.log(embedContent);
+            //console.log(embedContent);
             this.context.executeAction(embedQuestions, embedContent);
             }, (reason) => {
             if (reason === 'cancel') {
-                
                 console.log('cancel pressed - do nothing/close dialog?');
-                //this.applyTemplate(template, false);
             } else {
                 console.log('reason:' + reason + ' - do nothing/close dialog');
             }
@@ -253,7 +226,6 @@ class AttachQuestionsModal extends React.Component{
         }, 500);
 
     }
-
 
     //find node title
     getTitle(deckTree, type, id) {
@@ -281,10 +253,8 @@ class AttachQuestionsModal extends React.Component{
     }
 
     render() {
-
-        /*nikki define the action buttons up here, then just call them. nextQuestions, nextOptions, attach, previousQuestions, previousDecks ?? provided the display conditions are the same.*/
+        /* define the action buttons up here, then just call them. nextQuestions, nextOptions, attach, previousQuestions, previousDecks ?? provided the display conditions are the same.*/
         //action buttons
-        /*nikki change refs to state? */
         let nextQuestionsBtn = <Button id="nextQuestions" color="green" icon tabIndex="0" type="button" aria-label="Next Select questions" data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
             <Icon name="arrow right"/>
                 Next
@@ -314,7 +284,8 @@ class AttachQuestionsModal extends React.Component{
         /*nikki maybe change the disabled criteria?? */
 
         //From current deck content
-        let currentDeckContent = <AttachCurrentDeck deckQuestions={this.props.AttachQuestionsModalStore.deckQuestions} questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>; {/*nikki does this action button need changing? need to pass questions?*/}
+        //deckQuestions={this.props.AttachQuestionsModalStore.deckQuestions}
+        let currentDeckContent = <AttachCurrentDeck questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>; {/*nikki does this action button need changing? need to pass questions?*/}
         //From my Decks option content
         let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
         //From SlideWiki content

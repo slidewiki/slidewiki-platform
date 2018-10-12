@@ -3,6 +3,8 @@ import React from 'react';
 import { Menu} from 'semantic-ui-react';
 import updateActiveItem  from '../../../../actions/attachQuestions/updateActiveItem';
 import loadQuestions from '../../../../actions/attachQuestions/loadQuestions';
+import updateSelectedQuestions from '../../../../actions/attachQuestions/updateSelectedQuestions';
+
 
 class AttachMenu extends React.Component{
     constructor(props) {
@@ -21,42 +23,45 @@ class AttachMenu extends React.Component{
         this.context.executeAction(loadQuestions, {params:this.props.selector});
         this.setState({
             activeItem:'CurrentDeck',
-            //showQuestions: true /*nikki does it matter if this is true or false? */
+            showQuestions: true /*nikki does it matter if this is true or false? */
         });
         let payload ={
             activeItem:'CurrentDeck',
-            //showQuestions: true /*nikki does it matter if this is true or false? */
+            showQuestions: true /*nikki does it matter if this is true or false? */
         };
         this.context.executeAction(updateActiveItem,payload,null);
+        this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
+        
     
     }
 
     handleMyDecksClick(){
         this.setState({
             activeItem:'MyDecks',
-            //showQuestions: false
+            showQuestions: false
         });
         let payload ={
             activeItem:'MyDecks',
-            //showQuestions: false
+            showQuestions: false
         };
 
         this.context.executeAction(updateActiveItem,payload,null);
+        this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
 
     }
 
     handleSlideWikiClick(){
         this.setState({
             activeItem:'SlideWiki',
-            //showQuestions: false
+            showQuestions: false
         });
         let payload ={
             activeItem:'SlideWiki',
-            //showQuestions: false
+            showQuestions: false
         };
   
         this.context.executeAction(updateActiveItem,payload,null);
-
+        this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
     }
 
     render(){

@@ -13,40 +13,12 @@ class AttachQuestionsItem extends React.Component {
         key: the key for the question
         questionIndex: the index for the question (same as key?)
         selector: the deck from which the question comes
-        selectedQuestions: the currently selected questions
     */
-
-    checkNoEmpty(element){
-        return (element.toString().length>0);
-    }
-
-    handleCheckboxClick(selectedQuestion){ //not currently being used - moved up to the parent component
-        /*This method:
-       - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
-       - removes the selectedQuestion from the selectedQuestions list if it was already selected
-      */
-        console.log(selectedQuestion);
-        let tempQuestions = this.props.AttachQuestionsModalStore.selectedQuestions; //has this been passed? change to the store
-        let qindex = tempQuestions.indexOf(selectedQuestion);
-        if(qindex === -1){//It was not selected
-            tempQuestions.push(selectedQuestion);
-        } else { //It was selected...remove from it
-            tempQuestions[qindex]='';
-            tempQuestions = tempQuestions.filter(this.checkNoEmpty);
-        };
-
-        //this.setState({ //does it have this in state?
-        //    selectedQuestions: questions
-        //});
-
-        this.context.executeAction(updateSelectedQuestions,{selectedQuestions: tempQuestions},null);    
-        console.log(this.props.AttachQuestionsModalStore.deckQuestions)
-    }
 
     render(){
         const question = this.props.question;
         const answers = (
-            <AttachQuestionsAnswersList questionIndex={this.props.questionIndex} items={question.answers} explanation={question.explanation}/>//showCorrectAnswers={this.props.showCorrectAnswers}
+            <AttachQuestionsAnswersList questionIndex={this.props.questionIndex} items={question.answers} explanation={question.explanation}/>
         );
 
         let difficultyStars = (difficulty) => {
@@ -71,13 +43,12 @@ class AttachQuestionsItem extends React.Component {
 
         const name = 'question' + this.props.questionIndex;
 
-        //onChange={this.handleCheckboxClick.bind(this, question)} //from input
         return (
 
             <div className = "ui segments">
                 <div className="ui two column vertically divided segment">
                     <div className="ui checkbox">
-                        <input type="checkbox" onChange={this.props.onClick.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
+                        <input type="checkbox" onChange={this.props.onClick.bind(this)} onKeyPress={this.props.onKeyPress.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
                         <label htmlFor='name'>
                             {question.title}
                         </label>
@@ -92,7 +63,6 @@ class AttachQuestionsItem extends React.Component {
         );
     }
 }
-/*nikki put in the accordion here? for the answers */
 
 AttachQuestionsItem.contextTypes = {
     executeAction: PropTypes.func.isRequired

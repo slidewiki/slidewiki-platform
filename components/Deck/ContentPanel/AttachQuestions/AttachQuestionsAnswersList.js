@@ -35,12 +35,10 @@ class AttachQuestionsAnswersList extends React.Component{
             );
         });
         let explanation = `Explanation: ${this.props.explanation}`;
-        /*nikki add accordion here? Does it need the activeIfFirst bit? since we don't really want the first one open...*/
-        /*nikki what does the data-reactid do? */
         return (
             <div className="ui segment unpadded_segment" ref="attachquestionsanswers">
                 <div className="ui accordion">
-                <div ref="attachquestionanswersList" className='title'>
+                <div ref="attachquestionanswersList" className='title' tabIndex="0">
                     <i className="dropdown icon" />
                     Show Answers
                 </div>
@@ -54,14 +52,6 @@ class AttachQuestionsAnswersList extends React.Component{
             </div>
         );
     } 
-
-
 }
-/*nikki previously in the return section
-            <div ref="contentquestionanswersList">
-                <div className="ui relaxed list">
-                    {answersList}
-                </div>
-            </div> */
 
 export default AttachQuestionsAnswersList;

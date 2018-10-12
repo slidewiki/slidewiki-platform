@@ -1,9 +1,9 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import UserProfileStore from '../../../../stores/UserProfileStore';
+import UserProfileStore from '../../../../stores/UserProfileStore'; /*nikki is this needed? */
 import AttachQuestionsModalStore from '../../../../stores/AttachQuestionsModalStore';
 //import AttachDeckList from './AttachDeckList';
-import {  Segment, Loader,Label, Image,Dimmer} from 'semantic-ui-react';
+//import {  Segment, Loader,Label, Image,Dimmer} from 'semantic-ui-react';
 import AttachQuestionsList from './AttachQuestionsList';
 
 class AttachCurrentDeck extends React.Component{
@@ -11,8 +11,7 @@ class AttachCurrentDeck extends React.Component{
         super(props);
 
         this.state = {
-            /*nikki shouldn't set state, should use props from parent component and handlers also passed down */
-            //userDecks:this.props.AttachQuestionsModalStore.userDecks,
+            /*nikki reset this to blank? */
             selectedDeckTitle:  this.props.AttachQuestionsModalStore.selectedDeckTitle,
             selectedDeckId: this.props.currentDeckID
         };
@@ -21,7 +20,6 @@ class AttachCurrentDeck extends React.Component{
     componentWillReceiveProps(nextProps){
 
         this.setState({
-            //userDecks: nextProps.AttachQuestionsModalStore.userDecks,
             selectedDeckId: nextProps.currentDeckID,
             selectedDeckTitle:nextProps.AttachQuestionsModalStore.selectedDeckTitle,
         });
@@ -40,8 +38,8 @@ class AttachCurrentDeck extends React.Component{
             currentDeckContent = <div>There are no questions in this deck. Either select another deck to insert questions from or create some questions within this deck.</div>;
         }else {
             currentDeckContent = (
-                <AttachQuestionsList deckQuestions={this.props.deckQuestions} selectedDeckId={this.props.currentDeckID} maxHeight='350px'/>
-            ); /*nikki does it need all of these parameters? removed: user={userInfo} actionButtonId={this.props.actionButtonId}*/ 
+                <AttachQuestionsList selectedDeckId={this.props.currentDeckID} maxHeight='350px'/>
+            ); /*nikki does it need all of these parameters? removed: user={userInfo} actionButtonId={this.props.actionButtonId} deckQuestions={this.props.deckQuestions}*/ 
         }
         /*nikki removed segment */
         //<Segment id="panelCurrentDeckContent">

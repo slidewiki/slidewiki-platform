@@ -62,7 +62,6 @@ class AttachQuestionsList extends React.Component {
 
     }
 
-    /*nikki componentDidUpdate? is this really necessary? */
     componentDidUpdate(){
         if((this.state.deckQuestions.length !== 0) && this.state.firstTime){ //We have the questions rendered
             //$('#selectedDeckTitleId').focus(); /*nikki need to change this line */
@@ -102,11 +101,8 @@ class AttachQuestionsList extends React.Component {
        - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
        - removes the selectedQuestion from the selectedQuestions list if it was already selected
       */
-     /*nikki this method isn't used atm?? moved into component*/
-        //console.log(this);
-        console.log(`handleOnClick`);
-        console.log(this.state.selectedQuestions);
-        let questions = this.state.selectedQuestions;
+        //console.log(`handleOnClick`);
+        let questions = Object.assign([], this.state.selectedQuestions);
         let index = questions.indexOf(selectedQuestion);
         if(index === -1){//It was not selected
             questions.push(selectedQuestion);
@@ -120,20 +116,16 @@ class AttachQuestionsList extends React.Component {
         });
 
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:questions},null);
-        console.log(this.props.AttachQuestionsModalStore.deckQuestions)
-
     }
 
-
     handleAllQuestions(){
-        let allQuestions = this.props.AttachQuestionsModalStore.deckQuestions; //should this have another layer?
+        const allQuestions = Object.assign([], this.props.AttachQuestionsModalStore.deckQuestions);
         console.log(allQuestions);
 
         this.setState({
             selectedQuestions:allQuestions,
         });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:allQuestions},null);
-    
     }
 
     handleNone(){
@@ -144,12 +136,14 @@ class AttachQuestionsList extends React.Component {
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]},null);
     }
 
-    /*handleKeyPress(selectedQuestion,event){
+    handleKeyPress = (event, param, selectedQuestion) => {
         if(event.key === 'Enter'){
-            event.preventDefault();
-            this.handleOnClick(selectedQuestion);
+            //console.log('enter key');
+            if(param === 'handleQuestionClick') {
+                this.handleOnClick(selectedQuestion);
+            }
         }
-    }*/ //not being used? nikki
+    }
 
     getNextPos(pos,numItems,eventKeyCode){
         /*******************************************
@@ -198,7 +192,6 @@ class AttachQuestionsList extends React.Component {
         
     }
 
-
     render() {
         let deckQuestions = this.state.deckQuestions; //nikki should this be changed from state? either state or props.AttachModalStore
 
@@ -243,7 +236,7 @@ class AttachQuestionsList extends React.Component {
 
             let questionListItems = deckQuestions.map((node, index) => {
                 return (
-                    <AttachQuestionsItem onClick={() => this.handleOnClick(node)} question={node} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
+                    <AttachQuestionsItem onClick={() => this.handleOnClick(node)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleQuestionClick', node)} question={node} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
                 );
             });
             
@@ -256,7 +249,6 @@ class AttachQuestionsList extends React.Component {
 	                                    {questionListItems}
                                     </Item.Group>
                              </Segment>;
-
         }
 
         return (

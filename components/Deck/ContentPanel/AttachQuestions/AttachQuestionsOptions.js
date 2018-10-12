@@ -9,7 +9,7 @@ import updateOptions from '../../../../actions/attachQuestions/updateOptions';
 class AttachQuestionsOptions extends React.Component {
     constructor(props) {
         super(props);
-        /*nikki should this hold the state components for all of the question modal? then pass them down (along with handlers)  */
+        
         this.state = {
             title: '',
             showNumbers: false,
@@ -23,8 +23,6 @@ class AttachQuestionsOptions extends React.Component {
             value: !this.state.showNumbers,
         };
         this.setState({showNumbers: !this.state.showNumbers});
-        //console.log(optionChange);
-        //need to set the options...
         this.context.executeAction(updateOptions, optionChange);
     }
     toggleShowAnswers() {
@@ -33,8 +31,6 @@ class AttachQuestionsOptions extends React.Component {
             value: !this.state.showAnswers,
         };
         this.setState({showAnswers: !this.state.showAnswers});
-        //console.log(optionChange);
-        //need to set the options...
         this.context.executeAction(updateOptions, optionChange);
     }
     toggleShowExplanation() {
@@ -44,13 +40,11 @@ class AttachQuestionsOptions extends React.Component {
         };
         this.setState({showExplanation: !this.state.showExplanation});
         //console.log(optionChange);
-        //need to set the options...
         this.context.executeAction(updateOptions, optionChange);
         
         console.log(this.state.showExplanation);
     }
     onChange(event) {/*nikki does this need any error handling? */
-        //console.log(event.target.value);
         this.setState({title: event.target.value});
     }
     onBlur() {
@@ -61,18 +55,11 @@ class AttachQuestionsOptions extends React.Component {
         }
         this.context.executeAction(updateOptions, optionChange);
     }
-    //handleonChange 
-    //optionChange = {option: , value:}
-    //this.context.executeAction(updateOptions, optionChange)
+    
     render() {
         let showAnswers = this.state.showAnswers;
         let showExplanation = this.state.showExplanation;
         let showNumbers = this.state.showNumbers;
-        //need an on change option for an input box
-        //title input field
-        //radio buttons for other options. Also with on change handler. 
-        //pass down the handler methods from the modal?
-
     
         //TODO
         //requires aria tags etc and keyboard accessibility 
@@ -82,31 +69,28 @@ class AttachQuestionsOptions extends React.Component {
         //margin-bottom: 2px;
         //need tool-tip/ aria for the title - if no title is entered the default title is Questions, or should it have Questions entered in the box by default?
         return (
-            <Segment className='ui vertical stackable' id='EmbedOptions'>
-                <div style={{marginBottom: '5px'}}className='ui field input'>
-                    <label style={{marginRight: '20px'}}>Title</label>
+            <Segment className='ui vertical stackable' style={{padding: '20px'}} id='EmbedOptions'>
+                <div style={{marginBottom: '5px'}} className='ui field input'>
+                    <label style={{verticalAlign: 'middle', marginRight: '20px'}}>Title</label>
                     <input type='text' placeholder='Title for Questions...' onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
                 </div>
-                <div>
+                <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}} >Number questions</label>
                     <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnswers' name='showNumbers' checked={showNumbers} onChange={this.toggleShowNumbers.bind(this)}/>
                 </div>
-                <div>
+                <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}}>Display correct answers</label>
-                    <Checkbox toggle ref='showAnswers' name='showAnswers' checked={showAnswers} onChange={this.toggleShowAnswers.bind(this)}/>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnswers' name='showAnswers' checked={showAnswers} onChange={this.toggleShowAnswers.bind(this)}/>
                 </div>
-                <div>
+                <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}}>Display explanation</label>
-                    <Checkbox toggle ref='showExplanation' name='showExplanation' checked={showExplanation} onChange={this.toggleShowExplanation.bind(this)}/>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showExplanation' name='showExplanation' checked={showExplanation} onChange={this.toggleShowExplanation.bind(this)}/>
                 </div>
                 
             </Segment>
         );
     }
 }
-/*nikki <div>
-                    {questions}
-                </div> */
 
 AttachQuestionsOptions.contextTypes = {
     executeAction: PropTypes.func.isRequired
