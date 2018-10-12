@@ -331,7 +331,7 @@ export default {
         }
     },
     search: {
-        path: '/search/:queryparams?',
+        path: '/search',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
