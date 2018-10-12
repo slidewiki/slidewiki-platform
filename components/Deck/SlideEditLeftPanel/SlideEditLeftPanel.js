@@ -231,7 +231,8 @@ class SlideEditLeftPanel extends React.Component {
             }),
             html: this.context.intl.formatMessage({
                 id: 'editpanel.KeyboardShortcutsModal.html',
-                defaultMessage: '&#8226; Enter text in input box: control + enter <br/>'+
+                defaultMessage: '&#8226; Use Alt+F10 to enter the editor toolbar, then use Tab and Shift+Tab to move between toolbar groups and Arrow keys to move between buttons within a toolbar group. <br/>'+
+                '&#8226; Enter text in input box: control + enter <br/>'+
                 '&#8226; Move input box around: press control + alt and then the up, down, left, right keys <br/>' +
                 '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
                 '&#8226; Duplicate an input box: control + d <br/>'+
@@ -662,6 +663,7 @@ class SlideEditLeftPanel extends React.Component {
           <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
               <NavigationPanel mode='edit' />
               <div className="ui grey inverted segment bottom attached active tab">
+                <div id="CKeditorMenu"></div>
                 <div className="ui center aligned grid">
                     <div className="ui vertical labeled icon grey inverted large menu">
                           {panelcontent}

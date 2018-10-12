@@ -12,6 +12,7 @@
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+//CKEDITOR.plugins.addExternal('sharedspace', '/ckeditor-plugins/sharedspace/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
 CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
 
@@ -35,20 +36,35 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableObjectResizing = true;
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
-        //'/',
-            { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
+            { name: 'basicstyles', items: ['CopyFormatting'] },
+            { name: 'basicstyles', items: ['Bold'] },
+            { name: 'basicstyles', items: [ 'Italic'] },
+            { name: 'basicstyles', items: [ 'Underline'] },
+            { name: 'styles', items: [ 'Font'] },
+            { name: 'basicstyles', items: ['Strike' ] },
+            { name: 'basicstyles', items: [ 'Subscript' ] },
+            { name: 'basicstyles', items: [ 'Superscript' ] },
             { name: 'styles', items: [ 'Styles' ] },
+            { name: 'basicstyles', items: ['RemoveFormat' ] },
+			{ name: 'colors', items: [ 'TextColor'] },
+            { name: 'colors', items: ['BGColor' ] },
+            { name: 'styles', items: [ 'lineheight' ] },
+            { name: 'links', items: [ 'Link', 'Unlink' ] },
             { name: 'styles', items: [ 'Format'] },
         //'/',
             //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
             { name: 'insert', items: [ 'Symbol'] },
             //{ name: 'source', items: [ 'Mathjax'] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'paragraph', items: [ 'NumberedList'] },
+            { name: 'paragraph', items: [ 'BulletedList'] },
+            { name: 'paragraph', items: [ 'Outdent'] },
+			{ name: 'paragraph', items: [ 'Indent'] },
+            { name: 'paragraph', items: [ 'Blockquote'] },
+            { name: 'paragraph', items: [ 'JustifyLeft'] },
+            { name: 'paragraph', items: [ 'JustifyCenter'] },
+            { name: 'paragraph', items: [  'JustifyRight'] },
+            { name: 'paragraph', items: [  'JustifyBlock'] },
         //'/',
             //{ name: 'document', items: [ 'Sourcedialog'] },
             //{ name: 'document', items: [ 'CodeSnippet'] },
@@ -133,6 +149,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'list,' +
 		'liststyle,' +
         'lineheight,' +
+        'sharedspace,' +
 		'magicline,' +
 		'maximize,' +
 		'newpage,' +
