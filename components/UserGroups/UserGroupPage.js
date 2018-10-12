@@ -109,8 +109,10 @@ class UserGroupPage extends React.Component {
                       <Info group={ this.props.UserGroupsStore.currentUsergroup } />
                   </div>
                   <div className = "sixteen wide column">
-                      <Menu group={ this.props.UserGroupsStore.currentUsergroup } username={this.props.UserProfileStore.username} />
-                      <br />
+                      {(this.props.UserGroupsStore.currentUsergroup._id && this.props.UserGroupsStore.currentUsergroup._id > 0) ?
+                        (<div><Menu group={ this.props.UserGroupsStore.currentUsergroup } username={this.props.UserProfileStore.username} />
+                        <br /></div>)
+                      : ''}
                       <div className="ui vertical fluid menu">
                         <NavLink className="item" href={`/user/${this.props.UserProfileStore.username}/groups/overview`} activeStyle={this.styles}>
                           <p>
