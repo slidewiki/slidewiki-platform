@@ -19,14 +19,26 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
+import MobileDetect from 'mobile-detect/mobile-detect';
 
 class DeckViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isMobile: false};
+    }
+
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();
         if (text.length > 25) {
             text = text.substr(0, 21) + '...';
         }
         return text;
+    }
+
+    componentDidMount() {
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
 
     render() {
@@ -95,14 +107,14 @@ class DeckViewPanel extends React.Component {
         }
         const deckLicense = deckData.license;
         const deckTitle = deckData.title;
-        const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
+        const lastUpdate = CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
         if (deckData.language) deckData.language = deckData.language.substring(0, 2);
 
-        let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
+        let deckLanguageCode = deckData.language;
         let deckLanguage = deckLanguageCode === undefined ? '' : getLanguageName(deckLanguageCode);
         // default English
         deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
@@ -139,10 +151,10 @@ class DeckViewPanel extends React.Component {
                                             <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
                                         </h2>
                                         <div className="meta"><strong>Creator:&nbsp;</strong>
-                                            <NavLink href={creatorProfileURL}>{deckCreator}</NavLink>
+                                            <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
                                         </div>
                                         {originInfo}
-                                        <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
+                                        <div className="meta"><strong>Last Modified:&nbsp;</strong>{lastUpdate}</div>
                                         {deckDescription &&
                                             <div className="meta"><strong>Description:</strong>
                                                 <div className="description" tabIndex="0" >{deckDescription}</div>
@@ -187,7 +199,22 @@ class DeckViewPanel extends React.Component {
                                 if (slide.theme) {
                                     thumbnailURL += '/' + slide.theme;
                                 }
-                                if (index < maxSlideThumbnails) {
+                                if (this.state.isMobile) {
+                                    const slideURL = Util.makeNodeURL({
+                                        id: this.props.selector.id,
+                                        stype: 'slide',
+                                        sid: slide.id
+                                    }, 'deck', '', this.props.deckSlug);
+                                    return (
+                                        <div key={index} className="ui card">
+                                            <a href={slideURL} className="ui image"
+                                               tabIndex="-1">
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
+                                            </a>
+                                        </div>
+                                    );
+                                }
+                                else if (index < maxSlideThumbnails) {
                                     const slideURL = Util.makeNodeURL({
                                         id: this.props.selector.id,
                                         stype: 'slide',

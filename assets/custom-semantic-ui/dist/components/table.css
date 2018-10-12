@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.2 - Table
+ * # Semantic UI 2.4.0 - Table
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -308,13 +308,13 @@
 
 .ui.table tr.positive,
 .ui.table td.positive {
-  -webkit-box-shadow: 0px 0px 0px #146726 inset;
-          box-shadow: 0px 0px 0px #146726 inset;
+  -webkit-box-shadow: 0px 0px 0px #265326 inset;
+          box-shadow: 0px 0px 0px #265326 inset;
 }
 .ui.table tr.positive,
 .ui.table td.positive {
   background: #FCFFF5 !important;
-  color: #146726 !important;
+  color: #265326 !important;
 }
 
 /*--------------
@@ -353,8 +353,8 @@
 
 .ui.table tr.warning,
 .ui.table td.warning {
-  -webkit-box-shadow: 0px 0px 0px #984810 inset;
-          box-shadow: 0px 0px 0px #984810 inset;
+  -webkit-box-shadow: 0px 0px 0px #8E380A inset;
+          box-shadow: 0px 0px 0px #8E380A inset;
 }
 .ui.table tr.warning,
 .ui.table td.warning {
@@ -544,7 +544,7 @@
 .ui.table tr td.selectable.positive:hover,
 .ui.selectable.table tr:hover td.positive {
   background: #f7ffe6 !important;
-  color: #125a21 !important;
+  color: #214921 !important;
 }
 .ui.selectable.table tr.negative:hover,
 .ui.table tr td.selectable.negative:hover,
@@ -643,19 +643,19 @@
 
 /* Red */
 .ui.red.table {
-  border-top: 0.2em solid #DB2828;
+  border-top: 0.2em solid #C42424;
 }
 .ui.inverted.red.table {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
   color: #FFFFFF !important;
 }
 
 /* Orange */
 .ui.orange.table {
-  border-top: 0.2em solid #DA6619;
+  border-top: 0.2em solid #CA5010;
 }
 .ui.inverted.orange.table {
-  background-color: #DA6619 !important;
+  background-color: #CA5010 !important;
   color: #FFFFFF !important;
 }
 
@@ -679,10 +679,10 @@
 
 /* Green */
 .ui.green.table {
-  border-top: 0.2em solid #188130;
+  border-top: 0.2em solid #158538;
 }
 .ui.inverted.green.table {
-  background-color: #188130 !important;
+  background-color: #158538 !important;
   color: #FFFFFF !important;
 }
 

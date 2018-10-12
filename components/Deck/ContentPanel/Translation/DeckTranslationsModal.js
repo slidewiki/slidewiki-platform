@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -122,7 +123,7 @@ class DeckTranslationsModal extends React.Component {
                   && !compareLanguageCodes(current, this.props.TranslationStore.originLanguage))
                     arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
-            }, []).sort((a, b) => a.text > b.text);
+            }, []).sort((a, b) => (a.text > b.text) ? 1 : -1);
         }
 
         let btnMessage = this.context.intl.formatMessage(messages.translate);
@@ -181,8 +182,8 @@ class DeckTranslationsModal extends React.Component {
 }
 
 DeckTranslationsModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DeckTranslationsModal = connectToStores(DeckTranslationsModal, [TranslationStore], (context, props) => {
     return {

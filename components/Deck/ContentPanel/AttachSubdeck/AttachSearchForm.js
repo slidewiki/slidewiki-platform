@@ -23,7 +23,7 @@ class AttachSearchForm extends React.Component{
     // this is used when an autocomplete suggestion is pressed
     onSelect(searchstring){
         this.setState({
-            keywords: encodeURIComponent(searchstring.trim())
+            keywords: searchstring
         });
         this.handleRedirect();
     }
@@ -34,29 +34,14 @@ class AttachSearchForm extends React.Component{
             event.preventDefault();
         }
 
-        // form the query parameters to send to service
-        let queryparams = 'keywords=' + ((this.state.keywords) ? this.state.keywords : '*:*');
-        if(this.state.field)
-            queryparams += `&field=${this.state.field}`;
-
-        if(this.state.language)
-            queryparams += `&language=${this.state.language}`;
-
-
-        queryparams += '&kind=deck';        // always request decks here
-
         let users = this.refs.user.getSelected();
-        if(users){
-            users = users.split(',');
-            for(let i in users){
-                queryparams += `&user=${users[i]}`;
-            }
-        }
-
-        // console.log(queryparams);
         this.context.executeAction(loadSearchedDecks, {
-            params: {
-                queryparams: queryparams
+            query: {
+                keywords: this.state.keywords || undefined, 
+                field: this.state.field || undefined,
+                language: this.state.language || undefined, 
+                kind: 'deck',
+                user: (users !== '') ? users.split(',') : undefined,
             }
         });
 
@@ -64,38 +49,23 @@ class AttachSearchForm extends React.Component{
 
         return false;
     }
-    handleKeyPress(event){
-
-        if(event.key === 'Enter'){
-            this.handleRedirect(event);
-        }
-
+    onChange(event) {
+        let curstate = {};
+        curstate[event.target.name] = event.target.value;
+        this.setState(curstate);
     }
-    handleKeywordsChange(){
-        this.setState({
-            keywords:encodeURIComponent(this.keywordsInput.getSelected().trim())
-        });
-    }
-    handleLanguageChange(value){
-        this.setState({
-            language:encodeURIComponent(value.trim())
-        });
-
-    }
-
-    handleFieldChange(value){
-        this.setState({
-            field:encodeURIComponent(value.trim())
-        });
+    onDropdownChange(event, data){
+        let curstate = {};
+        curstate[data.name] = data.value;
+        this.setState(curstate);
     }
     render(){
         let fieldOptions =[
-        //  { value:'', text:'Select Search field'},
+          {value:'', text:'Select Search field'},
           {value:'title' , text:'Title'},
           {value:'description' , text:'Description'},
           {value:'content' , text:'Content'},
           {value:'speakernotes' , text:'Speakernotes'}
-
         ];
 
         let languageOptions = translationLanguages.reduce((arr, curr) => {
@@ -103,19 +73,24 @@ class AttachSearchForm extends React.Component{
             return arr;
         }, []);
 
+        // used to reset language filter
+        languageOptions.unshift({
+            value: '', 
+            text: 'Select Language'
+        });
+
         return (
           <Segment className='advancedSearch'>
                           <Header as="h3">Search for decks</Header>
                           <Form success>
                             <Form.Group>
-
                               <Form.Field width="11" >
                                 <Label htmlFor="SearchTerm"  className="sr-only">Search Term</Label>
-                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} onChange={this.handleKeywordsChange.bind(this)} />
+                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' handleRedirect={this.handleRedirect.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} />
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="field" className="sr-only">Search field</Label>
-                               <Dropdown selection name='field' id='field' ref={(field) => {this.field = field;}}  placeholder='Select Search field' options={fieldOptions} role="listbox"  onChange={(e, {value }) => {this.handleFieldChange(value);}}/>
+                               <Dropdown selection name='field' id='field' ref={(field) => {this.field = field;}}  placeholder='Select Search field' options={fieldOptions} role="listbox"  onChange={this.onDropdownChange.bind(this)}/>
                               </Form.Field>
                             </Form.Group>
                             <Form.Group>
@@ -125,7 +100,7 @@ class AttachSearchForm extends React.Component{
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="language" className="sr-only">Language</Label>
-                               <Dropdown selection  placeholder='Select Language' name='language'  id='language'  options={languageOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handleLanguageChange(value);}}/>
+                               <Dropdown selection  placeholder='Select Language' name='language'  id='language'  options={languageOptions} defaultValue='' role="listbox"  onChange={this.onDropdownChange.bind(this)}/>
                               </Form.Field>
                             </Form.Group>
                             <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"

@@ -2,9 +2,19 @@ import log from '../log/clog';
 import notFoundError from '../error/notFoundError';
 import methodNotAllowedError  from '../error/methodNotAllowedError';
 import searchSyntaxError from '../error/searchSyntaxError';
+import updateModalSubtitle from '../collections/updateModalSubtitle';
 
 export default function loadSearchedDecks(context,payload,done){
     log.info(context);
+
+    context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS_LOADING');
+    context.executeAction(updateModalSubtitle, 'Search Results');
+    
+    payload.query.expand = false;
+    payload.query.spellcheck = false;
+    payload.query.pageSize = 50;
+    payload.query.facets = false;
+
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             if (err.statusCode === 404) {
@@ -27,8 +37,6 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
-
-            log.info(context,res);
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
 
