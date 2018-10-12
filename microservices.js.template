@@ -52,6 +52,10 @@ export default {
         },
         'recommendation': {
             uri: '${SERVICE_URL_RECOMMENDATION}'
-        }
+        },
+        lrs: {
+            uri: '${SERVICE_LEARNINGLOCKER_API_URL}',
+            basicAuth: '${SERVICE_LEARNINGLOCKER_API_AUTH}',
+        },
     }
 };
