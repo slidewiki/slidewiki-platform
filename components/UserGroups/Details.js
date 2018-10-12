@@ -222,7 +222,8 @@ class Details extends React.Component {
                 description: this.refs.GroupDescription.value,
                 members: members,
                 timestamp: this.props.currentUsergroup.timestamp || '',
-                creator: this.props.currentUsergroup.creator || this.props.userid
+                creator: this.props.currentUsergroup.creator || this.props.userid,
+                picture: this.props.currentUsergroup.picture
             };
         } catch (error) {
 

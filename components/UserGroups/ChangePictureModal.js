@@ -4,7 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'slidewiki-react-image-cropper';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea} from 'semantic-ui-react';
-import uploadMediaFile from '../../actions/media/uploadMediaFile';
+import uploadMediaFile from '../../actions/usergroups/uploadPicture';
 
 class ChangePictureModal extends React.Component {
 
@@ -69,13 +69,13 @@ class ChangePictureModal extends React.Component {
         let payload = {};
         payload.bytes = this.refs.cropper.crop(170);
         payload.fileurl = this.props.filePath;
-        payload.filesize = payload.picture.length - 22;// minus 22 for data:image/png;base64, which is the prefix
-        payload.type = 'png';
+        payload.filesize = payload.bytes.length - 22;// minus 22 for data:image/png;base64, which is the prefix
+        payload.type = 'image/png';
         payload.license = 'CC0';
         payload.title = '';
         payload.text = '';
         // console.log('ChangePictureModal: uploadCroppedPicture:', payload);
-        if(payload.picture.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
+        if(payload.bytes.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
             this.context.executeAction(uploadMediaFile, payload);
             this.handleClose();
         } else {
@@ -107,7 +107,7 @@ class ChangePictureModal extends React.Component {
         });
         return (
           <Modal trigger={
-                  <Button tabIndex='-1' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} style={{'display': 'none'}}/>
+                  <Button tabIndex='-1' id="ChangeGroupPictureModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} style={{'display': 'none'}}/>
                  }
               open={this.state.modalOpen}
               onClose={this.handleClose}

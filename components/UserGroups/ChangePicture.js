@@ -55,12 +55,12 @@ class ChangePicture extends React.Component {
                     buttonsStyling: false
                 }).then(() => {
                     this.forceUpdate();
-                    $('#ChangePictureModalOpenButton').click();
+                    $('#ChangeGroupPictureModalOpenButton').click();
                 });
             }
             else {
                 this.forceUpdate();
-                $('#ChangePictureModalOpenButton').click();
+                $('#ChangeGroupPictureModalOpenButton').click();
             }
         } else
             swal({

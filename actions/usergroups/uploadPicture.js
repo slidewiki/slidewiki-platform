@@ -1,39 +1,66 @@
-import MediaStore from '../../stores/MediaStore';
-import uploadProfilePicture from '../media/uploadProfilePicture';
-import changeUserData from './changeUserData';
+import UserProfileStore from '../../stores/UserProfileStore';
+import UserGroupsStore from '../../stores/UserGroupsStore';
+import {Microservices} from '../../configs/microservices';
+import saveUsergroup from './saveUsergroup';
 const log = require('../log/clog');
 
-//This action gets a whole user object and uploads the picture and then saves the user with the picture URL
 export default function uploadPicture(context, payload, done) {
     log.info(context);
 
-    //prepare file
-    let file = {
-        type: 'image/' + payload.filetype,
-        title: 'profile picture of '+payload.uname,
-        filesize: payload.filesize,
-        filename: payload.fileurl,
-        bytes: payload.picture
-    };
+    payload.userid = context.getStore(UserProfileStore).userid;
+    payload.jwt = context.getStore(UserProfileStore).jwt;
 
-    context.executeAction(uploadProfilePicture, file, () => {
-        // console.log('uploadPicture: uploaded media file', context.getStore(MediaStore).file, context.getStore(MediaStore).file.url, context.getStore(MediaStore).file.thumbnailUrl);
+    let successCallback = (url) => {
+        let group = context.getStore(UserGroupsStore).currentUsergroup;
+        group.picture = url;
 
-        if (context.getStore(MediaStore).status !== 'success') {
-            //show error
-            context.dispatch('EDIT_USER_FAILED', {});
+        context.executeAction(saveUsergroup, group, () => {
 
-            return done();
-        }
-
-        delete payload.filesize;
-        delete payload.fileurl;
-        delete payload.filetype;
-        payload.picture = context.getStore(MediaStore).file.url;
-        // console.log('uploadPicture: Now saving user', payload, context.getStore(MediaStore).file.filename);
-
-        context.executeAction(changeUserData, payload, () => {
             done();
         });
+    };
+
+    context.service.create('media.create', payload, { timeout: 20 * 1000 }, { timeout: 20 * 1000 }, (err, res) => {
+        delete payload.jwt;
+        delete payload.userid;
+
+        if (err) {
+            // Every file send to the file-service gets checked if its distinct, if so 409 is returned
+            // All images of all users are regarded thus the 409 response is really common
+            if (err.statusCode === 409) {
+                let parts = err.message.split(' ');
+                let filename = parts[parts.length-1];
+                // Check if the file is an SVG. (sub-path already included in filename for SVGs)
+                let subpath = '/picture/';
+                if (filename.includes('/graphic/')) subpath = '';
+                filename = filename.substring(0, filename.length - 4);
+                payload.url = Microservices.file.uri + subpath + filename;
+
+                if (subpath === '') {
+                    context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                        successCallback(res);
+                    });
+                } else {
+                    console.log('Got 409 from file service', payload);
+                    successCallback(payload.url);
+                }
+            }
+            else {
+                context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
+            }
+        }
+        else {
+            let subPath = res.type === 'image/svg+xml' ? '/graphic/' : '/picture/';
+            payload.url = Microservices.file.uri + subPath + res.fileName;
+            if(res.type === 'image/svg+xml') {
+                context.service.read('media.readCSV', {url: payload.url}, { timeout: 20 * 1000 }, (err, res) => {
+                    successCallback(res);
+                });
+            } else {
+                successCallback(payload.url);
+            }
+            /**/
+        }
+        done();
     });
 }

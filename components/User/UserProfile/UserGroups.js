@@ -3,6 +3,7 @@ import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/usergroups/updateUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import UserPicture from '../../common/UserPicture';
 
 class UserGroups extends React.Component {
     constructor(props){
@@ -122,13 +123,21 @@ class UserGroups extends React.Component {
                 <div key={group._id} className="ui vertical segment" >
                     <div className="ui two column grid container">
 
-                        <div className="column">
+                        <div className="left aligned ten wide column">
                             <div className="ui header"><h3>{group.name}</h3></div>
-                            <div
-                                 className="meta">{group.members.length+1} {this.context.intl.formatMessage(((group.members.length+1) !== 1) ? this.messages.members : this.messages.member)}</div>
+                            <div className="meta">
+                              {group.members.length+1} {this.context.intl.formatMessage(((group.members.length+1) !== 1) ? this.messages.members : this.messages.member)}
+                            </div>
                         </div>
 
-                        <div className="right aligned column">
+                        <div className="four wide column">
+                            <div className="ui header"><h3></h3></div>
+                            <div className="meta">
+                              <UserPicture picture={ group.picture } link={ false } private={ false } width={ 50 } centered={ false } size={ 'mini' } aria-hidden={ 'true' } />
+                            </div>
+                        </div>
+
+                        <div className="right aligned two wide column">
                             <button className="ui large basic icon button"
                                     data-tooltip={this.context.intl.formatMessage(this.messages.groupDetails)}
                                     aria-label={this.context.intl.formatMessage(this.messages.groupDetails)}

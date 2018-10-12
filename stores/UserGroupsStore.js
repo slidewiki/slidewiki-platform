@@ -161,7 +161,10 @@ class UserGroupsStore extends BaseStore {
         this.emitChange();
     }
 
-
+    failureUploadingPicture(error) {
+        this.saveUsergroupIsLoading = false;
+        this.saveUsergroupError = error;
+    }
 
 /*
 
@@ -259,6 +262,7 @@ UserGroupsStore.handlers = {
     'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
     'LEAVE_USERGROUP_FAILED': 'leaveUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'leaveUsergroupSuccess',
+    'FAILURE_UPLOADING_MEDIA_FILE': 'failureUploadingPicture'
 
 /*
     //old ones

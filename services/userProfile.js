@@ -110,7 +110,8 @@ export default {
                 isActive: !isEmpty(params.isActive) ? params.isActive : true,
                 timestamp: !isEmpty(params.timestamp) ? params.timestamp : '',
                 members: members,
-                referenceDateTime: (new Date()).toISOString()
+                referenceDateTime: (new Date()).toISOString(),
+                picture: params.picture
             };
             // console.log('sending:', tosend, params.jwt);
             rp({
