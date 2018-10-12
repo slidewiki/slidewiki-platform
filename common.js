@@ -156,11 +156,14 @@ export default {
         if (!code) return '';
         code = code.substring(0, 2).toLowerCase();
 
+        let name = ISO6391.getName(code);
         // also returns empty string if unknown
-        let nativeName = ISO6391.getNativeName(code);
-        if (!nativeName) return '';
+        if (!name) return '';
 
-        return `${nativeName} (${ISO6391.getName(code)})`;
+        let nativeName = ISO6391.getNativeName(code);
+        if (nativeName === name) return name;
+
+        return `${nativeName} (${name})`;
     },
 
     compareLanguageCodes: (a, b) => {
