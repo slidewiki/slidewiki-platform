@@ -19,7 +19,6 @@ class ExamQuestionsList extends React.Component {
     }
 
     render() {
-      console.log(this.props.items);
         let list = this.props.items.map((node, index) => {
             return (
                 <div className="inline field" key={index}>
