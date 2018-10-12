@@ -16,6 +16,7 @@ class Details extends React.Component {
         super(props);
 
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.hasChanges = false;
 
         this.messages = defineMessages({
             error: {
@@ -122,6 +123,7 @@ class Details extends React.Component {
 
     componentDidMount() {
         console.log('Details componentDidMount');
+        let that = this;
         $('#usergoup_edit_dropdown_usernames_remote')
             .dropdown({
                 apiSettings: {
@@ -153,6 +155,8 @@ class Details extends React.Component {
                             organization: data.organization,
                             displayName: data.displayName
                         });
+
+                        that.hasChanges = true;
                     }
 
                     this.context.executeAction(updateUsergroup, {group: group, offline: true});
@@ -160,6 +164,19 @@ class Details extends React.Component {
                     return true;
                 }
             });
+
+        window.onbeforeunload = () => {
+            if (this.hasChanges === true)
+            {
+                const messagesUnsavedChangesAlert = defineMessages({
+                    alert:{
+                        id: 'UserGroupEdit.unsavedChangesAlert',
+                        defaultMessage: 'You have unsaved changes. If you do not save the group, it will not be updated. Are you sure you want to exit this page?'
+                    }
+                });
+                return this.context.intl.formatMessage(messagesUnsavedChangesAlert.alert);
+            }
+        };
     }
 
     componentWillreceiveProps(nextprops) {
@@ -238,6 +255,7 @@ class Details extends React.Component {
     handleSave(e) {
         e.preventDefault();
 
+        this.hasChanges = false;
         let group = this.getGroup(this.props.currentUsergroup.members);
 
         //console.log('handleSave:', group);
@@ -298,6 +316,7 @@ class Details extends React.Component {
         // console.log('handleClickRemoveMember', member, 'from', this.props.currentUsergroup.members);
 
         let group = this.getGroup(this.props.currentUsergroup.members);
+        this.hasChanges = true;
 
         group.members = group.members.filter((gmember) => {
             return gmember.userid !== member.userid;
