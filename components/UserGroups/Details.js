@@ -376,12 +376,12 @@ class Details extends React.Component {
 
         let buttons = '';
         if (this.props.userid && this.props.isMember && !this.props.isAdmin) {
-            buttons = <button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
+            buttons = <div className="ui buttons"><button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
                 <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
-            </button>;
+            </button></div>;
         }
         else if (this.props.userid && this.props.isAdmin) {
-            buttons = <div>
+            buttons = <div className="ui buttons">
               <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                   <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
               </button>
@@ -392,7 +392,7 @@ class Details extends React.Component {
             </div>;
         }
         else if (this.props.userid && this.props.isCreator) {
-            buttons = <div>
+            buttons = <div className="ui buttons">
               <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                   <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
               </button>
@@ -402,6 +402,12 @@ class Details extends React.Component {
               </button>
             </div>;
         }
+        let buttonStuff = <div className="ui grid">
+          <div className="nine wide column"></div>
+          <div className="seven wide column">
+            {buttons}
+          </div>
+        </div>;
 
         return (
           <div>
@@ -442,9 +448,7 @@ class Details extends React.Component {
                             </form>
                             <div className="ui hidden divider">
                             </div>
-                            <div className="ui buttons">
-                              {buttons}
-                            </div>
+                              {buttonStuff}
                             {(this.props.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
 
                             <div className="ui hidden divider">

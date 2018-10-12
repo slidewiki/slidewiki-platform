@@ -8,7 +8,7 @@ export default function saveUsergroup(context, payload, done) {
         if (err) {
             context.dispatch('SAVE_USERGROUP_FAILED', err);
         } else {
-            context.dispatch('SAVE_USERGROUP_SUCCESS', res);
+            context.dispatch('SAVE_USERGROUP_SUCCESS', payload);
             // console.log('updated usergroup from to', payload, res);
             if (!payload.id) {
                 context.executeAction(navigateAction, {
