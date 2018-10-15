@@ -11,8 +11,10 @@ export default {
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
 
         if(resource === 'questions.list') {
+            const nonExamQuestionsOnly = (args.nonExamQuestionsOnly) ? '&non_exam_questions_only=true' : '';
+            
             rp.get({
-                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true'
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true' + nonExamQuestionsOnly,
             }).then((res) => {
 
                 let questions = JSON.parse(res).map((item, index) => {
@@ -52,8 +54,10 @@ export default {
                 callback(err, {});
             });
         } else if(resource === 'questions.count') {
+            const nonExamQuestionsOnly = (args.nonExamQuestionsOnly) ? '&non_exam_questions_only=true' : '';
+          
             rp.get({
-                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true&include_subdecks_and_slides=true',
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true&include_subdecks_and_slides=true' + nonExamQuestionsOnly,
             }).then((res) => {
                 callback(null, {count: JSON.parse(res).count});
             }).catch((err) => {
