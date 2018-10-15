@@ -85,7 +85,7 @@ export default {
             uri: 'https://nlpservice.experimental.slidewiki.org'
         },
         'analytics': {
-            uri: 'http://analyticsservice.experimental.slidewiki.org'
+            uri: 'https://analyticsservice.experimental.slidewiki.org'
         }
     }
 };
