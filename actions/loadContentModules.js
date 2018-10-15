@@ -38,7 +38,7 @@ export default function loadContentModules(context, payload, done) {
         (callback) => {
             let editPermission = (context.getStore(PermissionsStore) && context.getStore(PermissionsStore).permissions && (context.getStore(PermissionsStore).permissions.admin || context.getStore(PermissionsStore).permissions.edit));
 
-            payload.nonExamQuestionsOnly = !editPermission;
+            payload.params.nonExamQuestionsOnly = !editPermission;
             context.executeAction(loadQuestionsCount, payload, callback);
         },
         (callback) => {
