@@ -49,6 +49,17 @@ class SlideEditLeftPanel extends React.Component {
             backgroundColor: null,
             colorPopupIsOpen: false
         };
+
+        this.messages = defineMessages({
+            transitionAlertTitle: {
+                id: 'slideEditLeftPanel.transitionAlertTitle',
+                defaultMessage: 'Changing Transition for the presentation'
+            },
+            transitionAlertContent: {
+                id: 'slideEditLeftPanel.transitionAlertContent',
+                defaultMessage: 'This transition will be used for the transition of this slide to the next slide, do you want to proceed?'
+            }
+        });
     }
     componentDidUpdate(prevProps, prevState){
         if (prevState.showTemplate !== this.state.showTemplate ||
@@ -217,13 +228,22 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleSlideTransitionchange(slideTransition){
         if(slideTransition !== ''){
-            this.setState({showTemplate: false});
-            this.setState({showProperties: true});
-            this.context.executeAction(changeSlideTransition, {
-                //slideSize: this.refs.template.slideSize
-                slideTransition: slideTransition
+            swal({
+                title: this.context.intl.formatMessage(this.messages.transitionAlertTitle),
+                text: this.context.intl.formatMessage(this.messages.transitionAlertContent),
+                type: 'warning',
+                showCloseButton: false,
+                showCancelButton: true,
+                allowEscapeKey: true,
+                showConfirmButton: true
+            }).then(() => {
+                this.setState({showTemplate: false});
+                this.setState({showProperties: true});
+                this.context.executeAction(changeSlideTransition, {
+                    //slideSize: this.refs.template.slideSize
+                    slideTransition: slideTransition
+                });
             });
-            //this.forceUpdate();
         }
     }
     changeSlideBackgroundClick(){
