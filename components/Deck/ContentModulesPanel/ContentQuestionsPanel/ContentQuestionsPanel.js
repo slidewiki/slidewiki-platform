@@ -22,42 +22,42 @@ class ContentQuestionsPanel extends React.Component {
         this.state = {
             pageNo: props.ContentModulesStore.selector.pageNum
         };
-        this.handlePageClick = this.handlePageClick.bind(this);
-        this.handlePreviousClick = this.handlePreviousClick.bind(this);
-        this.updateQuestionsList = this.updateQuestionsList.bind(this);
+        // this.handlePageClick = this.handlePageClick.bind(this);
+        // this.handlePreviousClick = this.handlePreviousClick.bind(this);
+        // this.updateQuestionsList = this.updateQuestionsList.bind(this);
         this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
         this.handleExamListButtonClick = this.handleExamListButtonClick.bind(this);
     }
 
-    updateQuestionsList(){
-        let selector = this.props.ContentModulesStore.selector;
-        selector.pageNum = this.state.pageNo;
-        this.context.executeAction(loadContentQuestions, {params: selector});
-    }
+    // updateQuestionsList(){
+    //     let selector = this.props.ContentModulesStore.selector;
+    //     selector.pageNum = this.state.pageNo;
+    //     this.context.executeAction(loadContentQuestions, {params: selector});
+    // }
 
-    handlePageClick(pageNo) {
-        if(pageNo !== this.state.pageNo){
-            this.setState({
-                pageNo: pageNo,
-            }, this.updateQuestionsList);
-        }
-    }
-
-    handlePreviousClick(){
-        if(this.state.pageNo !== 1){
-            this.setState({
-                pageNo: this.state.pageNo - 1,
-            }, this.updateQuestionsList);
-        }
-    }
-
-    handleNextClick(lastPageNo){
-        if(this.state.pageNo < lastPageNo){
-            this.setState({
-                pageNo: this.state.pageNo + 1,
-            }, this.updateQuestionsList);
-        }
-    }
+    // handlePageClick(pageNo) {
+    //     if(pageNo !== this.state.pageNo){
+    //         this.setState({
+    //             pageNo: pageNo,
+    //         }, this.updateQuestionsList);
+    //     }
+    // }
+    // 
+    // handlePreviousClick(){
+    //     if(this.state.pageNo !== 1){
+    //         this.setState({
+    //             pageNo: this.state.pageNo - 1,
+    //         }, this.updateQuestionsList);
+    //     }
+    // }
+    // 
+    // handleNextClick(lastPageNo){
+    //     if(this.state.pageNo < lastPageNo){
+    //         this.setState({
+    //             pageNo: this.state.pageNo + 1,
+    //         }, this.updateQuestionsList);
+    //     }
+    // }
 
     handleAddButtonClick() {
         this.context.executeAction(invertAddQuestionBoxFlag, {});
@@ -90,7 +90,7 @@ class ContentQuestionsPanel extends React.Component {
                 buttonBar = (userId !== '' && questions.length > 0) ? (
                     <div className='ui buttons'>
                         <button className='ui button blue' onClick={this.handleExamClick.bind(this)}>
-                            <i className='clipboard icon'></i>
+                            <i className='clipboard outline icon'></i>
                             Exam mode
                         </button>
                     </div>
@@ -102,7 +102,7 @@ class ContentQuestionsPanel extends React.Component {
 
         let examQuestionsButton = (questions.length > 0) ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
-                <i className="small check icon"  />
+                <i className="small check icon" />
                 Exam questions
             </button> : '';
         let editButtons = (editPermission) ?
