@@ -19,6 +19,7 @@ import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import TagsPanel from './TagsPanel/TagsPanel';
 //import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
+import PermissionsStore from '../../../stores/PermissionsStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
@@ -50,7 +51,9 @@ class ContentModulesPanel extends React.Component {
     handleTabClick(type, e) {
         switch (type) {
             case 'questions':
-                this.context.executeAction(loadContentQuestions, {params: this.props.ContentModulesStore.selector});
+                let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
+                this.context.executeAction(loadContentQuestions, {params: this.props.ContentModulesStore.selector, nonExamQuestionsOnly: !editPermission});
+                
                 break;
             case 'datasource':
                 this.context.executeAction(loadDataSources, {params: this.props.ContentModulesStore.selector});
@@ -196,9 +199,10 @@ class ContentModulesPanel extends React.Component {
 ContentModulesPanel.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
-ContentModulesPanel = connectToStores(ContentModulesPanel, [ContentModulesStore], (context, props) => {
+ContentModulesPanel = connectToStores(ContentModulesPanel, [ContentModulesStore, PermissionsStore], (context, props) => {
     return {
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ContentModulesStore: context.getStore(ContentModulesStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 export default ContentModulesPanel;

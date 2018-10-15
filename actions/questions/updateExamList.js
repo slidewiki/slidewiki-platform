@@ -5,7 +5,7 @@ import ContentQuestionsStore from '../../stores/ContentQuestionsStore';
 export default function updateExamList(context, payload, done) {
     log.info(context, payload);
     
-    let modifiedQuestions= [];
+    let modifiedQuestions = [];
     let questionsFromStore = context.getStore(ContentQuestionsStore).questions;
     for(let i = 0; i < questionsFromStore.length; i++) {
         if (questionsFromStore[i].isExamQuestion !== this.props.items[i].isExamQuestion) {
