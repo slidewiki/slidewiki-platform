@@ -52,7 +52,7 @@ export default {
         },
         'recommender': {
             uri: '${SERVICE_URL_RECOMMENDER}'
-        }
+        },
         'recommendation': {
             uri: '${SERVICE_URL_RECOMMENDATION}'
         }
