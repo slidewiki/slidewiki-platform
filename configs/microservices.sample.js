@@ -84,11 +84,11 @@ export default {
         'nlp': {
             uri: 'https://nlpservice.experimental.slidewiki.org'
         },
+        'recommender': {
+            uri: 'https://recommenderservice.experimental.slidewiki.org'
+        },
         'recommendation': {
             uri: 'http://slidewiki.imp.bg.ac.rs'
-        },
-        'recommender':{ //UPV version
-            uri: 'http://slidewiki.gti-ia.upv.es'
         }
     }
 };
