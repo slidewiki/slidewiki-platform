@@ -32,7 +32,7 @@ class ExamQuestionsList extends React.Component {
 
         return (
             <div ref="examquestionsList">
-                <h3 className="ui dividing header">Exam questions</h3>
+                <h3 className="ui dividing header">Select exam questions</h3>
                 <div >
                     {list}
                 </div>
