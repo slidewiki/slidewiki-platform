@@ -233,7 +233,7 @@ class Presentation extends React.Component{
         return(
             //<ResizeAware ref='container' id='container'>
             <div ref='container' id='container'>
-                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv}  data-background-transition="none">
                     <div className={['slides', style.slides].join(' ')}>
       			     	     {slides}
         			      </div>
@@ -254,7 +254,7 @@ class Presentation extends React.Component{
                 let bgTemp = content.split('background-color: ');
                 //need to check if bg is provided
                 let backgroundColour = bgTemp.length > 1 ? content.split('background-color: ')[1].split(';')[0] : '';
-                return <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                return <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={slide.transition}/>;
             });
         }
         return html;

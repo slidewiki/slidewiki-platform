@@ -785,6 +785,7 @@ class SlideContentEditor extends React.Component {
             let deckID = currentSelector.id;
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
+            let transition = this.props.SlideEditStore.slideTransition ? this.props.SlideEditStore.slideTransition : 'none';
 
             //setTimeout(function() {
             this.context.executeAction(saveSlide, {
@@ -795,7 +796,8 @@ class SlideContentEditor extends React.Component {
                 speakernotes: speakernotes,
                 dataSources: dataSources,
                 selector: currentSelector,
-                tags: tags
+                tags: tags,
+                transition: transition
             });
             //},500);
 
@@ -1289,7 +1291,7 @@ class SlideContentEditor extends React.Component {
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
                 if (!id || id === 'inlineContent') {
-                    id = this.menuFocus; 
+                    id = this.menuFocus;
                 }
                 if (id && id !== 'inlineContent') {
                     /*

@@ -156,7 +156,8 @@ export default {
                     position: content_id,
                     dataSources: args.dataSources,
                     license: 'CC BY-SA',
-                    tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []
+                    tags: (args.tags && (args.tags instanceof Array)) ? args.tags : [],
+                    transition: args.transition
                 })
             }).then((res) => {
                 let resParse = JSON.parse(res);

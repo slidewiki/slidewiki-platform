@@ -57,7 +57,7 @@ class SlideEditLeftPanel extends React.Component {
             },
             transitionAlertContent: {
                 id: 'slideEditLeftPanel.transitionAlertContent',
-                defaultMessage: 'This transition will be used for the transition of this slide to the next slide, do you want to proceed?'
+                defaultMessage: 'This transition will be used for the transition to this slide, do you want to proceed?'
             }
         });
     }
