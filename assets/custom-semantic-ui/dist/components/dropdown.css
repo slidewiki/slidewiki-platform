@@ -1499,6 +1499,11 @@ select.ui.dropdown {
   content: "\f0da";
 }
 */
+select.ui.dropdown:focus {
+  -webkit-box-shadow: 0 0 0 3px rgba(0, 125, 255, 0.35);
+          box-shadow: 0 0 0 3px rgba(0, 125, 255, 0.35);
+  border: 1px solid #85B7D9;
+}
 
 
 /*******************************

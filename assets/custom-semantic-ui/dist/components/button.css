@@ -76,8 +76,8 @@
   background-color: #CACBCD;
   color: rgba(0, 0, 0, 0.8);
   background-image: '' !important;
-  -webkit-box-shadow: '' !important;
-          box-shadow: '' !important;
+  -webkit-box-shadow: 0 0 0 2px rgba(0, 125, 255, 0.5) inset !important;
+          box-shadow: 0 0 0 2px rgba(0, 125, 255, 0.5) inset !important;
 }
 .ui.button:focus .icon {
   opacity: 0.85;
@@ -769,8 +769,8 @@
 .ui.basic.button:focus {
   background: #FFFFFF !important;
   color: rgba(0, 0, 0, 0.8) !important;
-  -webkit-box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.35) inset, 0px 0px 0px 0px rgba(34, 36, 38, 0.15) inset;
-          box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.35) inset, 0px 0px 0px 0px rgba(34, 36, 38, 0.15) inset;
+  -webkit-box-shadow: 0px 0px 0px 2px rgba(0, 125, 255, 0.5) inset !important;
+          box-shadow: 0px 0px 0px 2px rgba(0, 125, 255, 0.5) inset !important;
 }
 .ui.basic.buttons .button:active,
 .ui.basic.button:active {
@@ -3830,6 +3830,32 @@
          Theme Overrides
 *******************************/
 
+.ui.primary.buttons .button:focus,
+.ui.primary.button:focus,
+.ui.blue.buttons .button:focus,
+.ui.blue.button:focus {
+  -webkit-box-shadow: 0 0 0 2px #56b0f3 inset !important;
+          box-shadow: 0 0 0 2px #56b0f3 inset !important;
+}
+.ui.secondary.buttons .button:focus,
+.ui.secondary.button:focus {
+  -webkit-box-shadow: 0 0 0 2px #d7d7d7 inset !important;
+          box-shadow: 0 0 0 2px #d7d7d7 inset !important;
+}
+.ui.positive.buttons .button:focus,
+.ui.positive.button:focus,
+.ui.green.buttons .button:focus,
+.ui.green.button:focus {
+  -webkit-box-shadow: 0 0 0 2px #1bef5d inset !important;
+          box-shadow: 0 0 0 2px #1bef5d inset !important;
+}
+.ui.negative.buttons .button:focus,
+.ui.negative.button:focus,
+.ui.red.buttons .button:focus,
+.ui.red.button:focus {
+  -webkit-box-shadow: 0 0 0 2px #f16767 inset !important;
+          box-shadow: 0 0 0 2px #f16767 inset !important;
+}
 
 
 /*******************************

@@ -143,7 +143,7 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const editClass = classNames({
-            'ui button attached basic': true,
+            'ui button basic': true,
             //'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const viewClass = classNames({
@@ -267,6 +267,12 @@ class ContentActionsHeader extends React.Component {
 
 
         }
+        
+        const leftButtonsClass = classNames({
+            'ui left floated top attached buttons': true,
+            'basic': editButton !== '' 
+        });
+        
         /*
         <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
           type="button"
@@ -285,7 +291,7 @@ class ContentActionsHeader extends React.Component {
                 <div className="ui two column grid">
                     {this.props.TranslationStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
                     <div className="column computer tablet only">
-                        <div className="ui left floated top attached buttons" >
+                        <div className={leftButtonsClass}>
                             {editButton}
                             {markdownEditButton}
                             {saveButton}

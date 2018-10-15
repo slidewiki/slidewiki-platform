@@ -162,7 +162,7 @@ class ContentActionsFooter extends React.Component {
         }
 
         let desktopButtons = <div>
-          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
           <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
               <i className="print large icon"></i>
           </button>
@@ -227,7 +227,7 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>

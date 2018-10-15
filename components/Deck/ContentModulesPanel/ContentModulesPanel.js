@@ -76,6 +76,10 @@ class ContentModulesPanel extends React.Component {
             default:
         }
     }
+    handleKeyPress(type, e) {
+        this.handleTabClick(type);
+        e.preventDefault();
+    }
     render() {
         let pointingMenu = '';
         let activityDIV = '';
@@ -150,26 +154,26 @@ class ContentModulesPanel extends React.Component {
       
         // hide tags tab in slides 
         let tagsTab = (this.props.ContentModulesStore.selector.stype === 'deck') 
-        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>
+        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')} onKeyPress={this.handleKeyPress.bind(this, 'tags')}>
             Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span>
         </a> : '';
 
         // hide playlists tab in slides
         let palylistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
-        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')}>
+        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')} onKeyPress={this.handleKeyPress.bind(this, 'playlists')}>
             Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.playlists}</span>
         </a> : '';
 
         pointingMenu = (
             <div className="ui top attached pointing menu">
-                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
+                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')} onKeyPress={this.handleKeyPress.bind(this, 'datasource')} role="button">Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 {tagsTab}
                 {/*TODO add correct moduleCount*/}
-                <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')}>Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
-                <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
-                <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
+                <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')} onKeyPress={this.handleKeyPress.bind(this, 'discussion')} role="button">Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
+                <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')} onKeyPress={this.handleKeyPress.bind(this, 'history')} role="button">History</a>
+                <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')} onKeyPress={this.handleKeyPress.bind(this, 'usage')} role="button">Usage</a>
                 {/*<a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>*/}
-                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
+                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')} onKeyPress={this.handleKeyPress.bind(this, 'questions')} role="button">Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
                 {palylistsTab}
                 {/*
                 <a className="item">

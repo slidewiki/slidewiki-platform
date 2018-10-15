@@ -624,6 +624,11 @@
 .dash:before  { content: '\e801'; }
 .plus:before { content: '\e802'; }
 */
+.ui.checkbox input:focus ~ .box:before,
+.ui.checkbox input:focus ~ label:before {
+  -webkit-box-shadow: 0 0 0 3px rgba(0, 125, 255, 0.35);
+          box-shadow: 0 0 0 3px rgba(0, 125, 255, 0.35);
+}
 
 
 /*******************************
