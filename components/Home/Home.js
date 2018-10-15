@@ -79,7 +79,7 @@ class Home extends React.Component {
             },
             decks: {
                 id: 'home.decks',
-                defaultMessage: 'Decks, lorem ipsum dolor sit amet, consectetur adipiscing elit', // TODO: remove lorem ipsums
+                defaultMessage: 'Open educational resources for all learning environments'
             },
             schools: {
                 id: 'home.schools',
@@ -107,19 +107,19 @@ class Home extends React.Component {
             },
             slideWikiEnjoy: {
                 id: 'home.slideWikiEnjoy',
-                defaultMessage: 'SlideWiki...Create, Share and Enjoy Presentations'
+                defaultMessage: 'SlideWiki: Create, Share and Enjoy Presentations'
             },
             slideWikiAbout: {
                 id: 'home.slideWikiAbout',
-                defaultMessage: 'About SlideWiki'
+                defaultMessage: 'The SlideWiki Project'
             },
             slideWikiAboutContent: {
                 id: 'home.slideWikiAboutContent',
-                defaultMessage: 'SlideWiki is an open source development project, funded from the European Union\'s Horizon 2020 research and innovation programme. The project involves 17 partners to develop, test and trial SlideWiki. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget elit sapien. Nunc semper urna in lectus consectetur fermentum. Vestibulum eu sem pulvinar, sollicitudin ipsum eu, porttitor elit. Maecenas bibendum congue lectus, vitae. SlideWiki is an open source development project, funded from the European Union\'s Horizon 2020 research and innovation programme. The project involves 17 partners to develop, test and trial SlideWiki. To find out more or get involved'
-            },      //TODO: remove lorem ipsums
+                defaultMessage: 'SlideWiki is an online slideshow tool that offers users the chance to create and collaborate on slides, assessments and to share content as structured open educational resources using a Creative Commons licence. With SlideWiki you can engage with your audience by collaborating with colleagues to co-design and co-create course materials and share your knowledge across the world. SlideWiki is an open-source platform, and all its content can be reused under Creative Commons CC-BY-SA license. SlideWiki development, large-scale trials and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. The project involves 17 partners to develop, test and trial SlideWiki. '
+            },
             slideWikiAboutVisit: {
                 id: 'home.slideWikiAboutVisit',
-                defaultMessage: 'visit the project webiste.'
+                defaultMessage: 'visit the project website.'
             },
             myDecks: {
                 id: 'home.myDecks',
@@ -208,8 +208,8 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='feature-content blue-block'>
                                             <div className='feature-left'>
-                                                <h3>{this.context.intl.formatMessage(this.messages.findSlides)}</h3>
-                                                <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
+                                                <h3 className='ui header blue large'>{this.context.intl.formatMessage(this.messages.findSlides)}</h3>
+                                                <h4 className='ui header blue medium'>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                             </div>
                                             <div className='feature-right'><img src='/assets/images/home/search.jpg' alt=''/></div>
@@ -218,8 +218,8 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='feature-content green-block'>
                                             <div className='feature-left'>
-                                                <h3>{this.context.intl.formatMessage(this.messages.createSlides)}Create slides</h3>
-                                                <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
+                                                <h3 className='ui header teal large'>{this.context.intl.formatMessage(this.messages.createSlides)}Create slides</h3>
+                                                <h4 className='ui header teal medium'>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                             </div>
                                             <div className='feature-right'><img src='/assets/images/home/add.jpg' alt=''/></div>
@@ -228,8 +228,8 @@ class Home extends React.Component {
                                     <div className='column'>
                                         <div className='feature-content red-block'>
                                             <div className='feature-left'>
-                                                <h3>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h3>
-                                                <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
+                                                <h3 className='ui header large pink'>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h3>
+                                                <h4 className='ui header medium pink'>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
                                             </div>
                                             <div className='feature-right'><img src='/assets/images/home/share.jpg' alt=''/></div>
@@ -256,7 +256,7 @@ class Home extends React.Component {
                             <div className='ui column '>
                                 <div className='row'>
                                     <div className='column'>
-                                        <h3>{this.context.intl.formatMessage(this.messages.decks)}</h3>
+                                        <h3 className='ui header large'>{this.context.intl.formatMessage(this.messages.decks)}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -305,33 +305,9 @@ class Home extends React.Component {
                             <div className='ui one column grid'>
                                 <div className='column'>
                                     <h2>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
-                                    <div className='featured-deck'>
-                                        <div className='featured-img'>
-                                            <img src='/assets/images/home/featured-img.jpg' alt='Featured Image'/>
-                                        </div>
-                                        <div className='featured-content'>              {/*TODO: refactor this section to be a separated component based on a Carousel SWIK-2316*/}
-                                            <h3>Featured deck</h3>
-                                            <div className='featured-post'>
-                                                <h5>Introduction to Algebra</h5>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur egestas in sapien in bibendum. Nam vulputate nunc a dictum aliquet. Morbi hendrerit enim in dolor condimentum faucibus. </p>
-                                                <a href='#'>Read more...</a>
-                                            </div>
-                                            <div className='post-desc'>
-                                                <p>Creator&#58;<a href='#'>soeren</a></p>
-                                                <p>Date&#58;<span>20/08/2018</span></p>
-                                            </div>
-                                            <div className='post-button'>
-                                                <a href='#' className='left-btn'><i className='comments icon'/>24</a>
-                                                <a href='#' className='right-btn'><i className='share alternate icon'/>7</a>
-                                            </div>
-                                        </div>
-                                        <div className='deck-link'>
-                                            <a href='#'>See  all decks</a>
-                                        </div>
-                                    </div>
                                     <div className='column'>
                                         <div className='about-block'>
-                                            <h4>{this.context.intl.formatMessage(this.messages.slideWikiAbout)}</h4>
+                                            {/* <h3>{this.context.intl.formatMessage(this.messages.slideWikiAbout)}</h3> */}
                                             <p>{this.context.intl.formatMessage(this.messages.slideWikiAboutContent)} <a href='https://slidewiki.eu/' target='_blank'>{this.context.intl.formatMessage(this.messages.slideWikiAboutVisit)}</a>
                                             </p>
                                         </div>
@@ -342,6 +318,7 @@ class Home extends React.Component {
                     </div>
                     {/*<!-- presentation End -->*/}
                 </section>
+
 
                 {/*<!-- content ends -->*/}
 
