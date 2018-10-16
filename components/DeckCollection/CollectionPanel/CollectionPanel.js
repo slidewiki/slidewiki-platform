@@ -212,7 +212,7 @@ class CollectionPanel extends React.Component {
                     <div>
                         <h3><FormattedMessage {...this.messages.collectionTitle} /></h3>
                         <h2>{data.title}</h2>
-                        <h4>{nl2br(data.description)}</h4>
+                        <div>{nl2br(data.description)}</div>
                         <div className = "ui divider" />
                             <b><FormattedMessage {...this.messages.collectionCreator} />:</b> <NavLink href={`/user/${data.user.username}`}>{data.user.displayName}</NavLink><br/>
                             <b><FormattedMessage {...this.messages.collectionDate} />:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
