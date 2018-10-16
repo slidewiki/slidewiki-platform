@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import {NavLink} from 'fluxible-router';
+import {defineMessages} from 'react-intl';
 import {Microservices} from '../../../../configs/microservices';
 
 class UserMenu extends React.Component {
@@ -35,7 +35,7 @@ class UserMenu extends React.Component {
             recommendedDecks: {
                 id: 'UserMenu.recommendedDecks',
                 defaultMessage: 'Recommended Decks'
-            }
+            },
         });
     }
     render() {
