@@ -63,7 +63,7 @@ class UserMenu extends React.Component {
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
                   }
-                  { (this.props.user.uname === this.props.loggedinuser) &&
+                  { (this.props.user.uname === this.props.loggedinuser && Microservices.analytics) &&
                     <NavLink className="item" href={'/user/' + this.props.user.uname + '/recommendations'} activeStyle={this.styles}>
                         <p><i className="icons">
                             <i className="yellow open folder icon"></i>
