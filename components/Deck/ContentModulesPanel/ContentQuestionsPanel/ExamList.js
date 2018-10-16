@@ -35,7 +35,7 @@ class ExamList extends React.Component {
     }
     handleSubmitAnswers(e) {
         e.preventDefault();
-        let questions = this.props.ContentQuestionsStore.questions;
+        let questions = this.props.items;
         let errorsCount = 0;
         questions.forEach((question) => {
             const answers = question.answers;

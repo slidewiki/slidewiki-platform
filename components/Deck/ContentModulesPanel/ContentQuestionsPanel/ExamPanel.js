@@ -21,7 +21,7 @@ class ExamPanel extends React.Component {
         let questionsList = (<ExamList items={examQuestions} selector={selector} />);
         let content = (
             <div>
-                {examQuestions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
+                {examQuestions.length === 0 ? 'There are currently no exam questions for this ' + selector.stype + '.' : questionsList}
             </div>
         );
         return (
