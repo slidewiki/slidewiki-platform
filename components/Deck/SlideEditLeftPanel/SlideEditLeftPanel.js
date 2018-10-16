@@ -45,7 +45,8 @@ class SlideEditLeftPanel extends React.Component {
                                 <i tabIndex="0" className="paint brush icon"></i> Paint
                                </a>),
             backgroundColor: null,
-            colorPopupIsOpen: false
+            colorPopupIsOpen: false,
+            editText: false
         };
     }
     componentDidUpdate(prevProps, prevState){
@@ -74,6 +75,13 @@ class SlideEditLeftPanel extends React.Component {
         if (backgroundColorInput) {
             backgroundColorInput.addEventListener('input', () => {
                 $('.pptx2html').css('background-color', backgroundColorInput.value);
+            });
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.SlideEditStore.contentEditorFocus !== this.props.SlideEditStore.contentEditorFocus) {
+            this.setState({
+                editText: nextProps.SlideEditStore.contentEditorFocus
             });
         }
     }
@@ -277,6 +285,11 @@ class SlideEditLeftPanel extends React.Component {
     handleChangeBackgroundColorClick(){
         this.setState({
             backgroundColor: $('.pptx2html').css('background-color')
+        });
+    }
+    handleTabClick(editText) {
+        this.setState({
+            editText: editText
         });
     }
     handleKeyPress = (event, param, template) => {
@@ -659,16 +672,22 @@ class SlideEditLeftPanel extends React.Component {
         } else {
             panelcontent = normalContent;
         }
+        
+        const tabActive = {
+            background: '#767676',
+            color: '#ffffff'
+        };
+
         return (
           <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
               <NavigationPanel mode='edit' />
                 <div className="ui buttons attached fluid">
-                    <button className="ui button" style={{background:'#767676', color: '#ffffff'}}>Add</button>
-                    <button className="ui button">Edit</button>
+                    <button className="ui button" style={!this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, false)}>Add</button>
+                    <button className="ui button" style={this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, true)}>Edit</button>
                 </div>
               <div className="ui grey inverted segment bottom attached active tab">
-                <div id="CKeditorMenu"></div>
-                <div className="ui center aligned grid">
+                <div id="CKeditorMenu" style={!this.state.editText ? {display: 'none'} : {}}></div>
+                <div className="ui center aligned grid" style={this.state.editText ? {display: 'none'} : {}}>
                     <div className="ui vertical labeled icon grey inverted large menu">
                           {panelcontent}
                           </div>

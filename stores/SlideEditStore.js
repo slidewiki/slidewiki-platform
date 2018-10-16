@@ -32,6 +32,7 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
+        this.contentEditorFocus = 'false';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -157,6 +158,10 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.emitChange();
     }
+    handleContentEditorFocus(payload) {
+        this.contentEditorFocus = payload.focus;
+        this.emitChange();
+    }
 
     getState() {
         return {
@@ -187,7 +192,8 @@ class SlideEditStore extends BaseStore {
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
-            HTMLEditorClick: this.HTMLEditorClick
+            HTMLEditorClick: this.HTMLEditorClick,
+            contentEditorFocus: this.contentEditorFocus
         };
     }
     dehydrate() {
@@ -222,6 +228,7 @@ class SlideEditStore extends BaseStore {
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
+        this.contentEditorFocus = state.contentEditorFocus;
     }
 }
 
@@ -246,6 +253,7 @@ SlideEditStore.handlers = {
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
+    'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus'
 };
 
 export default SlideEditStore;

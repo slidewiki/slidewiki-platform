@@ -13,6 +13,7 @@ import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -983,15 +984,15 @@ class SlideContentEditor extends React.Component {
         //});
         
         CKEDITOR.instances.inlineContent.on('focus',(evt) => {
-            console.log('focus');
-            $('#CKeditorMenu').show();
-            $('#CKeditorMenu').next().hide();
+            this.context.executeAction(contentEditorClick, {
+                focus: true
+            });
         });
 
         CKEDITOR.instances.inlineContent.on('blur',(evt) => {
-            console.log('blur');
-            $('#CKeditorMenu').hide();
-            $('#CKeditorMenu').next().show();
+            this.context.executeAction(contentEditorClick, {
+                focus: false
+            });
         });
 
 
