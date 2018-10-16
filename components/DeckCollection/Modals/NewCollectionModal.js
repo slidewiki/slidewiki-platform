@@ -165,7 +165,7 @@ class NewCollectionModal extends React.Component {
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_description"><FormattedMessage {...this.messages.descriptionField} /></label>
-                                <input id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                                <textarea id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} rows="5" />
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_user_group"><FormattedMessage {...this.messages.usergroupField} /></label>

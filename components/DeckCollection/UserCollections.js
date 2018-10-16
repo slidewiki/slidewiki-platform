@@ -8,6 +8,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import NewCollectionModal from './Modals/NewCollectionModal';
 import UpdateCollectionModal from './Modals/UpdateCollectionModal';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import nl2br from 'react-nl2br';
 
 import MobileDetect from 'mobile-detect';
 
@@ -192,7 +193,10 @@ class UserCollections extends React.Component {
                             <div className="ui two column stackable grid container">
                                 <div className="column">
                                     <div className="ui header"><h3><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
-                                    <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''}  {col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
+                                    <div className="meta">
+                                        <div>{col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
+                                        {nl2br(col.description)}
+                                    </div>
                                 </div>
 
                                 <div className="right aligned column">
