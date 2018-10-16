@@ -28,7 +28,13 @@ class ContentQuestionsStore extends BaseStore {
         this.emitChange();
     }
     updateQuestions(payload) {
-        this.questions = payload.questions;
+        payload.modifiedSelections.forEach((modifiedSelection) => {
+            let index = this.questions.findIndex((question) => question.id === modifiedSelection.id);
+            if (index > -1) {
+                this.questions[index].isExamQuestion = !this.questions[index].isExamQuestion;
+            }
+        });
+      
         this.showExamList = false;
         this.emitChange();
     }

@@ -5,9 +5,16 @@ import invertExamListFlag from '../../../../actions/questions/invertExamListFlag
 import updateExamList from '../../../../actions/questions/updateExamList';
 
 class ExamQuestionsList extends React.Component {
-
+    constructor(props){
+        super(props);
+        
+        this.state = {
+            modifiedSelections: []
+        };
+    }
+    
     saveButtonClick() {
-        this.context.executeAction(updateExamList, {questions: this.props.items});
+        this.context.executeAction(updateExamList, {modifiedSelections: this.state.modifiedSelections});
     }
     
     cancelButtonClick() {
@@ -15,7 +22,13 @@ class ExamQuestionsList extends React.Component {
     }
     
     invertExamQuestionClick(index) {
-        this.props.items[index].isExamQuestion = !this.props.items[index].isExamQuestion;
+        let modifiedSelectionIndex = this.state.modifiedSelections.findIndex((modifiedSelection) => modifiedSelection.id === this.props.items[index].id);
+        if (modifiedSelectionIndex > -1) {
+            this.state.modifiedSelections.splice(modifiedSelectionIndex, 1);
+        } else {
+            const newValue = !this.props.items[index].isExamQuestion;
+            this.state.modifiedSelections.push({id: this.props.items[index].id, is_exam_question: newValue});
+        }
     }
 
     render() {

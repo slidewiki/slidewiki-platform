@@ -170,7 +170,7 @@ export default {
         } else if (resource === 'questions.updateExamList') {
             rp.put({
                 uri: Microservices.questions.uri + '/questions/updateExamList',
-                body: JSON.stringify(args.modifiedQuestions)
+                body: JSON.stringify(args.modifiedSelections)
             }).then(() => {
                 callback(null, {});
             }).catch((err) => {

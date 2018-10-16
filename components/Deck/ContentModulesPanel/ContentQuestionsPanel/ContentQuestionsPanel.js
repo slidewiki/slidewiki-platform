@@ -103,7 +103,7 @@ class ContentQuestionsPanel extends React.Component {
         let examQuestionsButton = (questions.length > 0) ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
-                Exam questions
+                Select exam questions
             </button> : '';
         let editButtons = (editPermission) ?
             <div className="column right aligned" data-reactid={655}>
