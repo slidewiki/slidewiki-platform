@@ -5,7 +5,7 @@ import ExamItem from './ExamItem';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
-import TreeUtil from '../../TreePanel/util/TreeUtil';
+import Util from '../../../common/Util';
 import showCorrectExamAnswers from '../../../../actions/questions/showCorrectExamAnswers';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 class ExamList extends React.Component {
@@ -20,7 +20,7 @@ class ExamList extends React.Component {
                 if (flatTree.get(i).get('type') === selector.stype && flatTree.get(i).get('id').split('-')[0] === selector.sid.split('-')[0]) {
                     path = flatTree.get(i).get('path');
                     let nodeSelector = {id: selector.id, stype: selector.stype, sid: selector.sid.split('-')[0], spath: path};
-                    let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+                    let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
                     return nodeURL;
                 }
             }
