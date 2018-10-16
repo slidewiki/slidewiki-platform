@@ -662,6 +662,10 @@ class SlideEditLeftPanel extends React.Component {
         return (
           <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
               <NavigationPanel mode='edit' />
+                <div className="ui buttons attached fluid">
+                    <button className="ui button" style={{background:'#767676', color: '#ffffff'}}>Add</button>
+                    <button className="ui button">Edit</button>
+                </div>
               <div className="ui grey inverted segment bottom attached active tab">
                 <div id="CKeditorMenu"></div>
                 <div className="ui center aligned grid">

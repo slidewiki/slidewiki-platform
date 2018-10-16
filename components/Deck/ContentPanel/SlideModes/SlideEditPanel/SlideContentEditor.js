@@ -981,7 +981,18 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
+        
+        CKEDITOR.instances.inlineContent.on('focus',(evt) => {
+            console.log('focus');
+            $('#CKeditorMenu').show();
+            $('#CKeditorMenu').next().hide();
+        });
 
+        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+            console.log('blur');
+            $('#CKeditorMenu').hide();
+            $('#CKeditorMenu').next().show();
+        });
 
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
