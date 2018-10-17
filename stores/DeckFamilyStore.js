@@ -18,7 +18,7 @@ class DeckFamilyStore extends BaseStore {
         this.hasMore = false;
         this.page = 1;
     }
-    showLoading(payload){
+    showLoading(){
         this.loading = true;
         this.emitChange();
     }

@@ -18,7 +18,6 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
-import LanguageDropdown from '../../../../common/LanguageDropdown';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 
 class DeckPropertiesEditor extends React.Component {
@@ -39,7 +38,6 @@ class DeckPropertiesEditor extends React.Component {
             validationErrors: {},
             title: props.deckProps.title || '',
             allowMarkdown: props.deckProps.allowMarkdown || false,
-            language: (props.deckProps.language && props.deckProps.language.replace('-', '_')) || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             //license: props.deckProps.license || '',
@@ -187,11 +185,6 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
-        if (this.state.language == null || this.state.language.length < 2) {
-            validationErrors.language = 'Please select a language.';
-            isValid = false;
-        }
-
         /*
         if (this.state.license == null || this.state.license.length < 2) {
             validationErrors.license = 'Please select a license.';
@@ -213,7 +206,6 @@ class DeckPropertiesEditor extends React.Component {
                 deckId: deckId,
                 title: this.state.title,
                 allowMarkdown: this.state.allowMarkdown,
-                language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
                 //license: this.state.license,
@@ -236,7 +228,6 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
-        if (fieldName === 'language') stateChange[fieldName] = stateChange[fieldName].replace('-', '_');
         this.setState(stateChange);
     }
     onChangeMarkdown(event) {
@@ -388,13 +379,6 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.title != null
         });
-        let langFieldClass = classNames({
-            'required': true,
-            'field': true,
-            'error': this.state.validationErrors.language != null,
-            'disabled': true,
-            'hidden': true
-        });
         /*
         let licenseFieldClass = classNames({
             'required': true,
@@ -454,7 +438,6 @@ class DeckPropertiesEditor extends React.Component {
             'sr': 'sr_RS',
             'lt': 'lt_LT',
         };
-        let simpleLanguage = this.state.language && fixedLanguageCodes[this.state.language.substring(0, 2)];
 
         let groupsArray = [];
         if (this.props.groups) {
@@ -505,12 +488,6 @@ class DeckPropertiesEditor extends React.Component {
                     aria-required="true" id="title_input"/>
 
             </div>
-            {/*<div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
-                <label htmlFor="language" id="language_label">
-                    Language
-                </label>
-                <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-            </div>*/}
         </div>;
         let markdownField = <div className="field">
                 <div className="ui checkbox">
