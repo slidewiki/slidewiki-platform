@@ -590,7 +590,7 @@ class AddDeck extends React.Component {
                             <div className="field">
                                 <label htmlFor="level_input" id="level-label">
                                     <FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
-                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-required="true" aria-labelledby="level-label"
+                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-labelledby="level-label"
                                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                                     defaultValue={null} />
                             </div>
