@@ -566,17 +566,17 @@ class AddDeck extends React.Component {
                                         id='AddDeck.form.label_language'
                                         defaultMessage='Language' />
                                 </label>
-                                <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
+                                <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
                             </div>
                         </div>
 
                         <div className="field">
-                            <label htmlFor="deck-description">
+                            <label htmlFor="deck-description" id="deck-description-label" >
                                 <FormattedMessage
                                   id='AddDeck.form.label_description'
                                   defaultMessage='Description' />
                             </label>
-                            <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
+                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
                         </div>
                         <div className="two fields">
                             <div className="field" ref="div_themes" >
@@ -588,8 +588,9 @@ class AddDeck extends React.Component {
                                 {themeOptions}
                             </div>
                             <div className="field">
-                                <label htmlFor="level_input"><FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
-                                <Dropdown id="level_input" fluid selection ref="dropdown_level"
+                                <label htmlFor="level_input" id="level-label">
+                                    <FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
+                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-required="true" aria-labelledby="level-label"
                                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                                     defaultValue={null} />
                             </div>
