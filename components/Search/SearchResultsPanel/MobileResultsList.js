@@ -1,8 +1,7 @@
 import React from 'react';
-import SearchResultsItem from './SearchResultsItem';
-import { Grid } from 'semantic-ui-react';
+import DeckCard from '../../User/UserProfile/DeckCard';
 
-class SearchResultsList extends React.Component {
+class MobileResultsList extends React.Component {
     initAccordion(){
         $('.ui.accordion').accordion({
             selector: {
@@ -20,15 +19,15 @@ class SearchResultsList extends React.Component {
         let list = this.props.items.map((node, index) => {
             node.index = index;
             return (
-                <SearchResultsItem key={index} data={node} />
+                <DeckCard key={index} cardContent={node} newTab={false}/>
             );
         });
         return (
-            <Grid verticalAlign="middle" className="items" role="list" aria-expanded="true">
+            <div className="ui three stackable cards">                
                 {list}
-            </Grid>
+            </div>
         );
     }
 }
 
-export default SearchResultsList;
+export default MobileResultsList;
