@@ -31,7 +31,7 @@ export default function chooseActionGroups(context, payload, done) {
             title = shortTitle;
     };
 
-    console.log('choose action', payload.params.category, payload.params.id);
+    // console.log('choose action', payload.params.category, payload.params.id);
 
 
     async.series([
@@ -49,11 +49,12 @@ export default function chooseActionGroups(context, payload, done) {
         (callback) => {
             switch (payload.params.category) {
                 case categories.categories[0]:
-                case undefined:
 
                     callback();
                     break;
                 case categories.categories[1]:
+                case undefined:
+                case 'undefined':
 
                     context.executeAction(fetchGroupDecks, {params: {groupid: payload.params.id}}, callback);
 

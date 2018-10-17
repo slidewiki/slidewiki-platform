@@ -96,7 +96,7 @@ class UserGroups extends React.Component {
         e.preventDefault();
         this.context.executeAction(updateUsergroup, {group: {}, offline: true});
         this.context.executeAction(navigateAction, {
-            url: '/usergroup/0'
+            url: '/usergroup/0/settings'
         });
     }
 

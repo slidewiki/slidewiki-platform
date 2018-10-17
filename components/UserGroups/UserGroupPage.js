@@ -74,6 +74,7 @@ class UserGroupPage extends React.Component {
             case 'settings':
                 return this.showDetails();
             case 'decks':
+            case undefined:
                 return this.showDecks();
             case 'playlists':
                 return this.showCollections();

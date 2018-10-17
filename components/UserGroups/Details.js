@@ -92,9 +92,12 @@ class Details extends React.Component {
                 defaultMessage: 'Members',
             },
         });
+
+        this.initialize = this.initialize.bind(this);
     }
 
     componentDidUpdate() {
+        this.initialize();
         // console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError, this.props.currentUsergroup);
         if (this.props.saveUsergroupError) {
             swal({
@@ -121,8 +124,9 @@ class Details extends React.Component {
         }
     }
 
-    componentDidMount() {
-        console.log('Details componentDidMount');
+    //inititalize drowdown and windowbeforeunload
+    initialize() {
+        // console.log('Details componentDidMount');
         let that = this;
         $('#usergoup_edit_dropdown_usernames_remote')
             .dropdown({
@@ -382,11 +386,13 @@ class Details extends React.Component {
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
-                        <div className="one wide column middle aligned">
-                          <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member">
-                            <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
-                          </button>
-                        </div>
+                        {(this.props.isAdmin || this.props.isCreator) ?
+                          <div className="one wide column middle aligned">
+                            <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member">
+                              <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                            </button>
+                          </div>
+                        : ''}
                       </div>
                     </div>
                   )
@@ -395,39 +401,43 @@ class Details extends React.Component {
         }
 
         let buttons = '';
-        if (this.props.userid && this.props.isMember && !this.props.isAdmin) {
+        if (this.props.isMember && !this.props.isAdmin) {
             buttons = <div className="ui buttons"><button className="ui labeled icon button" onClick={this.handleExitGroup.bind(this)} >
                 <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
             </button></div>;
         }
-        else if (this.props.userid && this.props.isAdmin) {
-            buttons = <div className="ui buttons">
-              <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
-                  <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
-              </button>
-              &nbsp;
-              <button className="ui right labeled icon button" name="" onClick={this.handleExitGroup.bind(this)} >
-                  <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
-              </button>
+        else if (this.props.isAdmin) {
+            buttons = <div className="ui grid">
+              <div className="nine wide column"></div>
+              <div className="seven wide column">
+                <div className="ui buttons">
+                  <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
+                      <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
+                  </button>
+                  &nbsp;
+                  <button className="ui right labeled icon button" name="" onClick={this.handleExitGroup.bind(this)} >
+                      <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.leaveGroup)}
+                  </button>
+                </div>
+              </div>
             </div>;
         }
         else if (this.props.userid && this.props.isCreator) {
-            buttons = <div className="ui buttons">
-              <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
-                  <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
-              </button>
-              &nbsp;
-              <button className="ui right labeled icon button" onClick={this.handleExitGroup.bind(this)} >
-                  <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.deleteGroup)}
-              </button>
+            buttons = <div className="ui grid">
+              <div className="nine wide column"></div>
+              <div className="seven wide column">
+                <div className="ui buttons">
+                  <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
+                      <i className="save icon"></i>{this.context.intl.formatMessage(this.messages.saveGroup)}
+                  </button>
+                  &nbsp;
+                  <button className="ui right labeled icon button" onClick={this.handleExitGroup.bind(this)} >
+                      <i className="remove icon"></i>{this.context.intl.formatMessage(this.messages.deleteGroup)}
+                  </button>
+                </div>
+              </div>
             </div>;
         }
-        let buttonStuff = <div className="ui grid">
-          <div className="nine wide column"></div>
-          <div className="seven wide column">
-            {buttons}
-          </div>
-        </div>;
 
         return (
           <div>
@@ -444,39 +454,44 @@ class Details extends React.Component {
                 <div className="ui container">
                     <div className="ui two column vertically padded grid container">
                         <div className="ui container">
-                            <form className="ui form">
-                                <div className="field" data-tooltip={this.context.intl.formatMessage(this.messages.groupName)} >
-                                    <label htmlFor="usergroupedit_input_GroupName">
-                                        {this.context.intl.formatMessage(this.messages.groupName)}
-                                    </label>
-                                    <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={this.props.currentUsergroup.name || ''}  />
+                          {(this.props.isAdmin || this.props.isCreator || this.props.isMember) ?
+                              <div>
+                                {(this.props.isAdmin || this.props.isCreator) ?
+                                <div>
+                                  <form className="ui form">
+                                      <div className="field" data-tooltip={this.context.intl.formatMessage(this.messages.groupName)} >
+                                          <label htmlFor="usergroupedit_input_GroupName">
+                                              {this.context.intl.formatMessage(this.messages.groupName)}
+                                          </label>
+                                          <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={this.props.currentUsergroup.name || ''}  />
+                                      </div>
+
+                                      <div className="field">
+                                          <label htmlFor="usergroupedit_input_GroupDescription">{this.context.intl.formatMessage(this.messages.description)}</label>
+                                          <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={this.props.currentUsergroup.description || ''} ></textarea>
+                                      </div>
+                                      <div className="field">
+                                          <label htmlFor="usergroupedit_input_AddUserGr">{this.context.intl.formatMessage(this.messages.addUser)}</label>
+                                          <select className="ui search dropdown" aria-labelledby="AddUserGr" id="usergroupedit_input_AddUserGr" name="AddUserGr" ref="AddUserGr" id="usergoup_edit_dropdown_usernames_remote">
+                                          </select>
+                                      </div>
+                                  </form>
+                                  <div className="ui hidden divider">
+                                  </div>
+                                </div>
+                                : ''}
+                                  {buttons}
+                                {(this.props.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
+
+                                <div className="ui hidden divider">
                                 </div>
 
-                                <div className="field">
-                                    <label htmlFor="usergroupedit_input_GroupDescription">{this.context.intl.formatMessage(this.messages.description)}</label>
-                                    <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={this.props.currentUsergroup.description || ''} ></textarea>
+                                <div className="ui header">
+                                    <h3>{this.context.intl.formatMessage(this.messages.members)}</h3>
                                 </div>
-                                {
-                                  (this.props.isAdmin || this.props.isCreator) ?
-                                    <div className="field">
-                                        <label htmlFor="usergroupedit_input_AddUserGr">{this.context.intl.formatMessage(this.messages.addUser)}</label>
-                                        <select className="ui search dropdown" aria-labelledby="AddUserGr" id="usergroupedit_input_AddUserGr" name="AddUserGr" ref="AddUserGr" id="usergoup_edit_dropdown_usernames_remote">
-                                        </select>
-                                    </div>
-                                  : ''
-                                }
-                            </form>
-                            <div className="ui hidden divider">
-                            </div>
-                              {buttonStuff}
-                            {(this.props.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
+                              </div>
+                            : '' }
 
-                            <div className="ui hidden divider">
-                            </div>
-
-                            <div className="ui header">
-                                <h3>{this.context.intl.formatMessage(this.messages.members)}</h3>
-                            </div>
                             <div className="ui relaxed divided list">
                                 {userlist}
                             </div>
