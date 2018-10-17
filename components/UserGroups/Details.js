@@ -91,6 +91,10 @@ class Details extends React.Component {
                 id: 'UserGroupEdit.members',
                 defaultMessage: 'Members',
             },
+            details: {
+                id: 'UserGroupEdit.details',
+                defaultMessage: 'Group details',
+            },
         });
 
         this.initialize = this.initialize.bind(this);
@@ -443,12 +447,7 @@ class Details extends React.Component {
           <div>
             <div className="ui segments">
               <div className="ui secondary segment">
-                  <h3>
-                    <FormattedMessage
-                      id='GroupDetails.details'
-                      defaultMessage='Group details'
-                    />
-                  </h3>
+                  <h3>{(this.props.isAdmin || this.props.isCreator) ? this.context.intl.formatMessage(this.messages.details) : this.context.intl.formatMessage(this.messages.members)}</h3>
               </div>
               <div className="ui segment">
                 <div className="ui container">

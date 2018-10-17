@@ -22,20 +22,24 @@ class Menu extends React.Component {
             collections: {
                 id: 'GroupMenu.collections',
                 defaultMessage: 'Playlists'
-            }
+            },
+            settings: {
+                id: 'GroupMenu.settings',
+                defaultMessage: 'Settings'
+            },
         });
     }
     render() {
         let memberMsg = this.context.intl.formatMessage(this.messages.members);
+        if (this.props.hasEditRights) {
+            memberMsg = this.context.intl.formatMessage(this.messages.settings);
+        }
         let sharedDecksMsg = this.context.intl.formatMessage(this.messages.sharedDecks);
         let deckCollectionsMsg = this.context.intl.formatMessage(this.messages.collections);
 
         return (
           <div role="navigation">
               <div className="ui vertical fluid menu" role="menu">
-                  <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/settings' } activeStyle={this.styles} role="menuitem">
-                      <p><i className="icon users"/> {memberMsg}</p>
-                  </NavLink>
                   <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/decks'} activeStyle={this.styles} role="menuitem">
                         <p><i className="icons">
                                     <i className="yellow open folder icon"></i>
@@ -44,6 +48,9 @@ class Menu extends React.Component {
                     </NavLink>
                   <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/playlists'} activeStyle={this.styles} role="menuitem">
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
+                  </NavLink>
+                  <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/settings' } activeStyle={this.styles} role="menuitem">
+                      <p><i className="icon users"/> {memberMsg}</p>
                   </NavLink>
               </div>
           </div>

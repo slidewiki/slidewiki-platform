@@ -102,6 +102,11 @@ class UserGroupPage extends React.Component {
                 defaultMessage: 'My Groups',
             },
         });
+        let group = this.props.UserGroupsStore.currentUsergroup;
+        const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
+        const isAdmin = group.members && group.members.find((m) => {
+            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+        });
         return (
           <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
@@ -111,8 +116,12 @@ class UserGroupPage extends React.Component {
                   </div>
                   <div className = "sixteen wide column">
                       {(this.props.UserGroupsStore.currentUsergroup._id && this.props.UserGroupsStore.currentUsergroup._id > 0) ?
-                        (<div><Menu group={ this.props.UserGroupsStore.currentUsergroup } username={this.props.UserProfileStore.username} />
-                        <br /></div>)
+                        (<div>
+                          <Menu group={ this.props.UserGroupsStore.currentUsergroup }
+                            username={this.props.UserProfileStore.username}
+                            hasEditRights={isCreator || isAdmin} />
+                          <br />
+                        </div>)
                       : ''}
                       <div className="ui vertical fluid menu">
                         <NavLink className="item" href={`/user/${this.props.UserProfileStore.username}/groups/overview`} activeStyle={this.styles}>

@@ -112,7 +112,7 @@ class UserGroups extends React.Component {
 
         // console.log('handleClickOnGroupDetails: use group', group);
 
-        this.context.executeAction(navigateAction, {url: '/usergroup/' + group._id + '/settings'});
+        this.context.executeAction(navigateAction, {url: '/usergroup/' + group._id});
     }
 
     render() {
