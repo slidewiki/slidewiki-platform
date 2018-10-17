@@ -50,8 +50,12 @@ export default {
         'nlp': {
             uri: '${SERVICE_URL_NLP}'
         },
-        'recommendation': {
-            uri: '${SERVICE_URL_RECOMMENDATION}'
-        }
+        'analytics': {
+            uri: '${SERVICE_URL_ANALYTICS}'
+        },
+        lrs: {
+            uri: '${SERVICE_LEARNINGLOCKER_API_URL}',
+            basicAuth: '${SERVICE_LEARNINGLOCKER_API_AUTH}',
+        },
     }
 };
