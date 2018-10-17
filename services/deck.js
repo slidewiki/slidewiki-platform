@@ -354,35 +354,55 @@ export default {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
 //            if (params.tags.length === 1 && params.tags[0].length === 0)
 //                params.tags = undefined;
-            let toSend = {
-                description: params.description,
-                language: params.language,
-                translation: {
-                    status: 'original'
-                },
-                tags: params.tags,
-                title: params.title,
-                license: params.license,
-                theme: params.theme
-            };
-            rp({
-                method: 'POST',
-                uri: Microservices.deck.uri + '/deck/new',
-                json: true,
-                headers: {'----jwt----': params.jwt},
-                body: toSend
-            }).then((deck) => {
-                // support old style deck api response
-                // TODO remove this
-                if (deck.revisions) {
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = deck.revisions[0].id;
-                    deck.title = deck.revisions[0].title;
 
-                    delete deck.revisions;
-                }
-                return deck;
-            }).then((deck) => callback(false, deck))
+            // prepare tagName and defaultName to send to deck service
+            let tagsPromise = Promise.resolve([]);
+            if (params.tags && params.tags.length) {
+                // send tags to tag-service
+                tagsPromise = rp.post({
+                    uri: Microservices.tag.uri + '/tag/upload',
+                    json: true,
+                    body: {
+                        user: params.userid,
+                        tags: params.tags,
+                    }
+                }).then((tags) => tags.map((t) => ({
+                    tagName: t.tagName,
+                    defaultName:  t.defaultName
+                })));
+                // TODO maybe catch an error here ?
+            }
+
+            tagsPromise.then((tags) => {
+                let toSend = {
+                    description: params.description,
+                    language: params.language,
+                    tags: tags,
+                    title: params.title,
+                    license: params.license,
+                    theme: params.theme
+                };
+                console.log(toSend);
+                return rp({
+                    method: 'POST',
+                    uri: Microservices.deck.uri + '/deck/new',
+                    json: true,
+                    headers: {'----jwt----': params.jwt},
+                    body: toSend
+                }).then((deck) => {
+                    // support old style deck api response
+                    // TODO remove this
+                    if (deck.revisions) {
+                        if (!deck.id) deck.id = deck._id;
+                        deck.revision = deck.revisions[0].id;
+                        deck.title = deck.revisions[0].title;
+
+                        delete deck.revisions;
+                    }
+                    return deck;
+                });
+            })
+            .then((deck) => callback(null, deck))
             .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
 

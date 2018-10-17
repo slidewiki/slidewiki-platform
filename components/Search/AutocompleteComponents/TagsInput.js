@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import suggestUsers from '../../../actions/search/suggestTags';
+import suggestTags from '../../../actions/search/suggestTags';
 /**
  * Properties:
  *  placeholder: placeholder text
@@ -9,7 +9,7 @@ import suggestUsers from '../../../actions/search/suggestTags';
 
 class TagsInput extends React.Component {
     initDropdown(){
-        $('#tags_input_div').dropdown({
+        $(this.rootElement).dropdown({
             fields: {
                 name: 'defaultName',
                 value: 'tagName'
@@ -17,12 +17,10 @@ class TagsInput extends React.Component {
             minCharacters: 1,
             allowAdditions: true,
             apiSettings:{
-                responseAsync: function(settings, callback) {
-                    const query = settings.urlData.query;
-
-                    context.executeAction(suggestUsers, {
-                        query: encodeURIComponent(query),
-                    }).then( (response) => {
+                responseAsync: (settings, callback) => {
+                    let queryString = settings.urlData.query;
+                    let query = Object.assign({ q: queryString }, this.props.tagFilter);
+                    context.executeAction(suggestTags, { query } ).then( (response) => {
                         callback(response);
                     });
                 }
@@ -49,7 +47,7 @@ class TagsInput extends React.Component {
 
         });
         return (
-            <div className={classes} id='tags_input_div'>
+            <div className={classes} ref={(i) => (this.rootElement = i)}>
               <input type="hidden" name="tags_input" ref='tags_input' id='tags_input'></input>
               <div className="menu" ref="dropdown_menu"></div>
               <div className="default text" id='tags_input_field'>{this.props.placeholder}</div>

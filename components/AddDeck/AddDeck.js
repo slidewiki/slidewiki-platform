@@ -18,6 +18,7 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import LanguageDropdown from '../common/LanguageDropdown';
+import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import classNames from 'classnames';
 
@@ -79,8 +80,7 @@ class AddDeck extends React.Component {
         const theme = this.refs.select_themes.value;
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
-        //const tags = this.refs.input_tags.value.split(', ');
-        const tags = [];
+        const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
@@ -581,6 +581,16 @@ class AddDeck extends React.Component {
                                 {themeOptions}
                             </div>
 
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="topics_input_field"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Topics' /></label>
+                            <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} />
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="tags_input_field"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
+                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
