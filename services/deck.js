@@ -339,7 +339,8 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 license: params.license,
-                theme: params.theme
+                theme: params.theme,
+                educationLevel: params.educationLevel,
             };
             rp({
                 method: 'POST',

@@ -18,8 +18,13 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import LanguageDropdown from '../common/LanguageDropdown';
+
+import { Dropdown } from 'semantic-ui-react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import classNames from 'classnames';
+
+
+import { educationLevels } from '../../lib/isced';
 
 //TODO: update link to terms of use;
 
@@ -77,6 +82,7 @@ class AddDeck extends React.Component {
         const language = this.refs.div_languages.getSelected();
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
+        const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
         //const tags = this.refs.input_tags.value.split(', ');
@@ -122,10 +128,10 @@ class AddDeck extends React.Component {
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
-            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense);
+            this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
-    correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense) {
+    correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense) {
         if (this.props.ImportStore.filename !== '') {//import deck
             this.handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions);
         } else {//create empty deck
@@ -134,6 +140,7 @@ class AddDeck extends React.Component {
                 language: language,
                 description: description,
                 theme: theme,
+                educationLevel: educationLevel,
                 license: license,
                 tags: tags,
                 deckId: this.props.ImportStore.deckId,
@@ -580,7 +587,12 @@ class AddDeck extends React.Component {
                                 </label>
                                 {themeOptions}
                             </div>
-
+                            <div className="field">
+                                <label htmlFor="level_input"><FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
+                                <Dropdown id="level_input" fluid selection ref="dropdown_level"
+                                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
+                                    defaultValue={null} />
+                            </div>
                         </div>
 
                         <div className="ui message" id="uploadDesc">
