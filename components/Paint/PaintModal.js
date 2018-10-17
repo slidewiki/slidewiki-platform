@@ -807,6 +807,15 @@ class PaintModal extends React.Component {
         }
     }
 
+    handleKeyPress = (event, param) => {
+        if(event.key === 'Enter'){
+           // console.log('enter key');
+            if(param === 'handlePaintOpen') {
+                this.handleOpen();
+            }
+        }
+    }
+
     render() {
         this.context.getUser().username;
         let submitButtonText = this.context.intl.formatMessage(this.messages.addToSlide);
@@ -916,7 +925,7 @@ class PaintModal extends React.Component {
 
             <Modal
                 trigger={
-                    <a className="item" id="paintModalTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}>
+                    <a className="item" id="paintModalTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePaintOpen')}>
                         <i tabIndex="0" className="paint brush icon"></i>{this.context.intl.formatMessage(this.messages.paintButton)}
                     </a>
                 }

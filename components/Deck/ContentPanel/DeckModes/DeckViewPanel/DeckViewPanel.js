@@ -208,7 +208,7 @@ class DeckViewPanel extends React.Component {
                                 }
                                 if (this.state.isMobile) {
                                     const slideURL = Util.makeNodeURL({
-                                        id: this.props.selector.id,
+                                        id: this.props.selector ? this.props.selector.id : deckData.id,
                                         stype: 'slide',
                                         sid: slide.id
                                     }, 'deck', '', this.props.deckSlug);
@@ -223,7 +223,7 @@ class DeckViewPanel extends React.Component {
                                 }
                                 else if (index < maxSlideThumbnails) {
                                     const slideURL = Util.makeNodeURL({
-                                        id: this.props.selector.id,
+                                        id: this.props.selector ? this.props.selector.id : deckData.id,
                                         stype: 'slide',
                                         sid: slide.id
                                     }, 'deck', '', this.props.deckSlug);

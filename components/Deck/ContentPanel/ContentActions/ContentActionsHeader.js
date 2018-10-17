@@ -21,9 +21,6 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
-import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
-import changeLoadingState from '../../../../actions/translation/changeLoadingState';
-
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -283,7 +280,6 @@ class ContentActionsHeader extends React.Component {
 
         return (
                 <div className="ui two column grid">
-                    {this.props.TranslationStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
                     <div className="column computer tablet only">
                         <div className="ui left floated top attached buttons" >
                             {editButton}

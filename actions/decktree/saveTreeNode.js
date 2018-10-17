@@ -12,7 +12,7 @@ export default function saveTreeNode(context, payload, done) {
     if (userid != null && userid !== '') {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
-        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).treeLanguage;
 
         context.service.update('decktree.nodeTitle', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {

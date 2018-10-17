@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Form
+ * # Semantic UI 2.4.0 - Form
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -681,7 +681,7 @@
 .ui.form .required.field > .checkbox:after {
   margin: -0.2em 0em 0em 0.2em;
   content: '*';
-  color: #DB2828;
+  color: #C42424;
 }
 .ui.form .required.fields:not(.grouped) > .field > label:after,
 .ui.form .required.fields.grouped > label:after,

@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Label
+ * # Semantic UI 2.4.0 - Label
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -510,16 +510,16 @@ a.ui.active.label:ActiveHover:before {
 
 .ui.red.labels .label,
 .ui.red.label {
-  background-color: #DB2828 !important;
-  border-color: #DB2828 !important;
+  background-color: #C42424 !important;
+  border-color: #C42424 !important;
   color: #FFFFFF !important;
 }
 
 /* Link */
 .ui.red.labels .label:hover,
 a.ui.red.label:hover {
-  background-color: #d01919 !important;
-  border-color: #d01919 !important;
+  background-color: #b61919 !important;
+  border-color: #b61919 !important;
   color: #FFFFFF !important;
 }
 
@@ -531,36 +531,36 @@ a.ui.red.label:hover {
 
 /* Ribbon */
 .ui.red.ribbon.label {
-  border-color: #b21e1e !important;
+  border-color: #991c1c !important;
 }
 
 /* Basic */
 .ui.basic.red.label {
   background-color: none #FFFFFF !important;
-  color: #DB2828 !important;
-  border-color: #DB2828 !important;
+  color: #C42424 !important;
+  border-color: #C42424 !important;
 }
 .ui.basic.red.labels a.label:hover,
 a.ui.basic.red.label:hover {
   background-color: #FFFFFF !important;
-  color: #d01919 !important;
-  border-color: #d01919 !important;
+  color: #b61919 !important;
+  border-color: #b61919 !important;
 }
 
 /*--- Orange ---*/
 
 .ui.orange.labels .label,
 .ui.orange.label {
-  background-color: #DA6619 !important;
-  border-color: #DA6619 !important;
+  background-color: #CA5010 !important;
+  border-color: #CA5010 !important;
   color: #FFFFFF !important;
 }
 
 /* Link */
 .ui.orange.labels .label:hover,
 a.ui.orange.label:hover {
-  background-color: #cc5a0e !important;
-  border-color: #cc5a0e !important;
+  background-color: #bb4406 !important;
+  border-color: #bb4406 !important;
   color: #FFFFFF !important;
 }
 
@@ -572,20 +572,20 @@ a.ui.orange.label:hover {
 
 /* Ribbon */
 .ui.orange.ribbon.label {
-  border-color: #ac5114 !important;
+  border-color: #9b3d0c !important;
 }
 
 /* Basic */
 .ui.basic.orange.label {
   background-color: none #FFFFFF !important;
-  color: #DA6619 !important;
-  border-color: #DA6619 !important;
+  color: #CA5010 !important;
+  border-color: #CA5010 !important;
 }
 .ui.basic.orange.labels a.label:hover,
 a.ui.basic.orange.label:hover {
   background-color: #FFFFFF !important;
-  color: #cc5a0e !important;
-  border-color: #cc5a0e !important;
+  color: #bb4406 !important;
+  border-color: #bb4406 !important;
 }
 
 /*--- Yellow ---*/
@@ -654,7 +654,7 @@ a.ui.olive.label:hover {
 
 /* Ribbon */
 .ui.olive.ribbon.label {
-  border-color: #105620 !important;
+  border-color: #0e5925 !important;
 }
 
 /* Basic */
@@ -674,16 +674,16 @@ a.ui.basic.olive.label:hover {
 
 .ui.green.labels .label,
 .ui.green.label {
-  background-color: #188130 !important;
-  border-color: #188130 !important;
+  background-color: #158538 !important;
+  border-color: #158538 !important;
   color: #FFFFFF !important;
 }
 
 /* Link */
 .ui.green.labels .label:hover,
 a.ui.green.label:hover {
-  background-color: #107026 !important;
-  border-color: #107026 !important;
+  background-color: #0d742d !important;
+  border-color: #0d742d !important;
   color: #FFFFFF !important;
 }
 
@@ -695,20 +695,20 @@ a.ui.green.label:hover {
 
 /* Ribbon */
 .ui.green.ribbon.label {
-  border-color: #105620 !important;
+  border-color: #0e5925 !important;
 }
 
 /* Basic */
 .ui.basic.green.label {
   background-color: none #FFFFFF !important;
-  color: #188130 !important;
-  border-color: #188130 !important;
+  color: #158538 !important;
+  border-color: #158538 !important;
 }
 .ui.basic.green.labels a.label:hover,
 a.ui.basic.green.label:hover {
   background-color: #FFFFFF !important;
-  color: #107026 !important;
-  border-color: #107026 !important;
+  color: #0d742d !important;
+  border-color: #0d742d !important;
 }
 
 /*--- Teal ---*/
