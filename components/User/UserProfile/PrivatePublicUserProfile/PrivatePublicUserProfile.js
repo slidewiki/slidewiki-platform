@@ -11,10 +11,75 @@ import classNames from 'classnames/bind';
 import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
 import approveUser from '../../../../actions/userReview/approveUser';
 import suspendUser from '../../../../actions/userReview/suspendUser';
+import {connectToStores} from 'fluxible-addons-react';
+import UserReviewStore from '../../../../stores/UserReviewStore';
+import {defineMessages, FormattedMessage} from 'react-intl';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
         super(props);
+
+        this.messages = defineMessages({
+            success: {
+                id: 'PrivatePublicUserProfile.success',
+                defaultMessage: 'Success',
+            },
+            failure: {
+                id: 'PrivatePublicUserProfile.failure',
+                defaultMessage: 'Action failed',
+            },
+            approved: {
+                id: 'PrivatePublicUserProfile.approved',
+                defaultMessage: 'User got approved and is now not part of the review process anymore.',
+            },
+            suspended: {
+                id: 'PrivatePublicUserProfile.suspended',
+                defaultMessage: 'User got suspended and is now not part of the review process anymore. The account and the decks will be removed soon.',
+            },
+            ok: {
+                id: 'PrivatePublicUserProfile.OK',
+                defaultMessage: 'OK',
+            }
+        });
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.UserReviewStore.dimmer.approve && ! this.props.UserReviewStore.dimmer.approve) {
+            swal({
+                type: 'success',
+                text: this.context.intl.formatMessage(messages.approved),
+                title: this.context.intl.formatMessage(messages.success),
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                confirmButtonText: this.context.intl.formatMessage(messages.ok)
+            })
+            .then(() => {}).catch(swal.noop);
+        }
+        else if (newProps.UserReviewStore.dimmer.suspend && ! this.props.UserReviewStore.dimmer.suspend) {
+            swal({
+                type: 'success',
+                text: this.context.intl.formatMessage(messages.suspended),
+                title: this.context.intl.formatMessage(messages.success),
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                confirmButtonText: this.context.intl.formatMessage(messages.ok)
+            })
+            .then(() => {}).catch(swal.noop);
+        }
+        else if (newProps.UserReviewStore.dimmer.suspend && ! this.props.UserReviewStore.dimmer.suspend) {
+            swal({
+                type: 'error',
+                text: 'unclear',
+                title: this.context.intl.formatMessage(messages.failure),
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                confirmButtonText: this.context.intl.formatMessage(messages.ok)
+            })
+            .then(() => {}).catch(swal.noop);
+        }
     }
 
     showUserDecks(){
@@ -146,7 +211,14 @@ class PrivatePublicUserProfile extends React.Component {
 }
 
 PrivatePublicUserProfile.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
+
+PrivatePublicUserProfile = connectToStores(PrivatePublicUserProfile, [UserReviewStore], (context, props) => {
+    return {
+        UserReviewStore: context.getStore(UserReviewStore).getState()
+    };
+});
 
 export default PrivatePublicUserProfile;

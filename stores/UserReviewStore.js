@@ -15,6 +15,7 @@ class UserReviewStore extends BaseStore {
         this.secret = '';
         this.secretCorrect = false;
         this.reviewable = false;
+        this.error = NULL;
     }
 
     getState() {
@@ -24,7 +25,8 @@ class UserReviewStore extends BaseStore {
             userid: this.userid,
             secret: this.secret,
             secretCorrect: this.secretCorrect,
-            reviewable: this.reviewable
+            reviewable: this.reviewable,
+            error: this.error
         };
     }
 
@@ -39,6 +41,7 @@ class UserReviewStore extends BaseStore {
         this.secret = state.secret;
         this.secretCorrect = state.secretCorrect;
         this.reviewable = state.reviewable;
+        this.error = state.error;
     }
 
     suspendSuccess(payload) {
@@ -95,6 +98,12 @@ class UserReviewStore extends BaseStore {
         this.secretCorrect = true;
         this.emitChange();
     }
+
+    actionFailed(error) {
+        this.error = error;
+        this.emitChange();
+        this.error = NULL;
+    }
 }
 
 UserReviewStore.storeName = 'UserReviewStore';
@@ -104,7 +113,8 @@ UserReviewStore.handlers = {
     'KEEP_REVIEWING_SUCCESS': 'keepReviewingSuccess',
     'NEXT_REVIEWABLE_USER_SUCCESS': 'nextReviewableUserSuccess',
     'NEXT_REVIEWABLE_UNAUTHORIZED': 'nextReviewableUnauthorized',
-    'NO_REVIEWABLES': 'noReviewables'
+    'NO_REVIEWABLES': 'noReviewables',
+    'REVIEW_ACTION_FAILED': 'actionFailed'
 };
 
 export default UserReviewStore;
