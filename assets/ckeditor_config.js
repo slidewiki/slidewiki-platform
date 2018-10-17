@@ -36,7 +36,38 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableObjectResizing = true;
 
     config.toolbar = [
-            { name: 'styles', items: [ 'FontSize' ] },
+
+        { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'CopyFormatting'] },
+        { name: 'styles', items: [ 'FontSize', 'Font'] },
+        { name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
+    
+        { name: 'styles', items: [ 'Styles' ] },
+        { name: 'basicstyles', items: ['RemoveFormat' ] },
+        { name: 'colors', items: [ 'TextColor', 'BGColor'] },
+        { name: 'colors', items: [ ] },
+        { name: 'styles', items: [ 'lineheight' ] },
+        { name: 'links', items: [ 'Link', 'Unlink' ] },
+        { name: 'styles', items: [ 'Format'] },
+    //'/',
+        //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+        { name: 'insert', items: [ 'Symbol'] },
+        //{ name: 'source', items: [ 'Mathjax'] },
+        { name: 'paragraph', items: [ 'NumberedList',  'BulletedList'] },
+        { name: 'paragraph', items: [] },
+        { name: 'paragraph', items: [ 'Outdent', 'Indent'] },
+        { name: 'paragraph', items: [ ] },
+        { name: 'paragraph', items: [ 'Blockquote'] },
+        { name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+        { name: 'paragraph', items: [ ] },
+        { name: 'paragraph', items: [ ] },
+        { name: 'paragraph', items: [  ] },
+    //'/',
+        //{ name: 'document', items: [ 'Sourcedialog'] },
+        //{ name: 'document', items: [ 'CodeSnippet'] },
+        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-'] },
+        { name: 'tools', items: ['Undo', 'Redo'] }
+        
+            /*{ name: 'styles', items: [ 'FontSize' ] },
             { name: 'basicstyles', items: ['CopyFormatting'] },
             { name: 'basicstyles', items: ['Bold'] },
             { name: 'basicstyles', items: [ 'Italic'] },
@@ -68,7 +99,7 @@ CKEDITOR.editorConfig = function( config ) {
         //'/',
             //{ name: 'document', items: [ 'Sourcedialog'] },
             //{ name: 'document', items: [ 'CodeSnippet'] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },*/
         //'/',
     ];
     //{ name: 'document', items: ['Templates' ] },

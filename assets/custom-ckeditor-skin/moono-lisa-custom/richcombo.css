@@ -48,7 +48,7 @@ The visual representation of a rich combo widget looks as follows:
 
 /* Combo separators. */
 /* Separators after every combo. */
-.cke_combo:after
+/*.cke_combo:after
 {
 	content: "";
 	position: absolute;
@@ -58,7 +58,7 @@ The visual representation of a rich combo widget looks as follows:
 	margin-top: 5px;
 	top: 0;
 	right: 0;
-}
+}*/
 
 .cke_rtl .cke_combo:after
 {
@@ -83,6 +83,9 @@ a.cke_combo_button
 	float: left;
 	margin: 0;
 	padding: 1px;
+	background:#e6e6e6;
+	border-radius: 4px;
+	margin-right: 1px
 }
 
 .cke_rtl a.cke_combo_button
@@ -270,7 +273,7 @@ a.cke_combo_button
    See: .cke_combo_inlinelabel */
 .cke_combo_text
 {
-	line-height: 26px;
+	line-height: 32px;
 	padding-left: 10px;
 	text-overflow: ellipsis;
 	overflow: hidden;

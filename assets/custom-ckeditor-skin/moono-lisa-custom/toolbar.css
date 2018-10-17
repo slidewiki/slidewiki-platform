@@ -102,12 +102,15 @@ a.cke_button
 {
 	display: inline-block;
 	height: 18px;
-	padding: 4px 6px;
+	padding: 7px 10px;
 	outline: none;
 	cursor: default;
 	float: left;
 	border: 0;
 	position: relative;
+	background:#e6e6e6;
+	border-radius: 4px;
+	margin-right:1px;
 }
 
 .cke_rtl a.cke_button
@@ -136,7 +139,7 @@ a.cke_button_on
 {
 	background: #fff;
 	border: 1px #bcbcbc solid;
-	padding: 3px 5px;
+	padding: 6px 9px;
 }
 
 
@@ -148,7 +151,7 @@ a.cke_button_off:active
 	background: #e5e5e5;
 	border: 1px #bcbcbc solid;
 	/* Compensate the border change */
-	padding: 3px 5px;
+	padding: 6px 9px;
 }
 
 .cke_hc a.cke_button_on,
@@ -169,7 +172,7 @@ a.cke_button_disabled:focus,
 a.cke_button_disabled:active
 {
 	border: 0;
-	padding: 4px 6px;
+	padding: 7px 10px;
 	background-color: transparent;
 }
 
@@ -225,7 +228,7 @@ a.cke_button_disabled .cke_button_arrow
 
 /* Toolbar group separators. */
 /* Separator after last button in the group. */
-.cke_toolgroup a.cke_button:last-child:after,
+/*.cke_toolgroup a.cke_button:last-child:after,
 .cke_toolgroup a.cke_button.cke_button_disabled:hover:last-child:after
 {
 	content: "";
@@ -236,7 +239,7 @@ a.cke_button_disabled .cke_button_arrow
 	margin-top: 4px;
 	top: 0;
 	right: -3px;
-}
+}*/
 
 .cke_rtl .cke_toolgroup a.cke_button:last-child:after,
 .cke_rtl .cke_toolgroup a.cke_button.cke_button_disabled:hover:last-child:after
@@ -430,7 +433,11 @@ a.cke_button_disabled .cke_button_arrow
 {
 	clear: right;
 }
-
+.cke_toolbox {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
 /* The button, which when clicked hides (collapses) all the toolbars. */
 a.cke_toolbox_collapser
 {

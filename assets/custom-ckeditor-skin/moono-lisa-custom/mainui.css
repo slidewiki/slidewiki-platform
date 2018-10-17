@@ -51,7 +51,7 @@ Special outer level classes used in this file:
 {
 	/* This is <span>, so transform it into a block.*/
 	display: block;
-	border: 1px solid #d1d1d1;
+	/*border: 1px solid #d1d1d1;*/
 	padding: 0;
 }
 
@@ -60,7 +60,7 @@ Special outer level classes used in this file:
 {
 	/* This is <span>, so transform it into a block.*/
 	display: block;
-	background: #fff;
+	/*background: #fff;*/
 	padding: 0;
 
 	-webkit-touch-callout: none; /* Safari only */
@@ -95,8 +95,8 @@ Special outer level classes used in this file:
 
 .cke_top
 {
-	border-bottom: 1px solid #d1d1d1;
-	background: #f8f8f8;
+	/*border-bottom: 1px solid #d1d1d1;
+	background: #f8f8f8;*/
 	padding: 6px 8px 2px;
 
 	/* Allow breaking toolbars when in a narrow editor. (#9947) */
