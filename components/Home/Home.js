@@ -124,6 +124,10 @@ class Home extends React.Component {
             myDecks: {
                 id: 'home.myDecks',
                 defaultMessage: 'My Decks.'
+            },
+            seeMoreDecks: {
+                id: 'home.seeMoreDecks',
+                defaultMessage: 'See more decks'
             }
         });
     }
@@ -305,6 +309,14 @@ class Home extends React.Component {
                             <div className='ui one column grid'>
                                 <div className='column'>
                                     <h2>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
+                                    <div className="featured-deck">
+                                        
+                                        <DeckList scope="featured" limit="1" inline="true"/>
+                                        
+                                        <div className="deck-link">
+                                            <a href="/featured">{this.context.intl.formatMessage(this.messages.seeMoreDecks)}</a>
+                                        </div>
+                                    </div>
                                     <div className='column'>
                                         <div className='about-block'>
                                             {/* <h3>{this.context.intl.formatMessage(this.messages.slideWikiAbout)}</h3> */}
