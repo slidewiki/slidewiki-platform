@@ -12,9 +12,7 @@ export default function loadDeckView(context, payload, done) {
         return;
     }
 
-    if (!payload.params.language) {
-        payload.params.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
-    }
+    payload.params.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).treeLanguage;
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
