@@ -15,14 +15,14 @@ export default {
         const content_id = selector.sid;
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
-            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=false&all_revisions=true'}).then((res) => {
+            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=false&include_previous_revisions=true'}).then((res) => {
                 callback(null, {discussion: JSON.parse(res).items, selector: selector});
             }).catch((err) => {
                 // console.log(err);
                 callback(err, {discussion: [], selector: selector});
             });
         } else if(resource === 'discussion.count'){
-            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=true&all_revisions=true'}).then((res) => {
+            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=true&include_previous_revisions=true'}).then((res) => {
                 callback(null, {count: JSON.parse(res).count, selector: selector});
             }).catch((err) => {
                 console.log('Error while getting discussion count of deck:', err.StatusCodeError, err.message, err.options);
