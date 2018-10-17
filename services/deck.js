@@ -86,14 +86,17 @@ export default {
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
             if (args.language)
                 uri += '?language=' + args.language;
-            let deckRes = rp.get({uri: uri, json: true}).then((deck) => {
+            let deckRes = rp.get({
+                uri: uri,
+                qs: { root: args.id, language: args.language },
+                json: true,
+            }).then((deck) => {
                 if (deck.revisions) {
                     // support old style api response
                     // TODO remove this
                     let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
                         return rev.id === deck.active;
                     });
-                    if (!deck.id) deck.id = deck._id;
 
                     currentRevision.revisionUser = currentRevision.user;
                     delete currentRevision.user;
@@ -103,6 +106,7 @@ export default {
 
                     // override everything else
                     Object.assign(deck, currentRevision);
+                    deck.id = deck._id;
                 }
 
                 return deck;
@@ -234,9 +238,11 @@ export default {
         } else if (resource === 'deck.properties') { //this is only used for deck edit - thus we call all the api routes with one service call
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let uri = Microservices.deck.uri + '/deck/' + args.sid;
-            if (args.language)
-                uri += '?language=' + args.language;
-            let deckPromise = rp.get({uri: uri, json:true}).then((deck) => {
+            let deckPromise = rp.get({
+                uri: uri,
+                qs: { root: args.id, language: args.language },
+                json:true,
+            }).then((deck) => {
                 // TODO remove this
                 if (deck.revisions) {
                     // support old style api response
@@ -244,7 +250,6 @@ export default {
                     let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
                         return rev.id === deck.active;
                     });
-                    if (!deck.id) deck.id = deck._id;
 
                     currentRevision.revisionUser = currentRevision.user;
                     delete currentRevision.user;
@@ -254,6 +259,7 @@ export default {
 
                     // override everything else
                     Object.assign(deck, currentRevision);
+                    deck.id = deck._id;
                 }
                 return deck;
             });
@@ -280,6 +286,7 @@ export default {
                         allowMarkdown: deck.allowMarkdown || false,
                         editors: { users, groups },
                         hidden: deck.hidden,
+                        educationLevel: deck.educationLevel,
                         deckOwner: deck.user,
                         revisionOwner: deck.revisionUser,
                         sid: args.sid,
@@ -380,9 +387,10 @@ export default {
                     tags: tags,
                     title: params.title,
                     license: params.license,
-                    theme: params.theme
+                    theme: params.theme,
+                    educationLevel: params.educationLevel,
                 };
-                console.log(toSend);
+
                 return rp({
                     method: 'POST',
                     uri: Microservices.deck.uri + '/deck/new',
@@ -440,6 +448,7 @@ export default {
                 title: params.title,
                 license: params.license,
                 theme: params.theme,
+                educationLevel: params.educationLevel,
                 allowMarkdown: params.allowMarkdown,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),

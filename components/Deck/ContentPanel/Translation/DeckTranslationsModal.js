@@ -1,14 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-react';
 import TranslationStore from '../../../../stores/TranslationStore';
-import {getLanguageNativeName, compareLanguageCodes} from '../../../../common';
+import {getLanguageDisplayName, compareLanguageCodes} from '../../../../common';
 import {navigateAction} from 'fluxible-router';
-import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
-import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';
-import loadDecktreeAndSwitchLanguage from '../../../../actions/translation/loadDecktreeAndSwitchLanguage';
+import addNodeTranslation from '../../../../actions/translation/addNodeTranslation';
 
 class DeckTranslationsModal extends React.Component {
 
@@ -52,11 +51,6 @@ class DeckTranslationsModal extends React.Component {
         }
     }
 
-    handleTranslationSelection(code, e) {
-        this.handleClose();
-        this.redirectToLanguage(code);
-    }
-
     handleLanguageSelection(e, data) {
         this.setState({ action: 'translate', languageCode: data.value });
     }
@@ -65,17 +59,10 @@ class DeckTranslationsModal extends React.Component {
         if (this.state.action === 'translate') {
             this.handleClose();
 
-            this.context.executeAction(addDeckTranslation, {
+            this.context.executeAction(addNodeTranslation, {
                 language: this.state.languageCode
             });
         }
-    }
-
-    redirectToLanguage(language = '') {
-        // console.log('redirectToLanguage language', language);
-        this.context.executeAction(loadDecktreeAndSwitchLanguage, {
-            language: language
-        });
     }
 
     render() {
@@ -118,16 +105,13 @@ class DeckTranslationsModal extends React.Component {
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
                 if (!this.props.TranslationStore.treeTranslations.find((t) => compareLanguageCodes(t, current)) //exclude transations and deck language
-                  && !compareLanguageCodes(current, this.props.TranslationStore.treeLanguage)
-                  && !compareLanguageCodes(current, this.props.TranslationStore.originLanguage))
-                    arr.push({key: current, value: current, text: getLanguageNativeName(current)});
+                  && !compareLanguageCodes(current, this.props.TranslationStore.treeLanguage))
+                    arr.push({key: current, value: current, text: getLanguageDisplayName(current)});
                 return arr;
             }, []).sort((a, b) => (a.text > b.text) ? 1 : -1);
         }
 
         let btnMessage = this.context.intl.formatMessage(messages.translate);
-
-        const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? (this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage) : this.props.TranslationStore.treeLanguage);
 
         return (
           <Modal trigger={
@@ -181,8 +165,8 @@ class DeckTranslationsModal extends React.Component {
 }
 
 DeckTranslationsModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DeckTranslationsModal = connectToStores(DeckTranslationsModal, [TranslationStore], (context, props) => {
     return {

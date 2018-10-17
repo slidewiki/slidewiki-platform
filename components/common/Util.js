@@ -68,6 +68,16 @@ class Util{
                     nodeURL += selector.sid + '/';
                 nodeURL += query;
                 break;
+            case 'print':
+                nodeURL = ['/print', selector.id, slug].join('/') + '/';
+                if(!selector.subdeck)//do not duplicate deck ID! only for slides duplicate it
+                    nodeURL += selector.id + '/';
+                else
+                    nodeURL += selector.subdeck + '/';
+                if(selector.stype === 'slide')//nodeURL = nodeURL+ '#' + this.props.ContentStore.selector.sid;// + '/';
+                    nodeURL += selector.sid + '/';
+                nodeURL += query;
+                break;
             default:
                 if (defaultIsDecktree)
                     nodeURL = '/decktree/' + selector.id + '/' + selector.spath + query;
