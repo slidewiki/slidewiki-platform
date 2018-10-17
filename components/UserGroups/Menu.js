@@ -17,15 +17,15 @@ class Menu extends React.Component {
             },
             sharedDecks: {
                 id: 'GroupMenu.sharedDecks',
-                defaultMessage: 'Shared Decks'
+                defaultMessage: 'Group Shared Decks'
             },
             collections: {
                 id: 'GroupMenu.collections',
-                defaultMessage: 'Playlists'
+                defaultMessage: 'Group Playlists'
             },
             settings: {
                 id: 'GroupMenu.settings',
-                defaultMessage: 'Settings'
+                defaultMessage: 'Group Settings'
             },
         });
     }
@@ -50,7 +50,7 @@ class Menu extends React.Component {
                       <p><i className="icon grid layout"/> {deckCollectionsMsg}</p>
                   </NavLink>
                   <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/settings' } activeStyle={this.styles} role="menuitem">
-                      <p><i className="icon users"/> {memberMsg}</p>
+                      <p><i className="icon setting"/> {memberMsg}</p>
                   </NavLink>
               </div>
           </div>

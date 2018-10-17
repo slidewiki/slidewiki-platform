@@ -34,11 +34,11 @@ class UserGroups extends React.Component {
             },
             member: {
                 id: 'UserGroups.member',
-                defaultMessage: 'member',
+                defaultMessage: 'Member',
             },
             members: {
                 id: 'UserGroups.members',
-                defaultMessage: 'members',
+                defaultMessage: 'Members',
             },
             groupSettings: {
                 id: 'UserGroups.groupSettings',
@@ -122,30 +122,25 @@ class UserGroups extends React.Component {
             items.push( (
                 <div key={group._id} className="ui vertical segment" >
                     <div className="ui two column grid container">
-
                         <div className="left aligned ten wide column">
                             <div className="ui header"><h3>{group.name}</h3></div>
                             <div className="meta">
                               {group.members.length+1} {this.context.intl.formatMessage(((group.members.length+1) !== 1) ? this.messages.members : this.messages.member)}
                             </div>
                         </div>
-
                         <div className="four wide column">
-                            <div className="ui header"><h3></h3></div>
                             <div className="meta">
                               <UserPicture picture={ group.picture } link={ false } private={ false } width={ 50 } centered={ false } size={ 'mini' } aria-hidden={ 'true' } />
                             </div>
                         </div>
-
                         <div className="right aligned two wide column">
                             <button className="ui large basic icon button"
                                     data-tooltip={this.context.intl.formatMessage(this.messages.groupDetails)}
                                     aria-label={this.context.intl.formatMessage(this.messages.groupDetails)}
                                     name={'viewGroup_' + group._id}
                                     onClick={this.handleClickOnGroupDetails.bind(this)} >
-                                <i className="eye icon" name={'viewGroup_' + group._id} ></i>
+                                <i className="info icon" name={'viewGroup_' + group._id} ></i>
                             </button>
-
                         </div>
                     </div>
                 </div>
@@ -165,9 +160,9 @@ class UserGroups extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h3 className="ui left floated header" >{this.context.intl.formatMessage(this.messages.groups)}</h3>
+                  <h1 className="ui left floated header" >{this.context.intl.formatMessage(this.messages.groups)}</h1>
                   <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
-                      <i className="icon users"/>
+                      <i className="icon plus"/>
                       <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>
                   </button>
               </div>

@@ -33,7 +33,7 @@ class Details extends React.Component {
             },
             messageGroupName: {
                 id: 'UserGroupEdit.messageGroupName',
-                defaultMessage: 'At least you have to give the group a name.',
+                defaultMessage: 'Group name required.',
             },
             createGroup: {
                 id: 'UserGroupEdit.createGroup',
@@ -57,7 +57,7 @@ class Details extends React.Component {
             },
             unknownCountry: {
                 id: 'UserGroupEdit.unknownCountry',
-                defaultMessage: 'unknown country',
+                defaultMessage: 'Unknown country',
             },
             groupName: {
                 id: 'UserGroupEdit.groupName',
@@ -73,7 +73,7 @@ class Details extends React.Component {
             },
             saveGroup: {
                 id: 'UserGroupEdit.saveGroup',
-                defaultMessage: 'Save group',
+                defaultMessage: 'Save Group',
             },
             deleteGroup: {
                 id: 'UserGroupEdit.deleteGroup',
@@ -81,7 +81,7 @@ class Details extends React.Component {
             },
             leaveGroup: {
                 id: 'UserGroupEdit.leaveGroup',
-                defaultMessage: 'Leave group',
+                defaultMessage: 'Leave Group',
             },
             loading: {
                 id: 'UserGroupEdit.loading',

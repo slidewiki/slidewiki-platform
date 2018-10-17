@@ -99,7 +99,7 @@ class UserGroupPage extends React.Component {
         const messages = defineMessages({
             goBack: {
                 id: 'UserGroupPage.goBack',
-                defaultMessage: 'My Groups',
+                defaultMessage: 'Return to My Groups List',
             },
         });
         let group = this.props.UserGroupsStore.currentUsergroup;
