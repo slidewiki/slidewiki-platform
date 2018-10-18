@@ -21,13 +21,28 @@ class Comment extends React.Component {
     }
 
     //return the position of the node in the deck
-    getPath(node){
+    getPathSameRevision(node){
         const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
-
         const flatTree = savedDeckTreeStore.flatTree;
         let path = '';
         for (let i=0; i < flatTree.size; i++) {
             if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
+                path = flatTree.get(i).get('path');
+                let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
+                let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
+
+                return nodeURL;
+            }
+        }
+        return path;
+    }
+    
+    getPathRegardlessRevision(node){
+        const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
+        const flatTree = savedDeckTreeStore.flatTree;
+        let path = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id').split('-')[0] === node.content_id.split('-')[0]) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
                 let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
@@ -42,7 +57,7 @@ class Comment extends React.Component {
         e.preventDefault();
 
         this.context.executeAction(navigateAction, {
-            url: this.getPath(this.props.comment)
+            url: this.getPathRegardlessRevision(this.props.comment)
         });
         // return false;
     }
@@ -68,10 +83,24 @@ class Comment extends React.Component {
                 <a href="#" tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
             </div>
         );
-
-        const cheerioContentName = (comment.content_name) ? cheerio.load(comment.content_name).text() : '';
-        const nodeRef = (comment.content_kind !== this.props.selector.stype || comment.content_id.split('-')[0] !== this.props.selector.sid.split('-')[0]) ? (<span>{' (from ' + comment.content_kind + ' '}<a href={this.getPath(comment)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>) : '';
-
+        
+        let nodePath = this.getPathSameRevision(comment);
+        let revisionNote = '';
+        if (nodePath === '') {
+            nodePath = this.getPathRegardlessRevision(comment);
+            if (nodePath !== '' && comment.content_id.split('-').length > 1) {
+                revisionNote = ' (revision ' + comment.content_id.split('-')[1] + ')';
+            }
+        }
+        
+        let nodeRef = '';
+        const cheerioContentName = (comment.content_name) ? cheerio.load(comment.content_name).text() + revisionNote : '';
+        if (comment.content_kind !== this.props.selector.stype || comment.content_id.split('-')[0] !== this.props.selector.sid.split('-')[0]) {
+            nodeRef = (<span>{' (from ' + comment.content_kind + ' '}<a href={nodePath} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>);
+        } else if (comment.content_id.split('-').length > 1 && this.props.selector.sid.split('-').length > 1 && comment.content_id.split('-')[1] !== this.props.selector.sid.split('-')[1]) {
+            nodeRef = '(revision ' + comment.content_id.split('-')[1] + ')';
+        }
+        
         const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
         const savedPermissionsStore = (this.props.PermissionsStore) ? this.props.PermissionsStore : this.props.savedPermissionsStore;
 
