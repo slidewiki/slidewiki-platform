@@ -8,13 +8,13 @@ class AttachQuestionsAnswersItem extends React.Component {
         let rightIcon = (<i className="icon"></i>);
         switch (answer.correct) {
             case true:
-            rightIcon = (<i className="checkmark icon teal"></i>);
-            break;
+                rightIcon = (<i className="checkmark icon teal"></i>);
+                break;
         }
 
         //add some aria stuff to this
         return (
-                <div className="content">{rightIcon} {answer.answer} </div>
+            <div className="content">{rightIcon} {answer.answer} </div>
         );
     }
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import AttachQuestionsModalStore from '../../../../stores/AttachQuestionsModalStore';
 import {FormattedMessage, defineMessages} from 'react-intl'; //used to translate messages
-import {Segment, Checkbox, Label, Input} from 'semantic-ui-react'; //also Label and Input? 
+import {Segment, Checkbox, Label, Input, Icon} from 'semantic-ui-react'; //also Label and Input? 
 import updateOptions from '../../../../actions/attachQuestions/updateOptions';
 
 class AttachQuestionsOptions extends React.Component {
@@ -15,17 +15,20 @@ class AttachQuestionsOptions extends React.Component {
     
     render() {
         //TODO: internationalise the messages */
-        let header = 'Confirm Embed Questions';
-        let text = 'Adding questions will overwrite the existing content in this slide. You can always revert to an earlier version of the slide or decide to not save after embedding the questions.';
+        let header = 'Warning';
+        let text1 = 'Adding questions will overwrite the existing content in this slide.';
+        let text2 = 'You can still revert to an earlier version of the slide or decide to not save after embedding the questions.';
             
 
         return (
             <Segment>
-                <div className='ui header' style={{padding: '20px'}} id='embedWarningHeader'>
+                <div className='ui header' id='embedWarningHeader'>
+                    <Icon name="exclamation triangle"/>
                     {header}
                 </div> 
                 <div className= 'ui text' id='embedWarningText'>
-                    {text}
+                    {text1} <br />
+                    {text2}
                 </div>
             </Segment>
 
@@ -41,7 +44,7 @@ AttachQuestionsOptions.contextTypes = {
 AttachQuestionsOptions = connectToStores(AttachQuestionsOptions,[AttachQuestionsModalStore],(context,props) => {
     return {
         AttachQuestionsModalStore: context.getStore(AttachQuestionsModalStore).getState(),
-        };
+    };
 });
 
 

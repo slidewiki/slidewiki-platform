@@ -932,8 +932,8 @@ class SlideContentEditor extends React.Component {
 
                     switch (currentAnswers[j].correct) {
                         case true:
-                        correctText = '<strong> - correct </strong>';
-                        break;
+                            correctText = '<strong> - correct </strong>';
+                            break;
                     }
                     questionhtml += '<li style="font-size:22px;">'+ currentAnswers[j].answer + correctText + '</li>';
                 }

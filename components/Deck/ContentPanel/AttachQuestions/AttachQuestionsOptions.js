@@ -90,9 +90,9 @@ class AttachQuestionsOptions extends React.Component {
         return (
             <Segment className='ui vertical stackable' style={{padding: '20px'}} id='EmbedOptions'>
                 <div style={{marginBottom: '5px'}} className='ui field input'>
-                    <label style={{verticalAlign: 'middle', marginRight: '20px'}}>Title</label>
-                    <input type='text' placeholder='Title for Questions...' onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
-                    Default title: questions
+                    <label style={{marginTop:'5px', marginRight: '20px'}}>Title</label>
+                    <input type='text' placeholder='Title for Questions...' tabIndex="1" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
+                    <div className='ui grey text' style={{marginLeft: '10px', marginTop:'5px'}}>Default title: Questions</div>
                 </div>
                 <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}} >Number questions</label>
@@ -118,7 +118,7 @@ AttachQuestionsOptions.contextTypes = {
 AttachQuestionsOptions = connectToStores(AttachQuestionsOptions,[AttachQuestionsModalStore],(context,props) => {
     return {
         AttachQuestionsModalStore: context.getStore(AttachQuestionsModalStore).getState(),
-        };
+    };
 });
 
 

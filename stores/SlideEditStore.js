@@ -54,10 +54,10 @@ class SlideEditStore extends BaseStore {
         this.emitChange();
     }
     changeTemplate(payload){
-            this.template = payload.template;
-            this.emitChange();
-            this.template = '';
-            this.emitChange();
+        this.template = payload.template;
+        this.emitChange();
+        this.template = '';
+        this.emitChange();
     }
     changeSlideSize(payload){
         this.slideSize = payload.slideSize;
