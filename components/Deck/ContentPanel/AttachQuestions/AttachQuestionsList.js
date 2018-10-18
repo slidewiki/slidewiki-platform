@@ -120,7 +120,7 @@ class AttachQuestionsList extends React.Component {
 
     handleAllQuestions(){
         const allQuestions = Object.assign([], this.props.AttachQuestionsModalStore.deckQuestions);
-        console.log(allQuestions);
+        //console.log(allQuestions);
 
         this.setState({
             selectedQuestions:allQuestions,

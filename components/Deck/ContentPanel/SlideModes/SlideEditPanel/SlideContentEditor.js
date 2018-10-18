@@ -903,60 +903,58 @@ class SlideContentEditor extends React.Component {
     handleEmbedQuestionsClick(content){
 
         let title = content.options.title; 
-        let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; left: 66px; width: 100%; height: 10%;"><h3>'+title+'</h3></div>';
+        let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; width: 100%; height: 10%;"><h3>'+title+'</h3></div>';
 
-        let questionhtml = "<div id='slide_questions' class='slide_questions' style='font-family:sans-serif'>";
+        let questionhtml = '<div  _type="body" id="questions_content" class="block content v-up" style="position: absolute; top: 15%; left: 50px; overflow-y:auto; height:80%; max-height:800px; width:90%; font-family:Tahoma;">';
         let questionsList = content.questions;
-        let uniqueID = this.getuniqueID();
+        //let uniqueID = this.getuniqueID();
 
         let showNumbers = content.options.showNumbers;
         let showAnsExp = content.options.showAnsExp;
-        //need to include options logic in here.
+        
         for (let i = 0; i < questionsList.length; i++){
             let currentQuestion = questionsList[i];
             let currentAnswers = currentQuestion.answers;
 
             if(showNumbers){
                 let questionNum = i + 1;
-                questionhtml += "<div class='slide_question'><div>" + questionNum + ". " + currentQuestion.title + "</div><ul>";
+                questionhtml += '<div style="padding-bottom:15px;"><div>' + questionNum + '. ' + currentQuestion.title + '</div><ul style="padding-bottom:5px; padding-top:5px;">';
             }
             else {
-                questionhtml += "<div class='slide_question'><div>" + currentQuestion.title + "</div><ul>";
+                questionhtml += '<div style="padding-bottom:15px;"><div>' + currentQuestion.title + '</div><ul  style="padding-bottom:5px; padding-top:5px;">';
             }
 
             if(showAnsExp){
                 //if the answers and explanation should be shown for the embedded questions
 
                 for (let j = 0; j < currentAnswers.length; j++){
-                    let correctText = "";
+                    let correctText = '';
 
                     switch (currentAnswers[j].correct) {
                         case true:
-                        correctText = " - correct";
+                        correctText = '<strong> - correct </strong>';
                         break;
                     }
-                    questionhtml += "<li>"+ currentAnswers[j].answer + correctText + "</li>";
+                    questionhtml += '<li style="font-size:22px;">'+ currentAnswers[j].answer + correctText + '</li>';
                 }
-                let explanation = currentQuestion.explanation ? "<div>Explanation: "+ currentQuestion.explanation + "</div>" : '';
-                questionhtml += "</ul>"+ explanation +"</div>";
+                let explanation = currentQuestion.explanation ? '<div style="padding-left:30px; padding-bottom:5px; font-style:italic;">Explanation: '+ currentQuestion.explanation + '</div>' : '';
+                questionhtml += '</ul>'+ explanation +'</div>';
             }
             else {
                 //if the answers and explanation shouldn't be included
                 for (let j = 0; j < currentAnswers.length; j++){
-                    questionhtml += "<li>"+currentAnswers[j].answer + "</li>";
+                    questionhtml += '<li style="font-size:22px;">'+currentAnswers[j].answer + '</li>';
                 }
 
-                questionhtml += "</ul></div>";
+                questionhtml += '</ul></div>';
             }
-            
         }
-        questionhtml += "</div>";
+        questionhtml += '</div>';
 
-
-        let scrolltest = '<div class="iframe" style="overflow:auto; height:80%; max-height:800px; position: relative; top: 15%; ">'+questionhtml+'</div>';
+        //let scrolldiv = '<div _type="body" id="questions_content" class="block content v-up context-menu-disabled" style="overflow-y:auto; height:80%; max-height:800px; position: relative; top: 15%; left: 40px; ">'+questionhtml+'</div>';
         //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
         //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
-        let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + scrolltest+'</div>';
+        let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + questionhtml+'</div>';
         
         if($('.pptx2html').length) //if slide is in canvas mode
         {
@@ -966,10 +964,10 @@ class SlideContentEditor extends React.Component {
             this.refs.inlineContent.innerHTML = pptx2htmlDiv;
         
         } else { //if slide is in non-canvas mode
-            this.refs.inlineContent.innerHTML += iframe; //does this want += or should it just be =? how does a canvas mode slide even work...
+            this.refs.inlineContent.innerHTML += scrolldiv; //does this want += or should it just be =? how does a canvas mode slide even work...
         }
 
-        console.log(pptx2htmlDiv);
+        //console.log(pptx2htmlDiv);
     }
     componentDidMount() {
         window.onbeforeunload = () => {

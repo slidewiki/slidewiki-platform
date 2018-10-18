@@ -24,6 +24,7 @@ class AttachQuestionsOptions extends React.Component {
         };
         this.setState({showNumbers: !this.state.showNumbers});
         this.context.executeAction(updateOptions, optionChange);
+        //console.log(optionChange);
     }
     toggleShowAnsExp() {
         let optionChange = {
@@ -32,6 +33,7 @@ class AttachQuestionsOptions extends React.Component {
         };
         this.setState({showAnsExp: !this.state.showAnsExp});
         this.context.executeAction(updateOptions, optionChange);
+        //console.log(optionChange);
     }
     /*Combined with the showAnswers to become showAnsExp
     toggleShowExplanation() {
@@ -53,8 +55,24 @@ class AttachQuestionsOptions extends React.Component {
         let optionChange = {
             option: 'title',
             value: this.state.title,
-        }
+        };
         this.context.executeAction(updateOptions, optionChange);
+    }
+
+    handleKeyPress = (event, param) => {
+        if(event.key === 'Enter'){
+           // console.log('enter key');
+            switch(param) {
+                case 'toggleNumbersClick':
+                    this.toggleShowNumbers();
+                    break;
+                case 'toggleAnsExpClick':
+                    this.toggleShowAnsExp();
+                    break;
+                default: 
+                    break;
+            }
+        }
     }
     
     render() {
@@ -74,14 +92,15 @@ class AttachQuestionsOptions extends React.Component {
                 <div style={{marginBottom: '5px'}} className='ui field input'>
                     <label style={{verticalAlign: 'middle', marginRight: '20px'}}>Title</label>
                     <input type='text' placeholder='Title for Questions...' onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
+                    Default title: questions
                 </div>
                 <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}} >Number questions</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showNumbers' name='showNumbers' checked={showNumbers} onChange={this.toggleShowNumbers.bind(this)}/>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showNumbers' name='showNumbers' checked={showNumbers} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleNumbersClick')} onChange={this.toggleShowNumbers.bind(this)}/>
                 </div>
                 <div style={{marginBottom: '5px'}}>
                     <label style={{marginRight: '20px'}}>Display correct answers and Explanation</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnsExp' name='showAnsExp' checked={showAnsExp} onChange={this.toggleShowAnsExp.bind(this)}/>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnsExp' name='showAnsExp' checked={showAnsExp} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleAnsExpClick')} onChange={this.toggleShowAnsExp.bind(this)}/>
                 </div>
             </Segment>
         );
