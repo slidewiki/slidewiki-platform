@@ -13,7 +13,7 @@ class UserGroupEdit extends React.Component {
     constructor(props){
         super(props);
 
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
 
         this.messages = defineMessages({
             error: {
