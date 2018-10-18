@@ -214,33 +214,34 @@ export default {
             rp(requestCall).then( (response) => {
                 let decks = response.items;
 
-                //get the number of likes
-                let arrayOfPromises = [];
-                decks.forEach((deck) => {
-                    let promise = rp.get({
+                // get the number of likes
+                let arrayOfPromises = decks.map((deck) => {
+                    return rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
                             metaonly: true,
                             activity_type: 'react',
                             all_revisions: true
                         }
+                    }).catch((err) => {
+                        // ignore errors from activities service
+                        return 0;
                     });
-                    arrayOfPromises.push(promise);
                 });
 
                 return Promise.all(arrayOfPromises).then((numbers) => {
+                    // wait for it to fill in the likes
                     for (let i = 0; i < numbers.length; i++) {
                         decks[i].noOfLikes = numbers[i];
                     }
-
-                    let converted = decks.map((deck) => { return transform(deck); });
-
-                    callback(null, {
-                        metadata: response._meta,
-                        decks: converted
-                    });
+                    return { metadata: response._meta, decks };
                 });
-            }).catch((err) => callback(err));
+
+            }).then(({ metadata, decks }) => {
+                let converted = decks.map((deck) => { return transform(deck); });
+
+                callback(null, { metadata, decks: converted });
+            }).catch((err) => callback(err, { metadata: {}, decks: [] }));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
                 // console.log('trying to get private user with id: ', params);
