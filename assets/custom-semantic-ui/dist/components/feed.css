@@ -39,7 +39,7 @@
       -ms-flex-direction: row;
           flex-direction: row;
   width: 100%;
-  padding: 0.21428571rem 0em;
+  padding: 0.1875rem 0em;
   margin: 0em;
   background: none;
   border-top: none;
@@ -80,7 +80,7 @@
   border-radius: 500rem;
 }
 .ui.feed > .event > .label + .content {
-  margin: 0.5em 0em 0.35714286em 1.14285714em;
+  margin: 0.5em 0em 0.3125em 1.125em;
 }
 
 /*--------------
@@ -169,7 +169,7 @@
   display: inline-block;
   float: none;
   font-weight: normal;
-  font-size: 0.85714286em;
+  font-size: 0.875em;
   font-style: normal;
   margin: 0em 0em 0em 0.5em;
   padding: 0em;
@@ -200,7 +200,7 @@
   border-left: none;
   font-size: 1em;
   max-width: 500px;
-  line-height: 1.4285em;
+  line-height: 1.5em;
 }
 
 /*--------------
@@ -209,7 +209,7 @@
 
 .ui.feed > .event > .content .meta {
   display: inline-block;
-  font-size: 0.85714286em;
+  font-size: 0.875em;
   margin: 0.5em 0em 0em;
   background: none;
   border: none;
@@ -273,13 +273,13 @@
 *******************************/
 
 .ui.small.feed {
-  font-size: 0.92857143rem;
+  font-size: 0.9375rem;
 }
 .ui.feed {
   font-size: 1rem;
 }
 .ui.large.feed {
-  font-size: 1.14285714rem;
+  font-size: 1.125rem;
 }
 
 

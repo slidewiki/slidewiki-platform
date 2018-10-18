@@ -112,7 +112,7 @@
   cursor: pointer;
 }
 .ui.comments .comment a.author:hover {
-  color: #1e70bf;
+  color: #0769b1;
 }
 
 /*--------------
@@ -234,28 +234,28 @@
 --------------------*/
 
 .ui.mini.comments {
-  font-size: 0.78571429rem;
+  font-size: 0.6875rem;
 }
 .ui.tiny.comments {
-  font-size: 0.85714286rem;
+  font-size: 0.875rem;
 }
 .ui.small.comments {
-  font-size: 0.92857143rem;
+  font-size: 0.9375rem;
 }
 .ui.comments {
   font-size: 1rem;
 }
 .ui.large.comments {
-  font-size: 1.14285714rem;
+  font-size: 1.125rem;
 }
 .ui.big.comments {
-  font-size: 1.28571429rem;
+  font-size: 1.3125rem;
 }
 .ui.huge.comments {
-  font-size: 1.42857143rem;
+  font-size: 1.4375rem;
 }
 .ui.massive.comments {
-  font-size: 1.71428571rem;
+  font-size: 1.6875rem;
 }
 
 
