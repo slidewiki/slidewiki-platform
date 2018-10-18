@@ -237,36 +237,39 @@ class InfoPanelInfoView extends React.Component {
         }
 
         let selectLanguageMessage = this.context.intl.formatMessage(this.messages.selectLanguage);
-
+        let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
-                <div className="ui top attached icon buttons menu">
-                    <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
+                {
+                    showZoomControls &&
+                        <div className="ui top attached basic icon buttons menu">
+                            <button className="ui button" onClick={this.zoomOut}
+                                    aria-label="Zoom out" data-tooltip="Zoom out">
+                                <i className="large search minus icon"></i>
+                            </button>
+                            <button className="ui button" onClick={this.resetZoom}
+                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                <i className="stacked icons">
+                                    <i className="small compress icon "></i>
+                                    <i className="large search icon "></i>
+                                </i>
+                            </button>
+                            <button className="ui button" onClick={this.zoomIn}
+                                    aria-label="Zoom in" data-tooltip="Zoom in">
+                                <i className="large search plus icon"></i>
+                            </button>
+                        </div>
+                }
+
+                <div className={`ui ${showZoomControls ? '' : 'top'} attached icon buttons menu`}>
+                    <Dropdown pointing="top" disabled={languageOptions.length < 2 && !canEdit}
                         button basic style={{textAlign: 'center'}}
                         trigger={<h5 className='ui small header'>{selectLanguageMessage}: <i className={selectedLanguageIcon + ' flag'}></i>{selectedLanguageName}</h5>}
                         icon={null}
                         aria-label={selectLanguageMessage} data-tooltip={selectLanguageMessage}
                         defaultValue={selectedLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-                    {
-                        this.props.ContentStore.selector.stype === 'slide' && [
-                            <button className="ui basic attached button" onClick={this.resetZoom}
-                                    type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
-                                <i className="stacked icons">
-                                    <i className="small compress icon "></i>
-                                    <i className="large search icon "></i>
-                                </i>
-                            </button>,
-                            <button className="ui basic attached button" onClick={this.zoomOut}
-                                    type="button" aria-label="Zoom out" data-tooltip="Zoom out">
-                                <i className="large search minus icon"></i>
-                            </button>,
-                            <button className="ui basic attached button" onClick={this.zoomIn}
-                                    type="button" aria-label="Zoom in" data-tooltip="Zoom in">
-                                <i className="large search plus icon"></i>
-                            </button>
-                        ]
-                    }
                 </div>
+
                 { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
                         <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
@@ -347,7 +350,7 @@ class InfoPanelInfoView extends React.Component {
                   </div>
                 ) : ''}
 
-                <div className="ui attached segment">
+                <div className="ui bottom attached segment">
                     <div className={['ui', 'image']}>
                         <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
                             <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
