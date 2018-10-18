@@ -37,12 +37,12 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.toolbar = [
 
-        { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'CopyFormatting'] },
+        { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'RemoveFormat'] }, //, 'CopyFormatting'
         { name: 'styles', items: [ 'FontSize', 'Font'] },
-        { name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
+        //{ name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
     
         { name: 'styles', items: [ 'Styles' ] },
-        { name: 'basicstyles', items: ['RemoveFormat' ] },
+        //{ name: 'basicstyles', items: [ ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor'] },
         { name: 'colors', items: [ ] },
         { name: 'styles', items: [ 'lineheight' ] },
@@ -50,13 +50,13 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'styles', items: [ 'Format'] },
     //'/',
         //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
-        { name: 'insert', items: [ 'Symbol'] },
+        //{ name: 'insert', items: [ ] },
         //{ name: 'source', items: [ 'Mathjax'] },
         { name: 'paragraph', items: [ 'NumberedList',  'BulletedList'] },
         { name: 'paragraph', items: [] },
         { name: 'paragraph', items: [ 'Outdent', 'Indent'] },
         { name: 'paragraph', items: [ ] },
-        { name: 'paragraph', items: [ 'Blockquote'] },
+        { name: 'paragraph', items: [ 'Symbol', 'Blockquote'] },
         { name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         { name: 'paragraph', items: [ ] },
         { name: 'paragraph', items: [ ] },
