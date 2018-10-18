@@ -1,5 +1,6 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 const log = require('../log/clog');
+import { isEmpty } from '../../common.js';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivity from '../activityfeed/addActivity';
 
@@ -25,6 +26,18 @@ export default function addTreeNode(context, payload, done) {
                     content_id: String(res.node.id),
                     content_kind: res.node.type
                 };
+                let parentId = payload.selector.id;
+                let topParentId = payload.selector.id;
+                let tmp = payload.selector.spath.split(';');
+                if (tmp.length > 1) {
+                    parentId = tmp[tmp.length - 2];
+                    tmp = parentId.split(':');
+                    parentId = tmp[0];
+                }
+                if (!isEmpty(parentId)) {
+                    activity.parent_content_id = parentId;
+                    activity.top_parent_content_id = topParentId;
+                }
                 context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);

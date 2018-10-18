@@ -2,6 +2,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import addActivity from '../../actions/activityfeed/addActivity';
 const log = require('../log/clog');
+import { isEmpty } from '../../common.js';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNode(context, payload, done) {
@@ -46,6 +47,18 @@ export default function deleteTreeNode(context, payload, done) {
                         content_name: payload.deletedName
                     }
                 };
+                let parentId = payload.id;
+                let topParentId = payload.id;
+                let tmp = payload.spath.split(';');
+                if (tmp.length > 1) {
+                    parentId = tmp[tmp.length - 2];
+                    tmp = parentId.split(':');
+                    parentId = tmp[0];
+                }
+                if (!isEmpty(parentId)) {
+                    activity.parent_content_id = parentId;
+                    activity.top_parent_content_id = topParentId;
+                }
 
                 context.executeAction(addActivity, {activity: activity});
             }

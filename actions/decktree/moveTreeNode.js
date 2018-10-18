@@ -1,5 +1,6 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import addActivity from '../activityfeed/addActivity';
+import { isEmpty } from '../../common.js';
 const log = require('../log/clog');
 
 export default function moveTreeNode(context, payload, done) {
@@ -76,6 +77,13 @@ export default function moveTreeNode(context, payload, done) {
                             target_id: targetId
                         }
                     };
+                    let parentId = sourceId;
+                    let topParentId = selector.id;
+                    if (parentId !== String(res.id) && !isEmpty(parentId)) {
+                        activity.parent_content_id = parentId;
+                        activity.top_parent_content_id = topParentId;
+                    }
+                    
                     context.executeAction(addActivity, {activity: activity});
                 }
             }

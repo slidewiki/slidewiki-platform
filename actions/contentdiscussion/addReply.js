@@ -1,6 +1,7 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivity from '../activityfeed/addActivity';
+import { isEmpty } from '../../common.js';
 const log = require('../log/clog');
 
 export default function addReply(context, payload, done) {
@@ -25,6 +26,18 @@ export default function addReply(context, payload, done) {
                     parent_comment_owner_id: String(payload.comment.user_id)
                 }
             };
+            let parentId = payload.selector.id;
+            let topParentId = payload.selector.id;
+            let tmp = payload.selector.spath.split(';');
+            if (tmp.length > 1) {
+                parentId = tmp[tmp.length - 2];
+                tmp = parentId.split(':');
+                parentId = tmp[0];
+            }
+            if (parentId !== comment.content_id && !isEmpty(parentId)) {
+                activity.parent_content_id = parentId;
+                activity.top_parent_content_id = topParentId;
+            }
             context.executeAction(addActivity, {activity: activity});
         }
 

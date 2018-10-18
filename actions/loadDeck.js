@@ -1,5 +1,6 @@
 import async from 'async';
 import {shortTitle} from '../configs/general';
+import { isEmpty } from '../common.js';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
@@ -244,6 +245,18 @@ export default function loadDeck(context, payload, done) {
                         content_id: payload.params.sid,
                         content_kind: payload.params.stype
                     };
+                    let parentId = payload.params.id;
+                    let topParentId = payload.params.id;
+                    let tmp = payload.params.spath.split(';');
+                    if (tmp.length > 1) {
+                        parentId = tmp[tmp.length - 2];
+                        tmp = parentId.split(':');
+                        parentId = tmp[0];
+                    }
+                    if (parentId !== payload.params.sid && !isEmpty(parentId)) {
+                        activity.parent_content_id = parentId;
+                        activity.top_parent_content_id = topParentId;
+                    }
                     context.executeAction(addActivity, {activity: activity});
                 }
 

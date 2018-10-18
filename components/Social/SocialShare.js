@@ -5,6 +5,7 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
 import EmbedModal from '../Deck/ContentPanel/ContentActions/EmbedModal';
 import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
+import { isEmpty } from '../../common.js';
 
 class SocialShare extends React.Component {
 
@@ -60,6 +61,19 @@ class SocialShare extends React.Component {
                 platform: platform
             }
         };
+        let parentId = this.props.selector.id;
+        let topParentId = this.props.selector.id;
+        let tmp = this.props.selector.spath.split(';');
+        if (tmp.length > 1) {
+            parentId = tmp[tmp.length - 2];
+            tmp = parentId.split(':');
+            parentId = tmp[0];
+        }
+        if (parentId !== this.props.selector.sid && !isEmpty(parentId)) {
+            activity.parent_content_id = parentId;
+            activity.top_parent_content_id = topParentId;
+        }
+        
         context.executeAction(addActivity, {activity: activity});
         context.executeAction(incrementDeckViewCounter, {type: 'share'});
     }
