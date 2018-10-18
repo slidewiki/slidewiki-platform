@@ -38,7 +38,8 @@ CKEDITOR.editorConfig = function( config ) {
     config.toolbar = [
 
         { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'RemoveFormat'] }, //, 'CopyFormatting'
-        { name: 'styles', items: [ 'FontSize', 'Font'] },
+        { name: 'styles', items: [ 'FontSize',] },
+        { name: 'styles', items: [ 'Font'] },
         //{ name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
     
         { name: 'styles', items: [ 'Styles' ] },
@@ -64,7 +65,7 @@ CKEDITOR.editorConfig = function( config ) {
     //'/',
         //{ name: 'document', items: [ 'Sourcedialog'] },
         //{ name: 'document', items: [ 'CodeSnippet'] },
-        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-'] },
+        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'] },
         { name: 'tools', items: ['Undo', 'Redo'] }
         
             /*{ name: 'styles', items: [ 'FontSize' ] },

@@ -62,7 +62,7 @@ Special outer level classes used in this file:
 	display: block;
 	/*background: #fff;*/
 	padding: 0;
-
+	background: #767676;
 	-webkit-touch-callout: none; /* Safari only */
 }
 

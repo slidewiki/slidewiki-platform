@@ -28,10 +28,14 @@ The visual representation of a rich combo widget looks as follows:
 /* The box that hold the entire combo widget */
 .cke_combo
 {
-	display: inline-block;
-	float: left;
+	/*display: inline-block;
+	float: left;*/
 	position: relative;
-	margin-bottom: 5px;
+	margin-bottom: 6px;
+	display:flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	flex: 1 1 auto;
 }
 
 .cke_rtl .cke_combo
@@ -85,7 +89,8 @@ a.cke_combo_button
 	padding: 1px;
 	background:#e6e6e6;
 	border-radius: 4px;
-	margin-right: 1px
+	margin-right: 1px;
+	flex:1 1 auto;
 }
 
 .cke_rtl a.cke_combo_button
@@ -280,7 +285,8 @@ a.cke_combo_button
 	float: left;
 	cursor: default;
 	color: #484848;
-    width: 60px;
+    /*width: 60px;*/
+	width: calc(100% - 35px);
 }
 
 .cke_rtl .cke_combo_text

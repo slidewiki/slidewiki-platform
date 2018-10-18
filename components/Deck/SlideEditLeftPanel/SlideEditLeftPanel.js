@@ -79,9 +79,10 @@ class SlideEditLeftPanel extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.SlideEditStore.contentEditorFocus !== this.props.SlideEditStore.contentEditorFocus) {
+        if(nextProps.SlideEditStore.contentEditorFocus !== this.props.SlideEditStore.contentEditorFocus
+            && nextProps.SlideEditStore.contentEditorFocus) {
             this.setState({
-                editText: nextProps.SlideEditStore.contentEditorFocus
+                editText: true
             });
         }
     }

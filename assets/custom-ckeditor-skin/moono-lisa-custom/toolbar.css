@@ -53,7 +53,10 @@ Special outer level classes used in this file:
 /* The box that holds each toolbar. */
 .cke_toolbar
 {
-	float: left;
+	/*float: left;*/
+	display: flex;
+	flex: 1 1 auto;
+	flex-wrap: wrap;
 }
 
 .cke_rtl .cke_toolbar
@@ -67,12 +70,13 @@ Special outer level classes used in this file:
 {
 	border: 0;
 	float: left;
-	margin: 1px 2px 6px 0;
+	margin: 1px 2px 0 0;
 	/* Helps to set proper position for separators after .cke_button. */
 	padding-right: 3px;
 	display:flex;
 	flex-wrap: wrap;
 	justify-content: center;
+	flex: 1 1 auto;
 }
 
 .cke_rtl .cke_toolgroup
@@ -100,17 +104,20 @@ Special outer level classes used in this file:
 /* A toolbar button . */
 a.cke_button
 {
-	display: inline-block;
+	/*display: inline-block;*/
 	height: 18px;
 	padding: 7px 10px;
 	outline: none;
 	cursor: default;
-	float: left;
+	/*float: left;*/
 	border: 0;
 	position: relative;
 	background:#e6e6e6;
 	border-radius: 4px;
 	margin-right:1px;
+	margin-bottom:6px;
+	flex: 1 1 auto;
+	text-align: center;
 }
 
 .cke_rtl a.cke_button
@@ -320,7 +327,6 @@ a.cke_button_disabled .cke_button_arrow
 	margin-top: 1px;
 	width: 16px;
 	height: 16px;
-	float: left;
 	display: inline-block;
 }
 
