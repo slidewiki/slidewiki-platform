@@ -40158,6 +40158,27 @@ body.pushable > .pusher {
   }
 }
 
+
+/*******************************
+        Embed Questions
+*******************************/
+.ui.questions.padded.text.grey {
+  color: #767676 !important;
+}
+.ui.segment.questions.unpadded {
+  margin: 0px;
+  line-height: 1;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.ui.questions.padded.vertical {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.ui.questions.padded.text{
+  padding: 5px 15px 10px 15px;
+}
+
 /*******************************
          Site Overrides
 *******************************/

@@ -36,7 +36,7 @@ class AttachQuestionsAnswersList extends React.Component{
         });
         let explanation = `Explanation: ${this.props.explanation}`;
         return (
-            <div className="ui segment unpadded_segment" ref="attachquestionsanswers">
+            <div className="ui segment questions unpadded" ref="attachquestionsanswers">
                 <div className="ui accordion">
                 <div ref="attachquestionanswersList" className='title' tabIndex="0">
                     <i className="dropdown icon" />

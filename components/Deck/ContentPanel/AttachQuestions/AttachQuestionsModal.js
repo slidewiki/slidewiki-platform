@@ -260,15 +260,14 @@ class AttachQuestionsModal extends React.Component{
                 Next
             <Icon name="arrow right"/>
         </Button>;
-        let attachBtn = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach" disabled={this.state.selectedQuestions.length===0} onClick={this.handleAttachButton}>
+        let attachBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label="Confirm Embed" data-tooltip="Embed questions in slide" disabled={this.state.selectedQuestions.length===0} onClick={this.handleAttachButton}>
             <Icon name="attach"/>
-                Attach
+                Confirm Embed
             <Icon name="attach"/>
         </Button>;
         
 
         //From current deck content
-        //deckQuestions={this.props.AttachQuestionsModalStore.deckQuestions}
         let currentDeckContent = <AttachCurrentDeck questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>; {/*nikki does this action button need changing? need to pass questions?*/}
         //From my Decks option content
         let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
@@ -282,19 +281,17 @@ class AttachQuestionsModal extends React.Component{
         let attachMenu;
         let modalDescription;
 
-    
-        //Check if showOptions is true first?
         if(this.state.showOptions){
             attachMenu ='';
             searchForm ='';
-            segmentPanelContent = <AttachQuestionsOptions selectedQuestions={this.state.selectedQuestions}/>; //nikki attachQuestionsOptions with props passed to it
+            segmentPanelContent = <AttachQuestionsOptions selectedQuestions={this.state.selectedQuestions}/>;
             actionButton = previousQuestionsBtn;
             actionButton2 = nextWarningBtn;
             
         } else if (this.state.showWarning){
             attachMenu = '';
             searchForm = '';
-            segmentPanelContent = <AttachQuestionsWarning />;//put the component link here
+            segmentPanelContent = <AttachQuestionsWarning />;
             actionButton = attachBtn;
             actionButton2 = '';
 
@@ -306,8 +303,6 @@ class AttachQuestionsModal extends React.Component{
 
             searchForm = '';
             segmentPanelContent = currentDeckContent;
-            //need to change this button? should lead to the options page...maybe handleOptionsButton?
-            /*nikki changed the disabled conditions for the button */
             actionButton = nextOptionsBtn;
             actionButton2='';
 

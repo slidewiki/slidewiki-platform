@@ -89,17 +89,17 @@ class AttachQuestionsOptions extends React.Component {
         //need tool-tip/ aria for the title - if no title is entered the default title is Questions, or should it have Questions entered in the box by default?
         return (
             <Segment className='ui vertical stackable' style={{padding: '20px'}} id='EmbedOptions'>
-                <div style={{marginBottom: '5px'}} className='ui field input'>
-                    <label style={{marginTop:'5px', marginRight: '20px'}}>Title</label>
+                <div className='ui field input'>
+                    <label className='ui questions padded text'>Title</label>
                     <input type='text' placeholder='Title for Questions...' tabIndex="1" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
-                    <div className='ui grey text' style={{marginLeft: '10px', marginTop:'5px'}}>Default title: Questions</div>
+                    <div className='ui grey text' className='ui questions padded text grey'>Default title: Questions</div>
                 </div>
-                <div style={{marginBottom: '5px'}}>
-                    <label style={{marginRight: '20px'}} >Number questions</label>
+                <div className='ui questions padded vertical'>
+                    <label className='ui questions padded text'>Number questions</label>
                     <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showNumbers' name='showNumbers' checked={showNumbers} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleNumbersClick')} onChange={this.toggleShowNumbers.bind(this)}/>
                 </div>
-                <div style={{marginBottom: '5px'}}>
-                    <label style={{marginRight: '20px'}}>Display correct answers and Explanation</label>
+                <div className='ui questions padded vertical'>
+                    <label className='ui questions padded text'>Display correct answers and Explanation</label>
                     <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnsExp' name='showAnsExp' checked={showAnsExp} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleAnsExpClick')} onChange={this.toggleShowAnsExp.bind(this)}/>
                 </div>
             </Segment>
