@@ -45,6 +45,26 @@ export default {
                     return res;
                 });
             }).then((res) => {
+                // get likes per deck
+                let deckIdsSet = new Set(res.map((deck) => deck._id));
+                let likePromises = [];
+                let likes = {};
+
+                for(let deckId of deckIdsSet){
+                    likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
+                        likes[deckId] = noOfLikes;
+                    }).catch( (err) => {
+                        likes[deckId] = 0;
+                    }));
+                }
+                
+                return Promise.all(likePromises).then( () => { 
+                    res.forEach((deck) => {
+                        deck.likes = likes[deck._id];
+                    });
+                    return res; 
+                });
+            }).then((res) => {
                 callback(null, {featured: addSlugs(res)});
             }).catch((err) => {
                 callback(err, {featured: []});

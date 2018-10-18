@@ -46,8 +46,8 @@ class DeckList extends React.Component {
                                     <p><FormattedMessage id='DeckList.desc.date' defaultMessage='Date'/>&#58;<span> {deckDate}</span></p>
                                 </div>
                                 <div className="post-button">
-                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')} className="left-btn"><i className="fork icon"></i>{deck.forkCount}</NavLink>
-                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')} className="right-btn"><i className="share alternate icon"></i>0</NavLink> {/* TODO get deck share amount  */}
+                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')} className="left-btn"><i className="thumbs up icon"></i>{deck.likes}</NavLink>
+                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')} className="right-btn"><i className="fork icon"></i>{deck.forkCount}</NavLink>
                                 </div>
                             </div>
                         </div>
