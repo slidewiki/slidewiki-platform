@@ -5,6 +5,7 @@ import {List, Icon, Button} from 'semantic-ui-react';
 import revertRevision from '../../../../actions/history/revertRevision';
 import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
 
+import cheerio from 'cheerio';
 import {NavLink} from 'fluxible-router';
 
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
@@ -43,11 +44,23 @@ class ContentChangeItem extends React.Component {
     }
 
     render() {
-        const change = this.props.change;
+        let change = this.props.change;
 
         let description, actionText;
         let iconName = 'write';
 
+        if (change.value && change.value.ref) {
+            change.value.ref.title = cheerio.load(change.value.ref.title).text();
+        }
+        if (change.value && change.value.origin) {
+            change.value.origin.title = cheerio.load(change.value.origin.title).text();
+        }
+        if (change.oldValue && change.oldValue.ref) {
+            change.oldValue.ref.title = cheerio.load(change.oldValue.ref.title).text();
+        }
+        if (change.translated) {
+            change.translated.title = cheerio.load(change.translated.title).text();
+        }
         switch (change.action) {
             case 'add':
                 iconName = change.value.kind === 'slide'? 'file text' :'folder';
@@ -82,7 +95,7 @@ class ContentChangeItem extends React.Component {
                 description = <span>restored {change.oldValue.kind} <em>{change.oldValue.ref.title}</em> to an earlier version</span>;
                 break;
             case 'remove':
-                iconName = 'trash outline';
+                iconName = 'trash alternate';
                 description = <span>removed {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'edit':

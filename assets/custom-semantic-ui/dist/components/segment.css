@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Segment
+ * # Semantic UI 2.4.0 - Segment
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -520,19 +520,19 @@
 
 /* Red */
 .ui.red.segment:not(.inverted) {
-  border-top: 2px solid #DB2828 !important;
+  border-top: 2px solid #C42424 !important;
 }
 .ui.inverted.red.segment {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
   color: #FFFFFF !important;
 }
 
 /* Orange */
 .ui.orange.segment:not(.inverted) {
-  border-top: 2px solid #DA6619 !important;
+  border-top: 2px solid #CA5010 !important;
 }
 .ui.inverted.orange.segment {
-  background-color: #DA6619 !important;
+  background-color: #CA5010 !important;
   color: #FFFFFF !important;
 }
 
@@ -556,10 +556,10 @@
 
 /* Green */
 .ui.green.segment:not(.inverted) {
-  border-top: 2px solid #188130 !important;
+  border-top: 2px solid #158538 !important;
 }
 .ui.inverted.green.segment {
-  background-color: #188130 !important;
+  background-color: #158538 !important;
   color: #FFFFFF !important;
 }
 
