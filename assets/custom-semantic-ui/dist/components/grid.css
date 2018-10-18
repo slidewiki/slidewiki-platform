@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.0 - Grid
+ * # Semantic UI 2.4.1 - Grid
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -151,7 +151,7 @@
   margin: 1rem 1rem;
 }
 .ui.grid .column + .ui.vertical.divider {
-  height: calc(50% -  1rem );
+  height: calc(50% - (2rem / 2));
 }
 
 /* Remove Border on Last Horizontal Segment */
@@ -1092,7 +1092,7 @@
   content: "";
   top: 0em;
   left: 0px;
-  width: calc(100% -  2rem );
+  width: calc(100% - 2rem);
   height: 1px;
   margin: 0% 1rem;
   -webkit-box-shadow: 0px -1px 0px 0px rgba(34, 36, 38, 0.15);
@@ -1131,12 +1131,12 @@
 .ui.relaxed[class*="vertically divided"].grid > .row:before {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-  width: calc(100% -  3rem );
+  width: calc(100% - 3rem);
 }
 .ui[class*="very relaxed"][class*="vertically divided"].grid > .row:before {
-  margin-left: 5rem;
-  margin-right: 5rem;
-  width: calc(100% -  5rem );
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+  width: calc(100% - 5rem);
 }
 
 /*----------------------
@@ -1352,7 +1352,7 @@
 .ui.grid > .red.row,
 .ui.grid > .red.column,
 .ui.grid > .row > .red.column {
-  background-color: #C42424 !important;
+  background-color: #DB2828 !important;
   color: #FFFFFF;
 }
 
@@ -1360,7 +1360,7 @@
 .ui.grid > .orange.row,
 .ui.grid > .orange.column,
 .ui.grid > .row > .orange.column {
-  background-color: #CA5010 !important;
+  background-color: #F2711C !important;
   color: #FFFFFF;
 }
 
@@ -1368,7 +1368,7 @@
 .ui.grid > .yellow.row,
 .ui.grid > .yellow.column,
 .ui.grid > .row > .yellow.column {
-  background-color: #FFD900 !important;
+  background-color: #FBBD08 !important;
   color: #FFFFFF;
 }
 
@@ -1384,7 +1384,7 @@
 .ui.grid > .green.row,
 .ui.grid > .green.column,
 .ui.grid > .row > .green.column {
-  background-color: #158538 !important;
+  background-color: #21BA45 !important;
   color: #FFFFFF;
 }
 
@@ -1392,7 +1392,7 @@
 .ui.grid > .teal.row,
 .ui.grid > .teal.column,
 .ui.grid > .row > .teal.column {
-  background-color: #158570 !important;
+  background-color: #00B5AD !important;
   color: #FFFFFF;
 }
 
@@ -1400,7 +1400,7 @@
 .ui.grid > .blue.row,
 .ui.grid > .blue.column,
 .ui.grid > .row > .blue.column {
-  background-color: #1E78BB !important;
+  background-color: #2185D0 !important;
   color: #FFFFFF;
 }
 

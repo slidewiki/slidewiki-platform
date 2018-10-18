@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.0 - Comment
+ * # Semantic UI 2.4.1 - Comment
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -112,7 +112,7 @@
   cursor: pointer;
 }
 .ui.comments .comment a.author:hover {
-  color: #0769b1;
+  color: #1e70bf;
 }
 
 /*--------------
@@ -234,7 +234,7 @@
 --------------------*/
 
 .ui.mini.comments {
-  font-size: 0.71428571rem;
+  font-size: 0.78571429rem;
 }
 .ui.tiny.comments {
   font-size: 0.85714286rem;

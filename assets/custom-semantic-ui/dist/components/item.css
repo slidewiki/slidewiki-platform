@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.0 - Item
+ * # Semantic UI 2.4.1 - Item
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -241,7 +241,7 @@
   color: rgba(0, 0, 0, 0.85);
 }
 .ui.items > .item > .content > a.header:hover {
-  color: #0769b1;
+  color: #1e70bf;
 }
 
 /* Meta */
@@ -452,7 +452,7 @@
 }
 .ui.items a.item:hover .content .header,
 .ui.link.items > .item:hover .content .header {
-  color: #0769b1;
+  color: #1e70bf;
 }
 
 /*--------------
