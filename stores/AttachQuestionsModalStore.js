@@ -13,6 +13,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.showSearchResults = false;
         this.showQuestions = false; /*nikki changed away from true */
         this.showOptions = false;
+        this.showWarning = false;
         this.activeItem = 'CurrentDeck';
         this.deckQuestions = [];
         this.selectedQuestions = []; /*nikki for storing the questions that have been selected for insertion */
@@ -37,6 +38,7 @@ class AttachQuestionsModalStore extends BaseStore{
             showSearchResults: this.showSearchResults,
             showQuestions: this.showQuestions,
             showOptions: this.showOptions,
+            showWarning: this.showWarning,
             activeItem: this.activeItem,
             deckQuestions: this.deckQuestions,
             deckQuestionsCount: this.deckQuestionsCount,
@@ -56,6 +58,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.selectedDeckId = state.selectedDeckId;
         this.showSearchResults = state.showSearchResults;
         this.showQuestions = state.showQuestions;
+        this.showWarning = state.showWarning;
         this.showOptions = state.showOptions;
         this.activeItem = state.activeItem;
         this.deckQuestions = state.deckQuestions;
@@ -72,6 +75,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.showSearchResults = false;
         this.showQuestions = false; 
         this.showOptions = false;
+        this.showWarning = false;
         this.activeItem = 'CurrentDeck';
         this.deckQuestions = [];
         this.deckQuestionsCount = '';
@@ -92,6 +96,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.showSearchResults = false;
         this.showQuestions = false;
         this.showOptions = false;
+        this.showWarning = false;
         this.activeItem = 'CurrentDeck';
         this.deckQuestions = [];
         this.deckQuestionsCount = ''; 
@@ -202,6 +207,15 @@ class AttachQuestionsModalStore extends BaseStore{
         this.emitChange();
     }
 
+    updateShowWarning(payload){
+        if (isNullOrUndefined(payload)){
+            console.log('undefined');
+        } else {
+            this.showWarning = payload;
+        }
+        this.emitChange();
+    }
+
     updateDeckQuestions(payload){
         if((payload === [])||(typeof payload === 'undefined')){
             this.deckQuestions = [];
@@ -263,6 +277,7 @@ AttachQuestionsModalStore.handlers = {
     'ATTACHQUESTIONS_SELECTED_QUESTIONS' : 'updateSelectedQuestions', 
     'ATTACHQUESTIONS_SHOW_QUESTIONS' : 'updateShowQuestions',
     'ATTACHQUESTIONS_SHOW_OPTIONS'  : 'updateShowOptions', 
+    'ATTACHQUESTIONS_SHOW_WARNING' : 'updateShowWarning',
     'ATTACHQUESTIONS_UPDATE_OPTIONS': 'updateOptions',
 };
 

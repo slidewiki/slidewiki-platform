@@ -24,7 +24,9 @@ import AttachCurrentDeck from './AttachCurrentDeck';
 import loadQuestions from '../../../../actions/attachQuestions/loadQuestions';
 import updateShowQuestions from '../../../../actions/attachQuestions/updateShowQuestions';
 import updateShowOptions from '../../../../actions/attachQuestions/updateShowOptions'; 
+import updateShowWarning from '../../../../actions/attachQuestions/updateShowWarning';
 import AttachQuestionsOptions from './AttachQuestionsOptions';
+import AttachQuestionsWarning from './AttachQuestionsWarning';
 import embedQuestions from '../../../../actions/attachQuestions/embedQuestions';
 
 class AttachQuestionsModal extends React.Component{
@@ -39,6 +41,7 @@ class AttachQuestionsModal extends React.Component{
             deckQuestions:[],
             showQuestions: false, 
             showOptions: false, 
+            showWarning: false,
 
         };
 
@@ -50,6 +53,7 @@ class AttachQuestionsModal extends React.Component{
         this.handlePreviousDecksButton = this.handlePreviousDecksButton.bind(this);
         this.handleOptionsButton = this.handleOptionsButton.bind(this);
         this.handlePreviousQuestionsButton = this.handlePreviousQuestionsButton.bind(this);
+        this.handleNextWarningButton = this.handleNextWarningButton.bind(this);
     }
 
     componentWillReceiveProps(nextProps){
@@ -60,6 +64,7 @@ class AttachQuestionsModal extends React.Component{
             deckQuestions:nextProps.AttachQuestionsModalStore.deckQuestions,
             showQuestions: nextProps.AttachQuestionsModalStore.showQuestions,
             showOptions: nextProps.AttachQuestionsModalStore.showOptions,
+            showWarning: nextProps.AttachQuestionsModalStore.showWarning,
         });
     }
 
@@ -101,7 +106,7 @@ class AttachQuestionsModal extends React.Component{
     }
 
     handleClose(){
-
+        //console.log('handleClose');
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,
@@ -132,7 +137,6 @@ class AttachQuestionsModal extends React.Component{
             showQuestions:true
         });
         this.context.executeAction(updateShowQuestions,true);
-        /*nikki new action that sets the showQuestions flag in the store? */
         //console.log(this.state.showQuestions);
         /*nikki should this also update the selected question label somehow...? */
 
@@ -171,58 +175,28 @@ class AttachQuestionsModal extends React.Component{
         /*nikki is this all that's needed? */
     }
 
-    handleAttachButton(){
-        /*nikki do we need this bit? what does it do? */
-        /*let activities = nodeSpec.map((node) => {
-            return {
-                activity_type: 'use',
-                user_id: String(this.props.UserProfileStore.userid),
-                content_id: node.id,
-                content_kind: 'slide',
-                use_info: {
-                    target_id:  targetDeckId,
-                    target_name: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', targetDeckId)
-                }
-            };
-        });*/
-        //this.context.executeAction(addActivities, {activities: activities});
 
+    handleNextWarningButton(){
+        /*nikki code here for setting the flags for the modal to go to the warning screen */
+        /*nikki showWarning: true, showOptions: false */
+        //console.log('nextwarning');
+        this.setState({
+            showOptions:false,
+            showWarning:true,
+        });
+        this.context.executeAction(updateShowOptions, false);
+        this.context.executeAction(updateShowWarning, true);
+    }
+
+
+    handleAttachButton(){
         let embedContent = {
             questions: this.props.AttachQuestionsModalStore.selectedQuestions,
             options: this.props.AttachQuestionsModalStore.embedOptions,
-            //insert additional options here
         }; 
-        /*nikki need error handling before doing the close action? */
-        //TODO: internationalise these messages?
-        swal({
-            title: 'Confirm Embed Questions',
-            text: 'Adding questions will overwrite the existing content in this slide. You can always revert to an earlier version of the slide or decide to not save after embedding the questions.',
-            type: 'question',
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText: 'Embed Questions',
-            confirmButtonClass: 'ui green button',
-            cancelButtonText: 'Cancel',
-            cancelButtonClass: 'ui red button',
-            buttonsStyling: false,
-            focusConfirm: true,
-            allowEnterKey: true,
-            allowEscapeKey: true,
-        }).then((result) => {
-            this.handleClose();
-            //console.log(embedContent);
-            this.context.executeAction(embedQuestions, embedContent);
-            }, (reason) => {
-            if (reason === 'cancel') {
-                console.log('cancel pressed - do nothing/close dialog?');
-            } else {
-                console.log('reason:' + reason + ' - do nothing/close dialog');
-            }
-        });
-        setTimeout(() => {
-            $('.swal2-confirm').focus();
-        }, 500);
-
+        //console.log(embedContent);
+        this.context.executeAction(embedQuestions, embedContent);
+        this.handleClose();
     }
 
     //find node title
@@ -244,21 +218,29 @@ class AttachQuestionsModal extends React.Component{
     handleKeyPress = (event, param) => {
         if(event.key === 'Enter'){
            // console.log('enter key');
-            if(param === 'handleAddQuestionsClick') {
-                this.handleOpen();
+            switch(param) {
+                case 'handleAddQuestionsClick':
+                    this.handleOpen();
+                    break;
+                case 'handleNextWarningClick':
+                    this.handleNextWarningButton();
+                    break;
+                default: 
+                    break;
             }
         }
     }
+    
 
     render() {
         /* define the action buttons up here, then just call them. nextQuestions, nextOptions, attach, previousQuestions, previousDecks ?? provided the display conditions are the same.*/
         //action buttons
-        let nextQuestionsBtn = <Button id="nextQuestions" color="green" icon tabIndex="0" type="button" aria-label="Next Select questions" data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
+        let nextQuestionsBtn = <Button id="nextQuestions" color="green" icon tabIndex="0" type="button" aria-label="Next Select questions" data-tooltip="Next" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
             <Icon name="arrow right"/>
                 Next
             <Icon name="arrow right"/>
         </Button>; //next button to take you to the question listing
-        let nextOptionsBtn = <Button id="nextOptions" color="green" icon tabIndex="0" type="button" aria-label="Next Select options" data-tooltip="Attach" disabled={this.state.selectedQuestions.length===0} onClick={this.handleOptionsButton}>
+        let nextOptionsBtn = <Button id="nextOptions" color="green" icon tabIndex="0" type="button" aria-label="Next Select options" data-tooltip="Next" disabled={this.state.selectedQuestions.length===0} onClick={this.handleOptionsButton}>
             <Icon name="arrow right"/>
                 Next
             <Icon name="arrow right"/>
@@ -269,17 +251,21 @@ class AttachQuestionsModal extends React.Component{
             <Icon name="arrow left"/>
         </Button>; // previous button to take you back to the deck listing
         let previousQuestionsBtn = <Button id="previousQuestions" color="green" icon tabIndex="0" type="button" aria-label="Previous Questions" data-tooltip="Return to questions list" onClick={this.handlePreviousQuestionsButton}>
-        <Icon name="arrow left"/>
-            Previous xxx
-        <Icon name="arrow left"/>
-    </Button>;; // previous button to take you back to the question listing
-    //onClick={this.handlePreviousButton}
+            <Icon name="arrow left"/>
+                Previous
+            <Icon name="arrow left"/>
+        </Button>; // previous button to take you back to the question listing
+        let nextWarningBtn = <Button id="nextWarning" color="green" icon tabIndex="0" type="button" aria-label="Next Embed Warning" data-tooltip="Next" onClick={this.handleNextWarningButton} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleNextWarningClick')}>
+            <Icon name="arrow right"/>
+                Next
+            <Icon name="arrow right"/>
+        </Button>;
         let attachBtn = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach" disabled={this.state.selectedQuestions.length===0} onClick={this.handleAttachButton}>
             <Icon name="attach"/>
                 Attach
             <Icon name="attach"/>
-        </Button>; // attach button to put the questions into the deck onClick={this.handleAttachButton}
-        /*nikki maybe change the disabled criteria?? */
+        </Button>;
+        
 
         //From current deck content
         //deckQuestions={this.props.AttachQuestionsModalStore.deckQuestions}
@@ -303,8 +289,15 @@ class AttachQuestionsModal extends React.Component{
             searchForm ='';
             segmentPanelContent = <AttachQuestionsOptions selectedQuestions={this.state.selectedQuestions}/>; //nikki attachQuestionsOptions with props passed to it
             actionButton = previousQuestionsBtn;
-            actionButton2 = attachBtn; /*nikki doesn't work yet. */
+            actionButton2 = nextWarningBtn;
             
+        } else if (this.state.showWarning){
+            attachMenu = '';
+            searchForm = '';
+            segmentPanelContent = <AttachQuestionsWarning />;//put the component link here
+            actionButton = attachBtn;
+            actionButton2 = '';
+
         } else if(this.state.activeItem === 'CurrentDeck') {
             //Display current deck questions when current deck tab is selected
             attachMenu = <AttachMenu activeItem={this.state.activeItem} selector={this.props.selector}/>;
@@ -351,7 +344,7 @@ class AttachQuestionsModal extends React.Component{
             actionButton2 = nextOptionsBtn;
 
         } else {
-            console.log('urm...not right');
+            console.log('Error');
             //does something need to go here?
         }
 
