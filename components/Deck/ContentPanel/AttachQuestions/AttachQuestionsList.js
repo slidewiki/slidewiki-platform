@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames/bind'; /*nikki what does this do?? */
+import classNames from 'classnames/bind'; 
 import {connectToStores} from 'fluxible-addons-react';
-import UserProfileStore from '../../../../stores/UserProfileStore'; /*nikki is this needed? */
+import UserProfileStore from '../../../../stores/UserProfileStore'; 
 import AttachQuestionsModalStore from '../../../../stores/AttachQuestionsModalStore';
-//import CustomDate from '../../util/CustomDate';
 import { Segment,Item,Grid,Icon,Label,Image,Dimmer, Loader, Button,TextArea} from 'semantic-ui-react';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import {Microservices} from '../../../../configs/microservices';
@@ -12,17 +11,14 @@ import updateSelectedQuestions  from '../../../../actions/attachQuestions/update
 import AttachQuestionsItem from './AttachQuestionsItem';
 
 const KEY_CODE = {
-   // LEFT:   37,
     UP:     38,
-   // RIGHT:  39,
     DOWN:   40,
     TAB: 9,
     ENTER: 13
-}; /*nikki do I need left and right?? */
+}; 
 
 class AttachQuestionsList extends React.Component {
     constructor(props){
-        /*nikki what does this receive now it's been moved? */
         /* Receives:
           user: user info
           deckQuestions: all questions for the deck
@@ -37,21 +33,18 @@ class AttachQuestionsList extends React.Component {
             selectedQuestions:this.props.AttachQuestionsModalStore.selectedQuestions,
             selectedDeckTitle: this.props.AttachQuestionsModalStore.selectedDeckTitle,
             selectedQuestionsLabel: this.props.AttachQuestionsModalStore.selectedQuestions.length +' of ' + this.props.AttachQuestionsModalStore.deckQuestions.length,
-            firstTime:true //*nikki is this needed? */
+            firstTime:true 
 
         };
         this.handleAllQuestions = this.handleAllQuestions.bind(this);
         this.handleNone = this.handleNone.bind(this);
-        //this.handleOnClick = this.handleOnClick.bind(this);
-
     }
     
     componentWillReceiveProps(nextProps){
 
         this.setState({
-            //userDecks: nextProps.AttachQuestionsModalStore.userDecks,
             selectedDeckId: nextProps.AttachQuestionsModalStore.selectedDeckId,
-            deckQuestions: nextProps.AttachQuestionsModalStore.deckQuestions, //new variable for the questions of that deck
+            deckQuestions: nextProps.AttachQuestionsModalStore.deckQuestions, 
             selectedQuestions:nextProps.AttachQuestionsModalStore.selectedQuestions,
             selectedDeckTitle:nextProps.AttachQuestionsModalStore.selectedDeckTitle,
             selectedQuestionsLabel: nextProps.AttachQuestionsModalStore.selectedQuestions.length +' of ' + nextProps.AttachQuestionsModalStore.deckQuestions.length
@@ -62,13 +55,13 @@ class AttachQuestionsList extends React.Component {
 
     componentDidUpdate(){
         if((this.state.deckQuestions.length !== 0) && this.state.firstTime){ //We have the questions rendered
-            //$('#selectedDeckTitleId').focus(); /*nikki need to change this line */
+            //$('#selectedDeckTitleId').focus(); 
             this.setState({
                 firstTime:false
             });
         } else if (this.state.deckQuestions.length === this.state.selectedQuestions.length) {
             //all questions are selected...moves focus to the NextButton
-            $('#nextOptions').focus(); /*nikki changed button id */
+            $('#nextOptions').focus(); 
         }
         this.refreshAccordion();    
     }

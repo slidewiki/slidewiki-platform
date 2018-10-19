@@ -35,7 +35,7 @@ class AttachDeckList extends React.Component {
     }
 
     handleOnclick(selectedDeck){
-        console.log(selectedDeck);
+        //console.log(selectedDeck);
         this.setState({
             selectedItem:selectedDeck.keyIndex,
             selectedDeckId:selectedDeck.selectedDeckId

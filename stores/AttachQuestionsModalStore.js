@@ -8,15 +8,15 @@ class AttachQuestionsModalStore extends BaseStore{
         this.userDecks = [];
         this.recentDecks = [];
         this.searchDecks =[];
-        this.selectedDeckTitle = ''; /*nikki 'Select the deck you wish to attach...'; */
+        this.selectedDeckTitle = ''; 
         this.selectedDeckId =-1;
         this.showSearchResults = false;
-        this.showQuestions = false; /*nikki changed away from true */
+        this.showQuestions = false; 
         this.showOptions = false;
         this.showWarning = false;
         this.activeItem = 'CurrentDeck';
         this.deckQuestions = [];
-        this.selectedQuestions = []; /*nikki for storing the questions that have been selected for insertion */
+        this.selectedQuestions = [];
         this.currentDeckId = '';
         this.currentDeckTitle = '';
         this.questionsCount = '';
@@ -28,7 +28,7 @@ class AttachQuestionsModalStore extends BaseStore{
         };
     }
 
-    getState(){ //should this be getInitialState?
+    getState(){
         return {
             userDecks : this.userDecks,
             recentDecks: this.recentDecks,
@@ -64,13 +64,13 @@ class AttachQuestionsModalStore extends BaseStore{
         this.deckQuestions = state.deckQuestions;
         this.deckQuestionsCount = state.deckQuestionsCount;
         this.selectedQuestions = state.selectedQuestions;
-        this.questionsCount = state.questionsCount;//nikki 
+        this.questionsCount = state.questionsCount;
     }
     resetModalStore(){
         this.userDecks = [];
         this.recentDecks = [];
         this.searchDecks = [];
-        this.selectedDeckTitle = ''; /*nikki 'Select the deck you wish to attach...'; */
+        this.selectedDeckTitle = ''; 
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.showQuestions = false; 
@@ -91,7 +91,7 @@ class AttachQuestionsModalStore extends BaseStore{
         this.emitChange();
     }
     initModal(){
-        this.selectedDeckTitle = ''; /*nikki 'Select the deck you wish to attach...'; */
+        this.selectedDeckTitle = '';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.showQuestions = false;
@@ -119,7 +119,7 @@ class AttachQuestionsModalStore extends BaseStore{
     updateSelectedDeck(payload){
         this.selectedDeckTitle = payload.selectedDeckTitle;
         this.selectedDeckId = payload.selectedDeckId;
-        console.log(payload);
+        //console.log(payload);
         this.emitChange();
     }
 

@@ -17,6 +17,10 @@ class AttachQuestionsOptions extends React.Component {
             //showExplanation: false,
         };
     }
+    componentDidMount() {
+        $('#title').focus();
+    }
+
     toggleShowNumbers() {
         let optionChange = {
             option: 'showNumbers',
@@ -47,7 +51,7 @@ class AttachQuestionsOptions extends React.Component {
         
         console.log(this.state.showExplanation);
     }*/
-    onChange(event) {/*nikki does this need any error handling? */
+    onChange(event) {
         this.setState({title: event.target.value});
     }
     onBlur() {
@@ -84,14 +88,12 @@ class AttachQuestionsOptions extends React.Component {
         //requires aria tags etc and keyboard accessibility 
         //need to space the toggle boxes out more (is getting the fitted class...)
         //CSS styling for toggle box
-        //vertical-align: middle;
-        //margin-bottom: 2px;
-        //need tool-tip/ aria for the title - if no title is entered the default title is Questions, or should it have Questions entered in the box by default?
+        //need tool-tip/ aria for the title - if no title is entered the default title is Questions
         return (
             <Segment className='ui vertical stackable' style={{padding: '20px'}} id='EmbedOptions'>
                 <div className='ui field input'>
                     <label className='ui questions padded text'>Title</label>
-                    <input type='text' placeholder='Title for Questions...' tabIndex="1" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
+                    <input id='title' type='text' placeholder='Title for Questions...' tabIndex="1" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
                     <div className='ui grey text' className='ui questions padded text grey'>Default title: Questions</div>
                 </div>
                 <div className='ui questions padded vertical'>
@@ -106,10 +108,6 @@ class AttachQuestionsOptions extends React.Component {
         );
     }
 }
-/*nikki removed <div style={{marginBottom: '5px'}}>
-                    <label style={{marginRight: '20px'}}>Display explanation</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showExplanation' name='showExplanation' checked={showExplanation} onChange={this.toggleShowExplanation.bind(this)}/>
-                </div> */
 
 AttachQuestionsOptions.contextTypes = {
     executeAction: PropTypes.func.isRequired

@@ -1,4 +1,4 @@
-/*nikki unchanged from subdecks file */
+/* unchanged from subdecks file */
 
 import log from '../log/clog';
 import notFoundError from '../error/notFoundError';

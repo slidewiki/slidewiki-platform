@@ -14,8 +14,7 @@ import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick'
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
-import AddQuestionsClick from '../../../actions/slide/AddQuestionsClick'; /*nikki no longer needed? now done by the modal function? */
-import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal'; /*nikki should this file be moved to another section of components? */
+import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal'; 
 import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import DeckPageStore from '../../../stores/DeckPageStore';
@@ -188,7 +187,7 @@ class SlideEditLeftPanel extends React.Component {
         if (this.state.slideTitle === ''){
             this.setState({titleMissingError: true});
         } else {
-            console.log(this.state.slideTitle);
+            //console.log(this.state.slideTitle);
             this.context.executeAction(changeTitle, {
                 title: this.state.slideTitle,
                 LeftPanelTitleChange: true
@@ -237,12 +236,6 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
-    }
-    //currently just for this deck, change this
-    /*nikki is this needed anymore? */
-    /*nikki is add questions click even the correct thing here? is this from sami's code*/
-    handleAddQuestionsClick(){
-        this.context.executeAction(AddQuestionsClick, {params: {stype : 'deck', sid : this.state.deckID}});
     }
 
     handleHelpClick(){
@@ -310,7 +303,7 @@ class SlideEditLeftPanel extends React.Component {
         //console.log(event.key);
         //if(event.key === 'Enter' || event.key === ' '){
         if(event.key === 'Enter'){
-            console.log('enter key');
+            //console.log('enter key');
             switch (param) {
                 case 'handleBack':
                     this.handleBack();
@@ -375,8 +368,6 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
                     break;
-                case 'handleAddQuestionsClick': /*nikki is this needed anymore? */
-                    this.handleAddQuestionsClick();
                 case 'handleHelpClick':
                     this.handleHelpClick();
                     break;
@@ -674,8 +665,7 @@ class SlideEditLeftPanel extends React.Component {
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
-           {/*nikki  {console.log(selectorDeck)}*/}
-            <AttachQuestions currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck}/>{/*nikki  <FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add Questions' />*/}
+            <AttachQuestions currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck}/>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>

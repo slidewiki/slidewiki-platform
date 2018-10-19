@@ -25,11 +25,11 @@ class AttachMenu extends React.Component{
         this.context.executeAction(loadQuestions, {params:this.props.selector});
         this.setState({
             activeItem:'CurrentDeck',
-            showQuestions: true /*nikki does it matter if this is true or false? */
+            showQuestions: true 
         });
         let payload ={
             activeItem:'CurrentDeck',
-            showQuestions: true /*nikki does it matter if this is true or false? */
+            showQuestions: true 
         };
         this.context.executeAction(updateActiveItem,payload,null);
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});

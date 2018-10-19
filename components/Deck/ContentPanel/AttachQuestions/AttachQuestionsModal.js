@@ -112,7 +112,7 @@ class AttachQuestionsModal extends React.Component{
             activeTrap: false,
             activeItem: 'CurrentDeck',
             selectedQuestions:[],
-            //showQuestions:true, /*nikki should this be false instead? */
+            //showQuestions:true,
             selectedDeckId: -1
         });
         this.context.executeAction(initModal,[]);
@@ -130,15 +130,13 @@ class AttachQuestionsModal extends React.Component{
             selectedQuestions:[]
         });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
-        let deckSelector = {id:this.state.selectedDeckId, stype:'deck', sid:this.state.selectedDeckId}; //not being set correctly by the mydecks/search?
+        let deckSelector = {id:this.state.selectedDeckId, stype:'deck', sid:this.state.selectedDeckId}; 
         this.context.executeAction(loadQuestions,{params:deckSelector});
         this.setState({
             showQuestions:true
         });
         this.context.executeAction(updateShowQuestions,true);
-        //console.log(this.state.showQuestions);
-        /*nikki should this also update the selected question label somehow...? */
-
+        
     }
 
     handleOptionsButton(){
@@ -164,8 +162,7 @@ class AttachQuestionsModal extends React.Component{
         });
         this.context.executeAction(updateShowQuestions, true);
         this.context.executeAction(updateShowOptions, false);
-        //console.log(this.state.activeItem);
-        //console.log(this.state.selectedQuestions);
+        
     }
 
 
@@ -205,7 +202,6 @@ class AttachQuestionsModal extends React.Component{
         return title;
     }
 
-    /*nikki Makes the add questions button keyboard accessible */
     handleKeyPress = (event, param) => {
         if(event.key === 'Enter'){
            // console.log('enter key');
@@ -250,16 +246,16 @@ class AttachQuestionsModal extends React.Component{
             <Icon name="arrow right"/>
                 Next
             <Icon name="arrow right"/>
-        </Button>;
+        </Button>; //next button to take you to the warning message
         let attachBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label="Confirm Embed" data-tooltip="Embed questions in slide" disabled={this.state.selectedQuestions.length===0} onClick={this.handleAttachButton}>
             <Icon name="attach"/>
                 Confirm Embed
             <Icon name="attach"/>
-        </Button>;
+        </Button>; //embed button to actually insert the questions
         
 
         //From current deck content
-        let currentDeckContent = <AttachCurrentDeck questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextOptions'}/>; {/*nikki does this action button need changing? need to pass questions?*/}
+        let currentDeckContent = <AttachCurrentDeck questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextOptions'}/>;
         //From my Decks option content
         let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextQuestions'}/>;
         //From SlideWiki content
@@ -326,7 +322,6 @@ class AttachQuestionsModal extends React.Component{
                   <AttachSelectedDeck maxHeight='350px'/>
                  ); //params user={userInfo} deckQuestions={this.props.deckQuestions} selectedDeckId={this.props.currentDeckID} actionButtonId={this.props.actionButtonId} maxHeight='400px'
             }
-            //segmentPanelContent = <AttachQuestionsList maxHeight='350px'/>; //how was this getting the questions? pulling them from the state?
             actionButton = previousDecksBtn;
             actionButton2 = nextOptionsBtn;
 

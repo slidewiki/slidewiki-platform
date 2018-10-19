@@ -8,7 +8,6 @@ import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentModulesStore from '../../../../stores/ContentModulesStore';
 import loadContentQuestions from '../../../../actions/loadContentQuestions';
-import downloadQuestion from '../../../../actions/questions/downloadQuestion'; //nikki not currently used
 import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
 import ContentQuestionsList from './ContentQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
@@ -63,13 +62,6 @@ class ContentQuestionsPanel extends React.Component {
         this.context.executeAction(invertAddQuestionBoxFlag, {});
     }
 
-    handleDownloadButtonClick() {
-     //   this.context.executeAction(downloadQuestion, {}); {/*nikki what are the curly braces here for? for passing additional parameters?*/}
-            //this.context.executeAction(downloadQuestion, {params: {stype : "deck", sid : this.state.deckID.toString()}});
-        console.log(this.props.ContentQuestionsStore.questions); /*nikki retrieves the questions from the store (already returned from the api when the question panel is loaded) */
-    }
-
-
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
@@ -80,34 +72,20 @@ class ContentQuestionsPanel extends React.Component {
         const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
 
         // Button bar differs for Slide and Folder
-        //nikki if this is a deck, why doesn't it show buttons for exam/test mode? because it has been commented out lower down
         let buttonBar = '';
         switch(selector.stype) {
             case 'slide':
                 buttonBar = '';
-                /* (
-                    <button className='ui button blue'>
-                        <i className='plus icon'></i>
-                        Add question
-                    </button>
-                );*/
                 break;
             case 'deck':
-                //nikki doesn't have any onClick action
                 buttonBar = (
                     <div className='ui buttons'>
                         <button className='ui button'>Exam mode</button>
-                        <button className='ui button'>Test mode</button> 
-                        <button className='ui button blue'>
-                            <i className='file pdf outline icon'></i>
-                            Export to PDF
-                        </button>
                     </div>
                 );
                 break;
         }
-        //nikki this checks if there is edit permission
-        //nikki what are the data-reactid fields?
+
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
         // console.log(editPermission);
         let addQuestionButton = ((editPermission) ?
@@ -135,15 +113,6 @@ class ContentQuestionsPanel extends React.Component {
             }
             return null;
         };     */
-
-       //nikki add additional button for the 'download' of the file
-       //nikki does this need a react-id?
-        let downloadQuestionButton = (editPermission) ? <div className="column right aligned" >
-            <button className="ui right floated compact button primary" onClick={this.handleDownloadButtonClick.bind(this)}>
-                <i className="small download icon"/>
-                Download questions
-            </button>
-        </div> : '';
        
         let questionsHeader = (
             <div className="ui segment attached" data-reactid={636}>
@@ -156,11 +125,10 @@ class ContentQuestionsPanel extends React.Component {
                                 </div>
                                 <div className="column right aligned" >
                                 {addQuestionButton}
-                                {this.props.ContentModulesStore.selector.stype === 'deck' ? downloadQuestionButton : ''} {/*nikki buttons are displayed the wrong way round*/}
                                 </div>
                             </div>
                         </div>
-                        {content} {/*nikki is this not then calling the questionsHeader?*/ }
+                        {content}
                     </div>
                 </div>
             </div>
@@ -221,15 +189,6 @@ class ContentQuestionsPanel extends React.Component {
                 {/* {pagination} */}
             </div>
         );
-
-        //   if (question !== undefined && question !== null) {
-        // //Question is selected -> show its data
-        //       content = (
-        //   <div>
-        //     <ContentQuestionForm question={question} />
-        //   </div>
-        // );
-        //   }
 
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
