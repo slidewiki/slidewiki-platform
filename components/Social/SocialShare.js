@@ -61,17 +61,9 @@ class SocialShare extends React.Component {
                 platform: platform
             }
         };
-        let parentId = this.props.selector.id;
-        let topParentId = this.props.selector.id;
-        let tmp = this.props.selector.spath.split(';');
-        if (tmp.length > 1) {
-            parentId = tmp[tmp.length - 2];
-            tmp = parentId.split(':');
-            parentId = tmp[0];
-        }
-        if (parentId !== this.props.selector.sid && !isEmpty(parentId)) {
-            activity.parent_content_id = parentId;
-            activity.top_parent_content_id = topParentId;
+        const contentRootId = this.props.selector.id;
+        if (!isEmpty(contentRootId)) {
+            activity.content_root_id = contentRootId;
         }
         
         context.executeAction(addActivity, {activity: activity});

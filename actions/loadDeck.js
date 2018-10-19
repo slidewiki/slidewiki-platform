@@ -245,17 +245,9 @@ export default function loadDeck(context, payload, done) {
                         content_id: payload.params.sid,
                         content_kind: payload.params.stype
                     };
-                    let parentId = payload.params.id;
-                    let topParentId = payload.params.id;
-                    let tmp = payload.params.spath.split(';');
-                    if (tmp.length > 1) {
-                        parentId = tmp[tmp.length - 2];
-                        tmp = parentId.split(':');
-                        parentId = tmp[0];
-                    }
-                    if (parentId !== payload.params.sid && !isEmpty(parentId)) {
-                        activity.parent_content_id = parentId;
-                        activity.top_parent_content_id = topParentId;
+                    const contentRootId = payload.params.id;
+                    if (!isEmpty(contentRootId)) {
+                        activity.content_root_id = contentRootId;
                     }
                     context.executeAction(addActivity, {activity: activity});
                 }

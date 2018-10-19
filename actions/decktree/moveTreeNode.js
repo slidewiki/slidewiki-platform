@@ -77,11 +77,9 @@ export default function moveTreeNode(context, payload, done) {
                             target_id: targetId
                         }
                     };
-                    let parentId = sourceId;
-                    let topParentId = selector.id;
-                    if (parentId !== String(res.id) && !isEmpty(parentId)) {
-                        activity.parent_content_id = parentId;
-                        activity.top_parent_content_id = topParentId;
+                    const contentRootId = selector.id;
+                    if (!isEmpty(contentRootId)) {
+                        activity.content_root_id = contentRootId;
                     }
                     
                     context.executeAction(addActivity, {activity: activity});

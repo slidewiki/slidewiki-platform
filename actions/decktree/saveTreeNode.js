@@ -53,17 +53,9 @@ export default function saveTreeNode(context, payload, done) {
                     content_id: String(newSid),
                     content_kind: payload.selector.stype
                 };
-                let parentId = payload.selector.id;
-                let topParentId = payload.selector.id;
-                let tmp = payload.selector.spath.split(';');
-                if (tmp.length > 1) {
-                    parentId = tmp[tmp.length - 2];
-                    tmp = parentId.split(':');
-                    parentId = tmp[0];
-                }
-                if (parentId !== payload.selector.sid && !isEmpty(parentId)) {
-                    activity.parent_content_id = parentId;
-                    activity.top_parent_content_id = topParentId;
+                const contentRootId = payload.selector.id;
+                if (!isEmpty(contentRootId)) {
+                    activity.content_root_id = contentRootId;
                 }
                 context.executeAction(addActivity, {activity: activity});
             }
