@@ -1,4 +1,5 @@
 import ISO6391 from 'iso-639-1';
+import locale from 'locale-code';
 import { sha512 } from 'js-sha512';
 import { hashingSalt } from './configs/general';
 
@@ -80,6 +81,19 @@ export default {
         return Math.floor(seconds) + ' seconds';
     },
 
+    getBrowserLanguage: function() {
+        let language =  navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+
+        if (language.length === 2) {
+            language += '_' + language.toUpperCase();
+        }
+        else {
+            language = language.replace('-', '_');
+        }
+
+        return language;
+    },
+
     getIntlLanguage() {
         let language = 'en';
         if (document.cookie.indexOf('locale=') > 0)
@@ -139,37 +153,22 @@ export default {
 
     // some locale support aux code
     getLanguageName: (code) => {
-        if (!code) return '';
-
-        // also returns empty string if unknown
-        return ISO6391.getName(code.substring(0, 2).toLowerCase());
+        if (code.length === 2)
+            return ISO6391.getName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageName(code.replace('_', '-'));
+        return '';
     },
 
     getLanguageNativeName: (code) => {
-        if (!code) return '';
-
-        // also returns empty string if unknown
-        return ISO6391.getNativeName(code.substring(0, 2).toLowerCase());
-    },
-
-    getLanguageDisplayName: (code) => {
-        if (!code) return '';
-        code = code.substring(0, 2).toLowerCase();
-
-        let name = ISO6391.getName(code);
-        // also returns empty string if unknown
-        if (!name) return '';
-
-        let nativeName = ISO6391.getNativeName(code);
-        if (nativeName === name) return name;
-
-        return `${nativeName} (${name})`;
+        if (code.length === 2)
+            return ISO6391.getNativeName(code.toLowerCase());
+        if (code.length === 5)
+            return locale.getLanguageNativeName(code.replace('_', '-'));
+        return '';
     },
 
     compareLanguageCodes: (a, b) => {
-        if (a === b) return true;
-        if (!a || !b) return false;
-
         if (a.length === 5 && b.length === 5)
             return a.replace('_', '-') === b.replace('_', '-');
         return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();

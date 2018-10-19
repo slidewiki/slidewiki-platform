@@ -265,6 +265,7 @@ class DeckCollectionStore extends BaseStore {
     }
 
     loadSearchResults(payload) {
+
         // transform search results
         payload.docs.forEach( (deck) => {
             deck.deckID = deck.db_id;
@@ -275,22 +276,28 @@ class DeckCollectionStore extends BaseStore {
 
         // more results have been loaded
         if (payload.page > 1) {
-            this.decks = (this.decks || []).concat(payload.docs);
+            this.decks = this.decks.concat(payload.docs);
             this.loadMoreLoading = false;
             this.loadMoreError = false;
 
         // page 1 of results is requested
         } else {
             this.decks = payload.docs;
+            this.decksMeta = {
+                queryparams: payload.queryparams
+            };
         }
-
-        this.decksMeta = {};
 
         // form next page link if more results are available
         if (payload.hasMore) {
-            this.decksMeta.links = payload.links;
+            this.decksMeta.links = {
+                next: `${this.decksMeta.queryparams}&page=${payload.page + 1}`
+            };
+
         } else {
-            this.decksMeta.links = {};
+            this.decksMeta.links = {
+                next: undefined
+            };
         }
 
         this.emitChange();

@@ -16,7 +16,7 @@ export default {
         if (resource === 'recommendations.list'){
             const minNoOfRecommendations = 6;
 
-            const recommendationServiceUri = Microservices.analytics.uri;
+            const recommendationServiceUri = Microservices.recommendation.uri;
 
             rp.get({uri: recommendationServiceUri + '/analytics/webresources/recommender?userid=' + uid, proxy: '' }).then((res) => {
 

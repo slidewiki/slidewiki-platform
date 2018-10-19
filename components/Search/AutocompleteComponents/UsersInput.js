@@ -47,9 +47,6 @@ class UsersInput extends React.Component {
     getSelected(){
         return this.refs.users_input.value;
     }
-    clear() {
-        $('#users_input_div').dropdown('clear');
-    }
     render(){
         let classes = classNames({
             'ui': true,

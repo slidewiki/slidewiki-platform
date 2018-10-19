@@ -9,13 +9,9 @@ export default function loadSearchedDecks(context,payload,done){
 
     context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS_LOADING');
     context.executeAction(updateModalSubtitle, 'Search Results');
-    
-    payload.query.expand = false;
-    payload.query.spellcheck = false;
-    payload.query.pageSize = 50;
-    payload.query.facets = false;
 
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
+        
         if (err) {
             if (err.statusCode === 404) {
                 context.executeAction(notFoundError, {}, done);
@@ -37,6 +33,7 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
+            res.queryparams = payload.params.queryparams || undefined;
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
 

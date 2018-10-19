@@ -5,7 +5,7 @@ import { NavLink } from 'fluxible-router';
 class Footer extends React.Component {
     render() {
         let info = <div className="ui inverted  list">
-            <div className="item">The SlideWiki project has received funding from the European Union&#39;s Horizon 2020 research and innovation programme under grant agreement No 688095 </div>
+            <div className="item" style={{textAlign: 'justify'}}>The SlideWiki project has received funding from the European Union&#39;s Horizon 2020 research and innovation programme under grant agreement No 688095 </div>
             <div className="item">Copyright &copy; 2018 &middot; All Rights Reserved</div>
             <div className="item">Build GIT_COMMIT&#64;GIT_BRANCH</div>
         </div>;

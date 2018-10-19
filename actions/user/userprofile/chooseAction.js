@@ -6,10 +6,10 @@ const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
 import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
 import { shortTitle } from '../../../configs/general';
-import loadUserStats from '../../stats/loadUserStats';
+import UserProfileStore from '../../../stores/UserProfileStore';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats'],
+    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations'],
     settings: ['profile', 'account', 'integrations'],
     groups: ['overview', 'edit'],
     decks: ['shared'],
@@ -63,9 +63,6 @@ export function chooseAction(context, payload, done) {
                     break;
             };
             break;
-        case categories.categories[5]:
-            title += 'User Stats';
-            break;
         default:
             title = shortTitle;
     };
@@ -101,10 +98,6 @@ export function chooseAction(context, payload, done) {
                 case categories.categories[4]:
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     context.executeAction(loadUserRecommendations, {}, callback);
-                    break;
-                case categories.categories[5]:
-                    context.dispatch('USER_CATEGORY', {category: payload.params.category});
-                    context.executeAction(loadUserStats, {}, callback);
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);

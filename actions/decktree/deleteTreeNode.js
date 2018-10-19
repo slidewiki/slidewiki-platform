@@ -2,7 +2,6 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import addActivity from '../../actions/activityfeed/addActivity';
 const log = require('../log/clog');
-import { isEmpty } from '../../common.js';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNode(context, payload, done) {
@@ -47,11 +46,7 @@ export default function deleteTreeNode(context, payload, done) {
                         content_name: payload.deletedName
                     }
                 };
-                const contentRootId = payload.id;
-                if (!isEmpty(contentRootId)) {
-                    activity.content_root_id = contentRootId;
-                }
-                
+
                 context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);

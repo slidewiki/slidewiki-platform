@@ -18,9 +18,8 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
+import LanguageDropdown from '../../../../common/LanguageDropdown';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
-
-import {educationLevels} from '../../../../../lib/isced';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -40,6 +39,7 @@ class DeckPropertiesEditor extends React.Component {
             validationErrors: {},
             title: props.deckProps.title || '',
             allowMarkdown: props.deckProps.allowMarkdown || false,
+            language: (props.deckProps.language && props.deckProps.language.replace('-', '_')) || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             //license: props.deckProps.license || '',
@@ -47,7 +47,6 @@ class DeckPropertiesEditor extends React.Component {
             users: editors.users,
             groups: editors.groups,
             published: !props.deckProps.hidden,
-            educationLevel: props.deckProps.educationLevel,
         };
     }
 
@@ -188,6 +187,11 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
+        if (this.state.language == null || this.state.language.length < 2) {
+            validationErrors.language = 'Please select a language.';
+            isValid = false;
+        }
+
         /*
         if (this.state.license == null || this.state.license.length < 2) {
             validationErrors.license = 'Please select a license.';
@@ -209,6 +213,7 @@ class DeckPropertiesEditor extends React.Component {
                 deckId: deckId,
                 title: this.state.title,
                 allowMarkdown: this.state.allowMarkdown,
+                language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
                 //license: this.state.license,
@@ -223,7 +228,6 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 tags: TagsStore.tags,
                 hidden: !this.state.published,
-                educationLevel: this.state.educationLevel,
             });
             this.context.executeAction(updateTheme, this.state.theme);
         }
@@ -232,15 +236,9 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
+        if (fieldName === 'language') stateChange[fieldName] = stateChange[fieldName].replace('-', '_');
         this.setState(stateChange);
     }
-
-    handleDropdownChange(fieldName, event, data) {
-        let stateChange = {};
-        stateChange[fieldName] = data.value;
-        this.setState(stateChange);
-    }
-
     onChangeMarkdown(event) {
         this.setState({allowMarkdown: !this.state.allowMarkdown});
     }
@@ -390,6 +388,13 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.title != null
         });
+        let langFieldClass = classNames({
+            'required': true,
+            'field': true,
+            'error': this.state.validationErrors.language != null,
+            'disabled': true,
+            'hidden': true
+        });
         /*
         let licenseFieldClass = classNames({
             'required': true,
@@ -449,6 +454,7 @@ class DeckPropertiesEditor extends React.Component {
             'sr': 'sr_RS',
             'lt': 'lt_LT',
         };
+        let simpleLanguage = this.state.language && fixedLanguageCodes[this.state.language.substring(0, 2)];
 
         let groupsArray = [];
         if (this.props.groups) {
@@ -488,7 +494,8 @@ class DeckPropertiesEditor extends React.Component {
 
         let listOfAuthorized = this.getListOfAuthorized();
 
-        let titleField = <div className="field">
+        //let titleAndLanguage = <div className="two fields">
+        let titleAndLanguage = <div className="field">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
                 <label htmlFor="title_input">
                     Title
@@ -498,6 +505,12 @@ class DeckPropertiesEditor extends React.Component {
                     aria-required="true" id="title_input"/>
 
             </div>
+            {/*<div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
+                <label htmlFor="language" id="language_label">
+                    Language
+                </label>
+                <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
+            </div>*/}
         </div>;
         let markdownField = <div className="field">
                 <div className="ui checkbox">
@@ -506,14 +519,8 @@ class DeckPropertiesEditor extends React.Component {
                 </div>
          </div>;
 
-        let titleAndLevelAndPublished = <div className="fields">
-            <div className="ten wide field">{titleField}</div>
-            <div className="four wide field">
-                <label htmlFor="level_input">Education Level</label>
-                <Dropdown id="level_input" label="Education Level" fluid selection
-                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
-                    value={this.state.educationLevel} onChange={this.handleDropdownChange.bind(this, 'educationLevel')} />
-            </div>
+        let titleAndLanguageAndPublished = <div className="fields">
+            <div className="fourteen wide field">{titleAndLanguage}</div>
             <div className="two wide field">
                 <label id="published_label">Published</label>
                 <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
@@ -545,7 +552,7 @@ class DeckPropertiesEditor extends React.Component {
                 <div className="ui grid">
                     <div className="sixteen wide column">
                         <form className="ui form">
-                            {titleAndLevelAndPublished}
+                            {titleAndLanguageAndPublished}
                             {description}
                             {themeAndLicence}
                             {markdownField}

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import {translationLanguages, getLanguageDisplayName} from '../../common';
+import {translationLanguages, getLanguageNativeName} from '../../common';
 
 /**
  * Properties:
@@ -66,12 +66,12 @@ class LanguageDropdown extends React.Component {
 
         let languageOptions = translationLanguages.reduce((arr, curr) => {
             arr.push(<div className="item" data-value={curr} key={curr} >
-                    {getLanguageDisplayName(curr)}
+                    {getLanguageNativeName(curr)}
                 </div>);
             return arr;
         }, []);
         let languageOptionsUI = <div className="menu">
-            <div className="item" data-value="en">{this.context.intl.formatMessage(this.messages.english)}</div>
+            <div className="item" data-value="en_EN">{this.context.intl.formatMessage(this.messages.english)}</div>
         </div>;
 
         let tooltip = this.props.tooltip;

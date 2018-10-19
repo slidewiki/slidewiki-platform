@@ -22,9 +22,7 @@ slidewikiplatform:
     - SERVICE_URL_SIGNALING=https://signalingservice.experimental.slidewiki.org
     - SERVICE_URL_QUESTION=https://questionservice.experimental.slidewiki.org
     - SERVICE_URL_NLP=https://nlpservice.experimental.slidewiki.org
-    - SERVICE_URL_ANALYTICS=https://analyticsservice.experimental.slidewiki.org
-    - SERVICE_LEARNINGLOCKER_API_URL=https://api.learninglocker.experimental.slidewiki.org
-    - SERVICE_LEARNINGLOCKER_API_AUTH=MWEwNTkwMTg5M2Y4ZjIyZTY4ZThkMzhlYWE0NDZkZjAxZWUyNjdhODo2YjE5MzAxODhmZWM0OTg0ZjE1YzVhODI1Njg2NTY5NDk5YzRmODEz
+    - SERVICE_URL_RECOMMENDATION=http://slidewiki.imp.bg.ac.rs
     - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org
     - SERVICE_USER_APIKEY=2cbc621f86e97189239ee8c4c80b10b3a935b8a9f5db3def7b6a3ae7c4b75cb5
     - SERVICE_USER_PRIVATE_RECAPTCHA_KEY=6LdNLyYTAAAAAFMC0J_zuVI1b9lXWZjPH6WLe-vJ

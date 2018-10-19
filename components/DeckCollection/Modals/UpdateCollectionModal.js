@@ -141,7 +141,7 @@ class UpdateCollectionModal extends React.Component {
     }
     render() {
 
-        // the user can assign a user group to that playlist
+        // the user can assign a user group to that collection
         let userGroupOptions = (this.props.userGroups || []).map( (userGroup) => ({
             text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
             value: userGroup._id
@@ -168,7 +168,7 @@ class UpdateCollectionModal extends React.Component {
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="header">
                     <Header content={this.context.intl.formatMessage(this.messages.modalTitle)} id='updateCollectionModalHeader'/>
                     <Modal.Content>
-                       <TextArea className="sr-only" id="updateCollectionDescription" value="Update a playlist details" tabIndex ='-1'/>
+                       <TextArea className="sr-only" id="updateCollectionDescription" value="Update a deck collection" tabIndex ='-1'/>
                         <Form>
                             <Form.Field required error={this.state.validationError}>
                                 <label htmlFor="col_title"><FormattedMessage {...this.messages.titleField} /></label>
@@ -176,11 +176,11 @@ class UpdateCollectionModal extends React.Component {
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_description"><FormattedMessage {...this.messages.descriptionField} /></label>
-                                <textarea id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} rows="5" />
+                                <input id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
                             </Form.Field>
                             <Form.Field>
-                                <label htmlFor="col_user_group" id="UserGroupLabel"><FormattedMessage {...this.messages.usergroupField} /></label>
-                                <Dropdown id="col_user_group" aria-labelledby="UserGroupLabel" placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} value={this.state.userGroup} />
+                                <label htmlFor="col_user_group"><FormattedMessage {...this.messages.usergroupField} /></label>
+                                <Dropdown id="col_user_group" placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} value={this.state.userGroup} />
                             </Form.Field>
                         </Form>
                     </Modal.Content>

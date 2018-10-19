@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.1 - Item
+ * # Semantic UI 2.4.0 - Item
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -139,7 +139,7 @@
 }
 .ui.items > .item > .content > .header {
   display: inline-block;
-  margin: -0.25em 0em 0em;
+  margin: -0.21425em 0em 0em;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
@@ -147,7 +147,7 @@
 
 /* Default Header Size */
 .ui.items > .item > .content > .header:not(.ui) {
-  font-size: 1.3125em;
+  font-size: 1.28571429em;
 }
 
 /*--------------
@@ -185,7 +185,7 @@
   margin-top: 0.6em;
   max-width: auto;
   font-size: 1em;
-  line-height: 1.5em;
+  line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);
 }
 

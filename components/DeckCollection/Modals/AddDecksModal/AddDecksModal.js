@@ -116,7 +116,7 @@ class AddDecksModal extends React.Component {
             });
         } else if (this.state.activeItem === 'slidewikiTab') {
             this.context.executeAction(loadMoreSearchResults, {
-                nextLink: nextLink
+                queryparams: nextLink
             });
         }
     }

@@ -5,7 +5,6 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
 import EmbedModal from '../Deck/ContentPanel/ContentActions/EmbedModal';
 import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
-import { isEmpty } from '../../common.js';
 
 class SocialShare extends React.Component {
 
@@ -61,11 +60,6 @@ class SocialShare extends React.Component {
                 platform: platform
             }
         };
-        const contentRootId = this.props.selector.id;
-        if (!isEmpty(contentRootId)) {
-            activity.content_root_id = contentRootId;
-        }
-        
         context.executeAction(addActivity, {activity: activity});
         context.executeAction(incrementDeckViewCounter, {type: 'share'});
     }

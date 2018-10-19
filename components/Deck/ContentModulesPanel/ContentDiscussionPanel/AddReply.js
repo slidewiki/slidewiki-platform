@@ -24,7 +24,6 @@ class AddReply extends React.Component {
         e.preventDefault();
         if (this.refs.replytitle.value !== '') {
             this.context.executeAction(addReply, {
-                selector: this.props.selector,
                 comment: this.props.comment,
                 title: this.refs.replytitle.value,
                 text: this.refs.replytext.value,

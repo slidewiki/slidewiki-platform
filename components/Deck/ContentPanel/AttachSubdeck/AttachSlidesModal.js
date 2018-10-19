@@ -162,14 +162,13 @@ class AttachSubdeckModal extends React.Component{
                 targetDeckId = this.props.selector.id;
             }
         }
-        
+
         let activities = nodeSpec.map((node) => {
             return {
                 activity_type: 'use',
                 user_id: String(this.props.UserProfileStore.userid),
                 content_id: node.id,
                 content_kind: 'slide',
-                content_root_id: this.state.selectedDeckId,
                 use_info: {
                     target_id:  targetDeckId,
                     target_name: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', targetDeckId)

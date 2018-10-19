@@ -5,9 +5,11 @@ import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea, Dropdown, Segment} from 'semantic-ui-react';
 import TranslationStore from '../../../../stores/TranslationStore';
-import {getLanguageDisplayName, compareLanguageCodes} from '../../../../common';
+import {getLanguageNativeName, compareLanguageCodes} from '../../../../common';
 import {navigateAction} from 'fluxible-router';
-import addNodeTranslation from '../../../../actions/translation/addNodeTranslation';
+import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
+import changeCurrentLanguage from '../../../../actions/translation/changeCurrentLanguage';
+import loadDecktreeAndSwitchLanguage from '../../../../actions/translation/loadDecktreeAndSwitchLanguage';
 
 class DeckTranslationsModal extends React.Component {
 
@@ -51,6 +53,11 @@ class DeckTranslationsModal extends React.Component {
         }
     }
 
+    handleTranslationSelection(code, e) {
+        this.handleClose();
+        this.redirectToLanguage(code);
+    }
+
     handleLanguageSelection(e, data) {
         this.setState({ action: 'translate', languageCode: data.value });
     }
@@ -59,10 +66,17 @@ class DeckTranslationsModal extends React.Component {
         if (this.state.action === 'translate') {
             this.handleClose();
 
-            this.context.executeAction(addNodeTranslation, {
+            this.context.executeAction(addDeckTranslation, {
                 language: this.state.languageCode
             });
         }
+    }
+
+    redirectToLanguage(language = '') {
+        // console.log('redirectToLanguage language', language);
+        this.context.executeAction(loadDecktreeAndSwitchLanguage, {
+            language: language
+        });
     }
 
     render() {
@@ -105,13 +119,16 @@ class DeckTranslationsModal extends React.Component {
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             languagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
                 if (!this.props.TranslationStore.treeTranslations.find((t) => compareLanguageCodes(t, current)) //exclude transations and deck language
-                  && !compareLanguageCodes(current, this.props.TranslationStore.treeLanguage))
-                    arr.push({key: current, value: current, text: getLanguageDisplayName(current)});
+                  && !compareLanguageCodes(current, this.props.TranslationStore.treeLanguage)
+                  && !compareLanguageCodes(current, this.props.TranslationStore.originLanguage))
+                    arr.push({key: current, value: current, text: getLanguageNativeName(current)});
                 return arr;
             }, []).sort((a, b) => (a.text > b.text) ? 1 : -1);
         }
 
         let btnMessage = this.context.intl.formatMessage(messages.translate);
+
+        const language = getLanguageNativeName(this.props.TranslationStore.inTranslationMode ? (this.props.TranslationStore.currentLang || this.props.TranslationStore.originLanguage) : this.props.TranslationStore.treeLanguage);
 
         return (
           <Modal trigger={

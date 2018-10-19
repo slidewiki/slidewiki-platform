@@ -38,9 +38,6 @@ class TagsInput extends React.Component {
     getSelected(){
         return this.refs.tags_input.value;
     }
-    clear() {
-        $('#tags_input_div').dropdown('clear');
-    }
     render(){
         let classes = classNames({
             'ui': true,

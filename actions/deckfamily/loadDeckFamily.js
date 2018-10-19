@@ -16,19 +16,11 @@ export default function loadDeckFamily(context, payload, done) {
             defaultName = res.defaultName || tagName;
         }
 
-        // form appropriate search query params
-        let args = {
-            query: {
-                tag: [payload.params.tag],
-                sort: 'lastUpdate',
-                facets: false,
-                expand: false,
-                spellcheck: false,
-            }
-        };
+         // form appropriate search query params
+        payload.params.queryparams = `keywords=*:*&kind=deck&tag=${payload.params.tag}&sort=lastUpdate`;
 
         // fetch results from search-service
-        context.service.read('searchresults.list', args, {timeout: 20 * 1000}, (err, res) => {
+        context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
@@ -39,16 +31,17 @@ export default function loadDeckFamily(context, payload, done) {
                     numFound: res.numFound,
                     decks: res.docs,
                     page: res.page, 
-                    hasMore: res.hasMore,
-                    links: res.links,
+                    hasMore: res.hasMore
                 });
-                done();
             }
 
             let pageTitle = shortTitle + ' | Tag | ' + defaultName;
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: pageTitle
             });
+
+            done();
         });
+       
     });   
 }

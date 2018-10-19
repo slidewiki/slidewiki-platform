@@ -1,6 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 const log = require('../log/clog');
-import { isEmpty } from '../../common.js';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivity from '../activityfeed/addActivity';
 
@@ -26,10 +25,6 @@ export default function addTreeNode(context, payload, done) {
                     content_id: String(res.node.id),
                     content_kind: res.node.type
                 };
-                const contentRootId = payload.selector.id;
-                if (!isEmpty(contentRootId)) {
-                    activity.content_root_id = contentRootId;
-                }
                 context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);
