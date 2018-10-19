@@ -27,7 +27,7 @@ class ExamPanel extends React.Component {
         return (
             <div ref="examPanel" className="ui container segments">
                 <div className="ui secondary segment">
-                    <h3 className="ui header">{title}Exam mode</h3>
+                    <h1 className="ui medium header">{title}Exam mode</h1>
                 </div>
                 { content }
             </div>

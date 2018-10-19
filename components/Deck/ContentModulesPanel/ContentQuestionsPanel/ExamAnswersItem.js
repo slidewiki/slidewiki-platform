@@ -18,11 +18,11 @@ class ExamAnswersItem extends React.Component {
         let answerIcon = (<i className="icon" />);
         if (showCorrectAnswers) {
             if (answer.correct && answer.selectedAnswer) {
-                answerIcon = (<i className="checkmark icon teal" />);
+                answerIcon = (<i className="checkmark icon teal" aria-label="your answer was correct" />);
             } else if (answer.correct && !answer.selectedAnswer) {
-                answerIcon = (<i className="checkmark icon red" />);
+                answerIcon = (<i className="checkmark icon red" aria-label="the correct answer"/>);
             } else if (!answer.correct && answer.selectedAnswer) {
-                answerIcon = (<i className="delete icon red" />);
+                answerIcon = (<i className="delete icon red" aria-label="your answer was incorrect answer"/>);
             }
         }
         return (

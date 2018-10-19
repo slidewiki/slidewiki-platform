@@ -6,6 +6,7 @@ class ExamItem extends React.Component {
         const answers = (
             <ExamAnswersList questionIndex={this.props.questionIndex} items={question.answers} showCorrectAnswers={this.props.showCorrectAnswers} explanation={question.explanation}/>
         );
+
         let difficultyStars = (difficulty) => {
             let difficultyClass = '';
             switch (difficulty) {
@@ -24,17 +25,22 @@ class ExamItem extends React.Component {
                 difficultyStars.push(<i key={i} className={difficultyClass} />);
             }
             return difficultyStars;
+
         };
+        let questionNo = this.props.questionIndex + 1;
+
         return (
             <div>
-                <div className="ui three column vertically divided grid segment">
-                    <div className="two wide column">
-                        {this.props.questionIndex + 1}.
-                        <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
+                <div className="ui three column vertically divided grid segment" tabIndex={0} aria-labelledby="question_no" >
+                    <div className="sr-only" id="question_no">{'Question' + questionNo + 'difficulty level ' + question.difficulty}</div>
+                    <div className="two wide column" aria-hidden="true" >
+                        {this.props.questionIndex + 1}
+                        <div className="ui star rating" data-rating={question.difficulty} />
                         {difficultyStars(question.difficulty)}
                     </div>
-                    <div className="seven wide column">
-                        <h4>
+                    <div className="seven wide column" >
+
+                        <h4 >
                             {question.title}
                         </h4>
                     </div>
