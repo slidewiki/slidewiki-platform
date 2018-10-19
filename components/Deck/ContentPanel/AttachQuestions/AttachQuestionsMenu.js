@@ -4,6 +4,8 @@ import { Menu} from 'semantic-ui-react';
 import updateActiveItem  from '../../../../actions/attachQuestions/updateActiveItem';
 import loadQuestions from '../../../../actions/attachQuestions/loadQuestions';
 import updateSelectedQuestions from '../../../../actions/attachQuestions/updateSelectedQuestions';
+import updateSelectedDeck from '../../../../actions/attachQuestions/updateSelectedDeck';
+
 
 
 class AttachMenu extends React.Component{
@@ -31,8 +33,12 @@ class AttachMenu extends React.Component{
         };
         this.context.executeAction(updateActiveItem,payload,null);
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
+        let payload2  = {
+            selectedDeckId: -1,
+            selectedDeckTitle: 'Click the deck you wish to select'
+        };
+        this.context.executeAction(updateSelectedDeck,payload2);
         
-    
     }
 
     handleMyDecksClick(){
@@ -48,6 +54,11 @@ class AttachMenu extends React.Component{
         this.context.executeAction(updateActiveItem,payload,null);
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
 
+        let payload2  = {
+            selectedDeckId: -1,
+            selectedDeckTitle: 'Click the deck you wish to select'
+        };
+        this.context.executeAction(updateSelectedDeck,payload2);
     }
 
     handleSlideWikiClick(){
@@ -62,6 +73,12 @@ class AttachMenu extends React.Component{
   
         this.context.executeAction(updateActiveItem,payload,null);
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]});
+
+        let payload2  = {
+            selectedDeckId: -1,
+            selectedDeckTitle: 'Click the deck you wish to select'
+        };
+        this.context.executeAction(updateSelectedDeck,payload2);
     }
 
     render(){

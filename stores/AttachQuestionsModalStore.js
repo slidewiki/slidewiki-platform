@@ -119,6 +119,7 @@ class AttachQuestionsModalStore extends BaseStore{
     updateSelectedDeck(payload){
         this.selectedDeckTitle = payload.selectedDeckTitle;
         this.selectedDeckId = payload.selectedDeckId;
+        console.log(payload);
         this.emitChange();
     }
 

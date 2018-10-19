@@ -2,6 +2,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
+import AttachQuestionsModalStore from '../../../../stores/AttachQuestionsModalStore';
 import AttachDeckList from './AttachDeckList';
 import {  Segment, Loader,Label, Image,Dimmer, Header} from 'semantic-ui-react';
 
@@ -9,11 +10,10 @@ class AttachSlideWiki extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            /*nikki should this be using the questions store */
             recentDecks:this.props.AttachSubdeckModalStore.recentDecks,
             searchDecks:this.props.AttachSubdeckModalStore.searchDecks,
-            selectedDeckTitle:   this.props.AttachSubdeckModalStore.selectedDeckTitle,
-            selectedDeckId: this.props.AttachSubdeckModalStore.selectedDeckId
+            selectedDeckTitle:   this.props.AttachQuestionsModalStore.selectedDeckTitle,
+            selectedDeckId: this.props.AttachQuestionsModalStore.selectedDeckId
 
         };
 
@@ -23,8 +23,8 @@ class AttachSlideWiki extends React.Component{
         this.setState({
 
             recentDecks: nextProps.AttachSubdeckModalStore.recentDecks,
-            selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
-            selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
+            selectedDeckId: nextProps.AttachQuestionsModalStore.selectedDeckId,
+            selectedDeckTitle:nextProps.AttachQuestionsModalStore.selectedDeckTitle,
             searchDecks: nextProps.AttachSubdeckModalStore.searchDecks,
             showSearchResults: nextProps.AttachSubdeckModalStore.showSearchResults,
 
@@ -74,10 +74,11 @@ class AttachSlideWiki extends React.Component{
 
 }
 
-AttachSlideWiki = connectToStores(AttachSlideWiki,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
+AttachSlideWiki = connectToStores(AttachSlideWiki,[UserProfileStore,AttachSubdeckModalStore,AttachQuestionsModalStore],(context,props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState(),
+        AttachQuestionsModalStore: context.getStore(AttachQuestionsModalStore).getState()
     };
 });
 export default AttachSlideWiki;

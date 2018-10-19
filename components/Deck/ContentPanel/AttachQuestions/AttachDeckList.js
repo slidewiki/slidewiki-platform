@@ -35,7 +35,7 @@ class AttachDeckList extends React.Component {
     }
 
     handleOnclick(selectedDeck){
-
+        console.log(selectedDeck);
         this.setState({
             selectedItem:selectedDeck.keyIndex,
             selectedDeckId:selectedDeck.selectedDeckId
@@ -45,11 +45,10 @@ class AttachDeckList extends React.Component {
             selectedDeckTitle:selectedDeck.selectedDeckTitle
         };
         this.context.executeAction(updateSelectedDeck,payload,null);
-        console.log(this.state.selectedDeckId);
+        //console.log(this.state.selectedDeckId);
        
 
-//        $(this.props.actionButtonId).focus();
-
+        $(this.props.actionButtonId).focus();
 
     }
     handleKeyPress(selectedDeck,event){
@@ -122,7 +121,7 @@ class AttachDeckList extends React.Component {
 
         if (decks_to_show.length){
             deck_list = decks_to_show.map((deck, index) => {
-                    //From deck users, data is in props.user. From slideWiki, data is in the deck
+                //From deck users, data is in props.user. From slideWiki, data is in the deck
                 let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
                 let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
                 let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
@@ -136,7 +135,6 @@ class AttachDeckList extends React.Component {
                     selectedDeckTitle:deck.title,
                     selectedDeckId: deck.deckID+'-'+deck.countRevisions
                 };
-                /*nikki only return if the deck.questionsCount is not 0? - will only work once the recentDecks also returns the questionsCount*/
                 return (
                        <Item key={index}
                               id={'deckItemList'+index}
@@ -176,7 +174,6 @@ class AttachDeckList extends React.Component {
                             </Item>
 
                 );
-              //    }
             });
         }
 

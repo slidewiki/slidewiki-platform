@@ -19,6 +19,7 @@ import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
 import AttachSearchForm from '../AttachSubdeck/AttachSearchForm';
 import AttachQuestionsList from './AttachQuestionsList'; 
+import AttachSelectedDeck from './AttachSelectedDeck';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import AttachCurrentDeck from './AttachCurrentDeck';
 import loadQuestions from '../../../../actions/attachQuestions/loadQuestions';
@@ -93,8 +94,6 @@ class AttachQuestionsModal extends React.Component{
             selectedDeckId: this.props.selector.id,
             selectedDeckTitle: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', this.props.selector.id)
         };
-        //console.log(`id ${this.props.selector.id}`);
-        //console.log(`Deck title: ${this.getTitle(this.props.currentDeck.DeckTreeStore.deckTree, 'deck', this.props.selector.id)}`);
         this.context.executeAction(updateSelectedDeck,payload3);
         let selector = this.props.selector;
         this.context.executeAction(loadQuestions, {params:selector});
@@ -143,9 +142,6 @@ class AttachQuestionsModal extends React.Component{
     }
 
     handleOptionsButton(){
-        //console.log('button - options!!');
-        //console.log(this.state.selectedQuestions);
-        //console.log(this.props.AttachQuestionsModalStore.selectedQuestions);
         this.setState({
             showOptions:true
         });
@@ -153,10 +149,8 @@ class AttachQuestionsModal extends React.Component{
     }
 
     handlePreviousDecksButton(){
-        /*nikki needs some additional handling here.  */
-        //console.log('previous decks button clicked');
         this.setState({
-            showQuestions:false /*nikki needs checking */
+            showQuestions:false
         });
         this.context.executeAction(updateSelectedQuestions,{selectedQuestions:[]},null);
         this.context.executeAction(updateShowQuestions, false);
@@ -166,19 +160,16 @@ class AttachQuestionsModal extends React.Component{
         //console.log('previous questions button clicked');
         this.setState({
             showQuestions:true,
-            showOptions:false /*nikki is this necessary? */
+            showOptions:false
         });
         this.context.executeAction(updateShowQuestions, true);
         this.context.executeAction(updateShowOptions, false);
         //console.log(this.state.activeItem);
         //console.log(this.state.selectedQuestions);
-        /*nikki is this all that's needed? */
     }
 
 
     handleNextWarningButton(){
-        /*nikki code here for setting the flags for the modal to go to the warning screen */
-        /*nikki showWarning: true, showOptions: false */
         //console.log('nextwarning');
         this.setState({
             showOptions:false,
@@ -268,11 +259,11 @@ class AttachQuestionsModal extends React.Component{
         
 
         //From current deck content
-        let currentDeckContent = <AttachCurrentDeck questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>; {/*nikki does this action button need changing? need to pass questions?*/}
+        let currentDeckContent = <AttachCurrentDeck questionsCount={this.props.AttachQuestionsModalStore.deckQuestionsCount} currentDeckID={this.props.selector.id} actionButtonId={'#nextOptions'}/>; {/*nikki does this action button need changing? need to pass questions?*/}
         //From my Decks option content
-        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
+        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextQuestions'}/>;
         //From SlideWiki content
-        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
+        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} actionButtonId={'#nextQuestions'}/>;
      
         let segmentPanelContent;
         let searchForm;
@@ -284,6 +275,7 @@ class AttachQuestionsModal extends React.Component{
         if(this.state.showOptions){
             attachMenu ='';
             searchForm ='';
+            modalDescription= <TextArea className="sr-only" id="attachQuestionsDescription" value="Select the options for embedding the questions in the slide" tabIndex ='-1'/>;
             segmentPanelContent = <AttachQuestionsOptions selectedQuestions={this.state.selectedQuestions}/>;
             actionButton = previousQuestionsBtn;
             actionButton2 = nextWarningBtn;
@@ -291,6 +283,7 @@ class AttachQuestionsModal extends React.Component{
         } else if (this.state.showWarning){
             attachMenu = '';
             searchForm = '';
+            modalDescription= <TextArea className="sr-only" id="attachQuestionsDescription" value="Confirm you wish to overwrite the slide content." tabIndex ='-1'/>;
             segmentPanelContent = <AttachQuestionsWarning />;
             actionButton = attachBtn;
             actionButton2 = '';
@@ -298,8 +291,7 @@ class AttachQuestionsModal extends React.Component{
         } else if(this.state.activeItem === 'CurrentDeck') {
             //Display current deck questions when current deck tab is selected
             attachMenu = <AttachMenu activeItem={this.state.activeItem} selector={this.props.selector}/>;
-            /*nikki does this description want to be here? */
-            modalDescription =  <TextArea className="sr-only" id="attachQuestionsDescription" value="You can attach one or more questions from this deck." tabIndex ='-1'/>;
+            modalDescription =  <TextArea className="sr-only" id="attachQuestionsDescription" value="You can add one or more questions from this deck to your slide." tabIndex ='-1'/>;
 
             searchForm = '';
             segmentPanelContent = currentDeckContent;
@@ -309,7 +301,7 @@ class AttachQuestionsModal extends React.Component{
         } else if ((this.state.activeItem !== 'CurrentDeck') && (!this.state.showQuestions)){
             //Display my deck list or the search form to find a deck
             attachMenu = <AttachMenu activeItem={this.state.activeItem}  selector={this.props.selector}/>;
-            modalDescription =  <TextArea className="sr-only" id="attachQuestionsDescription" value="You can attach one or more questions from this deck or another deck. First select your deck containing the questions or search SlideWiki for a deck." tabIndex ='-1'/>;
+            modalDescription =  <TextArea className="sr-only" id="attachQuestionsDescription" value="You can add one or more questions from this deck or another deck to your slide. First select your deck containing the questions or search SlideWiki for a deck." tabIndex ='-1'/>;
             
             if(this.state.activeItem === 'MyDecks'){
                 searchForm ='';
@@ -331,7 +323,7 @@ class AttachQuestionsModal extends React.Component{
                 segmentPanelContent = <div>There are no questions in this deck. Either select another deck to insert questions from or create some questions within this deck.</div>; 
             }else {
                 segmentPanelContent = (
-                  <AttachQuestionsList maxHeight='350px'/>
+                  <AttachSelectedDeck maxHeight='350px'/>
                  ); //params user={userInfo} deckQuestions={this.props.deckQuestions} selectedDeckId={this.props.currentDeckID} actionButtonId={this.props.actionButtonId} maxHeight='400px'
             }
             //segmentPanelContent = <AttachQuestionsList maxHeight='350px'/>; //how was this getting the questions? pulling them from the state?

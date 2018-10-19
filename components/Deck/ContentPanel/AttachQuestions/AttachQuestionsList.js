@@ -33,8 +33,7 @@ class AttachQuestionsList extends React.Component {
         super(props);
 
         this.state = {
-            //selectedQuestionId: this.props.selectedQuestionId, //does it have ids?
-            deckQuestions: this.props.AttachQuestionsModalStore.deckQuestions, /*nikki this.props.deckQuestions is this already passed down through props? is this overwriting the deckQuestions?*/
+            deckQuestions: this.props.AttachQuestionsModalStore.deckQuestions, 
             selectedQuestions:this.props.AttachQuestionsModalStore.selectedQuestions,
             selectedDeckTitle: this.props.AttachQuestionsModalStore.selectedDeckTitle,
             selectedQuestionsLabel: this.props.AttachQuestionsModalStore.selectedQuestions.length +' of ' + this.props.AttachQuestionsModalStore.deckQuestions.length,
@@ -46,17 +45,16 @@ class AttachQuestionsList extends React.Component {
         //this.handleOnClick = this.handleOnClick.bind(this);
 
     }
-    /*nikki does this need componentWillReceiveProps? */
+    
     componentWillReceiveProps(nextProps){
 
         this.setState({
             //userDecks: nextProps.AttachQuestionsModalStore.userDecks,
-            selectedDeckId: nextProps.AttachQuestionsModalStore.selectedDeckId, /*nikki does it actually need this if it is already given the questions? */
-           //*nikki  */ deckSlides: nextProps.AttachQuestionsModalStore.deckSlides,
+            selectedDeckId: nextProps.AttachQuestionsModalStore.selectedDeckId,
             deckQuestions: nextProps.AttachQuestionsModalStore.deckQuestions, //new variable for the questions of that deck
             selectedQuestions:nextProps.AttachQuestionsModalStore.selectedQuestions,
             selectedDeckTitle:nextProps.AttachQuestionsModalStore.selectedDeckTitle,
-            selectedQuestionsLabel: nextProps.AttachQuestionsModalStore.selectedQuestions.length +' of ' + this.props.AttachQuestionsModalStore.deckQuestions.length
+            selectedQuestionsLabel: nextProps.AttachQuestionsModalStore.selectedQuestions.length +' of ' + nextProps.AttachQuestionsModalStore.deckQuestions.length
 
         });
 
@@ -69,8 +67,8 @@ class AttachQuestionsList extends React.Component {
                 firstTime:false
             });
         } else if (this.state.deckQuestions.length === this.state.selectedQuestions.length) {
-            //all questions are selected...moves focus to the attachButton
-            $('#attachAttachModal').focus(); /*nikki change button id? should be a next button now */
+            //all questions are selected...moves focus to the NextButton
+            $('#nextOptions').focus(); /*nikki changed button id */
         }
         this.refreshAccordion();    
     }
@@ -193,9 +191,23 @@ class AttachQuestionsList extends React.Component {
     }
 
     render() {
-        let deckQuestions = this.state.deckQuestions; //nikki should this be changed from state? either state or props.AttachModalStore
+        let deckQuestions = this.state.deckQuestions;
 
         let questionsContent;
+
+        let deckLabel = '';
+        if (!(this.props.activeItem === 'currentDeck')){
+            deckLabel = (<Grid.Row columns={1}>
+                <Grid.Column>
+                    <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right" content='Selected Deck'/>
+                    <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic/>
+                    <TextArea className="sr-only" id="attachQuestionsDescription2" value="Select questions to insert" tabIndex ='-1'/>
+                </Grid.Column>
+            </Grid.Row>);
+        }else {
+            deckLabel = '';
+        }
+
         if(deckQuestions.length === 0){ //No questions loaded
             questionsContent = <Segment id="panelQuestionsContent">
                                     <Dimmer active inverted>
@@ -205,19 +217,13 @@ class AttachQuestionsList extends React.Component {
                                 </Segment>;
         }else{ //once the questions have loaded
             let headerContent =  <Grid  aria-describedby="attachQuestionsDescription2">
-                                    <Grid.Row columns={1}>
-                                      <Grid.Column>
-                                        <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right" content='Selected Deck'/>
-                                        <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic/>
-                                        <TextArea className="sr-only" id="attachQuestionsDescription2" value="Select questions to insert" tabIndex ='-1'/>
-                                      </Grid.Column>
-                                    </Grid.Row>
+                                        {deckLabel}
                                     <Grid.Row columns={2}>
-                                      <Grid.Column textAlign="left">
-                                      <Label htmlFor="questionsContentId"  color='blue'  pointing="right"  content="Selected questions:"/>
-                                      <Label  id="questionsContentId" content={this.state.selectedQuestionsLabel} basic/>
-                                      </Grid.Column>
-                                      <Grid.Column textAlign="right" >
+                                        <Grid.Column textAlign="left">
+                                            <Label htmlFor="questionsContentId"  color='blue'  pointing="right"  content="Selected questions:"/>
+                                            <Label  id="questionsContentId" content={this.state.selectedQuestionsLabel} basic/>
+                                        </Grid.Column>
+                                        <Grid.Column textAlign="right" >
                                         <Button type="button"
                                            id="attachAllQuestionsButtonId"
                                            color="blue"
@@ -243,7 +249,7 @@ class AttachQuestionsList extends React.Component {
             questionsContent = <Segment id="panelQuestionsContent">
                                 {headerContent}
 
-                                	<Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
+                                	<Item.Group divided relaxed style={{maxHeight:this.props.maxHeight, minHeight:'320px', overflowY:'auto', marginTop:'10px'}}
 	                                role="listbox" aria-expanded="true" aria-describedby="listInstructions">
 	                                    <TextArea className="sr-only" id="listInstructions" value="Use up and down arrow keys to navigate through the list and then enter to select a deck. Use tab to go out the list." tabIndex ='-1'/>
 	                                    {questionListItems}
