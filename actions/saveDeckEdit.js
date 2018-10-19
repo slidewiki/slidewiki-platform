@@ -57,7 +57,7 @@ export default function saveDeckEdit(context, payload, done) {
     } else {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
-        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).treeLanguage;
 
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
