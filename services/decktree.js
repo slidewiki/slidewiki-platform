@@ -28,10 +28,10 @@ export default {
                 qs: selector,
                 json: true
             }).then((res) => {
-                callback(null, {translations: res, selector: args.selector, language: args.language});
+                callback(null, {translations: res, selector: selector, language: args.language});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {translations: [], selector: args.selector, language: args.language});
+                callback(null, {translations: [], selector: selector, language: args.language});
             });
         }
 
@@ -69,10 +69,10 @@ export default {
                 }),
                 json: true
             }).then((res) => {
-                callback(null, {node: res, selector: args.selector, language: args.language});
+                callback(null, {node: res, selector: selector, language: args.language});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {node: {}, selector: args.selector, language: args.language});
+                callback(null, {node: {}, selector: selector, language: args.language});
             });
         }
     },
