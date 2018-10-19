@@ -33,6 +33,7 @@ class SlideEditStore extends BaseStore {
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
+        this.contentEditorFocus = 'false';
     }
 
     updateContent(payload) {
@@ -175,6 +176,10 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.emitChange();
     }
+    handleContentEditorFocus(payload) {
+        this.contentEditorFocus = payload.focus;
+        this.emitChange();
+    }
 
     getState() {
         return {
@@ -206,7 +211,8 @@ class SlideEditStore extends BaseStore {
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
             HTMLEditorClick: this.HTMLEditorClick,
-            scaleRatio: this.scaleRatio
+            scaleRatio: this.scaleRatio,
+            contentEditorFocus: this.contentEditorFocus,
         };
     }
 
@@ -244,6 +250,7 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
+        this.contentEditorFocus = state.contentEditorFocus;
     }
 
     zoomContent(payload) {
@@ -292,6 +299,7 @@ SlideEditStore.handlers = {
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
     'ZOOM': 'zoomContent',
+    'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus',
 };
 
 export default SlideEditStore;
