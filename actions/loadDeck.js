@@ -25,7 +25,6 @@ import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
-import validateUsedLanguage from './translation/validateUsedLanguage';
 import loadNodeTranslations from './translation/loadNodeTranslations';
 
 const log = require('./log/clog');
@@ -183,6 +182,8 @@ export default function loadDeck(context, payload, done) {
                     const userId = context.getStore(UserProfileStore).getState().userid;
                     if (userId !== undefined && userId !== null && userId !== '') {
                         context.executeAction(getFollowing, {selector: payload.params, userId: userId, followed_type: 'deck'}, callback);
+                    } else {
+                        callback();
                     }
                 }else{
                     callback();
@@ -223,7 +224,7 @@ export default function loadDeck(context, payload, done) {
             // context.dispatch('UPDATE_PAGE_TITLE', {
             //     pageTitle: pageTitle
             // });
-            // context.executeAction(validateUsedLanguage, {language: payload.params.language});
+
             if (payload.query.interestedUser)
                 context.executeAction(fetchUser, {
                     params: {
