@@ -903,7 +903,7 @@
   "welcome.3.download.strong": "Download",
   "importFileModal.modal_header": "Upload your presentation",
   "importFileModal.swal_button": "Accept",
-  "importFileModal.swal_message": "This file is not supported. Please, remember only pptx and odp files are supported.",
+  "importFileModal.swal_message": "This file is not supported. Please, remember only pptx, odp, and zip (SlideWiki or Reveal.js) files are supported.",
   "importFileModal.modal_selectButton": "Select file",
   "importFileModal.modal_uploadButton": "Upload",
   "importFileModal.modal_explanation1": "Select your presentation file and upload it to SlideWiki.",

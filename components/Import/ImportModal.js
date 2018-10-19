@@ -42,7 +42,7 @@ class Import extends React.Component {
             },
             swal_message:{
                 id:'importFileModal.swal_message',
-                defaultMessage:'This file is not supported. Please, remember only pptx, odp, and zip (HTML download) files are supported.',
+                defaultMessage:'This file is not supported. Please, remember only pptx, odp, and zip (HTML or Reveal.js download) files are supported.',
             },
             modal_selectButton:{
                 id:'importFileModal.modal_selectButton',
@@ -58,7 +58,7 @@ class Import extends React.Component {
             },
             modal_explanation2:{
                 id:'importFileModal.modal_explanation2',
-                defaultMessage:'Only PowerPoint (.pptx), OpenOffice (.odp) and SlideWiki HTML (.zip - previously downloaded/exported) are supported (Max size:'
+                defaultMessage:'Only PowerPoint (.pptx), OpenOffice (.odp), SlideWiki HTML (.zip - previously downloaded/exported), and Currently only PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files), and Reveal.js *.zip archives (zip archive of all files in the root of a reveal.js presentation directory with index.html in it) are supported (Max size:'
             },
             modal_cancelButton:{
                 id:'importFileModal.modal_cancelButton',

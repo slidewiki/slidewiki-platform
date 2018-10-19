@@ -600,7 +600,7 @@ class AddDeck extends React.Component {
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.format_message'
-                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx, OpenOffice ODP, and SlideWiki HTML downloads (*.zip files) are supported.' />
+                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files), and Reveal.js *.zip archives (a zip archive of all files in the root of a reveal.js presentation directory with index.html in it) are supported.' />
                             </p>
                         </div>
                         <div className="ui grid">
