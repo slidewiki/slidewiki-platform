@@ -157,7 +157,7 @@ class NewCollectionModal extends React.Component {
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="header">
                     <Modal.Header  as="h1" content={this.context.intl.formatMessage(this.messages.modalTitle)} id='addNewCollectionHeader'/>
                     <Modal.Content>
-                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
+                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new playlist" tabIndex ='-1'/>
                         <Form>
                             <Form.Field required error={this.state.validationError}>
                                 <label htmlFor="col_title"><FormattedMessage {...this.messages.titleField} /></label>
