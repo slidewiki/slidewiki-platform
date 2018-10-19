@@ -255,6 +255,7 @@ export default {
                         allowMarkdown: deck.allowMarkdown || false,
                         editors: { users, groups },
                         hidden: deck.hidden,
+                        educationLevel: deck.educationLevel,
                         deckOwner: deck.user,
                         revisionOwner: deck.revisionUser,
                         sid: args.sid,
@@ -338,7 +339,8 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 license: params.license,
-                theme: params.theme
+                theme: params.theme,
+                educationLevel: params.educationLevel,
             };
             rp({
                 method: 'POST',
@@ -395,6 +397,7 @@ export default {
                 title: params.title,
                 license: params.license,
                 theme: params.theme,
+                educationLevel: params.educationLevel,
                 allowMarkdown: params.allowMarkdown,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
