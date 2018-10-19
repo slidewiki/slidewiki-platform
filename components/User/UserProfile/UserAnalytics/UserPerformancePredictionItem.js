@@ -52,7 +52,7 @@ class UserPerformancePredictionItem extends React.Component {
         //         </div>
         //     );
         const progressBarId = 'progressbar_result' + this.props.index;
-        const resultProgress = (!prediction.result) ? '' :
+        const resultProgress = (prediction.result === undefined) ? '' :
             (
                 <div className="ui indicating progress" ref="div_progress" id={progressBarId} role="progressbar" data-value={prediction.result} data-total="100" aria-valuenow={prediction.result} aria-valuemin="0" aria-valuemax="100" tabIndex="0">
                     <div className="bar"><div className="progress" /></div>
@@ -97,7 +97,7 @@ class UserPerformancePredictionItem extends React.Component {
                                 {formatDate(prediction.started)}
                             </div>
                             <div className="three wide column">
-                                {(prediction.result) ? 'Predicted result: ' + Math.round(prediction.result * 100) / 100  + ' %': ''}
+                                {(prediction.result !== undefined) ? 'Predicted result: ' + Math.round(prediction.result * 100) / 100  + ' %': ''}
                             </div>
                             <div className="four wide column">
                                 {resultProgress}

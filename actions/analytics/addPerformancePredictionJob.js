@@ -13,6 +13,9 @@ export default function addPerformancePredictionJob(context, payload, done) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         } else {
+            let activeRevision = res.deck.revisions[res.deck.revisions.length-1];
+            payload.prediction.deckFirstSlide = activeRevision.firstSlide;
+            payload.prediction.deckTheme = activeRevision.theme;
             payload.prediction.id = res.activity.id;
             context.dispatch('ADD_PERFORMANCE_PREDICTION_SUCCESS', payload);
             context.executeAction(executePerformancePredictionJob, payload, done);

@@ -110,7 +110,17 @@ export default {
                 body: JSON.stringify(activity),
                 headers,
             }).then((res) => {
-                callback(null, {activity: JSON.parse(res)});
+                let activity = JSON.parse(res);
+                rp.get({
+                    uri: `${Microservices.deck.uri}/deck/${activity.content_id}`,
+                    json: true
+                }).then((deck) => {
+                    callback(null, {activity: activity, deck: deck});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(err, {activity: {}});
+                });
+              
             }).catch((err) => {
                 console.log(err);
                 callback(err, {activity: {}});
