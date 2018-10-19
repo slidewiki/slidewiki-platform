@@ -13,6 +13,7 @@ import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -605,6 +606,10 @@ class SlideContentEditor extends React.Component {
         }
         CKEDITOR.inline('inlineContent', {
             customConfig: '/assets/ckeditor_config.js',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: {
+                top: 'CKeditorMenu'
+            },
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
 
@@ -959,6 +964,10 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.replace('inlineContent', {
             //customConfig: '/assets/ckeditor_config.js',
             customConfig: '/assets/ckeditor_config.js',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: {
+                top: 'CKeditorMenu'
+            },
             toolbarGroups: [
                 //needed for Chrome initialization
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
@@ -973,6 +982,19 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
+        
+        CKEDITOR.instances.inlineContent.on('focus',(evt) => {
+            this.context.executeAction(contentEditorClick, {
+                focus: true
+            });
+        });
+
+        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+            this.context.executeAction(contentEditorClick, {
+                focus: false
+            });
+        });
+
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
@@ -1274,7 +1296,7 @@ class SlideContentEditor extends React.Component {
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
                 if (!id || id === 'inlineContent') {
-                    id = this.menuFocus; 
+                    id = this.menuFocus;
                 }
                 if (id && id !== 'inlineContent') {
                     /*
