@@ -45,6 +45,10 @@ export default function saveDeckEdit(context, payload, done) {
             content_id: String(payload.selector.sid),
             content_kind: 'deck'
         };
+        const contentRootId = payload.selector.id;
+        if (!common.isEmpty(contentRootId)) {
+            activity.content_root_id = contentRootId;
+        }
         context.executeAction(addActivity, {activity: activity});
     };
 
@@ -57,7 +61,7 @@ export default function saveDeckEdit(context, payload, done) {
     } else {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
-        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).treeLanguage;
 
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
