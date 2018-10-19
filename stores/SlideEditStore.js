@@ -34,6 +34,7 @@ class SlideEditStore extends BaseStore {
         this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
+        this.contentEditorFocus = 'false';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -162,13 +163,17 @@ class SlideEditStore extends BaseStore {
     handleEmbedQuestions(payload){
         //embedQuestionsContent - this is the content that will be embedded (questions and options)
         //embedQuestions - this will be the trigger that causes the questions to be embedded.
-        //add some form of logic/error handling here?
         this.embedQuestionsContent = payload; 
         this.embedQuestionsClick = 'true';
         this.emitChange();
 
         this.embedQuestionsClick = 'false';
         this.embedQuestionsContent = '';
+        this.emitChange();
+    }
+
+    handleContentEditorFocus(payload) {
+        this.contentEditorFocus = payload.focus;
         this.emitChange();
     }
 
@@ -204,6 +209,7 @@ class SlideEditStore extends BaseStore {
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
             HTMLEditorClick: this.HTMLEditorClick,
+            contentEditorFocus: this.contentEditorFocus
         };
     }
     dehydrate() {
@@ -240,6 +246,7 @@ class SlideEditStore extends BaseStore {
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
+        this.contentEditorFocus = state.contentEditorFocus;
     }
 }
 
@@ -265,6 +272,7 @@ SlideEditStore.handlers = {
     'SLIDE_EMBED_QUESTIONS': 'handleEmbedQuestions',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
+    'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus'
 };
 
 export default SlideEditStore;
