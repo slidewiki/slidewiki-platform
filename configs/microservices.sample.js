@@ -84,8 +84,8 @@ export default {
         'nlp': {
             uri: 'https://nlpservice.experimental.slidewiki.org'
         },
-        'recommendation': {
-            uri: 'http://slidewiki.imp.bg.ac.rs'
+        'analytics': {
+            uri: 'https://analyticsservice.experimental.slidewiki.org'
         },
         'lrs': {
             uri: 'https://api.learninglocker.experimental.slidewiki.org',
