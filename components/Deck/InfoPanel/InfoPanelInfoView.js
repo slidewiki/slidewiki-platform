@@ -242,21 +242,21 @@ class InfoPanelInfoView extends React.Component {
             <div className="ui container" ref="infoPanel" role="complementary">
                 {
                     showZoomControls &&
-                        <div className="ui top attached basic icon buttons menu">
-                            <button className="ui button" onClick={this.zoomOut}
+                        <div className="ui top attached basic buttons menu">
+                            <button className="ui icon button" onClick={this.zoomOut}
                                     aria-label="Zoom out" data-tooltip="Zoom out">
-                                <i className="large search minus icon"></i>
+                                <i className="large zoom out icon"></i>
                             </button>
                             <button className="ui button" onClick={this.resetZoom}
                                     aria-label="Reset zoom" data-tooltip="Reset zoom">
-                                <i className="stacked icons">
-                                    <i className="small compress icon "></i>
-                                    <i className="large search icon "></i>
+                                <i className="large stacked icons">
+                                    <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
+                                    <i className="search icon"></i>
                                 </i>
                             </button>
-                            <button className="ui button" onClick={this.zoomIn}
+                            <button className="ui icon button" onClick={this.zoomIn}
                                     aria-label="Zoom in" data-tooltip="Zoom in">
-                                <i className="large search plus icon"></i>
+                                <i className="large zoom in icon"></i>
                             </button>
                         </div>
                 }
