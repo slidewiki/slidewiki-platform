@@ -22,6 +22,8 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
+import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
+import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -119,11 +121,39 @@ class ContentActionsHeader extends React.Component {
 
     }
 
+    // let's see if the user wants something we don't have
+    isTranslationMissing() {
+        // the language the current contnet is actually in
+        let language = this.props.TranslationStore.nodeLanguage;
+        let primaryLanguage = this.props.TranslationStore.treeLanguage;
+        // the user selected language (defaults to the primary deck tree language)
+        let selectedLanguage = this.props.TranslationStore.currentLang || primaryLanguage;
+
+        return (selectedLanguage !== language);
+    }
+
+    addNodeTranslation(selector, options={}) {
+        if (selector.stype === 'slide') {
+            this.context.executeAction(addSlideTranslation, {
+                selector,
+                language: this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage,
+                markdown: options.markdown,
+            });
+        } else {
+            this.context.executeAction(addDeckTranslation, {
+                selector,
+                language: this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage,
+            });
+        }
+    }
+
     handleEditButton(selector) {
-        const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else if (this.isTranslationMissing()) {
+            this.addNodeTranslation(selector);
         } else {
+            let nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
@@ -131,10 +161,12 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleMarkdownEditButton(selector) {
-        const nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else if (this.isTranslationMissing()) {
+            this.addNodeTranslation(selector, { markdown: true });
         } else {
+            let nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
