@@ -1009,3 +1009,126 @@ i.flag:not(.icon):before {
 }
 
 /* Footer Style Ends */
+
+/* Terms Style Starts */
+.inner-container{
+    width: 100%;
+    padding: 112px 0 20px;
+}
+.inner-container .wrapper{
+    max-width: 2360px;
+}
+.content-left {
+    width: 72.89%;
+    float: left;
+    padding: 0 3% 0 0;
+}
+.content-left h1{
+    color: #1d78ba;
+    font-weight: 900;
+    margin: 0 0 17px;
+}
+.content-left h5{
+    font-weight: 900;
+    margin: 0;
+}
+.content-left ul{
+    width: 100%;
+    padding: 0 0 0 13px;
+}
+.content-left ul li{
+    width: 100%;
+}
+
+
+.content-right {
+    width: 27.11%;
+    float: left;
+}
+.content-right ul{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.content-right ul li{
+    width: 100%;
+    list-style: none;
+    margin: 0 0 22px;
+}
+.content-right ul li .feature-left{
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    padding-right: 0px;
+}
+.content-right ul li .feature-left .text-div{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    padding: 18px 0 0;
+}
+.content-right ul li .feature-left .text-div .text {
+    width: 72.2%;
+    padding: 0 32px 0 0;
+}
+.content-right ul li .feature-left .text-div .text p{
+    margin: 0;
+}
+.content-right ul li .feature-left .text-div img {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-self: baseline;
+    padding: 7px 0 0;
+    width: 148px;
+}
+.content-right ul li .feature-content{
+    padding: 91px 11% 76px 13%;
+}
+.content-right ul li .feature-content.blue-block{
+    border: 2px solid #1d78ba;
+}
+.content-right ul li .feature-content.green-block{
+    border: 2px solid #128571;
+}
+.content-right ul li .feature-content.red-block{
+    border: 2px solid #981d1f;
+}
+
+.content-right .signin-blk:before,.content-right .signin-blk:after{
+    content: none;
+}
+.content-right ul li .feature-content h2{
+    margin-bottom: 36px;
+}
+.content-right .signin-blk{
+    background: #1d78ba;
+    padding: 54px 44px 50px 81px;
+    text-align: left;
+}
+.content-right .signin-blk span{
+    color: #fff;
+    line-height: 50px;
+}
+.content-right .signin-blk span a{
+    color: #fff;
+    border-bottom: 3px solid #fff;
+}
+.content-right .signin-blk span a:hover{
+    border-bottom: 3px solid transparent;
+}
+.content-right .signin-blk p {
+    color: #fff;
+}
+.banner-container.inner-image{
+    width: 100%;
+}
+.banner-container.inner-image img{
+    float: left;
+}
