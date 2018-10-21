@@ -36,33 +36,29 @@ const periodToDate = (datePeriod) => {
     }
 };
 
+const activityTypeToVerb = (activityType) => {
+    switch (activityType) {
+        case 'edit':
+            return 'https://w3id.org/xapi/acrossx/verbs/edited';
+        case 'like':
+            return 'https://w3id.org/xapi/acrossx/verbs/liked';
+        default:
+            return 'http://adlnet.gov/expapi/verbs/experienced';
+    }
+}
+
 export default {
     name: 'stats',
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
-        let {username, activityType, datePeriod} = args;
+        let {username, activityType, datePeriod, groupid} = args;
 
         if (resource === 'stats.userStatsByTime') {
             let fromDate = periodToDate(datePeriod);
-            let verbId;
-            switch (activityType) {
-                case 'edit':
-                    verbId = 'https://w3id.org/xapi/acrossx/verbs/edited';
-                    break;
-                case 'like':
-                    verbId = 'https://w3id.org/xapi/acrossx/verbs/liked';
-                    break;
-                case 'view':
-                    verbId = 'http://adlnet.gov/expapi/verbs/experienced';
-                    break;
-                default:
-                    callback(null, []);
-            }
-
             let pipeline = [{
                 '$match': {
                     'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
-                    'statement.verb.id': verbId,
+                    'statement.verb.id': activityTypeToVerb(activityType),
                     'statement.actor.account.name': username
                 }
             }, {
@@ -96,7 +92,107 @@ export default {
                 json: true
             }).then((response) => callback(null, fillMissingDates(fromDate, response)))
               .catch((err) => callback(err));
+        } else if (resource === 'stats.groupStatsByTime') {
+            let fromDate = periodToDate(datePeriod);
+            rp.post({
+                uri: Microservices.user.uri + '/usergroups',
+                body: [parseInt(params.groupid)],
+                json: true
+            }).then((res) => {
+                let memberUsernames = res[0].members.map(member => member.username);
+                let pipeline = [{
+                    '$match': {
+                        'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
+                        'statement.verb.id': activityTypeToVerb(activityType),
+                        'statement.actor.account.name': { $in: memberUsernames }
+                    }
+                }, {
+                    '$project': {
+                        'date': {
+                            '$dateToString': {
+                                'format': '%Y-%m-%d',
+                                'date': '$timestamp'
+                            }
+                        }
+                    }
+                }, {
+                    '$group': {
+                        '_id': '$date',
+                        'count': {
+                            '$sum': 1
+                        }
+                    }
+                }, {
+                    '$sort': {
+                        '_id': 1
+                    }
+                }];
+                return rp({
+                    method: 'GET',
+                    uri: Microservices.lrs.uri + '/statements/aggregate',
+                    qs: {
+                        pipeline: JSON.stringify(pipeline),
+                    },
+                    headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                    json: true
+                });
+            }).then((response) => callback(null, fillMissingDates(fromDate, response)))
+              .catch((err) => callback(err));
         } else if (resource === 'stats.userStatsByTag') {
+            let pipeline = [
+                {
+                    '$match': {
+                        'statement.context.contextActivities.category': {
+                            '$exists': true
+                        },
+                        'statement.actor.account.name': username
+                    }
+                },
+                {
+                    '$unwind': {
+                        'path': '$statement.context.contextActivities.category'
+                    }
+                },
+                {
+                    '$project': {
+                        'tag': '$statement.context.contextActivities.category.definition.name.en'
+                    }
+                },
+                {
+                    '$group': {
+                        '_id': '$tag',
+                        'count': {
+                            '$sum': 1
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        '_id': false,
+                        'value': '$_id',
+                        'count': true
+                    }
+                },
+                {
+                    '$sort': {
+                        'count': -1
+                    }
+                },
+                {
+                    '$limit': 30
+                }
+            ];
+            rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => callback(null, response))
+              .catch((err) => callback(err));
+        } else if (resource === 'stats.groupTopContributors') {
             let pipeline = [
                 {
                     '$match': {

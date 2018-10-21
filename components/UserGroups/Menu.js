@@ -27,6 +27,10 @@ class Menu extends React.Component {
                 id: 'GroupMenu.settings',
                 defaultMessage: 'Group Settings'
             },
+            stats: {
+                id: 'GroupMenu.stats',
+                defaultMessage: 'Group Stats'
+            },
         });
     }
     render() {
@@ -36,6 +40,8 @@ class Menu extends React.Component {
         }
         let sharedDecksMsg = this.context.intl.formatMessage(this.messages.sharedDecks);
         let deckCollectionsMsg = this.context.intl.formatMessage(this.messages.collections);
+        let statsMsg = this.context.intl.formatMessage(this.messages.stats);
+
 
         return (
           <div role="navigation">
@@ -51,6 +57,9 @@ class Menu extends React.Component {
                   </NavLink>
                   <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/settings' } activeStyle={this.styles} role="menuitem">
                       <p><i className="icon setting"/> {memberMsg}</p>
+                  </NavLink>
+                  <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/stats' } activeStyle={this.styles} role="menuitem">
+                      <p><i className="icon line graph"/> {statsMsg}</p>
                   </NavLink>
               </div>
           </div>
