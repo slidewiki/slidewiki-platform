@@ -28,7 +28,7 @@ class NavigationPanel extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         return (<div>
             <Breadcrumb selector={selector} pathNames={this.getNameofNodes(deckTree, selector)} rootDeckName={deckTree.get('title')} />
-            <div className="ui attached menu">
+            <div className={`ui ${this.props.lastAttached ? 'bottom' : ''} attached menu`}>
                 <DeckLanguageMenu />
             </div>
         </div>);
