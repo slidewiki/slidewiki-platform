@@ -18,8 +18,7 @@ import Util from '../../common/Util';
 import TranslationItem from './TranslationItem';
 import addDeckTranslation from '../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../actions/translation/addSlideTranslation';
-import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';
-import qs from 'querystring';
+import {Button, Icon, Flag} from 'semantic-ui-react';
 import zoom from '../../../actions/slide/zoom';
 import ContentStore from '../../../stores/ContentStore';
 
@@ -211,32 +210,6 @@ class InfoPanelInfoView extends React.Component {
         let translationMissing = selectedLanguage !== language;
         let canEdit = this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly;
 
-        let languageMessage = (language === primaryLanguage) ? this.messages.language : this.messages.translation;
-
-        let languages = [primaryLanguage, ...this.props.TranslationStore.treeTranslations];
-        if (this.props.TranslationStore.currentLang && languages.indexOf(this.props.TranslationStore.currentLang) < 0) {
-            // put the current (but unavailable) language first
-            languages.unshift(this.props.TranslationStore.currentLang);
-        }
-        // remove duplicates
-        languages = languages.filter((elem, pos) => {
-            return languages.indexOf(elem) === pos;
-        });
-        let languageOptions = languages.map((t) => ({
-            text: getLanguageName(t) + (t === primaryLanguage ? ' (primary)' : ''),
-            value: t,
-            flag: flagForLocale(t),
-            icon: !flagForLocale(t) && 'flag',
-        }));
-        if (canEdit) {
-            languageOptions.push({
-                text: 'Add a new translation',
-                icon: 'translate',
-                key: 'placeholderForAddANewTranslation'
-            });
-        }
-
-        let selectLanguageMessage = this.context.intl.formatMessage(this.messages.selectLanguage);
         let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
@@ -260,15 +233,6 @@ class InfoPanelInfoView extends React.Component {
                             </button>
                         </div>
                 }
-
-                <div className={`ui ${showZoomControls ? '' : 'top'} attached icon buttons menu`}>
-                    <Dropdown pointing="top" disabled={languageOptions.length < 2 && !canEdit}
-                        button basic style={{textAlign: 'center'}}
-                        trigger={<h5 className='ui small header'>{selectLanguageMessage}: <i className={selectedLanguageIcon + ' flag'}></i>{selectedLanguageName}</h5>}
-                        icon={null}
-                        aria-label={selectLanguageMessage} data-tooltip={selectLanguageMessage}
-                        defaultValue={selectedLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-                </div>
 
                 { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">

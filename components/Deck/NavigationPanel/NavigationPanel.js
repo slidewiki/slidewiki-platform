@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Breadcrumb from './Breadcrumb';
+import DeckLanguageMenu from '../DeckLanguageMenu';
 
 class NavigationPanel extends React.Component {
     getNameofNodes(tree, selector) {
@@ -25,9 +26,12 @@ class NavigationPanel extends React.Component {
     render() {
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
-        return (
+        return (<div>
             <Breadcrumb selector={selector} pathNames={this.getNameofNodes(deckTree, selector)} rootDeckName={deckTree.get('title')} />
-        );
+            <div className="ui attached menu">
+                <DeckLanguageMenu />
+            </div>
+        </div>);
     }
 }
 
