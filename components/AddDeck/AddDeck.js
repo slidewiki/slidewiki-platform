@@ -551,15 +551,15 @@ class AddDeck extends React.Component {
                 </div>
                 <div className="sixteen wide column">
                     <form className="ui form upload">
+                        <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                            <label htmlFor="title">
+                                <FormattedMessage
+                                    id='AddDeck.form.label_title'
+                                    defaultMessage='Title' />
+                            </label>
+                            <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                        </div>
                         <div className="two fields">
-                            <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
-                                <label htmlFor="title">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_title'
-                                        defaultMessage='Title' />
-                                </label>
-                                <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
-                            </div>
                             <div className={fieldClass_language}>
                                 <label htmlFor="language">
                                     <FormattedMessage
@@ -568,17 +568,6 @@ class AddDeck extends React.Component {
                                 </label>
                                 <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
                             </div>
-                        </div>
-
-                        <div className="field">
-                            <label htmlFor="deck-description" id="deck-description-label" >
-                                <FormattedMessage
-                                  id='AddDeck.form.label_description'
-                                  defaultMessage='Description' />
-                            </label>
-                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
-                        </div>
-                        <div className="two fields">
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
                                     <FormattedMessage
@@ -587,6 +576,28 @@ class AddDeck extends React.Component {
                                 </label>
                                 {themeOptions}
                             </div>
+                        </div>
+                        <div className="field">
+                            <label htmlFor="deck-description" id="deck-description-label" >
+                                <FormattedMessage
+                                  id='AddDeck.form.label_description'
+                                  defaultMessage='Description' />
+                            </label>
+                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
+                        </div>
+                        <div className="ui message" id="metadata">
+                            <p>
+                                <FormattedMessage
+                                    id='AddDeck.form.metadata'
+                                    values={{
+                                        link_help: <a href="/help" target="_blank">
+                                            <FormattedMessage id="add.help" defaultMessage="Help decks"/>
+                                        </a>
+                                    }}
+                                    defaultMessage='Please use the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
+                            </p>
+                        </div>
+                        <div className="two fields">
                             <div className="field">
                                 <label htmlFor="level_input" id="level-label">
                                     <FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
@@ -594,23 +605,22 @@ class AddDeck extends React.Component {
                                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                                     defaultValue={null} />
                             </div>
-                        </div>
-
-                        <div className="field">
-                            <label htmlFor="topics_input_field"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Topics' /></label>
-                            <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} />
+                            <div className="field">
+                                <label htmlFor="topics_input_field"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
+                                <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby={DeckProperty.Tag.Topic.Choose}/>
+                            </div>
                         </div>
 
                         <div className="field">
                             <label htmlFor="tags_input_field"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} />
+                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labeledby={DeckProperty.Tag.Choose}/>
                         </div>
 
                         <div className="ui message" id="uploadDesc">
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.format_message'
-                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx, OpenOffice ODP, and SlideWiki HTML downloads (*.zip files) are supported.' />
+                                    defaultMessage='You can upload existing slides to your new deck in the following file formats: PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files) and RevealJS slideshows (*.zip files).' />
                             </p>
                         </div>
                         <div className="ui grid">
