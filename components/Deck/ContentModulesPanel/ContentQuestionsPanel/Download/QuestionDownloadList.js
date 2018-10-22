@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../../stores/ContentQuestionsStore';
-
-//import {Divider} from 'semantic-ui-react';
 import updateDownloadQuestions from '../../../../../actions/questions/updateDownloadQuestions';
 import QuestionDownloadItem from './QuestionDownloadItem';
 
@@ -12,7 +10,7 @@ class QuestionDownloadList extends React.Component {
         super(props);
         
         this.state = {
-            downloadQuestions: [] //change this
+            downloadQuestions: [] 
         };
     }
     
@@ -22,14 +20,14 @@ class QuestionDownloadList extends React.Component {
         })
     }
 
-    checkNoEmpty(element){//nikki check
+    checkNoEmpty(element){
         return (element.toString().length>0);
     }
 
-    handleQuestionClick(selectedQuestion){//nikki check
+    handleQuestionClick(selectedQuestion){
         /*This method:
-       - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
-       - removes the selectedQuestion from the selectedQuestions list if it was already selected
+       - adds the selectedQuestion into the downloadQuestions list if it was not already there
+       - removes the selectedQuestion from the downloadQuestions list if it was already selected
       */
         let questiontoadd = selectedQuestion;
         let tempquestions = Object.assign([], this.state.downloadQuestions);
@@ -60,14 +58,8 @@ class QuestionDownloadList extends React.Component {
 
     inSelectedQuestions(question){
         let questions = this.state.downloadQuestions;
-        /*let questiontocheck = {
-            title: question.title,
-            answers: question.answers,
-            explanation: question.explanation,
-            difficulty: question.difficulty,
-        };*/
-        let questiontocheck = question;
-        let qindex = questions.indexOf(questiontocheck); //will this work??
+
+        let qindex = questions.indexOf(question);
         if(qindex === -1){
             return false;
         } else { 

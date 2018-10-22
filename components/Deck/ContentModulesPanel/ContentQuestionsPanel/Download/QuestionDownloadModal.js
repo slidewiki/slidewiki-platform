@@ -4,13 +4,8 @@ import {connectToStores} from 'fluxible-addons-react';
 import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic-ui-react';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../../stores/ContentQuestionsStore';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import FocusTrap from 'focus-trap-react';
-//import resetModalStore from '../../../../actions/attachQuestions/resetModalStore';
-//import initModal from '../../../../actions/attachQuestions/initModal';
-//import updateSelectedQuestions from '../../../../../actions/attachQuestions/updateSelectedQuestions';
 import {FormattedMessage, defineMessages} from 'react-intl';
-//import loadQuestions from '../../../../../actions/attachQuestions/loadQuestions';
 import QuestionDownloadList from './QuestionDownloadList';
 import updateDownloadQuestions from '../../../../../actions/questions/updateDownloadQuestions';
 
@@ -68,13 +63,7 @@ class QuestionDownloadModal extends React.Component{
         }
     }
 
-    handleNextButton(){ //definitely needs modifying
-        console.log('handleNextButton');
-    }
-
-
     handleDownloadButton(){
-        /*nikki change this here for download content */
         let downloadQuestions = this.props.ContentQuestionsStore.downloadQuestions;
 
         let transformQuestions = downloadQuestions.map((node, index) => {
@@ -102,9 +91,8 @@ class QuestionDownloadModal extends React.Component{
 
     handleKeyPress = (event, param) => {
         if(event.key === 'Enter'){
-           // console.log('enter key');
             switch(param) {
-                case 'handleAddQuestionsClick':
+                case 'handleDownloadQuestionsClick':
                     this.handleOpen();
                     break;
                 default: 
@@ -115,8 +103,7 @@ class QuestionDownloadModal extends React.Component{
 
     handleSelectAll(){
         const allQuestions = Object.assign([], this.props.ContentQuestionsStore.questions);
-        //console.log(allQuestions);
-
+        
         this.setState({
             downloadQuestions:allQuestions,
         });
@@ -125,38 +112,25 @@ class QuestionDownloadModal extends React.Component{
     
 
     render() {
-        //action buttons
-        let nextQuestionsBtn = <Button id="nextQuestions" color="green" icon tabIndex="0" type="button" aria-label="Next Select questions" data-tooltip="Next" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
-            <Icon name="arrow right"/>
-                Next
-            <Icon name="arrow right"/>
-        </Button>; //next button 
-        let downloadBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label="Download Questions" data-tooltip="Download Questions" disabled={this.state.downloadQuestions.length===0} onClick={this.handleDownloadButton}>
+        let downloadBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label="Download Questions" data-tooltip="Download Questions as JSON format" disabled={this.state.downloadQuestions.length===0} onClick={this.handleDownloadButton}>
             <Icon name="download"/>
                 Download
             <Icon name="download"/>
         </Button>; //download button to actually download questions
         
-        /*
-        let segmentPanelContent;
-        let actionButton;
-        let actionButton2;
-        let modalDescription;
-        */
-
         let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value="You can select one or more questions from this deck to download." tabIndex ='-1'/>;
 
         let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} handleSelectAll={() => this.handleSelectAll()}/>;
         let actionButton = downloadBtn;
         let actionButton2='';
 
-        let downloadQuestionsBtn = <a  className="ui right floated compact button primary" id="handleDownloadQuestionsModal" role="button" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleDownloadQuestionsClick')} tabIndex='0'>
+        let downloadModalBtn = <a  className="ui right floated compact button primary" id="handleDownloadQuestionsModal" role="button" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleDownloadQuestionsClick')} tabIndex='0'>
         <i className="small download icon"/>
         <FormattedMessage id='questionpanel.handleDownloadQuestionsClick' defaultMessage='Download questions' />
         </a>;
 
         return (
-           <Modal trigger={downloadQuestionsBtn}
+           <Modal trigger={downloadModalBtn}
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 role="dialog"
@@ -203,16 +177,14 @@ class QuestionDownloadModal extends React.Component{
     }
 }
 
-
 QuestionDownloadModal.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-QuestionDownloadModal = connectToStores(QuestionDownloadModal,[UserProfileStore,ContentQuestionsStore,DeckTreeStore],(context,props) => {
+QuestionDownloadModal = connectToStores(QuestionDownloadModal,[UserProfileStore,ContentQuestionsStore,],(context,props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 

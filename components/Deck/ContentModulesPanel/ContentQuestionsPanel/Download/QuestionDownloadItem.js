@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class QuestionDownloadItem extends React.Component {
     render() {
         const question = this.props.question;
@@ -25,11 +24,9 @@ class QuestionDownloadItem extends React.Component {
             return difficultyStars;
 
         };
-        //let questionNo = this.props.questionIndex + 1;
-/*nikki removed <div className="sr-only" id="question_no">{'Question' + questionNo + 'difficulty level ' + question.difficulty}</div>
-                     */
+        
         return (
-                <div className="ui two column vertically divided" tabIndex={-1} aria-labelledby="question_no" >
+                <div className="ui two column vertically divided" tabIndex={-1}>
                     <div className="ui checkbox">
                         <input type="checkbox" onChange={this.props.onClick.bind(this)} onKeyPress={this.props.onKeyPress.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
                         <label htmlFor='name'>
