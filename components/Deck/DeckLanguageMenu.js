@@ -21,29 +21,9 @@ class DeckLanguageMenu extends React.Component {
         super(props);
 
         this.messages = defineMessages({
-            language:{
-                id: 'InfoPanelInfoView.language',
-                defaultMessage:'Language'
-            },
             selectLanguage:{
                 id: 'InfoPanelInfoView.selectLanguage',
                 defaultMessage:'Select language'
-            },
-            viewLanguage:{
-                id: 'InfoPanelInfoView.viewLanguage',
-                defaultMessage:'You are viewing this in language'
-            },
-            translation:{
-                id: 'InfoPanelInfoView.translation',
-                defaultMessage:'Translation'
-            },
-            current:{
-                id: 'InfoPanelInfoView.current',
-                defaultMessage:'Current'
-            },
-            alsoAvailableIn:{
-                id: 'InfoPanelInfoView.alsoAvailableIn',
-                defaultMessage:'Also available in'
             },
         });
     }
