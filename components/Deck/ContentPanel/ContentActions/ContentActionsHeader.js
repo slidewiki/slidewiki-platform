@@ -86,8 +86,10 @@ class ContentActionsHeader extends React.Component {
 
 
     handleAddNode(selector, nodeSpec) {
-        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "slide", id: "0"}
+        if (this.props.TranslationStore.currentLang) {
+            // use the new API to also set the language of the new node
+            Object.assign(nodeSpec, { [nodeSpec.type]: { language: this.props.TranslationStore.currentLang } });
+        }
         const contentDetails = this.props.ContentStore;
         //added mode to the navigate action
         this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec, mode: contentDetails.mode});
