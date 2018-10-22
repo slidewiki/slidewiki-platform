@@ -6,7 +6,7 @@ import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentModulesStore from '../../../../stores/ContentModulesStore';
-import loadContentQuestions from '../../../../actions/loadContentQuestions';
+import resetExamAnswers from '../../../../actions/questions/resetExamAnswers';
 import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
 import invertExamListFlag from '../../../../actions/questions/invertExamListFlag';
 import ContentQuestionsList from './ContentQuestionsList';
@@ -68,6 +68,7 @@ class ContentQuestionsPanel extends React.Component {
     }
     
     handleExamClick() {
+        this.context.executeAction(resetExamAnswers, {});
         this.context.executeAction(navigateAction, {
             url: '/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid
         });
@@ -100,7 +101,7 @@ class ContentQuestionsPanel extends React.Component {
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
 
-        let examQuestionsButton = (questions.length > 0) ?
+        let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
                 Select exam questions

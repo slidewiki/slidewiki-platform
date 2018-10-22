@@ -52,7 +52,7 @@ class ExamList extends React.Component {
         const roundedScore = Math.round((questions.length - errorsCount) / questions.length * 100);
         swal({
             title: 'Exam submitted',
-            text: 'Your score: ' + roundedScore,
+            text: 'Your score: ' + roundedScore + ' %',
             type: 'success',
             showCloseButton: false,
             showCancelButton: false,
@@ -85,7 +85,7 @@ class ExamList extends React.Component {
               <form className="ui form exam" onSubmit={this.handleSubmitAnswers.bind(this)}>
                 {list}
                 <div className="ui hidden divider" />
-                <button type="submit" className="ui blue labeled submit icon button">
+                <button type="submit" className="ui blue labeled submit icon button" disabled={showCorrectAnswers}>
                     <i className="icon checkmark"/>Submit answers
                 </button>
                 <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>

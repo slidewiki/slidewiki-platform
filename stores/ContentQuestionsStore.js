@@ -73,6 +73,15 @@ class ContentQuestionsStore extends BaseStore {
         }
         this.emitChange();
     }
+    resetAnswers() {
+        this.showCorrectExamAnswers = false;
+        this.questions.forEach((question) => {
+            const answers = question.answers;
+            for(let answer of answers) {
+                delete answer.selectedAnswer;
+            }
+        });
+    }
     invertAddBoxFlag() {
         this.showAddBox = !this.showAddBox;
         this.emitChange();
@@ -119,6 +128,7 @@ ContentQuestionsStore.handlers = {
     'LOAD_QUESTION': 'loadQuestion',
     'CANCEL_QUESTION': 'cancelQuestion',
     'TOGGLE_ANSWERS': 'toggleAnswers',
+    'RESET_ANSWERS': 'resetAnswers',
     'UPDATE_QUESTION': 'updateQuestion',
     'UPDATE_QUESTIONS': 'updateQuestions',
     'ADD_QUESTION': 'addQuestion',

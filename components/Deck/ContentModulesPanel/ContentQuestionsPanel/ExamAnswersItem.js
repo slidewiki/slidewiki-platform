@@ -2,11 +2,13 @@ import React from 'react';
 import selectExamAnswer from '../../../../actions/questions/selectExamAnswer';
 class ExamAnswersItem extends React.Component {
     handleOnChange() {
-        this.context.executeAction(selectExamAnswer, {
-            questionIndex: this.props.questionIndex,
-            answerIndex: this.props.index,
-            selected: this.refs[this.props.name].checked
-        });
+        if (!this.props.showCorrectAnswers) {
+            this.context.executeAction(selectExamAnswer, {
+                questionIndex: this.props.questionIndex,
+                answerIndex: this.props.index,
+                selected: this.refs[this.props.name].checked
+            });
+        }
     }
     render() {
         const answer = this.props.answer;
@@ -20,15 +22,16 @@ class ExamAnswersItem extends React.Component {
             if (answer.correct && answer.selectedAnswer) {
                 answerIcon = (<i className="checkmark icon teal" aria-label="your answer was correct" />);
             } else if (answer.correct && !answer.selectedAnswer) {
-                answerIcon = (<i className="checkmark icon red" aria-label="the correct answer"/>);
+                answerIcon = (<i className="checkmark icon red" aria-label="the correct answer which you didn't select"/>);
             } else if (!answer.correct && answer.selectedAnswer) {
                 answerIcon = (<i className="delete icon red" aria-label="your answer was incorrect answer"/>);
             }
         }
+        let inputCheckbox = (showCorrectAnswers) ? (<input type="checkbox" ref={name} name={name} id={name} checked={answer.selectedAnswer} />) : (<input type="checkbox" ref={name} name={name} id={name} onChange={this.handleOnChange.bind(this)} />);
         return (
             <div className="field">
                 <div className="ui checkbox">
-                    <input type="checkbox" ref={name} name={name} id={name} onChange={this.handleOnChange.bind(this)}/>
+                    {inputCheckbox}
                     <label htmlFor={name}>
                         {answerIcon} {answer.answer}
                     </label>
