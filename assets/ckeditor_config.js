@@ -21,7 +21,7 @@ CKEDITOR.disableAutoInline = true;
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
-
+    config.skin = 'moono-lisa-custom,/assets/custom-ckeditor-skin/moono-lisa-custom-build/';
 
     //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',

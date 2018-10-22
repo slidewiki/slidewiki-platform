@@ -31,7 +31,7 @@ The visual representation of a rich combo widget looks as follows:
 	/*display: inline-block;
 	float: left;*/
 	position: relative;
-	margin-bottom: 6px;
+	margin-bottom: 4px;
 	display:flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -89,7 +89,7 @@ a.cke_combo_button
 	padding: 1px;
 	background:#e6e6e6;
 	border-radius: 4px;
-	margin-right: 1px;
+	margin-right: 3px;
 	flex:1 1 auto;
 }
 
@@ -110,11 +110,16 @@ a.cke_combo_button
 .cke_combo_off a.cke_combo_button:focus,
 .cke_combo_off a.cke_combo_button:active
 {
-	background: #e5e5e5;
-	border: 1px solid #bcbcbc;
+	background: #fff;
+	/*border: 1px solid #bcbcbc;*/
 	/* Move combo so borders cover separators. Adjust padding to borders. */
-	padding: 0 0 0 1px;
-	margin-left: -1px;
+	/*padding: 0 0 0 1px;
+	margin-left: -1px;*/
+}
+
+.cke_combo_off a.cke_combo_button:focus {
+	background: #fff;
+	box-shadow: 0 0 0 2px rgba(0,125,255,.5) inset;
 }
 
 .cke_combo_off a.cke_combo_button:focus {
@@ -165,8 +170,8 @@ a.cke_combo_button
 .cke_toolbar_start + .cke_combo_off a.cke_combo_button:active
 {
 	/* Move first combo so borders cover separators. Adjust padding to borders. */
-	padding: 0 0 0 3px;
-	margin-left: -3px;
+	/*padding: 0 0 0 3px;
+	margin-left: -3px;*/
 }
 
 .cke_rtl .cke_toolbar_start + .cke_combo_on a.cke_combo_button,
@@ -278,7 +283,7 @@ a.cke_combo_button
    See: .cke_combo_inlinelabel */
 .cke_combo_text
 {
-	line-height: 32px;
+	line-height: 36px;
 	padding-left: 10px;
 	text-overflow: ellipsis;
 	overflow: hidden;
@@ -325,7 +330,7 @@ a.cke_combo_button
 .cke_combo_arrow
 {
 	cursor: default;
-	margin: 11px 0 0;
+	margin: 15px 0 0;
 	float: left;
 
 	/* Pure CSS Arrow */

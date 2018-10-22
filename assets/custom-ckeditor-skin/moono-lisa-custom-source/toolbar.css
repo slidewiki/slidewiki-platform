@@ -106,7 +106,7 @@ a.cke_button
 {
 	/*display: inline-block;*/
 	height: 18px;
-	padding: 7px 10px;
+	padding: 10px 10px;
 	outline: none;
 	cursor: default;
 	/*float: left;*/
@@ -115,7 +115,7 @@ a.cke_button
 	background:#e6e6e6;
 	border-radius: 4px;
 	margin-right:1px;
-	margin-bottom:6px;
+	margin-bottom:4px;
 	flex: 1 1 auto;
 	text-align: center;
 }
@@ -144,9 +144,12 @@ a.cke_button
    i.e. currently writing in bold or when spell checking is enabled. */
 a.cke_button_on
 {
-	background: #fff;
+	/*background: #fff;
 	border: 1px #bcbcbc solid;
-	padding: 6px 9px;
+	padding: 9px 9px;*/
+	background: #ababab;
+	border: 1px #e8e8e8 solid;
+	padding: 9px 9px;
 }
 
 
@@ -155,10 +158,13 @@ a.cke_button_off:hover,
 a.cke_button_off:focus,
 a.cke_button_off:active
 {
-	background: #e5e5e5;
-	border: 1px #bcbcbc solid;
-	/* Compensate the border change */
-	padding: 6px 9px;
+	background: #fff;
+}
+
+a.cke_button_off:focus
+{
+	background: #fff;
+	box-shadow: 0 0 0 2px rgba(0,125,255,.5) inset;
 }
 
 .cke_hc a.cke_button_on,
@@ -179,13 +185,13 @@ a.cke_button_disabled:focus,
 a.cke_button_disabled:active
 {
 	border: 0;
-	padding: 7px 10px;
-	background-color: transparent;
+	padding: 10px 10px;
+	background-color: #9e9e9e;
 }
 
 a.cke_button_disabled:focus {
 	border: 1px #bcbcbc solid;
-	padding: 3px 5px;
+	padding: 9px 9px;
 }
 
 .cke_hc a.cke_button_disabled:hover,
