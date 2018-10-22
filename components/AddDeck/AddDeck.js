@@ -594,7 +594,7 @@ class AddDeck extends React.Component {
                                             <FormattedMessage id="add.help" defaultMessage="Help decks"/>
                                         </a>
                                     }}
-                                    defaultMessage='Please selected from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
+                                    defaultMessage='Please select from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
                             </p>
                         </div>
                         <div className="two fields">
@@ -603,7 +603,7 @@ class AddDeck extends React.Component {
                             <div className="sr-only" id="describe_tags">Add tags or keywords for your deck. Multiple tags can be provided.</div>
                             <div className="field">
                                 <label htmlFor="level_input" id="level-label">
-                                    <FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
+                                    <FormattedMessage id='DeckProperty.Education.Choose' defaultMessage='Choose Education Level' /></label>
                                 <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-labelledby="level-label" aria-describedby="describe_level"
                                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                                     defaultValue={null} />

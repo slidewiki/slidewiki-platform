@@ -264,7 +264,22 @@ export default {
                 return deck;
             });
 
-            deckPromise.then((deck) => {
+            // fetch the tags data
+            let tagsPromise = deckPromise.then((deck) => {
+                if (!deck.tags || !deck.tags.length) return [];
+
+                return rp.get({
+                    uri: `${Microservices.tag.uri}/tags`,
+                    qs: {
+                        tagName: deck.tags.map((t) => t.tagName),
+                        paging: false, // this allows for unpaged results
+                    },
+                    useQuerystring: true,
+                    json: true,
+                });
+            });
+
+            Promise.all([deckPromise, tagsPromise]).then(([deck, tags]) => {
                 // prepare users and groups from editors object
                 let {users, groups} = deck.editors || {};
                 if (!users) users = [];
@@ -287,6 +302,7 @@ export default {
                         editors: { users, groups },
                         hidden: deck.hidden,
                         educationLevel: deck.educationLevel,
+                        tags: tags,
                         deckOwner: deck.user,
                         revisionOwner: deck.revisionUser,
                         sid: args.sid,
@@ -441,6 +457,9 @@ export default {
             } catch (e) {
 
             }
+
+            // we don't upload tags here as we don't expect user submitted tags here
+
             let toSend = {
                 description: params.description,
                 language: params.language,
