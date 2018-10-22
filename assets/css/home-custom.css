@@ -1031,6 +1031,7 @@ i.flag:not(.icon):before {
 .content-left h5{
     font-weight: 900;
     margin: 0;
+    font-size: 21px;
 }
 .content-left ul{
     width: 100%;
