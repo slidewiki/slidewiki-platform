@@ -99,19 +99,19 @@ class ContentModulesPanel extends React.Component {
             //    activityDIV = <ContributorsPanel selector={this.props.ContentModulesStore.selector} />;
             //    break;
             case 'questions':
-                activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} id="questions_panel" aria-labelledby="questions_label"/>;
                 break;
             case 'datasource':
-                activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} id="sources_panel" aria-labelledby="sources_label"/>;
                 break;
             case 'tags':
-                activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} id="tags_panel" aria-labelledby="tags_label"/>;
                 break;
             case 'playlists': 
-                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} id="playlist_panel" aria-labelledby="playlist_label"/>;
                 break;
             default:
-                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} id="comments_panel" aria-labelledby="comments_label"/>;
         }
         //set pointingMenu
         let historyTabClass = classNames({
@@ -154,40 +154,34 @@ class ContentModulesPanel extends React.Component {
       
         // hide tags tab in slides 
         let tagsTab = (this.props.ContentModulesStore.selector.stype === 'deck') 
-        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')} onKeyPress={this.handleKeyPress.bind(this, 'tags')}>
-            Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span>
+        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} role="button" onClick={this.handleTabClick.bind(this, 'tags')} onKeyPress={this.handleKeyPress.bind(this, 'tags')} aria-controls="tags_panel" id="tags_label">
+            Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags} </span>
         </a> : '';
 
         // hide playlists tab in slides
-        let palylistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
-        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')} onKeyPress={this.handleKeyPress.bind(this, 'playlists')}>
+        let playlistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
+        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')} role="button" aria-controls="playlist_panel" id="playlist_label" onKeyPress={this.handleKeyPress.bind(this, 'playlists')}>
             Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.playlists}</span>
         </a> : '';
 
         pointingMenu = (
-            <div className="ui top attached pointing menu">
-                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')} onKeyPress={this.handleKeyPress.bind(this, 'datasource')} role="button">Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
+            <div className="ui top attached pointing menu" role="tablist" aria-label="Additional deck tools">
+                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')} onKeyPress={this.handleKeyPress.bind(this, 'datasource')} aria-controls="sources_panel" id="sources_label" role="button">Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 {tagsTab}
                 {/*TODO add correct moduleCount*/}
-                <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')} onKeyPress={this.handleKeyPress.bind(this, 'discussion')} role="button">Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
-                <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')} onKeyPress={this.handleKeyPress.bind(this, 'history')} role="button">History</a>
-                <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')} onKeyPress={this.handleKeyPress.bind(this, 'usage')} role="button">Usage</a>
-                {/*<a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>*/}
-                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')} onKeyPress={this.handleKeyPress.bind(this, 'questions')} role="button">Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
-                {palylistsTab}
-                {/*
-                <a className="item">
-                    <img src="/assets/images/mock-avatars/helen.jpg" className="ui mini image circular"/>
-                    <img src="/assets/images/mock-avatars/elliot.jpg" className="ui mini image circular" />
-                    <img src="/assets/images/mock-avatars/jenny.jpg" className="ui mini image circular" />
-                    <img src="/assets/images/mock-avatars/joe.jpg" className="ui mini image circular" />
-                </a>*/}
+                <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')} onKeyPress={this.handleKeyPress.bind(this, 'discussion')} aria-controls="comments_panel" id="comments_label" role="button">Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
+                <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')} onKeyPress={this.handleKeyPress.bind(this, 'history')} aria-controls="history_panel" id="history_label" role="button">History</a>
+                {/*<a tabIndex="-1" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')} onKeyPress={this.handleKeyPress.bind(this, 'usage')} role="button">Usage</a>
+                <a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>*/}
+                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')} onKeyPress={this.handleKeyPress.bind(this, 'questions')} aria-controls="questions_panel" id="questions_label" role="button">Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
+                {playlistsTab}
+
 
             </div>
         );
 
         return (
-            <div ref="contentModulesPanel">
+            <div ref="contentModulesPanel" role="tabpanel">
                 {pointingMenu}
                 <div className="ui segment attached">
                     {activityDIV}
