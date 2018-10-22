@@ -84,8 +84,12 @@ export default {
         'nlp': {
             uri: 'https://nlpservice.experimental.slidewiki.org'
         },
-        'recommendation': {
-            uri: 'http://slidewiki.imp.bg.ac.rs'
-        }
+        'analytics': {
+            uri: 'https://analyticsservice.experimental.slidewiki.org'
+        },
+        'lrs': {
+            uri: 'https://api.learninglocker.experimental.slidewiki.org',
+            basicAuth :'MWEwNTkwMTg5M2Y4ZjIyZTY4ZThkMzhlYWE0NDZkZjAxZWUyNjdhODo2YjE5MzAxODhmZWM0OTg0ZjE1YzVhODI1Njg2NTY5NDk5YzRmODEz'
+        },
     }
 };
