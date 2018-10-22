@@ -14,6 +14,7 @@ import ExamQuestionsList from './ExamQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
 import ContentQuestionEdit from './ContentQuestionEdit';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+import QuestionDownloadModal from './Download/QuestionDownloadModal';
 
 class ContentQuestionsPanel extends React.Component {
 
@@ -72,6 +73,13 @@ class ContentQuestionsPanel extends React.Component {
             url: '/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid
         });
     }
+
+    handleDownloadButtonClick() {
+        //   this.context.executeAction(downloadQuestion, {});
+               //this.context.executeAction(downloadQuestion, {params: {stype : "deck", sid : this.state.deckID.toString()}});
+           console.log(this.props.ContentQuestionsStore.questions);
+       }
+    //would want this to load a modal - where questions can be selected. 
     
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
@@ -100,11 +108,12 @@ class ContentQuestionsPanel extends React.Component {
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
 
-        let examQuestionsButton = (questions.length > 0) ?
+        let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
                 Select exam questions
             </button> : '';
+        let downloadQuestionsButton = <QuestionDownloadModal />
         let editButtons = (editPermission) ?
             <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
@@ -112,6 +121,7 @@ class ContentQuestionsPanel extends React.Component {
                     Add question
                 </button>
                 {examQuestionsButton}
+                {downloadQuestionsButton}
             </div>
             : '';
         

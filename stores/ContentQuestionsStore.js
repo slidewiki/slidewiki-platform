@@ -10,6 +10,7 @@ class ContentQuestionsStore extends BaseStore {
         this.showAddBox = false;
         this.showExamList = false;
         this.showCorrectExamAnswers = false;
+        this.downloadQuestions = [];
     }
     addQuestion(payload) {
         this.questions.push(payload.question);
@@ -88,6 +89,16 @@ class ContentQuestionsStore extends BaseStore {
         this.showCorrectExamAnswers = true;
         this.emitChange();
     }
+    updateDownloadQuestions(payload){
+        //console.log('update download in store');
+        //console.log(payload);
+        if((payload===[])||(typeof payload === 'undefined')){
+            this.downloadQuestions =[];
+        }else{
+            this.downloadQuestions = payload;
+        }
+        this.emitChange();
+    }
     getState() {
         return {
             questions: this.questions,
@@ -96,7 +107,8 @@ class ContentQuestionsStore extends BaseStore {
             questionsCount: this.questionsCount,
             showAddBox: this.showAddBox,
             showExamList: this.showExamList,
-            showCorrectExamAnswers: this.showCorrectExamAnswers
+            showCorrectExamAnswers: this.showCorrectExamAnswers,
+            downloadQuestions: this.downloadQuestions
         };
     }
     dehydrate() {
@@ -110,6 +122,7 @@ class ContentQuestionsStore extends BaseStore {
         this.showAddBox = state.showAddBox;
         this.showExamList = state.showExamList;
         this.showCorrectExamAnswers = state.showCorrectExamAnswers;
+        this.downloadQuestions = state.downloadQuestions;
     }
 }
 
@@ -126,7 +139,8 @@ ContentQuestionsStore.handlers = {
     'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag',
     'INVERT_EXAM_LIST_FLAG': 'invertExamListFlag',
     'QUESTION_ANSWER_SELECTED': 'updateSelectedAnswer',
-    'SHOW_CORRECT_EXAM_ANSWERS': 'displayCorrectExamAnswers'
+    'SHOW_CORRECT_EXAM_ANSWERS': 'displayCorrectExamAnswers',
+    'UPDATE_DOWNLOAD_QUESTIONS': 'updateDownloadQuestions'
 };
 
 export default ContentQuestionsStore;

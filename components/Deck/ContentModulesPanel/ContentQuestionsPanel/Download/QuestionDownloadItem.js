@@ -1,0 +1,51 @@
+import React from 'react';
+
+
+class QuestionDownloadItem extends React.Component {
+    render() {
+        const question = this.props.question;
+
+        let difficultyStars = (difficulty) => {
+            let difficultyClass = '';
+            switch (difficulty) {
+                case 1:
+                    difficultyClass = 'ui small yellow star icon';
+                    break;
+                case 2:
+                    difficultyClass = 'ui small orange star icon';
+                    break;
+                case 3:
+                    difficultyClass = 'ui small red star icon';
+                    break;
+            }
+            let difficultyStars = [];
+            for(let i = 0; i < difficulty; i++){
+                difficultyStars.push(<i key={i} className={difficultyClass} />);
+            }
+            return difficultyStars;
+
+        };
+        let questionNo = this.props.questionIndex + 1;
+
+        return (
+            <div>
+                <div className="ui three column vertically divided grid segment" tabIndex={0} aria-labelledby="question_no" >
+                    <div className="sr-only" id="question_no">{'Question' + questionNo + 'difficulty level ' + question.difficulty}</div>
+                    <div className="two wide column" aria-hidden="true" >
+                        {this.props.questionIndex + 1}
+                        <div className="ui star rating" data-rating={question.difficulty} />
+                        {difficultyStars(question.difficulty)}
+                    </div>
+                    <div className="ui checkbox">
+                        <input type="checkbox" onChange={this.props.onClick.bind(this)} onKeyPress={this.props.onKeyPress.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
+                        <label htmlFor='name'>
+                            {question.title}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default QuestionDownloadItem;
