@@ -25,25 +25,21 @@ class QuestionDownloadItem extends React.Component {
             return difficultyStars;
 
         };
-        let questionNo = this.props.questionIndex + 1;
-
+        //let questionNo = this.props.questionIndex + 1;
+/*nikki removed <div className="sr-only" id="question_no">{'Question' + questionNo + 'difficulty level ' + question.difficulty}</div>
+                     */
         return (
-            <div>
-                <div className="ui three column vertically divided grid segment" tabIndex={0} aria-labelledby="question_no" >
-                    <div className="sr-only" id="question_no">{'Question' + questionNo + 'difficulty level ' + question.difficulty}</div>
-                    <div className="two wide column" aria-hidden="true" >
-                        {this.props.questionIndex + 1}
-                        <div className="ui star rating" data-rating={question.difficulty} />
-                        {difficultyStars(question.difficulty)}
-                    </div>
+                <div className="ui two column vertically divided" tabIndex={-1} aria-labelledby="question_no" >
                     <div className="ui checkbox">
                         <input type="checkbox" onChange={this.props.onClick.bind(this)} onKeyPress={this.props.onKeyPress.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
                         <label htmlFor='name'>
                             {question.title}
                         </label>
                     </div>
+                    <div className="ui star rating" data-rating={question.difficulty} >
+                        {difficultyStars(question.difficulty)}
+                    </div>
                 </div>
-            </div>
         );
     }
 }

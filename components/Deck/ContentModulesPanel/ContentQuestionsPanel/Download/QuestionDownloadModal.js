@@ -75,8 +75,27 @@ class QuestionDownloadModal extends React.Component{
 
     handleDownloadButton(){
         /*nikki change this here for download content */
-        let downloadContent = this.props.ContentQuestionsStore.downloadQuestions;
-        console.log(downloadContent);
+        let downloadQuestions = this.props.ContentQuestionsStore.downloadQuestions;
+
+        let transformQuestions = downloadQuestions.map((node, index) => {
+            return (
+                {
+                    title: node.title,
+                    answers: node.answers,
+                    explanation: node.explanation,
+                    difficulty: node.difficulty,
+                }
+            );
+        });
+        //console.log(transformQuestions);
+        let downloadContent = JSON.stringify(transformQuestions);
+        //console.log(downloadContent);
+
+        let element = document.createElement("a");
+        let file = new Blob([downloadContent], {type: 'text/string'});
+        element.href = URL.createObjectURL(file);
+        element.download = "questions.json";
+        element.click();
 
         this.handleClose();
     }
@@ -92,6 +111,16 @@ class QuestionDownloadModal extends React.Component{
                     break;
             }
         }
+    }
+
+    handleSelectAll(){
+        const allQuestions = Object.assign([], this.props.ContentQuestionsStore.questions);
+        //console.log(allQuestions);
+
+        this.setState({
+            downloadQuestions:allQuestions,
+        });
+        this.context.executeAction(updateDownloadQuestions,{downloadQuestions: allQuestions},null);
     }
     
 
@@ -117,7 +146,7 @@ class QuestionDownloadModal extends React.Component{
 
         let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value="You can select one or more questions from this deck to download." tabIndex ='-1'/>;
 
-        let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} />;
+        let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} handleSelectAll={() => this.handleSelectAll()}/>;
         let actionButton = downloadBtn;
         let actionButton2='';
 

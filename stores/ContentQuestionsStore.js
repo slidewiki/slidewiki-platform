@@ -92,10 +92,10 @@ class ContentQuestionsStore extends BaseStore {
     updateDownloadQuestions(payload){
         //console.log('update download in store');
         //console.log(payload);
-        if((payload===[])||(typeof payload === 'undefined')){
+        if((payload.downloadQuestions===[])||(typeof payload.downloadQuestions === 'undefined')){
             this.downloadQuestions =[];
         }else{
-            this.downloadQuestions = payload;
+            this.downloadQuestions = payload.downloadQuestions;
         }
         this.emitChange();
     }

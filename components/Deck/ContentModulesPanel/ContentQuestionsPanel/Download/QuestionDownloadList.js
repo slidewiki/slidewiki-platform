@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
+import ContentQuestionsStore from '../../../../../stores/ContentQuestionsStore';
+
 //import {Divider} from 'semantic-ui-react';
-//import invertExamListFlag from '../../../../actions/questions/invertExamListFlag';
-//import updateExamList from '../../../../actions/questions/updateExamList';
 import updateDownloadQuestions from '../../../../../actions/questions/updateDownloadQuestions';
+import QuestionDownloadItem from './QuestionDownloadItem';
 
 class QuestionDownloadList extends React.Component {
     constructor(props){
@@ -14,6 +16,12 @@ class QuestionDownloadList extends React.Component {
         };
     }
     
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            downloadQuestions: nextProps.ContentQuestionsStore.downloadQuestions,
+        })
+    }
+
     checkNoEmpty(element){//nikki check
         return (element.toString().length>0);
     }
@@ -23,13 +31,7 @@ class QuestionDownloadList extends React.Component {
        - adds the selectedQuestion into the selectedQuestions list if it was not selectedQuestion
        - removes the selectedQuestion from the selectedQuestions list if it was already selected
       */
-        console.log('onclick');
-        let questiontoadd = {
-            title: selectedQuestion.title,
-            answers: selectedQuestion.answers,
-            explanation: selectedQuestion.explanation,
-            difficulty: selectedQuestion.difficulty,
-        };
+        let questiontoadd = selectedQuestion;
         let tempquestions = Object.assign([], this.state.downloadQuestions);
         let index = tempquestions.indexOf(questiontoadd);
         if(index === -1){//It was not selected
@@ -58,12 +60,13 @@ class QuestionDownloadList extends React.Component {
 
     inSelectedQuestions(question){
         let questions = this.state.downloadQuestions;
-        let questiontocheck = {
+        /*let questiontocheck = {
             title: question.title,
             answers: question.answers,
             explanation: question.explanation,
             difficulty: question.difficulty,
-        };
+        };*/
+        let questiontocheck = question;
         let qindex = questions.indexOf(questiontocheck); //will this work??
         if(qindex === -1){
             return false;
@@ -75,18 +78,17 @@ class QuestionDownloadList extends React.Component {
     render() {
         let questionslist = this.props.questions.map((node, index) => {
             return (
-                <div className="inline field" key={index}>
-                    <div className="ui checkbox">
-                        <input type="checkbox" name={'question' + index} id={'question' + index} tabIndex="0" className="hidden" checked={this.inSelectedQuestions(node)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleQuestionClick', node)} onChange={this.handleQuestionClick.bind(this, node)}/>
-                        <label htmlFor={'question' + index}>{node.title}</label>
-                    </div>
-                </div>
+                <QuestionDownloadItem question={node} onClick={() => this.handleQuestionClick(node)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleQuestionClick', node)} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
             );
         });
 
         return (
             <div ref="downloadquestionsList">
                 <h3 className="ui dividing header">Select questions to download</h3>
+                <button className="ui right floated compact button primary" onClick={this.props.handleSelectAll.bind(this)}>
+                    <i className="small check icon" />
+                    Select all
+                </button>
                 <div >
                     {questionslist}
                 </div>
@@ -99,5 +101,10 @@ QuestionDownloadList.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
+QuestionDownloadList = connectToStores(QuestionDownloadList,[ContentQuestionsStore],(context,props) => {
+    return {
+        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
+    };
+});
 
 export default QuestionDownloadList;
