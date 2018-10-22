@@ -594,7 +594,7 @@ class AddDeck extends React.Component {
                                             <FormattedMessage id="add.help" defaultMessage="Help decks"/>
                                         </a>
                                     }}
-                                    defaultMessage='Please use the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
+                                    defaultMessage='Please selected from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
                             </p>
                         </div>
                         <div className="two fields">
@@ -606,14 +606,14 @@ class AddDeck extends React.Component {
                                     defaultValue={null} />
                             </div>
                             <div className="field">
-                                <label htmlFor="topics_input_field"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
-                                <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby={DeckProperty.Tag.Topic.Choose}/>
+                                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
+                                <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" />
                             </div>
                         </div>
 
                         <div className="field">
-                            <label htmlFor="tags_input_field"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labeledby={DeckProperty.Tag.Choose}/>
+                            <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
+                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
