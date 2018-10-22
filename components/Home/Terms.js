@@ -1,6 +1,10 @@
+import {connectToStores} from 'fluxible-addons-react';
 import {defineMessages} from 'react-intl';
+import {NavLink} from 'fluxible-router';
 import PropTypes from 'prop-types';
 import React from 'react';
+import updateTrap from '../../actions/loginModal/updateTrap';
+import UserProfileStore from '../../stores/UserProfileStore';
 
 class terms extends React.Component {
     constructor(props) {
@@ -143,12 +147,33 @@ class terms extends React.Component {
                 defaultMessage: 'Sign in'
             },
             getStartedDescription: {
-                id: 'home.getStartedDescription',
+                id: 'terms.getStartedDescription',
                 defaultMessage: 'Create an account to start creating and sharing your decks. '
+            },
+            myDecks: {
+                id: 'terms.myDecks',
+                defaultMessage: 'My Decks.'
             }
         });
     }
+
+    handleLoginButton() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('toggle');
+
+        this.closeSidebar({target: '<a className="item"></a>'});
+    }
+
     render() {
+
+        let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
+            <a onClick={this.handleLoginButton.bind(this)}>{this.context.intl.formatMessage(this.messages.signIn)}</a>:
+            <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
+                {this.context.intl.formatMessage(this.messages.myDecks)}
+            </NavLink>;
+
         return (
             <section className='inner-container'>
                 <div className='inner-content-block'>
@@ -200,7 +225,7 @@ class terms extends React.Component {
                                                             <div className='text'>
                                                                 <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                                             </div>
-                                                            <img style={{width: '80px'}} src='/assets/images/home/search.jpg' alt=''/>
+                                                            <img src='/assets/images/home/search.jpg' alt=''/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -214,7 +239,7 @@ class terms extends React.Component {
                                                             <div className='text'>
                                                                 <p>{this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
                                                             </div>
-                                                            <img style={{width: '80px'}} src='/assets/images/home/add.jpg' alt=''/>
+                                                            <img src='/assets/images/home/add.jpg' alt=''/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -228,14 +253,14 @@ class terms extends React.Component {
                                                             <div className='text'>
                                                                 <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
                                                             </div>
-                                                            <img style={{width: '80px'}} src='/assets/images/home/share.jpg' alt=''/>
+                                                            <img src='/assets/images/home/share.jpg' alt=''/>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </li>
                                         </ul>
                                         <div className='signin-blk'>
-                                            <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}<a href='#'>{this.context.intl.formatMessage(this.messages.signIn)}</a></span>
+                                            <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
                                             <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
                                         </div>
                                     </div>
@@ -255,5 +280,11 @@ terms.contextTypes = {
     getUser: PropTypes.func.isRequired,
     executeAction: PropTypes.func.isRequired
 };
+
+terms = connectToStores(terms, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 
 export default terms;

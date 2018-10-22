@@ -417,6 +417,7 @@ textarea:focus{
 .signin-blk  span a{
     border-bottom: 3px solid #1e78bb;
     color: #1e78bb;
+    cursor: pointer;
 }
 .signin-blk  span a:hover{
     border-bottom:  3px solid transparent;
