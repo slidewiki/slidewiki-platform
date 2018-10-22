@@ -124,7 +124,7 @@ class TagInput extends React.Component {
 
         // selection options are concatenated pre-selected tags and recommended tags 
         let initialOptions = this.props.initialTags.map( (t) => {
-            return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName}</div>;
+            return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName || t.tagName}</div>;
         });
 
         return (
