@@ -175,6 +175,7 @@ class terms extends React.Component {
             </NavLink>;
 
         return (
+            <div>
             <section className='inner-container'>
                 <div className='inner-content-block'>
                     <div className='wrapper'>
@@ -270,7 +271,10 @@ class terms extends React.Component {
                     </div>
                 </div>
             </section>
-
+            <section className='banner-container inner-image'>
+                <img src='/assets/images/home/banner.jpg' alt=''/>
+            </section>
+            </div>
         );
     }
 }

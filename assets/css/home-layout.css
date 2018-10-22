@@ -78,9 +78,9 @@
     .content-right ul li .feature-left .text-div{padding: 0;}
     .content-right .signin-blk{padding: 25px;}
     .content-right .signin-blk span{line-height: 36px;font-size: 31px;}
-
 }
 @media only screen and (min-width: 1199px) {
+    .banner-container img {margin-bottom: -380px}
     .results.home{margin-top: 5rem}
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -167,6 +167,7 @@
     .content-right ul li .feature-left .text-div .text{padding: 0 12px 0 0;}
     .content-right .signin-blk{padding: 25px;}
     .content-right .signin-blk span{line-height: 40px;}
+    .banner-container img {margin-bottom: -305px}
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -267,6 +268,7 @@
     .content-right ul li .feature-content {padding: 25px 25px;}
     .content-right .signin-blk{padding: 25px;}
     .content-right .signin-blk span{line-height: 35px;font-size: 29px;}
+    .banner-container img {margin-bottom: -150px}
 }
 
 @media only screen and (max-width: 767px) {
@@ -304,7 +306,7 @@
     .text-blk{padding: 10px 0 0;}
     .signin-outer{margin: 0;}
     .single-category{padding: 20px 0 0;}
-    .banner-container > img {width: 800px;margin-left: -400px;}
+    .banner-container > img {width: 800px;margin-left: -400px; margin-bottom: -120px}
     .feature-content{-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;display: inline-block;}
     .feature-block{position: static;top: 0;-webkit-transform: none;transform: none;padding: 0 20px;margin: 30px 0px;}
     .feature-left{padding-right: 0;display: inline-block;width: 100%;-webkit-box-flex: 0;-ms-flex: 0 0 100%;flex: 0 0 100%;}
@@ -401,6 +403,7 @@
     .content-right ul li .feature-left .text-div{-webkit-flex-direction: column;-ms-flex-direction: column;flex-direction: column;padding: 0;}
     .content-right ul li .feature-left .text-div .text{width: 100%;padding: 0;}
     .content-right .signin-blk span{padding: 0 0 10px;font-size: 17px;}
+    .banner-container > img {width: 800px;margin-left: -400px; margin-bottom: -120px}
 }
 
 
