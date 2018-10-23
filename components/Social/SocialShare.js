@@ -10,15 +10,29 @@ import { isEmpty } from '../../common.js';
 class SocialShare extends React.Component {
 
     componentDidMount(){
-        $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
+        $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false, allowTab: false});
     }
 
     componentDidUpdate() {
-        $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
+        $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false, allowTab: false});
     }
 
-    onEnterAndClick(text, value) {
-        $(this.refs.shareDropDown).dropdown('hide');
+    onEnterAndClick(text, value, element) {
+        //$(this.refs.shareDropDown).dropdown('hide');
+        console.log(value);
+        switch(value) {
+            case 'E-mail':
+                console.log('open mail');
+                //this.handleEmailClick();
+                this.handleEmailClick.bind(this)
+            break;
+            case 'Twitter':
+                console.log('twitter');
+                //this.handleEmailClick();
+                this.handleTwitterClick();
+            break;
+        }
+        
         return false;
     }
 
@@ -102,7 +116,7 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-                    <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleEmailClick.bind(this)}>
+                    <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}
                             subject={emailShareSubject}
@@ -113,7 +127,7 @@ class SocialShare extends React.Component {
                                 round />
                         </EmailShareButton>
                     </div>
-                    <div className="item" data-value="Twitter" role="menuitem" aria-label="Twitter" data-tooltip="Twitter" tabIndex="0" onClick={this.handleTwitterClick.bind(this)}>
+                    <div className="item" data-value="Twitter" role="menuitem" aria-label="Twitter" data-tooltip="Twitter" onClick={this.handleTwitterClick.bind(this)}>
                         <TwitterShareButton
                             url={shareUrl}
                             title={shareMessage}
@@ -133,7 +147,7 @@ class SocialShare extends React.Component {
                                 round />
                         </FacebookShareButton>
                     </div>*/}
-                    <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" tabIndex="0" onClick={this.handleGooglePlusClick.bind(this)}>
+                    <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" onClick={this.handleGooglePlusClick.bind(this)}>
                         <GooglePlusShareButton
                             url={shareUrl}
                             content={shareMessage}
@@ -143,7 +157,7 @@ class SocialShare extends React.Component {
                                 round />
                         </GooglePlusShareButton>
                     </div>
-                    <div className="item" data-value="LinkedIn" role="menuitem" aria-label="LinkedIn" data-tooltip="LinkedIn" tabIndex="0" onClick={this.handleLinkedinClick.bind(this)}>
+                    <div className="item" data-value="LinkedIn" role="menuitem" aria-label="LinkedIn" data-tooltip="LinkedIn" onClick={this.handleLinkedinClick.bind(this)}>
                         <LinkedinShareButton
                             url={shareUrl}
                             title={shareMessage + '(' + shareUrl + ')'}
