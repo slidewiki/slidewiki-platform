@@ -22,8 +22,17 @@ import ContentModulesStore from '../../../stores/ContentModulesStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
+import {  Dropdown } from 'semantic-ui-react';
 
 class ContentModulesPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            showMobileMenu: false
+        };
+    }
+
     componentWillMount() {
         let selector = this.props.ContentModulesStore.selector;
         //check localStorage to see if invalid data have been read from the browser cache
@@ -44,6 +53,25 @@ class ContentModulesPanel extends React.Component {
                 }
                 localStorage.removeItem('commentsCount');// reset the state in localStorage
             }
+        }
+    }
+    
+    componentDidMount(){
+        $(this.refs.selectTab).dropdown({selectOnKeydown: false});
+        this.checkOverflowingChildren();
+    }
+    
+    componentDidUpdate() {
+        this.checkOverflowingChildren();
+    }
+    
+    checkOverflowingChildren() {
+        const element = this.refs.pointerMenu;
+        
+        const hasOverflowingChildren = element.offsetWidth < element.scrollWidth; //only check the width
+                
+        if (this.state.showMobileMenu !== hasOverflowingChildren) {
+            this.setState({showMobileMenu: hasOverflowingChildren}); // show the mobile menu if menu items are overflowing
         }
     }
 
@@ -80,7 +108,68 @@ class ContentModulesPanel extends React.Component {
         this.handleTabClick(type);
         e.preventDefault();
     }
+    
+    handleDropdownChange(e, dropdown) {
+        let selectedItem = dropdown.value;
+        this.handleTabClick(selectedItem);
+    }
+    
+    getContentModuleOptions(showLabels) {
+        let labelClasses = 'ui tiny circular label';
+        
+        return [
+            {
+                text: <span>Sources {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.datasource}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.datasource})</span>}
+                    </span>,
+                value: 'datasource'
+            },
+            {
+                text: <span>Tags {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.tags}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.tags})</span>}
+                    </span>,
+                value: 'tags'
+            },
+            { // TODO add correct moduleCount
+                text: <span>Comments {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.comments}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.comments})</span>}
+                    </span>,
+                value: 'discussion'
+            },
+            {
+                text: 'History',
+                value: 'history'
+            },
+            {
+                text: 'Usage',
+                value: 'usage'
+            },
+            /*{
+                text: 'Contributors',
+                value: 'contributors'
+            },*/
+            {
+                text: <span>Questions {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.questions}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.questions})</span>}
+                    </span>,
+                value: 'questions'
+            },
+            {
+                text: <span>Playlists {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.playlists}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.playlists})</span>}
+                    </span>,
+                value: 'playlists'
+            }
+        ];
+    }
+    
     render() {
+        
         let pointingMenu = '';
         let activityDIV = '';
         const hrefPath = '/activities/' + this.props.ContentModulesStore.selector.stype + '/' + this.props.ContentModulesStore.selector.sid;
@@ -113,77 +202,71 @@ class ContentModulesPanel extends React.Component {
             default:
                 activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} id="comments_panel" aria-labelledby="comments_label"/>;
         }
-        //set pointingMenu
-        let historyTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'history')
-        });
-        let usageTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'usage')
-        });
-        let discussionTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'discussion')
-        });
-        let questionsTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'questions')
-        });
-        let datasourceTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'datasource')
-        });
-        let tagsTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'tags')
-        });
-        let playlistsTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'playlists')
-        });
-
-        //let contributorsTabClass = classNames({
-        //    'item': true,
-        //    'active': (this.props.ContentModulesStore.moduleType === 'contributors')
-        //});
+        
         //hide focused outline
         let compStyle = {
             outline: 'none'
         };
-      
-        // hide tags tab in slides 
-        let tagsTab = (this.props.ContentModulesStore.selector.stype === 'deck') 
-        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} role="button" onClick={this.handleTabClick.bind(this, 'tags')} onKeyPress={this.handleKeyPress.bind(this, 'tags')} aria-controls="tags_panel" id="tags_label">
-            Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags} </span>
-        </a> : '';
-
-        // hide playlists tab in slides
-        let playlistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
-        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')} role="button" aria-controls="playlist_panel" id="playlist_label" onKeyPress={this.handleKeyPress.bind(this, 'playlists')}>
-            Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.playlists}</span>
-        </a> : '';
-
+        
         pointingMenu = (
-            <div className="ui top attached pointing menu" role="tablist" aria-label="Additional deck tools">
-                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')} onKeyPress={this.handleKeyPress.bind(this, 'datasource')} aria-controls="sources_panel" id="sources_label" role="button">Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
-                {tagsTab}
-                {/*TODO add correct moduleCount*/}
-                <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')} onKeyPress={this.handleKeyPress.bind(this, 'discussion')} aria-controls="comments_panel" id="comments_label" role="button">Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
-                <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')} onKeyPress={this.handleKeyPress.bind(this, 'history')} aria-controls="history_panel" id="history_label" role="button">History</a>
-                {/*<a tabIndex="-1" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')} onKeyPress={this.handleKeyPress.bind(this, 'usage')} role="button">Usage</a>
-                <a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>*/}
-                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')} onKeyPress={this.handleKeyPress.bind(this, 'questions')} aria-controls="questions_panel" id="questions_label" role="button">Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
-                {playlistsTab}
-
-
+            <div className="ui top attached pointing menu" ref="pointerMenu" role="tablist" aria-label="Additional deck tools">
+                {this.getContentModuleOptions(true).map((item) => {
+                    let active = this.props.ContentModulesStore.moduleType === item.value;
+                    
+                    let classes = classNames({
+                        'item': true,
+                        'active': active && !this.state.showMobileMenu
+                    });
+                    
+                    //hide tags and playlists for slide view
+                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists')) {
+                        return;
+                    }
+                    
+                    return (<a tabIndex="0" className={classes} style={compStyle} 
+                        onClick={this.handleTabClick.bind(this, item.value)} onKeyPress={this.handleKeyPress.bind(this, item.value)} 
+                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="button">{item.text}</a>);
+                        
+                    {/*
+                    <a className="item">
+                        <img src="/assets/images/mock-avatars/helen.jpg" className="ui mini image circular"/>
+                        <img src="/assets/images/mock-avatars/elliot.jpg" className="ui mini image circular" />
+                        <img src="/assets/images/mock-avatars/jenny.jpg" className="ui mini image circular" />
+                        <img src="/assets/images/mock-avatars/joe.jpg" className="ui mini image circular" />
+                    </a>*/}
+                })}                
             </div>
         );
-
+        
+        let mobileMenu = (
+            <Dropdown fluid pointing button text='Tools' value={this.props.ContentModulesStore.moduleType} options={this.getContentModuleOptions(false)} onChange={this.handleDropdownChange.bind(this)}/>
+        );
+        
+        //make sure element is still rendered by the browser, in order to get the dimensions to detect overflowing children
+        let pointingMenuStyle = this.state.showMobileMenu ? { 
+            visibility: 'hidden',
+            height: 0
+        } : {};
+        
+        let mobileMenuStyle = {
+            display: this.state.showMobileMenu  ? 'block' : 'none' 
+        };
+        
+        let activityDIVClasses = classNames({
+            'ui': true,
+            'segment': true,
+            'attached': !this.state.showMobileMenu
+        });
+        
         return (
             <div ref="contentModulesPanel" role="tabpanel">
-                {pointingMenu}
-                <div className="ui segment attached">
+                <div style={pointingMenuStyle}>
+                    {pointingMenu}
+                </div>
+                <div style={mobileMenuStyle}>
+                    {mobileMenu}
+                </div>
+                <div className={activityDIVClasses}>
                     {activityDIV}
                 </div>
             </div>
