@@ -4,7 +4,7 @@ import methodNotAllowedError  from '../../error/methodNotAllowedError';
 import { isEmpty } from '../../../common.js';
 const log = require('../../log/clog');
 
-export function fetchUserDecks(context, payload, done) {
+export default function fetchUserDecks(context, payload, done) {
     log.info(context);
 
     // if we are looking at decks shared with us (not owned) => no `id2`

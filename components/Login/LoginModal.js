@@ -344,7 +344,7 @@ class LoginModal extends React.Component {
         <div className="ui one column grid">
           <div className="ui center aligned column">
             <textarea className="sr-only" id="signinModalDescription"
-            value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+            defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
             tabIndex ='-1'/>
             <div className={inputField_classes}>
               <div><label htmlFor="email1" hidden>

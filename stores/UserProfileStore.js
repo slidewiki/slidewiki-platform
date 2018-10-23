@@ -329,43 +329,8 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
-    updateUsergroup(group) {
-        this.currentUsergroup = group;
-        // console.log('UserProfileStore: updateUsergroup', group);
-        this.saveUsergroupError = '';
-        this.deleteUsergroupError = '';
-        this.emitChange();
-    }
-
-    saveUsergroupFailed(error) {
-        this.saveUsergroupIsLoading = false;
-        this.saveUsergroupError = error.message;
-        this.emitChange();
-    }
-
-    saveUsergroupSuccess() {
-        this.saveUsergroupIsLoading = false;
-        this.currentUsergroup = {};
-        this.saveUsergroupError = '';
-        this.emitChange();
-    }
-
-    saveUsergroupStart() {
-        this.saveUsergroupIsLoading = true;
-        this.emitChange();
-    }
-
     saveProfileStart() {
         this.saveProfileIsLoading = true;
-        this.emitChange();
-    }
-
-    deleteUsergroupFailed(error) {
-        this.deleteUsergroupError = {
-            action: 'delete',
-            message: error.message
-        };
-        this.usergroupsViewStatus = '';
         this.emitChange();
     }
 
@@ -461,18 +426,14 @@ UserProfileStore.handlers = {
     'RESET_PROVIDER_STUFF': 'resetProviderStuff',
     'UPDATE_PROVIDER_ACTION': 'updateProviderAction',
     'USER_SIGNOUT': 'handleSignOut',
-    'UPDATE_USERGROUP': 'updateUsergroup',
-    'SAVE_USERGROUP_START': 'saveUsergroupStart',
-    'SAVE_USERGROUP_FAILED': 'saveUsergroupFailed',
-    'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess',
-    'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
+    'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
+    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal',
+
     'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
-    'SAVE_USERPROFILE_START': 'saveProfileStart',
-    'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
-    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal'
+    'SAVE_USERPROFILE_START': 'saveProfileStart'
 };
 
 export default UserProfileStore;

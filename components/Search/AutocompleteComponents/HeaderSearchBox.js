@@ -5,6 +5,7 @@ import { navigateAction } from 'fluxible-router';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import { debounce } from 'lodash';
+import querystring from 'querystring';
 
 class HeaderSearchBox extends React.Component {
     constructor(props){
@@ -54,12 +55,14 @@ class HeaderSearchBox extends React.Component {
         this.initAutocomplete();
     }
     handleRedirect(){
-        // when no keywords are given, fetch all results
-        let keywords = (this.state.searchstring.trim() !== '')
-            ? this.state.searchstring : '*:*';
+
+        let query = {
+            keywords: this.state.searchstring.trim(), 
+            sort: 'score',
+        };
 
         this.context.executeAction(navigateAction, {
-            url: '/search/keywords=' + encodeURIComponent(keywords)
+            url: `/search?${querystring.stringify(query)}`
         });
 
         // unfocus input element

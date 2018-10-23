@@ -25,6 +25,7 @@ import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
+import chooseActionGroups from '../actions/usergroups/chooseActionGroups';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
@@ -287,6 +288,16 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
+    usergroup: {
+        path: '/usergroup/:id/:category?',
+        method: 'get',
+        page: 'usergroup',
+        title: 'SlideWiki -- User group',
+        handler: require('../components/UserGroups/UserGroupPage'),
+        action: (context, payload, done) => {
+            context.executeAction(chooseActionGroups, payload, done);
+        }
+    },
     userprofilereview: {
         path: '/Sfn87Pfew9Af09aM',
         method: 'get',
@@ -320,7 +331,7 @@ export default {
         }
     },
     search: {
-        path: '/search/:queryparams?',
+        path: '/search',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
@@ -575,6 +586,35 @@ export default {
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.slideID = payload.params.sid;
+                    payload.params.sid = payload.params.id;//this is needed to have loadDeckView working correctly
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.sid = payload.params.slideID;//needs to be reset for loadPresentation
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
+    presentationIE: {
+        path: '/presentationIE/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'presentationIE',
+        handler: require('../components/Deck/Presentation/PresentationIE'),
         action: (context, payload, done) => {
             async.series([
                 (callback) => {
