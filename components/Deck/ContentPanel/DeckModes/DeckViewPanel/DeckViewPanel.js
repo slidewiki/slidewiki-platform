@@ -140,64 +140,72 @@ class DeckViewPanel extends React.Component {
 
         return (
             <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
-
                 <main role="main">
                     <div className="ui segment" style={heightStyle}>
-                        <div className="ui two column grid container">
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
-                            <div className="column">
-                                <div className="item">
-                                    <div className="content">
-                                        <h2 className="ui header">{deckTitle}
-                                            <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
-                                        </h2>
+                            <h2 className="ui header">{deckTitle}
+                                <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
+                            </h2>
+                        <div className="ui stackable grid container">
+                            <div className="two column row">
+                                <div className="column">
+                                    <div className="item">
                                         <div className="meta"><strong>Creator:&nbsp;</strong>
                                             <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
                                         </div>
                                         {originInfo}
                                         <div className="meta"><strong>Last Modified:&nbsp;</strong>{lastUpdate}</div>
-                                        {deckDescription &&
-                                            <div className="meta"><strong>Description:</strong>
-                                                <div className="description" tabIndex="0" >{deckDescription}</div>
-                                            </div>
-                                        }
+                                    </div>
+                                </div>
+                                <div className="column">
+                                    <div className="sr-only">"Deck metadata"</div>
+                                    <div className="row">
+                                               <div className="ui medium labels" >
+                                                <div className="ui label" >
+                                                    <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
+                                                </div>
+                                                <div className="ui label" >
+                                                    <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
+                                                </div>
+                                                { deckData.educationLevel &&
+                                                <div className="ui label" >
+                                                    <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
+                                                </div>
+                                                }
+                                                </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="ui medium labels">
+                                                <div className="ui label" >
+                                                    <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
+                                                <div className="ui label" >
+                                                    <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
+                                                <div className="ui label" >
+                                                    <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
+                                                <div className="ui label" >
+                                                    <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="column">
-
-                                <div className="ui hidden divider"></div>
-                                <div className="row">
-                                    <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
-                                        </div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
-                                        </div>
-                                        { deckData.educationLevel &&
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
-                                        </div>
-                                        }
-                                    </div>
+                            <div className="row" >
+                                <div className="item">
+                                {deckDescription &&
+                                <div className="meta"><strong>Description:</strong>
+                                    <div className="description" >{deckDescription}</div>
                                 </div>
-                                <div className="row">
-                                    <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
+                                }
+                                <div className="meta" ><strong>Subject:&nbsp;</strong>
+                                    <div className="description">
+                                        <a target="_blank" href="/deckfamily/computing" >Computing</a>,&nbsp;
+                                        <a target="_blank" href="/deckfamily/science" >Science</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="ui divider"></div>
+                        </div>
+                        <div className="ui section divider"></div>
                         <div key={this.props.slideIndex} className="ui container three cards">
                             {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                             {slidesArr.map((slide, index) => {
@@ -231,7 +239,7 @@ class DeckViewPanel extends React.Component {
                                         <div key={index} className="ui card">
                                             <a href={slideURL} className="ui image"
                                                tabIndex="-1">
-                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1} aria-hidden="true"/>
                                             </a>
                                             <div className="content" tabIndex="-1">
                                                 <a href={slideURL}
