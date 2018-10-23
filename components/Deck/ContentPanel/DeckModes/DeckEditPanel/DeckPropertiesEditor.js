@@ -557,7 +557,7 @@ class DeckPropertiesEditor extends React.Component {
                 <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
                     ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} initialTags={this.state.topics} />
             </div>
-        </div>
+        </div>;
 
         return (
             <div className="ui container">
