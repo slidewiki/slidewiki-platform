@@ -7,7 +7,6 @@ import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-import {getLanguageName} from '../../../common';
 import TranslationStore from '../../../stores/TranslationStore';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import {defineMessages} from 'react-intl';
@@ -19,10 +18,6 @@ class InfoPanelInfoView extends React.Component {
     constructor(props){
         super(props);
         this.messages = defineMessages({
-            viewLanguage:{
-                id: 'InfoPanelInfoView.viewLanguage',
-                defaultMessage:'You are viewing this in'
-            },
         });
 
         this.zoomIn = this.zoomIn.bind(this);
@@ -44,19 +39,8 @@ class InfoPanelInfoView extends React.Component {
 
     render() {
         let selector = this.props.DeckTreeStore.selector;
-
-        let language = this.props.TranslationStore.nodeLanguage;
-        let primaryLanguage = this.props.TranslationStore.treeLanguage;
-
-        // the user selected language (defaults to the primary deck tree language)
-        let selectedLanguage = this.props.TranslationStore.currentLang || primaryLanguage;
-        let selectedLanguageName = getLanguageName(selectedLanguage);
-
-        // let's see if the user wants something we don't have
-        let translationMissing = selectedLanguage !== language;
-        let canEdit = this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly;
-
         let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
+
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 {
@@ -87,16 +71,6 @@ class InfoPanelInfoView extends React.Component {
                             Updated version available
                         </NavLink>
                     </div>
-                }
-
-                { translationMissing && canEdit ?
-                    <div className="ui attached segment">
-                        <div className="ui info message">
-                            <p>Translation to {selectedLanguageName} is missing.</p>
-                            <p>{this.context.intl.formatMessage(this.messages.viewLanguage)} {getLanguageName(language)}.</p>
-                        </div>
-                    </div>
-                    : null
                 }
 
                 <div className="ui attached segment">
