@@ -112,6 +112,7 @@ class DeckViewPanel extends React.Component {
         const lastUpdate = CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
+        const deckCreatorDisplayName = this.props.DeckViewStore.creatorData.displayName || deckCreator;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
         if (deckData.language) deckData.language = deckData.language.substring(0, 2);
@@ -152,7 +153,7 @@ class DeckViewPanel extends React.Component {
                                 <div className="column">
                                     <div className="item">
                                         <div className="meta"><strong>Creator:&nbsp;</strong>
-                                            <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
+                                            <NavLink href={creatorProfileURL}>{deckCreatorDisplayName}</NavLink>
                                         </div>
                                         {originInfo}
                                         <div className="meta"><strong>Last Modified:&nbsp;</strong>{lastUpdate}</div>
