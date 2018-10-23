@@ -6,7 +6,7 @@ import loadGroupStatsByTime from '../stats/loadGroupStatsByTime';
 
 export default function updateGroupStatsActivityType(context, payload, done) {
     log.info(context);
-    context.dispatch('UPDATE_GROUP_STATS_ACTIVITY_TYPE', payload);
+    context.dispatch('UPDATE_GROUP_ACTIVITY_TIMELINE_FILTERS', payload);
 
     async.parallel([
         (callback) => {

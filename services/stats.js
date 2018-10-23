@@ -45,7 +45,7 @@ const activityTypeToVerb = (activityType) => {
         default:
             return 'http://adlnet.gov/expapi/verbs/experienced';
     }
-}
+};
 
 export default {
     name: 'stats',
@@ -99,7 +99,7 @@ export default {
                 body: [parseInt(params.groupid)],
                 json: true
             }).then((res) => {
-                let memberUsernames = res[0].members.map(member => member.username);
+                let memberUsernames = res[0].members.map((member) => member.username);
                 let pipeline = [{
                     '$match': {
                         'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
@@ -192,59 +192,61 @@ export default {
                 json: true
             }).then((response) => callback(null, response))
               .catch((err) => callback(err));
-        } else if (resource === 'stats.groupTopContributors') {
-            let pipeline = [
-                {
-                    '$match': {
-                        'statement.context.contextActivities.category': {
-                            '$exists': true
-                        },
-                        'statement.actor.account.name': username
-                    }
-                },
-                {
-                    '$unwind': {
-                        'path': '$statement.context.contextActivities.category'
-                    }
-                },
-                {
-                    '$project': {
-                        'tag': '$statement.context.contextActivities.category.definition.name.en'
-                    }
-                },
-                {
-                    '$group': {
-                        '_id': '$tag',
-                        'count': {
-                            '$sum': 1
-                        }
-                    }
-                },
-                {
-                    '$project': {
-                        '_id': false,
-                        'value': '$_id',
-                        'count': true
-                    }
-                },
-                {
-                    '$sort': {
-                        'count': -1
-                    }
-                },
-                {
-                    '$limit': 30
-                }
-            ];
-            rp({
-                method: 'GET',
-                uri: Microservices.lrs.uri + '/statements/aggregate',
-                qs: {
-                    pipeline: JSON.stringify(pipeline),
-                },
-                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+        } else if (resource === 'stats.groupMembersStats') {
+            rp.post({
+                uri: Microservices.user.uri + '/usergroups',
+                body: [parseInt(params.groupid)],
                 json: true
-            }).then((response) => callback(null, response))
+            }).then((res) => {
+                let memberUsernames = res[0].members.map((member) => member.username);
+                let pipeline = [
+                    {
+                        '$match': {
+                            'timestamp': {'$gte': {'$dte': periodToDate(datePeriod).toISOString()}},
+                            'statement.verb.id': activityTypeToVerb(activityType),
+                            'statement.actor.account.name': { $in: memberUsernames }
+                        }
+                    },
+                    {
+                        '$project': {
+                            'username': '$statement.actor.account.name'
+                        }
+                    },
+                    {
+                        '$group': {
+                            '_id': '$username',
+                            'count': {
+                                '$sum': 1
+                            }
+                        }
+                    },
+                    {
+                        '$project': {
+                            '_id': false,
+                            'username': '$_id',
+                            'count': true
+                        }
+                    },
+                    {
+                        '$sort': {
+                            'count': -1
+                        }
+                    },
+                    {
+                        '$limit': 30
+                    }
+                ];
+
+                return rp({
+                    method: 'GET',
+                    uri: Microservices.lrs.uri + '/statements/aggregate',
+                    qs: {
+                        pipeline: JSON.stringify(pipeline),
+                    },
+                    headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                    json: true
+                });
+            }).then((response) => callback(null, callback(null, response)))
               .catch((err) => callback(err));
         }
     }

@@ -1,16 +1,16 @@
 import async from 'async';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
-import loadGroupStatsByTime from '../stats/loadGroupStatsByTime';
+import loadGroupMembersStats from '../stats/loadGroupMembersStats';
 
 
-export default function updateGroupStatsPeriod(context, payload, done) {
+export default function updateGroupMembersStatsFilters(context, payload, done) {
     log.info(context);
-    context.dispatch('UPDATE_GROUP_STATS_PERIOD', payload);
+    context.dispatch('UPDATE_GROUP_MEMBERS_STATS_FILTERS', payload);
 
     async.parallel([
         (callback) => {
-            context.executeAction(loadGroupStatsByTime, payload, callback);
+            context.executeAction(loadGroupMembersStats, payload, callback);
         },
     ], (err, results) => {
         if (err) {

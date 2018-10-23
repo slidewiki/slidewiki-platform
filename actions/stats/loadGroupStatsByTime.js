@@ -4,8 +4,8 @@ import GroupStatsStore from '../../stores/GroupStatsStore';
 
 
 export default function loadGroupStatsByTime(context, payload, done) {
-    let datePeriod = context.getStore(GroupStatsStore).datePeriod;
-    let activityType = context.getStore(GroupStatsStore).activityType;
+    let datePeriod = context.getStore(GroupStatsStore).timelineFilters.datePeriod;
+    let activityType = context.getStore(GroupStatsStore).timelineFilters.activityType;
 
     log.info(context);
 
