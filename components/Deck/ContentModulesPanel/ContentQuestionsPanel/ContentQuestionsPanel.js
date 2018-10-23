@@ -14,6 +14,7 @@ import ContentQuestionAdd from './ContentQuestionAdd';
 import ContentQuestionEdit from './ContentQuestionEdit';
 // import ContentQuestionForm from './ContentQuestionForm';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+import QuestionDownloadModal from './Download/QuestionDownloadModal';
 
 class ContentQuestionsPanel extends React.Component {
 
@@ -100,14 +101,12 @@ class ContentQuestionsPanel extends React.Component {
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
         // console.log(editPermission);
         let addQuestionButton = (editPermission) ?
-            <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                     <i className="small plus icon" data-reactid={640} />
                     Add question
                 </button>
-            </div>
             : '';
-        // console.log(addQuestionButton);
+        let downloadQuestionsButton = <QuestionDownloadModal />;
 
         /*
         let addQuestionButton = (
@@ -138,7 +137,10 @@ class ContentQuestionsPanel extends React.Component {
                                 <div className="column">
                                     <h3 className="ui  header">Questions</h3>
                                 </div>
+                                <div className="column right aligned" data-reactid={655}>
                                 {addQuestionButton}
+                                {downloadQuestionsButton}
+                                </div>
                             </div>
                         </div>
                         {content}
