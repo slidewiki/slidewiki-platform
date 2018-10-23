@@ -76,17 +76,13 @@ class QuestionDownloadModal extends React.Component{
                 }
             );
         });
-        //console.log(transformQuestions);
         let downloadContent = JSON.stringify(transformQuestions);
-        //console.log(downloadContent);
 
         let element = document.createElement("a");
         let file = new Blob([downloadContent], {type: 'text/string'});
         element.href = URL.createObjectURL(file);
         element.download = "questions.json";
         element.click();
-
-        console.log(downloadQuestions);
 
         this.handleClose();
     }
