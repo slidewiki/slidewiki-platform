@@ -1257,6 +1257,7 @@ class SlideContentEditor extends React.Component {
                             {
                                 $(this).find('img:first').width(newWidth);
                                 $(this).find('img:first').height(newHeight);
+                                $(this).css('max-width', '');  //remove max-width that is set after inserting a new image
                             }
                             if($(this).find('iframe:first').length)
                             {
@@ -1740,7 +1741,7 @@ class SlideContentEditor extends React.Component {
                             let d = new Date();
                             let time = d.getTime();
                             if (nextProps.MediaStore.file.url){
-                                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '?' + time.toString() + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%"><img src="' + nextProps.MediaStore.file.url + '?' + time.toString() + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                             }
                         }
                         this.refreshCKeditor();
