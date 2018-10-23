@@ -1581,10 +1581,10 @@ class SlideContentEditor extends React.Component {
             //}
         });
     }
+
     componentWillReceiveProps(nextProps) {
         if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
-            //this.initialScale = 1;
             this.scaleRatio = null;
         }
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
@@ -2331,7 +2331,7 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
         const compStyle = {
-//            height: '720px',
+            height: 'fit-content',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
@@ -2339,8 +2339,9 @@ class SlideContentEditor extends React.Component {
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
-            height: '100%',
+            height: 'auto',
             padding: '0',
+            position: 'relative',
         };
         const contentStyle = {
             minWidth: '100%',
@@ -2405,6 +2406,12 @@ class SlideContentEditor extends React.Component {
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+        let slideHTMLContent = this.props.content;
+        if (slideHTMLContent.indexOf('class="pptx2html"') < 0) {
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">'
+                    + slideHTMLContent + '</div>';
+        }
+
         return (
             //<ResizeAware ref='container' id='container' style={{position: 'relative'}}>
             <div ref='container' id='container'>
@@ -2438,11 +2445,13 @@ class SlideContentEditor extends React.Component {
                 </button>
                 */}
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className={[style.reveal, 'reveal'].join(' ')}>
-                        <div className={[style.slides, 'slides'].join(' ')}>
+                    <div className={[style.reveal, 'reveal'].join(' ')}
+                            style={{height: 'fit-content', position: 'relative'}}>
+                        <div className={[style.slides, 'slides'].join(' ')}
+                                style={{height: 'fit-content', position: 'relative'}}>
                             <section className="present" ref='present' id='present'  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html: slideHTMLContent}}  tabIndex="0">
                                     </div>
                                 </HotKeys>
                             </section>
