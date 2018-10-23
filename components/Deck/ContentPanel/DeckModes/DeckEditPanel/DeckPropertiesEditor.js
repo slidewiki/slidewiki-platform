@@ -20,6 +20,8 @@ import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 
+import {educationLevels} from '../../../../../lib/isced';
+
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -45,6 +47,7 @@ class DeckPropertiesEditor extends React.Component {
             users: editors.users,
             groups: editors.groups,
             published: !props.deckProps.hidden,
+            educationLevel: props.deckProps.educationLevel,
         };
     }
 
@@ -220,6 +223,7 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 tags: TagsStore.tags,
                 hidden: !this.state.published,
+                educationLevel: this.state.educationLevel,
             });
             this.context.executeAction(updateTheme, this.state.theme);
         }
@@ -230,6 +234,13 @@ class DeckPropertiesEditor extends React.Component {
         stateChange[fieldName] = event.target.value;
         this.setState(stateChange);
     }
+
+    handleDropdownChange(fieldName, event, data) {
+        let stateChange = {};
+        stateChange[fieldName] = data.value;
+        this.setState(stateChange);
+    }
+
     onChangeMarkdown(event) {
         this.setState({allowMarkdown: !this.state.allowMarkdown});
     }
@@ -477,8 +488,7 @@ class DeckPropertiesEditor extends React.Component {
 
         let listOfAuthorized = this.getListOfAuthorized();
 
-        //let titleAndLanguage = <div className="two fields">
-        let titleAndLanguage = <div className="field">
+        let titleField = <div className="field">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
                 <label htmlFor="title_input">
                     Title
@@ -496,8 +506,14 @@ class DeckPropertiesEditor extends React.Component {
                 </div>
          </div>;
 
-        let titleAndLanguageAndPublished = <div className="fields">
-            <div className="fourteen wide field">{titleAndLanguage}</div>
+        let titleAndLevelAndPublished = <div className="fields">
+            <div className="ten wide field">{titleField}</div>
+            <div className="four wide field">
+                <label htmlFor="level_input">Education Level</label>
+                <Dropdown id="level_input" label="Education Level" fluid selection
+                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
+                    value={this.state.educationLevel} onChange={this.handleDropdownChange.bind(this, 'educationLevel')} />
+            </div>
             <div className="two wide field">
                 <label id="published_label">Published</label>
                 <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
@@ -529,7 +545,7 @@ class DeckPropertiesEditor extends React.Component {
                 <div className="ui grid">
                     <div className="sixteen wide column">
                         <form className="ui form">
-                            {titleAndLanguageAndPublished}
+                            {titleAndLevelAndPublished}
                             {description}
                             {themeAndLicence}
                             {markdownField}

@@ -20,6 +20,8 @@ import addDeckTranslation from '../../../actions/translation/addDeckTranslation'
 import addSlideTranslation from '../../../actions/translation/addSlideTranslation';
 import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';
 import qs from 'querystring';
+import zoom from '../../../actions/slide/zoom';
+import ContentStore from '../../../stores/ContentStore';
 
 class InfoPanelInfoView extends React.Component {
     constructor(props){
@@ -50,6 +52,10 @@ class InfoPanelInfoView extends React.Component {
                 defaultMessage:'Also available in'
             },
         });
+
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
+        this.resetZoom = this.resetZoom.bind(this);
     }
 
     getNameofNodes(tree, selector) {
@@ -122,6 +128,18 @@ class InfoPanelInfoView extends React.Component {
                 language: this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage,
             });
         }
+    }
+
+    zoomIn() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'in' });
+    }
+
+    resetZoom() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'reset' });
+    }
+
+    zoomOut() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'out' });
     }
 
     render() {
@@ -219,17 +237,39 @@ class InfoPanelInfoView extends React.Component {
         }
 
         let selectLanguageMessage = this.context.intl.formatMessage(this.messages.selectLanguage);
-
+        let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
-                <div className="ui top attached icon buttons menu">
-                    <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
+                {
+                    showZoomControls &&
+                        <div className="ui top attached basic buttons menu">
+                            <button className="ui icon button" onClick={this.zoomOut}
+                                    aria-label="Zoom out" data-tooltip="Zoom out">
+                                <i className="large zoom out icon"></i>
+                            </button>
+                            <button className="ui button" onClick={this.resetZoom}
+                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                <i className="large stacked icons">
+                                    <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
+                                    <i className="search icon"></i>
+                                </i>
+                            </button>
+                            <button className="ui icon button" onClick={this.zoomIn}
+                                    aria-label="Zoom in" data-tooltip="Zoom in">
+                                <i className="large zoom in icon"></i>
+                            </button>
+                        </div>
+                }
+
+                <div className={`ui ${showZoomControls ? '' : 'top'} attached icon buttons menu`}>
+                    <Dropdown pointing="top" disabled={languageOptions.length < 2 && !canEdit}
                         button basic style={{textAlign: 'center'}}
                         trigger={<h5 className='ui small header'>{selectLanguageMessage}: <i className={selectedLanguageIcon + ' flag'}></i>{selectedLanguageName}</h5>}
                         icon={null}
                         aria-label={selectLanguageMessage} data-tooltip={selectLanguageMessage}
                         defaultValue={selectedLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
                 </div>
+
                 { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
                         <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
@@ -310,7 +350,7 @@ class InfoPanelInfoView extends React.Component {
                   </div>
                 ) : ''}
 
-                <div className="ui attached segment">
+                <div className="ui bottom attached segment">
                     <div className={['ui', 'image']}>
                         <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
                             <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
@@ -329,12 +369,13 @@ InfoPanelInfoView.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore, ContentStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         TranslationStore: context.getStore(TranslationStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState(),
     };
 });
 export default InfoPanelInfoView;

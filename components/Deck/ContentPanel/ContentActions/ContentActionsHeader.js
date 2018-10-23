@@ -17,6 +17,7 @@ import saveClick from '../../../../actions/slide/saveClick';
 import cancelClick from '../../../../actions/slide/cancelClick';
 import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
+import zoom from '../../../../actions/slide/zoom';
 import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
@@ -75,6 +76,10 @@ class ContentActionsHeader extends React.Component {
                 defaultMessage:'Loading'
             },
         });
+
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
+        this.resetZoom = this.resetZoom.bind(this);
     }
 
 
@@ -136,8 +141,29 @@ class ContentActionsHeader extends React.Component {
         }
     }
 
+    zoomIn() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'in' });
+    }
+
+    resetZoom() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'reset' });
+    }
+
+    zoomOut() {
+        this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'out' });
+    }
+
     render() {
         const contentDetails = this.props.ContentStore;
+
+        const buttonsAreDisabled = this.props.PermissionsStore.permissions.readOnly
+            || !this.props.PermissionsStore.permissions.edit
+            || contentDetails.mode ==='edit'
+            || contentDetails.mode ==='markdownEdit'
+            || this.props.TranslationStore.inTranslationMode
+        ;
+        const buttonsAreHidden = this.props.UserProfileStore.username === '' || buttonsAreDisabled;
+
         //config buttons based on the selected item
         const editClass = classNames({
             'ui button attached basic': true,
@@ -149,19 +175,19 @@ class ContentActionsHeader extends React.Component {
         });
         const addSlideClass = classNames({
             'ui basic button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
+            'disabled': buttonsAreDisabled,
         });
         const addDeckClass = classNames({
             'ui basic button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
+            'disabled': buttonsAreDisabled,
         });
         const duplicateItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled,
         });
         const deleteItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled,
         });
         const red = {
             backgroundColor: 'red'
@@ -173,7 +199,7 @@ class ContentActionsHeader extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'ui basic button':true,
-                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit' || this.props.TranslationStore.inTranslationMode
+                'disabled': buttonsAreDisabled,
             }),
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
@@ -295,10 +321,10 @@ class ContentActionsHeader extends React.Component {
                         {mobileMessage}
                     </div>
                     <div className="column computer tablet only">
-                    {this.props.UserProfileStore.username === '' ? '' :
-                        <div className="ui right floated basic top attached buttons" >
+                    <div className="ui right floated basic top attached buttons" >
+                    { buttonsAreHidden ? '' : [
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
-                            type="button"
+                            type="button" key="addSlide"
                             aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
@@ -307,8 +333,8 @@ class ContentActionsHeader extends React.Component {
                                 <i className="inverted corner plus icon"></i>
                             </i>
 
-                        </button>
-                        <AttachSlides buttonStyle={buttonStyle} selector={selector} />
+                        </button>,
+                        <AttachSlides buttonStyle={buttonStyle} selector={selector} key="attachSlides" />,
                         <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
                             type="button"
                             aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
@@ -318,32 +344,47 @@ class ContentActionsHeader extends React.Component {
                                 <i className="yellow folder icon"></i>
                                 <i className="inverted corner plus icon"></i>
                             </i>
-                        </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
+                        </button>,
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} key="attachSubdeck" />,
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
-                            type="button"
+                            type="button" key="duplicateItem"
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="grey large copy outline horizontally flipped icon"></i>
 
-                        </button>
+                        </button>,
                         <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
-                            type="button"
+                            type="button" key="deleteItem"
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="red large trash alternate icon"></i>
-                        </button>
-                        {/*
-                          <button className="item ui small basic right attached disabled button">
-                              <a className="" title="Settings">
-                                  <i className="black large setting icon"></i>
-                              </a>
-                          </button>
-                          */}
+                        </button>,
+                    ] }
+                            {
+                                this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
+                                    <button className="ui icon button" onClick={this.zoomOut}
+                                            key="zoomOut"
+                                            type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                        <i className="large zoom out icon"></i>
+                                    </button>,
+                                    <button className="ui button" onClick={this.resetZoom}
+                                            key="zoomReset"
+                                            type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                        <i className="large stacked icons">
+                                            <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
+                                            <i className="search icon"></i>
+                                        </i>
+                                    </button>,
+                                    <button className="ui icon button" onClick={this.zoomIn}
+                                            key="zoomIn"
+                                            type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                        <i className="large zoom in icon"></i>
+                                    </button>
+                                ] : null
+                            }
                     </div>
-                    }
                 </div>
             </div>
         );
