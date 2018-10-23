@@ -78,7 +78,10 @@ class TagsPanel extends React.Component {
     handleSave(e) {
         e.preventDefault();
 
+        // we need to add the existing topics tags in this list, otherwise we'll lose them
         let tagsToSave = this.tags_input.getSelected();
+        tagsToSave.push(...this.props.TagsStore.topics.map((t) => ({ tagName: t.tagName })));
+
         this.context.executeAction(saveTags, {
             tags: tagsToSave,
             selector: this.props.selector

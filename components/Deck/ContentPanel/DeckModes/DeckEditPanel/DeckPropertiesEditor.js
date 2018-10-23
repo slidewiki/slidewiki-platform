@@ -37,8 +37,6 @@ class DeckPropertiesEditor extends React.Component {
             groups: [],
         };
 
-        let tags = props.deckProps.tags || [];
-
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
@@ -51,8 +49,8 @@ class DeckPropertiesEditor extends React.Component {
             groups: editors.groups,
             published: !props.deckProps.hidden,
             educationLevel: props.deckProps.educationLevel,
-            nonTopicTags: tags.filter((t) => t.tagType !== 'topic'),
-            topics: tags.filter((t) => t.tagType === 'topic'),
+            tags: props.deckProps.tags || [],
+            topics: props.deckProps.topics || [],
         };
     }
 
@@ -205,8 +203,8 @@ class DeckPropertiesEditor extends React.Component {
         groups = this.props.DeckEditStore.authorizedGroups;
         // console.log('handleSave', users, groups, isValid);
 
-        // for topics we need to merge with nonTopicTags in state
-        let newTags = [...this.state.nonTopicTags, ...this.topicInput.getSelected()];
+        // for topics we need to merge with tags in state
+        let newTags = [...this.state.tags, ...this.topicInput.getSelected()];
         // as topics are never new, and we don't change the other tags, tagName is all we need
         newTags = newTags.map((t) => ({ tagName: t.tagName }));
 

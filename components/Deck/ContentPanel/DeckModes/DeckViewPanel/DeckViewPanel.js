@@ -134,8 +134,6 @@ class DeckViewPanel extends React.Component {
 
         const user = this.props.UserProfileStore.userid;
 
-        let deckTopics = deckData.tags ? deckData.tags.filter((t) => t.tagType === 'topic') : [];
-
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
                 <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
         </div> : '';
@@ -192,18 +190,18 @@ class DeckViewPanel extends React.Component {
                                 </div>
                             </div>
                             <div className="row" >
-                                <div className="item">
-                                {deckDescription &&
-                                <div className="meta"><strong>Description:</strong>
-                                    <div className="description" >{deckDescription}</div>
-                                </div>
+                                { deckDescription &&
+                                    <div className="item">
+                                        <div className="meta"><strong>Description:</strong>
+                                            <div className="description" >{deckDescription}</div>
+                                        </div>
+                                    </div>
                                 }
-                                </div>
-                                { deckTopics.length > 0 &&
+                                { deckData.topics.length > 0 &&
                                     <div className="item">
                                         <div className="meta"><strong>Subject:&nbsp;</strong>
                                             <div className="description">
-                                            { deckTopics.map((t, i) => 
+                                            { deckData.topics.map((t, i) => 
                                                 <span key={i}>
                                                     { !!i && ',\xa0' }
                                                     <a target="_blank" href={`/deckfamily/${t.tagName}`}>{t.defaultName || t.tagName}</a>

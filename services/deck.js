@@ -3,6 +3,7 @@ import rp from 'request-promise';
 import slugify from 'slugify';
 
 import {fillInUserInfo, fillInGroupInfo} from '../lib/services/user';
+import {fetchTagInfo} from '../lib/services/tag';
 
 const log = require('../configs/log').log;
 
@@ -187,28 +188,18 @@ export default {
             });
 
             // fetch the tags data
-            let tagsPromise = deckPromise.then((deck) => {
-                if (!deck.tags || !deck.tags.length) return [];
-
-                return rp.get({
-                    uri: `${Microservices.tag.uri}/tags`,
-                    qs: {
-                        tagName: deck.tags.map((t) => t.tagName),
-                        paging: false, // this allows for unpaged results
-                    },
-                    useQuerystring: true,
-                    json: true,
-                });
-            });
+            let tagsPromise = deckPromise.then((deck) => fetchTagInfo(deck.tags));
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
             Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise, tagsPromise])
             .then(([deckData, slidesData, forkCount, usersData, shareCount, downloadCount, tags]) => {
+                // split tags to topics and non-topics
                 Object.assign(deckData, {
                     forkCount,
                     shareCount,
                     downloadCount,
-                    tags,
+                    tags: tags.filter((t) => t.tagType !== 'topic'),
+                    topics: tags.filter((t) => t.tagType === 'topic'),
                 });
 
                 addSlug(deckData);
@@ -265,19 +256,7 @@ export default {
             });
 
             // fetch the tags data
-            let tagsPromise = deckPromise.then((deck) => {
-                if (!deck.tags || !deck.tags.length) return [];
-
-                return rp.get({
-                    uri: `${Microservices.tag.uri}/tags`,
-                    qs: {
-                        tagName: deck.tags.map((t) => t.tagName),
-                        paging: false, // this allows for unpaged results
-                    },
-                    useQuerystring: true,
-                    json: true,
-                });
-            });
+            let tagsPromise = deckPromise.then((deck) => fetchTagInfo(deck.tags));
 
             Promise.all([deckPromise, tagsPromise]).then(([deck, tags]) => {
                 // prepare users and groups from editors object
@@ -294,7 +273,6 @@ export default {
                     let deckProps = {
                         description: deck.description,
                         language: deck.language,
-                        tags: deck.tags,
                         title: deck.title,
                         license: deck.license,
                         theme: deck.theme,
@@ -302,7 +280,8 @@ export default {
                         editors: { users, groups },
                         hidden: deck.hidden,
                         educationLevel: deck.educationLevel,
-                        tags: tags,
+                        tags: tags.filter((t) => t.tagType !== 'topic'),
+                        topics: tags.filter((t) => t.tagType === 'topic'),
                         deckOwner: deck.user,
                         revisionOwner: deck.revisionUser,
                         sid: args.sid,
@@ -539,7 +518,7 @@ export default {
                     };
                 });
 
-                rp.put({
+                return rp.put({
                     uri: Microservices.deck.uri + '/deck/' + params.selector.sid + '/tags',
                     json: true,
                     body: {
@@ -547,12 +526,13 @@ export default {
                         tags: deckTags,
                     },
                     headers: { '----jwt----': params.jwt },
-                }).catch( (err) => {
-                    console.log(err);
-                    callback(err);
+                }).then(() => {
+                    callback(null, {
+                        tags: tags.filter((t) => t.tagType !== 'topic'),
+                        topics: tags.filter((t) => t.tagType === 'topic'),
+                    });
                 });
 
-                callback(null, {tags: tags});
             }).catch((err) => callback(err));
         }
         else if (resource === 'deck.translations') {

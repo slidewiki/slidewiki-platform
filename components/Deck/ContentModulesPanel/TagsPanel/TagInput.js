@@ -22,7 +22,7 @@ class TagInput extends React.Component {
             // initialize pre-selected tags
             let values = this.state.initialTags.map( (tag) => `tagName:${tag.tagName}`);
 
-            $(this.rootElement).dropdown('set selected', values);
+            $(this.rootElement).dropdown('set exactly', values);
         }
     }
     getStateFromProps(props){
