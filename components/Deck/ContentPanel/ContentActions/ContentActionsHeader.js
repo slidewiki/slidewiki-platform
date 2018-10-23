@@ -342,7 +342,7 @@ class ContentActionsHeader extends React.Component {
                         </button>,
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} key="attachSlides" />,
                         <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
-                            type="button"
+                            type="button" key="addDeck"
                             aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
