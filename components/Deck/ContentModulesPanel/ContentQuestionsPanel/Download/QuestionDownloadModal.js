@@ -6,7 +6,7 @@ import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic
 import ContentQuestionsStore from '../../../../../stores/ContentQuestionsStore';
 import FocusTrap from 'focus-trap-react';
 import {FormattedMessage, defineMessages} from 'react-intl';
-//import QuestionDownloadList from './QuestionDownloadList';
+import QuestionDownloadList from './QuestionDownloadList';
 import updateDownloadQuestions from '../../../../../actions/questions/updateDownloadQuestions';
 
 class QuestionDownloadModal extends React.Component{
@@ -121,8 +121,8 @@ class QuestionDownloadModal extends React.Component{
         
         let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value="You can select one or more questions from this deck to download." tabIndex ='-1'/>;
 
-        let segmentPanelContent = 'hi';
-        //let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} handleSelectAll={() => this.handleSelectAll()}/>;
+        //let segmentPanelContent = 'hi';
+        let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} handleSelectAll={() => this.handleSelectAll()}/>;
         let actionButton = downloadBtn;
         let actionButton2='';
 
