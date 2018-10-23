@@ -30,7 +30,7 @@ class QuestionDownloadModal extends React.Component{
         this.setState({
             downloadQuestions: nextProps.ContentQuestionsStore.downloadQuestions, //need to add to store
             deckQuestions:nextProps.ContentQuestionsStore.questions, //need to change name?
-            });
+        });
     }
 
     componentWillUnmount(){
@@ -68,20 +68,20 @@ class QuestionDownloadModal extends React.Component{
 
         let transformQuestions = downloadQuestions.map((node, index) => {
             return (
-                {
-                    title: node.title,
-                    answers: node.answers,
-                    explanation: node.explanation,
-                    difficulty: node.difficulty,
-                }
+            {
+                title: node.title,
+                answers: node.answers,
+                explanation: node.explanation,
+                difficulty: node.difficulty,
+            }
             );
         });
         let downloadContent = JSON.stringify(transformQuestions);
 
-        let element = document.createElement("a");
+        let element = document.createElement('a');
         let file = new Blob([downloadContent], {type: 'text/string'});
         element.href = URL.createObjectURL(file);
-        element.download = "questions.json";
+        element.download = 'questions.json';
         element.click();
 
         this.handleClose();

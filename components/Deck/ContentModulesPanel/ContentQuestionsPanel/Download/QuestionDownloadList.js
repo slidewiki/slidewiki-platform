@@ -17,7 +17,7 @@ class QuestionDownloadList extends React.Component {
     componentWillReceiveProps(nextProps){
         this.setState({
             downloadQuestions: nextProps.ContentQuestionsStore.downloadQuestions,
-        })
+        });
     }
 
     checkNoEmpty(element){
