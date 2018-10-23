@@ -41,7 +41,7 @@ class UserNotificationsItem extends React.Component {
             notification.user_id = undefined;
         }
 
-        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deck/') + notification.content_id;
+        let viewPath = (notification.content_kind === 'deck') ? '/deck/' + notification.content_id : (notification.slidePath && notification.slidePath !== '') ? notification.slidePath : '/slideview/' + notification.content_id;
         const cheerioContentName = (notification.content_name !== undefined) ? cheerio.load(notification.content_name).text() : '';
         if (notification.content_kind === 'group')
             viewPath = '/user/' + this.props.username + '/groups/overview';
