@@ -302,7 +302,6 @@ class InfoPanelInfoView extends React.Component {
                         </NavLink>
                     </div>
                 }
-                <div className="ui attached segment">
 
                     { translationMissing && canEdit ?
                         <div className="ui selection list">
@@ -393,6 +392,7 @@ InfoPanelInfoView.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
 };
+
 InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore, ContentStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
