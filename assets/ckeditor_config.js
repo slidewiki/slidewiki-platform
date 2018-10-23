@@ -12,6 +12,7 @@
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+//CKEDITOR.plugins.addExternal('sharedspace', '/ckeditor-plugins/sharedspace/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
 CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
 
@@ -26,6 +27,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.extraPlugins = 'sourcedialog',
     //config.extraPlugins = 'sourcedialog';
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
+    config.fontSize_sizes = '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;40/40px;44/44px;48/48px;52/52px;56/56px;60/60px;64/64px;68/68px;72/72px;76/76px;82/82px;90/90px;99/99px'; //100/100px;120/120px;140/140px
 
     // Set the most common block elements.
     config.format_tags = 'p;h3;h4;h5;pre';
@@ -35,24 +37,71 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableObjectResizing = true;
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
-        //'/',
+
+        { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'RemoveFormat'] }, //, 'CopyFormatting'
+        { name: 'styles', items: [ 'FontSize',] },
+        { name: 'styles', items: [ 'Font'] },
+        //{ name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
+    
+        { name: 'styles', items: [ 'Styles' ] },
+        //{ name: 'basicstyles', items: [ ] },
+        { name: 'colors', items: [ 'TextColor', 'BGColor'] },
+        { name: 'colors', items: [ ] },
+        { name: 'styles', items: [ 'lineheight' ] },
+        { name: 'links', items: [ 'Link', 'Unlink' ] },
+        { name: 'styles', items: [ 'Format'] },
+    //'/',
+        //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+        //{ name: 'insert', items: [ ] },
+        //{ name: 'source', items: [ 'Mathjax'] },
+        { name: 'paragraph', items: [ 'NumberedList',  'BulletedList'] },
+        { name: 'paragraph', items: [] },
+        { name: 'paragraph', items: [ 'Outdent', 'Indent'] },
+        { name: 'paragraph', items: [ ] },
+        { name: 'paragraph', items: [ 'Symbol', 'Blockquote'] },
+        { name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+        { name: 'paragraph', items: [ ] },
+        { name: 'paragraph', items: [ ] },
+        { name: 'paragraph', items: [  ] },
+    //'/',
+        //{ name: 'document', items: [ 'Sourcedialog'] },
+        //{ name: 'document', items: [ 'CodeSnippet'] },
+        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'] },
+        { name: 'tools', items: ['Undo', 'Redo'] }
+        
+            /*{ name: 'styles', items: [ 'FontSize' ] },
+            { name: 'basicstyles', items: ['CopyFormatting'] },
+            { name: 'basicstyles', items: ['Bold'] },
+            { name: 'basicstyles', items: [ 'Italic'] },
+            { name: 'basicstyles', items: [ 'Underline'] },
             { name: 'styles', items: [ 'Font'] },
-            { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
+            { name: 'basicstyles', items: ['Strike' ] },
+            { name: 'basicstyles', items: [ 'Subscript' ] },
+            { name: 'basicstyles', items: [ 'Superscript' ] },
             { name: 'styles', items: [ 'Styles' ] },
+            { name: 'basicstyles', items: ['RemoveFormat' ] },
+			{ name: 'colors', items: [ 'TextColor'] },
+            { name: 'colors', items: ['BGColor' ] },
+            { name: 'styles', items: [ 'lineheight' ] },
+            { name: 'links', items: [ 'Link', 'Unlink' ] },
             { name: 'styles', items: [ 'Format'] },
         //'/',
             //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
             { name: 'insert', items: [ 'Symbol'] },
             //{ name: 'source', items: [ 'Mathjax'] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'paragraph', items: [ 'NumberedList'] },
+            { name: 'paragraph', items: [ 'BulletedList'] },
+            { name: 'paragraph', items: [ 'Outdent'] },
+			{ name: 'paragraph', items: [ 'Indent'] },
+            { name: 'paragraph', items: [ 'Blockquote'] },
+            { name: 'paragraph', items: [ 'JustifyLeft'] },
+            { name: 'paragraph', items: [ 'JustifyCenter'] },
+            { name: 'paragraph', items: [  'JustifyRight'] },
+            { name: 'paragraph', items: [  'JustifyBlock'] },
         //'/',
             //{ name: 'document', items: [ 'Sourcedialog'] },
             //{ name: 'document', items: [ 'CodeSnippet'] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },*/
         //'/',
     ];
     //{ name: 'document', items: ['Templates' ] },
@@ -133,6 +182,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'list,' +
 		'liststyle,' +
         'lineheight,' +
+        'sharedspace,' +
 		'magicline,' +
 		'maximize,' +
 		'newpage,' +

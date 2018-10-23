@@ -4,7 +4,7 @@ import PopularDecks from '../PopularDecks';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Icon } from 'semantic-ui-react';
-import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
+import fetchUserDecks from '../../../../actions/user/userprofile/fetchUserDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 
 class UserDecks extends React.Component {
