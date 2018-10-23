@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Grid
+ * # Semantic UI 2.4.1 - Grid
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -1352,7 +1352,7 @@
 .ui.grid > .red.row,
 .ui.grid > .red.column,
 .ui.grid > .row > .red.column {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
   color: #FFFFFF;
 }
 
@@ -1360,7 +1360,7 @@
 .ui.grid > .orange.row,
 .ui.grid > .orange.column,
 .ui.grid > .row > .orange.column {
-  background-color: #DA6619 !important;
+  background-color: #CA5010 !important;
   color: #FFFFFF;
 }
 
@@ -1384,7 +1384,7 @@
 .ui.grid > .green.row,
 .ui.grid > .green.column,
 .ui.grid > .row > .green.column {
-  background-color: #188130 !important;
+  background-color: #158538 !important;
   color: #FFFFFF;
 }
 
@@ -1424,7 +1424,7 @@
 .ui.grid > .pink.row,
 .ui.grid > .pink.column,
 .ui.grid > .row > .pink.column {
-  background-color: #E03997 !important;
+  background-color: #8B2527 !important;
   color: #FFFFFF;
 }
 

@@ -5,7 +5,7 @@ import searchStringEmptyError  from '../error/searchStringEmptyError';
 export default function loadMoreResults(context, payload, done) {
 
 
-    context.dispatch('SHOW_LOAD_MORE_LOADING', payload);
+    context.dispatch('SHOW_LOAD_MORE_LOADING');
 
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

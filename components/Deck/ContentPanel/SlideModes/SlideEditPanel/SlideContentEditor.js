@@ -13,6 +13,7 @@ import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -43,6 +44,7 @@ class SlideContentEditor extends React.Component {
         this.idContext = null;
         //this.oldContent = '';
         //this.redoContent = '';
+        this.scaleRatio = null;
 
         CKEDITOR.on('instanceReady', (ev) => {
 
@@ -107,7 +109,6 @@ class SlideContentEditor extends React.Component {
                 });
                 swal({
                     title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
-                    title: 'Apply template',
                     text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text, {
                         width: $('.pptx2html').css('width'),
                         height: $('.pptx2html').css('height')
@@ -226,7 +227,6 @@ class SlideContentEditor extends React.Component {
                 buttonsStyling: false,
                 focusConfirm: true,
                 allowEnterKey: true,
-                showCloseButton: true,
                 allowEscapeKey: true,
             }).then((result) => {
                 this.applyTemplate(template, true); //keep existing content
@@ -605,6 +605,10 @@ class SlideContentEditor extends React.Component {
         }
         CKEDITOR.inline('inlineContent', {
             customConfig: '/assets/ckeditor_config.js',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: {
+                top: 'CKeditorMenu'
+            },
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
 
@@ -959,6 +963,10 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.replace('inlineContent', {
             //customConfig: '/assets/ckeditor_config.js',
             customConfig: '/assets/ckeditor_config.js',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: {
+                top: 'CKeditorMenu'
+            },
             toolbarGroups: [
                 //needed for Chrome initialization
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
@@ -973,6 +981,19 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
+        
+        CKEDITOR.instances.inlineContent.on('focus',(evt) => {
+            this.context.executeAction(contentEditorClick, {
+                focus: true
+            });
+        });
+
+        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+            this.context.executeAction(contentEditorClick, {
+                focus: false
+            });
+        });
+
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
@@ -1274,7 +1295,7 @@ class SlideContentEditor extends React.Component {
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
                 if (!id || id === 'inlineContent') {
-                    id = this.menuFocus; 
+                    id = this.menuFocus;
                 }
                 if (id && id !== 'inlineContent') {
                     /*
@@ -1584,9 +1605,13 @@ class SlideContentEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
-            //this.initialScale = 1;
-            this.scaleRatio = null;
         }
+
+        if (nextProps.SlideEditStore.scaleRatio && nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideEditStore.scaleRatio;
+            this.resize();
+        }
+
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
             if (this.finishLoading === true){
@@ -2260,21 +2285,6 @@ class SlideContentEditor extends React.Component {
         //context.hasChanges = true;
     }
 
-    zoomIn(){
-        this.scaleRatio += 0.25;
-        this.resize();
-    }
-
-    resetZoom(){
-        this.scaleRatio = 1;
-        this.resize();
-    }
-
-    zoomOut(){
-        this.scaleRatio -= 0.25;
-        this.resize();
-    }
-
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
@@ -2461,33 +2471,6 @@ class SlideContentEditor extends React.Component {
                             </div>
                         </div>
                     }
-                    {
-                        this.props.hideSpeakerNotes ?  null :
-                        <div className="ui segment vertical attached left icon buttons">
-                            <button className="ui button" onClick={this.zoomIn.bind(this)} type="button"
-                                    aria-label="Zoom in" data-tooltip="Zoom in">
-                                <i className="stacked icons">
-                                    <i className="small plus icon"></i>
-                                    <i className="large search icon"></i>
-                                </i>
-                            </button>
-                            <button className="ui button" onClick={this.resetZoom.bind(this)} type="button"
-                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
-                                <i className="stacked icons">
-                                    <i className="small compress icon"></i>
-                                    <i className="large search icon"></i>
-                                </i>
-                            </button>
-                            <button className="ui button" onClick={this.zoomOut.bind(this)} type="button"
-                                    aria-label="Zoom out" data-tooltip="Zoom out">
-                                <i className="stacked icons">
-                                    <i className="small minus icon"></i>
-                                    <i className="large search icon"></i>
-                                </i>
-                            </button>
-                        </div>
-                    }
-
                 </div>
             </div>
         );
