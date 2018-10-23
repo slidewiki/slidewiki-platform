@@ -64,9 +64,9 @@ class QuestionDownloadModal extends React.Component{
     }
 
     handleDownloadButton(){
-        /*let downloadQuestions = this.props.ContentQuestionsStore.downloadQuestions;
+        let downloadQuestions = this.props.ContentQuestionsStore.downloadQuestions;
 
-        let transformQuestions = downloadQuestions.map((node, index) => {
+        /*let transformQuestions = downloadQuestions.map((node, index) => {
             return (
                 {
                     title: node.title,
@@ -86,7 +86,7 @@ class QuestionDownloadModal extends React.Component{
         element.download = "questions.json";
         element.click();*/
 
-        console.log(`buttonclicked`);
+        console.log(downloadQuestions);
 
         this.handleClose();
     }
@@ -121,7 +121,6 @@ class QuestionDownloadModal extends React.Component{
         
         let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value="You can select one or more questions from this deck to download." tabIndex ='-1'/>;
 
-        //let segmentPanelContent = 'hi';
         let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} handleSelectAll={() => this.handleSelectAll()}/>;
         let actionButton = downloadBtn;
         let actionButton2='';
@@ -177,7 +176,6 @@ class QuestionDownloadModal extends React.Component{
 
         );
     }
-///////////////
 }
 
 QuestionDownloadModal.contextTypes = {

@@ -3,7 +3,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../../stores/ContentQuestionsStore';
 import updateDownloadQuestions from '../../../../../actions/questions/updateDownloadQuestions';
-//import QuestionDownloadItem from './QuestionDownloadItem';
+import QuestionDownloadItem from './QuestionDownloadItem';
 
 class QuestionDownloadList extends React.Component {
     constructor(props){
@@ -70,8 +70,7 @@ class QuestionDownloadList extends React.Component {
     render() {
         let questionslist = this.props.questions.map((node, index) => {
             return (
-                `question ${node}`
-                //<QuestionDownloadItem question={node} onClick={() => this.handleQuestionClick(node)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleQuestionClick', node)} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
+                <QuestionDownloadItem question={node} onClick={() => this.handleQuestionClick(node)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleQuestionClick', node)} selectedQ={this.inSelectedQuestions(node)} key={index} questionIndex={index}/>
             );
         });
 
