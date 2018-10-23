@@ -198,6 +198,8 @@ class DeckViewPanel extends React.Component {
                                         </div>
                                     </div>
                                 }
+                            </div>
+                            <div className="row" >
                                 { deckData.topics.length > 0 &&
                                     <div className="item">
                                         <div className="meta"><strong>Subject:&nbsp;</strong>
