@@ -66,7 +66,7 @@ class QuestionDownloadModal extends React.Component{
     handleDownloadButton(){
         let downloadQuestions = this.props.ContentQuestionsStore.downloadQuestions;
 
-        /*let transformQuestions = downloadQuestions.map((node, index) => {
+        let transformQuestions = downloadQuestions.map((node, index) => {
             return (
                 {
                     title: node.title,
@@ -84,7 +84,7 @@ class QuestionDownloadModal extends React.Component{
         let file = new Blob([downloadContent], {type: 'text/string'});
         element.href = URL.createObjectURL(file);
         element.download = "questions.json";
-        element.click();*/
+        element.click();
 
         console.log(downloadQuestions);
 
