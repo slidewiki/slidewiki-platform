@@ -392,30 +392,31 @@ class SlideEditLeftPanel extends React.Component {
         };
         let otherList = (
                 <div>
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                  <a className="item" id="handleBack"  tabIndex="0" role="button" onClick={this.handleBack.bind(this)} aria-labelledby="editpanel.back" onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i id="handleBackLink" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
-                  <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
-                      <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
+                  <a  className="item" tabIndex="0" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} aria-labelledby="editpanel.embed"
+                      onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
+                      <i   className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
                   </a>
-                  <a className="item" id="handleTableClick" role="button" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
-                      <i tabIndex="0" className="table icon"></i><FormattedMessage id='editpanel.table' defaultMessage='Table' />
+                  <a className="item" id="handleTableClick" tabIndex="0" aria-labelledby="editpanel.table" role="button" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
+                      <i className="table icon"></i><FormattedMessage id='editpanel.table' defaultMessage='Table' />
                   </a>
-                  <a className="item" id="handleMathsClick" role="button" onClick={this.handleMathsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleMathsClick')}>
-                      <i tabIndex="0" className="superscript icon"></i><FormattedMessage id='editpanel.Maths' defaultMessage='Maths' />
+                  <a className="item" id="handleMathsClick" tabIndex="0" aria-labelledby="editpanel.Maths" role="button" onClick={this.handleMathsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleMathsClick')}>
+                      <i className="superscript icon"></i><FormattedMessage id='editpanel.Maths' defaultMessage='Maths' />
                   </a>
-                  <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
-                      <i tabIndex="0" className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
+                  <a className="item" id="handleCodeClick" tabIndex="0" aria-labelledby="editpanel.Code" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
+                      <i  className="code icon"></i><FormattedMessage id='editpanel.Code' defaultMessage='Code' />
                   </a>
-                  <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
-                      <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
+                  <a className="item" id="handleHTMLEditorClick" role="button" tabIndex="0" aria-labelledby="editpanel.HTMLeditor" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
+                      <i className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
                   </a>
                 </div>);
 
         let embedOptions = (
                 <form className="ui form">
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                  <a className="item" id="handleBack" role="button" tabIndex="0" aria-labelledby="editpanel.back" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
+                      <i id="handleBackLink" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <label htmlFor="embedCode">
                     <FormattedMessage id='editpanel.embedCode' defaultMessage='Code to embed content:' />
@@ -424,7 +425,7 @@ class SlideEditLeftPanel extends React.Component {
                     <i className="error">
                         {this.state.embedCodeMissingError === false ? '' : <FormattedMessage id='editpanel.embedCodeMissingError' defaultMessage='missing embed code' />}
                     </i>
-                    <textarea rows="4" onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-label="Code to embed content" autoFocus ></textarea>
+                    <textarea rows="4" onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-labelledby="editpanel.embedCode" autoFocus ></textarea>
                   </div>
                   <div>
                     <i>or</i>
@@ -436,22 +437,22 @@ class SlideEditLeftPanel extends React.Component {
                     <i className="error">
                         {this.state.URLMissingError === false ? '' : <FormattedMessage id='editpanel.URLMissingError' defaultMessage='missing URL/link to content' />}
                     </i>
-                    <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" autoFocus/>
+                    <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-labelledby="editpanel.embedURL" autoFocus/>
                   </div>
                   <label htmlFor="embedWidth">
                     <FormattedMessage id='editpanel.embedWidth' defaultMessage='Width of embedded content:' />
                   </label>
                   <div className="required field">
-                    <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="embedWidth" ref="embedWidth" name="embedWidth" aria-label="Width of embedded content" aria-required="true" required />
+                    <Input onChange={this.handleChange.bind(this)} defaultValue="400"  id="embedWidth" ref="embedWidth" name="embedWidth" aria-labelledby="editpanel.embedWidth" aria-required="true" required />
                   </div>
                   <label htmlFor="embedHeight">
                     <FormattedMessage id='editpanel.embedHeight' defaultMessage='Height of embedded content:' />
                   </label>
                   <div className="required field">
-                    <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="embedHeight" ref="embedHeight" name="embedHeight" aria-label="Height of embedded content" aria-required="true" required />
+                    <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="embedHeight" ref="embedHeight" name="embedHeight" aria-labelledby="editpanel.embedHeight" aria-required="true" required />
                   </div>
-                  <a className="item" id="handleEmbedAddClick" role="button" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
-                      <i tabIndex="0" className="add square icon"></i><FormattedMessage id='editpanel.embedAdd' defaultMessage='Add to Slide' />
+                  <a className="item" id="handleEmbedAddClick" tabIndex="0" aria-labelledby="editpanel.embedAdd editpanel.embedNote" role="button" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
+                      <i className="add square icon"></i><FormattedMessage id='editpanel.embedAdd' defaultMessage='Add to Slide' />
                   </a>
                   <label htmlFor="handleEmbedAddClick">
                     <FormattedMessage id='editpanel.embedNote' defaultMessage='Not all website owners allow their content to be embedded. Using an embed code (instead of URL) often works best.' />
@@ -467,27 +468,28 @@ class SlideEditLeftPanel extends React.Component {
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
                 <div style={templateListStyle}>
-                  <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                    <div className="sr-only">Select slide template</div>
+                  <a className="item" id="handleBack" tabIndex="0" aria-labelledby="editpanel.back" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i id="handleBackLink" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
-                      <i tabIndex="0" aria-label="Empty document"><FormattedMessage id='editpanel.template2' defaultMessage='Empty document - Document-mode (non-canvas)' /></i> <br/><br/>
+                      <i tabIndex="0" aria-labelledby="editpanel.template2"><FormattedMessage id='editpanel.template2' defaultMessage='Empty document - Document-mode (non-canvas)' /></i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '3')}>
-                      <i tabIndex="0" aria-label="Document with title"><FormattedMessage id='editpanel.template3' defaultMessage='Document with title - Document-mode (non-canvas)' /></i> <br/><br/>
+                      <i tabIndex="0" aria-labelledby="editpanel.template3"><FormattedMessage id='editpanel.template3' defaultMessage='Document with title - Document-mode (non-canvas)' /></i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '31')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '31')}>
-                      <i tabIndex="0" aria-label="Document with rich text example"><FormattedMessage id='editpanel.template31' defaultMessage='Document with rich text example - Document-mode (non-canvas)' /></i> <br/><br/>
+                      <i tabIndex="0" aria-labelledby="editpanel.template31"><FormattedMessage id='editpanel.template31' defaultMessage='Document with rich text example - Document-mode (non-canvas)' /></i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - Document with rich text example" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
-                      <i tabIndex="0" aria-label="Title and bullets"><FormattedMessage id='editpanel.template1' defaultMessage='Title and bullets' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /> </i> <br/><br/>
+                      <i tabIndex="0" aria-labelledby="editpanel.template1"><FormattedMessage id='editpanel.template1' defaultMessage='Title and bullets' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /> </i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11')}>
-                      <i tabIndex="0" aria-label="1 row 1 column"><FormattedMessage id='editpanel.template11' defaultMessage='1 row 1 column ' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /></i> <br/><br/>
+                      <i tabIndex="0" aria-labelledby="editpanel.template11"><FormattedMessage id='editpanel.template11' defaultMessage='1 row 1 column ' /><br/> <FormattedMessage id='editpanel.template960px' defaultMessage='960 * 720 pixels (4:3)' /></i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '12')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '12')}>
@@ -542,18 +544,18 @@ class SlideEditLeftPanel extends React.Component {
 
         let propertiesContent  = (
                 <form className="ui form">
-                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                  <a className="item" id="handleBack" tabIndex="0" aria-labelledby="editpanel.back" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i id="handleBackLink" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
-                  <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
+                  <a className="item" id="handleTitleClick" tabIndex="0" aria-labelledby="editpanel.slideTitleButton" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
+                      <i className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Change slide name' />
                   </a>
-                  <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
-                      <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
+                  <a className="item" id="changeSlideSizeClick" tabIndex="0" aria-labelledby="editpanel.slideSize" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
+                      <i className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
                   </a>
                  <Popup id='colorpopup' trigger={
-                      <a className="item" id="handleChangeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
-                          <i tabIndexn="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
+                      <a className="item" id="handleChangeBackgroundColor" tabIndex="0" aria-labelledby="editpanel.changeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
+                          <i className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
                       </a>
                     }
                     content={
@@ -568,8 +570,8 @@ class SlideEditLeftPanel extends React.Component {
                     open={this.state.colorPopupIsOpen}
                     onOpen={this.handleOpenColorPopup.bind(this)}
                   />
-                  <a className="item" id="handleRemoveBackgroundClick" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
-                      <i tabIndex="0"  className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
+                  <a className="item" id="handleRemoveBackgroundClick" tabIndex="0" aria-labelledby="editpanel.removeBackground" role="button" onClick={this.handleRemoveBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleRemoveBackgroundClick')}>
+                      <i className="image slash icon"></i><FormattedMessage id='editpanel.removeBackground' defaultMessage='Remove background' />
                       {/*eraser*/}
                   </a>
                 </form>);
@@ -585,8 +587,8 @@ class SlideEditLeftPanel extends React.Component {
 
         let titleChangeContent  = (
                 <div className="ui form">
-                  <a className="item" id="handleTitleBack" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
-                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                  <a className="item" id="handleTitleBack" tabIndex="0" aria-labelledby="editpanel.back" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
+                      <i id="handleBackLink" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <i className="error">
                       {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='Error: Slide name can not be empty' />}
@@ -598,7 +600,7 @@ class SlideEditLeftPanel extends React.Component {
                   <div className="ui fluid action input">
                     <TextArea type="text" onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideNameChangeKeyInInput')} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide name" aria-required="true" required autoFocus tabIndex='0'/>
                     <button className="ui icon button blue" aria-describedby="ariaLabelSlideNameSaveButton" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
-                        <i tabIndex="0" className="check icon white big"></i>
+                        <i className="check icon white big"></i>
                     </button>
                   </div>
                   <TextArea className="sr-only" id="ariaLabelSlideNameSaveButton" value="submit slide name" tabIndex ='-1'/>
@@ -606,11 +608,11 @@ class SlideEditLeftPanel extends React.Component {
 
         let sizeContent = (
             <div >
-              <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                  <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+              <a className="item" id="handleBack" aria-labelledby="editpanel.back" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                  <i id="handleBackLink"  className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '960')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '960')}>
-                  <i tabIndex="0" aria-label="Standard (4:3) low - 960 * 720 pixels -  (legacy Powerpoint default) "><FormattedMessage id='editpanel.slideSizeStandard' defaultMessage='Standard (4:3) low' /> <br/> 960 * 720 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' />  <br/> <FormattedMessage id='editpanel.slideSizeNameLegacy' defaultMessage='(legacy/old) Powerpoint default' />  </i> <br/><br/>
+                  <i ><FormattedMessage id='editpanel.slideSizeStandard' defaultMessage='Standard (4:3) low' /> <br/> 960 * 720 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' />  <br/> <FormattedMessage id='editpanel.slideSizeNameLegacy' defaultMessage='(legacy/old) Powerpoint default' />  </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/960.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1280')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1280')}>
@@ -632,27 +634,27 @@ class SlideEditLeftPanel extends React.Component {
             </div>);
         let normalContent = (
           <div>
-            <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
-                <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
+            <a className="item" id="handleAddInputBox" tabIndex="0" aria-labelledby="editpanel.addTextBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
+                <i className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
-            <a  className="item" id="handleUploadMediaClick" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
-                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Add image' />
+            <a  className="item" id="handleUploadMediaClick" tabIndex="0" aria-labelledby="editpanel.Image" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
+                <i className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Add image' />
             </a>
             {this.paintButton}
-            <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
-                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Add video' />
+            <a  className="item" id="handleUploadVideoClick" tabIndex="0" aria-labelledby="editpanel.Video" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
+                <i className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Add video' />
             </a>
-            <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
-                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
+            <a  className="item" id="handleOtherClick" tabIndex="0" aria-labelledby="editpanel.Other" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
+                <i className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
-            <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
-                <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
+            <a  className="item" id="handleTemplateClick" tabIndex="0" aria-labelledby="editpanel.Template" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
+                <i className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
-            <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
-                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
+            <a className="item" id="handlePropertiesClick" tabIndex="0" aria-labelledby="editpanel.Properties" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
+                <i className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
             </a>
-            <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
-                <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
+            <a className="item" id="handleHelpClick" tabIndex="0" aria-labelledby="editpanel.Help" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
+                <i className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
             </a>
             </div>
           );
@@ -680,10 +682,10 @@ class SlideEditLeftPanel extends React.Component {
         };
 
         return (
-          <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+          <div className="ui container" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
               <NavigationPanel mode='edit' />
                 <div className="ui buttons attached fluid">
-                    <button className="ui button" style={!this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, false)}>Add</button>
+                    <button className="ui button" style={!this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, false)}>Design</button>
                     <button className="ui button" style={this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, true)}>Edit</button>
                 </div>
               <div className="ui grey inverted segment bottom attached active tab">
