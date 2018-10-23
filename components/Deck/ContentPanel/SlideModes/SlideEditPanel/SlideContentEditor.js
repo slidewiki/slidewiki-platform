@@ -2264,8 +2264,8 @@ class SlideContentEditor extends React.Component {
             this.refs.inlineContent.style.height = contentHeight + padding + 'px';
             this.refs.inlineContent.style.width = contentWidth + padding + 'px';
         } else {
-            this.refs.inlineContent.style.overflowY = 'scroll';
-            this.refs.inlineContent.style.height = '100%';
+            this.refs.inlineContent.style.overflowY = 'auto';
+            this.refs.slideEditPanel.style.height = '720px'; // fix problem with editing: SWIK-2499
         }
     }
 
