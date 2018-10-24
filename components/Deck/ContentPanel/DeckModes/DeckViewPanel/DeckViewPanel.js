@@ -170,10 +170,10 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui hidden divider"></div>
                                 <div className="row">
                                     <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
                                         </div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                         </div>
                                         { deckData.educationLevel &&
@@ -185,13 +185,13 @@ class DeckViewPanel extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
                                     </div>
                                 </div>
