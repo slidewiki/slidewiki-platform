@@ -364,31 +364,6 @@ export default {
         }
     },
 
-    //-----------------------------------DeckPage routes------------------------------
-    // selector {id: 'id of parent deck; may contain [0-9-]',
-    // stype: 'type of selected content e.g. slide, deck or question',
-    // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
-    // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
-    // mode: 'interaction mode e.g. view, edit, questions, datasources'}
-    // theme: For testing, choice of any of the reveal.js themes
-    deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/tree/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
-        method: 'get',
-        page: 'deck',
-        handler: require('../components/Deck/Deck'),
-        action: (context, payload, done) => {
-            // check params for slug misinterpretation
-            if (payload.params.slug && !payload.params.stype && payload.params.sid) {
-                let stype = payload.params.slug.substring(1);
-                if (['deck', 'slide', 'question'].includes(stype)) {
-                    payload.params.stype = stype;
-                    payload.params.slug = undefined;
-                }
-            }
-            console.log(payload);
-            context.executeAction(loadDeck, payload, done);
-        }
-    },
     decklandingpage: {
         path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?',
         method: 'get',
@@ -415,27 +390,33 @@ export default {
             });
         }
     },
-    oldDeckMode: {
-        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)/:sid?/:spath?/:mode?/:theme?',
+
+    //-----------------------------------DeckPage routes------------------------------
+    // selector {id: 'id of parent deck; may contain [0-9-]',
+    // stype: 'type of selected content e.g. slide, deck or question',
+    // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
+    // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
+    // mode: 'interaction mode e.g. view, edit, questions, datasources'}
+    // theme: For testing, choice of any of the reveal.js themes
+    deck: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
+        page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            let urlParts = [
-                '/deck',
-                payload.params.id,
-                payload.params.slug.substring(1).toLowerCase(),
-                'tree',
-                payload.params.stype,
-                payload.params.sid,
-                payload.params.spath,
-                payload.params.mode,
-                payload.params.theme,
-            ];
-            urlParts = urlParts.filter((u) => !!u);
+            // check params for slug misinterpretation
+            if (payload.params.slug && !payload.params.stype && payload.params.sid) {
+                let stype = payload.params.slug.substring(1);
+                if (['deck', 'slide', 'question'].includes(stype)) {
+                    payload.params.stype = stype;
+                    payload.params.slug = undefined;
+                }
+            }
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            context.executeAction(loadDeck, payload, done);
         }
     },
+
     oldSlugDeck: {
         path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',

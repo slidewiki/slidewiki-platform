@@ -53,7 +53,6 @@ class DeckLandingPage extends React.Component {
 
     render() {
         let deckData = this.props.DeckViewStore.deckData;
-        console.log(deckData);
 
         let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children[0]);
 
