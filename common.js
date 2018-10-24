@@ -175,6 +175,32 @@ export default {
         return a.substring(0,2).toLowerCase() === b.substring(0,2).toLowerCase();
     },
 
+    // splits the string identifier to {id, revision}
+    parseIdentifier: function(identifier) {
+        let parsed = String(identifier).match(/^(\d+)(?:-(\d+))?$/);
+
+        // return nothing undefined if error
+        if (!parsed) return;
+
+        let result = { id: parseInt(parsed[1]) };
+
+        // could be undefined, so don't parse (it would result to NaN)
+        let revision = parsed[2] && parseInt(parsed[2]);
+        if (revision) {
+            result.revision = revision;
+        }
+
+        return result;
+    },
+
+    toIdentifier: function(ref) {
+        // return nothing for null or invalid data
+        if (!ref || !ref.id) return;
+
+        let revision = ref.revision ? `-${ref.revision}` : '';
+        return `${ref.id}${revision}`;
+    },
+
     //ISO6391 language codes from https://pkgstore.datahub.io/core/language-codes/language-codes_csv/data/b65af208b52970a4683fa8fde9af8e9f/language-codes_csv.csv
     translationLanguages: [
         'de',

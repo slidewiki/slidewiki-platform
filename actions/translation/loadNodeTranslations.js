@@ -10,7 +10,7 @@ export default function loadNodeTranslations(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
         } else {
             context.dispatch('LOAD_TRANSLATIONS_SUCCESS', res);
-            done();
+            done(null, res.selector);
         }
     });
 }

@@ -1,6 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import {isEmpty} from '../common.js';
+import {parseIdentifier, toIdentifier, isEmpty} from '../common.js';
 const log = require('../configs/log').log;
 
 export default {
@@ -24,11 +24,20 @@ export default {
         } else if (resource === 'decktree.nodetranslation') {
             /*********connect to microservices*************/
             rp.get({
-                uri: Microservices.deck.uri + '/decktree/node/translations',
+                uri: Microservices.deck.uri + '/decktree/node',
                 qs: selector,
                 json: true
             }).then((res) => {
-                callback(null, {translations: res, selector: selector, language: args.language});
+                // update selector based on response
+                let pathParts = res.path.split('/'); // omit the first as it's always the empty string
+                // make selector canonical
+                let newSelector = { id: pathParts[2], stype: 'deck', sid: pathParts[2], spath: '' };
+                if (pathParts.length > 3) {
+                    newSelector.stype = pathParts[3];
+                    newSelector.sid = pathParts[4];
+                    [newSelector.spath] = pathParts.slice(-1);
+                }
+                callback(null, {translations: res.variants, selector: newSelector, language: args.language});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {translations: [], selector: selector, language: args.language});

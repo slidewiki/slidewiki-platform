@@ -25,7 +25,7 @@ class ContentStore extends BaseStore {
         this.selector.sid = selector.sid;
         this.selector.stype = selector.stype;
         this.selector.theme = selector.theme;
-        this.selector.currentSubDeck = this.getCurrentSubdeck();
+        this.selector.currentSubDeck = this.getCurrentSubdeck(this.selector);
         this.emitChange();
     }
     getState() {

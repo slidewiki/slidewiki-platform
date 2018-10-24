@@ -127,7 +127,11 @@ export default function loadDeck(context, payload, done) {
     }
 
     // load translation stuff
-    context.executeAction(loadNodeTranslations, payload.params, (err, results) => {
+    context.executeAction(loadNodeTranslations, payload.params, (err, selector) => {
+        // override payload in as many places
+        context.dispatch('UPDATE_CONTENT_SELECTOR', selector);
+        Object.assign(payloadCustom.params, selector);
+
         //load all required actions in parallel
         async.parallel([
             (callback) => {
