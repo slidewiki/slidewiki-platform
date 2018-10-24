@@ -2,7 +2,7 @@ import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 import cookieParser from 'cookie';
-import slug from 'slug';
+import slugify from 'slugify';
 
 const log = require('../configs/log').log;
 
@@ -52,7 +52,8 @@ export default {
                 country: !isEmpty(params.country) ? params.country : '',
                 picture: !isEmpty(params.picture) ? params.picture : '',
                 organization: !isEmpty(params.organization) ? params.organization : '',
-                description: !isEmpty(params.description) ? params.description : ''
+                description: !isEmpty(params.description) ? params.description : '',
+                displayName: !isEmpty(params.displayName) ? params.displayName : ''
             };
             rp({
                 method: 'PUT',
@@ -256,7 +257,7 @@ export default {
                         roles: params.roles,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
-                        status: params.status || 'public',
+                        status: params.status || 'any',
                         page: params.page,
                         pageSize: 30
                     },
@@ -385,6 +386,7 @@ export default {
                         hasPassword: body.hasPassword || false,
                         providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : [],
+                        displayName: !isEmpty(body.displayName) ? body.displayName : '',
                         ltis: !isEmpty(body.ltis) ? body.ltis : []
                     };
                     callback(null, converted, {
@@ -420,7 +422,8 @@ export default {
                         country: !isEmpty(body.country) ? body.country : '',
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : ''
+                        description: !isEmpty(body.description) ? body.description : '',
+                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
                     };
                     callback(null, converted);
                 })
@@ -450,5 +453,5 @@ function transform(deck){
 }
 
 function buildSlug(deck) {
-    return slug(deck.title || '').toLowerCase() || '_';
+    return slugify(deck.title || '').toLowerCase() || '_';
 }
