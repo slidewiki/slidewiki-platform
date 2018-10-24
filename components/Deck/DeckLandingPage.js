@@ -54,13 +54,13 @@ class DeckLandingPage extends React.Component {
     render() {
         let deckData = this.props.DeckViewStore.deckData;
 
-        let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children[0]);
+        let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children && this.props.DeckViewStore.slidesData.children[0]);
 
         let deckThumbURL = firstSlide && `${Microservices.file.uri}/thumbnail/slide/${firstSlide.id}`;
         if (deckThumbURL && firstSlide.theme) {
             deckThumbURL += '/' + firstSlide.theme;
         }
-        let deckThumbAlt = firstSlide && firstSlide.title ? firstSlide.title + ' | ' + firstSlide.id : firstSlide.id;
+        let deckThumbAlt = firstSlide && (firstSlide.title ? firstSlide.title + ' | ' + firstSlide.id : firstSlide.id);
 
         let deckSlug = this.props.DeckPageStore.deckSlug || '_';
         let selector = this.props.DeckPageStore.selector;
