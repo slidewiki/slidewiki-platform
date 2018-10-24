@@ -372,7 +372,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/view/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/tree/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -418,12 +418,13 @@ export default {
     oldDeckMode: {
         path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
+        handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
             let urlParts = [
                 '/deck',
                 payload.params.id,
                 payload.params.slug.substring(1).toLowerCase(),
-                'view',
+                'tree',
                 payload.params.stype,
                 payload.params.sid,
                 payload.params.spath,

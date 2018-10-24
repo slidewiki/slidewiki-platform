@@ -1,15 +1,17 @@
 import React from 'react';;
 import { NavLink } from 'fluxible-router';
-import { Grid, Divider, Button, Image, Icon, Item, Label, Flag, Menu, Segment, Container } from 'semantic-ui-react';
+import { Grid, Divider, Button, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
 
 import { connectToStores } from 'fluxible-addons-react';
+import DeckPageStore from '../../stores/DeckPageStore';
 import DeckListStore from '../../stores/DeckListStore';
 import DeckViewStore from '../../stores/DeckViewStore';
 import ContentLikeStore from '../../stores/ContentLikeStore';
 import ContentModulesStore from '../../stores/ContentModulesStore';
+import TranslationStore from '../../stores/TranslationStore';
 
 import CustomDate from './util/CustomDate';
-import { getLanguageName, isEmpty } from '../../common';
+import { getLanguageDisplayName, isEmpty } from '../../common';
 import { flagForLocale } from '../../configs/locales';
 import { Microservices } from '../../configs/microservices';
 
@@ -19,17 +21,64 @@ import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
+import { getEducationLevel } from '../../lib/isced';
 
 class DeckLandingPage extends React.Component {
 
+    getPresentationHref() {
+        let selector = this.props.DeckPageStore.selector;
+        let presentationUrlParts = ['/presentation', selector.id, this.props.DeckPageStore.deckSlug || '_'];
+
+        if (selector.spath.search(';') !== -1) {
+            // if a subdeck is selected - use its selector
+            presentationUrlParts.push(selector.spath.substring(0, selector.spath.search(';')));
+        } else {
+            // if it is the main/root deck - use that id
+            presentationUrlParts.push(selector.id);
+        }
+
+        if (selector.stype === 'slide'){
+            // if it is a slide, also add ID of slide
+            presentationUrlParts.push(selector.sid);
+        }
+
+        let presLocation = presentationUrlParts.join('/');
+
+        if (this.props.TranslationStore.currentLang) {
+            presLocation += '?language=' + (this.props.TranslationStore.currentLang);
+        }
+
+        return presLocation;
+    }
+
     render() {
-        const deckData = this.props.DeckViewStore.deckData;
+        let deckData = this.props.DeckViewStore.deckData;
         console.log(deckData);
+
+        let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children[0]);
+
+        let deckThumbURL = firstSlide && `${Microservices.file.uri}/thumbnail/slide/${firstSlide.id}`;
+        if (deckThumbURL && firstSlide.theme) {
+            deckThumbURL += '/' + firstSlide.theme;
+        }
+        let deckThumbAlt = firstSlide && firstSlide.title ? firstSlide.title + ' | ' + firstSlide.id : firstSlide.id;
+
+        let deckSlug = this.props.DeckPageStore.deckSlug || '_';
+        let selector = this.props.DeckPageStore.selector;
+        let openDeckUrl = ['', 'deck', selector.id , deckSlug, 'deck', selector.id].join('/');
+        let presentationUrl = this.getPresentationHref();
+
+        let deckTags = deckData.tags || [];
+        let deckTopics = deckData.topics || [];
+
         if(!deckData.variants)
             deckData.variants = [];
+
+        let deckLanguages = [this.props.TranslationStore.treeLanguage, ...this.props.TranslationStore.treeTranslations];
+
         
-        const owner = this.props.DeckViewStore.ownerData;
-        const creator = this.props.DeckViewStore.creatorData;
+        let owner = this.props.DeckViewStore.ownerData;
+        let creator = this.props.DeckViewStore.creatorData;
 
         let interestedInDecks = 'No decks to show';
         if(this.props.DeckListStore.featured && this.props.DeckListStore.featured.length >= 1)
@@ -51,12 +100,16 @@ class DeckLandingPage extends React.Component {
                           <Grid stackable>
                                <Grid.Column width={4}>
 
-                        <Image src={`${Microservices.file.uri}/thumbnail/slide/${deckData.firstSlide}`} bordered size='medium' spaced as='a' href={'/deck/' + deckData._id + '-' + deckData.revision + '/view'} aria-hidden='true'/>
+                        <NavLink className="image" aria-hidden tabIndex='-1' href={openDeckUrl}>
+                            <Image src={deckThumbURL} alt={deckThumbAlt}
+                                size="medium" bordered spaced />
+                        </NavLink>
+
                       </Grid.Column>
                       <Grid.Column width={6}>
                         <Item>
                           <Item.Content>
-                            <Item.Header as="h2">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label inverted color='lightGrey'>Unlisted</Label>}</Item.Header>
+                            <Item.Header as="h2">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label inverted style={{backgroundColor: 'lightgrey'}}>Unlisted</Label>}</Item.Header>
                              <Item.Description>{deckData.description}</Item.Description>
                           <Divider hidden/>
                             <Item.Meta><strong>Creator:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink></Item.Meta>
@@ -70,8 +123,13 @@ class DeckLandingPage extends React.Component {
                                 <Divider hidden />
                                 <div className="ui right aligned container">
                                 <div className="ui orange labels">
+                                        { deckData.educationLevel &&
+                                            <div className="ui label" >
+                                                <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
+                                            </div>
+                                        }
                                         <div className="ui label" tabIndex="0">
-                                            <i className="fork icon" aria-label="Number of forks"></i>**</div>
+                                            <i className="fork icon" aria-label="Number of forks"></i>{deckData.forkCount}</div>
                                         <div className="ui label" tabIndex="0">
                                             <i className="thumbs up icon" aria-label="Number of likes"></i>{this.props.ContentLikeStore.usersWhoLikedDeck.length}</div>
                                         <div className="ui label" tabIndex="0">
@@ -89,12 +147,16 @@ class DeckLandingPage extends React.Component {
                         <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
                         <div className="right menu">
                         <div className="ui icon buttons huge right floated">
-                          <Button icon large aria-label='open deck' data-tooltip='open deck' role='button' >
-                            <Icon name='open folder' color='yellow' />
-                          </Button>
-                          <Button icon large aria-label='open slideshow' data-tooltip='open slideshow' role='button' >
-                            <Icon name='play circle' color='grey' />
-                          </Button>
+                            <NavLink href={openDeckUrl}>
+                                <Button icon large aria-label='open deck' data-tooltip='open deck' role='button' >
+                                    <Icon name='open folder' color='yellow' />
+                                </Button>
+                            </NavLink>
+                            <a target="_blank" href={presentationUrl}>
+                                <Button icon large aria-label='open slideshow' data-tooltip='open slideshow' role='button' >
+                                    <Icon name='play circle' color='grey' />
+                                </Button>
+                            </a>
                           <Button icon large aria-label='start live presentation' data-tooltip='start live presentation' role='button'>
                             <Icon name='record' color='blue' />
                           </Button>
@@ -117,19 +179,37 @@ class DeckLandingPage extends React.Component {
                    <Divider hidden />
                 <Grid.Row>
                     <Grid divided='vertically' stackable>
-                <Grid.Column mobile={16} tablet={10} computer={13}>
+                <Grid.Column mobile={16} tablet={10} computer={12}>
                     <Grid.Row>
-                    <h4>Available in the following languages:</h4>
-                    {<span><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + deckData.language}>{getLanguageName(deckData.language)} <Flag name={flagForLocale(deckData.language)}/></NavLink>{(deckData.variants.length > 0) ? ', ' : ''}</span>}
-                    {deckData.variants.map((variant, key) => {
-                        return <span key={key}><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + variant.language}>{getLanguageName(variant.language)} <Flag name={flagForLocale(variant.language)}/></NavLink>{(deckData.variants.length - 1 !== key) ? ', ' : ''}</span>;
-                    })}
-                  </Grid.Row>
-                  <br/>
-                  <Grid.Row>
-                    <h4>Marked with tags:</h4>
-                    {(deckData.tags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckData.tags} editable={false}/>}
-                  </Grid.Row>
+                        <h4>Available in the following languages:</h4>
+                        { deckLanguages.map((lang, i) =>
+                            <span key={i}>
+                                {!!i && ',\xa0'}
+                                <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + lang}>
+                                    <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
+                                    { getLanguageDisplayName(lang) }
+                                </NavLink>
+                            </span>
+                        ) }
+                    </Grid.Row>
+                    <Divider />
+                    <Grid.Row>
+                        <h4>Subjects:</h4>
+                        { (deckTopics.length === 0) ?
+                            <div>There are no subjects assigned to this deck.</div> :
+                            <div>{ deckTopics.map((t, i) => 
+                                <span key={i}>
+                                    { !!i && ',\xa0' }
+                                    <a target="_blank" href={`/deckfamily/${t.tagName}`}>{t.defaultName || t.tagName}</a>
+                                </span>
+                            ) }</div>
+                        }
+                    </Grid.Row>
+                    <Divider />
+                    <Grid.Row>
+                        <h4>Marked with tags:</h4>
+                        {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
+                    </Grid.Row>
                   <Divider />
                   <Grid.Row>
                     <h4>You may also be interested in:</h4>
@@ -137,7 +217,7 @@ class DeckLandingPage extends React.Component {
                     {/*<Icon name='chevron circle right' size='huge' link/>*/}
                   </Grid.Row>
                         </Grid.Column>
-                    <Grid.Column mobile={16} tablet={1} computer={3}>
+                    <Grid.Column mobile={16} tablet={1} computer={4}>
                         <Grid.Row>
                             <Segment>
                     <ActivityFeedPanel /></Segment>
@@ -166,8 +246,8 @@ class DeckLandingPage extends React.Component {
                         <Icon name='star outline'/> ???
                         <br/>
                       <strong>Other languages available:</strong> {
-                        deckData.variants.map((variant, key) => {
-                            return <span key={key}><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + variant.language}>{getLanguageName(variant.language)}</NavLink> (???%),</span>;
+                        deckLanguages.map((variant, key) => {
+                            return <span key={key}><NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + language}>{getLanguageDisplayName(language)}</NavLink> (???%),</span>;
                         })
                       }<br/>
                       </Grid.Column>
@@ -213,10 +293,12 @@ class DeckLandingPage extends React.Component {
     }
 }
 
-DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckViewStore, ContentModulesStore, DeckListStore], (context, props) => {
+DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckPageStore, DeckViewStore, TranslationStore, ContentModulesStore, DeckListStore], (context, props) => {
     return {
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
+        DeckPageStore: context.getStore(DeckPageStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState(),
         ContentModulesStore: context.getStore(ContentModulesStore).getState(),
         DeckListStore : context.getStore(DeckListStore).getState(),
     };
