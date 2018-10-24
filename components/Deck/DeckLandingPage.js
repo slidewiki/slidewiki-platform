@@ -18,7 +18,7 @@ import { Microservices } from '../../configs/microservices';
 import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
-import PresentationPanel from './InfoPanel/PresentationsPanel';
+import PresentationsPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 import { getEducationLevel } from '../../lib/isced';
@@ -210,20 +210,21 @@ class DeckLandingPage extends React.Component {
                      <Grid.Row>
                         <div className="ui bottom attached tabular secondary menu" style={{'background': '#DCDDDE'}}>
                         <div className="right menu">
-                            <div className="ui icon buttons basic huge right floated">
-                            <NavLink href={openDeckUrl}>
-                                <Button basic icon large aria-label='open deck' data-tooltip='open deck' role='button' style={{'background': '#FFFFFF'}} >
+                            <div className="ui icon buttons huge attached">
+                            <NavLink href={openDeckUrl} tabIndex={-1} >
+                                <Button icon large aria-label='open deck' data-tooltip='open deck' role='button'>
                                     <Icon name='open folder' color='yellow' />
                                 </Button>
                             </NavLink>
-                            <a target="_blank" href={presentationUrl}>
+                            <a target="_blank" href={presentationUrl} tabIndex={-1} >
                                 <Button icon large aria-label='open slideshow' data-tooltip='open slideshow' role='button' >
                                     <Icon name='play circle' color='grey' />
                                 </Button>
                             </a>
-                          <Button icon large aria-label='start live presentation' data-tooltip='start live presentation' role='button'>
+                            <PresentationsPanel deckPage={true} />
+                          {/*<Button icon large aria-label='start live presentation' data-tooltip='start live presentation' role='button'>
                             <Icon name='record' color='blue' />
-                          </Button>
+                          </Button>*/}
                             </div>
                             </div>
                         </div>
@@ -231,7 +232,7 @@ class DeckLandingPage extends React.Component {
                       <Menu.Item as={() => {return <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision}><Button fluid basic color='blue' size='large' ><Icon name='folder large open' color='yellow'/>
                                 Open Deck</Button></NavLink>;}}/>
                       <Menu.Item as={() => {return <a href={'/presentation/' + deckData._id + '-' + deckData.revision} target="_blank"><Button fluid basic color='blue' size='large' ><Icon name='play large circle' color='grey'/>Play SlideShow</Button></a>;}}/>
-                      <Menu.Item as={() => {return <PresentationPanel deckPage={true}/>;}}/>
+                      <Menu.Item as={() => {return <PresentationsPanel deckPage={true}/>;}}/>
                     </Menu>
                     {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
 
