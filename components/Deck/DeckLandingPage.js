@@ -78,7 +78,7 @@ class DeckLandingPage extends React.Component {
         let deckLanguages = [this.props.TranslationStore.treeLanguage, ...this.props.TranslationStore.treeTranslations];
         
         let owner = this.props.DeckViewStore.ownerData;
-        let creator = this.props.DeckViewStore.creatorData
+        let creator = this.props.DeckViewStore.creatorData;
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
             <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
         </div> : '';
@@ -139,7 +139,7 @@ class DeckLandingPage extends React.Component {
                                               <div className="row">
                                                   <div className="ui medium labels" >
                                                       <div className="ui label" >
-                                                          <i className="comments icon" aria-label="Default language"></i>LANGUAGE
+                                                          <i className="comments icon" aria-label="Default language"></i>{getLanguageDisplayName(deckData.language)}
                                                       </div>
                                                       <div className="ui label" >
                                                           <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
