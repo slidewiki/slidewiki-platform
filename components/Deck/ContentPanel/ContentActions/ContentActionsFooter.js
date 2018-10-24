@@ -135,10 +135,7 @@ class ContentActionsFooter extends React.Component {
         let likeButton = 'ui button';
         let followButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
-        let iconFollowButton = <Icon.Group >
-            <Icon size='large' name='circle outline' />
-            <Icon name='rss'/>
-        </Icon.Group>;
+        let iconFollowButton = <Icon size='large' name='rss' />;
         let tooltipFollowButton = 'Subscribe to this deck';
         let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
@@ -153,10 +150,7 @@ class ContentActionsFooter extends React.Component {
             }
 
             if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
-                iconFollowButton = <Icon.Group >
-                    <Icon size='large' name='circle' color='blue'/>
-                    <Icon name='rss' inverted={true}/>
-                </Icon.Group>;
+                iconFollowButton = <Icon size='large' name='rss' color='blue' />;
                 tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
             }
         }

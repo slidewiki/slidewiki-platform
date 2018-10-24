@@ -29,7 +29,10 @@ export default {
                 });
                 break;
             case 'suggester.tags':
-                rp.get({uri: `${Microservices.tag.uri}/tag/suggest/${args.query}`}).then((res) => {
+                rp.get({
+                    uri: `${Microservices.tag.uri}/tag/suggest`,
+                    qs: args.query,
+                }).then((res) => {
                     callback(null, { success: true, results: JSON.parse(res) });
                 }).catch((err) => {
                     callback(null, {success: false, results: {}});
