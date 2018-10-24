@@ -14,8 +14,13 @@ class TransitionModal extends React.Component {
 
         this.state = {
             modalOpen: false,
-            activeTrap: false
+            activeTrap: false,
+            transition: null
         };
+
+        this.unmountTrap = this.unmountTrap.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.messages = defineMessages({
             noTransitionMessage: {
@@ -25,11 +30,44 @@ class TransitionModal extends React.Component {
             convexTransitionMessage: {
                 id: 'transitionModal.convexMessage',
                 defaultMessage: 'Convex'
+            },
+            /////////////
+            question: {
+                id: 'transitionModal.question',
+                defaultMessage: 'You are able to add this transition to the full presentation or only for this slide. What do you prefer?'
             }
+
+        });
+    }
+
+    unmountTrap() {
+        if(this.state.activeTrap){
+            this.setState({ activeTrap: false });
+            $('#app').attr('aria-hidden','false');
+        }
+    }
+
+    handleOpen(){
+        $('#app').attr('aria-hidden', 'true');
+        this.setState({
+            modalOpen:true,
+            activeTrap:true,
+            transition: this.props.transition
+        });
+    }
+
+    handleClose() {
+        $('#app').attr('aria-hidden', 'false');
+        this.setState({
+            modalOpen: false,
+            activeTrap: false
         });
     }
 
     render() {
+        const headerStyle = {
+            'textAlign': 'center'
+        };
         let transitionName = '';
         let modalTrigger = '';
         let noTransition = false;
@@ -41,26 +79,32 @@ class TransitionModal extends React.Component {
                 noTransition = true;
                 break;
             case 'convex':
-                transitionName = this.context.intl.formatMessage(this.messages.convexTransitionMessage)
-                imgSrc = '/assets/images/slidetransitions/convex.gif'
-                alt = 'Convex slide transition'
+                transitionName = this.context.intl.formatMessage(this.messages.convexTransitionMessage);
+                imgSrc = '/assets/images/slidetransitions/convex.gif';
+                alt = 'Convex slide transition';
                 break;
 
         }
 
         if (noTransition) {
             modalTrigger =
-                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, this.props.transition)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', this.props.transition)}>
-                    <i tabIndex="0" className="eye slash outline icon"/><FormattedMessage id={'transitionModalTrigger.' + this.props.transition} defaultMessage={transitionName} />
+                <a className="item" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', this.props.transition)}>
+                    <i tabIndex="0" className="eye slash outline icon"/>{transitionName}
                 </a>;
         } else {
             modalTrigger =
-                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, this.props.transition)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', this.props.transition)}>
-                    <i tabIndex="0" aria-label={alt}><FormattedMessage id={'transitionModalTrigger.' + this.props.transition} defaultMessage={transitionName} /></i>
-                    <img aria-hidden="true" className="ui image small bordered fluid" src={imgSrc} alt={alt} />
+                <a className="item" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', this.props.transition)}>
+                    <i tabIndex="0" aria-label={alt}/>{transitionName}
+                    <img aria-hidden="true" className="ui image small bordered fluid" src={imgSrc} alt={alt}/>
                 </a>;
         }
 
+
+        let focusTrapOptions = {
+            onDeactivate:this.unmountTrap,
+            clickOutsideDeactivates:true,
+            initialFocus: '#transitionModal' + this.props.transition + 'Description'
+        };
         return (
             <Modal
                 trigger={modalTrigger}
@@ -72,6 +116,24 @@ class TransitionModal extends React.Component {
                 aria-describedby={'transitionModal.' + this.props.transition + 'Description'}
                 tabIndex="0"
             >
+                <FocusTrap
+                    id={'focus-trap-transitionModal-' + this.props.transition}
+                    className = 'header'
+                    active={this.state.activeTrap}
+                    focusTrapOptions={focusTrapOptions}
+                >
+                    <Modal.Header className="ui center aligned" id="paintModalHeader">
+                        <h1 style={headerStyle}>Select the way you want to add the transition</h1>
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Divider/>
+                            <div id={'transitionModal' + this.props.transition + 'Description'}>
+                                {this.context.intl.formatMessage(this.messages.question)}
+                            </div>
+
+                        <Divider/>
+                    </Modal.Content>
+                </FocusTrap>
             </Modal>
         );
     }
