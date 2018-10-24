@@ -7,7 +7,6 @@ let ReactDOM = require('react-dom');
 import ChartRender from '../../util/ChartRender';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
-import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import { findDOMNode } from 'react-dom';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
@@ -1039,7 +1038,7 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
-        
+
         CKEDITOR.instances.inlineContent.on('focus',(evt) => {
             this.context.executeAction(contentEditorClick, {
                 focus: true
