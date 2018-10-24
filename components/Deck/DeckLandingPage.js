@@ -51,7 +51,7 @@ class DeckLandingPage extends React.Component {
                           <Grid stackable>
                                <Grid.Column width={4}>
 
-                        <Image src={`${Microservices.file.uri}/thumbnail/slide/${deckData.firstSlide}`} bordered size='medium' spaced as='a' href={'/deck/' + deckData._id + '-' + deckData.revision} aria-hidden='true'/>
+                        <Image src={`${Microservices.file.uri}/thumbnail/slide/${deckData.firstSlide}`} bordered size='medium' spaced as='a' href={'/deck/' + deckData._id + '-' + deckData.revision + '/view'} aria-hidden='true'/>
                       </Grid.Column>
                       <Grid.Column width={6}>
                         <Item>

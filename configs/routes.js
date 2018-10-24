@@ -372,7 +372,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/view/:stype(deck|slide|question)?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -387,6 +387,52 @@ export default {
             }
             console.log(payload);
             context.executeAction(loadDeck, payload, done);
+        }
+    },
+    decklandingpage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?',
+        method: 'get',
+        handler: require('../components/Deck/DeckLandingPage'),
+        page: 'decklandingpage',
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
+                },
+                (callback) => {
+                    payload.params.stype = undefined;
+                    //payload.params.slug = undefined;
+                    payload.params.sid = undefined;
+                    payload.params.spath = undefined;
+                    payload.params.mode = undefined;
+                    payload.params.theme = undefined;
+                    context.executeAction(loadDeck, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
+    oldDeckMode: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/:stype(deck|slide|question)/:sid?/:spath?/:mode?/:theme?',
+        method: 'get',
+        action: (context, payload, done) => {
+            let urlParts = [
+                '/deck',
+                payload.params.id,
+                payload.params.slug.substring(1).toLowerCase(),
+                'view',
+                payload.params.stype,
+                payload.params.sid,
+                payload.params.spath,
+                payload.params.mode,
+                payload.params.theme,
+            ];
+            urlParts = urlParts.filter((u) => !!u);
+
+            done({statusCode: '301', redirectURL: urlParts.join('/')});
         }
     },
     oldSlugDeck: {
@@ -412,32 +458,6 @@ export default {
         method: 'get',
         action: (context, payload, done) => {
             context.executeAction(loadLegacy, payload, done);
-        }
-    },
-    decklandingpage: {
-        path: '/deckpage/:id',
-        method: 'get',
-        handler: require('../components/Deck/DeckLandingPage'),
-        page: 'decklandingpage',
-        action: (context, payload, done) => {
-            async.series([
-                (callback) => {
-                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
-                },
-                (callback) => {
-                    payload.params.stype = undefined;
-                    payload.params.slug = undefined;
-                    payload.params.sid = undefined;
-                    payload.params.spath = undefined;
-                    payload.params.mode = undefined;
-                    payload.params.theme = undefined;
-                    context.executeAction(loadDeck, payload, callback);
-                }
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
         }
     },
     diffview: {
