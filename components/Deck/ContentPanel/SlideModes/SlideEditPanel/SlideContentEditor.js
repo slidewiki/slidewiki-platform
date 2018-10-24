@@ -11,7 +11,6 @@ import { findDOMNode } from 'react-dom';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import {HotKeys} from 'react-hotkeys';
-import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import MediaStore from '../../../../../stores/MediaStore';
 import {Microservices} from '../../../../../configs/microservices';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
@@ -19,7 +18,6 @@ import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
@@ -28,7 +26,6 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import Util from '../../../../common/Util';
-import {FormattedMessage, defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 
 
