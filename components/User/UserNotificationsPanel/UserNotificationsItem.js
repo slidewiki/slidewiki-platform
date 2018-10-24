@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {formatDate} from '../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import {List, Icon, Button} from 'semantic-ui-react';
+import { isEmpty } from '../../../common.js';
 import classNames from 'classnames/bind';
 import cheerio from 'cheerio';
 import readUserNotification from '../../../actions/user/notifications/readUserNotification';
@@ -41,7 +42,15 @@ class UserNotificationsItem extends React.Component {
             notification.user_id = undefined;
         }
 
-        let viewPath = (notification.content_kind === 'deck') ? '/deck/' + notification.content_id : (notification.slidePath && notification.slidePath !== '') ? notification.slidePath : '/slideview/' + notification.content_id;
+        let viewPath = '';
+        if (!isEmpty(notification.content_root_id) && !isEmpty(notification.path)) {
+            viewPath = notification.path;
+        } else if (notification.content_kind === 'deck') {
+            viewPath = '/deck/' + notification.content_id;
+        } else {
+            viewPath = '/slideview/' + notification.content_id;
+        }
+        
         const cheerioContentName = (notification.content_name !== undefined) ? cheerio.load(notification.content_name).text() : '';
         if (notification.content_kind === 'group')
             viewPath = '/user/' + this.props.username + '/groups/overview';

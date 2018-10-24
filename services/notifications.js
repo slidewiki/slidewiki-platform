@@ -19,10 +19,10 @@ export default {
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=false'}).then((res) => {
                 let notifications = JSON.parse(res).items;
                 
-                //create path for slides - GET DECK DATA for content_root_id FROM DECK SERVICE
+                //create path for slides and subdecks- GET DECK DATA for content_root_id FROM DECK SERVICE
                 let deckTreePromises = [];
                 for(let notification of notifications){
-                    if (notification.content_kind === 'slide' && notification.content_root_id) {
+                    if (notification.content_root_id && notification.content_id.split('-')[0] !== notification.content_root_id.split('-')[0]) {
                         deckTreePromises.push(
                             rp.get({
                                 uri: `${Microservices.deck.uri}/decktree/${notification.content_root_id}`,
@@ -39,8 +39,8 @@ export default {
                         let deckId = deckTree.id;
                         let flatTree = flattenTree(deckTree);
                         for (let j = 0; j < notifications.length; j++) {
-                            if (notifications[j].content_kind === 'slide' && notifications[j].content_root_id && notifications[j].content_root_id.split('-')[0] === deckId.split('-')[0]) {
-                                notifications[j].slidePath = getSlidePath(notifications[j].content_id, deckId, flatTree);
+                            if (notifications[j].content_root_id && notifications[j].content_root_id.split('-')[0] === deckId.split('-')[0]) {
+                                notifications[j].path = getPath(notifications[j].content_id, notifications[j].content_kind, deckId, flatTree);
                             }
                         }
                     }
@@ -149,12 +149,12 @@ export default {
 };
 
 //return the position of the node in the deck
-function getSlidePath(slideId, deckId, flatTree){
+function getPath(sid, type, deckId, flatTree){
     let path = '';
     for (let i = 0; i < flatTree.length; i++) {
-        if (flatTree[i].type === 'slide' && flatTree[i].id === slideId) {
+        if (flatTree[i].type === type && flatTree[i].id === sid) {
             path = flatTree[i].path;
-            let nodeSelector = {id: deckId, stype: 'slide', sid: slideId, spath: path};
+            let nodeSelector = {id: deckId, stype: type, sid: sid, spath: path};
             let nodeURL = Util.makeNodeURL(nodeSelector, 'deck', 'view', undefined, undefined, true);
 
             return nodeURL;
