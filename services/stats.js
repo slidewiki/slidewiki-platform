@@ -255,9 +255,7 @@ export default {
                         return stat.username === username;
                     });
                     return {username: username, count: found != null ? found.count : 0};
-                }).sort(function(a, b){
-                    return b.count - a.count
-                });
+                }).sort((a, b) => b.count - a.count);
                 callback(null, callback(null, memberStats));
             }).catch((err) => callback(err));
         }
