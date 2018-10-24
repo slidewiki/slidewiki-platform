@@ -8,6 +8,10 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0, 'playlists': 0};
         this.selector = {};
     }
+    updateSelector(selector) {
+        this.selector = selector;
+        this.emitChange();
+    }
     updateContentModules(payload) {
         this.moduleType = payload.moduleType;
         this.selector = payload.selector;
@@ -144,6 +148,7 @@ ContentModulesStore.handlers = {
     'LOAD_PLAYLISTS_COUNT_FAILURE': 'loadPlaylistsCountError',
     'ADD_DECK_TO_COLLECTION_SUCCESS': 'increasePlaylistsCount', 
     'REMOVE_DECK_FROM_COLLECTION_SUCCESS': 'decreasePlaylistsCount',
+    'UPDATE_CONTENT_SELECTOR': 'updateSelector',
 };
 
 export default ContentModulesStore;

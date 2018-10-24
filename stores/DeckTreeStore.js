@@ -283,6 +283,8 @@ class DeckTreeStore extends BaseStore {
     }
 
     selectTreeNode(args) {
+        if (this.selector.isEmpty()) return;
+
         let oldSelector = this.selector;
         this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
         this.switchSelector(oldSelector, this.selector);
@@ -698,8 +700,8 @@ DeckTreeStore.handlers = {
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError',
-    'FOCUS_TREE_NODE': 'focusTreeNode'
-
+    'FOCUS_TREE_NODE': 'focusTreeNode',
+    'UPDATE_CONTENT_SELECTOR': 'selectTreeNode',
 };
 
 export default DeckTreeStore;
