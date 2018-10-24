@@ -25,6 +25,7 @@ class DeckCard extends React.Component {
             thumbnailURL = this.props.cardContent.picture;
         }
         let viewUrl = ['/deck', this.props.cardContent.deckID, this.props.cardContent.slug].join('/');
+        let openDeckUrl = ['/deck', this.props.cardContent.deckID, this.props.cardContent.slug, 'deck', this.props.cardContent.deckID].join('/');
         let presentationUrl = ['/presentation', this.props.cardContent.deckID, this.props.cardContent.slug, this.props.cardContent.deckID].join('/');
 
         let cardTitle = this.props.cardContent.title;
@@ -69,7 +70,7 @@ class DeckCard extends React.Component {
                     </div>
                 </div>
                 <div className="bottom attached menu ui basic buttons">
-                    <NavLink href={viewUrl} data-tooltip="Open deck" role="button" className="ui icon button" aria-label="Open deck">
+                    <NavLink href={openDeckUrl} data-tooltip="Open deck" role="button" className="ui icon button" aria-label="Open deck">
                         <i className="yellow open folder large icon" aria-hidden="true" ></i>
                     </NavLink>
                     <a href={presentationUrl} target="_blank" className="ui icon button" role="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
