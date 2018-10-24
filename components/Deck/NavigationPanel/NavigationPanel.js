@@ -4,7 +4,6 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Breadcrumb from './Breadcrumb';
 import DeckLanguageMenu from '../DeckLanguageMenu';
-import classNames from "classnames";
 
 class NavigationPanel extends React.Component {
     getNameofNodes(tree, selector) {
