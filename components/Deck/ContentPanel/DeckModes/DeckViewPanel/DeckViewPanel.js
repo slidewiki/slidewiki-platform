@@ -19,14 +19,28 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
+import MobileDetect from 'mobile-detect/mobile-detect';
+
+import {getEducationLevel} from '../../../../../lib/isced.js';
 
 class DeckViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isMobile: false};
+    }
+
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();
         if (text.length > 25) {
             text = text.substr(0, 21) + '...';
         }
         return text;
+    }
+
+    componentDidMount() {
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
 
     render() {
@@ -156,23 +170,28 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui hidden divider"></div>
                                 <div className="row">
                                     <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
                                         </div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                         </div>
+                                        { deckData.educationLevel &&
+                                        <div className="ui label" tabIndex="0">
+                                            <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
+                                        </div>
+                                        }
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
-                                        <div className="ui label" tabIndex="0">
+                                        <div className="ui label">
                                             <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
                                     </div>
                                 </div>
@@ -187,9 +206,24 @@ class DeckViewPanel extends React.Component {
                                 if (slide.theme) {
                                     thumbnailURL += '/' + slide.theme;
                                 }
-                                if (index < maxSlideThumbnails) {
+                                if (this.state.isMobile) {
                                     const slideURL = Util.makeNodeURL({
-                                        id: this.props.selector.id,
+                                        id: this.props.selector ? this.props.selector.id : deckData.id,
+                                        stype: 'slide',
+                                        sid: slide.id
+                                    }, 'deck', '', this.props.deckSlug);
+                                    return (
+                                        <div key={index} className="ui card">
+                                            <a href={slideURL} className="ui image"
+                                               tabIndex="-1">
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
+                                            </a>
+                                        </div>
+                                    );
+                                }
+                                else if (index < maxSlideThumbnails) {
+                                    const slideURL = Util.makeNodeURL({
+                                        id: this.props.selector ? this.props.selector.id : deckData.id,
                                         stype: 'slide',
                                         sid: slide.id
                                     }, 'deck', '', this.props.deckSlug);

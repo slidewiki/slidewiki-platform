@@ -3,9 +3,7 @@ import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import UserProfileStore from '../stores/UserProfileStore';
 import serviceUnavailable from './error/serviceUnavailable';
-import loadUserCollections from './collections/loadUserCollections';
-import loadDeckCollections from './collections/loadDeckCollections';
-const log = require('./log/clog');
+import log from'./log/clog';
 import TranslationStore from '../stores/TranslationStore';
 
 export default function loadDeckEdit(context, payload, done) {
@@ -17,15 +15,9 @@ export default function loadDeckEdit(context, payload, done) {
         return;
     }
 
-    // load deck collections of the current user
-    context.executeAction(loadUserCollections, payload, done);
-
-    // load deck groups assigned to the current deck
-    context.executeAction(loadDeckCollections, payload, done);
-
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     if (!payload.params.language) {
-        payload.params.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).originLanguage;
+        payload.params.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).treeLanguage;
     }
 
     context.service.read('deck.properties', payload, {timeout: 20 * 1000}, (err, res) => {
