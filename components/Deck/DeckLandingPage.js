@@ -1,6 +1,6 @@
 import React from 'react';;
 import { NavLink } from 'fluxible-router';
-import { Grid, Divider, Button, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
+import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
 
 import { connectToStores } from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
@@ -11,7 +11,7 @@ import ContentModulesStore from '../../stores/ContentModulesStore';
 import TranslationStore from '../../stores/TranslationStore';
 
 import CustomDate from './util/CustomDate';
-import { getLanguageDisplayName, isEmpty } from '../../common';
+import {getLanguageDisplayName, getLanguageName, isEmpty} from '../../common';
 import { flagForLocale } from '../../configs/locales';
 import { Microservices } from '../../configs/microservices';
 
@@ -22,6 +22,7 @@ import PresentationPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 import { getEducationLevel } from '../../lib/isced';
+import lodash from 'lodash';
 
 class DeckLandingPage extends React.Component {
 
@@ -55,6 +56,7 @@ class DeckLandingPage extends React.Component {
         let deckData = this.props.DeckViewStore.deckData;
 
         let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children && this.props.DeckViewStore.slidesData.children[0]);
+        const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
 
         let deckThumbURL = firstSlide && `${Microservices.file.uri}/thumbnail/slide/${firstSlide.id}`;
         if (deckThumbURL && firstSlide.theme) {
@@ -74,10 +76,16 @@ class DeckLandingPage extends React.Component {
             deckData.variants = [];
 
         let deckLanguages = [this.props.TranslationStore.treeLanguage, ...this.props.TranslationStore.treeTranslations];
-
         
         let owner = this.props.DeckViewStore.ownerData;
-        let creator = this.props.DeckViewStore.creatorData;
+        let creator = this.props.DeckViewStore.creatorData
+        let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
+            <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
+        </div> : '';
+
+        const ColPadding = {
+            paddingLeft: '0px'
+        };
 
         let interestedInDecks = 'No decks to show';
         if(this.props.DeckListStore.featured && this.props.DeckListStore.featured.length >= 1)
@@ -97,31 +105,65 @@ class DeckLandingPage extends React.Component {
                   <Grid.Row>
                       <Segment>
                           <Grid stackable>
-                               <Grid.Column width={4}>
-
-                        <NavLink className="image" aria-hidden tabIndex='-1' href={openDeckUrl}>
-                            <Image src={deckThumbURL} alt={deckThumbAlt}
-                                size="medium" bordered spaced />
-                        </NavLink>
-
-                      </Grid.Column>
-                      <Grid.Column width={6}>
-                        <Item>
-                          <Item.Content>
-                            <Item.Header as="h2">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label inverted style={{backgroundColor: 'lightgrey'}}>Unlisted</Label>}</Item.Header>
-                             <Item.Description>{deckData.description}</Item.Description>
-                          <Divider hidden/>
+                              <Grid.Column width={4}>
+                                  <NavLink className="image" aria-hidden tabIndex='-1' href={openDeckUrl}>
+                                      <Image src={deckThumbURL} alt={deckThumbAlt}
+                                             size='large' bordered spaced />
+                                  </NavLink>
+                              </Grid.Column>
+                              <Grid.Column width={12}>
+                                  <div className="row">
+                                      <Header as="h1">{deckData.title + ' '} {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='red'>Unlisted</Label>}</Header>
+                                  </div>
+                                  <Divider hidden />
+                                  <div className="ui stackable grid container">
+                                      <div className="two column row">
+                                          <div className="column" style={ColPadding}>
+                                              <div className="item">
+                                                  <div className="meta"><strong>Creator:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink></div>
+                                                  {originInfo}
+                                                  <div className="meta"><strong>Last Modified:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
+                                              </div>
+                                          </div>
+                                          {/* <strong>Original Author:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></Item.Met>
+                                    //      <Item.Meta><strong>Last modified:</strong> {CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</Item.Meta>
+                                          <Item.Meta><strong>Description</strong></Item.Meta>
+                                  <Item.Description>{deckData.description}</Item.Description>
+                            <Divider hidden/>
                             <Item.Meta><strong>Creator:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink></Item.Meta>
                             <Item.Meta><strong>Original Author:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></Item.Meta>
                             <Item.Meta><strong>Last modified:</strong> {CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</Item.Meta>
-                                <Divider hidden/>
-                           </Item.Content>
-                        </Item>
-                      </Grid.Column>
-                            <Grid.Column width={5}>
-                                <Divider hidden />
-                                <div className="ui right aligned container">
-                                <div className="ui orange labels">
+                             */}
+                                          <div className="column">
+                                              <h2 className="sr-only">"Deck metadata"</h2>
+                                              <div className="row">
+                                                  <div className="ui medium labels" >
+                                                      <div className="ui label" >
+                                                          <i className="comments icon" aria-label="Default language"></i>LANGUAGE
+                                                      </div>
+                                                      <div className="ui label" >
+                                                          <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
+                                                      </div>
+                                                      { deckData.educationLevel &&
+                                                      <div className="ui label" >
+                                                          <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
+                                                      </div>
+                                                      }
+                                                  </div>
+                                              </div>
+                                              <div className="row">
+                                                  <div className="ui medium labels">
+                                                      <div className="ui label" >
+                                                          <i className="fork icon" aria-label="Number of forks"></i>{deckData.forkCount}</div>
+                                                      <div className="ui label" >
+                                                          <i className="thumbs up icon" aria-label="Number of likes"></i>{this.props.ContentLikeStore.usersWhoLikedDeck.length}</div>
+                                                      <div className="ui label" >
+                                                          <i className="share alternate icon" aria-label="Number of shares"></i>{deckData.shareCount}</div>
+                                                      <div className="ui label" >
+                                                          <i className="download icon" aria-label="Number of downloads"></i>{deckData.downloadCount}</div>
+                                                  </div>
+
+                                                  {/*<div className="ui orange labels">
                                         { deckData.educationLevel &&
                                             <div className="ui label" >
                                                 <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
@@ -135,19 +177,42 @@ class DeckLandingPage extends React.Component {
                                             <i className="share alternate icon" aria-label="Number of shares"></i>{deckData.shareCount}</div>
                                         <div className="ui label" tabIndex="0">
                                             <i className="download icon" aria-label="Number of downloads"></i>{deckData.downloadCount}</div>
-                                    </div>
-                                </div>
+                                    </div> */}
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div className="row" >
+                                          <div className="item">
+                                              <div className="meta"><strong>Description:</strong>
+                                                  <div className="description" >{deckData.description}</div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div className="row" >
+                                          { deckTopics.length > 0 &&
+                                          <div className="item">
+                                              <div className="meta"><strong>Subject:&nbsp;</strong></div>
+                                              <div className="description">{ deckTopics.map((t, i) =>
+                                                  <span key={i}>
+                                                              { !!i && ',\xa0' }
+                                                      <a target="_blank" href={`/deckfamily/${t.tagName}`}>{t.defaultName || t.tagName}</a>
+                                                          </span>
+                                              ) }
+                                              </div>
+                                          </div>
+                                          }
+                                      </div>
+                                  </div>
                               </Grid.Column>
-                            </Grid>
-                          </Segment>
-                    </Grid.Row>
-
-                    <Grid.Row>
-                        <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
+                          </Grid>
+                      </Segment>
+                  </Grid.Row>
+                     <Grid.Row>
+                        <div className="ui bottom attached tabular secondary menu" style={{'background': '#DCDDDE'}}>
                         <div className="right menu">
-                        <div className="ui icon buttons huge right floated">
+                            <div className="ui icon buttons basic huge right floated">
                             <NavLink href={openDeckUrl}>
-                                <Button icon large aria-label='open deck' data-tooltip='open deck' role='button' >
+                                <Button basic icon large aria-label='open deck' data-tooltip='open deck' role='button' style={{'background': '#FFFFFF'}} >
                                     <Icon name='open folder' color='yellow' />
                                 </Button>
                             </NavLink>
@@ -169,7 +234,7 @@ class DeckLandingPage extends React.Component {
                       <Menu.Item as={() => {return <PresentationPanel deckPage={true}/>;}}/>
                     </Menu>
                     {/*<NavLink href='#'><Button basic fluid icon labelPosition='left' color='blue'><Icon name='th' color='blue'/>Add to Playlist ???</Button></NavLink><br/>*/}
-                    
+
                   </Grid.Row>
       {/*}              <Grid.Column mobile={16} tablet={1} computer={2}>
                 </Grid.Column>
@@ -192,7 +257,7 @@ class DeckLandingPage extends React.Component {
                         ) }
                     </Grid.Row>
                     <Divider />
-                    <Grid.Row>
+                    {/* <Grid.Row>
                         <h4>Subjects:</h4>
                         { (deckTopics.length === 0) ?
                             <div>There are no subjects assigned to this deck.</div> :
@@ -204,14 +269,15 @@ class DeckLandingPage extends React.Component {
                             ) }</div>
                         }
                     </Grid.Row>
+                    */}
                     <Divider />
                     <Grid.Row>
-                        <h4>Marked with tags:</h4>
+                        <h5>Tags:</h5>
                         {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
                     </Grid.Row>
                   <Divider />
                   <Grid.Row>
-                    <h4>You may also be interested in:</h4>
+                    <h2>You may also be interested in:</h2>
                     {interestedInDecks}
                     {/*<Icon name='chevron circle right' size='huge' link/>*/}
                   </Grid.Row>
