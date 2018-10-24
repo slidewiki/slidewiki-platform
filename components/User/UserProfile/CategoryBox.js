@@ -130,7 +130,15 @@ class CategoryBox extends React.Component {
                   />
                 </p>
               </NavLink>
-
+                <NavLink className="item" href={'/user/' + this.props.username + '/stats'} activeStyle={this.styles}>
+                    <p>
+                        <i className="icon line graph"/>
+                        <FormattedMessage
+                          id='CategoryBox.userStats'
+                          defaultMessage='User Stats'
+                        />
+                    </p>
+                </NavLink>
             </div>
 
             <div className="ui vertical fluid menu">

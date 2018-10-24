@@ -25,6 +25,7 @@ import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
+import chooseActionGroups from '../actions/usergroups/chooseActionGroups';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
@@ -287,6 +288,16 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
+    usergroup: {
+        path: '/usergroup/:id/:category?',
+        method: 'get',
+        page: 'usergroup',
+        title: 'SlideWiki -- User group',
+        handler: require('../components/UserGroups/UserGroupPage'),
+        action: (context, payload, done) => {
+            context.executeAction(chooseActionGroups, payload, done);
+        }
+    },
     userprofilereview: {
         path: '/Sfn87Pfew9Af09aM',
         method: 'get',
@@ -320,7 +331,7 @@ export default {
         }
     },
     search: {
-        path: '/search/:queryparams?',
+        path: '/search',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',

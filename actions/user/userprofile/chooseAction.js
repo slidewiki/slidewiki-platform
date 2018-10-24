@@ -1,6 +1,6 @@
 import async from 'async';
 import fetchUser from './fetchUser';
-import { fetchUserDecks } from './fetchUserDecks';
+import fetchUserDecks from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
@@ -8,11 +8,12 @@ import loadUserRecommendations from '../../recommendations/loadUserRecommendatio
 import { shortTitle, LTI_ID } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
+import loadUserStats from '../../stats/loadUserStats';
+
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    //categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations'],
-    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'ltis'],
+    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats', 'ltis'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit'],
+    groups: ['overview'],
     ltis: ['overview', 'edit'],
     decks: ['shared'],
 };
@@ -44,9 +45,6 @@ export function chooseAction(context, payload, done) {
                 case categories.groups[0]:
                     title += 'My Groups';
                     break;
-                case categories.groups[1]:
-                    title += 'Create Group';
-                    break;
                 default:
                     title = shortTitle;
                     break;
@@ -67,6 +65,9 @@ export function chooseAction(context, payload, done) {
             };
             break;
         case categories.categories[5]:
+            title += 'User Stats';
+            break;
+        case categories.categories[6]:
             switch(payload.params.item){
                 case categories.ltis[0]:
                     title += 'My LTIs';
@@ -117,8 +118,11 @@ export function chooseAction(context, payload, done) {
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     context.executeAction(loadUserRecommendations, {}, callback);
                     break;
-
                 case categories.categories[5]:
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category});
+                    context.executeAction(loadUserStats, {}, callback);
+                    break;
+                case categories.categories[6]:
                     if(!categories.settings.includes(payload.params.item) && !categories.ltis.includes(payload.params.item) ){
                         context.executeAction(notFoundError, {}, callback);
                         break;
@@ -126,7 +130,6 @@ export function chooseAction(context, payload, done) {
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     callback();
                     break;
-
                 default:
                     context.executeAction(notFoundError, {}, callback);
             }

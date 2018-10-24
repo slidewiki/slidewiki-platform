@@ -551,15 +551,14 @@ UserProfileStore.handlers = {
     'RESET_PROVIDER_STUFF': 'resetProviderStuff',
     'UPDATE_PROVIDER_ACTION': 'updateProviderAction',
     'USER_SIGNOUT': 'handleSignOut',
-    'UPDATE_USERGROUP': 'updateUsergroup',
-    'SAVE_USERGROUP_START': 'saveUsergroupStart',
-    'SAVE_USERGROUP_FAILED': 'saveUsergroupFailed',
-    'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess',
-    'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
+    'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
+    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal',
+
     'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
+    'SAVE_USERPROFILE_START': 'saveProfileStart',
 
     //LTI
     'UPDATE_USERLTI': 'updateUserlti',
@@ -574,7 +573,7 @@ UserProfileStore.handlers = {
 
     'SAVE_USERPROFILE_START': 'saveProfileStart',
     'SHOW_DEACTIVATE_ACCOUNT_MODAL': 'showDeactivateModal',
-    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal'
+    'HIDE_DEACTIVATE_ACCOUNT_MODAL': 'hideDeactivateModal',
 };
 
 export default UserProfileStore;

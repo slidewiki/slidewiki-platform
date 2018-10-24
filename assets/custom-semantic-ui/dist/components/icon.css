@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.0 - Icon
+ * # Semantic UI 2.4.1 - Icon
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -338,14 +338,14 @@ i.inverted.circular.purple.icon {
 
 /* Pink */
 i.pink.icon {
-  color: #E03997 !important;
+  color: #8B2527 !important;
 }
 i.inverted.pink.icon {
   color: #EC89BF !important;
 }
 i.inverted.bordered.pink.icon,
 i.inverted.circular.pink.icon {
-  background-color: #E03997 !important;
+  background-color: #8B2527 !important;
   color: #FFFFFF !important;
 }
 
