@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
+import {connectToStores} from 'fluxible-addons-react';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
 const ReactDOM = require('react-dom');
 
 class SlideContentView extends React.Component {
@@ -12,10 +14,13 @@ class SlideContentView extends React.Component {
         this.resize = this.resize.bind(this);
     }
     componentWillReceiveProps(nextProps){
-        if (this.currentContent !== this.props.content)
-        {
+        if (this.currentContent !== this.props.content) {
             this.currentContent = this.props.content;
-            this.scaleRatio = null;
+        }
+
+        if (nextProps.SlideViewStore.scaleRatio && nextProps.SlideViewStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideViewStore.scaleRatio;
+            this.resize();
         }
     }
     componentWillUnmount(){
@@ -65,25 +70,14 @@ class SlideContentView extends React.Component {
             this.refs.inlineContent.style.overflowX = 'hidden';
 
             /* Some extra padding is added to ensure that the borderline is visible. */
-            this.refs.inlineContent.style.height = contentHeight + padding + 'px';
-            this.refs.inlineContent.style.width = contentWidth + padding + 'px';
+            this.refs.inlineContent.style.height = contentHeight + 'px';
+            this.refs.inlineContent.style.width = contentWidth + 'px';
         } else {
             this.refs.inlineContent.style.overflowY = 'scroll';
             this.refs.inlineContent.style.height = '100%';
         }
     }
-    zoomIn(){
-        this.scaleRatio += 0.25;
-        this.resize();
-    }
-    resetZoom(){
-        this.scaleRatio = 1;
-        this.resize();
-    }
-    zoomOut(){
-        this.scaleRatio -= 0.25;
-        this.resize();
-    }
+
     render() {
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
@@ -130,7 +124,11 @@ class SlideContentView extends React.Component {
             styleName = 'white';
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-
+        //to handle non-canvas display of slides
+        let slideHTMLContent = this.props.content;
+        if(slideHTMLContent.indexOf('class="pptx2html"') === -1){
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">' + slideHTMLContent + '</div>';
+        }
         return (
         <div ref='container' id='container'>
             <div ref="slideContentView" className="ui" style={compStyle}>
@@ -138,7 +136,7 @@ class SlideContentView extends React.Component {
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
-                                 dangerouslySetInnerHTML={{__html: this.props.content}}>
+                                 dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
                         </section>
                     </div>
@@ -154,15 +152,6 @@ class SlideContentView extends React.Component {
                       </div>
                   </div>
                 }
-                {this.props.hideSpeakerNotes ?  null
-                  :
-                  <div className="ui segment vertical attached left icon buttons">
-                      <button className="ui button" onClick={this.zoomIn.bind(this)} type="button" aria-label="Zoom in" data-tooltip="Zoom in"><i className="stacked icons"><i className="small plus icon "></i><i className="large search icon "></i></i></button>
-                      <button className="ui button" onClick={this.resetZoom.bind(this)} type="button" aria-label="Reset zoom" data-tooltip="reset zoom"><i className="stacked icons"><i className="small compress icon "></i><i className="large search icon "></i></i></button>
-                      <button className="ui button" onClick={this.zoomOut.bind(this)} type="button" aria-label="Zoom out" data-tooltip="Zoom out"><i className="stacked icons"><i className="small minus icon "></i><i className="large search icon "></i></i></button>
-                  </div>
-                }
-
             </div>
         </div>
         );
@@ -172,5 +161,11 @@ class SlideContentView extends React.Component {
 SlideContentView.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
+
+SlideContentView = connectToStores(SlideContentView, [SlideViewStore], (context, props) => {
+    return {
+        SlideViewStore: context.getStore(SlideViewStore).getState(),
+    };
+});
 
 export default SlideContentView;

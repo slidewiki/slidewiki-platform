@@ -11,6 +11,10 @@ export default function fetchUser(context, payload, done) {
         context.stack = ['fetchUser']; // this is needed as fluxible context stack gets minified in production. This is the case when action is called from component
     log.info(context);
 
+    if (!payload.params) {
+        payload.params = {};
+    }
+
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;
