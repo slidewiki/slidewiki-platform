@@ -5,7 +5,7 @@ import { navigateAction } from 'fluxible-router';
 import { Button, Icon, Modal, Header, Image, Segment, TextArea, Menu, Popup, Container } from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
+import fetchUserDecks from '../../../../actions/user/userprofile/fetchUserDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 import DeckCollectionStore from '../../../../stores/DeckCollectionStore';
 import DecksList from './DecksList';
@@ -116,7 +116,7 @@ class AddDecksModal extends React.Component {
             });
         } else if (this.state.activeItem === 'slidewikiTab') {
             this.context.executeAction(loadMoreSearchResults, {
-                queryparams: nextLink
+                nextLink: nextLink
             });
         }
     }

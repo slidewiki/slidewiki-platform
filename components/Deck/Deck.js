@@ -19,42 +19,7 @@ import TranslationStore from '../../stores/TranslationStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
 class Deck extends React.Component {
-    componentWillReceiveProps(nextProps) {
-        // console.log('Deck componentWillReceiveProps from', this.props.TranslationStore.invalidLanguage, 'to', nextProps.TranslationStore.invalidLanguage);
-        if (!this.props.TranslationStore.invalidLanguage && nextProps.TranslationStore.invalidLanguage)
-            this.showInvalidLanguageModal();
-    }
-    componentDidMount() {
-        // console.log('Deck componentDidMount invalidLanguage?', this.props.TranslationStore.invalidLanguage);
-        if (this.props.TranslationStore.invalidLanguage)
-            this.showInvalidLanguageModal();
-    }
-    showInvalidLanguageModal() {
-        const messages = defineMessages({
-            error: {
-                id: 'Deck.error',
-                defaultMessage: 'Error',
-            },
-            invalidLanguage: {
-                id: 'Deck.invalidLanguage',
-                defaultMessage: 'The language you choosed is not available for this deck. Either the language code is misspelled or you have to add this new language as a translation to the deck.',
-            },
-            close: {
-                id: 'Deck.close',
-                defaultMessage: 'Close',
-            }
-        });
-        swal({
-            title: this.context.intl.formatMessage(messages.error),
-            text: this.context.intl.formatMessage(messages.invalidLanguage),
-            type: 'error',
-            confirmButtonText: this.context.intl.formatMessage(messages.close),
-            confirmButtonClass: 'negative ui button',
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            buttonsStyling: false
-        });
-    }
+
     handleExpandClick(){
         this.context.executeAction(hideLeftColumn, {});
         return false;

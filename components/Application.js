@@ -30,18 +30,18 @@ class Application extends React.Component {
         let cookieBanner = '';
         let Handler = this.props.currentRoute.handler;
         let header = null , footer = null, content = null;
-        const noHF_pages = ['presentation', 'neo4jguide', 'webrtc', 'print'];//NOTE add the route name to the following array if you don't want header and footer rendered on the page
+        const noHF_pages = ['presentation', 'neo4jguide', 'webrtc', 'print', 'presentationIE'];//NOTE add the route name to the following array if you don't want header and footer rendered on the page
         if(!noHF_pages.includes(this.props.currentRoute.name)){
             header = <Header />; footer = <Footer />;
+            //does not show banner on the above pages
+            if (!this.state.user_cookies) {
+                cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies.'>
+                    {(message) =>
+                      <CookieBanner message={message} cookie='user-has-accepted-cookies' dismissOnScroll={false} onAccept={() => {}}/>}
+                    </FormattedMessage>;
+            }
         }
         content = (this.props.ErrorStore.error) ? <Error error={this.props.ErrorStore.error} /> : <Handler />;
-
-        if (!this.state.user_cookies) {
-            cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies to ensure you get the best experience on our website.'>
-                {(message) =>
-                  <CookieBanner message={message} cookie='user-has-accepted-cookies' dismissOnScroll={false} onAccept={() => {}}/>}
-                </FormattedMessage>;
-        }
 
         return (
               <div className="slidewiki-page">
