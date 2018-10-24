@@ -60,16 +60,16 @@ class TransitionModal extends React.Component {
                     <img aria-hidden="true" className="ui image small bordered fluid" src={imgSrc} alt={alt} />
                 </a>;
         }
-        
+
         return (
             <Modal
                 trigger={modalTrigger}
                 open={this.state.modalOpen}
                 onOpen={this.handleOpen}
                 onClose={this.handleClose}
-                id="paintModal"
-                aria-labelledby="paintModalHeader"
-                aria-describedby="paintModalDescription"
+                id={'transitionModal.' + this.props.transition}
+                aria-labelledby={'transitionModal.' + this.props.transition + 'Header'}
+                aria-describedby={'transitionModal.' + this.props.transition + 'Description'}
                 tabIndex="0"
             >
             </Modal>
