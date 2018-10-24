@@ -230,7 +230,7 @@ class TreePanel extends React.Component {
                             permissions={this.props.PermissionsStore.permissions}
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
-                    <div className="ui attached segment">
+                    <div className="ui bottom attached segment">
                         <div className="ui small header" >Beta feature
                             <i className="yellow warning sign icon"></i>
                         </div>
