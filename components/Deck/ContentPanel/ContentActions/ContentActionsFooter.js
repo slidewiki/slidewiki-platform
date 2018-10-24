@@ -156,7 +156,7 @@ class ContentActionsFooter extends React.Component {
         }
 
         let desktopButtons = <div>
-          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
           <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
               <i className="print large icon"></i>
           </button>
@@ -179,9 +179,9 @@ class ContentActionsFooter extends React.Component {
                <i className="ui ellipsis vertical large icon" style={{'marginTop':'0.7em'}}></i>
               </div>
             </AriaMenuButton.Button>
-            <AriaMenuButton.Menu className='ui menu vertical'
+            <AriaMenuButton.Menu className='ui menu vertical' role='menu'
              style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
-                 <AriaMenuButton.MenuItem className='item' key= {0} tag='li'>
+                 <AriaMenuButton.MenuItem className='item' key= {0} tag='li' role='menuitem'>
                    <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
                     <div aria-label="Print" data-tooltip="Print" >
                         <i className="print large icon"></i>
@@ -218,10 +218,10 @@ class ContentActionsFooter extends React.Component {
                 </div>
                 <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
                     {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : (this.state.isMobile) ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : ''}
-                    <div className="right menu">
+                    <div className="right menu" role="menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
