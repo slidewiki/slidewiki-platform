@@ -110,9 +110,12 @@ class DeckLanguageMenu extends React.Component {
         );
 
         return (
-            <Dropdown item trigger={dropdownTrigger} icon={null}
-                className="fluid" style={{ textAlign: 'center' }} 
+            <Dropdown
+                fluid
+                labeled
+                trigger={dropdownTrigger}
                 aria-label={selectLanguageMessage}
+                aria-describedby={selectedLanguageName}
                 disabled={languageOptions.length < 2 && !canEdit}
                 defaultValue={selectedLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
         );
