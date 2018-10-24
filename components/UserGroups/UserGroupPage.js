@@ -72,7 +72,7 @@ class UserGroupPage extends React.Component {
 
     showStats(){
         let group = this.props.UserGroupsStore.currentUsergroup;
-        return <GroupStats groupid={this.props.UserGroupsStore.currentUsergroup.id} groupStats={this.props.GroupStatsStore} />;
+        return <GroupStats groupid={this.props.UserGroupsStore.currentUsergroup._id} groupStats={this.props.GroupStatsStore} />;
     }
 
     chooseView(){

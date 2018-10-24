@@ -100,6 +100,7 @@ export default {
                 json: true
             }).then((res) => {
                 let memberUsernames = res[0].members.map((member) => member.username);
+                memberUsernames.push(res[0].creator.username);
                 let pipeline = [{
                     '$match': {
                         'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
@@ -193,12 +194,14 @@ export default {
             }).then((response) => callback(null, response))
               .catch((err) => callback(err));
         } else if (resource === 'stats.groupMembersStats') {
+            let memberUsernames;
             rp.post({
                 uri: Microservices.user.uri + '/usergroups',
                 body: [parseInt(params.groupid)],
                 json: true
             }).then((res) => {
-                let memberUsernames = res[0].members.map((member) => member.username);
+                memberUsernames = res[0].members.map((member) => member.username);
+                memberUsernames.push(res[0].creator.username);
                 let pipeline = [
                     {
                         '$match': {
@@ -246,8 +249,17 @@ export default {
                     headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
                     json: true
                 });
-            }).then((response) => callback(null, callback(null, response)))
-              .catch((err) => callback(err));
+            }).then((response) => {
+                let memberStats = memberUsernames.map((username) => {
+                    let found = response.find((stat) => {
+                        return stat.username === username;
+                    });
+                    return {username: username, count: found != null ? found.count : 0};
+                }).sort(function(a, b){
+                    return b.count - a.count
+                });
+                callback(null, callback(null, memberStats));
+            }).catch((err) => callback(err));
         }
     }
 };

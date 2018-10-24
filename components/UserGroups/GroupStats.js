@@ -57,7 +57,6 @@ class GroupStats extends React.Component {
     render() {
         return (
           <Grid relaxed>
-              {this.props.groupStats.statsByTime && this.props.groupStats.statsByTime.length > 0 &&
               <Grid.Row columns={1}>
                   <Grid.Column>
                       <ActivityTimeline statsByTime={this.props.groupStats.statsByTime}
@@ -67,18 +66,17 @@ class GroupStats extends React.Component {
                                         handleActivityTypeChange={this.handleTimelineActivityChange.bind(this)}
                                         handleDatePeriodChange={this.handleTimelinePeriodChange.bind(this)} />
                   </Grid.Column>
-              </Grid.Row>}
-              {this.props.groupStats.membersStats && this.props.groupStats.membersStats.length > 0 &&
+              </Grid.Row>
               <Grid.Row columns={1}>
                   <Grid.Column>
                       <UserBarChart title={this.context.intl.formatMessage(this.messages.membersStatsTitle)} data={this.props.groupStats.membersStats}
-                                    loading={this.props.groupStats.statsByTimeLoading}
+                                    loading={this.props.groupStats.membersStatsLoading}
                                     activityType={this.props.groupStats.membersStatsFilters.activityType}
                                     datePeriod={this.props.groupStats.membersStatsFilters.datePeriod}
                                     handleActivityTypeChange={this.handleMembersStatsActivityChange.bind(this)}
                                     handleDatePeriodChange={this.handleMembersStatsPeriodChange.bind(this)} />
                   </Grid.Column>
-              </Grid.Row>}
+              </Grid.Row>
           </Grid>
         );
     }
