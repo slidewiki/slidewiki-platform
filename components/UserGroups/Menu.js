@@ -58,9 +58,8 @@ class Menu extends React.Component {
                   <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/settings' } activeStyle={this.styles} role="menuitem">
                       <p><i className="icon setting"/> {memberMsg}</p>
                   </NavLink>
-                  <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/stats' } activeStyle={this.styles} role="menuitem">
-                      <p><i className="icon line graph"/> {statsMsg}</p>
-                  </NavLink>
+                  {this.props.hasEditRights ? <NavLink className="item" href={'/usergroup/' + this.props.group._id + '/stats' } activeStyle={this.styles} role="menuitem">
+                      <p><i className="icon line graph"/> {statsMsg}</p></NavLink> : ''}
               </div>
           </div>
         );
