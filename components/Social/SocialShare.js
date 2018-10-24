@@ -10,28 +10,28 @@ import { isEmpty } from '../../common.js';
 class SocialShare extends React.Component {
 
     componentDidMount(){
-        $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false, allowTab: false});
+        this.initDropdown();
     }
 
     componentDidUpdate() {
-        $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false, allowTab: false});
+        this.initDropdown();
+    }
+    
+    initDropdown() {
+        $(this.refs.shareDropDown).dropdown({
+            action: this.onClick.bind(this), 
+            selectOnKeydown: false, 
+            allowTab: false, // prevent tabindex on menu items
+            keys: {
+                enter: false, // prevent event listener on enter since enters are handled by 'react-share'
+                upArrow: false, 
+                downArrow: false
+            }
+        });
     }
 
-    onEnterAndClick(text, value, element) {
-        //$(this.refs.shareDropDown).dropdown('hide');
-        console.log(value);
-        switch(value) {
-            case 'E-mail':
-                console.log('open mail');
-                //this.handleEmailClick();
-                this.handleEmailClick.bind(this)
-            break;
-            case 'Twitter':
-                console.log('twitter');
-                //this.handleEmailClick();
-                this.handleTwitterClick();
-            break;
-        }
+    onClick(text, value) {
+        $(this.refs.shareDropDown).dropdown('hide');
         
         return false;
     }
