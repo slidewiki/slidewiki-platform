@@ -98,6 +98,8 @@ export default {
                     userid: curr.userid,
                     joined: curr.joined || ''
                 };
+                if (curr.role)
+                    member.role = curr.role;
                 prev.push(member);
                 return prev;
             }, []);
@@ -108,7 +110,8 @@ export default {
                 isActive: !isEmpty(params.isActive) ? params.isActive : true,
                 timestamp: !isEmpty(params.timestamp) ? params.timestamp : '',
                 members: members,
-                referenceDateTime: (new Date()).toISOString()
+                referenceDateTime: (new Date()).toISOString(),
+                picture: params.picture
             };
             // console.log('sending:', tosend, params.jwt);
             rp({
@@ -119,7 +122,7 @@ export default {
                 body: tosend,
                 timeout: body.timeout
             })
-            .then((body) => callback(null, body))
+            .then((ret) => callback(null, ret))
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.deleteUsergroup') {
             rp({
@@ -197,6 +200,67 @@ export default {
                     qs: {
                         user: params.id2,
                         roles: params.roles,
+                        rootsOnly: true,
+                        sort: (params.sort || 'lastUpdate'),
+                        status: params.status || 'any',
+                        page: params.page,
+                        pageSize: 30
+                    },
+                    json: true
+                };
+            }
+
+            if(params.jwt){
+                requestCall.headers = { '----jwt----': params.jwt };
+            }
+
+            rp(requestCall).then( (response) => {
+                let decks = response.items;
+
+                // get the number of likes
+                let arrayOfPromises = decks.map((deck) => {
+                    return rp.get({
+                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
+                        qs: {
+                            metaonly: true,
+                            activity_type: 'react',
+                            all_revisions: true
+                        }
+                    }).catch((err) => {
+                        // ignore errors from activities service
+                        return 0;
+                    });
+                });
+
+                return Promise.all(arrayOfPromises).then((numbers) => {
+                    // wait for it to fill in the likes
+                    for (let i = 0; i < numbers.length; i++) {
+                        decks[i].noOfLikes = numbers[i];
+                    }
+                    return { metadata: response._meta, decks };
+                });
+
+            }).then(({ metadata, decks }) => {
+                let converted = decks.map((deck) => { return transform(deck); });
+
+                callback(null, { metadata, decks: converted });
+            }).catch((err) => callback(err, { metadata: {}, decks: [] }));
+        }  else if (resource === 'userProfile.fetchGroupOwnedDecks'){
+            let requestCall = '';
+
+            // if we want to load more results, we already have a next link
+            // from the previous response of the deck-service
+            if (params.nextLink){
+                requestCall = {
+                    uri: `${Microservices.deck.uri}${params.nextLink}`,
+                    json: true
+                };
+            } else {
+                requestCall = {
+                    method: 'GET',
+                    uri: `${Microservices.deck.uri}/decks`,
+                    qs: {
+                        usergroup: params.id,
                         rootsOnly: true,
                         sort: (params.sort || 'lastUpdate'),
                         status: params.status || 'any',

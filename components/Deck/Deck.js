@@ -187,8 +187,10 @@ class Deck extends React.Component {
                                       <div className="ui hidden divider"></div>
                                     </div>
                                     <div className="mobile only sixteen wide column">
-                                          <NavigationPanel/>
-                                          <div className="ui hidden divider"></div>
+                                        <div className="ui segments">
+                                            <NavigationPanel lastAttached={true} />
+                                        </div>
+                                        <div className="ui hidden divider"></div>
                                     </div>
                                   </div>
                                 </div>;
