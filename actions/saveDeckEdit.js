@@ -45,6 +45,10 @@ export default function saveDeckEdit(context, payload, done) {
             content_id: String(payload.selector.sid),
             content_kind: 'deck'
         };
+        const contentRootId = payload.selector.id;
+        if (!common.isEmpty(contentRootId)) {
+            activity.content_root_id = contentRootId;
+        }
         context.executeAction(addActivity, {activity: activity});
     };
 

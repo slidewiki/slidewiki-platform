@@ -8,7 +8,7 @@ import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
 import UserRecommendations from '../UserRecommendations';
 import classNames from 'classnames/bind';
-import { fetchUserDecks } from '../../../../actions/user/userprofile/fetchUserDecks';
+import fetchUserDecks from '../../../../actions/user/userprofile/fetchUserDecks';
 
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){

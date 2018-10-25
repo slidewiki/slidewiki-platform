@@ -53,7 +53,11 @@ class TagsPanel extends React.Component {
             ariaCancel: {
                 id: 'TagsPanel.aria.cancel',
                 defaultMessage: 'Cancel tags'
-            }
+            },
+            tagInputPlaceholder:{
+                id: 'TagsPanel.TagInput.placeholder',
+                defaultMessage: 'Insert new tags'
+            },
         });
     }
     onShowEditForm(e) {
@@ -74,7 +78,10 @@ class TagsPanel extends React.Component {
     handleSave(e) {
         e.preventDefault();
 
+        // we need to add the existing topics tags in this list, otherwise we'll lose them
         let tagsToSave = this.tags_input.getSelected();
+        tagsToSave.push(...this.props.TagsStore.topics.map((t) => ({ tagName: t.tagName })));
+
         this.context.executeAction(saveTags, {
             tags: tagsToSave,
             selector: this.props.selector
@@ -109,7 +116,7 @@ class TagsPanel extends React.Component {
                 {expandLink}
             </div>;
 
-        let tagEditPanel = <TagInput initialTags={tags} recommendedTags={this.props.TagsStore.recommendedTags} ref={(instance) => (this.tags_input = instance)}/> ;
+        let tagEditPanel = <TagInput initialTags={tags} recommendedTags={this.props.TagsStore.recommendedTags} ref={(instance) => (this.tags_input = instance)} placeholder={this.context.intl.formatMessage(this.messages.tagInputPlaceholder)} allowAdditions={true}/> ;
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
 

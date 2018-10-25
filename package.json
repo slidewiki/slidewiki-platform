@@ -47,7 +47,8 @@
   },
   "napa": {
     "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git",
-    "reveal.js-menu": "https://github.com/slidewiki/reveal.js-menu"
+    "reveal.js-menu": "https://github.com/slidewiki/reveal.js-menu",
+    "ckeditor-sharedspace-plugin": "https://github.com/ckeditor/ckeditor-dev/tree/major/plugins/sharedspace.git"
   },
   "napa-config": {
     "cache": false
@@ -82,6 +83,7 @@
     "css-loader": "^0.28.7",
     "css-modules-require-hook": "^4.0.6",
     "csurf": "^1.9.0",
+    "d3": "3",
     "debug": "^3.1.0",
     "diff": "3.4.0",
     "es5-shim": "^4.5.9",
@@ -124,6 +126,7 @@
     "moment": "^2.22.2",
     "napa": "^2.3.0",
     "npm": "^5.5.1",
+    "nvd3": "^1.8.6",
     "pre-commit": "^1.2.2",
     "prop-types": "^15.6.2",
     "react": "^15.4.2",
@@ -143,6 +146,7 @@
     "react-intl": "^2.2.3",
     "react-intl-webpack-plugin": "0.0.3",
     "react-list": "^0.8.6",
+    "react-nl2br": "^0.4.0",
     "react-qr-svg": "^2.1.0",
     "react-resize-aware": "^1.0.11",
     "react-responsive": "^1.2.6",
@@ -166,7 +170,7 @@
     "superagent": "^3.8.1",
     "superagent-csrf": "^1.0.0",
     "superagent-csrf-middleware": "^0.3.0",
-    "sweetalert2": "^6.11.1",
+    "sweetalert2": "^6.11.5",
     "turndown": "^4.0.1",
     "uglifyjs-webpack-plugin": "^1.1.0",
     "url-loader": "^0.6.2",
