@@ -10,6 +10,8 @@ import publishDeck from '../../actions/addDeck/publishDeck';
 import waitForThumbnails from '../../actions/addDeck/waitForThumbnails';
 import importCanceled from '../../actions/import/importCanceled';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
+import { defineMessages } from 'react-intl';
+import { Microservices } from '../../configs/microservices';
 
 class ImportPreviewModal extends React.Component {
     handleReject(){
@@ -112,10 +114,12 @@ class ImportPreviewModal extends React.Component {
                 if (slide.title !== undefined)
                     thumbnailAlt += slide.title ;
                 let thumbnailSrc = (slide.thumbnail) ? 'data:image/png;base64,' + slide.thumbnail : '';
+                // let thumbnailSrc2 = Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/' + (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
                 let imgTitle = 'Title: ' + slide.title;
                 return (
                     <td key={index} style={{'padding':' 15px'}}><div style={{'width': '250px'}} tabIndex='0'>
                         Slide {index+1} <img title={imgTitle} style={imgStyle} src={thumbnailSrc} alt={thumbnailAlt} aria-hidden='true' />
+                        {/* <img title={imgTitle} style={imgStyle} src={thumbnailSrc2} alt={thumbnailAlt} aria-hidden='true' /> */}
                     </div></td>
                 );
                 
