@@ -360,7 +360,7 @@
   "embedModal.large": "Groot",
   "embedModal.other": "Andere",
   "embedModal.embedHeader": "SlideWiki presentatiereeks over \"{title}\" door {creator}.",
-  "embedModel.desc": "Selecteer een optie hieronder en kopieer daarna de gegenereerde HTML in uw website.",
+  "embedModal.description": "Selecteer een optie hieronder en kopieer daarna de gegenereerde HTML in uw website.",
   "embedModal.embed": "Inbedden",
   "embedModal.size": "Afmeting",
   "embedModal.widthLabel": "Breedte van ingebedde inhoud",

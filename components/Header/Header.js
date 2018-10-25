@@ -58,7 +58,7 @@ class Header extends React.Component {
             <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
             </button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/>
-            <FormattedMessage id='header.signin.mobile' defaultMessage='Sign in'/>
+            <FormattedMessage id='header.signin.mobile' defaultMessage='Sign In'/>
             </a>;
         let notification_locale = '';
 
@@ -67,6 +67,9 @@ class Header extends React.Component {
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
               <FormattedMessage id='header.mydecks.mobile' defaultMessage='Decks'/>
+              </NavLink>
+              <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/playlists'}><i className="grid layout icon"/>
+              <FormattedMessage id='header.myplaylists.mobile' defaultMessage='Playlists'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>
               <FormattedMessage id='header.mygroups.mobile' defaultMessage='Groups'/>
@@ -88,7 +91,7 @@ class Header extends React.Component {
 
         return (
             <div>
-                <MediaQuery minWidth={768} values={{width: 1600}}>
+                <MediaQuery minWidth={1050} values={{width: 1600}}>
                     <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                         <div className="ui fluid container">
                             <a className="item" href='/'>
@@ -110,7 +113,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </MediaQuery>
-                <MediaQuery maxWidth={768} values={{width: 1600}}>
+                <MediaQuery maxWidth={1049} values={{width: 1600}}>
                     <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
                         <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
                           &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki Logo" style={{width: '9rem', paddingTop: '0.5rem'}}/>

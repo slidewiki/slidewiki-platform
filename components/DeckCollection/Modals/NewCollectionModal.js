@@ -73,7 +73,8 @@ class NewCollectionModal extends React.Component {
         this.context.executeAction(addNewCollection, {
             title: this.state.title, 
             description: this.state.description,
-            userGroup: this.state.userGroup
+            userGroup: this.state.userGroup, 
+            deckId: this.props.deckId
         });
 
         this.handleClose();
@@ -156,7 +157,7 @@ class NewCollectionModal extends React.Component {
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="header">
                     <Modal.Header  as="h1" content={this.context.intl.formatMessage(this.messages.modalTitle)} id='addNewCollectionHeader'/>
                     <Modal.Content>
-                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
+                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new playlist" tabIndex ='-1'/>
                         <Form>
                             <Form.Field required error={this.state.validationError}>
                                 <label htmlFor="col_title"><FormattedMessage {...this.messages.titleField} /></label>
@@ -164,7 +165,7 @@ class NewCollectionModal extends React.Component {
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_description"><FormattedMessage {...this.messages.descriptionField} /></label>
-                                <input id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                                <textarea id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} rows="5" />
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_user_group"><FormattedMessage {...this.messages.usergroupField} /></label>
