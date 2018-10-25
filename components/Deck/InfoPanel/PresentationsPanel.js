@@ -153,7 +153,7 @@ class PresentationsPanel extends React.Component {
 
         let toReturn;
         if(this.props.deckPage)
-            toReturn = <Button icon large aria-label='start live presentation' data-tooltip='start live presentation' role='button' onClick={this.openChooseASessionModal.bind(this)}>
+            toReturn = <Button icon huge basic aria-label='start live presentation' data-tooltip='start live presentation' role='button' onClick={this.openChooseASessionModal.bind(this)}>
                 <Icon name='record' color='blue'/>
             </Button>;
         else
