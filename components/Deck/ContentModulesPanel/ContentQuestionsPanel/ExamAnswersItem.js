@@ -4,7 +4,7 @@ class ExamAnswersItem extends React.Component {
     handleOnChange() {
         if (!this.props.showCorrectAnswers) {
             this.context.executeAction(selectExamAnswer, {
-                questionIndex: this.props.questionIndex,
+                questionIndex: this.props.originalQIndex,
                 answerIndex: this.props.index,
                 selected: this.refs[this.props.name].checked
             });
