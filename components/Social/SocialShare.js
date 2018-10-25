@@ -109,28 +109,30 @@ class SocialShare extends React.Component {
         const emailShareSubject = 'Interesting ' + this.props.selector.stype + ' on SlideWiki';
 
         return(
-            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share">
+            <div className="ui dropdown" ref="shareDropDown" data-tooltip="Share">
                 <div className="text">
-                    <button className="ui button" type="button" >
+                    <button className="ui button" type="button" role="listbox" aria-haspopup="true" aria-label="Share">
                         <i className="share alternate large icon" />
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-                    <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" onClick={this.handleEmailClick.bind(this)}>
+                    <div className="item" data-value="E-mail" data-tooltip="E-mail" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}
                             subject={emailShareSubject}
                             body={emailShareMessage}
+                            additionalProps={{'aria-label': 'E-mail', 'role': 'menuitem'}}
                             className="Demo__some-network__share-button">
                             <EmailIcon
                                 size={iconSize}
                                 round />
                         </EmailShareButton>
                     </div>
-                    <div className="item" data-value="Twitter" role="menuitem" aria-label="Twitter" data-tooltip="Twitter" onClick={this.handleTwitterClick.bind(this)}>
+                    <div className="item" data-value="Twitter" data-tooltip="Twitter" onClick={this.handleTwitterClick.bind(this)}>
                         <TwitterShareButton
                             url={shareUrl}
                             title={shareMessage}
+                            additionalProps={{'aria-label': 'Twitter', 'role': 'menuitem'}}
                             className="Demo__some-network__share-button">
                             <TwitterIcon
                                 size={iconSize}
@@ -147,22 +149,24 @@ class SocialShare extends React.Component {
                                 round />
                         </FacebookShareButton>
                     </div>*/}
-                    <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" onClick={this.handleGooglePlusClick.bind(this)}>
+                    <div className="item" data-value="GooglePlus" data-tooltip="Google Plus" onClick={this.handleGooglePlusClick.bind(this)}>
                         <GooglePlusShareButton
                             url={shareUrl}
                             content={shareMessage}
+                            additionalProps={{'aria-label': 'GooglePlus', 'role': 'menuitem'}}
                             className="Demo__some-network__share-button">
                             <GooglePlusIcon
                                 size={iconSize}
                                 round />
                         </GooglePlusShareButton>
                     </div>
-                    <div className="item" data-value="LinkedIn" role="menuitem" aria-label="LinkedIn" data-tooltip="LinkedIn" onClick={this.handleLinkedinClick.bind(this)}>
+                    <div className="item" data-value="LinkedIn" data-tooltip="LinkedIn" onClick={this.handleLinkedinClick.bind(this)}>
                         <LinkedinShareButton
                             url={shareUrl}
                             title={shareMessage + '(' + shareUrl + ')'}
                             windowWidth={750}
                             windowHeight={600}
+                            additionalProps={{'aria-label': 'LinkedIn', 'role': 'menuitem'}}
                             className="Demo__some-network__share-button">
                             <LinkedinIcon
                                 size={iconSize}
