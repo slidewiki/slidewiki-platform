@@ -8,6 +8,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import NewCollectionModal from './Modals/NewCollectionModal';
 import UpdateCollectionModal from './Modals/UpdateCollectionModal';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import nl2br from 'react-nl2br';
 
 import MobileDetect from 'mobile-detect';
 
@@ -15,7 +16,7 @@ class UserCollections extends React.Component {
     constructor(props){
         super(props);
 
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
 
         this.state = {
             showNewCollectionModal: false,
@@ -111,7 +112,7 @@ class UserCollections extends React.Component {
             },
             collectionCreate: {
                 id: 'UserCollections.collections.create',
-                defaultMessage: 'Create new Playlist'
+                defaultMessage: 'Create Playlist'
             },
             collectionDelete: {
                 id: 'UserCollections.collections.delete',
@@ -191,8 +192,11 @@ class UserCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui header"><h3><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
-                                    <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''}  {col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
+                                    <div className="ui small header"><h3><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
+                                    <div className="meta">
+                                        <div>{col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
+                                        {nl2br(col.description)}
+                                    </div>
                                 </div>
 
                                 <div className="right aligned column">
@@ -220,8 +224,9 @@ class UserCollections extends React.Component {
                 <div className="ui secondary clearing segment">
                     <h2 className="ui left floated header">{this.context.intl.formatMessage((this.props.loggedinuser === this.props.user.uname) ? this.messages.myCollectionsTitle :this.messages.ownedCollectionsTitle)}</h2>
                     {(this.props.loggedinuser === this.props.user.uname && !this.state.isMobile) &&
-                        <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
-                          <p><FormattedMessage {...this.messages.collectionCreate} /></p>
+                        <button className="ui right floated labeled icon button" onClick={this.showNewCollectionModal.bind(this)}>
+                            <i className="icon plus"></i>
+                              <p><FormattedMessage {...this.messages.collectionCreate} /></p>
                         </button>
                     }
                 </div>

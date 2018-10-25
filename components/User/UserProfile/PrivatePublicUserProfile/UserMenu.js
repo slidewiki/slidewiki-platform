@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import {NavLink} from 'fluxible-router';
+import {defineMessages} from 'react-intl';
 import {Microservices} from '../../../../configs/microservices';
 
 class UserMenu extends React.Component {
     constructor(props){
         super(props);
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
         this.messages = this.getIntlMessages();
     }
     getIntlMessages(){
@@ -35,7 +35,7 @@ class UserMenu extends React.Component {
             recommendedDecks: {
                 id: 'UserMenu.recommendedDecks',
                 defaultMessage: 'Recommended Decks'
-            }
+            },
         });
     }
     render() {
@@ -53,20 +53,20 @@ class UserMenu extends React.Component {
           <div role="navigation">
               <div className="ui vertical fluid menu" role="menu">
                   <NavLink className="item" href={'/user/' + this.props.user.uname } activeStyle={this.styles} role="menuitem">
-                      <p><i className="yellow icon open folder"/> {decksMsg}</p>
+                      <p><i className="icon open folder"/> {decksMsg}</p>
                   </NavLink>
                   { (this.props.user.uname === this.props.loggedinuser) &&
                     <NavLink className="item" href={'/user/' + this.props.user.uname + '/decks/shared'} activeStyle={this.styles} role="menuitem">
                         <p><i className="icons">
-                                    <i className="yellow open folder icon"></i>
+                                    <i className="open folder icon"></i>
                                     <i className="corner users icon"></i>
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
                   }
-                  { (this.props.user.uname === this.props.loggedinuser && Microservices.recommendation !== undefined && Microservices.recommendation.uri === 'http://slidewiki.imp.bg.ac.rs') &&
+                  { (this.props.user.uname === this.props.loggedinuser && Microservices.analytics) &&
                     <NavLink className="item" href={'/user/' + this.props.user.uname + '/recommendations'} activeStyle={this.styles}>
                         <p><i className="icons">
-                            <i className="yellow open folder icon"></i>
+                            <i className="open folder icon"></i>
                             <i className="corner thumbs up icon"></i>
                         </i> {deckRecommendationsMsg}</p>
                     </NavLink>
