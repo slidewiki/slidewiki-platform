@@ -91,8 +91,8 @@ function getDecks(deckIds){
             decks[deckId].revisions.forEach( (rev, index, arr) => {
                 deckRevisions[deckId + '-' + rev.id] = rev;
                 
-                if (index == arr.length - 1 && rev.educationLevel !== undefined) { //get educational level of last revision
-                    decks[deckId].educationLevel = rev.educationLevel
+                if (index === arr.length - 1 && rev.educationLevel !== undefined) { //get educational level of last revision
+                    decks[deckId].educationLevel = rev.educationLevel;
                 }
             });
         }).catch( (err) => {
