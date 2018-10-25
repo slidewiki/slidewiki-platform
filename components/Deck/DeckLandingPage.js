@@ -99,8 +99,9 @@ class DeckLandingPage extends React.Component {
                 <Container fluid>
                     <Divider hidden/>
                     <Grid divided='vertically' stackable>
-                        <Grid.Column mobile={0} tablet={1} computer={2}>
+                        <Grid.Column only="tablet computer" tablet={1} computer={2}>
                         </Grid.Column>
+
                         <Grid.Column mobile={16} tablet={14} computer={12}>
                             <Grid.Row>
                                 <Segment>
@@ -115,7 +116,7 @@ class DeckLandingPage extends React.Component {
                                             <div className="row">
                                                 <Header as="h1">
                                                     <div className="sr-only">Deck title: </div>
-                                                    {deckData.title + ' '}
+                                                    <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
                                                     <div className="sr-only">Deck status: </div>
                                                     {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='pink'>Unlisted</Label>}</Header>
                                             </div>
@@ -205,13 +206,11 @@ class DeckLandingPage extends React.Component {
                                     </div>
                                 </div>
                             </Grid.Row>
-                            {/*
-         <Grid.Column mobile={16} tablet={1} computer={2}>
-                </Grid.Column> */}
 
                             <Divider hidden />
+
                             <Grid divided='vertically' stackable>
-                                <Grid.Column mobile={16} tablet={10} computer={12}>
+                                <Grid.Column only="tablet computer" width={12}>
                                     <Segment attached='top' >
                                         <Header size="small" as="h3">Available in the following languages:</Header>
                                         { deckLanguages.map((lang, i) =>
@@ -234,7 +233,7 @@ class DeckLandingPage extends React.Component {
                                         {/*<Icon name='chevron circle right' size='huge' link/>*/}
                                     </Segment>
                                 </Grid.Column>
-                                <Grid.Column mobile={16} tablet={1} computer={4}>
+                                <Grid.Column only="tablet computer" width={4}>
                                     <Segment>
                                         <ActivityFeedPanel /></Segment>
                                     <Segment attached='bottom'>
@@ -246,28 +245,11 @@ class DeckLandingPage extends React.Component {
                                 </Grid.Column>
                             </Grid>
 
-                            <Divider />
-
                         </Grid.Column>
 
-                        <Grid.Column mobile={0} tablet={1} computer={2}>
+                        <Grid.Column only="tablet computer" tablet={1} computer={2}>
                         </Grid.Column>
 
-                        {/*  <Grid.Column mobile={16} tablet={4} computer={2}>
-                  
-                  <Divider />
-                  <Grid.Row>
-                    <Button compact color='secondary' disabled><Icon name='thumbs up' /> {this.props.ContentLikeStore.usersWhoLikedDeck.length}</Button>
-                    <Button compact color='secondary' disabled><Icon name='share alternate' /> {deckData.shareCount}</Button>
-                    <Button compact color='secondary' disabled><Icon name='download' /> {deckData.downloadCount}</Button>
-                  </Grid.Row>
-                  <Divider />
-                  
-                </Grid.Column> 
-                
-                <Grid.Column mobile={16} tablet={1} computer={2}>
-                </Grid.Column>
-                */}
                     </Grid>
                 </Container>
             </div>
