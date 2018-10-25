@@ -26,8 +26,8 @@ class DeckList extends React.Component {
                             <div className="ui two column stackable grid">
                                 <div className="column">
                                     <div className="ui header"><NavLink href={['/deck', deck._id, deck.slug,].join('/')}>{deck.title}</NavLink></div>
-                                    <div className="meta"><FormattedMessage id='decklist.meta.creator' defaultMessage='Creator:' /> <NavLink href={'/user/' + deck.username}>{deck.username}</NavLink></div>
-                                    <div className="meta"><FormattedMessage id='decklist.meta.date' defaultMessage='Date:' /> {deckDate}</div>
+                                    <div className="meta"><FormattedMessage id='decklist.meta.creator' defaultMessage='Creator' />: <NavLink href={'/user/' + deck.username}>{deck.username}</NavLink></div>
+                                    <div className="meta"><FormattedMessage id='decklist.meta.date' defaultMessage='Date' />: {deckDate}</div>
                                 </div>
                                 <div className="column right aligned">
                                     <div className="ui large label" tabIndex="0">
