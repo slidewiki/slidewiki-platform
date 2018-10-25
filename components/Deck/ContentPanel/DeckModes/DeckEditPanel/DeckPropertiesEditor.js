@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
@@ -18,8 +20,10 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
-import LanguageDropdown from '../../../../common/LanguageDropdown';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
+
+import {educationLevels} from '../../../../../lib/isced';
+import TagInput from '../../../ContentModulesPanel/TagsPanel/TagInput';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -28,18 +32,15 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     getStateFromProps(props) {
-        let editors = props.deckProps.editors;
-        if (editors === undefined)
-            editors = {
-                users: [],
-                groups: []
-            };
+        let editors = props.deckProps.editors || {
+            users: [],
+            groups: [],
+        };
 
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
             allowMarkdown: props.deckProps.allowMarkdown || false,
-            language: (props.deckProps.language && props.deckProps.language.replace('-', '_')) || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             //license: props.deckProps.license || '',
@@ -47,6 +48,9 @@ class DeckPropertiesEditor extends React.Component {
             users: editors.users,
             groups: editors.groups,
             published: !props.deckProps.hidden,
+            educationLevel: props.deckProps.educationLevel,
+            tags: props.deckProps.tags || [],
+            topics: props.deckProps.topics || [],
         };
     }
 
@@ -190,11 +194,6 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
-        if (this.state.language == null || this.state.language.length < 2) {
-            validationErrors.language = 'Please select a language.';
-            isValid = false;
-        }
-
         /*
         if (this.state.license == null || this.state.license.length < 2) {
             validationErrors.license = 'Please select a license.';
@@ -207,6 +206,11 @@ class DeckPropertiesEditor extends React.Component {
         groups = this.props.DeckEditStore.authorizedGroups;
         // console.log('handleSave', users, groups, isValid);
 
+        // for topics we need to merge with tags in state
+        let newTags = [...this.state.tags, ...this.topicInput.getSelected()];
+        // as topics are never new, and we don't change the other tags, tagName is all we need
+        newTags = newTags.map((t) => ({ tagName: t.tagName }));
+
         this.setState({validationErrors: validationErrors});
         if (isValid) {
             let deckId = this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id;
@@ -216,7 +220,6 @@ class DeckPropertiesEditor extends React.Component {
                 deckId: deckId,
                 title: this.state.title,
                 allowMarkdown: this.state.allowMarkdown,
-                language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
                 //license: this.state.license,
@@ -229,8 +232,9 @@ class DeckPropertiesEditor extends React.Component {
                         groups: groups
                     }
                 },
-                tags: TagsStore.tags,
+                tags: newTags,
                 hidden: !this.state.published,
+                educationLevel: this.state.educationLevel,
             });
             this.context.executeAction(updateTheme, this.state.theme);
         }
@@ -239,9 +243,15 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
-        if (fieldName === 'language') stateChange[fieldName] = stateChange[fieldName].replace('-', '_');
         this.setState(stateChange);
     }
+
+    handleDropdownChange(fieldName, event, data) {
+        let stateChange = {};
+        stateChange[fieldName] = data.value;
+        this.setState(stateChange);
+    }
+
     onChangeMarkdown(event) {
         this.setState({allowMarkdown: !this.state.allowMarkdown});
     }
@@ -391,13 +401,6 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.title != null
         });
-        let langFieldClass = classNames({
-            'required': true,
-            'field': true,
-            'error': this.state.validationErrors.language != null,
-            'disabled': true,
-            'hidden': true
-        });
         /*
         let licenseFieldClass = classNames({
             'required': true,
@@ -457,7 +460,6 @@ class DeckPropertiesEditor extends React.Component {
             'sr': 'sr_RS',
             'lt': 'lt_LT',
         };
-        let simpleLanguage = this.state.language && fixedLanguageCodes[this.state.language.substring(0, 2)];
 
         let groupsArray = [];
         if (this.props.groups) {
@@ -497,8 +499,7 @@ class DeckPropertiesEditor extends React.Component {
 
         let listOfAuthorized = this.getListOfAuthorized();
 
-        //let titleAndLanguage = <div className="two fields">
-        let titleAndLanguage = <div className="field">
+        let titleField = <div className="field">
             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
                 <label htmlFor="title_input">
                     Title
@@ -508,12 +509,6 @@ class DeckPropertiesEditor extends React.Component {
                     aria-required="true" id="title_input"/>
 
             </div>
-            {/*<div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
-                <label htmlFor="language" id="language_label">
-                    Language
-                </label>
-                <LanguageDropdown type="spoken" required={true} value={simpleLanguage} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-            </div>*/}
         </div>;
         let markdownField = <div className="field">
                 <div className="ui checkbox">
@@ -522,15 +517,14 @@ class DeckPropertiesEditor extends React.Component {
                 </div>
          </div>;
 
-        let titleAndLanguageAndPublished = <div className="fields">
-            <div className="fourteen wide field">{titleAndLanguage}</div>
+        let titleAndPublished = <div className="fields">
+            <div className="sixteen wide field">{titleField}</div>
             <div className="two wide field">
                 <label id="published_label">Published</label>
                 <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
                     checked={this.state.published} onChange={this.handleChangeCheckbox.bind(this, 'published')} />
             </div>
         </div>;
-
 
         let description = <div className="field">
             <label htmlFor="description_input" id="deck-description">Description</label>
@@ -550,15 +544,32 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         </div>;
 
+        let levelAndTopics = <div className="two fields">
+            <div className="sr-only" id="describe_level">Select education level of deck content</div>
+            <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete. Multiple subjects can be selected"</div>
+            <div className="field">
+                <label htmlFor="level_input" id="level_label"><FormattedMessage id="DeckProperty.Education" defaultMessage="Education Level" /></label>
+                <Dropdown id="level_input" fluid selection aria-labelledby="level_label" aria-describedby="describe_level"
+                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
+                    value={this.state.educationLevel} onChange={this.handleDropdownChange.bind(this, 'educationLevel')} />
+            </div>
+            <div className="field">
+                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckProperty.Tag.Topic" defaultMessage="Subject" /></label>
+                <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
+                    ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} initialTags={this.state.topics} />
+            </div>
+        </div>;
+
         return (
             <div className="ui container">
                 <div className="ui grid">
                     <div className="sixteen wide column">
                         <form className="ui form">
-                            {titleAndLanguageAndPublished}
+                            {titleAndPublished}
                             {description}
                             {themeAndLicence}
                             {markdownField}
+                            {levelAndTopics}
                             {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
                                 <div>
                                     <div className="two fields">

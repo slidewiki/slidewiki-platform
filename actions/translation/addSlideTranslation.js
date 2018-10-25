@@ -17,15 +17,20 @@ export default function addSlideTranslation(context, payload, done) {
             log.error(context, {filepath: __filename, message: err.message });
             context.executeAction(serviceUnavailable, payload, done);//TODO improve
         } else {
-            console.log('addSlideTranslation service returned', res);
+            // console.log('addSlideTranslation service returned', res);
 
-            //update selector
+            // update selector
             let newSlideId = res.node.id + '-' + res.node.revision;
             let newPath = location.pathname.toString().replace(new RegExp(payload.selector.sid, 'g'), newSlideId);
-            // also replace view with edit
-            // remove it first if it exists, then append it
-            newPath = newPath.replace(/\/view$/, '');
-            newPath = newPath + '/edit';
+            // replace 'view', if exists, with 'edit'
+            newPath = newPath.replace(/\/(view)?$/, '');
+
+            if (payload.markdown) {
+                newPath = newPath + '/markdownEdit';
+            } else {
+                newPath = newPath + '/edit';
+            }
+            
 
             let params = new URLSearchParams(location.search);
             params.set('language', payload.language);
