@@ -17,15 +17,15 @@ class AttachQuestionsOptions extends React.Component {
         //TODO: internationalise the messages */
         let header = 'Warning';
         let text1 = 'Adding questions will overwrite the existing content in this slide.';
-        let text2 = 'You can still revert to an earlier version of the slide or decide to not save after embedding the questions.';
+        let text2 = 'You can still revert to an earlier version of this slide or decide to not save after embedding the questions.';
             
 
         return (
             <Segment>
-                <div className='ui header' id='embedWarningHeader'>
-                    <Icon name="exclamation triangle"/>
+                <h2 className='ui header' id='embedWarningHeader'>
+                    <Icon name="yellow exclamation triangle"/>
                     {header}
-                </div> 
+                </h2>
                 <div className= 'ui text' id='embedWarningText'>
                     {text1} <br />
                     {text2}

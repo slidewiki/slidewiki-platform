@@ -92,17 +92,17 @@ class AttachQuestionsOptions extends React.Component {
         return (
             <Segment className='ui vertical stackable' style={{padding: '20px'}} id='EmbedOptions'>
                 <div className='ui field input'>
-                    <label className='ui questions padded text'>Title</label>
-                    <input id='title' type='text' placeholder='Title for Questions...' tabIndex="1" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
+                    <label htmlFor='title' className='ui questions padded text'>Title</label>
+                    <input id='title' type='text' placeholder='Title for Questions...' tabIndex="0" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
                     <div className='ui grey text' className='ui questions padded text grey'>Default title: Questions</div>
                 </div>
                 <div className='ui questions padded vertical'>
-                    <label className='ui questions padded text'>Number questions</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showNumbers' name='showNumbers' checked={showNumbers} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleNumbersClick')} onChange={this.toggleShowNumbers.bind(this)}/>
+                    <label htmlFor='qu_no' className='ui questions padded text'>Number questions</label>
+                    <Checkbox id='qu_no' toggle style={{verticalAlign: 'middle'}} ref='showNumbers' name='showNumbers' checked={showNumbers} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleNumbersClick')} onChange={this.toggleShowNumbers.bind(this)}/>
                 </div>
                 <div className='ui questions padded vertical'>
-                    <label className='ui questions padded text'>Display correct answers and Explanation</label>
-                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnsExp' name='showAnsExp' checked={showAnsExp} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleAnsExpClick')} onChange={this.toggleShowAnsExp.bind(this)}/>
+                    <label htmlFor='showAns' className='ui questions padded text'>Display correct answers and Explanation</label>
+                    <Checkbox toggle style={{verticalAlign: 'middle'}} ref='showAnsExp' id='showAns' name='showAnsExp' checked={showAnsExp} onKeyPress={(evt) => this.handleKeyPress(evt, 'toggleAnsExpClick')} onChange={this.toggleShowAnsExp.bind(this)}/>
                 </div>
             </Segment>
         );

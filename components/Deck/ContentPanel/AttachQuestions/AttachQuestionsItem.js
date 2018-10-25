@@ -43,13 +43,14 @@ class AttachQuestionsItem extends React.Component {
 
         const name = 'question' + this.props.questionIndex;
 
+
         return (
 
             <div className = "ui segments">
                 <div className="ui two column vertically divided segment">
                     <div className="ui checkbox">
-                        <input type="checkbox" onChange={this.props.onClick.bind(this)} onKeyPress={this.props.onKeyPress.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} /> 
-                        <label htmlFor='name'>
+                        <input type="checkbox" onChange={this.props.onClick.bind(this)} onKeyPress={this.props.onKeyPress.bind(this)} checked={this.props.selectedQ} ref={name} name={name} id={name} aria-labelledby="question_label"/>
+                        <label htmlFor='name' id="question_label">
                             {question.title}
                         </label>
                     </div>
