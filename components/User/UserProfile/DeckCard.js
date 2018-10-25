@@ -26,30 +26,31 @@ class DeckCard extends React.Component {
             thumbnailURL = this.props.cardContent.picture;
         }
         let viewUrl = ['/deck', this.props.cardContent.deckID, this.props.cardContent.slug].join('/');
+        let openDeckUrl = ['/deck', this.props.cardContent.deckID, this.props.cardContent.slug, 'deck', this.props.cardContent.deckID].join('/');
         let presentationUrl = ['/presentation', this.props.cardContent.deckID, this.props.cardContent.slug, this.props.cardContent.deckID].join('/');
 
         let cardTitle = this.props.cardContent.title;
         if (cardTitle.length > 25) cardTitle = cardTitle.slice(0, 24) + '…';
 
         let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0, 99) + '...' : this.props.cardContent.description;
-        let labels = this.props.cardContent.hidden ?
-            defineMessages({
-                label_text: {
-                    id: 'user.deck.linkLabelUnlisted',
-                    defaultMessage: 'Unlisted deck: {title}. Last updated {update} ago'
-                },
-            })
-            : defineMessages({
-                label_text: {
-                    id: 'user.deck.linkLabel',
-                    defaultMessage: 'Deck: {title}. Last updated {update} ago'
-                },
-            });
-        let ariaLabel = this.context.intl.formatMessage(labels.label_text, { title: this.props.cardContent.title, update: timeSince((new Date(this.props.cardContent.updated))) });
+
+        let labelMessages = defineMessages({
+            hidden: {
+                id: 'user.deck.linkLabelUnlisted',
+                defaultMessage: 'Unlisted deck: {title}. Last updated {update} ago'
+            },
+            published: {
+                id: 'user.deck.linkLabel',
+                defaultMessage: 'Deck: {title}. Last updated {update} ago'
+            },
+        });
+
+        let labelMessage = this.props.cardContent.hidden ? labelMessages.hidden : labelMessages.published;
+        let ariaLabel = this.context.intl.formatMessage(labelMessage, { title: this.props.cardContent.title, update: timeSince((new Date(this.props.cardContent.updated))) });
 
         let hiddenRibbon = '';
         if (this.props.cardContent.hidden) {
-            hiddenRibbon = <span className="ui red right ribbon label" tabIndex={-1}><FormattedMessage id='user.deckcard.unlisted' defaultMessage='Unlisted' /></span>;
+            hiddenRibbon = <span className="ui pink right ribbon label" tabIndex={-1}><FormattedMessage id='user.deckcard.unlisted' defaultMessage='Unlisted' /></span>;
         };
         let thumbnailAlt = this.props.cardContent.title + ' | ' + this.props.cardContent.deckID;
         return (
@@ -92,7 +93,7 @@ class DeckCard extends React.Component {
                 <div className="bottom attached menu ui basic buttons">
                     <FormattedMessage id="user.deckcard.opendeck" defaultMessage='Open deck'>
                         {
-                            (label) => <NavLink href={viewUrl} data-tooltip={label} role="button" className="ui icon button" aria-label={label}>
+                            (label) => <NavLink href={openDeckUrl} data-tooltip={label} role="button" className="ui icon button" aria-label={label}>
                                 <i className="yellow open folder large icon" aria-hidden="true" ></i>
                             </NavLink>
                         }

@@ -4,10 +4,12 @@ import { connectToStores } from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import UserGroupsStore from '../../stores/UserGroupsStore';
 import UserProfileStore from '../../stores/UserProfileStore';
+import GroupStatsStore from '../../stores/GroupStatsStore';
 import Info from './Info';
 import Menu from './Menu';
 import Details from './Details';
 import Decks from './Decks';
+import GroupStats from './GroupStats';
 import GroupCollections from '../DeckCollection/GroupCollections';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {navigateAction} from 'fluxible-router';
@@ -68,6 +70,11 @@ class UserGroupPage extends React.Component {
             picture={this.props.UserProfileStore.user.picture} />;
     }
 
+    showStats(){
+        let group = this.props.UserGroupsStore.currentUsergroup;
+        return <GroupStats groupid={this.props.UserGroupsStore.currentUsergroup._id} groupStats={this.props.GroupStatsStore} />;
+    }
+
     chooseView(){
         // console.log('chooseView', this.props.UserGroupsStore.category);
         switch(this.props.UserGroupsStore.category){
@@ -78,6 +85,8 @@ class UserGroupPage extends React.Component {
                 return this.showDecks();
             case 'playlists':
                 return this.showCollections();
+            case 'stats':
+                return this.showStats();
             default:
                 return this.showDetails();
         }
@@ -148,10 +157,12 @@ UserGroupPage.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-UserGroupPage = connectToStores(UserGroupPage, [UserGroupsStore, UserProfileStore], (context, props) => {
+UserGroupPage = connectToStores(UserGroupPage, [UserGroupsStore, UserProfileStore, GroupStatsStore], (context, props) => {
     return {
         UserGroupsStore: context.getStore(UserGroupsStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        GroupStatsStore: context.getStore(GroupStatsStore).getState(),
+
     };
 });
 

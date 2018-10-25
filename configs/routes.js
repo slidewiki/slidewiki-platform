@@ -364,6 +364,16 @@ export default {
         }
     },
 
+    decklandingpage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?',
+        method: 'get',
+        handler: require('../components/Deck/DeckLandingPage'),
+        page: 'decklandingpage',
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
     // stype: 'type of selected content e.g. slide, deck or question',
@@ -385,9 +395,11 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
+
             context.executeAction(loadDeck, payload, done);
         }
     },
+
     oldSlugDeck: {
         path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
@@ -575,7 +587,7 @@ export default {
         path: '/infopanel/:id/:spath?',
         method: 'get',
         page: 'decktree',
-        handler: require('../components/Deck/InfoPanel/InfoPanel'),
+        handler: require('../components/Deck/InfoPanel/InfoPanelInfoView'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }
