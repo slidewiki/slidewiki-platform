@@ -10,7 +10,7 @@ class UserBarChart extends React.Component {
         let tableRows = this.props.data.map((stat, index) => {
             return (
               <Table.Row key={index}>
-                  <Table.Cell>{stat.username}</Table.Cell>
+                  <Table.Cell>{stat.displayName || stat.username}</Table.Cell>
                   <Table.Cell>{stat.count}</Table.Cell>
               </Table.Row>
             );
@@ -36,6 +36,7 @@ class UserBarChart extends React.Component {
                                                 margin={{top: 5, right: 30, left: 20, bottom: 5}} maxBarSize={70}>
                                           <XAxis dataKey="username"/>
                                           <YAxis/>
+                                          <Tooltip/>
                                           <Bar dataKey="count" fill="#8884d8" />
                                       </BarChart>
                                   </ResponsiveContainer>
