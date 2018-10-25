@@ -83,7 +83,7 @@ class CategoryBox extends React.Component {
               </NavLink>
             </div>
 
-            { this.props.username.endsWith(LTI_ID) &&
+
               <div className="ui vertical fluid menu">
                 <div className="item" style={ this.headerStyle }>
                   <h3>
@@ -103,7 +103,7 @@ class CategoryBox extends React.Component {
                   </p>
                 </NavLink>
               </div>
-            }
+    
 
           </div>
         );
