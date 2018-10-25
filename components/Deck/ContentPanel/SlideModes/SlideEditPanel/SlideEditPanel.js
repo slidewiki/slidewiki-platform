@@ -7,8 +7,6 @@ import SlideContentEditor from './SlideContentEditor';
 import MarkdownEditor from './MarkdownEditor';
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
-
-
 class SlideEditPanel extends React.Component {
     constructor(props) {
         super(props);

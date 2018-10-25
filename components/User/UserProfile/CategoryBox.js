@@ -6,7 +6,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 class CategoryBox extends React.Component {
     constructor(props){
         super(props);
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
         this.headerStyle = {'backgroundColor': 'rgb(243, 244, 245)', 'color': 'rgba(0,0,0,.6)'};
     }
 
@@ -50,6 +50,15 @@ class CategoryBox extends React.Component {
                   />
                 </p>
               </NavLink>
+                <NavLink className="item" href={'/user/' + this.props.username + '/stats'} activeStyle={this.styles}>
+                    <p>
+                        <i className="icon line graph"/>
+                        <FormattedMessage
+                          id='CategoryBox.userStats'
+                          defaultMessage='User Stats'
+                        />
+                    </p>
+                </NavLink>
             </div>
 
             <div className="ui vertical fluid menu">
