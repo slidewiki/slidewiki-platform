@@ -53,12 +53,12 @@ class UserMenu extends React.Component {
           <div role="navigation">
               <div className="ui vertical fluid menu" role="menu">
                   <NavLink className="item" href={'/user/' + this.props.user.uname } activeStyle={this.styles} role="menuitem">
-                      <p><i className="yellow icon open folder"/> {decksMsg}</p>
+                      <p><i className="icon open folder"/> {decksMsg}</p>
                   </NavLink>
                   { (this.props.user.uname === this.props.loggedinuser) &&
                     <NavLink className="item" href={'/user/' + this.props.user.uname + '/decks/shared'} activeStyle={this.styles} role="menuitem">
                         <p><i className="icons">
-                                    <i className="yellow open folder icon"></i>
+                                    <i className="open folder icon"></i>
                                     <i className="corner users icon"></i>
                                 </i> {sharedDecksMsg}</p>
                     </NavLink>
@@ -66,7 +66,7 @@ class UserMenu extends React.Component {
                   { (this.props.user.uname === this.props.loggedinuser && Microservices.analytics) &&
                     <NavLink className="item" href={'/user/' + this.props.user.uname + '/recommendations'} activeStyle={this.styles}>
                         <p><i className="icons">
-                            <i className="yellow open folder icon"></i>
+                            <i className="open folder icon"></i>
                             <i className="corner thumbs up icon"></i>
                         </i> {deckRecommendationsMsg}</p>
                     </NavLink>

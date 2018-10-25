@@ -187,17 +187,17 @@ class DeckLandingPage extends React.Component {
                                 </Segment>
                             </Grid.Row>
                             <Grid.Row>
-                                <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
+                                <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
-                                                <Button basic icon huge aria-label='open deck' data-tooltip='open deck' role='button'>
-                                                    <Icon name='open folder' color='yellow' />
+                                                <Button icon huge aria-label='open deck' data-tooltip='open deck' role='button'>
+                                                    <Icon name='open folder' />
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button basic icon huge aria-label='open slideshow in new tab' data-tooltip='open slideshow' role='button' >
-                                                    <Icon name='play circle' color='blue' />
+                                                <Button icon huge aria-label='open slideshow in new tab' data-tooltip='open slideshow' role='button' >
+                                                    <Icon name='play circle' />
                                                 </Button>
                                             </a>
                                             <PresentationsPanel deckPage={true} />
@@ -271,12 +271,12 @@ class DeckLandingPage extends React.Component {
                     </Grid>
                 </Container>
             </div>
-    );
+        );
     }
-    }
+}
 
-    DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckPageStore, DeckViewStore, TranslationStore, ContentModulesStore, DeckListStore], (context, props) => {
-        return {
+DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckPageStore, DeckViewStore, TranslationStore, ContentModulesStore, DeckListStore], (context, props) => {
+    return {
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         DeckPageStore: context.getStore(DeckPageStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),
@@ -284,6 +284,6 @@ class DeckLandingPage extends React.Component {
         ContentModulesStore: context.getStore(ContentModulesStore).getState(),
         DeckListStore : context.getStore(DeckListStore).getState(),
     };
-    });
+});
 
-    export default DeckLandingPage;
+export default DeckLandingPage;

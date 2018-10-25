@@ -37,7 +37,7 @@ class DeckCard extends React.Component {
 
         let hiddenRibbon = '';
         if (this.props.cardContent.hidden) {
-            hiddenRibbon = <span className="ui red right ribbon label" tabIndex={-1}>Unlisted</span>;
+            hiddenRibbon = <span className="ui pink right ribbon label" tabIndex={-1}>Unlisted</span>;
             ariaLabel = `Unlisted ${ariaLabel}`;
         };
         let thumbnailAlt= this.props.cardContent.title + ' | ' + this.props.cardContent.deckID;

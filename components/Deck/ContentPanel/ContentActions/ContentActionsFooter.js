@@ -216,7 +216,7 @@ class ContentActionsFooter extends React.Component {
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
                     {this.props.ContentStore.selector.stype === 'slide' ? <div className="bar"></div> : ''}
                 </div>
-                <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
+                <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
                     {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : (this.state.isMobile) ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : ''}
                     <div className="right menu" role="menu">
                         <div className="ui icon buttons large right floated">
