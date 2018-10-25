@@ -23,7 +23,7 @@ class AttachQuestionsOptions extends React.Component {
         return (
             <Segment>
                 <h2 className='ui header' id='embedWarningHeader'>
-                    <Icon name="yellow exclamation triangle"/>
+                    <Icon className="yellow" name="warning sign"/>
                     {header}
                 </h2>
                 <div className= 'ui text' id='embedWarningText'>

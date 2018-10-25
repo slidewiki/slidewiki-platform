@@ -940,15 +940,15 @@ class SlideContentEditor extends React.Component {
                             correctText = '<strong> - correct </strong>';
                             break;
                     }
-                    questionhtml += '<li style="font-size:22px;">'+ currentAnswers[j].answer + correctText + '</li>';
+                    questionhtml += '<li style="font-size:22px; margin-top:5px;">'+ currentAnswers[j].answer + correctText + '</li>';
                 }
-                let explanation = currentQuestion.explanation ? '<div style="padding-left:30px; padding-bottom:5px; font-style:italic;">Explanation: '+ currentQuestion.explanation + '</div>' : '';
+                let explanation = currentQuestion.explanation ? '<div style="padding-left:30px; padding-bottom:5px; font-size:24px; "><strong>Explanation:</strong> '+ currentQuestion.explanation + '</div>' : '';
                 questionhtml += '</ul>'+ explanation +'</div>';
             }
             else {
                 //if the answers and explanation shouldn't be included
                 for (let j = 0; j < currentAnswers.length; j++){
-                    questionhtml += '<li style="font-size:22px;">'+currentAnswers[j].answer + '</li>';
+                    questionhtml += '<li style="font-size:22px; margin-top:5px;">'+currentAnswers[j].answer + '</li>';
                 }
 
                 questionhtml += '</ul></div>';
