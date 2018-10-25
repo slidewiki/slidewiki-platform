@@ -297,8 +297,8 @@ class ReportModal extends React.Component {
                   <Icon name="warning circle" size='large' />
             </Button>;
         else
-            trigger = <div aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
-                  <Icon name="warning circle" size='large' /> Report
+            trigger = <div className={this.props.className} aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+                  <span><Icon name="warning circle" size='large' /> Report</span>
             </div>;
 
         return(
