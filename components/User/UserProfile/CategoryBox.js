@@ -7,7 +7,7 @@ import {Microservices} from '../../../configs/microservices';
 class CategoryBox extends React.Component {
     constructor(props){
         super(props);
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
         this.headerStyle = {'backgroundColor': 'rgb(243, 244, 245)', 'color': 'rgba(0,0,0,.6)'};
     }
 

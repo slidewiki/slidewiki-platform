@@ -173,7 +173,7 @@ class AttachSlides extends React.Component{
     loadSlidesGrid(){
         let activeItemStyle = {
             backgroundColor:'#f8ffff',
-            border:'2px solid #2185d0'
+            border:'2px solid #1e78bb'
 
         };
 

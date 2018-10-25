@@ -70,6 +70,12 @@ class EmbedModal extends React.Component {
             },
         });
     }
+    
+    handleKeyPress(event, param, template) {
+        if (event.key === 'Enter'){
+            this.handleEmbed();
+        }
+    }
 
     handleEmbed() {
         this.setState({
@@ -177,8 +183,8 @@ class EmbedModal extends React.Component {
         return(
             <Modal
                     trigger={
-                        <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbed.bind(this)}>
-                            <div role="button" tabIndex="0" className="SocialMediaShareButton Demo__some-network__share-button">
+                        <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbed.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
+                            <div role="button" className="SocialMediaShareButton Demo__some-network__share-button">
                                 <div style={{width: this.props.size + 'px', height: this.props.size + 'px'}}>
                                     <Icon name="share square" style={{
                                         width: (this.props.size - 2) + 'px',
