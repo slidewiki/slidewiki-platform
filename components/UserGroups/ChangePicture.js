@@ -24,19 +24,19 @@ class ChangePicture extends React.Component {
     openCropPictureModal(e) {
         const messages = defineMessages({
             modalTitle: {
-                id: 'ChangePicture.modalTitle',
+                id: 'ChangePicture.Groups.modalTitle',
                 defaultMessage: 'Big file',
             },
             modalText: {
-                id: 'ChangePicture.modalText',
+                id: 'ChangePicture.Groups.modalText',
                 defaultMessage: 'The selected file is quite big (> 10MB). This could cause problems like a white profile picture. You should upload a smaller picture if you notice strange things.',
             },
             modalTitle2: {
-                id: 'ChangePicture.modalTitle2',
+                id: 'ChangePicture.Groups.modalTitle2',
                 defaultMessage: 'Wrong file type',
             },
             modalText2: {
-                id: 'ChangePicture.modalText2',
+                id: 'ChangePicture.Groups.modalText2',
                 defaultMessage: 'You have selected a file type that we currently do not support',
             },
         });
@@ -94,7 +94,7 @@ class ChangePicture extends React.Component {
                             <button className="ui primary labeled icon button" onClick={ this.openFileDialog.bind(this) }>
                                 <i className="icon upload"/>
                                 <FormattedMessage
-                                  id='ChangePicture.upload'
+                                  id='ChangePicture.Group.upload'
                                   defaultMessage='Upload new Image'
                                 />
                             </button>
@@ -102,7 +102,7 @@ class ChangePicture extends React.Component {
                             <button className="ui red labeled icon button" onClick={ this.removePicture.bind(this) }>
                                 <i className="icon ban"/>
                                 <FormattedMessage
-                                  id='ChangePicture.remove'
+                                  id='ChangePicture.Group.remove'
                                   defaultMessage='Remove Image'
                                 />
                             </button>
