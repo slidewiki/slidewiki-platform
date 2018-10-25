@@ -1,14 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import PresentationSlide from './PresentationSlide';
-import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
-import loadPresentation from '../../../actions/loadPresentation';
+import ContributorsStore from '../../../stores/ContributorsStore';
+import DataSourceStore from '../../../stores/DataSourceStore';
+import SlideContentView from '../../../components/Deck/ContentPanel/SlideModes/SlideViewPanel/SlideContentView';
+import DataSourceList from '../../../components/Deck/ContentModulesPanel/DataSourcePanel/DataSourceList';
+import ContributorsList from '../../../components/Deck/ContentModulesPanel/ContributorsPanel/ContributorsList';
 
 let playerCss = {
-    height: '100%',
+    height: '29.7cm',
+    width: '21cm',
     // position: 'absolute',
     top: '0',
     fontSize: '100%'
@@ -18,13 +22,13 @@ let clearStyle = {
     clear: 'both'
 };
 
-let pdf;
+//let pdf;
 if(process.env.BROWSER){
-    pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
+    //pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
 }
 
 
-class Presentation extends React.Component{
+class PresentationPrint extends React.Component{
     constructor(props){
         super(props);
         this.playerCss = playerCss;
@@ -35,40 +39,9 @@ class Presentation extends React.Component{
     }
 
     componentDidMount(){
-        if(process.env.BROWSER){
-             //loading reveal style
-            //Hide the header and footer
-            $('.ui.footer.sticky.segment').css({'display': 'none'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
-            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.horizontal.segments.footer').css({'display': 'none'});
-            $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
+        setTimeout(() => { window.print(); }, 2000);
 
-            let styleName = this.props.PresentationStore.theme;
-
-
-            this.revealDiv.style.display = 'inline';
-
-
-            let pptxwidth = $('.pptx2html').width();
-            let pptxheight = $('.pptx2html').height();
-
-            Reveal.initialize({
-                width: pptxwidth,
-    			height: pptxheight,
-                transition: 'none',
-                backgroundTransition: 'none',
-                history: true,
-                dependencies: [
-                    { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true }
-                ]
-            });
-            if(pdf){
-                window.print();
-            }
-
-        }
     }
 
     componentDidUpdate(){
@@ -77,8 +50,8 @@ class Presentation extends React.Component{
     render(){
         this.slides = this.getSlides();
         return(
-            <div id="presentationPrint">
-                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+            <div id="presentationPrint" className="printView">
+                <div className="reveal-old" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                     <div className="slides">
         			     	{this.slides}
         			      </div>
@@ -87,21 +60,69 @@ class Presentation extends React.Component{
             </div>
         );
     }
-
+    findSourcesForSlide(sid) {
+        let items = this.props.DataSourceStore.dataSources.filter((source) => {
+            return source.sid === sid;
+        });
+        return items;
+    }
+    prepareContributorName(contributor){
+        let out = '';
+        if(contributor.displayName){
+            out = contributor.displayName;
+        }else{
+            out = contributor.username;
+        }
+        if(contributor.organization){
+            out = out + ' (' + contributor.organization + ')';
+        }
+        return out;
+    }
     getSlides(){
+        //console.log(this.props.DataSourceStore);
+        //console.log(this.props.ContributorsStore);
+        let contributors = [];
+        let creator = this.prepareContributorName(this.props.ContributorsStore.creator[0]);
+        this.props.ContributorsStore.contributors.forEach((contrib) => {
+            contributors.push(this.prepareContributorName(contrib));
+        });
+        let joinedContribs = contributors.join(', ');
+        if(!joinedContribs.trim()){
+            joinedContribs = ' - ';
+        }
         let slides = this.props.PresentationStore.content;
-
+        //the fake slide added at the end
+        const lastSlideContent = `
+          <br/>
+          <br/>
+          <center>
+          Creator:  ${creator}<br/><br/>
+          Contributors: <br/> ${joinedContribs}<br/><br/><br/>
+          Licensed under the Creative Commons <br/>Attribution ShareAlike CC-BY-SA license <br/>
+          <br/><br/>
+          This deck was created using <a href="http://slidewiki.org">SlideWiki</a>.<br/>
+          <div><img src="/assets/images/slidewiki.svg" style="width: 200px;"/></div>
+          </center>
+        `;
         let returnList = [];
         if(slides){
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
                 let notes = '';
-                if(slide.speakernotes){
-                    notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
+                let slideSources = '';
+                let sources = this.findSourcesForSlide(slide.id);
+                if(sources.length){
+                    slideSources = <div className="ui segment"><b><i className="ui icon caret square up"></i> Sources</b><br/><DataSourceList items={sources} editable={false} selector ={slide.id}/></div>;
+                }
+                if(slide.speakernotes && slide.speakernotes.trim()){
+                    notes = <div className="ui segment"><b><i className="ui icon caret square up"></i> Speaker Notes</b><div dangerouslySetInnerHTML={{__html: slide.speakernotes.replace('position: absolute;','')}}></div></div>;
                 }
                 let content = slide.content + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id + '-' + i} id={'slide-' + slide.id + '-' + i} />);
+                returnList.push(<div key={slide.id + '-' + i} style={{pageBreakAfter : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
             }
+            //add last slide for licensing
+            returnList.push(<div key={'end-slide'} style={{pageBreakAfter : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
+
             return returnList;
 
         }
@@ -112,15 +133,17 @@ class Presentation extends React.Component{
 
 }
 
-Presentation.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+PresentationPrint.contextTypes = {
+    executeAction: PropTypes.func.isRequired
 };
 
-Presentation = connectToStores(Presentation, [PresentationStore], (context, props) => {
+PresentationPrint = connectToStores(PresentationPrint, [PresentationStore, DataSourceStore, ContributorsStore], (context, props) => {
     return {
-        PresentationStore: context.getStore(PresentationStore).getState()
+        PresentationStore: context.getStore(PresentationStore).getState(),
+        DataSourceStore: context.getStore(DataSourceStore).getState(),
+        ContributorsStore: context.getStore(ContributorsStore).getState()
     };
 });
 
 
-export default Presentation;
+export default PresentationPrint;

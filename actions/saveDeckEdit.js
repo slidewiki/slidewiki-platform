@@ -1,11 +1,13 @@
 import UserProfileStore from '../stores/UserProfileStore';
 import PermissionsStore from '../stores/PermissionsStore';
+import TranslationStore from '../stores/TranslationStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from './error/serviceUnavailable';
 import addActivity from './activityfeed/addActivity';
 const log = require('./log/clog');
 const common = require('../common.js');
+import Util from '../components/common/Util';
 
 export default function saveDeckEdit(context, payload, done) {
     log.info(context);
@@ -17,16 +19,21 @@ export default function saveDeckEdit(context, payload, done) {
         context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
         context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);
         //console.log(payload.selector);
-        context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
+        let params = {
             selector: payload.selector,
             nodeSpec: {
                 title: striptags(payload.title), id: payload.selector.sid,
                 path: payload.selector.spath,
-                theme: payload.theme,
+                theme: payload.theme
             }
-        });
+        };
+        //only apply it if root deck is changed
+        if(!payload.selector.spath){
+            params.allowMarkdown = payload.allowMarkdown;
+        }
+        context.dispatch('UPDATE_TREE_NODE_SUCCESS', params);
         //update the URL: redirect to view after edit
-        let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + payload.selector.sid + '/' + payload.selector.spath;
+        let newURL = Util.makeNodeURL(payload.selector, payload.selector.page, '');
         context.executeAction(navigateAction, {
             url: newURL
         });
@@ -38,6 +45,10 @@ export default function saveDeckEdit(context, payload, done) {
             content_id: String(payload.selector.sid),
             content_kind: 'deck'
         };
+        const contentRootId = payload.selector.id;
+        if (!common.isEmpty(contentRootId)) {
+            activity.content_root_id = contentRootId;
+        }
         context.executeAction(addActivity, {activity: activity});
     };
 
@@ -50,11 +61,13 @@ export default function saveDeckEdit(context, payload, done) {
     } else {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
+        payload.language = context.getStore(TranslationStore).currentLang || context.getStore(TranslationStore).treeLanguage;
+
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
-                log.error(context, {filepath: __filename});
+                log.error(context, {filepath: __filename, message: err.message});
                 // context.executeAction(serviceUnavailable, payload, done);
                 done();
             } else {

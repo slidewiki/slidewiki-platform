@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {List} from 'semantic-ui-react';
 import ContentChangeItem from './ContentChangeItem';
@@ -12,7 +13,7 @@ class DeckRevisionChanges extends React.Component {
         }) : 'There are no changes for this version.';
 
         return (
-            <List relaxed>
+            <List relaxed style={{ 'overflow-y': 'auto', 'max-height': '400px' }}>
                 {changes}
             </List>
         );
@@ -20,7 +21,7 @@ class DeckRevisionChanges extends React.Component {
 }
 
 DeckRevisionChanges.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default DeckRevisionChanges;

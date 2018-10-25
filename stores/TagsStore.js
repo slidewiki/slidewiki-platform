@@ -4,6 +4,7 @@ class TagsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.tags = [];
+        this.topics = [];
         this.showAllTags = false;
         this.selectedIndex = -1;
         this.contentOwner = 0;
@@ -15,9 +16,7 @@ class TagsStore extends BaseStore {
         this.recommendedTags = [];
     }
     loadTagsSlide(payload) {
-        this.tags = [];
-        let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
-        this.tags = lastRevision.tags? lastRevision.tags: [];
+        this.tags = payload.slide.tags || [];
         this.oldTags = JSON.parse(JSON.stringify(this.tags));
         this.tagsHaveChanged = false;
         this.selector = payload.selector;
@@ -27,9 +26,8 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     loadTagsDeck(payload) {
-        this.tags = [];
-        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
-        this.tags = lastRevision.tags? lastRevision.tags: [];
+        this.tags = payload.deckData.tags || [];
+        this.topics = payload.deckData.topics || [];
         this.oldTags = JSON.parse(JSON.stringify(this.tags));
         this.tagsHaveChanged = false;
         this.selector = {
@@ -48,7 +46,8 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     updateTags(payload) {
-        this.tags = payload.tags;
+        this.tags = payload.tags || [];
+        this.topics = payload.topics || [];
         this.selectedIndex = -1;
         this.tagsHaveChanged = false;
         this.isLoading = false;
@@ -111,6 +110,7 @@ class TagsStore extends BaseStore {
     getState() {
         return {
             tags: this.tags,
+            topics: this.topics,
             showAllTags: this.showAllTags,
             tag: this.tag,
             selectedIndex: this.selectedIndex,
@@ -128,6 +128,7 @@ class TagsStore extends BaseStore {
     }
     rehydrate(state) {
         this.tags = state.tags;
+        this.topics = state.topics;
         this.showAllTags = state.showAllTags;
         this.selectedIndex = state.selectedIndex;
         this.contentOwner = state.contentOwner;

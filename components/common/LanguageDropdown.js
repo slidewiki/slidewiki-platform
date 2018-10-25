@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import {translationLanguages, getLanguageDisplayName} from '../../common';
 
 /**
  * Properties:
  *   required: true|false
- *   ?country:  language short code, like en_EN or de_AT
  *   type: spoken/ui defines which languages are available
  *   tooltip
  *   onChange: Action which should be called on the change event
@@ -41,39 +42,11 @@ class LanguageDropdown extends React.Component {
             english: {
                 id: 'LanguageDropdown.english',
                 defaultMessage: 'English'
-            }, 
-            german: {
-                id: 'LanguageDropdown.german',
-                defaultMessage: 'German'
-            }, 
-            dutch: {
-                id: 'LanguageDropdown.dutch',
-                defaultMessage: 'Dutch'
-            }, 
-            greek: {
-                id: 'LanguageDropdown.greek',
-                defaultMessage: 'Greek'
-            }, 
-            italian: {
-                id: 'LanguageDropdown.italian',
-                defaultMessage: 'Italian'
-            }, 
-            portuguese: {
-                id: 'LanguageDropdown.portuguese',
-                defaultMessage: 'Portuguese'
-            }, 
-            serbian: {
-                id: 'LanguageDropdown.serbian',
-                defaultMessage: 'Serbian'
-            },
-            spanish: {
-                id: 'LanguageDropdown.spanish',
-                defaultMessage: 'Spanish'
             },
             tooltip: {
                 id: 'LanguageDropdown.tooltip',
                 defaultMessage: 'There will be more in the future'
-            }, 
+            },
             placeholder: {
                 id: 'LanguageDropdown.placeholder',
                 defaultMessage: 'Select your language'
@@ -91,35 +64,14 @@ class LanguageDropdown extends React.Component {
             'required': this.props.required
         });
 
-        let languageOptions = <div className="menu">
-
-            <div className="item" data-value="en_GB" >
-                <FormattedMessage {...this.messages.english} />
-            </div>
-            <div className="item" data-value="de_DE" >
-                <FormattedMessage {...this.messages.german} />
-            </div>
-            <div className="item" data-value="nl_NL" >
-                <FormattedMessage {...this.messages.dutch} />
-            </div>
-            <div className="item" data-value="el_GR" >
-                <FormattedMessage {...this.messages.greek} />
-            </div>
-            <div className="item" data-value="it_IT" >
-                <FormattedMessage {...this.messages.italian} />
-            </div>
-            <div className="item" data-value="pt_PT" >
-                <FormattedMessage {...this.messages.portuguese} />
-            </div>
-            <div className="item" data-value="sr_RS" >
-                <FormattedMessage {...this.messages.serbian} />
-            </div>
-            <div className="item" data-value="es_ES" >
-                <FormattedMessage {...this.messages.spanish} />
-            </div>
-        </div>;
+        let languageOptions = translationLanguages.reduce((arr, curr) => {
+            arr.push(<div className="item" data-value={curr} key={curr} >
+                    {getLanguageDisplayName(curr)}
+                </div>);
+            return arr;
+        }, []);
         let languageOptionsUI = <div className="menu">
-            <div className="item" data-value="en_EN">{this.context.intl.formatMessage(this.messages.english)}</div>
+            <div className="item" data-value="en">{this.context.intl.formatMessage(this.messages.english)}</div>
         </div>;
 
         let tooltip = this.props.tooltip;
@@ -133,16 +85,16 @@ class LanguageDropdown extends React.Component {
                     :
                     <input type="hidden" value={this.props.value} name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
-                <div className="default text"><FormattedMessage {...this.messages.placeholder} /></div>
-                {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}
+                <div className="default text">{this.context.intl.formatMessage(this.messages.placeholder)}</div>
+                {this.props.type === 'spoken' ? (<div className="menu">{languageOptions}</div>) : languageOptionsUI}
             </div>
         );
     }
 }
 
 LanguageDropdown.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default LanguageDropdown;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -26,15 +27,16 @@ class DeckFamily extends React.Component {
             params: {
                 tag: this.props.DeckFamilyStore.tag
             },
-            page: this.props.DeckFamilyStore.page + 1
+            nextLink: this.props.DeckFamilyStore.links.next,
         });
     }
     render() {
 
         // define load more results div
         let loadMoreDiv = '';
+        let nextLink = this.props.DeckFamilyStore.links.next;
 
-        if(this.props.DeckFamilyStore.hasMore){
+        if(nextLink){
             let loadMoreContent = <button className="ui button" onClick={this.loadMore.bind(this)}>Load More</button>;
             if(this.props.DeckFamilyStore.loadMoreLoading){
                 loadMoreContent = <div className="ui active text loader">Loading</div>;
@@ -52,7 +54,7 @@ class DeckFamily extends React.Component {
                   <div className="ui segments">
                       {(this.props.DeckFamilyStore.loading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                       <div className="ui secondary clearing segment">
-                          <h2 className="ui left floated header">Decks for tag: {this.props.DeckFamilyStore.tag}</h2>
+                          <h2 className="ui left floated header">Decks for tag: {this.props.DeckFamilyStore.defaultName || this.props.DeckFamilyStore.tag}</h2>
 
                           <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                               <i className="icon exchange"/>
@@ -77,7 +79,7 @@ class DeckFamily extends React.Component {
 }
 
 DeckFamily.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 DeckFamily = connectToStores(DeckFamily, [DeckFamilyStore], (context, props) => {
     return {

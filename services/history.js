@@ -1,6 +1,5 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../configs/log').log;
 
 export default {
@@ -12,10 +11,26 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'history.changes') {
-            let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes', json: true}) :
-                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes', qs:{root: args.deckId}, json: true});
-
-            changesPromise.then((changes) => {
+            Promise.resolve().then(() => {
+                if (args.slideId == null) {
+                    return rp.get({
+                        uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes',
+                        qs: {
+                            language: args.language,
+                        },
+                        json: true
+                    });
+                } else {
+                    return rp.get({
+                        uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes',
+                        qs: {
+                            language: args.language,
+                            root: args.deckId
+                        },
+                        json: true
+                    });
+                }
+            }).then((changes) => {
                 if (!changes.length){
                     return changes;
                 }
@@ -24,7 +39,10 @@ export default {
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
                     changes.forEach((changeOp) => {
                         let opUser = users.find((user) => user._id === changeOp.user);
-                        if (opUser) changeOp.username = opUser.username;
+                        if (opUser) {
+                            changeOp.username = opUser.username;
+                            changeOp.userDisplayName = opUser.displayName || opUser.username;
+                        }
                     });
                     return changes;
                 });
@@ -49,7 +67,11 @@ export default {
                 let userIds = [... new Set(revisions.map((rev) => rev.user))];
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
                     revisions.forEach((rev) => {
-                        rev.username = users.find((user) => user._id === rev.user).username;
+                        let revUser = users.find((user) => user._id === rev.user);
+                        if (revUser){
+                            rev.username = revUser.username;
+                            rev.userDisplayName = revUser.displayName || revUser.username;
+                        }
                     });
                     return revisions;
                 });
@@ -73,6 +95,9 @@ export default {
                     top_root_deck: params.id
                 },
                 headers: { '----jwt----': params.jwt }
+            }).then((deck) => {
+                if (!deck.id) deck.id = deck._id;
+                return deck;
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
         }
@@ -90,6 +115,13 @@ export default {
                 },
                 headers: { '----jwt----': params.jwt }
             }).then((res) => {
+                // TODO remove these after api changes
+                if (res.revisions) {
+                    res.id = res._id;
+                    res.revision = res.revisions[0].id;
+                    res.title = res.revisions[0].title;
+                }
+
                 callback(null, res);
             }).catch((err) => {
                 callback(err, {

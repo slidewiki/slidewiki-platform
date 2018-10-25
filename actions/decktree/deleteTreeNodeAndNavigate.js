@@ -3,7 +3,7 @@ import DeckTreeStore from '../../stores/DeckTreeStore';
 import deleteTreeNode from './deleteTreeNode';
 const log = require('../log/clog');
 import {navigateAction} from 'fluxible-router';
-import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
+import Util from '../../components/common/Util';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNodeAndNavigate(context, payload, done) {
@@ -41,7 +41,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
                     spath: currentState.selector.get('spath')
                 };
                 context.executeAction(navigateAction, {
-                    url: TreeUtil.makeNodeURL(selector, 'deck', 'view')
+                    url: Util.makeNodeURL(selector, 'deck', 'view', undefined, undefined, true)
                 });
             } else {
                 log.error(context, {filepath: __filename});

@@ -39,7 +39,8 @@ export default {
                     callback(null, {
                         username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
-                        jwt: res.headers['----jwt----']
+                        jwt: res.headers['----jwt----'],
+                        displayName: JSON.parse(res.body).displayName
                     });
                 })
                 .catch((err) => {
@@ -100,7 +101,8 @@ export default {
                     callback(null, {
                         username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
-                        jwt: res.headers['----jwt----']
+                        jwt: res.headers['----jwt----'],
+                        displayName: JSON.parse(res.body).displayName
                     });
                 })
                 .catch((err) => {
@@ -258,6 +260,24 @@ export default {
                 resolveWithFullResponse: true
             }).then((res) => {
                 callback(null, res);  //no JSON
+            }).catch((err) => {
+                callback(err, {});
+            });
+        }
+        else if (resource === 'user.sendEmail') {
+            rp.post({
+                uri: Microservices.user.uri + '/user/' + params.ownerid + '/sendEmail',
+                body: {
+                    reason: 1,
+                    data: {
+                        deckid: parseInt(params.deckId),
+                        deckname: params.deckname
+                    }
+                },
+                headers: { '----jwt----': params.jwt },
+                json: true
+            }).then((res) => {
+                callback(null, res);  //no data
             }).catch((err) => {
                 callback(err, {});
             });

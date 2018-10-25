@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -10,6 +11,9 @@ import ResetPasswordStore from '../../stores/ResetPasswordStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import ReCAPTCHA from 'react-google-recaptcha';
 import common from '../../common';
+import updateTrap from '../../actions/loginModal/updateTrap';
+
+let MediaQuery = require ('react-responsive');
 
 class ResetPassword extends React.Component {
     componentDidMount() {
@@ -178,6 +182,10 @@ class ResetPassword extends React.Component {
         this.context.executeAction(navigateAction, {//go to home page after password reset
             url: '/'
         });
+        //prepraring the modal
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
         $('.ui.login.modal').modal('show');
         return true;
     }
@@ -220,67 +228,81 @@ class ResetPassword extends React.Component {
             'icon': true
         });
 
-        return (
-            <div className="ui page centered grid" >
-                <div className="eight wide column">
-                    <div className="ui blue padded center aligned segment">
-                        <h2 className="ui dividing header">
-                          <FormattedMessage
-                            id='resetPassword.resetPW'
-                            defaultMessage='Reset Password'
-                          />
-                        </h2>
-                        <form className="ui form" >
-                            <div className={emailClasses} data-position="top center" data-inverted="">
-                                <label style={signUpLabelStyle}>
-                                  <FormattedMessage
-                                    id='resetPassword.mail'
-                                    defaultMessage='Email * '
-                                  />
-                                </label>
-                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
-                            </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>
-                                  <FormattedMessage
-                                    id='resetPassword.remail'
-                                    defaultMessage='Re-enter email * '
-                                  />
-                                </label>
-                                <div className="ui icon input"><input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
-                            </div>
-                            <div >
-                                <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
-                            </div>
-                            <div className="ui error message"></div>
-
-                            {this.props.ResetPasswordStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">
-                              <FormattedMessage
-                                id='resetPassword.loading'
-                                defaultMessage='Loading'
-                              />
-                            </div></div> : ''}
-
-                            <button type="submit" className="ui blue labeled submit icon button" >
-                                <i className="icon send"/>
-                                <FormattedMessage
-                                  id='resetPassword.reset'
-                                  defaultMessage='Reset my password now'
-                                />
-                            </button>
-                        </form>
-                        <br/>
-                    </div>
+        let content = <div className="ui blue padded center aligned segment">
+            <h2 className="ui dividing header">
+              <FormattedMessage
+                id='resetPassword.resetPW'
+                defaultMessage='Reset Password'
+              />
+            </h2>
+            <form className="ui form" >
+                <div className={emailClasses} data-position="top center" data-inverted="">
+                    <label style={signUpLabelStyle}>
+                      <FormattedMessage
+                        id='resetPassword.mail'
+                        defaultMessage='Email * '
+                      />
+                    </label>
+                    <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                 </div>
+                <div className="ui inline field">
+                    <label style={signUpLabelStyle}>
+                      <FormattedMessage
+                        id='resetPassword.remail'
+                        defaultMessage='Re-enter email * '
+                      />
+                    </label>
+                    <div className="ui icon input"><input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
+                </div>
+                <div >
+                    <input type="hidden" id="recaptcha" name="recaptcha"></input>
+                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                </div>
+                <div className="ui error message"></div>
+
+                {this.props.ResetPasswordStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">
+                  <FormattedMessage
+                    id='resetPassword.loading'
+                    defaultMessage='Loading'
+                  />
+                </div></div> : ''}
+
+                <button type="submit" className="ui blue labeled submit icon button" >
+                    <i className="icon send"/>
+                    <FormattedMessage
+                      id='resetPassword.reset'
+                      defaultMessage='Reset my password now'
+                    />
+                </button>
+            </form>
+            <br/>
+        </div>;
+
+        return (
+            <div className="ui page centered padded grid" >
+              <MediaQuery minDeviceWidth={1024} values={{deviceWidth: 1600}}>
+                <div className="eight wide column">
+                  {content}
+                </div>
+              </MediaQuery>
+              <MediaQuery minDeviceWidth={768} maxDeviceWidth={1023}>
+                <div className="ten wide column">
+                  {content}
+                </div>
+              </MediaQuery>
+              <MediaQuery maxDeviceWidth={767}>
+                <div className="sixteen wide column">
+                  {content}
+                </div>
+              </MediaQuery>
             </div>
         );
     }
 }
 
 ResetPassword.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ResetPassword = connectToStores(ResetPassword, [ResetPasswordStore], (context, props) => {
     return {

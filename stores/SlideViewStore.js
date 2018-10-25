@@ -10,35 +10,19 @@ class SlideViewStore extends BaseStore {
         this.content = '';
         this.speakernotes = '';
         this.tags = [];
-        this.loadingIndicator = '';
+        this.scaleRatio = null;
     }
-    loading(payload){
-        this.loadingIndicator = payload.loadingIndicator;
+
+    updateContent(payload) {
+        //this.id = payload.slide.id;
+        this.slideId = payload.selector.sid;
+        this.title = payload.slide.title;
+        this.content = payload.slide.content;
+        this.speakernotes = payload.slide.speakernotes;
+        this.tags = payload.slide.tags || [];
         this.emitChange();
     }
-    updateContent(payload) {
-        if (payload.slide.revisions !== undefined)
-        {
-            //this.id = payload.slide.id;
-            this.slideId = payload.selector.sid;
-            let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
-            this.title = lastRevision.title;
-            this.content = lastRevision.content;
-            this.speakernotes = lastRevision.speakernotes;
-            this.tags = lastRevision.tags? lastRevision.tags: [];
-            this.loadingIndicator = 'false';
-            this.emitChange();
-        }
-        else
-        {
-            this.slideId = '';
-            this.title = 'title not found';
-            this.content = 'content not found';
-            this.tags = [];
-            this.loadingIndicator = 'false';
-            this.emitChange();
-        }
-    }
+
     getState() {
         return {
             id: this.id,
@@ -47,12 +31,14 @@ class SlideViewStore extends BaseStore {
             content: this.content,
             tags: this.tags,
             speakernotes: this.speakernotes,
-            loadingIndicator: this.loadingIndicator
+            scaleRatio: this.scaleRatio
         };
     }
+
     dehydrate() {
         return this.getState();
     }
+
     rehydrate(state) {
         this.id = state.id;
         this.slideId = state.slideId;
@@ -60,14 +46,36 @@ class SlideViewStore extends BaseStore {
         this.content = state.content;
         this.tags = state.tags;
         this.speakernotes = state.speakernotes;
-        this.loadingIndicator = state.loadingIndicator;
+    }
+
+    zoomContent(payload) {
+        if (!this.scaleRatio) {
+            this.scaleRatio = 1;
+        }
+
+        if (payload.mode === 'view') {
+            switch (payload.direction) {
+                case 'in':
+                    this.scaleRatio += 0.25;
+                    break;
+
+                case 'out':
+                    this.scaleRatio -= 0.25;
+                    break;
+
+                case 'reset':
+                    this.scaleRatio = 1;
+                    break;
+            }
+        }
+        this.emitChange();
     }
 }
 
 SlideViewStore.storeName = 'SlideViewStore';
 SlideViewStore.handlers = {
     'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent',
-    'LOAD_SLIDE_CONTENT_LOAD': 'loading'
+    'ZOOM': 'zoomContent'
 };
 
 export default SlideViewStore;

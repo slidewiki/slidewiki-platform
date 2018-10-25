@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form, Dropdown, Segment, TextArea} from 'semantic-ui-react';
@@ -94,7 +95,7 @@ class UpdateCollectionModal extends React.Component {
         return defineMessages({
             modalTitle: {
                 id: 'UpdateCollectionModal.title',
-                defaultMessage: 'Update Deck Collection'
+                defaultMessage: 'Update Playlist'
             }, 
             titleField: {
                 id: 'UpdateCollectionModal.field.title',
@@ -102,7 +103,7 @@ class UpdateCollectionModal extends React.Component {
             }, 
             titleFieldPlaceholder: {
                 id: 'UpdateCollectionModal.field.title.placeholder',
-                defaultMessage: 'Deck Collection Title'
+                defaultMessage: 'Playlist Title'
             }, 
             descriptionField: {
                 id: 'UpdateCollectionModal.field.description',
@@ -110,7 +111,7 @@ class UpdateCollectionModal extends React.Component {
             }, 
             descriptionFieldPlaceholder: {
                 id: 'UpdateCollectionModal.field.description.placeholder',
-                defaultMessage: 'Deck Collection Description'
+                defaultMessage: 'Playlist Description'
             }, 
             usergroupField: {
                 id: 'UpdateCollectionModal.field.usergroup',
@@ -130,20 +131,18 @@ class UpdateCollectionModal extends React.Component {
             }, 
             updateCollectionSuccessTitle: {
                 id: 'UpdateCollectionModal.success.title',
-                defaultMessage: 'Update Deck Collection'
+                defaultMessage: 'Update Playlist'
             }, 
             updateCollectionSuccessText: {
                 id: 'UpdateCollectionModal.success.text',
-                defaultMessage: 'We are updating the Deck Collection...'
+                defaultMessage: 'We are updating the Playlist...'
             }
         });
     }
     render() {
 
-        // the user can assign a user group to a collection only if he is the creator of the user group
-        let userGroupOptions = (this.props.userGroups || []).filter( (userGroup) => {
-            return (userGroup.creator.userid === this.props.loggedInUser);
-        }).map( (userGroup) => ({
+        // the user can assign a user group to that playlist
+        let userGroupOptions = (this.props.userGroups || []).map( (userGroup) => ({
             text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
             value: userGroup._id
         }));
@@ -169,7 +168,7 @@ class UpdateCollectionModal extends React.Component {
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="header">
                     <Header content={this.context.intl.formatMessage(this.messages.modalTitle)} id='updateCollectionModalHeader'/>
                     <Modal.Content>
-                       <TextArea className="sr-only" id="updateCollectionDescription" value="Update a deck collection" tabIndex ='-1'/>
+                       <TextArea className="sr-only" id="updateCollectionDescription" value="Update a playlist details" tabIndex ='-1'/>
                         <Form>
                             <Form.Field required error={this.state.validationError}>
                                 <label htmlFor="col_title"><FormattedMessage {...this.messages.titleField} /></label>
@@ -177,11 +176,11 @@ class UpdateCollectionModal extends React.Component {
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_description"><FormattedMessage {...this.messages.descriptionField} /></label>
-                                <input id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                                <textarea id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} rows="5" />
                             </Form.Field>
                             <Form.Field>
-                                <label htmlFor="col_user_group"><FormattedMessage {...this.messages.usergroupField} /></label>
-                                <Dropdown id="col_user_group" placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} value={this.state.userGroup} />
+                                <label htmlFor="col_user_group" id="UserGroupLabel"><FormattedMessage {...this.messages.usergroupField} /></label>
+                                <Dropdown id="col_user_group" aria-labelledby="UserGroupLabel" placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} value={this.state.userGroup} />
                             </Form.Field>
                         </Form>
                     </Modal.Content>
@@ -200,8 +199,8 @@ class UpdateCollectionModal extends React.Component {
 }
 
 UpdateCollectionModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired, 
+    intl: PropTypes.object.isRequired
 };
 
 export default UpdateCollectionModal;

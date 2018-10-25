@@ -9,6 +9,9 @@ export default function addDeckSaveDeck(context, payload, done) {
     //enrich data
     payload.jwt = context.getStore(UserProfileStore).jwt;
 
+    // TODO remove this
+    payload.userid = context.getStore(UserProfileStore).userid;
+
     //no pptx uploaded
     if (payload.deckId === null) {
         context.service.create('deck.create', payload, null, {timeout: 30 * 1000}, (err, res) => {
@@ -44,8 +47,8 @@ function createActivity(deck) {
     let activity = {
         activity_type: 'add',
         user_id: String(deck.user),
-        content_id: deck.id ? (String(deck.id) + '-1'): (String(deck._id) + '-1'),
-        content_name: deck.revisions[0].title,
+        content_id: `${deck.id}-1`,
+        content_name: deck.title,
         content_owner_id: String(deck.user),
         content_kind: 'deck'
     };

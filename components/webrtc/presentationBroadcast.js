@@ -1,11 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
-import { Grid, Button, Popup } from 'semantic-ui-react';
+import { Grid, Button, Popup, Label } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
+import SessionRecorder from './SessionRecorder.js';
 import SocialSharing from './SocialSharing.js';
 import Chat from './Chat.js';
 import { QRCode } from 'react-qr-svg';
@@ -38,7 +40,7 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc + '';
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
-        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
+        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
         this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];
     }
 
@@ -64,8 +66,8 @@ class presentationBroadcast extends React.Component {
             return;
         }
         //Remove menus as they shouldn't appear
-        $('.menu:first').remove();
-        $('.footer:first').remove();
+        //$('.menu:first').remove();
+        //$('.footer:first').remove();
 
         that.socket = io(Microservices.webrtc.uri);
 
@@ -81,11 +83,18 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
+            window.localforage.config({
+                driver: [window.localforage.WEBSQL, window.localforage.INDEXEDDB],
+                name: 'SlideWikiRecorder',
+                size: 524288000
+            });
+            window.localforage.clear();
             that.setState({
                 roleText: 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ',
-                peerCountText: 'People currently listening: '
+                peerCountText: 'People currently attending: '
             });
             setmyID();
+            that.socket.emit('follow hashtag', that.hashTags.join(' '), that.room, that.deckID);
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             requestStreams({
                 audio: true,
@@ -95,6 +104,15 @@ class presentationBroadcast extends React.Component {
                 //   facingMode: "user"
                 // }
             });
+        });
+
+        that.socket.on('new tweets', (tweet) => { //only initiator recieves this
+            try {
+                that.refs.chat.addTweet(tweet);
+                that.sendRTCMessage('new tweets', tweet);
+            } catch (e) {
+                console.log('Failed adding/sending tweet', e);
+            }
         });
 
         that.socket.on('join', (room, socketID) => { //whole room recieves this, except for the peer that tries to join
@@ -163,10 +181,10 @@ class presentationBroadcast extends React.Component {
             console.log('Received room is full');
             swal({
                 titleText: 'The Room is already full',
-                text: 'The maximium number of listeners is already reached. Please try again later.',
+                text: 'The maximium number of participants is already reached. Please try again later.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Check',
+                confirmButtonText: 'Ok',
                 allowOutsideClick: false,
                 allowEscapeKey: false
             });
@@ -302,15 +320,19 @@ class presentationBroadcast extends React.Component {
                 $('#media').remove();
                 swal({//NOTE implemented here because this dialog interrupted with error dialogs of requestStreams()
                     title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                    html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
+                    html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently attending people.</p>',
                     type: 'info',
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Check',
+                    confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
+                })
+                .then(() => that.refs.sessionRecorder.recordSessionModal())
+                .then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
             }
             that.localStream = stream;
+            if(that.isInitiator)
+                that.refs.sessionRecorder.recordStream(stream);
 
             function sendASAP() {
                 if (that.presenterID) //wait for presenterID before sending the message
@@ -440,7 +462,7 @@ class presentationBroadcast extends React.Component {
                     text: 'This presentation has ended. Feel free to look at the deck as long as you want.',
                     type: 'warning',
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Check',
+                    confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     allowEscapeKey: false
                 });
@@ -630,6 +652,11 @@ class presentationBroadcast extends React.Component {
                         changeSlide(data.data.slide);
                     }
                     break;
+                case 'new tweets':
+                    if(!that.isInitiator){
+                        this.refs.chat.addTweet(data.data);
+                    }
+                    break;
                 default:
 
             }
@@ -734,8 +761,10 @@ class presentationBroadcast extends React.Component {
             });
 
             if (that.isInitiator) {
+                that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, document.getElementById('slidewikiPresentation').contentWindow.location.href);
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    that.refs.sessionRecorder.recordSlideChange(that.currentSlide);
                     that.forceUpdate();
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
@@ -761,6 +790,7 @@ class presentationBroadcast extends React.Component {
                     that.eventForwarding = true;
                 });
             }
+            $('#slidewikiPresentation').off('load');
         }
 
         function changeSlide(slideID) { // called by peers
@@ -783,7 +813,7 @@ class presentationBroadcast extends React.Component {
 
         function handleNewUsername(username, peerID) {
             if(isEmpty(username) || username === 'undefined')
-                that.pcs[peerID].username = 'Peer ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
+                that.pcs[peerID].username = 'Participant ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
             else
                 that.pcs[peerID].username = username;
             sendRTCMessage('username', that.pcs[peerID].username, peerID);
@@ -835,8 +865,8 @@ class presentationBroadcast extends React.Component {
     }
 
     sendUsername() {
-        if (this.context && this.context.getUser() && this.context.getUser().username)
-            this.sendRTCMessage('newUsername', this.context.getUser().username, this.presenterID);
+        if (this.context && this.context.getUser() && (this.context.getUser().displayName || this.context.getUser().username))
+            this.sendRTCMessage('newUsername', (this.context.getUser().displayName || this.context.getUser().username), this.presenterID);
         else
             this.sendRTCMessage('newUsername', 'undefined');
     }
@@ -851,7 +881,7 @@ class presentationBroadcast extends React.Component {
         let indexes = [0,Math.ceil(contentArray.length/3),Math.ceil(contentArray.length/3)*2,contentArray.length];
         if(contentArray.length > 0){
             titleHTMLAddition = ' <span id="taskModalPeerCount">0</span>/' + contentArray.length;
-            contentHTML = '<div class="ui accordion"><div class="title"><i class="dropdown icon"></i>Detailed list of peers</div><div class="content"><div class="transition hidden">'+
+            contentHTML = '<div class="ui accordion"><div class="title"><i class="dropdown icon"></i>Detailed list of participants</div><div class="content"><div class="transition hidden">'+
             '<div class="ui stackable three column grid">'+
                 '<div class="column">'+contentArray.slice(indexes[0],indexes[1]).reduce((a,b) => a + b, '')+'</div>'+
                 '<div class="column">'+contentArray.slice(indexes[1],indexes[2]).reduce((a,b) => a + b, '')+'</div>'+
@@ -951,7 +981,7 @@ class presentationBroadcast extends React.Component {
 
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
-            let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
+            let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Participant');
             return tmp ? 'Anonymous Rabbits' : this.pcs[key].username;
         }));
         peernames = Array.from(peernames).reduce((a,b) => a+', '+b, '').substring(1);
@@ -976,7 +1006,10 @@ class presentationBroadcast extends React.Component {
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
+                  <div>
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} role="button" aria-label="Show QR-Code">QR-Code</Button>
+                  <SessionRecorder ref="sessionRecorder" deckID={this.deckID.split('-')[0]} revision={this.deckID.split('-')[1]}/>
+                  </div>
               ) : ('')};
             </Grid.Row>
 
@@ -986,7 +1019,7 @@ class presentationBroadcast extends React.Component {
                   <Grid.Column width={15}>
                     <h4>
                       {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
-                          trigger={<span>{Object.keys(this.pcs).length}</span>}
+                          trigger={<Label icon='group' content={Object.keys(this.pcs).length}/>}
                           content={peernames}
                         /></p>) : <p>{this.state.roleText}</p>}
                     </h4>
@@ -1005,11 +1038,9 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
-                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
+                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Open current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
-                  {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)} role="button" aria-label="Copy URL to clipboard"/>
-                  ) : (
+                  {(this.isInitiator) ? ('') : (
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
                   )}
                   {(this.state.showReopenModalButton) ? (
@@ -1024,8 +1055,8 @@ class presentationBroadcast extends React.Component {
 }
 
 presentationBroadcast.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 presentationBroadcast = handleRoute(presentationBroadcast);

@@ -6,6 +6,8 @@ class DeckFamilyStore extends BaseStore {
         super(dispatcher);
 
         this.tag = '';
+        this.defaultName = '';
+
         this.decks = [];
         this.numFound = 0;
 
@@ -15,8 +17,9 @@ class DeckFamilyStore extends BaseStore {
         this.loadMoreLoading = false;
         this.hasMore = false;
         this.page = 1;
+        this.links = {};
     }
-    showLoading(payload){
+    showLoading(){
         this.loading = true;
         this.emitChange();
     }
@@ -26,6 +29,7 @@ class DeckFamilyStore extends BaseStore {
     }
     updateFamilyDecks(payload){
         this.tag = payload.tag;
+        this.defaultName = payload.defaultName;
         this.decks = payload.decks.map( (deck) => {
             return {
                 deckID: deck.db_id,
@@ -35,6 +39,7 @@ class DeckFamilyStore extends BaseStore {
                 updated: deck.updated,
                 description: deck.description,
                 creationDate: deck.timestamp,
+                noOfLikes: deck.noOfLikes,
             };
         });
 
@@ -42,6 +47,7 @@ class DeckFamilyStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
+        this.links = payload.links;
 
         // hide loading
         this.loading = false;
@@ -57,6 +63,7 @@ class DeckFamilyStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
+        this.links = payload.links;
 
         // hide loading
         this.loading = false;
@@ -73,13 +80,15 @@ class DeckFamilyStore extends BaseStore {
     getState() {
         return {
             tag: this.tag,
+            defaultName: this.defaultName, 
             decks: this.decks,
             numFound: this.numFound,
             loading: this.loading,
             error: this.error,
             hasMore: this.hasMore,
             loadMoreLoading: this.loadMoreLoading,
-            page: this.page
+            page: this.page,
+            links: this.links,
         };
     }
     dehydrate() {
@@ -88,12 +97,14 @@ class DeckFamilyStore extends BaseStore {
     rehydrate(state) {
         this.tag = state.tag;
         this.decks = state.decks;
+        this.defaultName = state.defaultName;
         this.numFound = state.numFound;
         this.loading = state.loading;
         this.error = state.error;
         this.hasMore = state.hasMore;
         this.loadMoreLoading = state.loadMoreLoading;
         this.page = state.page;
+        this.links = state.links;
     }
 }
 

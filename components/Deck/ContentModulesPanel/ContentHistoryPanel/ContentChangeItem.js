@@ -1,12 +1,14 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {List, Icon, Button} from 'semantic-ui-react';
 //import moment from 'moment';
 import revertRevision from '../../../../actions/history/revertRevision';
 import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
 
+import cheerio from 'cheerio';
 import {NavLink} from 'fluxible-router';
 
-import Iso from 'iso-639-1';
+import {getLanguageName, getLanguageNativeName} from '../../../../common';
 
 class ContentChangeItem extends React.Component {
 
@@ -42,11 +44,23 @@ class ContentChangeItem extends React.Component {
     }
 
     render() {
-        const change = this.props.change;
+        let change = this.props.change;
 
-        let description;
+        let description, actionText;
         let iconName = 'write';
 
+        if (change.value && change.value.ref) {
+            change.value.ref.title = cheerio.load(change.value.ref.title).text();
+        }
+        if (change.value && change.value.origin) {
+            change.value.origin.title = cheerio.load(change.value.origin.title).text();
+        }
+        if (change.oldValue && change.oldValue.ref) {
+            change.oldValue.ref.title = cheerio.load(change.oldValue.ref.title).text();
+        }
+        if (change.translated) {
+            change.translated.title = cheerio.load(change.translated.title).text();
+        }
         switch (change.action) {
             case 'add':
                 iconName = change.value.kind === 'slide'? 'file text' :'folder';
@@ -56,6 +70,7 @@ class ContentChangeItem extends React.Component {
                 description = <span>created a duplicate of {change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
             case 'attach':
+                iconName = change.value.kind === 'slide'? 'file text' :'folder';
                 description = <span>attached {change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
             case 'fork':
@@ -64,7 +79,9 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'translate':
                 iconName = 'translate';
-                description = <span>created a translation of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink> into { Iso.getName(change.translatedTo.substring(0, 2)) } </span>;
+                description =
+                    <span>added { getLanguageName(change.translated.language) } translation for {change.translated.kind} <em>{change.translated.title}</em>
+                    </span>;
                 break;
             case 'revise':
                 iconName = 'save';
@@ -78,11 +95,12 @@ class ContentChangeItem extends React.Component {
                 description = <span>restored {change.oldValue.kind} <em>{change.oldValue.ref.title}</em> to an earlier version</span>;
                 break;
             case 'remove':
-                iconName = 'trash outline';
+                iconName = 'trash alternate';
                 description = <span>removed {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'edit':
-                description = <span>edited slide <em>{change.value.ref.title}</em></span>;
+                actionText = change.value.variant ? 'edited slide translation' : 'edited slide';
+                description = <span>{actionText} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'move':
                 iconName = 'move';
@@ -96,6 +114,9 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'update':
                 description = <span>updated deck <em>{change.path[change.path.length - 1].title}</em></span>;
+                break;
+            case 'translate':
+                
                 break;
             default:
                 description = <span>updated the deck</span>;
@@ -134,7 +155,7 @@ class ContentChangeItem extends React.Component {
                 <List.Content style={{width:'100%'}} tabIndex='0'>
                     <List.Header>
                         <NavLink className="user"
-                                          href={'/user/' + change.username}> {change.username}</NavLink> {description} {buttons}
+                                          href={'/user/' + change.username}> {change.userDisplayName}</NavLink> {description} {buttons}
                     </List.Header>
                     {/*<List.Description>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</List.Description>*/}
                     <List.Description>{formatDate(change.timestamp)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}</List.Description>
@@ -145,7 +166,7 @@ class ContentChangeItem extends React.Component {
 }
 
 ContentChangeItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default ContentChangeItem;

@@ -1,43 +1,43 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideContentView from './SlideContentView';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 
-class SlideViewPanel extends React.PureComponent {
+class SlideViewPanel extends React.Component {
     constructor(props) {
         super(props);
-
-        this.isLoading = this.isContentUndefined();
+        this.currentID;
+        this.slideContentView = '';
     }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        let samePropsState = this.props.SlideViewStore.content === nextProps.SlideViewStore.content;
-        let undefinedContent = nextProps.SlideViewStore.content === undefined ||
-                nextProps.SlideViewStore.content === '';
-        this.isLoading = undefinedContent;
-
-        // Content should be updated only when new content is ready or component properties/state have changed.
-        let shouldUpdate = !undefinedContent && !samePropsState;
-        return shouldUpdate;
-    }
-
     componentWillReceiveProps(nextProps) {
-        let undefinedContent = this.isContentUndefined();
-        this.isLoading = undefinedContent;
+        if (this.props.SlideViewStore.content !== nextProps.SlideViewStore.content) {
+            this.slideContentView = '';
+            this.forceUpdate();
+        }
     }
-
+    componentWillMount(){
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        if (selector && this.currentID !== selector.sid) {
+            this.slideContentView = '';
+            this.currentID = selector.sid;
+            this.forceUpdate();
+        }
+    }
+    componentDidUpdate(){
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        if (selector && this.currentID !== selector.sid) {
+            this.slideContentView = '';
+            this.currentID = selector.sid;
+        }
+    }
     componentWillUnmount() {
-        this.props.SlideViewStore.content = '';
-        this.isLoading = true;
-    }
-
-    isContentUndefined() {
-        return this.props.SlideViewStore.content === undefined || this.props.SlideViewStore.content === '';
     }
 
     render() {
-        let deckTheme = this.props.selector && this.props.selector.theme;
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        let deckTheme = selector && selector.theme;
         if (!deckTheme) {
             // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
             let treeNode = this.props.DeckTreeStore.flatTree
@@ -50,36 +50,34 @@ class SlideViewPanel extends React.PureComponent {
                 deckTheme = this.props.DeckTreeStore.theme;
             }
         }
-
-        const compStyle = {
-            minHeight: 600,
+        if (this.currentID === selector.sid){
+            this.slideContentView = (
+                <div className="ui bottom attached segment">
+                    <SlideContentView content={this.props.SlideViewStore.content}
+                            speakernotes={this.props.SlideViewStore.speakernotes}
+                            theme={deckTheme}/>
+                </div>);
+        } else {
+            this.slideContentView = null;
+        }
+        const loadStyle = {
+            minWidth: '100%',
+            minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative'
         };
-
-        if (this.isLoading) {
-            return (
-                <div className="ui bottom attached segment">
-                    <div className="ui active dimmer"><div className="ui text loader">Loading...</div></div>
-                    <div className="ui" style={compStyle}/>
-                </div>
-            );
-        }
-
         return (
             <div className="ui bottom attached segment">
-                <SlideContentView content={this.props.SlideViewStore.content}
-                        speakernotes={this.props.SlideViewStore.speakernotes}
-                        loadingIndicator={this.props.SlideViewStore.loadingIndicator}
-                        theme={deckTheme}/>
+                {(this.currentID !== selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {this.slideContentView}
             </div>
         );
     }
 }
 
 SlideViewPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, DeckTreeStore], (context, props) => {

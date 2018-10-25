@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form, Dropdown, Segment, TextArea} from 'semantic-ui-react';
@@ -72,7 +73,8 @@ class NewCollectionModal extends React.Component {
         this.context.executeAction(addNewCollection, {
             title: this.state.title, 
             description: this.state.description,
-            userGroup: this.state.userGroup
+            userGroup: this.state.userGroup, 
+            deckId: this.props.deckId
         });
 
         this.handleClose();
@@ -81,7 +83,7 @@ class NewCollectionModal extends React.Component {
         return defineMessages({
             modalTitle: {
                 id: 'NewCollectionModal.title',
-                defaultMessage: 'Create a new Deck Collection'
+                defaultMessage: 'Create a new Playlist'
             }, 
             titleField: {
                 id: 'NewCollectionModal.field.title',
@@ -89,7 +91,7 @@ class NewCollectionModal extends React.Component {
             }, 
             titleFieldPlaceholder: {
                 id: 'NewCollectionModal.field.title.placeholder',
-                defaultMessage: 'Deck Collection Title'
+                defaultMessage: 'Playlist Title'
             }, 
             descriptionField: {
                 id: 'NewCollectionModal.field.description',
@@ -97,7 +99,7 @@ class NewCollectionModal extends React.Component {
             }, 
             descriptionFieldPlaceholder: {
                 id: 'NewCollectionModal.field.description.placeholder',
-                defaultMessage: 'Deck Collection Description'
+                defaultMessage: 'Playlist Description'
             }, 
             usergroupField: {
                 id: 'NewCollectionModal.field.usergroup',
@@ -117,21 +119,19 @@ class NewCollectionModal extends React.Component {
             }, 
             newCollectionSuccessTitle: {
                 id: 'NewCollectionModal.success.title',
-                defaultMessage: 'New Deck Collection'
+                defaultMessage: 'New Playlist'
             }, 
             newCollectionSuccessText: {
                 id: 'NewCollectionModal.success.text',
-                defaultMessage: 'We are creating a new Deck Collection...'
+                defaultMessage: 'We are creating a new Playlist...'
             }
 
         });
     }
     render() {
 
-        // the user can assign a user group to a collection only if he is the creator of the user group
-        let userGroupOptions = (this.props.userGroups || []).filter( (userGroup) => {
-            return (userGroup.creator.userid === this.props.loggedInUser);
-        }).map( (userGroup) => ({
+        // the user can assign a user group to that collection
+        let userGroupOptions = (this.props.userGroups || []).map( (userGroup) => ({
             text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
             value: userGroup._id
         }));
@@ -157,7 +157,7 @@ class NewCollectionModal extends React.Component {
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="header">
                     <Modal.Header  as="h1" content={this.context.intl.formatMessage(this.messages.modalTitle)} id='addNewCollectionHeader'/>
                     <Modal.Content>
-                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
+                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new playlist" tabIndex ='-1'/>
                         <Form>
                             <Form.Field required error={this.state.validationError}>
                                 <label htmlFor="col_title"><FormattedMessage {...this.messages.titleField} /></label>
@@ -165,7 +165,7 @@ class NewCollectionModal extends React.Component {
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_description"><FormattedMessage {...this.messages.descriptionField} /></label>
-                                <input id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                                <textarea id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} rows="5" />
                             </Form.Field>
                             <Form.Field>
                                 <label htmlFor="col_user_group"><FormattedMessage {...this.messages.usergroupField} /></label>
@@ -189,8 +189,8 @@ class NewCollectionModal extends React.Component {
 }
 
 NewCollectionModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired, 
+    intl: PropTypes.object.isRequired
 };
 
 export default NewCollectionModal;

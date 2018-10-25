@@ -1,6 +1,7 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivity from '../activityfeed/addActivity';
+import { isEmpty } from '../../common.js';
 const log = require('../log/clog');
 
 export default function addReply(context, payload, done) {
@@ -21,9 +22,14 @@ export default function addReply(context, payload, done) {
                 content_kind: comment.content_kind,
                 comment_info: {
                     comment_id: comment.id,
-                    text: comment.title
+                    text: comment.title,
+                    parent_comment_owner_id: String(payload.comment.user_id)
                 }
             };
+            const contentRootId = payload.selector.id;
+            if (!isEmpty(contentRootId)) {
+                activity.content_root_id = contentRootId;
+            }
             context.executeAction(addActivity, {activity: activity});
         }
 

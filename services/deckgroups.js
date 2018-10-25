@@ -9,14 +9,15 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-        let args = params.params? params.params : params;
 
-        let usergroups = (params.usergroups || []).map( (usergroup) => {
-            return usergroup._id;
-        }).join('&usergroup=');
+        let authToken = params.jwt;
+        let args = params.params? params.params : params;
 
         // suggest deck collections that this user can add decks to
         if(resource === 'deckgroups.forUser'){
+            let usergroups = (params.usergroups || []).map( (usergroup) => {
+                return usergroup._id;
+            }).join('&usergroup=');
 
             // form request call
             let uri = `${Microservices.deck.uri}/groups?user=${args.userId}`;
@@ -24,7 +25,7 @@ export default {
                 uri += `&usergroup=${usergroups}`;
             }
             uri += '&page=0&per_page=100';
-            
+
             // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
             rp({
                 method: 'GET',
@@ -33,18 +34,37 @@ export default {
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
 
-        // get deck collections assigned to a specified deck
-        } else if (resource === 'deckgroups.forDeck'){
+        // get deck collections assigned to a user group
+        } else if(resource === 'deckgroups.forGroup'){
+            // form request call
+            let uri = `${Microservices.deck.uri}/groups?usergroup=${args.groupid}&page=0&per_page=100`;
 
-            let uri = `${Microservices.deck.uri}/deck/${args.sid}/groups?user=${args.userId}`;
-            if(usergroups !== ''){
-                uri += `&usergroup=${usergroups}`;
-            }
-
+            // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
             rp({
                 method: 'GET',
                 uri: uri,
                 json: true
+            }).then( (deckGroups) => callback(null, deckGroups))
+            .catch( (err) => callback(err));
+
+          // get deck collections assigned to a specified deck
+        } else if (resource === 'deckgroups.forDeck'){
+
+            let deckId = args.sid;
+            // check if it's a slide
+            if (args.stype !== 'deck') {
+                // TODO define what this service will do with slides
+                deckId = args.id;
+            }
+
+            let uri = `${Microservices.deck.uri}/deck/${deckId}/groups`;
+            rp({
+                method: 'GET',
+                uri: uri,
+                qs: {
+                    countOnly: args.countOnly || undefined
+                },
+                json: true,
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
 
@@ -55,48 +75,40 @@ export default {
                 uri: `${Microservices.deck.uri}/group/${args.id}`,
                 json: true
             }).then( (group) => {
-                let deckPromises = [];
-                let likesPromises = [];//get the number of deck likes
 
-                // get details for the decks in the collection
-                for(let deckId of group.decks){
-                    deckPromises.push(
+                let deckPromise = rp.get({
+                    uri: `${Microservices.deck.uri}/group/${args.id}/decks`,
+                    json: true,
+                    headers: { '----jwt----': authToken || undefined },
+                }).then((decks) =>
+                    Promise.all(decks.map((deck) =>
                         rp.get({
-                            uri: `${Microservices.deck.uri}/deck/${deckId}`,
-                            json: true
-                        })
-                    );
-
-                    likesPromises.push(
-                        rp.get({
-                            uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=react&all_revisions=true'
-                        })
-                    );
-                }
-                let deckPromise = Promise.all(deckPromises);
-
-                let likesPromise = Promise.all(likesPromises);
+                            uri: Microservices.activities.uri + '/activities/deck/' + deck._id + '?metaonly=true&activity_type=react&all_revisions=true'
+                        }).then((noOfLikes) => Object.assign(deck, { noOfLikes }))
+                    ))
+                );
 
                 // get username of the deck collection owner
                 let userPromise = rp.get({
                     uri: `${Microservices.user.uri}/user/${group.user}`,
                     json: true
                 }).then( (user) => {
-                    return user.username;
+                    return {
+                        username: user.username,
+                        displayName: user.displayName || user.username
+                    };
                 });
 
-                Promise.all([deckPromise, userPromise, likesPromise]).then( (data) => {
-                    group.decks = data[0];
+                return Promise.all([deckPromise, userPromise]).then( ([decks, user]) => {
+                    group.decks = decks;
                     group.user = {
                         id: group.user,
-                        username: data[1]
+                        username: user.username,
+                        displayName: user.displayName
                     };
-                    for (let i = 0; i < data[2].length; i++) {
-                        group.decks[i].noOfLikes = data[2][i];
-                    }
 
                     callback(null, group);
-                }).catch( (err) => callback(err));
+                });
 
             }).catch( (err) => callback(err));
         }
@@ -133,64 +145,7 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
 
-        // update deck assignments to deck groups
-        if(resource === 'deckgroups.decks'){
-
-            let usergroups = params.usergroups.map( (usergroup) => {
-                return usergroup._id;
-            }).join('&usergroup=');
-
-            let uri = `${Microservices.deck.uri}/deck/${args.deckId}/groups?user=${params.userId}`;
-
-            if(usergroups !== ''){
-                uri += `&usergroup=${usergroups}`;
-            }
-
-            // get deck groups assigned to current deck
-            rp({
-                method: 'GET',
-                uri: uri,
-                json: true
-            }).then( (existingDeckGroups) => {
-                let existingDeckGroupIds = existingDeckGroups.map( (e) => { return e._id; });
-                let addOps = [];
-                let removeOps = existingDeckGroupIds.map( (e) => { return {groupId: e, updateOp: {op: 'remove', deckId: args.deckId}}; } );
-
-                // check if deck group ids given are already related to this deck
-                args.collections.forEach( (deckGroupId) => {
-                    if(existingDeckGroupIds.includes(deckGroupId)){
-                        // deck is already related to this deck group
-                        removeOps = removeOps.filter( (e) => { return e.groupId !== deckGroupId; });
-                    } else {
-                        addOps.push({groupId: deckGroupId, updateOp: {op: 'add', deckId: args.deckId}});
-                    }
-                });
-
-                // add/remove deck id to/from the following deck groups
-                async.eachSeries(addOps.concat(removeOps), (item, done) => {
-                    rp({
-                        method: 'PATCH',
-                        uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,
-                        json: true,
-                        headers: {'----jwt----': args.jwt},
-                        body: [
-                            item.updateOp
-                        ]
-                    }).then( () => done())
-                    .catch(done);
-                }, (err) => {
-                    if(err){
-                        callback(err);
-                    } else {
-                        callback(null, {});
-                    }
-                });
-            }).catch( (err) => {
-                callback(err);
-            });
-
-        // update deck collection metadata
-        } else if (resource === 'deckgroups.metadata'){
+        if (resource === 'deckgroups.metadata'){
             rp({
                 method: 'PUT',
                 uri: `${Microservices.deck.uri}/group/${args.id}`,
@@ -214,6 +169,20 @@ export default {
                 body: args.newOrder
             }).then( (updated) => callback(null, updated))
             .catch((err) => callback(err));
+        } else if (resource === 'deckgroups.updateDecksOfCollection'){
+            rp({
+                method: 'PATCH',
+                uri: `${Microservices.deck.uri}/group/${args.collectionId}/decks`,
+                json: true,
+                headers: {'----jwt----': args.jwt},
+                body: [
+                    {
+                        op: args.op,
+                        deckId: args.deckId
+                    }
+                ]
+            }).then( () => callback(null, {}))
+            .catch( (err) => callback(err));
         }
     },
 

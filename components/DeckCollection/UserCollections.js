@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../stores/DeckCollectionStore';
@@ -7,6 +8,9 @@ import { connectToStores } from 'fluxible-addons-react';
 import NewCollectionModal from './Modals/NewCollectionModal';
 import UpdateCollectionModal from './Modals/UpdateCollectionModal';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import nl2br from 'react-nl2br';
+
+import MobileDetect from 'mobile-detect';
 
 class UserCollections extends React.Component {
     constructor(props){
@@ -15,12 +19,19 @@ class UserCollections extends React.Component {
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
 
         this.state = {
-            showNewCollectionModal: false, 
+            showNewCollectionModal: false,
             showUpdateCollectionModal: false,
-            updateCollectionDetails: {}
+            updateCollectionDetails: {},
+            isMobile: false
         };
 
         this.messages = this.getIntlMessages();
+    }
+
+    componentDidMount() {
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null ) ? true : false});
     }
 
     showNewCollectionModal(event){
@@ -81,69 +92,69 @@ class UserCollections extends React.Component {
             },
             readError: {
                 id: 'UserCollections.error.read',
-                defaultMessage: 'An error occurred while fetching deck collections. Please try again later.'
+                defaultMessage: 'An error occurred while fetching playlists. Please try again later.'
             },
             deleteError: {
                 id: 'UserCollections.error.delete',
-                defaultMessage: 'An error occurred while deleting collection...'
-            }, 
-            createError: { 
+                defaultMessage: 'An error occurred while deleting playlist...'
+            },
+            createError: {
                 id: 'UserCollections.error.create',
-                defaultMessage: 'An error occurred while creating collection....'
-            }, 
+                defaultMessage: 'An error occurred while creating playlist....'
+            },
             updateError: {
                 id: 'UserCollections.error.update',
-                defaultMessage: 'An error occured while updating collection...'
-            }, 
+                defaultMessage: 'An error occured while updating playlist...'
+            },
             noCollectionsFound: {
                 id: 'UserCollections.collections.empty',
-                defaultMessage: 'No deck collections available'
-            }, 
+                defaultMessage: 'No playlists available'
+            },
             collectionCreate: {
                 id: 'UserCollections.collections.create',
-                defaultMessage: 'Create new collection'
+                defaultMessage: 'Create Playlist'
             },
             collectionDelete: {
                 id: 'UserCollections.collections.delete',
-                defaultMessage: 'Delete Collection'
-            }, 
+                defaultMessage: 'Delete Playlist'
+            },
             collectionSettings: {
                 id: 'UserCollections.collections.settings',
-                defaultMessage: 'Collection Settings'
-            }, 
+                defaultMessage: 'Playlist Settings'
+            },
             myCollectionsTitle: {
                 id: 'UserCollections.collections.mycollections',
-                defaultMessage: 'My Deck Collections'
-            }, 
+                defaultMessage: 'Playlists'
+            },
             ownedCollectionsTitle: {
                 id: 'UserCollections.collections.owned',
-                defaultMessage: 'Owned Deck Collections'
-            }, 
+                defaultMessage: 'Owned Playlists'
+            },
             deckText: {
-                id: 'UserCollections.deck', 
+                id: 'UserCollections.deck',
                 defaultMessage: 'deck'
-            }, 
+            },
             decksText: {
-                id: 'UserCollections.decks', 
+                id: 'UserCollections.decks',
                 defaultMessage: 'decks'
-            }, 
+            },
             shareCollectionText: {
-                id: 'UserCollections.collections.shared', 
-                defaultMessage: 'Shared Collection'
-            }, 
+                id: 'UserCollections.collections.shared',
+                defaultMessage: 'Shared Playlist'
+            },
             deleteCollectionConfirmationTitle:{
-                id: 'UserCollections.collections.delete.title', 
-                defaultMessage: 'Delete Collection'
-            }, 
+                id: 'UserCollections.collections.delete.title',
+                defaultMessage: 'Delete Playlist'
+            },
             deleteCollectionConfirmationText:{
-                id: 'UserCollections.collections.delete.text', 
-                defaultMessage: 'Are you sure you want to delete this collection?'
+                id: 'UserCollections.collections.delete.text',
+                defaultMessage: 'Are you sure you want to delete this playlist?'
             }
         });
     }
 
     render() {
-        
+
 
         let content = '';
         let loadingDiv = '';
@@ -162,7 +173,7 @@ class UserCollections extends React.Component {
         } else if(this.props.DeckCollectionStore.updateCollectionMetadataError){
             this.showErrorPopup(this.context.intl.formatMessage(this.messages.updateError));
         }
-        
+
         // just show loading indicator
         if (collections === undefined){
             loadingDiv = (this.props.DeckCollectionStore.loading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : '';
@@ -181,8 +192,11 @@ class UserCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui header"><h3><a href={`/collection/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
-                                    <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''}  {col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
+                                    <div className="ui small header"><h3><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
+                                    <div className="meta">
+                                        <div>{col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
+                                        {nl2br(col.description)}
+                                    </div>
                                 </div>
 
                                 <div className="right aligned column">
@@ -209,9 +223,10 @@ class UserCollections extends React.Component {
                 {loadingDiv}
                 <div className="ui secondary clearing segment">
                     <h2 className="ui left floated header">{this.context.intl.formatMessage((this.props.loggedinuser === this.props.user.uname) ? this.messages.myCollectionsTitle :this.messages.ownedCollectionsTitle)}</h2>
-                    {(this.props.loggedinuser === this.props.user.uname) &&
-                        <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
-                          <p><FormattedMessage {...this.messages.collectionCreate} /></p>
+                    {(this.props.loggedinuser === this.props.user.uname && !this.state.isMobile) &&
+                        <button className="ui right floated labeled icon button" onClick={this.showNewCollectionModal.bind(this)}>
+                            <i className="icon plus"></i>
+                              <p><FormattedMessage {...this.messages.collectionCreate} /></p>
                         </button>
                     }
                 </div>
@@ -226,8 +241,8 @@ class UserCollections extends React.Component {
 }
 
 UserCollections.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired, 
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 UserCollections = connectToStores(UserCollections, [DeckCollectionStore, UserProfileStore], (context, props) => {

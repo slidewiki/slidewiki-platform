@@ -1,5 +1,3 @@
-const co = require('../common');
-
 export default {
     Microservices: {
         'deck': {
@@ -48,6 +46,16 @@ export default {
         },
         'questions': {
             uri: '${SERVICE_URL_QUESTION}'
-        }
+        },
+        'nlp': {
+            uri: '${SERVICE_URL_NLP}'
+        },
+        'analytics': {
+            uri: '${SERVICE_URL_ANALYTICS}'
+        },
+        lrs: {
+            uri: '${SERVICE_LEARNINGLOCKER_API_URL}',
+            basicAuth: '${SERVICE_LEARNINGLOCKER_API_AUTH}',
+        },
     }
 };

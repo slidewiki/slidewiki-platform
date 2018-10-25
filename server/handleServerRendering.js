@@ -6,7 +6,10 @@ import ReactDOM from 'react-dom/server';
 import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
 import PresentorComponent from '../components/PresentorHTMLLayout';
+import PresentorIEComponent from '../components/PresentorIELayout';
 import PresentationRoomsComponent from '../components/PresentationRoomsHTMLLayout';
+import PresentationPrintComponent from '../components/PresentationPrintHTMLLayout';
+import BasicHTMLLayout from '../components/BasicHTMLLayout';
 
 import serialize from 'serialize-javascript';
 import debugLib from 'debug';
@@ -41,9 +44,19 @@ let renderApp = function(req, res, context){
 
 
     //todo: for future, we can choose to not include specific scripts in some predefined layouts
+    //todo: if our deck IDs exceed a number of digits, slice of 0-20 might not be a good idea
     let layout = HTMLComponent;
-    if(req.url && req.url.slice(0,20).includes('/Presentation/')){//NOTE only test first few chars as presentaton rooms URL has "/Presentation/..." also in it
+    if(req.url && (req.url.slice(0,20).includes('/Presentation')|| req.url.slice(0,20).includes('/presentation'))){//NOTE only test first few chars as presentaton rooms URL has "/Presentation/..." also in it
         layout = PresentorComponent;
+    }
+    if(req.url && (req.url.slice(0,20).includes('/print'))){
+        layout = PresentationPrintComponent;
+    }
+    if(req.url && (req.url.includes('/neo4jguide'))){
+        layout = BasicHTMLLayout;
+    }
+    if(req.url && (req.url.includes('/presentationIE'))){
+        layout = PresentorIEComponent;
     }
     if(req.url && req.url.includes('/presentationbroadcast')){
         layout = PresentationRoomsComponent;
@@ -89,7 +102,7 @@ export default function handleServerRendering(req, res, next){
                 if (err) {
                     if (err.statusCode && err.statusCode === '301') {
                         //console.log('REDIRECTING to '+ JSON.stringify(err));
-                        res.redirect(err.redirectURL);
+                        res.redirect(301, err.redirectURL);
                     }else
                     if (err.statusCode && err.statusCode === '404') {
                         let html = renderApp(req, res, context);

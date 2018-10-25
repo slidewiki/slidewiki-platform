@@ -5,10 +5,13 @@ import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../log/clog');
 import addActivity from '../activityfeed/addActivity';
 import {navigateAction} from 'fluxible-router';
+import { isEmpty } from '../../common.js';
+import Util from '../../components/common/Util';
 
 export default function saveSlide(context, payload, done) {
     log.info(context);
-    
+    console.log('!!! action saveSlide with payload', payload);
+
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -27,11 +30,16 @@ export default function saveSlide(context, payload, done) {
                 context.dispatch('SAVE_SLIDE_EDIT_SUCCESS', res);
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
                     selector: payload.selector,
-                    nodeSpec: {title: striptags(payload.title), id: res.slide.id, path: res.slide.path}
+                    nodeSpec: {title: striptags(payload.title), id: res.slide.id, path: res.slide.path, theme: res.slide.theme}
                 });
 
                 //update the URL: redirect to view after edit
-                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + res.slide.id + '/' + res.slide.path;
+                let newURL = Util.makeNodeURL({
+                    id: payload.selector.id,
+                    stype: payload.selector.stype,
+                    sid: res.slide.id,
+                    spath: res.slide.path
+                }, 'deck', 'view');
                 context.executeAction(navigateAction, {
                     url: newURL
                 });
@@ -43,14 +51,18 @@ export default function saveSlide(context, payload, done) {
                     content_id: String(res.slide.id),
                     content_kind: 'slide'
                 };
+                const contentRootId = payload.selector.id;
+                if (!isEmpty(contentRootId)) {
+                    activity.content_root_id = contentRootId;
+                }
                 context.executeAction(addActivity, {activity: activity});
             }
 
             //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
-            let pageTitle = shortTitle + ' | Slide Edit | ';
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: pageTitle
-            });
+            //let pageTitle = shortTitle + ' | Slide Edit | ';
+            //context.dispatch('UPDATE_PAGE_TITLE', {
+            //    pageTitle: pageTitle
+            //});
             done();
         });
     }

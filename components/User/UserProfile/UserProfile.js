@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { getIntlLanguage } from '../../../common.js';
+import {getIntlLanguage} from '../../../common.js';
 import CategoryBox from './CategoryBox';
 import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
@@ -7,13 +8,17 @@ import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
-import UserGroupEdit from './UserGroupEdit';
-import { connectToStores } from 'fluxible-addons-react';
+import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import UserStatsStore from '../../../stores/UserStatsStore';
+import UserGroupsStore from '../../../stores/UserGroupsStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { categories } from '../../../actions/user/userprofile/chooseAction';
+import {defineMessages, FormattedMessage} from 'react-intl';
+import {categories} from '../../../actions/user/userprofile/chooseAction';
+import UserStats from './UserStats';
+
+let MediaQuery = require ('react-responsive');
 
 class UserProfile extends React.Component {
     componentDidMount() {}
@@ -105,12 +110,11 @@ class UserProfile extends React.Component {
                     case categories.groups[0]:
                         return this.displayGroups();
                         break;
-                    case categories.groups[1]:
-                        return this.displayGroupedit();
-                        break;
                     default:
                         return this.notImplemented();
                 }});
+            case 'stats':
+                return this.addScaffold(() => this.displayUserStats());
             default:
                 return this.displayUserProfile();
         };
@@ -123,9 +127,22 @@ class UserProfile extends React.Component {
                     <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
-                <div className = "twelve wide column" >
-                    {toInsert()}
-                </div>
+                <MediaQuery minDeviceWidth={1024} values={{deviceWidth: 1600}}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={768} maxDeviceWidth={1023}>
+                    <div className = "eleven wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+                <MediaQuery maxDeviceWidth={767}>
+                    <div className = "twelve wide column" >
+                        {toInsert()}
+                    </div>
+                </MediaQuery>
+
             </div>
         );
     }
@@ -159,7 +176,7 @@ class UserProfile extends React.Component {
                       </h3>
                   </div>
                   <div className="ui segment">
-                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
+                      <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
                   </div>
 
               </div>
@@ -204,7 +221,16 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user}
+                                          decks={this.props.UserProfileStore.userDecks}
+                                          decksMeta={this.props.UserProfileStore.userDecksMeta}
+                                          loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading}
+                                          loadMoreError={this.props.UserProfileStore.nextUserDecksError}
+                                          loggedinuser={this.props.UserProfileStore.username}
+                                          loggedinUserId={this.props.UserProfileStore.userid}
+                                          category={this.props.UserProfileStore.category}
+                                          categoryItem={this.props.UserProfileStore.categoryItem}
+                                          />);
     }
 
     displayIntegrations() {
@@ -214,11 +240,11 @@ class UserProfile extends React.Component {
     }
 
     displayGroups() {
-        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserGroupsStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
     }
 
-    displayGroupedit() {
-        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
+    displayUserStats(){
+        return (<UserStats userStats={this.props.UserStatsStore} />);
     }
 
     notImplemented() {
@@ -236,14 +262,16 @@ class UserProfile extends React.Component {
 }
 
 UserProfile.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
-UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {
+UserProfile = connectToStores(UserProfile, [UserProfileStore, UserStatsStore, UserGroupsStore, IntlStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        IntlStore: context.getStore(IntlStore).getState()
+        UserStatsStore: context.getStore(UserStatsStore).getState(),
+        UserGroupsStore: context.getStore(UserGroupsStore).getState(),
+        IntlStore: context.getStore(IntlStore).getState(),
     };
 });
 

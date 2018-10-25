@@ -1,26 +1,82 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
-import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
-import deleteUsergroup from '../../../actions/user/userprofile/deleteUsergroup';
-import leaveUsergroup from '../../../actions/user/userprofile/leaveUsergroup';
+import updateUsergroup from '../../../actions/usergroups/updateUsergroup';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import UserPicture from '../../common/UserPicture';
 
 class UserGroups extends React.Component {
     constructor(props){
         super(props);
 
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+
+        this.messages = defineMessages({
+            error: {
+                id: 'UserGroups.error',
+                defaultMessage: 'Error',
+            },
+            unknownError: {
+                id: 'UserGroups.unknownError',
+                defaultMessage: 'Unknown error while saving.',
+            },
+            close: {
+                id: 'UserGroups.close',
+                defaultMessage: 'Close',
+            },
+            msgError: {
+                id: 'UserGroups.msgError',
+                defaultMessage: 'Error while deleting the group',
+            },
+            msgErrorLeaving: {
+                id: 'UserGroups.msgErrorLeaving',
+                defaultMessage: 'Error while leaving the group',
+            },
+            member: {
+                id: 'UserGroups.member',
+                defaultMessage: 'Member',
+            },
+            members: {
+                id: 'UserGroups.members',
+                defaultMessage: 'Members',
+            },
+            groupSettings: {
+                id: 'UserGroups.groupSettings',
+                defaultMessage: 'Group settings',
+            },
+            groupDetails: {
+                id: 'UserGroups.groupDetails',
+                defaultMessage: 'Group details',
+            },
+            notAGroupmember: {
+                id: 'UserGroups.notAGroupmember',
+                defaultMessage: 'Not a member of a group.',
+            },
+            loading: {
+                id: 'UserGroups.loading',
+                defaultMessage: 'Loading',
+            },
+            groups: {
+                id: 'UserGroups.groups',
+                defaultMessage: 'Groups',
+            },
+            createGroup: {
+                id: 'UserGroups.createGroup',
+                defaultMessage: 'Create new group',
+            },
+        });
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.error.action !== undefined && this.props.error === '') {
-            let message = 'Error while deleting the group: ';
+            let message = this.context.intl.formatMessage(this.messages.error) + ': ';
             if (nextProps.error.action === 'leave')
-                message = 'Error while leaving the group: ';
+                message = this.context.intl.formatMessage(this.messages.msgErrorLeaving) + ': ';
             swal({
-                title: 'Error',
+                title: this.context.intl.formatMessage(this.messages.error),
                 text: message + nextProps.error.message,
                 type: 'error',
-                confirmButtonText: 'Close',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.close),
                 confirmButtonClass: 'negative ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -36,52 +92,27 @@ class UserGroups extends React.Component {
         }
     }
 
-    handleClickOnEditGroup(e) {
+    handleClickNewGroup(e) {
         e.preventDefault();
-        // console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
+        this.context.executeAction(updateUsergroup, {group: {}, offline: true});
+        this.context.executeAction(navigateAction, {
+            url: '/usergroup/0/settings'
+        });
+    }
 
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
+    handleClickOnGroupDetails(e) {
+        e.preventDefault();
+
+        const action = e.target.attributes.name.value;  //eg. viewGroup_2
         const groupid = action.split('_')[1];
 
         let group = this.props.groups.find((group) => {
             return group._id.toString() === groupid;
         });
 
-        // console.log('handleClickOnEditGroup: use group', group);
+        // console.log('handleClickOnGroupDetails: use group', group);
 
-        this.context.executeAction(updateUsergroup, {group: group, offline: false});
-
-        this.context.executeAction(navigateAction, {
-            url: '/user/' + this.props.username + '/groups/edit'
-        });
-    }
-
-    handleClickOnRemoveGroup(e) {
-        e.preventDefault();
-        console.log('handleClickOnRemoveGroup:', e.target.attributes.name.value);
-
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
-        const groupid = action.split('_')[1];
-
-        this.context.executeAction(deleteUsergroup, {groupid: groupid});
-    }
-
-    handleClickOnLeaveGroup(e) {
-        e.preventDefault();
-        console.log('handleClickOnLeaveGroup:', e.target.attributes.name.value);
-
-        const action = e.target.attributes.name.value;  //eg. changeGroup_2
-        const groupid = action.split('_')[1];
-
-        this.context.executeAction(leaveUsergroup, {groupid: groupid});
-    }
-
-    handleCLickNewGroup(e) {
-        e.preventDefault();
-        this.context.executeAction(updateUsergroup, {group: {}, offline: true});
-        this.context.executeAction(navigateAction, {
-            url: '/user/' + this.props.username + '/groups/edit'
-        });
+        this.context.executeAction(navigateAction, {url: '/usergroup/' + group._id});
     }
 
     render() {
@@ -90,30 +121,26 @@ class UserGroups extends React.Component {
         this.props.groups.forEach((group) => {
             items.push( (
                 <div key={group._id} className="ui vertical segment" >
-                    <div className="ui two column stackable grid container">
-
-                        <div className="column">
+                    <div className="ui two column grid container">
+                        <div className="left aligned ten wide column">
                             <div className="ui header"><h3>{group.name}</h3></div>
-                            <div
-                                 className="meta">{group.members.length+1} member{((group.members.length+1) !== 1) ? 's': ''}</div>
+                            <div className="meta">
+                              {group.members.length+1} {this.context.intl.formatMessage(((group.members.length+1) !== 1) ? this.messages.members : this.messages.member)}
+                            </div>
                         </div>
-
-                        <div className="right aligned column">
-                            {((this.props.userid === group.creator) || (this.props.userid === group.creator.userid)) ? (
-                              <div>
-                                  <button className="ui large basic icon button" data-tooltip="Group deletion" aria-label="Group deletion" name={'deleteGroup_' + group._id} onClick={this.handleClickOnRemoveGroup.bind(this)} >
-                                      <i className="remove icon" name={'deleteGroup_' + group._id} ></i>
-                                  </button>
-                                  <button className="ui large basic icon button" data-tooltip="Group settings" aria-label="Group settings" name={'changeGroup_' + group._id} onClick={this.handleClickOnEditGroup.bind(this)} >
-                                      <i className="setting icon" name={'changeGroup_' + group._id} ></i>
-                                  </button>
-                              </div>
-                            ) : (
-                              <button className="ui large basic icon button" data-tooltip="Leave group" aria-label="Leave group" name={'leaveGroup_' + group._id} onClick={this.handleClickOnLeaveGroup.bind(this)} >
-                                  <i className="remove icon" name={'leaveGroup_' + group._id} ></i>
-                              </button>
-                            )}
-
+                        <div className="four wide column">
+                            <div className="meta">
+                              <UserPicture picture={ group.picture } link={ false } private={ false } width={ 50 } centered={ false } size={ 'mini' } aria-hidden={ 'true' } />
+                            </div>
+                        </div>
+                        <div className="right aligned two wide column">
+                            <button className="ui large basic icon button"
+                                    data-tooltip={this.context.intl.formatMessage(this.messages.groupDetails)}
+                                    aria-label={this.context.intl.formatMessage(this.messages.groupDetails)}
+                                    name={'viewGroup_' + group._id}
+                                    onClick={this.handleClickOnGroupDetails.bind(this)} >
+                                <i className="info icon" name={'viewGroup_' + group._id} ></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -124,7 +151,7 @@ class UserGroups extends React.Component {
             items = [(
                 <div key="dummy" className="ui vertical segment" >
                   <div className="ui two column stackable grid container">
-                    <h4>Not a member of a group.</h4>
+                    <h4>{this.context.intl.formatMessage(this.messages.notAGroupmember)}</h4>
                   </div>
                 </div>
             )];
@@ -133,25 +160,24 @@ class UserGroups extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h3 className="ui left floated header" >Groups</h3>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewGroup.bind(this)}>
-                      <i className="icon users"/>
-                      <p>Create new group</p>
+                  <h1 className="ui left floated header" >{this.context.intl.formatMessage(this.messages.groups)}</h1>
+                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
+                      <i className="icon plus"/>
+                      <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>
                   </button>
               </div>
 
-              {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+              {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
 
-              <div className="ui vertical segment">
-                  {items}
-              </div>
+              {items}
             </div>
         );
     }
 }
 
 UserGroups.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default UserGroups;
