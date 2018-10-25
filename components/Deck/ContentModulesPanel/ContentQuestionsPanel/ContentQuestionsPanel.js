@@ -105,7 +105,7 @@ class ContentQuestionsPanel extends React.Component {
             if (editPermission || !question.isExamQuestion) {
                 visibleQuestions.push(question);
             }
-        })
+        });
         let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
