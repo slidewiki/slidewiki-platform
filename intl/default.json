@@ -1216,7 +1216,6 @@
   "UserProfile.alterData": "Alter my personal data",
   "UserProfile.changePassword": "Change password",
   "UserProfile.deactivateAccount": "Deactivate Account",
-  "UserProfile.notImplemented": "This feature is curently not implemented. Please wait for future releases of SlideWiki",
   "Stats.tagCloudTitle": "Popular Tags",
   "UserRegistration.firstName_prompt": "Please enter your first name",
   "UserRegistration.lastName_prompt": "Please enter your last name",
