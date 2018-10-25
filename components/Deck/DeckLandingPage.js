@@ -79,9 +79,20 @@ class DeckLandingPage extends React.Component {
 
         let owner = this.props.DeckViewStore.ownerData;
         let creator = this.props.DeckViewStore.creatorData;
-        let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
-            <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
-        </div> : '';
+
+        let originInfo = null;
+        let originCreator = this.props.DeckViewStore.originCreatorData;
+        if (deckData.origin) {
+            originInfo = (
+                <div className="meta" tabIndex="0">
+                    <strong>Origin: </strong>
+                    <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink>
+                    {originCreator ? ' by ' : ''}
+                    {originCreator && <a href={'/user/' + originCreator.username}>{originCreator.displayName || originCreator.username}</a>}
+                    {/* TODO check if this URL is working with languages! */}
+                </div>
+            );
+        }
 
         const ColPadding = {
             paddingLeft: '0px'
@@ -126,7 +137,7 @@ class DeckLandingPage extends React.Component {
                                                 <div className="two column row">
                                                     <div className="column" style={ColPadding}>
                                                         <div className="item">
-                                                            <div className="meta"><strong>Creator:</strong> <NavLink href={'/user/' + owner.username}>{owner.displayName || owner.username}</NavLink></div>
+                                                            <div className="meta"><strong>Creator:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
                                                             {originInfo}
                                                             <div className="meta"><strong>Last Modified:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
                                                         </div>
@@ -224,7 +235,7 @@ class DeckLandingPage extends React.Component {
                                             </span>
                                         ) }
                                     </Segment>
-                                    <Segment attached >
+                                    <Segment attached='bottom'>
                                         <Header size="small" as="h3">Tags:</Header>
                                         {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
