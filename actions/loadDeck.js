@@ -37,6 +37,11 @@ import log from './log/clog';
 export default function loadDeck(context, payload, done) {
     log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
     context.dispatch('UPDATE_MODE', {mode: 'loading'});
+
+    // resets the deck view store
+    // TODO (what other store to reset ???)
+    context.dispatch('LOAD_DECK_CONTENT_START');
+
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
