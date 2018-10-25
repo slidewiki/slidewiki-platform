@@ -13,29 +13,24 @@ class CategoryBox extends React.Component {
 
     render() {
         let analyticsDiv = ((Microservices.analytics) ? (
-            <div className="ui vertical menu">
+            <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <table><tr><td>
-                  <h3>
-                    <FormattedMessage
-                      id='CategoryBox.analytics'
-                      defaultMessage='Analytics'
-                    />
-                  </h3>
-                </td><td style={{'textAlign':'center'}}>
-                  <h5 className="ui small header" >
-                    Beta feature
-                  </h5>
-                </td><td style={{'textAlign':'center'}}>
-                  <i className="yellow warning sign icon" />
-                </td></tr></table>
+                <h3>
+                  <FormattedMessage
+                    id='CategoryBox.analytics'
+                    defaultMessage='Analytics'
+                  />
+                  <span className="ui top right attached icon label">
+                    <i className="warning yellow sign icon"/>Beta
+                  </span>
+                </h3>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
                 <p>
                   <i className="icon chart bar"/>
                   <FormattedMessage
-                    id='CategoryBox.myAnalytics'
-                    defaultMessage=' My Analytics'
+                    id='CategoryBox.PerformancePrediction'
+                    defaultMessage='Performance Prediction'
                   />
                 </p>
               </NavLink>
