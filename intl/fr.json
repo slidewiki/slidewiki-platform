@@ -360,7 +360,7 @@
   "embedModal.large": "Large",
   "embedModal.other": "Autre",
   "embedModal.embedHeader": " SlideWiki deck sur \"{title}\" par {creator {creator }.",
-  "embedModel.desc": " Sélectionnez l'une des options ci-dessous et copiez le code HTML généré dans votre site.",
+  "embedModal.description": " Sélectionnez l'une des options ci-dessous et copiez le code HTML généré dans votre site.",
   "embedModal.embed": "Intégrer",
   "embedModal.size": "Taille",
   "embedModal.widthLabel": "Largeur du contenu incorporé",

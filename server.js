@@ -59,6 +59,8 @@ server.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery'
 server.use('/sweetalert2', express.static(path.join(__dirname, '/node_modules/sweetalert2')));
 server.use('/headjs', express.static(path.join(__dirname, '/node_modules/headjs')));
 server.use('/glidejs', express.static(path.join(__dirname, '/node_modules/glidejs')));
+server.use('/d3', express.static(path.join(__dirname, '/node_modules/d3')));
+server.use('/nvd3', express.static(path.join(__dirname, '/node_modules/nvd3')));
 
 server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckeditor')));
 server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
@@ -107,7 +109,9 @@ fetchrPlugin.registerService(require('./services/userreview'));
 fetchrPlugin.registerService(require('./services/nlp'));
 fetchrPlugin.registerService(require('./services/deckgroups'));
 fetchrPlugin.registerService(require('./services/recommendations'));
+fetchrPlugin.registerService(require('./services/following'));
 fetchrPlugin.registerService(require('./services/tags'));
+fetchrPlugin.registerService(require('./services/stats'));
 
 
 // ************************** UI Internationalisation routines ***************************************

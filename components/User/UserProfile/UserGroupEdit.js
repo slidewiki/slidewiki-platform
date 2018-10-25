@@ -13,7 +13,7 @@ class UserGroupEdit extends React.Component {
     constructor(props){
         super(props);
 
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
 
         this.messages = defineMessages({
             error: {
@@ -338,7 +338,7 @@ class UserGroupEdit extends React.Component {
 
 UserGroupEdit.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 
 export default UserGroupEdit;

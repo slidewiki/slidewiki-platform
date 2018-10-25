@@ -1,34 +1,43 @@
+import {connectToStores} from 'fluxible-addons-react';
+import {NavLink, navigateAction} from 'fluxible-router';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
-import SlideEditStore from '../../../../../stores/SlideEditStore';
-import DataSourceStore from '../../../../../stores/DataSourceStore';
-import SlideViewStore from '../../../../../stores/SlideViewStore';
-import MediaStore from '../../../../../stores/MediaStore';
-import addSlide from '../../../../../actions/slide/addSlide';
-import saveSlide from '../../../../../actions/slide/saveSlide';
-import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-//import ResizeAware from 'react-resize-aware';
-import { findDOMNode } from 'react-dom';
-import UserProfileStore from '../../../../../stores/UserProfileStore';
-import {Microservices} from '../../../../../configs/microservices';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
-//import TemplateDropdown from '../../../../common/TemplateDropdown';
-import {HotKeys} from 'react-hotkeys';
-import UploadMediaModal from '../../../../common/UploadMediaModal';
-import Util from '../../../../common/Util';
-import {FormattedMessage, defineMessages} from 'react-intl';
-
 let ReactDOM = require('react-dom');
+
+import ChartRender from '../../util/ChartRender';
+import DataSourceStore from '../../../../../stores/DataSourceStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import { findDOMNode } from 'react-dom';
+import {FormattedMessage, defineMessages} from 'react-intl';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import {HotKeys} from 'react-hotkeys';
+import MediaStore from '../../../../../stores/MediaStore';
+import {Microservices} from '../../../../../configs/microservices';
+import PaintModalStore from '../../../../../stores/PaintModalStore';
+import saveSlide from '../../../../../actions/slide/saveSlide';
+import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
+import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
+import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
+//import ResizeAware from 'react-resize-aware';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
+//import TemplateDropdown from '../../../../common/TemplateDropdown';
+import UploadMediaModal from '../../../../common/UploadMediaModal';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
+import Util from '../../../../common/Util';
+import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
+
+
+
 
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.currentcontent;
+        this.currentContent;
         this.refresh = 'false';
         this.CKEDitor_loaded = false;
-        this.scaleratio = 1;
+        this.scaleRatio = null;
         //this.refs.template;
         this.menuFocus;
         this.previousCaretRange;
@@ -36,8 +45,48 @@ class SlideContentEditor extends React.Component {
         this.loading = '';
         this.hasChanges = false;
         this.finishLoading = false;
+        this.idContext = null;
         //this.oldContent = '';
         //this.redoContent = '';
+        this.scaleRatio = null;
+
+        CKEDITOR.on('instanceReady', (ev) => {
+
+            ev.editor.on('fileUploadRequest', (ev2) => {
+                ev2.cancel();
+            });
+
+            ev.editor.document.on('drop', (ev2) => {
+                if (ev2.data.$.dataTransfer.files) {
+                    console.log('droppped');
+                    if (ev2.data.$.dataTransfer.files.length !== 0) {
+                        let file = ev2.data.$.dataTransfer.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
+
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
+                }
+            });
+
+            ev.editor.document.on('paste', (ev2) => {
+                if (ev2.data.$.clipboardData.files) {
+                    console.log('pasted');
+                    if (ev2.data.$.clipboardData.files.length !== 0){
+                        let file = ev2.data.$.clipboardData.files[0];
+                        let params = {};
+                        let url = URL.createObjectURL(file);
+                        file.preview = url;
+                        params.file = file;
+
+                        this.context.executeAction(handleDroppedFile, file);
+                    }
+                }
+            });
+        });
+
     }
 
     handleSlideSizechange(slideSize){
@@ -64,7 +113,6 @@ class SlideContentEditor extends React.Component {
                 });
                 swal({
                     title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
-                    title: 'Apply template',
                     text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text, {
                         width: $('.pptx2html').css('width'),
                         height: $('.pptx2html').css('height')
@@ -81,29 +129,38 @@ class SlideContentEditor extends React.Component {
                     allowEnterKey: true,
                 }).then((accepted) => {
                     //this.applyTemplate(template);
+                    let width = '';
+                    let height = '';
                     switch (slideSize) {
                         case '960':
-                            $('.pptx2html').css('width', '960');
-                            $('.pptx2html').css('height', '720');
+                            width = '960';
+                            height = '720';
                             break;
                         case '1280':
-                            $('.pptx2html').css('width', '1280');
-                            $('.pptx2html').css('height', '960');
+                            width = '1280';
+                            height = '960';
                             break;
                         case '1600':
-                            $('.pptx2html').css('width', '1600');
-                            $('.pptx2html').css('height', '1200');
+                            width = '1600';
+                            height = '1200';
                             break;
                         case '720p':
-                            $('.pptx2html').css('width', '1280');
-                            $('.pptx2html').css('height', '720');
+                            width = '1280';
+                            height = '720';
                             break;
                         case '1080p':
-                            $('.pptx2html').css('width', '1920');
-                            $('.pptx2html').css('height', '1080');
+                            width = '1920';
+                            height = '1080';
                             break;
                         default:
                     }
+
+                    $('.pptx2html').css('width', width);
+                    $('.pptx2html').css('height', height);
+
+                    this.context.executeAction(changeSlideSizeText, {
+                        slideSizeText: width + '\u00D7' + height
+                    });
                     this.resize();
                 }, (reason) => {
                     //done(reason);
@@ -183,7 +240,6 @@ class SlideContentEditor extends React.Component {
                 buttonsStyling: false,
                 focusConfirm: true,
                 allowEnterKey: true,
-                showCloseButton: true,
                 allowEscapeKey: true,
             }).then((result) => {
                 this.applyTemplate(template, true); //keep existing content
@@ -225,6 +281,9 @@ class SlideContentEditor extends React.Component {
         let pptx2htmlStartDiv;
         let pptx2htmlcontent;
         let pptx2htmlCloseDiv;
+        let width;
+        let height;
+        let size;
         switch (template) {
             case '2':
                 // dialog for remove or keep existing content is skipped - start from scratch in document/non-canvas mode
@@ -256,7 +315,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case '1':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="position: relative; width: ${width}px; height: ${height}px;">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
                     '   <h3>Title</h3></div>'+
                     '   <div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
@@ -270,7 +331,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case '11':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
                                         '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; ">'+
                                         '<p>Row 1 - Column 1</p></div>'+
@@ -279,7 +342,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case '12':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; ">'+
                     '<p>Row 1 - Column&nbsp;1</p>'+
@@ -293,7 +358,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case '22':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
                 '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                 '<p>Row 2 - Column&nbsp;1</p>'+
@@ -309,7 +376,9 @@ class SlideContentEditor extends React.Component {
                 pptx2htmlCloseDiv = '</div>';
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
             case '21':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: 720px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
                 '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                 '<p>Row 2 - Column 1</p>'+
@@ -323,7 +392,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case '11img':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
                 '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                 '<p>Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
@@ -337,7 +408,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'outitleslide':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div class="titleSlide" style="background-image: url(/custom_modules/reveal.js/img/outitlepage.png);background-repeat: no-repeat;background-position: center; height:100%; width:100%">' +
                 '<div style="position:absolute; left:100px; top: 200px; width:300px; height: 200px;">' +
                 '<h3>Title</h3>' +
@@ -347,7 +420,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'oegtitleslide':
-                pptx2htmlStartDiv = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div class="titleSlide" style="background-image: url(/custom_modules/reveal.js/img/oeglargelogo.png), url(/custom_modules/reveal.js/img/ccimage.png), url(/custom_modules/reveal.js/img/upmlogo.png), url(/custom_modules/reveal.js/img/oeglogo.png); background-position: top left, bottom left, top center, top right; background-repeat: no-repeat;">' +
                 '<div style="position:absolute; left:100px; top: 200px; width:300px; height: 200px;">' +
                 '<h3>Title</h3>' +
@@ -357,7 +432,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'slidewikislide':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="56826" style="position: relative; width: 960px; height: 720px; transform: scale(0.859406, 0.859406); transform-origin: left top 0px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" id="56826" style="position: relative; width: ${width}; height: ${height}px; transform: scale(0.859406, 0.859406); transform-origin: left top 0px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">`;
                 pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" id="79445" style="position: absolute; top: 144.275px; left: 1.43937px; width: 950.596px; height: 78.9953px; z-index: 23488; cursor: auto;" tabindex="0">' +
                 '<h3 id="4651"><span id="93000" style="color:#1e78bb;"><span id="80895"><span id="13770" style="font-family:Tahoma,Geneva,sans-serif;">SlideWiki</span></span></span></h3>' +
                 '</div>' +
@@ -385,7 +462,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'EKDDA':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="65156" style="position: relative; width: 1280px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">';
+                width = 1280;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" id="65156" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div id="42107">&nbsp;</div>'+
                 '<div _id="20482" _idx="undefined" _name="Τίτλος 1" _type="title" class="block content v-up ui-resizable context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;" tabindex="0"><span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Στυλ κύριου τίτλου</span></span></span></span></span></div>'+
                 '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 874.4px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
@@ -415,7 +494,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'EKDDAeng':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="65156" style="position: relative; width: 1280px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">';
+                width = 1280;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" id="65156" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div id="42107">&nbsp;</div>'+
                 '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 780.914px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
                 '<div class="O0" id="52252" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:left">'+
@@ -444,7 +525,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'EKDDAengNofooter':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="65156" style="position: relative; width: 1280px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">';
+                width = 1280;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" id="65156" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div id="42107">&nbsp;</div>'+
                 '<div _id="20482" _idx="undefined" _name="Τίτλος 1" _type="title" class="block content v-up context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;" tabindex="0"><span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Questionnaire structure</span></span></span></span></span></div>'+
                 '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 780.914px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
@@ -474,7 +557,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'TIBtitle':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="96004" style="position: relative; width: 960px; height: 720px; border-style: double; border-color: rgb(218, 102, 25);">';
+                width = 960;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" id="96004" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25);">`;
                 pptx2htmlcontent = '<div id="51108"></div>'+
                 '<div _id="2" _idx="undefined" _name="Title 1" _type="ctrTitle" class="block content v-down context-menu-disabled" id="7861" style="position: absolute; top: 117.833px; left: 120px; width: 720px; height: 250.667px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5302; cursor: auto;" tabindex="0">'+
                 '<div class="h-mid" id="75057">'+
@@ -519,7 +604,9 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
             case 'VMU':
-                pptx2htmlStartDiv = '<div class="pptx2html" id="42690" style="position: relative; width: 1280px; height: 720px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">';
+                width = 1280;
+                height = 720;
+                pptx2htmlStartDiv = `<div class="pptx2html" id="42690" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">`;
                 pptx2htmlcontent = '<div id="32657" style="position: absolute; top: 512px; left: 71px; width: 587px; height: 44px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
                     '<div class="h-mid" id="85086">'+
                     '<p id="33865" style="margin-top:0pt; margin-bottom:0pt; margin-left:0in; text-align:left"><font id="13787" face="Georgia" color="#000000"><span id="12663" style="font-size: 26px;">Vardenis Pavardenis</span></font></p>'+
@@ -542,6 +629,15 @@ class SlideContentEditor extends React.Component {
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
         }
+
+        const content = $('.pptx2html');
+
+        if (width && height) {
+            this.context.executeAction(changeSlideSizeText, {
+                slideSizeText: content.width() + '\u00D7' + content.height()
+            });
+        }
+
         this.hasChanges = true;
         //fix to prevent Firefox caret from resetting
         $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
@@ -551,10 +647,11 @@ class SlideContentEditor extends React.Component {
         //this.addBorders();
         this.uniqueIDAllElements();
         this.resize();
-        $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+        content.css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         this.resizeDrag();
         //this.forceUpdate();
     }
+
     refreshCKeditor(){
         if (CKEDITOR.instances.inlineContent != null) {
             //console.log('destroy CKEDITOR instance');
@@ -562,6 +659,10 @@ class SlideContentEditor extends React.Component {
         }
         CKEDITOR.inline('inlineContent', {
             customConfig: '/assets/ckeditor_config.js',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: {
+                top: 'CKeditorMenu'
+            },
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
 
@@ -916,6 +1017,10 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.replace('inlineContent', {
             //customConfig: '/assets/ckeditor_config.js',
             customConfig: '/assets/ckeditor_config.js',
+            removePlugins: 'floatingspace,resize',
+            sharedSpaces: {
+                top: 'CKeditorMenu'
+            },
             toolbarGroups: [
                 //needed for Chrome initialization
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
@@ -926,10 +1031,23 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         }); //leave all buttons
-        //this.currentcontent = this.props.content;
+        //this.currentContent = this.props.content;
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
+
+        CKEDITOR.instances.inlineContent.on('focus',(evt) => {
+            this.context.executeAction(contentEditorClick, {
+                focus: true
+            });
+        });
+
+        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+            this.context.executeAction(contentEditorClick, {
+                focus: false
+            });
+        });
+
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
@@ -1013,7 +1131,7 @@ class SlideContentEditor extends React.Component {
         }
 
         if(process.env.BROWSER){
-            window.addEventListener('resize', this.handleResize);
+            this.resize();
         }
         /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
@@ -1025,16 +1143,36 @@ class SlideContentEditor extends React.Component {
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
         //('img');
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(true);
+
+        let slideSizeTextTemp;
+        if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
+        {
+            slideSizeTextTemp = $('.pptx2html').css('width') + ' * ' + $('.pptx2html').css('height');
+        } else {
+            slideSizeTextTemp = 'none (document-mode)'; //slide is in document-mode
+        }
+        this.context.executeAction(changeSlideSizeText, {
+            slideSizeText: slideSizeTextTemp
+        });
     }
     handleResize = () => {
         this.forceUpdate();
     }
+
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
         this.resize();
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(false);
+
     }
+
     correctDimensionsBoxesIframe()
     {
         //le.log('correct iframe');
@@ -1098,6 +1236,31 @@ class SlideContentEditor extends React.Component {
         //$('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'move');
         $('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'auto');
         $('.pptx2html [style*="absolute"]').not('.drawing').hover(function() { //no dragging of SVG - makes them go away
+
+            // Make SVG resizable as soon as it is selected the first time.
+            if ($(this).find('svg').length) {
+                // Remove previous width and height if it is defined inside its style attribute.
+                let svgStyle = $(this).children('svg').attr('style');
+                if (svgStyle) {
+                    let first = svgStyle.split(' width: ')[0];
+                    let second = svgStyle.split(' width: ')[1] ? svgStyle.split(' width: ')[1].split('px;')[2] : undefined;
+                    if (second) {
+                        let newStyle = first + second;
+                        $(this).children('svg').attr('style', newStyle);
+                    }
+                }
+
+                $(this).children('svg').attr('width', '98%');
+                $(this).children('svg').attr('height', '98%');
+                // If there is no viewBox defined, let's add one.
+                if (!$(this).children('svg').attr('viewBox')) {
+                    let parentStyle = $(this).attr('style');
+                    let parentWidth = parentStyle.split('width: ')[1].split('px')[0];
+                    let parentHeight = parentStyle.split('height: ')[1].split('px')[0];
+                    $(this).children('svg').attr('viewBox', '0 0 ' + parentWidth + ' ' + parentHeight);
+                }
+
+            }
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
                 if (!(
@@ -1129,9 +1292,9 @@ class SlideContentEditor extends React.Component {
                         },
                         drag: function(event, ui) {
                             let changeLeft = ui.position.left - ui.originalPosition.left; // find change in left
-                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleratio)); // adjust new left by our zoomScale
+                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleRatio)); // adjust new left by our zoomScale
                             let changeTop = ui.position.top - ui.originalPosition.top; // find change in top
-                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleratio; // adjust new top by our zoomScale
+                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleRatio; // adjust new top by our zoomScale
                             ui.position.left = newLeft;
                             ui.position.top = newTop;
                         },
@@ -1156,9 +1319,9 @@ class SlideContentEditor extends React.Component {
                         },
                         resize: function(event, ui) {
                             let changeWidth = ui.size.width - ui.originalSize.width; // find change in width
-                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleratio; // adjust new width by our zoomScale
+                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleRatio; // adjust new width by our zoomScale
                             let changeHeight = ui.size.height - ui.originalSize.height; // find change in height
-                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleratio; // adjust new height by our zoomScale
+                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleRatio; // adjust new height by our zoomScale
                             //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
@@ -1166,6 +1329,7 @@ class SlideContentEditor extends React.Component {
                             {
                                 $(this).find('img:first').width(newWidth);
                                 $(this).find('img:first').height(newHeight);
+                                $(this).css('max-width', '');  //remove max-width that is set after inserting a new image
                             }
                             if($(this).find('iframe:first').length)
                             {
@@ -1203,9 +1367,10 @@ class SlideContentEditor extends React.Component {
                 //console.log('tabFocus');
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
-                if (!id || id === 'inlineContent'){id = this.menuFocus; }//console.log('used menuFocus');
-                if (id && id !== 'inlineContent')
-                {
+                if (!id || id === 'inlineContent') {
+                    id = this.menuFocus;
+                }
+                if (id && id !== 'inlineContent') {
                     /*
                     if(!$('#'+id).hasClass('editMode')){
                         if($('.editMode').length)
@@ -1406,6 +1571,10 @@ class SlideContentEditor extends React.Component {
             //if(!$(this).draggable( 'instance' )){
             //console.log('menu for: ' + $(this).attr('id'));
             const messagesContextMenu = defineMessages({
+                contextMenuEditImage:{
+                    id: 'SlideContentEditor.contextMenuEditImage',
+                    defaultMessage: 'Edit Image',
+                },
                 contextMenuBringToFront:{
                     id: 'SlideContentEditor.contextMenuBringToFront',
                     defaultMessage: 'Bring to front (Ctrl shift +)',
@@ -1438,6 +1607,35 @@ class SlideContentEditor extends React.Component {
                     //let id = $trigger.attr('id');
                     let id = $trigger.attr('id');
                     //console.log('menu for: ' + id);
+                    let contextMenuItems = {
+                        //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
+                        //'move': {name: 'Move around', icon: 'fa-arrows',},
+                        'front': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuBringToFront), icon: 'fa-arrow-circle-up'},
+                        'back': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuSendToBack), icon: 'fa-arrow-circle-o-down'},
+                        'duplicate': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDuplicate), icon: 'copy'},
+                        'delete': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDelete), icon: 'delete'},
+                        //'sep1': '---------',
+                        'quit': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuClose), icon: 'quit', accesskey: 'esc'}
+                        //'quit': {name: 'Send to back', icon: 'quit'},
+                    };
+
+                    // In case there is an image, provide option to edit it.
+                    let imgChildren = $('#' + id.toString()).has('img').length || $('#' + id.toString()).has('svg').length;
+                    if (imgChildren) {
+                        contextMenuItems = {
+                            //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
+                            //'move': {name: 'Move around', icon: 'fa-arrows',},
+                            'editImage': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuEditImage), icon: 'edit'},
+                            'front': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuBringToFront), icon: 'fa-arrow-circle-up'},
+                            'back': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuSendToBack), icon: 'fa-arrow-circle-o-down'},
+                            'duplicate': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDuplicate), icon: 'copy'},
+                            'delete': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDelete), icon: 'delete'},
+                            //'sep1': '---------',
+                            'quit': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuClose), icon: 'quit', accesskey: 'esc'}
+                            //'quit': {name: 'Send to back', icon: 'quit'},
+                        };
+                    }
+
                     return {
                         // define the elements + functions of the menu
                         callback: function(key, options) {
@@ -1449,6 +1647,8 @@ class SlideContentEditor extends React.Component {
                                     //slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
                                     //slideEditorContext.setEditMode(false, slideEditorContext, slideEditorContext.menuFocus, slideEditorContext.previousCaretRange);
                                     //break;
+                                case 'editImage':
+                                    slideEditorContext.editImage(slideEditorContext, false, $(this).attr('id'));
                                 case 'front':
                                     slideEditorContext.bringToFront(slideEditorContext, false, $(this).attr('id'));
                                     break;
@@ -1466,17 +1666,7 @@ class SlideContentEditor extends React.Component {
                                 default:
                             }
                         },
-                        items: {
-                            //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
-                            //'move': {name: 'Move around', icon: 'fa-arrows',},
-                            'front': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuBringToFront), icon: 'fa-arrow-circle-up'},
-                            'back': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuSendToBack), icon: 'fa-arrow-circle-o-down'},
-                            'duplicate': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDuplicate), icon: 'copy'},
-                            'delete': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDelete), icon: 'delete'},
-                            //'sep1': '---------',
-                            'quit': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuClose), icon: 'quit', accesskey: 'esc'}
-                            //'quit': {name: 'Send to back', icon: 'quit'},
-                        }
+                        items: contextMenuItems
                     };
                 },
 
@@ -1486,6 +1676,15 @@ class SlideContentEditor extends React.Component {
         });
     }
     componentWillReceiveProps(nextProps) {
+        if (this.currentContent !== this.props.content) {
+            this.currentContent = this.props.content;
+        }
+
+        if (nextProps.SlideEditStore.scaleRatio && nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
+            this.scaleRatio = nextProps.SlideEditStore.scaleRatio;
+            this.resize();
+        }
+
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
             if (this.finishLoading === true){
@@ -1581,13 +1780,8 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').css('background-size', '');
             $('.pptx2html').attr('aria-hidden','');
         }
-        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
-        {
-            this.refs.uploadMediaModal.handleOpen();
-        }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
-                this.refs.uploadMediaModal.handleClose();
                 //TODO code which inserts the file into the slide
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)  //if slide is in canvas mode
@@ -1602,7 +1796,26 @@ class SlideContentEditor extends React.Component {
                         $('.pptx2html').attr('aria-hidden','true');
                         $('.pptx2html').attr('alt',' ');
                     } else{
-                        $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                        if(nextProps.MediaStore.file.svg) {
+                            let idContextTop = '300px';
+                            let idContextLeft = '250px';
+                            if (this.idContext) {
+                                let style = $('#' + this.idContext).attr('style');
+                                idContextTop = style.split('top: ')[1].split(';')[0];
+                                idContextLeft = style.split('left: ')[1].split(';')[0];
+                                $('#' + this.idContext.toString()).remove();
+                                this.idContext = null;
+                            }
+                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: ' + idContextTop + '; left: ' + idContextLeft + ';  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+                        } else {
+                            console.log(nextProps.MediaStore.file);
+                            // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
+                            let d = new Date();
+                            let time = d.getTime();
+                            if (nextProps.MediaStore.file.url){
+                                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%"><img src="' + nextProps.MediaStore.file.url + '?' + time.toString() + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                            }
+                        }
                         this.refreshCKeditor();
                         //this.resize();
                         this.resizeDrag();
@@ -1635,7 +1848,6 @@ class SlideContentEditor extends React.Component {
 
             }
             else if (nextProps.MediaStore.status === 'error') {
-                this.refs.uploadMediaModal.handleClose();
                 const messagesimageUploadError = defineMessages({
                     swal_title:{
                         id: 'SlideContentEditor.imageUploadErrorTitle',
@@ -1923,6 +2135,25 @@ class SlideContentEditor extends React.Component {
             context.hasChanges = true;
         }
     }
+    editImage(context, event, idContext){
+        this.idContext = idContext;
+        let contains_img = $('#' + idContext).find('img').length;
+        if (contains_img) {
+            let src = $('#' + idContext).find('img')[0].src;
+            this.context.executeAction(editImageWithSrc, src);
+        } else {
+            let src = $('#' + idContext).attr('svg-source');
+            if (src) {
+                this.context.executeAction(editImageWithSrc, src);
+            } else {
+                let svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' +
+                    $('#' + idContext).children('svg').html() + '</svg>';
+                this.context.executeAction(editSVGwithSVG, svg);
+            }
+        }
+
+
+    }
     bringToFront(context, event, idContext){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = idContext;
@@ -2055,48 +2286,62 @@ class SlideContentEditor extends React.Component {
     }
     */
     resize() {
-        if($('.pptx2html').length)  //if slide is in canvas mode
-        {
-            let containerwidth = document.getElementById('container').offsetWidth;
-            let containerheight = document.getElementById('container').offsetHeight;
-            //reset scaling of pptx2html element to get original size
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            //Function to fit contents in edit and view component
-            let pptxwidth = $('.pptx2html').width();
-            let pptxheight = $('.pptx2html').height();
-            //TODO - change to get right!
-            this.scaleratio = containerwidth / (pptxwidth+50);
-            //this.scaleratio = containerwidth / (pptxwidth+120);
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-            //$('.pptx2html').animate({
-            //    transform: 'scale(2)'
-            //});
-            //console.log('scale with ratio: ' + this.scaleratio);
+//        if($('.pptx2html').length)  //if slide is in canvas mode
+//        {
+//            $('.pptx2html').css({'transform': 'scale('+this.scaleRatio+','+this.scaleRatio+')', 'transform-origin': 'top left'});
+//            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+//            this.refs.inlineContent.style.overflowY = 'auto';
+//            this.refs.present.style.overflowY = 'hidden';
+//        } else {
+//            this.refs.inlineContent.style.overflowY = 'scroll';
+//            this.refs.present.style.overflowY = 'scroll';
+//        }
 
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.overflowY = 'auto';
-            this.refs.present.style.overflowY = 'hidden';
-        }
-        else {
-            this.refs.inlineContent.style.overflowY = 'scroll';
-            this.refs.present.style.overflowY = 'scroll';
-            this.refs.inlineContent.style.height = '100%';
-        }
         //$('.cke_float').width( $('.pptx2html').width());
         //$('.cke_top').css('maxwidth', $('.pptx2html').width());
         //$('.cke_float').css('maxwidth', $('.pptx2html').width());
         //$('.cke_toolbox').css('maxwidth', $('.pptx2html').width());
-        let twentypercent = $('#container').width() * 0.2;
-        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
-        $('.cke_float').css('width', $('#container').width() - twentypercent);
-        $('.cke_top').css('width', $('#container').width() - twentypercent);
+
+//        let twentypercent = $('#container').width() * 0.2;
+//        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
+//        $('.cke_float').css('width', $('#container').width() - twentypercent);
+//        $('.cke_top').css('width', $('#container').width() - twentypercent);
+
+        if ($('.pptx2html').length) {
+            const containerwidth = document.getElementById('container').offsetWidth;
+
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+
+            const pptxwidth = $('.pptx2html').outerWidth();
+            const padding = 12;
+
+            if (!this.scaleRatio) {
+                this.scaleRatio = containerwidth / (pptxwidth + padding);
+            }
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
+                'transform-origin': 'top left'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+
+            const pptxheight = $('.pptx2html').outerHeight();
+            const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
+            const contentHeight = pptxheight * this.scaleRatio;
+            const contentWidth = pptxwidth * this.scaleRatio;
+
+            this.refs.slideEditPanel.style.height = contentHeight + padding + 'px';
+            this.refs.inlineContent.style.overflowY = 'hidden';
+            this.refs.inlineContent.style.overflowX = 'hidden';
+
+            /* Some extra padding is added to ensure that the borderline is visible. */
+            this.refs.inlineContent.style.height = contentHeight + padding + 'px';
+            this.refs.inlineContent.style.width = contentWidth + padding + 'px';
+        } else {
+            this.refs.inlineContent.style.overflowY = 'auto';
+            this.refs.slideEditPanel.style.height = '720px'; // fix problem with editing: SWIK-2499
+        }
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
         // Remove the warning window.
         window.onbeforeunload = () => {};
         if (CKEDITOR.instances.inlineContent != null) {
@@ -2108,9 +2353,11 @@ class SlideContentEditor extends React.Component {
             CKEDITOR.instances.inlineSpeakerNotes.destroy();
         }
     }
+
     emitChange(context){
         //context.hasChanges = true;
     }
+
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
@@ -2134,6 +2381,7 @@ class SlideContentEditor extends React.Component {
             'moveDown': ['ctrl+alt+down'],
             'moveLeft': ['ctrl+alt+left'],
             'moveRight': ['ctrl+alt+right'],
+            'editImage': [ 'ctrl+e'],
             'bringToFront': [ 'ctrl+shift+plus'],
             'bringToBack': ['ctrl+shift+-'],
             'duplicate': ['ctrl+d'],
@@ -2154,66 +2402,46 @@ class SlideContentEditor extends React.Component {
             'moveDown': (event) => this.keyMoveDown(slideEditorContext, event),
             'moveLeft': (event) => this.keyMoveLeft(slideEditorContext, event),
             'moveRight': (event) => this.keyMoveRight(slideEditorContext, event),
+            'editImage': (event) => this.editImage(slideEditorContext, event),
             'bringToFront': (event) => this.bringToFront(slideEditorContext, event),
             'bringToBack': (event) => this.sendToBack(slideEditorContext, event),
             'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
         const headerStyle = {
-            //minWidth: '100%',
             height: '0px',
             overflowY: 'auto',
-            //borderStyle: 'dashed dashed none dashed',
-            //borderColor: '#e7e7e7',
             position: 'relative'
         };
         const compStyle = {
-            // maxHeight: 450,
-            //minHeight: 450,
-            //overflowY: 'auto',
-            //position: 'relative'
-            //minWidth: '100%',
-            // maxHeight: 450,
-            //padding: 20,
-            minHeight: 600,
-            //minHeight: '100%',
+//            height: '720px',
             overflowY: 'auto',
-            //overflowX: 'hidden',
             overflowX: 'auto',
-            //overflowY: 'visible',
-            //overflow: 'hidden,'
             position: 'relative'
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
-            //padding: 10,
-            //paddingTop: 40,
-            height: '100%'
+            height: '100%',
+            padding: '0',
         };
         const contentStyle = {
             minWidth: '100%',
-            // maxHeight: 450,
-            //padding: 10,
-            /*paddingLeft: 50,
-            paddingRight: 50,
-            paddingTop: 10,
-            xpaddingBottom: 10,*/
-            minHeight: 610,
-            overflowY: 'auto',
-            overflowX: 'auto',
-            //borderStyle: 'dashed',
-            //borderColor: '#e7e7e7',
+            height: '720px',
+            overflowY: 'hidden',
+            overflowX: 'hidden',
+            padding: '0px',
         };
         const compSpeakerStyle = {
             minHeight: 50,
             overflowY: 'auto',
             position: 'relative',
-            resize: 'vertical'
+            resize: 'vertical',
+            paddingLeft: '5px'
         };
         const speakernotesStyle = {
             minWidth: '100%',
-            minHeight: 60,
+            minHeight: '85px',
             overflowY: 'auto',
             overflowX: 'auto',
             position: 'relative',
@@ -2304,10 +2532,18 @@ class SlideContentEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                    <b>Speaker notes:</b><br />
-                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
-                    </div>
+                <div className="ui horizontal segments">
+                    {
+                        this.props.hideSpeakerNotes ?  null :
+                        <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
+                                style={compSpeakerStyle}>
+                            <b>Speaker notes:</b><br />
+                            <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
+                                    ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
+                                    dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -2328,7 +2564,7 @@ SlideContentEditor.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore, PaintModalStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
@@ -2336,7 +2572,8 @@ SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserPr
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        MediaStore: context.getStore(MediaStore).getState()
+        MediaStore: context.getStore(MediaStore).getState(),
+        PaintModalStore: context.getStore(PaintModalStore).getState()
     };
 });
 export default SlideContentEditor;
