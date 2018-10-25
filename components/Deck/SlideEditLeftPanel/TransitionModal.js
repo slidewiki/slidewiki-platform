@@ -5,6 +5,7 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import SlideEditStore from '../../../stores/SlideEditStore';
+import changeSlideTransition from '../../../actions/slide/changeSlideTransition';
 
 
 
@@ -31,10 +32,38 @@ class TransitionModal extends React.Component {
                 id: 'transitionModal.convexMessage',
                 defaultMessage: 'Convex'
             },
+            fadeTransitionMessage: {
+                id: 'transitionModal.fadeMessage',
+                defaultMessage: 'Fade'
+            },
+            slideTransitionMessage: {
+                id: 'transitionModal.slideMessage',
+                defaultMessage: 'Slide'
+            },
+            zoomTransitionMessage: {
+                id: 'transitionModal.zoomMessage',
+                defaultMessage: 'Zoom'
+            },
+            concaveTransitionMessage: {
+                id: 'transitionModal.concaveMessage',
+                defaultMessage: 'Concave'
+            },
             /////////////
             question: {
                 id: 'transitionModal.question',
-                defaultMessage: 'You are able to add this transition to the full presentation or only for this slide. What do you prefer?'
+                defaultMessage: 'You are able to add this transition to the full presentation or only to this slide. What do you prefer?'
+            },
+            cancel: {
+                id: 'transitionModal.cancel',
+                defaultMessage: 'Cancel'
+            },
+            applyFull: {
+                id: 'transitionModal.applyFull',
+                defaultMessage: 'Apply to the full presentation'
+            },
+            onlySlide: {
+                id: 'transitionModal.onlySlide',
+                defaultMessage: 'Apply only to  this slide'
             }
 
         });
@@ -64,6 +93,15 @@ class TransitionModal extends React.Component {
         });
     }
 
+    handleTransitionType(type) {
+        if (type === 'slide') {
+            this.context.executeAction(changeSlideTransition, {
+                slideTransition: this.props.transition
+            });
+            this.handleClose();
+        }
+    }
+
     render() {
         const headerStyle = {
             'textAlign': 'center'
@@ -83,7 +121,26 @@ class TransitionModal extends React.Component {
                 imgSrc = '/assets/images/slidetransitions/convex.gif';
                 alt = 'Convex slide transition';
                 break;
-
+            case 'fade':
+                transitionName = this.context.intl.formatMessage(this.messages.fadeTransitionMessage);
+                imgSrc = '/assets/images/slidetransitions/fade.gif';
+                alt = 'Fade slide transition';
+                break;
+            case 'slide':
+                transitionName = this.context.intl.formatMessage(this.messages.slideTransitionMessage);
+                imgSrc = '/assets/images/slidetransitions/slide.gif';
+                alt = 'Slide slide transition';
+                break;
+            case 'zoom':
+                transitionName = this.context.intl.formatMessage(this.messages.zoomTransitionMessage);
+                imgSrc = '/assets/images/slidetransitions/zoom.gif';
+                alt = 'Zoom slide transition';
+                break;
+            case 'concave':
+                transitionName = this.context.intl.formatMessage(this.messages.concaveTransitionMessage);
+                imgSrc = '/assets/images/slidetransitions/concave.gif';
+                alt = 'concave slide transition';
+                break;
         }
 
         if (noTransition) {
@@ -130,9 +187,26 @@ class TransitionModal extends React.Component {
                             <div id={'transitionModal' + this.props.transition + 'Description'}>
                                 {this.context.intl.formatMessage(this.messages.question)}
                             </div>
-
                         <Divider/>
                     </Modal.Content>
+                    <Modal.Actions>
+                        <button type='cancel' onClick={this.handleClose} className='ui cancel button'>
+                            <i className='remove icon'/>
+                            {this.context.intl.formatMessage(this.messages.cancel)}
+                        </button>
+                        <Button ref='applyFull' color='blue' tabIndex="0" type="button" className='ui blue button'
+                                aria-label={this.context.intl.formatMessage(this.messages.applyFull)} labelPosition='left'
+                                content={this.context.intl.formatMessage(this.messages.applyFull)}
+                                icon='check'
+                                onClick={this.handleTransitionType.bind(this, 'full')}
+                        />
+                        <Button ref='onlySlide' color="blue" tabIndex="0" type="button" className='ui blue button'
+                                aria-label={this.context.intl.formatMessage(this.messages.onlySlide)} labelPosition='left'
+                                content={this.context.intl.formatMessage(this.messages.onlySlide)}
+                                icon='check'
+                                onClick={this.handleTransitionType.bind(this, 'slide')}
+                        />
+                    </Modal.Actions>
                 </FocusTrap>
             </Modal>
         );
