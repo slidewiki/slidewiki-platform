@@ -106,7 +106,7 @@ class AttachDeckList extends React.Component {
         let deck_list;
         let activeItemStyle = {
             backgroundColor:'#f8ffff',
-            color:'#2185d0'
+            color:'#1e78bb'
 
         };
        //Order decks by updated data
