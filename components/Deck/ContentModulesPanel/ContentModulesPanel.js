@@ -104,6 +104,10 @@ class ContentModulesPanel extends React.Component {
             default:
         }
     }
+    handleKeyPress(type, e) {
+        this.handleTabClick(type);
+        e.preventDefault();
+    }
     
     handleDropdownChange(e, dropdown) {
         let selectedItem = dropdown.value;
@@ -184,19 +188,19 @@ class ContentModulesPanel extends React.Component {
             //    activityDIV = <ContributorsPanel selector={this.props.ContentModulesStore.selector} />;
             //    break;
             case 'questions':
-                activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} id="questions_panel" aria-labelledby="questions_label"/>;
                 break;
             case 'datasource':
-                activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} id="sources_panel" aria-labelledby="sources_label"/>;
                 break;
             case 'tags':
-                activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} id="tags_panel" aria-labelledby="tags_label"/>;
                 break;
             case 'playlists': 
-                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} id="playlist_panel" aria-labelledby="playlist_label"/>;
                 break;
             default:
-                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} id="comments_panel" aria-labelledby="comments_label"/>;
         }
         
         //hide focused outline
@@ -205,7 +209,7 @@ class ContentModulesPanel extends React.Component {
         };
         
         pointingMenu = (
-            <div className="ui top attached pointing menu" ref="pointerMenu">
+            <div className="ui top attached pointing menu" ref="pointerMenu" role="tablist" aria-label="Additional deck tools">
                 {this.getContentModuleOptions(true).map((item) => {
                     let active = this.props.ContentModulesStore.moduleType === item.value;
                     
@@ -220,7 +224,8 @@ class ContentModulesPanel extends React.Component {
                     }
                     
                     return (<a tabIndex="0" className={classes} style={compStyle} 
-                        onClick={this.handleTabClick.bind(this, item.value)} key={item.value}>{item.text}</a>);
+                        onClick={this.handleTabClick.bind(this, item.value)} onKeyPress={this.handleKeyPress.bind(this, item.value)} 
+                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="button">{item.text}</a>);
                         
                     {/*
                     <a className="item">
@@ -254,7 +259,7 @@ class ContentModulesPanel extends React.Component {
         });
         
         return (
-            <div ref="contentModulesPanel">
+            <div ref="contentModulesPanel" role="tabpanel">
                 <div style={pointingMenuStyle}>
                     {pointingMenu}
                 </div>
