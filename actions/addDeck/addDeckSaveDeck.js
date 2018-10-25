@@ -9,6 +9,9 @@ export default function addDeckSaveDeck(context, payload, done) {
     //enrich data
     payload.jwt = context.getStore(UserProfileStore).jwt;
 
+    // TODO remove this
+    payload.userid = context.getStore(UserProfileStore).userid;
+
     //no pptx uploaded
     if (payload.deckId === null) {
         context.service.create('deck.create', payload, null, {timeout: 30 * 1000}, (err, res) => {

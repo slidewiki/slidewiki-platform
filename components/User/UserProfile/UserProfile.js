@@ -8,10 +8,10 @@ import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
-import UserGroupEdit from './UserGroupEdit';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserStatsStore from '../../../stores/UserStatsStore';
+import UserGroupsStore from '../../../stores/UserGroupsStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
 import {defineMessages, FormattedMessage} from 'react-intl';
@@ -109,9 +109,6 @@ class UserProfile extends React.Component {
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
                         return this.displayGroups();
-                        break;
-                    case categories.groups[1]:
-                        return this.displayGroupedit();
                         break;
                     default:
                         return this.notImplemented();
@@ -243,11 +240,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroups() {
-        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
-    }
-
-    displayGroupedit() {
-        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} displayName={this.props.UserProfileStore.user.displayName} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserGroupsStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
     }
 
     displayUserStats(){
@@ -273,11 +266,12 @@ UserProfile.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-UserProfile = connectToStores(UserProfile, [UserProfileStore, UserStatsStore, IntlStore], (context, props) => {
+UserProfile = connectToStores(UserProfile, [UserProfileStore, UserStatsStore, UserGroupsStore, IntlStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         UserStatsStore: context.getStore(UserStatsStore).getState(),
-        IntlStore: context.getStore(IntlStore).getState()
+        UserGroupsStore: context.getStore(UserGroupsStore).getState(),
+        IntlStore: context.getStore(IntlStore).getState(),
     };
 });
 

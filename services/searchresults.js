@@ -88,8 +88,12 @@ function getDecks(deckIds){
     let deckPromises = deckIds.map( (deckId) => 
         rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`, json: true}).then( (deckRes) => {
             decks[deckId] = deckRes;
-            decks[deckId].revisions.forEach( (rev) => {
+            decks[deckId].revisions.forEach( (rev, index, arr) => {
                 deckRevisions[deckId + '-' + rev.id] = rev;
+                
+                if (index === arr.length - 1 && rev.educationLevel !== undefined) { //get educational level of last revision
+                    decks[deckId].educationLevel = rev.educationLevel;
+                }
             });
         }).catch( (err) => {
             decks[deckId] = null;
@@ -97,6 +101,24 @@ function getDecks(deckIds){
 
 
     return Promise.all(deckPromises).then( () => { return {decks, deckRevisions}; });
+}
+
+function getSlideAmount(deckIds){
+    let slidesAmount = {};
+    let slidesPromises = deckIds.map( (deckId) => 
+        rp.get({
+            uri: `${Microservices.deck.uri}/deck/${deckId}/slides`, 
+            qs: {
+                countOnly: true
+            },
+            json: true
+        }).then((noOfSlides) => {
+            slidesAmount[deckId] = noOfSlides.slidesCount;
+        }).catch( (err) => {
+            slidesAmount[deckId] = 0;
+        }));
+
+    return Promise.all(slidesPromises).then( () => { return slidesAmount; });
 }
 
 function getActivity(activityType, deckIds){
@@ -307,10 +329,10 @@ export default {
                     getActivity('download', deckIds), 
                     getActivity('share', deckIds),
                     getTags(response.facets),
+                    getSlideAmount(deckIds),
                     getQuestionsCount(deckIds),
-                ]).then( ([ users, { decks, deckRevisions }, likes, downloads, shares, tags, questions ]) => {
+                ]).then( ([ users, { decks, deckRevisions }, likes, downloads, shares, tags, slides, questions ]) => {
                     response.docs.forEach( (result) => {
-
                         parseDeck(result, users);
 
                         // fill forks data
@@ -331,6 +353,8 @@ export default {
                         result.downloadsCount = downloads[result.db_id];
                         result.sharesCount = shares[result.db_id];
                         result.questionsCount = questions[result.db_id];
+                        result.educationLevel = decks[result.db_id].educationLevel;
+                        result.noOfSlides = slides[result.db_id];
                     });
 
                     if (response.facets) {

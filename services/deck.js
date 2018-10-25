@@ -3,6 +3,7 @@ import rp from 'request-promise';
 import slugify from 'slugify';
 
 import {fillInUserInfo, fillInGroupInfo} from '../lib/services/user';
+import {fetchTagInfo} from '../lib/services/tag';
 
 const log = require('../configs/log').log;
 
@@ -120,11 +121,16 @@ export default {
 
                 return deck;
             });
+
             /* Create promise for slides data success */
             let uri2 = Microservices.deck.uri + '/deck/' + args.sid + '/slides';
             if (args.language)
                 uri2 += '?language=' + args.language;
-            let slidesRes = rp.get({uri:uri2});
+            let slidesRes = rp.get({
+                uri: uri2,
+                json: true,
+            });
+
             /* Catch errors from deck data response */
             let deckPromise = deckRes.catch((err) => {
                 callback({msg: 'Error in retrieving deck meta data ' + Microservices.deck.uri + ',', content: err}, {});
@@ -139,7 +145,10 @@ export default {
 
             // the forkCount API requires just the deck id, not the revision (a deck may be a fork of any revision)
             let deckId = parseInt(args.sid); // we rely on parseInt
-            let forkCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + deckId + '/forkCount'}).catch((err) => {
+            let forkCountPromise = rp.get({
+                uri: Microservices.deck.uri + '/deck/' + deckId + '/forkCount',
+                json: true,
+            }).catch((err) => {
                 callback({
                     msg: 'Error in retrieving fork count',
                     content: err
@@ -148,6 +157,7 @@ export default {
 
             let shareCountPromise = rp.get({
                 uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=share&all_revisions=true',
+                json: true,
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -158,6 +168,7 @@ export default {
 
             let downloadCountPromise = rp.get({
                 uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=download&all_revisions=true',
+                json: true,
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -175,28 +186,39 @@ export default {
                 }
                 let userPromisesMap = {};
                 let userPromises = users.map((user) => {
-                    return userPromisesMap[user] = userPromisesMap[user] || rp.get({uri: Microservices.user.uri + '/user/' + user.toString()});
+                    return userPromisesMap[user] = userPromisesMap[user] || rp.get({
+                        uri: Microservices.user.uri + '/user/' + user.toString(),
+                        json: true,
+                    });
                 });
                 return Promise.all(userPromises);
             }).catch((err) => {
                 callback({msg: 'Error in retrieving user data from ' + Microservices.user.uri, content: err}, {});
             });
 
+            // fetch the tags data
+            let tagsPromise = deckPromise.then((deck) => fetchTagInfo(deck.tags));
+
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise]).then((data) => {
-                let deckData = data[0];
-                deckData.forkCount = JSON.parse(data[2]);
-                deckData.shareCount = JSON.parse(data[4]);
-                deckData.downloadCount = JSON.parse(data[5]);
+            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise, tagsPromise])
+            .then(([deckData, slidesData, forkCount, usersData, shareCount, downloadCount, tags]) => {
+                // split tags to topics and non-topics
+                Object.assign(deckData, {
+                    forkCount,
+                    shareCount,
+                    downloadCount,
+                    tags: tags.filter((t) => t.tagType !== 'topic'),
+                    topics: tags.filter((t) => t.tagType === 'topic'),
+                });
 
                 addSlug(deckData);
 
                 callback(null, {
-                    deckData: deckData,
-                    slidesData: JSON.parse(data[1]),
-                    creatorData: JSON.parse(data[3][0]),
-                    ownerData: JSON.parse(data[3][1]),
-                    originCreatorData: data[3][2] != null ? JSON.parse(data[3][2]) : {}
+                    deckData,
+                    slidesData,
+                    creatorData: usersData[0],
+                    ownerData: usersData[1],
+                    originCreatorData: usersData[2] || {},
                 });
             }).catch((err) => {
                 //console.log(err);
@@ -242,7 +264,10 @@ export default {
                 return deck;
             });
 
-            deckPromise.then((deck) => {
+            // fetch the tags data
+            let tagsPromise = deckPromise.then((deck) => fetchTagInfo(deck.tags));
+
+            Promise.all([deckPromise, tagsPromise]).then(([deck, tags]) => {
                 // prepare users and groups from editors object
                 let {users, groups} = deck.editors || {};
                 if (!users) users = [];
@@ -257,7 +282,6 @@ export default {
                     let deckProps = {
                         description: deck.description,
                         language: deck.language,
-                        tags: deck.tags,
                         title: deck.title,
                         license: deck.license,
                         theme: deck.theme,
@@ -265,6 +289,8 @@ export default {
                         editors: { users, groups },
                         hidden: deck.hidden,
                         educationLevel: deck.educationLevel,
+                        tags: tags.filter((t) => t.tagType !== 'topic'),
+                        topics: tags.filter((t) => t.tagType === 'topic'),
                         deckOwner: deck.user,
                         revisionOwner: deck.revisionUser,
                         sid: args.sid,
@@ -339,36 +365,56 @@ export default {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
 //            if (params.tags.length === 1 && params.tags[0].length === 0)
 //                params.tags = undefined;
-            let toSend = {
-                description: params.description,
-                language: params.language,
-                translation: {
-                    status: 'original'
-                },
-                tags: params.tags,
-                title: params.title,
-                license: params.license,
-                theme: params.theme,
-                educationLevel: params.educationLevel,
-            };
-            rp({
-                method: 'POST',
-                uri: Microservices.deck.uri + '/deck/new',
-                json: true,
-                headers: {'----jwt----': params.jwt},
-                body: toSend
-            }).then((deck) => {
-                // support old style deck api response
-                // TODO remove this
-                if (deck.revisions) {
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = deck.revisions[0].id;
-                    deck.title = deck.revisions[0].title;
 
-                    delete deck.revisions;
-                }
-                return deck;
-            }).then((deck) => callback(false, deck))
+            // prepare tagName and defaultName to send to deck service
+            let tagsPromise = Promise.resolve([]);
+            if (params.tags && params.tags.length) {
+                // send tags to tag-service
+                tagsPromise = rp.post({
+                    uri: Microservices.tag.uri + '/tag/upload',
+                    json: true,
+                    body: {
+                        user: params.userid,
+                        tags: params.tags,
+                    }
+                }).then((tags) => tags.map((t) => ({
+                    tagName: t.tagName,
+                    defaultName:  t.defaultName
+                })));
+                // TODO maybe catch an error here ?
+            }
+
+            tagsPromise.then((tags) => {
+                let toSend = {
+                    description: params.description,
+                    language: params.language,
+                    tags: tags,
+                    title: params.title,
+                    license: params.license,
+                    theme: params.theme,
+                    educationLevel: params.educationLevel,
+                };
+
+                return rp({
+                    method: 'POST',
+                    uri: Microservices.deck.uri + '/deck/new',
+                    json: true,
+                    headers: {'----jwt----': params.jwt},
+                    body: toSend
+                }).then((deck) => {
+                    // support old style deck api response
+                    // TODO remove this
+                    if (deck.revisions) {
+                        if (!deck.id) deck.id = deck._id;
+                        deck.revision = deck.revisions[0].id;
+                        deck.title = deck.revisions[0].title;
+
+                        delete deck.revisions;
+                    }
+                    return deck;
+                });
+            })
+            .then((deck) => callback(null, deck))
             .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
 
@@ -399,6 +445,9 @@ export default {
             } catch (e) {
 
             }
+
+            // we don't upload tags here as we don't expect user submitted tags here
+
             let toSend = {
                 description: params.description,
                 language: params.language,
@@ -478,7 +527,7 @@ export default {
                     };
                 });
 
-                rp.put({
+                return rp.put({
                     uri: Microservices.deck.uri + '/deck/' + params.selector.sid + '/tags',
                     json: true,
                     body: {
@@ -486,12 +535,13 @@ export default {
                         tags: deckTags,
                     },
                     headers: { '----jwt----': params.jwt },
-                }).catch( (err) => {
-                    console.log(err);
-                    callback(err);
+                }).then(() => {
+                    callback(null, {
+                        tags: tags.filter((t) => t.tagType !== 'topic'),
+                        topics: tags.filter((t) => t.tagType === 'topic'),
+                    });
                 });
 
-                callback(null, {tags: tags});
             }).catch((err) => callback(err));
         }
         else if (resource === 'deck.translations') {
