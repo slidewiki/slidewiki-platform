@@ -53,7 +53,6 @@ class ContentModulesPanel extends React.Component {
             case 'questions':
                 let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
                 let params = this.props.ContentModulesStore.selector;
-                params.nonExamQuestionsOnly = !editPermission;
                 this.context.executeAction(loadContentQuestions, {params: params});
                 
                 break;

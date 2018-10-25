@@ -100,7 +100,12 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
-
+        let visibleQuestions = [];
+        questions.forEach((question) => {
+            if (editPermission || !question.isExamQuestion) {
+                visibleQuestions.push(question);
+            }
+        })
         let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
@@ -200,7 +205,7 @@ class ContentQuestionsPanel extends React.Component {
         //         </a>
         //     </div>
         // );
-        let questionsList = (<ContentQuestionsList items={questions} selector={selector} editPermission={editPermission}/>);
+        let questionsList = (<ContentQuestionsList items={visibleQuestions} selector={selector} editPermission={editPermission}/>);
         let examQuestionsList = (<ExamQuestionsList items={questions} selector={selector} />);
         let questionAdd = (<ContentQuestionAdd selector={this.props.selector} userId={userId} />);
         let questionEdit = (<ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId}/>);
@@ -208,7 +213,7 @@ class ContentQuestionsPanel extends React.Component {
             <div>
                 {buttonBar}
                 {questionsHeader}
-                {questions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
+                {visibleQuestions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
                 {/* {pagination} */}
             </div>
         );

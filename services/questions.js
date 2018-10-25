@@ -11,10 +11,9 @@ export default {
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
 
         if(resource === 'questions.list') {
-            const nonExamQuestionsOnly = (args.nonExamQuestionsOnly) ? '&non_exam_questions_only=true' : '';
             
             rp.get({
-                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true' + nonExamQuestionsOnly,
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true',
             }).then((res) => {
 
                 let questions = JSON.parse(res).map((item, index) => {
