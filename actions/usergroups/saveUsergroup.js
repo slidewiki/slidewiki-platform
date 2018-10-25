@@ -1,4 +1,4 @@
-import UserProfileStore from '../../../stores/UserProfileStore';
+import UserProfileStore from '../../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 
 export default function saveUsergroup(context, payload, done) {
@@ -8,10 +8,13 @@ export default function saveUsergroup(context, payload, done) {
         if (err) {
             context.dispatch('SAVE_USERGROUP_FAILED', err);
         } else {
-            context.dispatch('SAVE_USERGROUP_SUCCESS', res);
-            context.executeAction(navigateAction, {
-                url: '/user/' + context.getStore(UserProfileStore).username + '/groups/overview'
-            });
+            context.dispatch('SAVE_USERGROUP_SUCCESS', payload);
+            // console.log('updated usergroup from to', payload, res);
+            if (!payload.id) {
+                context.executeAction(navigateAction, {
+                    url: '/usergroup/' + res.id + '/settings'
+                });
+            }
         }
         done();
     });

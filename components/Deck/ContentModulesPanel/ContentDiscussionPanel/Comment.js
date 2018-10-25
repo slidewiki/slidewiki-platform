@@ -134,7 +134,7 @@ class Comment extends React.Component {
                     </div>
                     {commentContent}
                     { (String(this.props.userid) !== '') ? replyLink : ''}
-                    { comment.replyBoxOpened ? (<AddReply comment={comment} userid={this.props.userid}/>) : '' }
+                    { comment.replyBoxOpened ? (<AddReply comment={comment} selector={this.props.selector} userid={this.props.userid}/>) : '' }
                 </div>
                 {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid} selector={this.props.selector} savedDeckTreeStore={savedDeckTreeStore} savedPermissionsStore={savedPermissionsStore}/>); })}</div> : ''}
             </div>
