@@ -24,7 +24,13 @@ export default function addSlideTranslation(context, payload, done) {
             let newPath = location.pathname.toString().replace(new RegExp(payload.selector.sid, 'g'), newSlideId);
             // replace 'view', if exists, with 'edit'
             newPath = newPath.replace(/\/(view)?$/, '');
-            newPath = newPath + '/edit';
+
+            if (payload.markdown) {
+                newPath = newPath + '/markdownEdit';
+            } else {
+                newPath = newPath + '/edit';
+            }
+            
 
             let params = new URLSearchParams(location.search);
             params.set('language', payload.language);

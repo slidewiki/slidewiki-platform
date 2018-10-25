@@ -14,7 +14,7 @@ import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 //import ServiceUnavailable from '../Error/ServiceUnavailable';//NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory
-import InfoPanel from './InfoPanel/InfoPanel';
+import InfoPanelInfoView from './InfoPanel/InfoPanelInfoView';
 import TranslationStore from '../../stores/TranslationStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
@@ -187,8 +187,10 @@ class Deck extends React.Component {
                                       <div className="ui hidden divider"></div>
                                     </div>
                                     <div className="mobile only sixteen wide column">
-                                          <NavigationPanel/>
-                                          <div className="ui hidden divider"></div>
+                                        <div className="ui segments">
+                                            <NavigationPanel lastAttached={true} />
+                                        </div>
+                                        <div className="ui hidden divider"></div>
                                     </div>
                                   </div>
                                 </div>;
@@ -210,7 +212,7 @@ class Deck extends React.Component {
                 rightPanel = (
                   <div className={rightColClass}>
                       <div className={treePanelClass}>
-                          <InfoPanel />
+                          <InfoPanelInfoView />
                       </div>
 
                       <div className="ui hidden divider"></div>
