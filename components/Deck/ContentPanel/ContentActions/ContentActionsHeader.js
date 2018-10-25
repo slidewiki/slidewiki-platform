@@ -22,6 +22,8 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
+import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
+import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -84,8 +86,10 @@ class ContentActionsHeader extends React.Component {
 
 
     handleAddNode(selector, nodeSpec) {
-        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "slide", id: "0"}
+        if (this.props.TranslationStore.currentLang) {
+            // use the new API to also set the language of the new node
+            Object.assign(nodeSpec, { [nodeSpec.type]: { language: this.props.TranslationStore.currentLang } });
+        }
         const contentDetails = this.props.ContentStore;
         //added mode to the navigate action
         this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec, mode: contentDetails.mode});
@@ -119,11 +123,39 @@ class ContentActionsHeader extends React.Component {
 
     }
 
+    // let's see if the user wants something we don't have
+    isTranslationMissing() {
+        // the language the current contnet is actually in
+        let language = this.props.TranslationStore.nodeLanguage;
+        let primaryLanguage = this.props.TranslationStore.treeLanguage;
+        // the user selected language (defaults to the primary deck tree language)
+        let selectedLanguage = this.props.TranslationStore.currentLang || primaryLanguage;
+
+        return (selectedLanguage !== language);
+    }
+
+    addNodeTranslation(selector, options={}) {
+        if (selector.stype === 'slide') {
+            this.context.executeAction(addSlideTranslation, {
+                selector,
+                language: this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage,
+                markdown: options.markdown,
+            });
+        } else {
+            this.context.executeAction(addDeckTranslation, {
+                selector,
+                language: this.props.TranslationStore.currentLang || this.props.TranslationStore.treeLanguage,
+            });
+        }
+    }
+
     handleEditButton(selector) {
-        const nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else if (this.isTranslationMissing()) {
+            this.addNodeTranslation(selector);
         } else {
+            let nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
@@ -131,10 +163,12 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleMarkdownEditButton(selector) {
-        const nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else if (this.isTranslationMissing()) {
+            this.addNodeTranslation(selector, { markdown: true });
         } else {
+            let nodeURL = Util.makeNodeURL(selector, selector.page, 'markdownEdit');
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
@@ -160,13 +194,12 @@ class ContentActionsHeader extends React.Component {
             || !this.props.PermissionsStore.permissions.edit
             || contentDetails.mode ==='edit'
             || contentDetails.mode ==='markdownEdit'
-            || this.props.TranslationStore.inTranslationMode
         ;
         const buttonsAreHidden = this.props.UserProfileStore.username === '' || buttonsAreDisabled;
 
         //config buttons based on the selected item
         const editClass = classNames({
-            'ui button attached basic': true,
+            'ui button basic': true,
             //'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const viewClass = classNames({
@@ -205,7 +238,6 @@ class ContentActionsHeader extends React.Component {
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
         } ;
         let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
-        let currentlyEditingTranslation = (this.props.TranslationStore.inTranslationMode && this.props.TranslationStore.nodeLanguage === this.props.TranslationStore.currentLang);
 
         if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
@@ -219,7 +251,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save{currentlyEditingTranslation ? ' translation' : ''}
+                        Save
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
@@ -259,7 +291,7 @@ class ContentActionsHeader extends React.Component {
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         >
                         <i className="icons">
-                            <i className={'large blue ' + (currentlyEditingTranslation ? 'translate' : 'edit') + ' icon'}></i>
+                            <i className="large blue edit icon"></i>
                             <i className=""></i>
                         </i>
                         {this.context.intl.formatMessage(this.messages.editButtonText)}
@@ -290,6 +322,12 @@ class ContentActionsHeader extends React.Component {
 
 
         }
+        
+        const leftButtonsClass = classNames({
+            'ui left floated top attached buttons': true,
+            'basic': editButton !== '' 
+        });
+        
         /*
         <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
           type="button"
@@ -307,7 +345,7 @@ class ContentActionsHeader extends React.Component {
         return (
                 <div className="ui two column grid">
                     <div className="column computer tablet only">
-                        <div className="ui left floated top attached buttons" >
+                        <div className={leftButtonsClass}>
                             {editButton}
                             {markdownEditButton}
                             {saveButton}
@@ -336,7 +374,7 @@ class ContentActionsHeader extends React.Component {
                         </button>,
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} key="attachSlides" />,
                         <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
-                            type="button"
+                            type="button" key="addDeck"
                             aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
