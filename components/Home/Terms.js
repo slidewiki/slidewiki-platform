@@ -176,104 +176,95 @@ class terms extends React.Component {
 
         return (
             <div>
-            <section className='inner-container'>
-                <div className='inner-content-block'>
-                    <div className='wrapper'>
-                        <div className='ui grid'>
-                            <div className='row'>
-                                <div className='column'>
-                                    <div className='content-left'>
-                                        <h1>{this.context.intl.formatMessage(this.messages.mainTitle)}</h1>
-                                        <p>{this.context.intl.formatMessage(this.messages.summary)}</p>
-                                        <p>{this.context.intl.formatMessage(this.messages.disclaimer)}</p>
-                                        <h5>{this.context.intl.formatMessage(this.messages.missionTitle)}</h5>
-                                        <ul>
-                                            <li>{this.context.intl.formatMessage(this.messages.mission1)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.mission2)}</li>
-                                        </ul>
-                                        <h5>{this.context.intl.formatMessage(this.messages.freeTo)}</h5>
-                                        <ul>
-                                            <li>{this.context.intl.formatMessage(this.messages.free1)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.free2)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.free3)}</li>
-                                        </ul>
-                                        <h5>{this.context.intl.formatMessage(this.messages.conditionsTitle)}</h5>
-                                        <ul>
-                                            <li>{this.context.intl.formatMessage(this.messages.condition1)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.condition2)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.condition3)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.condition4)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.condition5)}</li>
-                                        </ul>
-                                        <h5>{this.context.intl.formatMessage(this.messages.understandingTitle)}</h5>
-                                        <ul>
-                                            <li>{this.context.intl.formatMessage(this.messages.understanding1)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.understanding2)}</li>
-                                            <li>{this.context.intl.formatMessage(this.messages.understanding3)}</li>
-                                        </ul>
-                                        <p>{this.context.intl.formatMessage(this.messages.paragraph1)}</p>
-                                        <p>{this.context.intl.formatMessage(this.messages.paragraph2)}</p>
-                                        <p>{this.context.intl.formatMessage(this.messages.paragraph3)}</p>
-                                    </div>
-                                    <div className='content-right'>
-                                        <ul>
-                                            <li>
-                                                <div className='feature-content blue-block'>
-                                                    <div className='feature-left'>
-                                                        <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
-                                                        <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
-                                                        <div className='text-div'>
-                                                            <div className='text'>
-                                                                <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
-                                                            </div>
-                                                            <img src='/assets/images/home/search.jpg' alt=''/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className='feature-content green-block'>
-                                                    <div className='feature-left'>
-                                                        <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
-                                                        <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
-                                                        <div className='text-div'>
-                                                            <div className='text'>
-                                                                <p>{this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
-                                                            </div>
-                                                            <img src='/assets/images/home/add.jpg' alt=''/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className='feature-content red-block'>
-                                                    <div className='feature-left'>
-                                                        <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
-                                                        <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
-                                                        <div className='text-div'>
-                                                            <div className='text'>
-                                                                <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
-                                                            </div>
-                                                            <img src='/assets/images/home/share.jpg' alt=''/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div className='signin-blk'>
-                                            <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
-                                            <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
-                                        </div>
-                                    </div>
+                <div className='ui hidden divider'>
+                </div>
+            <div className='ui grid stackable container'>
+                <div className='row'>
+                    <div className='twelve wide column'>
+                        <div className='ui content'>
+                            <h1 className='ui header'>{this.context.intl.formatMessage(this.messages.mainTitle)}</h1>
+                            <p>{this.context.intl.formatMessage(this.messages.summary)}</p>
+                            <p>{this.context.intl.formatMessage(this.messages.disclaimer)}</p>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.missionTitle)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.mission1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.mission2)}</li>
+                            </ul>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.freeTo)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.free1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.free2)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.free3)}</li>
+                            </ul>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.conditionsTitle)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.condition1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition2)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition3)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition4)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition5)}</li>
+                            </ul>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.understandingTitle)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.understanding1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.understanding2)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.understanding3)}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className='four wide column'>
+                        <div className='feature-content blue-block'>
+                            <div className='feature-left'>
+                                <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
+                                <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
+                                <div className='text-div'>
+                                    {/*}  <div className='text'>
+                                                        <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
+                                                    </div> */}
+                                    <img src='/assets/images/home/search.jpg' alt=''/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='feature-content green-block'>
+                            <div className='feature-left'>
+                                <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
+                                <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
+                                <div className='text-div'>
+                                    {/*    <div className='text'>
+                                                        <p>{this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
+                                                    </div> */}
+                                    <img src='/assets/images/home/add.jpg' alt=''/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='feature-content red-block'>
+                            <div className='feature-left'>
+                                <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
+                                <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
+                                <div className='text-div'>
+                                    {/*   <div className='text'>
+                                                        <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
+                                                    </div> */}
+                                    <img src='/assets/images/home/share.jpg' alt=''/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <section className='banner-container inner-image'>
-                <img src='/assets/images/home/banner.jpg' alt=''/>
-            </section>
+                <div className='row'>
+                    <div className='signin-blk'>
+                        <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
+                        <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
+                    </div>
+                </div>
+                {/*   </div>
+                </div> */}
+                <div className='row'>
+                    <div className='banner-container inner-image'>
+                        <img src='/assets/images/home/banner.jpg' alt=''/>
+                    </div>
+                </div>
+            </div>
             </div>
         );
     }
