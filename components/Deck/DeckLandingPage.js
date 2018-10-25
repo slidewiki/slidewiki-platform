@@ -88,11 +88,12 @@ class DeckLandingPage extends React.Component {
         };
 
         let interestedInDecks = 'No decks to show';
-        if(this.props.DeckListStore.featured && this.props.DeckListStore.featured.length >= 1)
+        if (this.props.DeckListStore.featured && this.props.DeckListStore.featured.length >= 1) {
             interestedInDecks =  this.props.DeckListStore.featured.map((deck, i) => {
                 return <Grid.Column key={i} width={5}><NavLink href={`/deck/${deck._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}`} bordered /><h4>{deck.title}</h4></NavLink></Grid.Column>;
             });
-        interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
+            interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
+        }
 
         return (
             <div>
@@ -214,24 +215,27 @@ class DeckLandingPage extends React.Component {
                                     <Segment attached='top' >
                                         <Header size="small" as="h3">Available in the following languages:</Header>
                                         { deckLanguages.map((lang, i) =>
-                                                <span key={i}>
-                                {!!i && ',\xa0'}
-                                                    <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + lang}>
-                                    <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
-                                                        { getLanguageDisplayName(lang) }
-                                                    </NavLink>
-                                        </span>
+                                            <span key={i}>
+                                                {!!i && ',\xa0'}
+                                                <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + lang}>
+                                                    <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
+                                                    { getLanguageDisplayName(lang) }
+                                                </NavLink>
+                                            </span>
                                         ) }
                                     </Segment>
                                     <Segment attached >
                                         <Header size="small" as="h3">Tags:</Header>
                                         {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
+                                    {
+                                    /* 
                                     <Segment attached='bottom'>
                                         <Header size="small" as="h3">You may also be interested in:</Header>
                                         {interestedInDecks}
-                                        {/*<Icon name='chevron circle right' size='huge' link/>*/}
                                     </Segment>
+                                    */
+                                    }
                                 </Grid.Column>
                                 <Grid.Column only="tablet computer" width={4}>
                                     <Segment>
