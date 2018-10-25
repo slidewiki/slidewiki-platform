@@ -193,13 +193,13 @@ class DeckLandingPage extends React.Component {
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
-                                                <Button icon huge aria-label='open deck' data-tooltip='open deck' role='button'>
-                                                    <Icon name='open folder' />
+                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip="Open Deck" role="button">
+                                                    <Icon name="open folder" />
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button icon huge aria-label='open slideshow in new tab' data-tooltip='open slideshow' role='button' >
-                                                    <Icon name='play circle' />
+                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip="Open Slideshow" role="button" >
+                                                    <Icon name="play circle" />
                                                 </Button>
                                             </a>
                                             <PresentationsPanel deckPage={true} />
