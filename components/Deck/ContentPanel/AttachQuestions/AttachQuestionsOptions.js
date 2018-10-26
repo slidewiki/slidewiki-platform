@@ -94,7 +94,7 @@ class AttachQuestionsOptions extends React.Component {
                 <div className='ui field input'>
                     <label htmlFor='title' className='ui questions padded text'>Title</label>
                     <input id='title' type='text' placeholder='Title for Questions...' tabIndex="0" onChange={this.onChange.bind(this)} onBlur={this.onBlur.bind(this)}/>
-                    <div className='ui grey text' className='ui questions padded text grey'>Default title: Questions</div>
+                    <div className='ui questions padded text grey'>Default title: Questions</div>
                 </div>
                 <div className='ui questions padded vertical'>
                     <label htmlFor='qu_no' className='ui questions padded text'>Number questions</label>
@@ -119,7 +119,4 @@ AttachQuestionsOptions = connectToStores(AttachQuestionsOptions,[AttachQuestions
     };
 });
 
-
 export default AttachQuestionsOptions;
-
-
