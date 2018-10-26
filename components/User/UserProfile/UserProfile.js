@@ -119,8 +119,6 @@ class UserProfile extends React.Component {
                     case categories.ltis[1]:
                         return this.displayLTIedit();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             case 'stats':
                 return this.addScaffold(() => this.displayUserStats());
