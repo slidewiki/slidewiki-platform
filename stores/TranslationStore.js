@@ -8,7 +8,6 @@ class TranslationStore extends BaseStore {
         this.nodeVariants = [];
         this.currentLang = '';
         this.supportedLangs = translationLanguages;
-        this.inTranslationMode = false;
         this.originLanguage = '';
         this.nodeLanguage = '';
         this.treeLanguage = '';
@@ -20,7 +19,6 @@ class TranslationStore extends BaseStore {
             nodeVariants: this.nodeVariants,
             currentLang: this.currentLang,
             supportedLangs: this.supportedLangs,
-            inTranslationMode: this.inTranslationMode,
             originLanguage: this.originLanguage,
             nodeLanguage: this.nodeLanguage,
             treeLanguage: this.treeLanguage,
@@ -35,29 +33,10 @@ class TranslationStore extends BaseStore {
         this.nodeVariants = state.nodeVariants;
         this.currentLang = state.currentLang;
         this.supportedLangs = state.supportedLangs;
-        this.inTranslationMode = state.inTranslationMode;
         this.originLanguage = state.originLanguage;
         this.nodeLanguage = state.nodeLanguage;
         this.treeLanguage = state.treeLanguage;
         this.treeTranslations = state.treeTranslations;
-    }
-
-    recomputeTranslationMode() {
-        if (!this.currentLang) return false;
-
-        if (this.originLanguage) {
-            if (compareLanguageCodes(this.currentLang, this.originLanguage))
-                return false;
-            else
-                return true;
-        }
-        else if (this.translations.length) {
-            let translation = this.translations.find(this.current);
-            return this.translations.indexOf(this.currentLang) > -1;
-        }
-        else {
-            return false;
-        }
     }
 
     deckGotLoaded(data) {
@@ -103,9 +82,6 @@ class TranslationStore extends BaseStore {
         // update translations
         this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.substring(0, 2));
         this.nodeVariants = payload.translations;
-
-        // always recompute translation mode based on current language
-        this.inTranslationMode = this.recomputeTranslationMode();
 
         this.emitChange();
         // this.logState('translationsLoaded');
