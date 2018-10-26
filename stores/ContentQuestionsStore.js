@@ -8,6 +8,7 @@ class ContentQuestionsStore extends BaseStore {
         this.selector = {};
         this.questionsCount = 0;
         this.showAddBox = false;
+        this.downloadQuestions = [];
     }
     addQuestion(payload) {
         this.questions.push(payload.question);
@@ -62,13 +63,22 @@ class ContentQuestionsStore extends BaseStore {
         this.showAddBox = !this.showAddBox;
         this.emitChange();
     }
+    updateDownloadQuestions(payload){
+        if((payload.downloadQuestions===[])||(typeof payload.downloadQuestions === 'undefined')){
+            this.downloadQuestions = [];
+        }else{
+            this.downloadQuestions = payload.downloadQuestions;
+        }
+        this.emitChange();
+    }
     getState() {
         return {
             questions: this.questions,
             question: this.question,
             selector: this.selector,
             questionsCount: this.questionsCount,
-            showAddBox: this.showAddBox
+            showAddBox: this.showAddBox,
+            downloadQuestions: this.downloadQuestions,
         };
     }
     dehydrate() {
@@ -80,6 +90,7 @@ class ContentQuestionsStore extends BaseStore {
         this.selector = state.selector;
         this.questionsCount = state.questionsCount;
         this.showAddBox = state.showAddBox;
+        this.downloadQuestions = state.downloadQuestions;
     }
 }
 
@@ -92,7 +103,8 @@ ContentQuestionsStore.handlers = {
     'UPDATE_QUESTION': 'updateQuestion',
     'ADD_QUESTION': 'addQuestion',
     'DELETE_QUESTION': 'deleteQuestion',
-    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag'
+    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag',
+    'UPDATE_DOWNLOAD_QUESTIONS': 'updateDownloadQuestions'
 };
 
 export default ContentQuestionsStore;
