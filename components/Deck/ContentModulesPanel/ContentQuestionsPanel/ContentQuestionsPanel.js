@@ -125,7 +125,7 @@ class ContentQuestionsPanel extends React.Component {
                                 <div className="column">
                                     <h3 className="ui header">Questions</h3>
                                 </div>
-                                <div className="column right aligned" data-reactid={655}>
+                                <div className="column right aligned">
                                 {addQuestionButton}
                                 {downloadQuestionsButton}
                                 </div>
