@@ -163,8 +163,8 @@ class DownloadModal extends React.Component{
                               <Icon name='download' size='large'/>
                         </Button>
                         :
-                        <div aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
-                              <Icon name='download' size='large'/> Download
+                        <div className={this.props.className} aria-label="Download" data-tooltip="Download" onClick={this.handleOpen}>
+                            <span><Icon name='download' size='large'/> Download</span>
                         </div>
                   }
 
