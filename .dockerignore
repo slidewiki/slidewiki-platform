@@ -5,5 +5,3 @@ coverage
 configs/microservices.js
 configs/general.js
 configs/secrets.js
-
-node_modules
