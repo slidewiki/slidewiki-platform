@@ -21,6 +21,7 @@ import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
+import deckDeletion from '../../../../../actions/deckedit/deckDeletion';
 
 import {educationLevels} from '../../../../../lib/isced';
 import TagInput from '../../../ContentModulesPanel/TagsPanel/TagInput';
@@ -237,6 +238,60 @@ class DeckPropertiesEditor extends React.Component {
         }
     }
 
+    handleDelete(evt) {
+        evt.preventDefault();
+
+        if ( this.props.DeckEditStore.roots && this.props.DeckEditStore.roots.length < 1 ) {
+            // not used in other decks
+
+            if (this.state.editors.length < 1 && this.state.groups.length < 1) {
+                // no editors - could just be deleted
+                this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+            }
+            else {
+                // transfer ownership
+
+            }
+        }
+        else {
+            // is included as subdeck in one other deck and could not just deleted
+            // show modal with 2 options: delete and remove
+
+            const parentRootDecks = this.props.DeckEditStore.roots.map(deck => `<a href="${location.origin}/deck/${deck.id}" target="_blank">${deck.id}</a>`);
+            swal({
+                title: 'Deck is in use',
+                html: 'The deck you want to delete is used as a subdeck in the following decks: <br>'
+                    + parentRootDecks.join('<br>')
+                    + '<br><br>You could remove your deck as a subdeck from the listed ones or delete the deck complete which also removes it as subdeck.',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Remove as subdeck',
+                confirmButtonClass: 'ui button',
+                cancelButtonText: 'Delete whole deck',
+                cancelButtonClass: 'negative ui button',
+                allowEscapeKey: true,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+                .then((result) => {
+                    console.log(result);
+                    // confirm btn
+                    // remove deck as node from the parent deck
+                })
+                .catch(() => {
+                    // cancel btn
+                    if (this.state.editors.length < 1 && this.state.groups.length < 1) {
+                        // no editors - could just be deleted
+                        this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+                    }
+                    else {
+                        // transfer ownership
+
+                    }
+                });
+        }
+    }
+
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
@@ -392,6 +447,7 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
+        console.log('render edit: published and roots', this.state.published, this.props.DeckEditStore.roots);
         //CSS
         let titleFieldClass = classNames({
             'required': true,
@@ -484,6 +540,9 @@ class DeckPropertiesEditor extends React.Component {
             <div>
                 <button className='ui primary button'
                     onClick={this.handleSave.bind(this)}>Save
+                </button>
+                <button className='negative ui button'
+                    onClick={this.handleDelete.bind(this)}>Delete
                 </button>
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>

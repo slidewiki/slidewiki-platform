@@ -258,7 +258,13 @@ export default {
             // fetch the tags data
             let tagsPromise = deckPromise.then((deck) => fetchTagInfo(deck.tags));
 
-            Promise.all([deckPromise, tagsPromise]).then(([deck, tags]) => {
+            //fetch root decks
+            let rootsPromise = rp.get({
+                uri: Microservices.deck.uri + '/deck/' + args.sid.split('-')[0] + '/rootDecks',
+                json:true,
+            });
+
+            Promise.all([deckPromise, tagsPromise, rootsPromise]).then(([deck, tags, roots]) => {
                 // prepare users and groups from editors object
                 let {users, groups} = deck.editors || {};
                 if (!users) users = [];
@@ -291,6 +297,7 @@ export default {
 
                     callback(null, {
                         deckProps: deckProps,
+                        roots
                     });
                 });
             }).catch((err) => {
@@ -554,8 +561,23 @@ export default {
             })
             .catch((err) => callback(err));
         }
+    },
+    delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
+        if (resource === 'deck.delete') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.deck.uri + '/deck/' + params.id,
+                headers: { '----jwt----': params.jwt },
+                json: true
+            })
+            .then((body) => {
+                callback(null, body);
+            })
+            .catch((err) => callback(err));
+        }
     }
-    // delete: (req, resource, params, config, callback) => {}
 };
 
 function addSlugs(decks) {
