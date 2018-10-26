@@ -14,6 +14,7 @@ import ExamQuestionsList from './ExamQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
 import ContentQuestionEdit from './ContentQuestionEdit';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+import QuestionDownloadModal from './Download/QuestionDownloadModal';
 
 class ContentQuestionsPanel extends React.Component {
 
@@ -106,26 +107,34 @@ class ContentQuestionsPanel extends React.Component {
                 visibleQuestions.push(question);
             }
         });
+
         let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
                 Select exam questions
             </button> : '';
-        let editButtons = (editPermission) ?
-            <div className="column right aligned" data-reactid={655}>
+
+        let addQuestionButton =
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
-                    <i className="small plus icon" data-reactid={640} />
+                    <i className="small plus icon"/>
                     Add question
                 </button>
+        ;
+
+        let editButtons = (editPermission) ?
+            <div className="column right aligned">
+                {addQuestionButton}
                 {examQuestionsButton}
             </div>
             : '';
-        
+
+        let downloadQuestionsButton = <QuestionDownloadModal />;
+
         /*
         let addQuestionButton = (
-            <div className="column right aligned" data-reactid={655}>
+            <div className="column right aligned">
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
-                    <i className="small plus icon" data-reactid={640} />
+                    <i className="small plus icon"/>
                     Add question
                 </button>
             </div>
@@ -142,9 +151,9 @@ class ContentQuestionsPanel extends React.Component {
         */
 
         let questionsHeader = (
-            <div className="ui segment attached" data-reactid={636}>
-                <div className="ui bottom attached" data-reactid={637}>
-                    <div data-reactid={638}>
+            <div className="ui segment attached">
+                <div className="ui bottom attached">
+                    <div>
                         <div className="ui vertical segment">
                             <div className="ui two column stackable grid">
                                 <div className="column">

@@ -145,7 +145,7 @@ class ContentQuestionAdd extends React.Component {
             width: '680px',
         };
         return (
-            <div className="ui bottom attached" data-reactid="637">
+            <div className="ui bottom attached">
                 <div className="ui padded segment">
                     <form className="ui form" ref="questionadd_form">
                         <div className="two fields inline">

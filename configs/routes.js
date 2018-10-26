@@ -26,6 +26,7 @@ import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
+import chooseActionGroups from '../actions/usergroups/chooseActionGroups';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
@@ -288,6 +289,16 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
+    usergroup: {
+        path: '/usergroup/:id/:category?',
+        method: 'get',
+        page: 'usergroup',
+        title: 'SlideWiki -- User group',
+        handler: require('../components/UserGroups/UserGroupPage'),
+        action: (context, payload, done) => {
+            context.executeAction(chooseActionGroups, payload, done);
+        }
+    },
     userprofilereview: {
         path: '/Sfn87Pfew9Af09aM',
         method: 'get',
@@ -354,6 +365,16 @@ export default {
         }
     },
 
+    decklandingpage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?',
+        method: 'get',
+        handler: require('../components/Deck/DeckLandingPage'),
+        page: 'decklandingpage',
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
     // stype: 'type of selected content e.g. slide, deck or question',
@@ -375,9 +396,11 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
+
             context.executeAction(loadDeck, payload, done);
         }
     },
+
     oldSlugDeck: {
         path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
@@ -574,7 +597,7 @@ export default {
         path: '/infopanel/:id/:spath?',
         method: 'get',
         page: 'decktree',
-        handler: require('../components/Deck/InfoPanel/InfoPanel'),
+        handler: require('../components/Deck/InfoPanel/InfoPanelInfoView'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }

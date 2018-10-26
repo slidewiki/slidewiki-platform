@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {connectToStores} from 'fluxible-addons-react';
-import { navigateAction} from 'fluxible-router';
+import { connectToStores } from 'fluxible-addons-react';
+import { navigateAction } from 'fluxible-router';
 import { Microservices } from '../../configs/microservices';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
@@ -18,9 +18,10 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import LanguageDropdown from '../common/LanguageDropdown';
+import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
 import { Dropdown } from 'semantic-ui-react';
-import {FormattedMessage, defineMessages} from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import classNames from 'classnames';
 
 
@@ -57,8 +58,8 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.error !== null)
             this.showError();
     }
-    handleKeyPressUploadModal(event){
-        if(event.key === 'Enter'){
+    handleKeyPressUploadModal(event) {
+        if (event.key === 'Enter') {
             this.handleUploadModal(event);
         }
     }
@@ -67,8 +68,8 @@ class AddDeck extends React.Component {
 
         $('.ui.small.modal').modal('show');
     }
-    handleKeyPressAddDeck(event){
-        if(event.key === 'Enter'){
+    handleKeyPressAddDeck(event) {
+        if (event.key === 'Enter') {
             this.handleAddDeck(event);
         }
     }
@@ -85,8 +86,7 @@ class AddDeck extends React.Component {
         const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
-        //const tags = this.refs.input_tags.value.split(', ');
-        const tags = [];
+        const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
@@ -144,7 +144,7 @@ class AddDeck extends React.Component {
                 license: license,
                 tags: tags,
                 deckId: this.props.ImportStore.deckId,
-                selector: {id: this.props.ImportStore.deckId}
+                selector: { id: this.props.ImportStore.deckId }
             });
         }
     }
@@ -158,14 +158,14 @@ class AddDeck extends React.Component {
             url: '/'
         });
     }
-    handleRedirect(){
+    handleRedirect() {
         //console.log('AddDeck: handleRedirect()');
         this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
-    handleImportRedirect(){
+    handleImportRedirect() {
         this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/deck/' + this.props.ImportStore.deckId
@@ -173,31 +173,31 @@ class AddDeck extends React.Component {
     }
     updateProgressBar() {
         const progress_messages = defineMessages({
-            uploading:{
+            uploading: {
                 id: 'AddDeck.progress.uploading',
                 defaultMessage: 'Uploading file',
             },
-            converting:{
+            converting: {
                 id: 'AddDeck.progress.converting',
                 defaultMessage: 'Converting file',
             },
-            importing:{
+            importing: {
                 id: 'AddDeck.progress.importing',
                 defaultMessage: 'Importing slide ',
             },
-            of:{
+            of: {
                 id: 'AddDeck.progress.of',
                 defaultMessage: ' of ',
             },
-            uploaded:{
+            uploaded: {
                 id: 'AddDeck.progress.uploaded',
                 defaultMessage: 'Slides uploaded!',
             },
-            imported:{
+            imported: {
                 id: 'AddDeck.progress.imported',
                 defaultMessage: 'Imported ',
             },
-            slides:{
+            slides: {
                 id: 'AddDeck.progress.slides',
                 defaultMessage: ' slides',
             }
@@ -206,10 +206,10 @@ class AddDeck extends React.Component {
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
         let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? this.context.intl.formatMessage(progress_messages.uploading) :
-        (this.props.ImportStore.uploadProgress === 65) ? this.context.intl.formatMessage(progress_messages.converting) :
-        (this.props.ImportStore.uploadProgress !== 100) ? this.context.intl.formatMessage(progress_messages.importing) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides :
-        (noOfSlides === totalNoOfSlides) ? this.context.intl.formatMessage(progress_messages.uploaded) :
-        this.context.intl.formatMessage(progress_messages.imported) + noOfSlides  + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides + this.context.intl.formatMessage(progress_messages.slides);//this should not happen, but user should know in case it does
+            (this.props.ImportStore.uploadProgress === 65) ? this.context.intl.formatMessage(progress_messages.converting) :
+                (this.props.ImportStore.uploadProgress !== 100) ? this.context.intl.formatMessage(progress_messages.importing) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides :
+                    (noOfSlides === totalNoOfSlides) ? this.context.intl.formatMessage(progress_messages.uploaded) :
+                        this.context.intl.formatMessage(progress_messages.imported) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides + this.context.intl.formatMessage(progress_messages.slides);//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
 
         if (this.props.ImportStore.uploadProgress === 100) {
@@ -223,38 +223,38 @@ class AddDeck extends React.Component {
                     content_owner_id: String(this.props.UserProfileStore.userid),
                     content_kind: 'deck'
                 };
-                context.executeAction(addActivity, {activity: activity});
+                context.executeAction(addActivity, { activity: activity });
 
                 const success_messages = defineMessages({
-                    success_title_text:{
+                    success_title_text: {
                         id: 'AddDeck.swal.success_title_text',
                         defaultMessage: 'Deck created!',
                     },
-                    success_text:{
+                    success_text: {
                         id: 'AddDeck.swal.success_text',
                         defaultMessage: 'The selected file has been imported and a new deck has been created.',
                     },
-                    preview_text:{
+                    preview_text: {
                         id: 'AddDeck.swal.preview_text',
                         defaultMessage: 'Here is a preview of your slides. It may take a few seconds for the images to be created. You can use the tab key to move through the images.',
                     },
-                    success_text_extra:{
+                    success_text_extra: {
                         id: 'AddDeck.swal.success_text_extra',
                         defaultMessage: 'This new deck will not be visible to others in your decks page or in search results until published.',
                     },
-                    success_confirm_text:{
+                    success_confirm_text: {
                         id: 'AddDeck.swal.success_confirm_text',
                         defaultMessage: 'Complete import',
                     },
-                    success_reject_text:{
+                    success_reject_text: {
                         id: 'AddDeck.swal.success_reject_text',
                         defaultMessage: 'Try again',
                     },
-                    success_imported_slides_text:{
+                    success_imported_slides_text: {
                         id: 'AddDeck.swal.success_imported_slides_text',
                         defaultMessage: 'Imported slides:',
                     },
-                    success_publish_deck_text:{
+                    success_publish_deck_text: {
                         id: 'AddDeck.swal.success_publish_deck_text',
                         defaultMessage: 'Publish your deck for it to show in search results immediately (publishing occurs after a few seconds)',
                     }
@@ -267,14 +267,14 @@ class AddDeck extends React.Component {
                     '<div style="height: 260px;overflow: auto;" >' +
                     '<table><tr>';
                 let slides = this.props.ImportStore.slides;
-                for(let i = 0; i < slides.length; i++) {
+                for (let i = 0; i < slides.length; i++) {
                     let slide = slides[i];
-                    let thumbnailAlt = 'Slide ' + (i+1) + ': ';
+                    let thumbnailAlt = 'Slide ' + (i + 1) + ': ';
                     if (slide.title !== undefined)
-                        thumbnailAlt += slide.title ;
+                        thumbnailAlt += slide.title;
                     let thumbnailSrc = Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/' + (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
                     html += '<td style="padding: 15px;"><div style="width: 250px;" tabIndex="0">' +
-                        'Slide ' + (i+1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + thumbnailSrc + ' alt="' + thumbnailAlt + '" aria-hidden="true" />' +
+                        'Slide ' + (i + 1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + thumbnailSrc + ' alt="' + thumbnailAlt + '" aria-hidden="true" />' +
                         '</div></td>'; //THUMBNAIL
                 }
                 html += '</tr></table></div>';
@@ -292,7 +292,8 @@ class AddDeck extends React.Component {
                     confirmButtonClass: 'positive ui button',
                     cancelButtonText: this.context.intl.formatMessage(success_messages.success_reject_text),
                     cancelButtonClass: 'ui red button',
-                    buttonsStyling: false
+                    buttonsStyling: false,
+                    allowOutsideClick: false
                 }).then((accepted) => {
                     let checkboxPublish = $('#checkbox_publish')[0].checked;
                     if (checkboxPublish) {
@@ -328,15 +329,15 @@ class AddDeck extends React.Component {
                 });
             } else {
                 const error_messages = defineMessages({
-                    error_title_text:{
+                    error_title_text: {
                         id: 'AddDeck.swal.error_title_text',
                         defaultMessage: 'Error',
                     },
-                    error_text:{
+                    error_text: {
                         id: 'AddDeck.swal.error_text',
                         defaultMessage: 'There was a problem with importing this file. Please, try again.',
                     },
-                    error_confirm_text:{
+                    error_confirm_text: {
                         id: 'AddDeck.swal.error_confirm_text',
                         defaultMessage: 'Close',
                     }
@@ -363,11 +364,11 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('reset');
 
         const progress_messages = defineMessages({
-            uploaded:{
+            uploaded: {
                 id: 'AddDeck.progress.uploaded',
                 defaultMessage: 'Slides uploaded!',
             },
-            failed:{
+            failed: {
                 id: 'AddDeck.progress.failed',
                 defaultMessage: 'Upload failed!',
             }
@@ -376,8 +377,8 @@ class AddDeck extends React.Component {
             text: {
                 // active  : 'Uploading: {percent}%',
                 // active  : 'Importing: {percent}%',
-                success : this.context.intl.formatMessage(progress_messages.uploaded),
-                error   : this.context.intl.formatMessage(progress_messages.failed)
+                success: this.context.intl.formatMessage(progress_messages.uploaded),
+                error: this.context.intl.formatMessage(progress_messages.failed)
             }
         });
     }
@@ -385,7 +386,7 @@ class AddDeck extends React.Component {
         //update progress bar
         $('#progressbar_addDeck_upload').progress('set error');
     }
-    handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions){
+    handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions) {
         //console.log('handleFileSubmit()');
 
         this.context.executeAction(addDeckDeleteError, null);
@@ -485,22 +486,22 @@ class AddDeck extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
         */
-        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
-                <option value="default">White - Default</option>
-                <option value="beige">Cream</option>
-                <option value="black">Black</option>
-                <option value="league">Dark Grey</option>
-                <option value="sky">Pale Blue</option>
-                <option value="solarized">Beige</option>
-                <option value="moon">Dark Slate Blue</option>
-                <option value="night">High Contrast 1</option>
-                <option value="blood">High Contrast 2</option>
-                <option value="serif">Serif</option>
-                <option value="simple">Simple</option>
-                <option value="openuniversity">Open University</option>
-                <option value="odimadrid">ODI Madrid</option>
-                <option value="oeg">OEG</option>
-            </select>;
+        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme" ref="select_themes">
+            <option value="default">White - Default</option>
+            <option value="beige">Cream</option>
+            <option value="black">Black</option>
+            <option value="league">Dark Grey</option>
+            <option value="sky">Pale Blue</option>
+            <option value="solarized">Beige</option>
+            <option value="moon">Dark Slate Blue</option>
+            <option value="night">High Contrast 1</option>
+            <option value="blood">High Contrast 2</option>
+            <option value="serif">Serif</option>
+            <option value="simple">Simple</option>
+            <option value="openuniversity">Open University</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>
+        </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
         //   <option value="CC BY" >Creative Commons Attribution</option>
@@ -509,19 +510,19 @@ class AddDeck extends React.Component {
 
 
         const form_messages = defineMessages({
-            hint_title:{
+            hint_title: {
                 id: 'AddDeck.form.hint_title',
                 defaultMessage: 'Please enter a title.',
             },
-            hint_language:{
+            hint_language: {
                 id: 'AddDeck.form.hint_language',
                 defaultMessage: 'Please select a language.',
             },
-            selected_message:{
+            selected_message: {
                 id: 'AddDeck.form.selected_message',
                 defaultMessage: '(Selected for upload: {filename})',
             },
-            button_create:{
+            button_create: {
                 id: 'AddDeck.form.button_create',
                 defaultMessage: 'Create deck',
             }
@@ -535,8 +536,8 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.deckId !== null &&
             this.props.ImportStore.uploadProgress < 100 &&
             this.props.ImportStore.error === null) {
-            setTimeout( () => {
-                this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
+            setTimeout(() => {
+                this.context.executeAction(checkNoOfSlides, { id: this.props.ImportStore.deckId });
             }, 100);
         }
 
@@ -551,15 +552,15 @@ class AddDeck extends React.Component {
                 </div>
                 <div className="sixteen wide column">
                     <form className="ui form upload">
+                        <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                            <label htmlFor="title">
+                                <FormattedMessage
+                                    id='AddDeck.form.label_title'
+                                    defaultMessage='Title' />
+                            </label>
+                            <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                        </div>
                         <div className="two fields">
-                            <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
-                                <label htmlFor="title">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_title'
-                                        defaultMessage='Title' />
-                                </label>
-                                <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
-                            </div>
                             <div className={fieldClass_language}>
                                 <label htmlFor="language">
                                     <FormattedMessage
@@ -568,17 +569,6 @@ class AddDeck extends React.Component {
                                 </label>
                                 <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
                             </div>
-                        </div>
-
-                        <div className="field">
-                            <label htmlFor="deck-description" id="deck-description-label" >
-                                <FormattedMessage
-                                  id='AddDeck.form.label_description'
-                                  defaultMessage='Description' />
-                            </label>
-                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
-                        </div>
-                        <div className="two fields">
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
                                     <FormattedMessage
@@ -587,38 +577,72 @@ class AddDeck extends React.Component {
                                 </label>
                                 {themeOptions}
                             </div>
+                        </div>
+                        <div className="field">
+                            <label htmlFor="deck-description" id="deck-description-label" >
+                                <FormattedMessage
+                                    id='AddDeck.form.label_description'
+                                    defaultMessage='Description' />
+                            </label>
+                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
+                        </div>
+                        <div className="ui message" id="metadata">
+                            <p>
+                                <FormattedMessage
+                                    id='AddDeck.form.metadata'
+                                    values={{
+                                        link_help: <a href="/help" target="_blank">
+                                            <FormattedMessage id="add.help" defaultMessage="Help decks"/>
+                                        </a>
+                                    }}
+                                    defaultMessage='Please select from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
+                            </p>
+                        </div>
+                        <div className="two fields">
+                            <div className="sr-only" id="describe_level">Select education level of deck content</div>
+                            <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete. Multiple subjects can be selected"</div>
+                            <div className="sr-only" id="describe_tags">Add tags or keywords for your deck. Multiple tags can be provided.</div>
                             <div className="field">
                                 <label htmlFor="level_input" id="level-label">
-                                    <FormattedMessage id='DeckProperty.Education.Label' defaultMessage='Choose Education Level' /></label>
-                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-labelledby="level-label"
+                                    <FormattedMessage id='DeckProperty.Education.Choose' defaultMessage='Choose Education Level' /></label>
+                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-labelledby="level-label" aria-describedby="describe_level"
                                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                                     defaultValue={null} />
                             </div>
+                            <div className="field">
+                                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
+                                <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
+                            </div>
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
+                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.format_message'
-                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx, OpenOffice ODP, and SlideWiki HTML downloads (*.zip files) are supported.' />
+                                    defaultMessage='You can upload existing slides to your new deck in the following file formats: PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files) and RevealJS slideshows (*.zip files).' />
                             </p>
                         </div>
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
-                                   {/*
+                                    {/*
                                     <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
                                         <FormattedMessage
                                             id='AddDeck.form.button_select'
                                             defaultMessage='Select file' />
                                     </div>
                                     */}
-                                    <ImportModal/>
+                                    <ImportModal />
                                     {/*    <Import />*/}
 
                                 </div>
                                 <div className="column" ref="div_filename">
-                                    {filename ? this.context.intl.formatMessage(form_messages.selected_message, {filename: filename}) : ''}
+                                    {filename ? this.context.intl.formatMessage(form_messages.selected_message, { filename: filename }) : ''}
                                 </div>
                             </div>
                         </div>
