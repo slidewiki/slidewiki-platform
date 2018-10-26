@@ -102,16 +102,12 @@ class UserProfile extends React.Component {
                     case categories.settings[2]:
                         return this.displayIntegrations();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             case categories.categories[1]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
                         return this.displayGroups();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             case 'stats':
                 return this.addScaffold(() => this.displayUserStats());
@@ -245,15 +241,6 @@ class UserProfile extends React.Component {
 
     displayUserStats(){
         return (<UserStats userStats={this.props.UserStatsStore} />);
-    }
-
-    notImplemented() {
-        return (<h3>
-          <FormattedMessage
-            id='UserProfile.notImplemented'
-            defaultMessage='This feature is curently not implemented. Please wait for future releases of SlideWiki'
-          />
-        </h3>);
     }
 
     render() {
