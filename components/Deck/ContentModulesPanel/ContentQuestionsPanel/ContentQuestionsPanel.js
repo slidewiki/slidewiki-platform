@@ -14,6 +14,7 @@ import ContentQuestionAdd from './ContentQuestionAdd';
 import ContentQuestionEdit from './ContentQuestionEdit';
 // import ContentQuestionForm from './ContentQuestionForm';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+import QuestionDownloadModal from './Download/QuestionDownloadModal';
 
 class ContentQuestionsPanel extends React.Component {
 
@@ -96,6 +97,7 @@ class ContentQuestionsPanel extends React.Component {
                 </button>
             </div>
             : '');
+        let downloadQuestionsButton = <QuestionDownloadModal />;
 
         /*
         let addQuestionButton = (
@@ -123,8 +125,9 @@ class ContentQuestionsPanel extends React.Component {
                                 <div className="column">
                                     <h3 className="ui header">Questions</h3>
                                 </div>
-                                <div className="column right aligned" >
+                                <div className="column right aligned" data-reactid={655}>
                                 {addQuestionButton}
+                                {downloadQuestionsButton}
                                 </div>
                             </div>
                         </div>
