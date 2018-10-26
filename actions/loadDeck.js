@@ -1,5 +1,6 @@
 import async from 'async';
 import {shortTitle} from '../configs/general';
+import { isEmpty } from '../common.js';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
@@ -21,10 +22,10 @@ import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
+import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
-import validateUsedLanguage from './translation/validateUsedLanguage';
 import loadNodeTranslations from './translation/loadNodeTranslations';
 
 const log = require('./log/clog');
@@ -178,6 +179,18 @@ export default function loadDeck(context, payload, done) {
                 }
             },
             (callback) => {
+                if(runNonContentActions){
+                    const userId = context.getStore(UserProfileStore).getState().userid;
+                    if (userId !== undefined && userId !== null && userId !== '') {
+                        context.executeAction(getFollowing, {selector: payload.params, userId: userId, followed_type: 'deck'}, callback);
+                    } else {
+                        callback();
+                    }
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
                 if(runNonContentActions || languageWillChange){
                     //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
                     context.executeAction(loadContributors, payloadCustom, callback);
@@ -212,7 +225,7 @@ export default function loadDeck(context, payload, done) {
             // context.dispatch('UPDATE_PAGE_TITLE', {
             //     pageTitle: pageTitle
             // });
-            // context.executeAction(validateUsedLanguage, {language: payload.params.language});
+
             if (payload.query.interestedUser)
                 context.executeAction(fetchUser, {
                     params: {
@@ -232,6 +245,10 @@ export default function loadDeck(context, payload, done) {
                         content_id: payload.params.sid,
                         content_kind: payload.params.stype
                     };
+                    const contentRootId = payload.params.id;
+                    if (!isEmpty(contentRootId)) {
+                        activity.content_root_id = contentRootId;
+                    }
                     context.executeAction(addActivity, {activity: activity});
                 }
 

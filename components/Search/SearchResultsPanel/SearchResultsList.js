@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchResultsItem from './SearchResultsItem';
+import { Grid } from 'semantic-ui-react';
 
 class SearchResultsList extends React.Component {
     initAccordion(){
@@ -17,14 +18,15 @@ class SearchResultsList extends React.Component {
     }
     render() {
         let list = this.props.items.map((node, index) => {
+            node.index = index;
             return (
                 <SearchResultsItem key={index} data={node} />
             );
         });
         return (
-            <div className="ui accordion fluid">
+            <Grid verticalAlign="middle" className="items" role="list" aria-expanded="true">
                 {list}
-            </div>
+            </Grid>
         );
     }
 }
