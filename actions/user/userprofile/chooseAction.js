@@ -1,6 +1,6 @@
 import async from 'async';
 import fetchUser from './fetchUser';
-import { fetchUserDecks } from './fetchUserDecks';
+import fetchUserDecks from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
@@ -11,7 +11,7 @@ import loadUserStats from '../../stats/loadUserStats';
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview', 'edit'],
+    groups: ['overview'],
     decks: ['shared'],
 };
 
@@ -40,9 +40,6 @@ export function chooseAction(context, payload, done) {
             switch(payload.params.item){
                 case categories.groups[0]:
                     title += 'My Groups';
-                    break;
-                case categories.groups[1]:
-                    title += 'Create Group';
                     break;
                 default:
                     title = shortTitle;
