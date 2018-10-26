@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.1 - Header
+ * # Semantic UI 2.4.2 - Header
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -143,7 +143,7 @@ h4.ui.header {
   font-size: 1.25rem;
 }
 h5.ui.header {
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
 /* Sub Header */
@@ -181,7 +181,7 @@ h5.ui.header .sub.header {
   font-size: 1.25em;
 }
 .ui.tiny.header {
-  font-size: 1.125em;
+  font-size: 1em;
 }
 
 /* Sub Header */
