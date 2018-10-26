@@ -19,14 +19,28 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
+import MobileDetect from 'mobile-detect/mobile-detect';
+
+import {getEducationLevel} from '../../../../../lib/isced.js';
 
 class DeckViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {isMobile: false};
+    }
+
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();
         if (text.length > 25) {
             text = text.substr(0, 21) + '...';
         }
         return text;
+    }
+
+    componentDidMount() {
+        let userAgent = window.navigator.userAgent;
+        let mobile = new MobileDetect(userAgent);
+        this.setState({isMobile: (mobile.phone() !== null) ? true : false});
     }
 
     render() {
@@ -98,6 +112,7 @@ class DeckViewPanel extends React.Component {
         const lastUpdate = CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
+        const deckCreatorDisplayName = this.props.DeckViewStore.creatorData.displayName || deckCreator;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
         if (deckData.language) deckData.language = deckData.language.substring(0, 2);
@@ -119,6 +134,7 @@ class DeckViewPanel extends React.Component {
         const ownerProfileURL = '/user/' + deckOwner;
 
         const user = this.props.UserProfileStore.userid;
+        const deckTopics = deckData.topics || [];
 
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
                 <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>{/* TODO check if this URL is working with languages! */}
@@ -126,59 +142,82 @@ class DeckViewPanel extends React.Component {
 
         return (
             <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
-
                 <main role="main">
                     <div className="ui segment" style={heightStyle}>
-                        <div className="ui two column grid container">
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
-                            <div className="column">
-                                <div className="item">
-                                    <div className="content">
-                                        <h2 className="ui header">{deckTitle}
-                                            <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
-                                        </h2>
+                            <h2 className="ui header">{deckTitle}
+                                <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
+                            </h2>
+                        <div className="ui stackable grid container">
+                            <div className="two column row">
+                                <div className="column">
+                                    <div className="item">
                                         <div className="meta"><strong>Creator:&nbsp;</strong>
-                                            <NavLink href={creatorProfileURL}>{this.props.DeckViewStore.creatorData.displayName}</NavLink>
+                                            <NavLink href={creatorProfileURL}>{deckCreatorDisplayName}</NavLink>
                                         </div>
                                         {originInfo}
                                         <div className="meta"><strong>Last Modified:&nbsp;</strong>{lastUpdate}</div>
-                                        {deckDescription &&
-                                            <div className="meta"><strong>Description:</strong>
-                                                <div className="description" tabIndex="0" >{deckDescription}</div>
-                                            </div>
-                                        }
+                                    </div>
+                                </div>
+                                <div className="column">
+                                    <div className="sr-only">"Deck metadata"</div>
+                                    <div className="row">
+                                               <div className="ui medium labels" >
+                                                <div className="ui label" >
+                                                    <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
+                                                </div>
+                                                <div className="ui label" >
+                                                    <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
+                                                </div>
+                                                { deckData.educationLevel &&
+                                                <div className="ui label" >
+                                                    <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(deckData.educationLevel)}
+                                                </div>
+                                                }
+                                                </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="ui medium labels">
+                                                <div className="ui label" >
+                                                    <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
+                                                <div className="ui label" >
+                                                    <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
+                                                <div className="ui label" >
+                                                    <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
+                                                <div className="ui label" >
+                                                    <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="column">
-
-                                <div className="ui hidden divider"></div>
-                                <div className="row">
-                                    <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="comments icon" aria-label="Default language"></i>{deckLanguage}
-                                        </div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
+                            <div className="row" >
+                                { deckDescription &&
+                                    <div className="item">
+                                        <div className="meta"><strong>Description:</strong>
+                                            <div className="description" >{deckDescription}</div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="row">
-                                    <div className="ui labels">
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
-                                        <div className="ui label" tabIndex="0">
-                                            <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
+                                }
+                            </div>
+                            <div className="row" >
+                                { deckTopics.length > 0 &&
+                                    <div className="item">
+                                        <div className="meta"><strong>Subject:&nbsp;</strong>
+                                            <div className="description">
+                                            { deckTopics.map((t, i) => 
+                                                <span key={i}>
+                                                    { !!i && ',\xa0' }
+                                                    <a target="_blank" href={`/deckfamily/${t.tagName}`}>{t.defaultName || t.tagName}</a>
+                                                </span>
+                                            ) }
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
-                        <div className="ui divider"></div>
+                        <div className="ui section divider"></div>
                         <div key={this.props.slideIndex} className="ui container three cards">
                             {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                             {slidesArr.map((slide, index) => {
@@ -187,9 +226,9 @@ class DeckViewPanel extends React.Component {
                                 if (slide.theme) {
                                     thumbnailURL += '/' + slide.theme;
                                 }
-                                if (index < maxSlideThumbnails) {
+                                if (this.state.isMobile) {
                                     const slideURL = Util.makeNodeURL({
-                                        id: this.props.selector.id,
+                                        id: this.props.selector ? this.props.selector.id : deckData.id,
                                         stype: 'slide',
                                         sid: slide.id
                                     }, 'deck', '', this.props.deckSlug);
@@ -198,6 +237,21 @@ class DeckViewPanel extends React.Component {
                                             <a href={slideURL} className="ui image"
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
+                                            </a>
+                                        </div>
+                                    );
+                                }
+                                else if (index < maxSlideThumbnails) {
+                                    const slideURL = Util.makeNodeURL({
+                                        id: this.props.selector ? this.props.selector.id : deckData.id,
+                                        stype: 'slide',
+                                        sid: slide.id
+                                    }, 'deck', '', this.props.deckSlug);
+                                    return (
+                                        <div key={index} className="ui card">
+                                            <a href={slideURL} className="ui image"
+                                               tabIndex="-1">
+                                                <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1} aria-hidden="true"/>
                                             </a>
                                             <div className="content" tabIndex="-1">
                                                 <a href={slideURL}

@@ -3,6 +3,7 @@ import log from  '../log/clog';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivities from '../activityfeed/addActivities';
 import addActivity from '../activityfeed/addActivity';
+import { isEmpty } from '../../common.js';
 
 export default function addTreeNodeList(context, payload, done) {
     log.info(context);
@@ -17,15 +18,20 @@ export default function addTreeNodeList(context, payload, done) {
             } else {
                 context.dispatch('ADD_TREE_NODELIST_SUCCESS', res);
                 let activityType = (payload.attach) ? 'attach' : 'add';
+                const contentRootId = payload.selector.id;
+                
                 if(Array.isArray(res.node)){ //More than one slide/deck was added
                     let activities = res.node.map((node) => {
-                        return {
+                        let activity = {
                             activity_type: activityType,
                             user_id: String(context.getStore(UserProfileStore).userid),
                             content_id: String(node.id),
                             content_kind: node.type
                         };
-
+                        if (!isEmpty(contentRootId)) {
+                            activity.content_root_id = contentRootId;
+                        }
+                        return activity;
                     });
                     context.executeAction(addActivities, {activities: activities});
                 } else {  //Only a slide/deck was added
@@ -34,7 +40,10 @@ export default function addTreeNodeList(context, payload, done) {
                         user_id: String(userid),
                         content_id: String(res.node.id),
                         content_kind: res.node.type
-                    };
+                    };                    
+                    if (!isEmpty(contentRootId)) {
+                        activity.content_root_id = contentRootId;
+                    }
                     context.executeAction(addActivity, {activity: activity});
                 }
 

@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Table
+ * # Semantic UI 2.4.2 - Table
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -22,7 +22,7 @@
   border: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-box-shadow: none;
           box-shadow: none;
-  border-radius: 0.28571429rem;
+  border-radius: 0.25rem;
   text-align: left;
   color: rgba(0, 0, 0, 0.87);
   border-collapse: separate;
@@ -58,7 +58,7 @@
   background: #F9FAFB;
   text-align: inherit;
   color: rgba(0, 0, 0, 0.87);
-  padding: 0.92857143em 0.71428571em;
+  padding: 0.9375em 0.6875em;
   vertical-align: inherit;
   font-style: none;
   font-weight: bold;
@@ -70,13 +70,13 @@
   border-left: none;
 }
 .ui.table thead tr:first-child > th:first-child {
-  border-radius: 0.28571429rem 0em 0em 0em;
+  border-radius: 0.25rem 0em 0em 0em;
 }
 .ui.table thead tr:first-child > th:last-child {
-  border-radius: 0em 0.28571429rem 0em 0em;
+  border-radius: 0em 0.25rem 0em 0em;
 }
 .ui.table thead tr:first-child > th:only-child {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0.25rem 0.25rem 0em 0em;
 }
 
 /* Footer */
@@ -90,7 +90,7 @@
   background: #F9FAFB;
   text-align: inherit;
   color: rgba(0, 0, 0, 0.87);
-  padding: 0.71428571em 0.71428571em;
+  padding: 0.6875em 0.6875em;
   vertical-align: middle;
   font-style: normal;
   font-weight: normal;
@@ -100,13 +100,13 @@
   border-left: none;
 }
 .ui.table tfoot tr:first-child > th:first-child {
-  border-radius: 0em 0em 0em 0.28571429rem;
+  border-radius: 0em 0em 0em 0.25rem;
 }
 .ui.table tfoot tr:first-child > th:last-child {
-  border-radius: 0em 0em 0.28571429rem 0em;
+  border-radius: 0em 0em 0.25rem 0em;
 }
 .ui.table tfoot tr:first-child > th:only-child {
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0.25rem 0.25rem;
 }
 
 /* Table Row */
@@ -124,7 +124,7 @@
 
 /* Table Cells */
 .ui.table td {
-  padding: 0.71428571em 0.71428571em;
+  padding: 0.6875em 0.6875em;
   text-align: inherit;
 }
 
@@ -308,13 +308,13 @@
 
 .ui.table tr.positive,
 .ui.table td.positive {
-  -webkit-box-shadow: 0px 0px 0px #146726 inset;
-          box-shadow: 0px 0px 0px #146726 inset;
+  -webkit-box-shadow: 0px 0px 0px #265326 inset;
+          box-shadow: 0px 0px 0px #265326 inset;
 }
 .ui.table tr.positive,
 .ui.table td.positive {
   background: #FCFFF5 !important;
-  color: #146726 !important;
+  color: #265326 !important;
 }
 
 /*--------------
@@ -353,8 +353,8 @@
 
 .ui.table tr.warning,
 .ui.table td.warning {
-  -webkit-box-shadow: 0px 0px 0px #984810 inset;
-          box-shadow: 0px 0px 0px #984810 inset;
+  -webkit-box-shadow: 0px 0px 0px #8E380A inset;
+          box-shadow: 0px 0px 0px #8E380A inset;
 }
 .ui.table tr.warning,
 .ui.table td.warning {
@@ -518,7 +518,7 @@
 .ui.table tbody tr td.selectable > a:not(.ui) {
   display: block;
   color: inherit;
-  padding: 0.71428571em 0.71428571em;
+  padding: 0.6875em 0.6875em;
 }
 
 /* Other States */
@@ -544,7 +544,7 @@
 .ui.table tr td.selectable.positive:hover,
 .ui.selectable.table tr:hover td.positive {
   background: #f7ffe6 !important;
-  color: #125a21 !important;
+  color: #214921 !important;
 }
 .ui.selectable.table tr.negative:hover,
 .ui.table tr td.selectable.negative:hover,
@@ -580,7 +580,7 @@
   margin-bottom: 0em;
   top: 0px;
   margin-top: 1em;
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0.25rem 0.25rem 0em 0em;
 }
 .ui.table[class*="top attached"]:first-child {
   margin-top: 0em;
@@ -594,7 +594,7 @@
   margin-bottom: 1em;
   -webkit-box-shadow: none, none;
           box-shadow: none, none;
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0.25rem 0.25rem;
 }
 .ui[class*="bottom attached"].table:last-child {
   margin-bottom: 0em;
@@ -643,19 +643,19 @@
 
 /* Red */
 .ui.red.table {
-  border-top: 0.2em solid #DB2828;
+  border-top: 0.2em solid #C42424;
 }
 .ui.inverted.red.table {
-  background-color: #DB2828 !important;
+  background-color: #C42424 !important;
   color: #FFFFFF !important;
 }
 
 /* Orange */
 .ui.orange.table {
-  border-top: 0.2em solid #DA6619;
+  border-top: 0.2em solid #CA5010;
 }
 .ui.inverted.orange.table {
-  background-color: #DA6619 !important;
+  background-color: #CA5010 !important;
   color: #FFFFFF !important;
 }
 
@@ -679,10 +679,10 @@
 
 /* Green */
 .ui.green.table {
-  border-top: 0.2em solid #188130;
+  border-top: 0.2em solid #158538;
 }
 .ui.inverted.green.table {
-  background-color: #188130 !important;
+  background-color: #158538 !important;
   color: #FFFFFF !important;
 }
 
@@ -724,10 +724,10 @@
 
 /* Pink */
 .ui.pink.table {
-  border-top: 0.2em solid #E03997;
+  border-top: 0.2em solid #8B2527;
 }
 .ui.inverted.pink.table {
-  background-color: #E03997 !important;
+  background-color: #8B2527 !important;
   color: #FFFFFF !important;
 }
 
