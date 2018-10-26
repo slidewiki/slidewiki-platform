@@ -4,7 +4,7 @@ class ExamItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ExamAnswersList questionIndex={this.props.questionIndex} items={question.answers} showCorrectAnswers={this.props.showCorrectAnswers} explanation={question.explanation}/>
+            <ExamAnswersList originalQIndex={question.originalQIndex} questionIndex={this.props.questionIndex} items={question.answers} showCorrectAnswers={this.props.showCorrectAnswers} explanation={question.explanation}/>
         );
 
         let difficultyStars = (difficulty) => {

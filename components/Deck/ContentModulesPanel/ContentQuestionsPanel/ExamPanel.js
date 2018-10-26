@@ -37,6 +37,7 @@ class ExamPanel extends React.Component {
         let examQuestions = [];
         questions.forEach((question) => {
             if (question.isExamQuestion) {
+                question.originalQIndex = questions.indexOf(question);
                 examQuestions.push(question);
             }
         });
