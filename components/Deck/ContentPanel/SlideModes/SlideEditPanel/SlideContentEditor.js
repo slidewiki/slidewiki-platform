@@ -1966,15 +1966,30 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
+                    //give surrounding div the width and height of its child Iframe element
+                    if ($('#'+uniqueID + ' > iframe').css('width') !== ''){
+                        $('#'+ uniqueID).css('width', $('#'+uniqueID + ' > iframe').css('width'));
+                    } else {
+                        $('#'+ uniqueID).css('width', nextProps.SlideEditStore.embedWidth);
+                    }
+                    if ($('#'+uniqueID + ' > iframe').css('height') !== ''){
+                        $('#'+ uniqueID).css('height', $('#'+uniqueID + ' > iframe').css('height'));
+                    } else {
+                        $('#'+ uniqueID).css('height', nextProps.SlideEditStore.embedHeight);
+                    }
+                    //Overwrite Iframe title with title entered in slide edit left panel to improve accessbility
+                    $('#'+uniqueID + ' > iframe').attr('title', nextProps.SlideEditStore.embedTitle);
                     this.correctDimensionsBoxesIframe();
 
                 } else { //if slide is in non-canvas mode
-                    this.refs.inlineContent.innerHTML += nextProps.SlideEditStore.embedCode;
+                    this.refs.inlineContent.innerHTML += '<div id="'+uniqueID+'">' + nextProps.SlideEditStore.embedCode + '</div>';
+                    //Overwrite Iframe title with title entered in slide edit left panel to improve accessbility
+                    $('#'+uniqueID + ' > iframe').attr('title', nextProps.SlideEditStore.embedTitle);
                 }
                 this.hasChanges = true;
             }
             else {
-                let iframe = '<iframe src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'" height="'+nextProps.SlideEditStore.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
+                let iframe = '<iframe title="'+nextProps.SlideEditStore.embedTitle+'" src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'px" height="'+nextProps.SlideEditStore.embedHeight+'px" frameborder="0" allow="encrypted-media"></iframe>';
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
