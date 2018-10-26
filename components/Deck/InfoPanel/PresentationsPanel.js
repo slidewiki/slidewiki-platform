@@ -151,8 +151,13 @@ class PresentationsPanel extends React.Component {
             overflowY: 'auto'
         };
 
-        return (
-            <div ref="presentationPanel">
+        let toReturn;
+        if(this.props.deckPage)
+            toReturn = <Button icon size="huge" aria-label="Start Live Presentation" data-tooltip="Start Live Presentation" role="button" onClick={this.openChooseASessionModal.bind(this)}>
+                <Icon name="record" />
+            </Button>;
+        else
+            toReturn = <div ref="presentationPanel">
                 <Icon name="warning sign" color="yellow"/><span className="ui small header" tabIndex="0"> Beta feature</span>
                 <div className="ui basic segment" style={panelDIVStyles}>
                     <Grid columns={2}>
@@ -178,6 +183,10 @@ class PresentationsPanel extends React.Component {
                         }
                     </div>
                 </div>
+            </div>;
+
+        return (<div>
+            {toReturn}
             </div>
         );
     }

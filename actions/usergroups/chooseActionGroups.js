@@ -1,15 +1,18 @@
 import async from 'async';
 import UserProfileStore from '../../stores/UserProfileStore';
+import UserGroupsStore from '../../stores/UserGroupsStore';
 import updateUsergroup from './updateUsergroup';
 import fetchGroupDecks from './fetchGroupDecks';
 import fetchUser from '../user/userprofile/fetchUser';
 import notFoundError from '../error/notFoundError';
 const log = require('../log/clog');
 import loadGroupCollections from '../collections/loadGroupCollections';
+import loadGroupStats from '../stats/loadGroupStats';
+
 import { shortTitle } from '../../configs/general';
 
 export const categories = {
-    categories: ['settings', 'decks', 'playlists']
+    categories: ['settings', 'decks', 'playlists', 'stats']
 };
 
 export default function chooseActionGroups(context, payload, done) {
@@ -26,6 +29,9 @@ export default function chooseActionGroups(context, payload, done) {
             break;
         case categories.categories[2]:
             title += 'Playlists of user group';
+            break;
+        case categories.categories[3]:
+            title += 'User Group Stats';
             break;
         default:
             title = shortTitle;
@@ -47,6 +53,9 @@ export default function chooseActionGroups(context, payload, done) {
             callback();
         },
         (callback) => {
+            let group = context.getStore(UserGroupsStore).currentUsergroup;
+            let userid = context.getStore(UserProfileStore).userid;
+            const isCreator = group.creator && group.creator.userid === userid;
             switch (payload.params.category) {
                 case categories.categories[0]:
 
@@ -61,6 +70,13 @@ export default function chooseActionGroups(context, payload, done) {
                     break;
                 case categories.categories[2]:
                     context.executeAction(loadGroupCollections, {groupid: payload.params.id}, callback);
+                    break;
+                case categories.categories[3]:
+                    if(!isCreator) {
+                        context.executeAction(notFoundError, {}, callback);
+                        break;
+                    }
+                    context.executeAction(loadGroupStats, {groupid: payload.params.id}, callback);
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);
