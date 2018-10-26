@@ -82,7 +82,9 @@ class QuestionDownloadModal extends React.Component{
         let file = new Blob([downloadContent], {type: 'text/string'});
         element.href = URL.createObjectURL(file);
         element.download = 'questions.json';
+        document.body.appendChild(element);
         element.click();
+        document.body.removeChild(element);
 
         this.handleClose();
     }
