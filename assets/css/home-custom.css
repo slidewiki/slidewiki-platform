@@ -585,15 +585,27 @@ textarea:focus{
     color: #1e78bb;
     border: 3px solid #1e78bb;
 }
+.feature-content.blue-block-terms {
+    color: #1e78bb;
+    border: 3px solid #1e78bb;
+}
 .feature-content.green-block {
     color: #158570;
     border: 3px solid #158570;
     border-left: none;
 }
+.feature-content.green-block-terms {
+    color: #158570;
+    border: 3px solid #158570;
+}
 .feature-content.red-block {
     color: #991C1C;
     border: 3px solid #991C1C;
     border-left: none;
+}
+.feature-content.red-block-terms {
+    color: #991C1C;
+    border: 3px solid #991C1C;
 }
 .feature-content p{
     font-size: 1.25rem;
@@ -602,10 +614,19 @@ textarea:focus{
 .feature-content.blue-block p {
     color: #1e78bb;
 }
+.feature-content.blue-block-terms p {
+    color: #1e78bb;
+}
 .feature-content.green-block p {
     color: #158570;
 }
+.feature-content.green-block-terms p {
+    color: #158570;
+}
 .feature-content.red-block p {
+    color: #991C1C;
+}
+.feature-content.red-block-terms p {
     color: #991C1C;
 }
 .feature-block .ui.grid > .column:not(.row),

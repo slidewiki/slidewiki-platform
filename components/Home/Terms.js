@@ -213,7 +213,7 @@ class terms extends React.Component {
                         </div>
                     </div>
                     <div className='four wide column'>
-                        <div className='feature-content blue-block'>
+                        <div className='feature-content blue-block-terms'>
                             <div className='feature-left'>
                                 <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
                                 <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
@@ -225,7 +225,7 @@ class terms extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className='feature-content green-block'>
+                        <div className='feature-content green-block-terms'>
                             <div className='feature-left'>
                                 <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
                                 <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
@@ -237,7 +237,7 @@ class terms extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className='feature-content red-block'>
+                        <div className='feature-content red-block-terms'>
                             <div className='feature-left'>
                                 <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
                                 <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
