@@ -193,6 +193,192 @@ export default {
                 json: true
             }).then((response) => callback(null, response))
               .catch((err) => callback(err));
+        } else if (resource === 'stats.userEngagement') {
+
+            let promises = [];
+            let pipeline_active_engagement = [
+                {
+                    "$match": {
+                        "statement.verb.id": {
+                            "$in": [
+                                "https://w3id.org/xapi/acrossx/verbs/edited",
+                                "http://activitystrea.ms/schema/1.0/create",
+                                "https://w3id.org/xapi/acrossx/verbs/forked",
+                                "https://brindlewaye.com/xAPITerms/verbs/added"
+                            ]
+                        },
+                        "statement.actor.account.name": username
+                    }
+                },
+                {
+                    "$project": {
+                        "user": "$statement.actor.account.name"
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": "$user",
+                        "count": {
+                            "$sum": 1
+                        }
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": false,
+                        "value": "$_id",
+                        "count": true
+                    }
+                },
+                {
+                    "$sort": {
+                        "count": -1
+                    }
+                },
+                {
+                    "$limit": 1
+                }
+            ];
+
+            let pipeline_passive_engagement = [
+                {
+                    "$match": {
+                        "statement.verb.id": {
+                            "$in": [
+                                "http://adlnet.gov/expapi/verbs/experienced",
+                                "https://w3id.org/xapi/acrossx/verbs/liked",
+                                "https://w3id.org/xapi/acrossx/verbs/downloaded"
+                            ]
+                        },
+                        "statement.actor.account.name": username
+                    }
+                },
+                {
+                    "$project": {
+                        "user": "$statement.actor.account.name"
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": "$user",
+                        "count": {
+                            "$sum": 1
+                        }
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": false,
+                        "value": "$_id",
+                        "count": true
+                    }
+                },
+                {
+                    "$sort": {
+                        "count": -1
+                    }
+                },
+                {
+                    "$limit": 1
+                }
+            ];
+
+            let pipeline_social_engagement = [
+                {
+                    "$match": {
+                        "statement.verb.id": {
+                            "$in": [
+                                "https://w3id.org/xapi/acrossx/verbs/shared",
+                                "http://adlnet.gov/expapi/verbs/commented",
+                                "https://w3id.org/xapi/acrossx/verbs/replied"
+                            ]
+                        },
+                        "statement.actor.account.name": username
+                    }
+                },
+                {
+                    "$project": {
+                        "user": "$statement.actor.account.name"
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": "$user",
+                        "count": {
+                            "$sum": 1
+                        }
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": false,
+                        "value": "$_id",
+                        "count": true
+                    }
+                },
+                {
+                    "$sort": {
+                        "count": -1
+                    }
+                },
+                {
+                    "$limit": 1
+                }
+            ];
+
+            promises.push(rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline_active_engagement),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => {
+                return {"active_engagement" : response[0].count};
+            })
+              .catch((err) => callback(err))
+            );
+
+            promises.push(rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline_passive_engagement),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => {
+                return {"passive_engagement" : response[0].count};
+            })
+              .catch((err) => callback(err))
+            );
+
+            promises.push(rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline_social_engagement),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => {
+                return {"social_engagement" : response[0].count};
+            })
+              .catch((err) => callback(err))
+            );
+            Promise.all(promises).then(function(values) {
+                  // console.log("all", values);
+                  let toReturn = [];
+                  values.forEach(function(value){
+                    if(value)
+                        toReturn.push(value);
+                        //console.log("all", value);
+
+                  });
+                  callback(null, toReturn);
+                });  
+            
         } else if (resource === 'stats.groupMembersStats') {
             let memberUsernames;
             rp.post({
