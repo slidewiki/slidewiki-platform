@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.0 - Grid
+ * # Semantic UI 2.4.2 - Grid
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -1424,7 +1424,7 @@
 .ui.grid > .pink.row,
 .ui.grid > .pink.column,
 .ui.grid > .row > .pink.column {
-  background-color: #E03997 !important;
+  background-color: #8B2527 !important;
   color: #FFFFFF;
 }
 

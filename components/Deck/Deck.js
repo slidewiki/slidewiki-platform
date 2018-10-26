@@ -14,47 +14,12 @@ import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 //import ServiceUnavailable from '../Error/ServiceUnavailable';//NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory
-import InfoPanel from './InfoPanel/InfoPanel';
+import InfoPanelInfoView from './InfoPanel/InfoPanelInfoView';
 import TranslationStore from '../../stores/TranslationStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
 class Deck extends React.Component {
-    componentWillReceiveProps(nextProps) {
-        // console.log('Deck componentWillReceiveProps from', this.props.TranslationStore.invalidLanguage, 'to', nextProps.TranslationStore.invalidLanguage);
-        if (!this.props.TranslationStore.invalidLanguage && nextProps.TranslationStore.invalidLanguage)
-            this.showInvalidLanguageModal();
-    }
-    componentDidMount() {
-        // console.log('Deck componentDidMount invalidLanguage?', this.props.TranslationStore.invalidLanguage);
-        if (this.props.TranslationStore.invalidLanguage)
-            this.showInvalidLanguageModal();
-    }
-    showInvalidLanguageModal() {
-        const messages = defineMessages({
-            error: {
-                id: 'Deck.error',
-                defaultMessage: 'Error',
-            },
-            invalidLanguage: {
-                id: 'Deck.invalidLanguage',
-                defaultMessage: 'The language you choosed is not available for this deck. Either the language code is misspelled or you have to add this new language as a translation to the deck.',
-            },
-            close: {
-                id: 'Deck.close',
-                defaultMessage: 'Close',
-            }
-        });
-        swal({
-            title: this.context.intl.formatMessage(messages.error),
-            text: this.context.intl.formatMessage(messages.invalidLanguage),
-            type: 'error',
-            confirmButtonText: this.context.intl.formatMessage(messages.close),
-            confirmButtonClass: 'negative ui button',
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            buttonsStyling: false
-        });
-    }
+
     handleExpandClick(){
         this.context.executeAction(hideLeftColumn, {});
         return false;
@@ -222,8 +187,10 @@ class Deck extends React.Component {
                                       <div className="ui hidden divider"></div>
                                     </div>
                                     <div className="mobile only sixteen wide column">
-                                          <NavigationPanel/>
-                                          <div className="ui hidden divider"></div>
+                                        <div className="ui segments">
+                                            <NavigationPanel lastAttached={true} />
+                                        </div>
+                                        <div className="ui hidden divider"></div>
                                     </div>
                                   </div>
                                 </div>;
@@ -245,7 +212,7 @@ class Deck extends React.Component {
                 rightPanel = (
                   <div className={rightColClass}>
                       <div className={treePanelClass}>
-                          <InfoPanel />
+                          <InfoPanelInfoView />
                       </div>
 
                       <div className="ui hidden divider"></div>

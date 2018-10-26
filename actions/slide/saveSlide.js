@@ -5,6 +5,7 @@ import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../log/clog');
 import addActivity from '../activityfeed/addActivity';
 import {navigateAction} from 'fluxible-router';
+import { isEmpty } from '../../common.js';
 import Util from '../../components/common/Util';
 
 export default function saveSlide(context, payload, done) {
@@ -50,6 +51,10 @@ export default function saveSlide(context, payload, done) {
                     content_id: String(res.slide.id),
                     content_kind: 'slide'
                 };
+                const contentRootId = payload.selector.id;
+                if (!isEmpty(contentRootId)) {
+                    activity.content_root_id = contentRootId;
+                }
                 context.executeAction(addActivity, {activity: activity});
             }
 

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getIntlLanguage } from '../../../common.js';
+import {getIntlLanguage} from '../../../common.js';
 import CategoryBox from './CategoryBox';
 import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
@@ -8,13 +8,15 @@ import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
-import UserGroupEdit from './UserGroupEdit';
-import { connectToStores } from 'fluxible-addons-react';
+import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import UserStatsStore from '../../../stores/UserStatsStore';
+import UserGroupsStore from '../../../stores/UserGroupsStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { categories } from '../../../actions/user/userprofile/chooseAction';
+import {defineMessages, FormattedMessage} from 'react-intl';
+import {categories} from '../../../actions/user/userprofile/chooseAction';
+import UserStats from './UserStats';
 
 let MediaQuery = require ('react-responsive');
 
@@ -100,20 +102,15 @@ class UserProfile extends React.Component {
                     case categories.settings[2]:
                         return this.displayIntegrations();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             case categories.categories[1]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
                         return this.displayGroups();
                         break;
-                    case categories.groups[1]:
-                        return this.displayGroupedit();
-                        break;
-                    default:
-                        return this.notImplemented();
                 }});
+            case 'stats':
+                return this.addScaffold(() => this.displayUserStats());
             default:
                 return this.displayUserProfile();
         };
@@ -220,7 +217,16 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} decksMeta={this.props.UserProfileStore.userDecksMeta} loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading} loadMoreError={this.props.UserProfileStore.nextUserDecksError} loggedinuser={this.props.UserProfileStore.username} loggedinUserId={this.props.UserProfileStore.userid} category={this.props.UserProfileStore.category} categoryItem={this.props.UserProfileStore.categoryItem} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user}
+                                          decks={this.props.UserProfileStore.userDecks}
+                                          decksMeta={this.props.UserProfileStore.userDecksMeta}
+                                          loadMoreLoading={this.props.UserProfileStore.nextUserDecksLoading}
+                                          loadMoreError={this.props.UserProfileStore.nextUserDecksError}
+                                          loggedinuser={this.props.UserProfileStore.username}
+                                          loggedinUserId={this.props.UserProfileStore.userid}
+                                          category={this.props.UserProfileStore.category}
+                                          categoryItem={this.props.UserProfileStore.categoryItem}
+                                          />);
     }
 
     displayIntegrations() {
@@ -230,20 +236,11 @@ class UserProfile extends React.Component {
     }
 
     displayGroups() {
-        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserGroupsStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
     }
 
-    displayGroupedit() {
-        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} displayName={this.props.UserProfileStore.user.displayName} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
-    }
-
-    notImplemented() {
-        return (<h3>
-          <FormattedMessage
-            id='UserProfile.notImplemented'
-            defaultMessage='This feature is curently not implemented. Please wait for future releases of SlideWiki'
-          />
-        </h3>);
+    displayUserStats(){
+        return (<UserStats userStats={this.props.UserStatsStore} />);
     }
 
     render() {
@@ -256,10 +253,12 @@ UserProfile.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {
+UserProfile = connectToStores(UserProfile, [UserProfileStore, UserStatsStore, UserGroupsStore, IntlStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        IntlStore: context.getStore(IntlStore).getState()
+        UserStatsStore: context.getStore(UserStatsStore).getState(),
+        UserGroupsStore: context.getStore(UserGroupsStore).getState(),
+        IntlStore: context.getStore(IntlStore).getState(),
     };
 });
 

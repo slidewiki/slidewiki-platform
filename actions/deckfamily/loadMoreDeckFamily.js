@@ -5,9 +5,8 @@ import serviceUnavailable from '../error/serviceUnavailable';
 export default function loadMoreDeckFamily(context, payload, done) {
     log.info(context);
 
-    // form appropriate search query params
-    payload.params.queryparams = `keywords=*:*&kind=deck&tag=${encodeURIComponent(payload.params.tag)}&sort=lastUpdate&page=${payload.page}`;
-
+    context.dispatch('DECKFAMILY_SHOW_LOAD_MORE_LOADING');
+    
     // fetch results from search-service
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
@@ -19,10 +18,11 @@ export default function loadMoreDeckFamily(context, payload, done) {
                 numFound: res.numFound,
                 decks: res.docs,
                 page: res.page,
-                hasMore: res.hasMore
+                hasMore: res.hasMore,
+                links: res.links,
             });
-        }
 
-        done();
+            done();
+        }
     });
 }
