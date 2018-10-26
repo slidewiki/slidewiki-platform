@@ -1009,7 +1009,7 @@ class SlideContentEditor extends React.Component {
         }
         questionhtml += '</div>';
 
-        //let scrolldiv = '<div _type="body" id="questions_content" class="block content v-up context-menu-disabled" style="overflow-y:auto; height:80%; max-height:800px; position: relative; top: 15%; left: 40px; ">'+questionhtml+'</div>';
+        let scrolldiv = '<div _type="body" id="questions_content" class="block content v-up context-menu-disabled" style="overflow-y:auto; height:80%; max-height:800px; position: absolute; top: 25px; left: 40px; ">'+titleDiv+questionhtml+'</div>';
         //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
         //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
         let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + questionhtml+'</div>';
@@ -1022,7 +1022,7 @@ class SlideContentEditor extends React.Component {
             this.refs.inlineContent.innerHTML = pptx2htmlDiv;
         
         } else { //if slide is in non-canvas mode
-            this.refs.inlineContent.innerHTML += scrolldiv; //does this want += or should it just be =? how does a canvas mode slide even work...
+            this.refs.inlineContent.innerHTML = scrolldiv; 
         }
 
         //console.log(pptx2htmlDiv);
