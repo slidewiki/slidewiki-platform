@@ -86,7 +86,10 @@ class DeckPropertiesEditor extends React.Component {
                     confirmButtonClass: 'positive ui button',
                     allowEscapeKey: true,
                     allowOutsideClick: true,
-                    buttonsStyling: false
+                    buttonsStyling: false,
+                    onOpen: () => {
+                        $('.swal2-confirm').focus();
+                    }
                 })
                     .then(() => {
                         return true;

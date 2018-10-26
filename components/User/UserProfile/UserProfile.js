@@ -104,16 +104,12 @@ class UserProfile extends React.Component {
                     case categories.settings[2]:
                         return this.displayIntegrations();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             case categories.categories[1]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
                         return this.displayGroups();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             case categories.categories[6]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
@@ -266,14 +262,6 @@ class UserProfile extends React.Component {
 
     displayLTIedit() {
         return (<UserLTIEdit saveUserltiError={this.props.UserProfileStore.saveUserltiError} username={this.props.UserProfileStore.username} currentUserlti={this.props.UserProfileStore.currentUserlti} userid={this.props.UserProfileStore.userid} saveUserltiIsLoading={this.props.UserProfileStore.saveUserltiIsLoading} picture={this.props.UserProfileStore.user.picture} />);
-    }
-    notImplemented() {
-        return (<h3>
-          <FormattedMessage
-            id='UserProfile.notImplemented'
-            defaultMessage='This feature is curently not implemented. Please wait for future releases of SlideWiki'
-          />
-        </h3>);
     }
 
     render() {

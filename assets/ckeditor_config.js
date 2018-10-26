@@ -173,7 +173,6 @@ CKEDITOR.editorConfig = function( config ) {
 		'horizontalrule,' +
 		'htmlwriter,' +
         'image,' +
-		'iframe,' +
 		'indentlist,' +
 		'indentblock,' +
 		'justify,' +

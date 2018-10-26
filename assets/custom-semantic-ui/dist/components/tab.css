@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.1 - Tab
+ * # Semantic UI 2.4.2 - Tab
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -85,8 +85,8 @@
 *******************************/
 
 .ui.menu.pointing .item:focus {
-  -webkit-box-shadow: 0 0 0 2px rgba(0, 125, 255, 0.5) inset;
-          box-shadow: 0 0 0 2px rgba(0, 125, 255, 0.5) inset;
+  -webkit-box-shadow: 0 0 0 2px #5E9ACF inset;
+          box-shadow: 0 0 0 2px #5E9ACF inset;
 }
 
 
