@@ -53,6 +53,7 @@ class Footer extends React.Component {
                             </div>
                             <div className='nine wide column'>
                                 <div className='footer-right'>
+                                    <p>If you would like to provide feedback or report issues, please use our <a href='/contactus'>Contact Form</a>.</p>
                                     <h3 className="ui medium inverted header">Funding</h3>
                                     <p>The SlideWiki project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 688095</p>
                                     <p>Copyright &copy; 2018 All Rights Reserved<br/> Build GIT_COMMIT&#64;GIT_BRANCH</p>
