@@ -434,7 +434,7 @@ textarea:focus{
 }
 .category-list {
     width: 100%;
-    padding: 139px 0 110px;
+    padding: 100px 0 110px;
 }
 .single-category {
     width: 100%;
@@ -446,6 +446,16 @@ textarea:focus{
 .text-blk{
     width:100%;
     padding: 47px 0 0;
+}
+.text-blk label{
+    padding: 10px 23px;
+    color: #ffffff;
+    background: #158570;
+    font-size: 30px;
+    font-weight: 700;
+    border: 2px solid transparent;
+    display: inline-block;
+    margin: 0 0 20px;
 }
 .text-blk a{
     padding: 10px 23px;
@@ -810,6 +820,7 @@ i.flag:not(.icon):before {
 
 .deck-link {
     position: absolute;
+    colour: #1e78bb;
     right: 40px;
     bottom: -2px;
     padding: 20px 55px 0 55px;
@@ -886,7 +897,7 @@ i.flag:not(.icon):before {
 .about-block {
     width: 100%;
     float: left;
-    padding: 30px 0 0 0;
+    padding: 60px 0 0 0;
 }
 
 .about-block h3 {

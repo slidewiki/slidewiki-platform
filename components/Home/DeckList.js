@@ -26,49 +26,54 @@ class DeckList extends React.Component {
                     let deckDate = CustomDate.format(deck.timestamp, 'Do MMMM YYYY');
                     let deckLanguage = getLanguageName(deck.language || 'en') || 'English';
                     let theme = deck.theme !== undefined ? '/' + deck.theme : '';
-                    
                     return (
-                        <div key={'deck_meta' + deck._id} className="ui vertical segment clearing">
-                            <div className="featured-img">
-                                <NavLink href={['/deck', deck._id, deck.slug,].join('/')}>
-                                    <img src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} alt="Featured Image" style={{ maxHeight: '290px', height: 'initial'}} /> {/* TODO change this in css file */}
-                                </NavLink>
-                            </div>
-                            <div className="featured-content">
-                                {this.props.scope === 'featured' ? <h4><FormattedMessage id='DeckList.title.featured' defaultMessage='Featured deck'/></h4> : ''}
-                                <div className="featured-post">
-                                    <h5><NavLink href={['/deck', deck._id, deck.slug,].join('/')}>{deck.title}</NavLink></h5>
-                                    <p>{deck.description}</p>
-                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')}><FormattedMessage id='DeckList.link.readmore' defaultMessage='Read more'/>...</NavLink>
+                        <div className="ui vertical segment " key={'deck_meta' + deck._id}>
+                            <div className="ui three column stackable grid">
+                                <div className="three wide column">
+                                    <div className="ui medium image bordered">
+                                        <NavLink href={['/deck', deck._id, deck.slug,].join('/')}>
+                                            <img src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} alt="Featured Image" style={{ maxHeight: '290px', height: 'initial'}} />
+                                        </NavLink>
+                                    </div>
                                 </div>
-                                <div className="post-desc">
-                                    <p><FormattedMessage id='DeckList.desc.creator' defaultMessage='Creator'/>&#58; <NavLink href={'/user/' + deck.username}>{deck.username}</NavLink></p>
-                                    <p><FormattedMessage id='DeckList.desc.date' defaultMessage='Date'/>&#58;<span> {deckDate}</span></p>
+                                <div className="column">
+                                    <div className="item">
+                                        <h2 className="ui header"><NavLink href={['/deck', deck._id, deck.slug,].join('/')}>{deck.title}</NavLink></h2>
+                                        <div className="meta"><FormattedMessage id='decklist.meta.creator' defaultMessage='Creator:' />: <NavLink href={'/user/' + deck.username}>{deck.username}</NavLink></div>
+                                        <div className="meta"><FormattedMessage id='decklist.meta.date' defaultMessage='Last Modified:' />: {deckDate}</div>
+                                    </div>
                                 </div>
-                                <div className="post-button">
-                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')} className="left-btn"><i className="thumbs up icon"></i>{deck.likes}</NavLink>
-                                    <NavLink href={['/deck', deck._id, deck.slug,].join('/')} className="right-btn"><i className="fork icon"></i>{deck.forkCount}</NavLink>
+                                <div className="column right aligned">
+                                    <div className="ui label" >
+                                        <FormattedMessage id="decklist.decklanguage" defaultMessage='Default language' aria-label="Default language">
+                                            {
+                                                (label) => <i className="ui comments outline icon" aria-label={label}></i>
+                                            }
+                                        </FormattedMessage> {deckLanguage}
+                                    </div>
+                                    <div className="ui label"  >
+                                        <FormattedMessage id="decklist.forkcount" defaultMessage='Number of forks'>
+                                            {
+                                                (label) => <i className="fork icon" aria-label={label}></i>
+                                            }
+                                        </FormattedMessage> {deck.forkCount}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     );
                 });
         }
-        
-        let classes = this.props.inline !== 'true' ? 'ui segment' : '';
 
         return (
-            <div>
-                <div ref="DeckListpanel" key = "Deckspanel" className={classes}>
-                    {result}
-                </div>
-                {this.props.inline !== 'true' ?
-                <div className="ui hidden divider"></div>
-                : ''}
+            <div ref="DeckListpanel" className="ui segment" key="Deckspanel">
+                {result}
             </div>
         );
     }
 }
+
+
 
 DeckList = connectToStores(DeckList, [DeckListStore], (context, props) => {
     return {

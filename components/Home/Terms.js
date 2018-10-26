@@ -221,7 +221,9 @@ class terms extends React.Component {
                                     {/*}  <div className='text'>
                                                         <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                                     </div> */}
-                                    <img src='/assets/images/home/search.jpg' alt=''/>
+                                    <div className="ui small image" aria-hidden="true">
+                                        <img src='/assets/images/home/search.jpg' alt=''/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

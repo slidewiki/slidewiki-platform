@@ -35,11 +35,11 @@ class Home extends React.Component {
             },
             findSlidesSubtitle: {
                 id: 'home.findSlidesSubtitle',
-                defaultMessage: 'Explore the deck lorem ipsum'           // TODO: change lorem ipsums
+                defaultMessage: 'Explore the deck'
             },
             findSlidesContent: {
                 id: 'home.findSlidesContent',
-                defaultMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget elit sapien. Nunc semper urna in lectus consectetur fermentum. Vestibulum eu sem pulvinar, sollicitudin ipsum eu, porttitor elit. Maecenas bibendum congue lectus, viligula finibus, sit amet aliquam n ipsum eu, porttitor elit. Maecenas bibendum congue lectus, viligula finibus, sit amet.'           // TODO: change lorem ipsums
+                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
             },
             createSlides: {
                 id: 'home.createSlides',
@@ -47,7 +47,7 @@ class Home extends React.Component {
             },
             createSlidesSubtitle: {
                 id: 'home.createSlidesSubtitle',
-                defaultMessage: 'Learn how to create slides with SlideWiki'
+                defaultMessage: 'Add and adapt course material'
             },
             createSlidesContent: {
                 id: 'home.createSlidesContent',
@@ -55,7 +55,7 @@ class Home extends React.Component {
             },
             sharingSlides: {
                 id: 'home.sharingSlides',
-                defaultMessage: 'Sharing slides'
+                defaultMessage: 'Share slides'
             },
             sharingSlidesSubtitle: {
                 id: 'home.sharingSlidesSubtitle',
@@ -207,7 +207,7 @@ class Home extends React.Component {
                     </div>
                     <div className='feature-block'>
                         <div className='wrapper'>
-                            <div className='ui three column  stackable  grid'>
+                            <div className='ui three column stackable grid'>
                                 <div className='row'>
                                     <div className='column'>
                                         <div className='feature-content blue-block'>
@@ -216,17 +216,17 @@ class Home extends React.Component {
                                                 <h4 className='ui header blue medium'>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                                             </div>
-                                            <div className='feature-right'><img src='/assets/images/home/search.jpg' alt=''/></div>
+                                            <div className='feature-right' aria-hidden="true"><img src='/assets/images/home/search.jpg' alt=''/></div>
                                         </div>
                                     </div>
                                     <div className='column'>
                                         <div className='feature-content green-block'>
                                             <div className='feature-left'>
-                                                <h3 className='ui header teal large'>{this.context.intl.formatMessage(this.messages.createSlides)}Create slides</h3>
-                                                <h4 className='ui header teal medium'>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
-                                                <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
+                                                <h3 className='ui header teal large'>{this.context.intl.formatMessage(this.messages.createSlides)}</h3>
+                                                <h4 className='ui header teal medium'>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
+                                                <p>{this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
                                             </div>
-                                            <div className='feature-right'><img src='/assets/images/home/add.jpg' alt=''/></div>
+                                            <div className='feature-right' aria-hidden="true"><img src='/assets/images/home/add.jpg' alt=''/></div>
                                         </div>
                                     </div>
                                     <div className='column'>
@@ -236,7 +236,7 @@ class Home extends React.Component {
                                                 <h4 className='ui header medium pink'>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
                                                 <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
                                             </div>
-                                            <div className='feature-right'><img src='/assets/images/home/share.jpg' alt=''/></div>
+                                            <div className='feature-right' aria-hidden="true"><img src='/assets/images/home/share.jpg' alt=''/></div>
                                         </div>
                                     </div>
                                 </div>
@@ -265,32 +265,32 @@ class Home extends React.Component {
                                 </div>
                             </div>
                             <div className='category-list'>
-                                <div className='ui three column  stackable grid'>
+                                <div className='ui three column stackable grid'>
                                     <div className='row'>
                                         <div className='column'>
                                             <div className='single-category'>
-                                                <img src='/assets/images/home/category-img1.svg' alt='img'/>
+                                                <img src='/assets/images/home/category-img1.svg' alt='' aria-hidden="true"/>
                                                     <div className='text-blk'>
-                                                        <a href='#'>{this.context.intl.formatMessage(this.messages.schools)}</a>
-                                                        <p>{this.context.intl.formatMessage(this.messages.schoolsContent)}</p>
+                                                        <div className='ui teal massive label'> {this.context.intl.formatMessage(this.messages.schools)}</div>
+                                                    </div>
+
+                                            </div>
+                                        </div>
+                                        <div className='column'>
+                                            <div className='single-category'>
+                                                <img src='/assets/images/home/category-img2.svg' alt='' aria-hidden="true"/>
+                                                    <div className='text-blk'>
+                                                        <div className='ui teal massive label'>{this.context.intl.formatMessage(this.messages.colleges)}</div>
+                                                        {/*<p>{this.context.intl.formatMessage(this.messages.collegesContent)}</p> */}
                                                     </div>
                                             </div>
                                         </div>
                                         <div className='column'>
                                             <div className='single-category'>
-                                                <img src='/assets/images/home/category-img2.svg' alt='img'/>
+                                                <img src='/assets/images/home/category-img3.svg' alt='' aria-hidden="true"/>
                                                     <div className='text-blk'>
-                                                        <a href='#'>{this.context.intl.formatMessage(this.messages.colleges)}</a>
-                                                        <p>{this.context.intl.formatMessage(this.messages.collegesContent)}</p>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                        <div className='column'>
-                                            <div className='single-category'>
-                                                <img src='/assets/images/home/category-img3.svg' alt='img'/>
-                                                    <div className='text-blk'>
-                                                        <a href='#'>{this.context.intl.formatMessage(this.messages.training)}</a>
-                                                        <p>{this.context.intl.formatMessage(this.messages.trainingContent)}</p>
+                                                        <div className='ui teal massive label'>{this.context.intl.formatMessage(this.messages.training)}</div>
+                                                        {/* <p>{this.context.intl.formatMessage(this.messages.trainingContent)}</p> */}
                                                     </div>
                                             </div>
                                         </div>
@@ -310,9 +310,8 @@ class Home extends React.Component {
                                 <div className='column'>
                                     <h2>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
                                     <div className="featured-deck">
-                                        
+                                        <h3>Featured deck</h3>
                                         <DeckList scope="featured" limit="1" inline="true"/>
-                                        
                                         <div className="deck-link">
                                             <a href="/featured">{this.context.intl.formatMessage(this.messages.seeMoreDecks)}</a>
                                         </div>
