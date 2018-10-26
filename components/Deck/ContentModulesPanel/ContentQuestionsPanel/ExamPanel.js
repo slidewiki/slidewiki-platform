@@ -62,7 +62,7 @@ class ExamPanel extends React.Component {
                 <div className="ui secondary segment">
                     <h1 className="ui medium header">{title}Exam mode</h1>
                 </div>
-                {examQuestions.length !== 0 ? noExamQuestionsNotification : questionsList}
+                {examQuestions.length === 0 ? noExamQuestionsNotification : questionsList}
             </div>
         );
     }
