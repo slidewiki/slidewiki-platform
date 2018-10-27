@@ -101,6 +101,7 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
+
         let visibleQuestions = [];
         questions.forEach((question) => {
             if (editPermission || !question.isExamQuestion) {
@@ -114,15 +115,15 @@ class ContentQuestionsPanel extends React.Component {
                 Select exam questions
             </button> : '';
 
+
         let addQuestionButton =
-                <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
-                    <i className="small plus icon"/>
-                    Add question
-                </button>
+            <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
+                <i className="small plus icon"/>
+                Add question
+            </button>
         ;
 
-        let editButtons = (editPermission) ?
-            <div className="column right aligned">
+        let editButtons = (editPermission) ? <div>
                 {addQuestionButton}
                 {examQuestionsButton}
             </div>
@@ -137,8 +138,7 @@ class ContentQuestionsPanel extends React.Component {
                     <i className="small plus icon"/>
                     Add question
                 </button>
-            </div>
-        );
+            </div>);
 
         const getUserButton = () => {
         console.log(creatorId);
@@ -147,22 +147,23 @@ class ContentQuestionsPanel extends React.Component {
                 return addQuestionButton;
             }
             return null;
-        };
-        */
-
+        };     */
+       
         let questionsHeader = (
             <div className="ui segment attached">
                 <div className="ui bottom attached">
                     <div>
                         <div className="ui vertical segment">
-                            <div className="ui two column stackable grid">
-                                <div className="column">
-                                    <h3 className="ui  header">Questions</h3>
+                            <div className="ui stackable grid"> 
+                                <div className="four wide column">
+                                    <h3 className="ui header">Questions</h3>
                                 </div>
-                                {editButtons}
+                                <div className="twelve wide column right aligned">
+                                    {editButtons}
+                                    {downloadQuestionsButton}
+                                </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

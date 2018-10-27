@@ -74,8 +74,8 @@ class AttachSubdeckModalStore extends BaseStore{
                     language:deck.language,
                     countRevisions:deck.countRevisions,
                     deckCreatorid:deck.user,
-                    deckCreator:deck.username
-
+                    deckCreator:deck.username,
+                    questionsCount: deck.questionsCount,
                 });
 
             }); //map
@@ -86,12 +86,12 @@ class AttachSubdeckModalStore extends BaseStore{
     }
 
     updateSearchDecks(payload){
+
         if((payload.docs===[])||(typeof payload.docs === 'undefined')){
             this.searchDecks =[];
             this.showSearchResults = true;
 
         }else{
-
             let searchDecks = payload.docs.map((deck) => {
 
                 return({
@@ -106,7 +106,8 @@ class AttachSubdeckModalStore extends BaseStore{
                     language:deck.language,
                     countRevisions:deck.revisionCount,
                     deckCreatorid:deck.creator,
-                    deckCreator:deck.user.username
+                    deckCreator:deck.user.username,
+                    questionsCount: deck.questionsCount,
                 });
             });//map
 

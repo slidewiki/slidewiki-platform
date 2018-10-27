@@ -1,3 +1,5 @@
+/*unchanged from subdecks file */
+
 import notFoundError from '../error/notFoundError';
 import methodNotAllowedError  from '../error/methodNotAllowedError';
 import log from '../log/clog';
@@ -5,7 +7,6 @@ import log from '../log/clog';
 
 export default function loadUserDecks(context,payload,done){
     log.info(context);
-
     context.service.read('userProfile.fetchUserDecks', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             if (err.statusCode === 404) {
