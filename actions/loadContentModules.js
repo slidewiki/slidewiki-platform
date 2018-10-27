@@ -10,6 +10,7 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
+import PermissionsStore from '../stores/PermissionsStore';
 const log = require('./log/clog');
 
 
@@ -35,6 +36,9 @@ export default function loadContentModules(context, payload, done) {
         // },
 
         (callback) => {
+            let editPermission = (context.getStore(PermissionsStore) && context.getStore(PermissionsStore).permissions && (context.getStore(PermissionsStore).permissions.admin || context.getStore(PermissionsStore).permissions.edit));
+
+            payload.params.nonExamQuestionsOnly = !editPermission;
             context.executeAction(loadQuestionsCount, payload, callback);
         },
         (callback) => {
