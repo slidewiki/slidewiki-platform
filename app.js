@@ -38,6 +38,7 @@ import DeckListStore from './stores/DeckListStore';
 import ContentActionsFooterStore from './stores/ContentActionsFooterStore';
 import IntlStore from './stores/IntlStore';
 import AttachSubdeckModalStore from './stores/AttachSubdeckModalStore';
+import AttachQuestionsModalStore from './stores/AttachQuestionsModalStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
 import ContentLikeStore from './stores/ContentLikeStore';
@@ -95,6 +96,7 @@ const app = new Fluxible({
         ContentActionsFooterStore,
         IntlStore,
         AttachSubdeckModalStore,
+        AttachQuestionsModalStore,
         ServiceErrorStore,
         PermissionsStore,
         ContentLikeStore,

@@ -332,6 +332,7 @@
   "CollectionsPanel.error.removeDeck": "An error occured while removing playlist from deck...",
   "CollectionsPanel.error.adDeck": "An error occured while adding playlist to the deck...",
   "CollectionsPanel.addToPlaylist": "Add deck to playlist",
+  "questionpanel.handleDownloadQuestionsClick": "Download questions",
   "RecommendedTags.header": "Recommended Tags",
   "RecommendedTags.aria.add": "Add recommended tag",
   "RecommendedTags.aria.dismiss": "Dismiss recommendation",

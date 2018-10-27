@@ -77,22 +77,11 @@ class ContentQuestionsPanel extends React.Component {
         switch(selector.stype) {
             case 'slide':
                 buttonBar = '';
-                /* (
-                    <button className='ui button blue'>
-                        <i className='plus icon'></i>
-                        Add question
-                    </button>
-                );*/
                 break;
             case 'deck':
                 buttonBar = (
                     <div className='ui buttons'>
                         <button className='ui button'>Exam mode</button>
-                        <button className='ui button'>Test mode</button>
-                        <button className='ui button blue'>
-                            <i className='file pdf outline icon'></i>
-                            Export to PDF
-                        </button>
                     </div>
                 );
                 break;
@@ -100,23 +89,23 @@ class ContentQuestionsPanel extends React.Component {
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
         // console.log(editPermission);
-        let addQuestionButton = (editPermission) ?
-                <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
-                    <i className="small plus icon" data-reactid={640} />
-                    Add question
-                </button>
-            : '';
-        let downloadQuestionsButton = <QuestionDownloadModal />;
-
-        /*
-        let addQuestionButton = (
+        let addQuestionButton = ((editPermission) ?
             <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                     <i className="small plus icon" data-reactid={640} />
                     Add question
                 </button>
             </div>
-        );
+            : '');
+        let downloadQuestionsButton = <QuestionDownloadModal />;
+
+        /*
+        let addQuestionButton = (
+            <div className="column right aligned" data-reactid={655}>
+                <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
+                    <i className="small plus icon" data-reactid={640} />Add question
+                </button>
+            </div>);
 
         const getUserButton = () => {
         console.log(creatorId);
@@ -125,19 +114,18 @@ class ContentQuestionsPanel extends React.Component {
                 return addQuestionButton;
             }
             return null;
-        };
-        */
-
+        };     */
+       
         let questionsHeader = (
             <div className="ui segment attached" data-reactid={636}>
                 <div className="ui bottom attached" data-reactid={637}>
                     <div data-reactid={638}>
                         <div className="ui vertical segment">
-                            <div className="ui two column stackable grid">
+                            <div className="ui two column stackable grid"> 
                                 <div className="column">
-                                    <h3 className="ui  header">Questions</h3>
+                                    <h3 className="ui header">Questions</h3>
                                 </div>
-                                <div className="column right aligned" data-reactid={655}>
+                                <div className="column right aligned">
                                 {addQuestionButton}
                                 {downloadQuestionsButton}
                                 </div>
@@ -204,15 +192,6 @@ class ContentQuestionsPanel extends React.Component {
                 {/* {pagination} */}
             </div>
         );
-
-        //   if (question !== undefined && question !== null) {
-        // //Question is selected -> show its data
-        //       content = (
-        //   <div>
-        //     <ContentQuestionForm question={question} />
-        //   </div>
-        // );
-        //   }
 
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
