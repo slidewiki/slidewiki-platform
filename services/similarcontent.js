@@ -13,7 +13,7 @@ export default {
         let selector= {'sid': args.sid, 'stype': args.stype};
         if(resource === 'similarcontent.list'){
             /*********connect to microservices*************/
-            let numberReco = 5; //Number of recommendations to be retrieved from the service
+            let numberReco = 3; //Number of recommendations to be retrieved from the service
             let serviceUri = Microservices.recommender.uri;
             let userId = params.userid?params.userid :args.userid;
             if(userId){ //user logged

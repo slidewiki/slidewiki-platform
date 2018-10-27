@@ -24,4 +24,6 @@ export default function loadSimilarContentsSelector(context, payload, done) {
         }
     });
 
+    done();
+
 }

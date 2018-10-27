@@ -7,7 +7,6 @@ import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import PresentationsPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-import SimilarContentPanel from '../SimilarContentPanel/SimilarContentPanel';
 import TranslationStore from '../../../stores/TranslationStore';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import {defineMessages} from 'react-intl';
@@ -80,9 +79,6 @@ class InfoPanelInfoView extends React.Component {
                 </div>
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
-                </div>
-                <div className="ui attached segment">
-                  <SimilarContentPanel maxHeight="360px" inPanel/>
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
                   <div className="ui attached segment">
