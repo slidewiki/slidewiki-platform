@@ -25,7 +25,8 @@ class ContentQuestionEdit extends React.Component {
             explanation: this.props.question.explanation,
             userId: this.props.userId,
             relatedObjectId: this.props.question.relatedObjectId,
-            relatedObject: this.props.question.relatedObject
+            relatedObject: this.props.question.relatedObject,
+            isExamQuestion: this.props.question.isExamQuestion
         };
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
@@ -41,6 +42,7 @@ class ContentQuestionEdit extends React.Component {
         this.updateCorrect4 = this.updateCorrect4.bind(this);
 
         this.updateExplanation = this.updateExplanation.bind(this);
+        this.updateIsExamQuestion = this.updateIsExamQuestion.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
         this.cancelButtonClick = this.cancelButtonClick.bind(this);
         this.deleteButtonClick = this.deleteButtonClick.bind(this);
@@ -148,14 +150,18 @@ class ContentQuestionEdit extends React.Component {
     updateQuestionDifficulty(e) {
         this.setState({difficulty: e.target.value});
     }
-
+    
+    updateIsExamQuestion(e) {
+        this.setState({isExamQuestion: e.target.checked});
+    }
+    
     render() {
         // const numAnswers = this.props.question.answers.length;
         const answerChoiceWidth = {
             width: '680px',
         };
         return (
-            <div className="ui bottom attached" data-reactid="637">
+            <div className="ui bottom attached">
                 <div className="ui padded segment">
                     <form className="ui form" ref="questionedit_form">
                         <div className="two fields inline">
@@ -237,6 +243,12 @@ class ContentQuestionEdit extends React.Component {
                         <div className="field">
                             <label htmlFor="explanation">Explanation (optional)</label>
                             <textarea rows="2" id="explanation" defaultValue={this.state.explanation} onChange={this.updateExplanation}></textarea>
+                        </div>
+                        <div className="field">
+                            <div className="ui checkbox">
+                                <input type="checkbox" name="exam" id="exam" tabIndex="0" className="hidden" defaultChecked={this.state.isExamQuestion} onChange={this.updateIsExamQuestion}/>
+                                <label htmlFor="exam">This is an exam question</label>
+                            </div>
                         </div>
                         <div className="field">
                             <div className="ui container">

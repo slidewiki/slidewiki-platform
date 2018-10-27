@@ -115,9 +115,7 @@ class ContentQuestionsItem extends React.Component {
                     {difficultyStars(question.difficulty)}
                 </div>
 
-                <div
-                    className={activeIfFirst + ' content'}
-                    data-reactid={653}>
+                <div className={activeIfFirst + ' content'}>
                     {answers}
                 </div>
                 {nodeRef}
