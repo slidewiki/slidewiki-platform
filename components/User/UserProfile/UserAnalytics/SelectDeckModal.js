@@ -139,17 +139,14 @@ class SelectDeckModal extends React.Component{
             segmentPanelContent = slideWikiContent;
         }
 
-        let selectDeckBtn = <Popup trigger={
-            <Button as="button" className="ui right floated labeled icon button"
-                                                    type="button"
-                                                    aria-label="New prediction job"
-                                                    aria-hidden={this.state.modalOpen}
-                                                    basic icon onClick={this.handleOpen}
-                                                    tabIndex="0" >
+        let selectDeckBtn =
+            <button className="ui right floated labeled icon button" role="button" tabIndex="0"
+                aria-label="New prediction job" aria-hidden={this.state.modalOpen}
+                onClick={this.handleOpen} >
                 <i className="icon chart bar"/>
-                New prediction job
-            </Button>
-        } content='Create a new prediction job' on='hover'/>;
+                <p>New prediction job</p>
+            </button>
+        ;
 
         return (
             <Modal trigger={selectDeckBtn}
