@@ -253,7 +253,6 @@ class DeckLandingPage extends React.Component {
                                     </Segment>
                                     <Segment attached='bottom'>
                                         <Header size="small" as="h3">You may also be interested in:</Header>
-                                        <div className="sr-only">These decks have been recommended as they are similar to this deck</div>
                                         {interestedInDecks}
                                     </Segment
                                 </Grid.Column>
