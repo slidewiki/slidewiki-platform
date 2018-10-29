@@ -50,6 +50,9 @@ export default {
         'nlp': {
             uri: '${SERVICE_URL_NLP}'
         },
+        'recommender': {
+            uri: '${SERVICE_URL_RECOMMENDER}'
+        },
         'analytics': {
             uri: '${SERVICE_URL_ANALYTICS}'
         },

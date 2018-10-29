@@ -11,6 +11,12 @@ class SimilarContentStore extends BaseStore {
         this.selector = payload.selector;
         this.emitChange();
     }
+    updateSelector(payload){
+        this.selector =  payload.selector;
+        this.contents = []; //previuos contents are nor related with new selector, so we clean the variable
+        this.emitChange();
+
+    }
     getState() {
         return {
             contents: this.contents,
@@ -28,7 +34,8 @@ class SimilarContentStore extends BaseStore {
 
 SimilarContentStore.storeName = 'SimilarContentStore';
 SimilarContentStore.handlers = {
-    'LOAD_SIMILAR_CONTENT_SUCCESS': 'updateSimilarContent'
+    'LOAD_SIMILAR_CONTENT_SUCCESS': 'updateSimilarContent',
+    'SIMILAR_CONTENT_UPDATE_SELECTOR' : 'updateSelector'
 };
 
 export default SimilarContentStore;
