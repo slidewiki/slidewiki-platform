@@ -79,13 +79,13 @@ class UserStats extends React.Component {
         let socialEngagementMsg = this.context.intl.formatMessage(this.messages.socialEngagement);
         let radarData = [{
             type: activeEngagementMsg,
-            value: userEngagement['active_engagement']
+            value: userEngagement.active_engagement
         }, {
             type: passiveEngagementMsg,
-            value: userEngagement['passive_engagement']
+            value: userEngagement.passive_engagement
         }, {
             type: socialEngagementMsg,
-            value: userEngagement['social_engagement']
+            value: userEngagement.social_engagement
         }];
 
         let userEngagementRows = radarData.map((engagement, index) => {

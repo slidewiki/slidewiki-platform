@@ -198,131 +198,131 @@ export default {
             let promises = [];
             let pipeline_active_engagement = [
                 {
-                    "$match": {
-                        "statement.verb.id": {
-                            "$in": [
-                                "https://w3id.org/xapi/acrossx/verbs/edited",
-                                "http://activitystrea.ms/schema/1.0/create",
-                                "https://w3id.org/xapi/acrossx/verbs/forked",
-                                "https://brindlewaye.com/xAPITerms/verbs/added"
+                    '$match': {
+                        'statement.verb.id': {
+                            '$in': [
+                                'https://w3id.org/xapi/acrossx/verbs/edited',
+                                'http://activitystrea.ms/schema/1.0/create',
+                                'https://w3id.org/xapi/acrossx/verbs/forked',
+                                'https://brindlewaye.com/xAPITerms/verbs/added'
                             ]
                         },
-                        "statement.actor.account.name": username
+                        'statement.actor.account.name': username
                     }
                 },
                 {
-                    "$project": {
-                        "user": "$statement.actor.account.name"
+                    '$project': {
+                        'user': '$statement.actor.account.name'
                     }
                 },
                 {
-                    "$group": {
-                        "_id": "$user",
-                        "count": {
-                            "$sum": 1
+                    '$group': {
+                        '_id': '$user',
+                        'count': {
+                            '$sum': 1
                         }
                     }
                 },
                 {
-                    "$project": {
-                        "_id": false,
-                        "value": "$_id",
-                        "count": true
+                    '$project': {
+                        '_id': false,
+                        'value': '$_id',
+                        'count': true
                     }
                 },
                 {
-                    "$sort": {
-                        "count": -1
+                    '$sort': {
+                        'count': -1
                     }
                 },
                 {
-                    "$limit": 1
+                    '$limit': 1
                 }
             ];
 
             let pipeline_passive_engagement = [
                 {
-                    "$match": {
-                        "statement.verb.id": {
-                            "$in": [
-                                "http://adlnet.gov/expapi/verbs/experienced",
-                                "https://w3id.org/xapi/acrossx/verbs/liked",
-                                "https://w3id.org/xapi/acrossx/verbs/downloaded"
+                    '$match': {
+                        'statement.verb.id': {
+                            '$in': [
+                                'http://adlnet.gov/expapi/verbs/experienced',
+                                'https://w3id.org/xapi/acrossx/verbs/liked',
+                                'https://w3id.org/xapi/acrossx/verbs/downloaded'
                             ]
                         },
-                        "statement.actor.account.name": username
+                        'statement.actor.account.name': username
                     }
                 },
                 {
-                    "$project": {
-                        "user": "$statement.actor.account.name"
+                    '$project': {
+                        'user': '$statement.actor.account.name'
                     }
                 },
                 {
-                    "$group": {
-                        "_id": "$user",
-                        "count": {
-                            "$sum": 1
+                    '$group': {
+                        '_id': '$user',
+                        'count': {
+                            '$sum': 1
                         }
                     }
                 },
                 {
-                    "$project": {
-                        "_id": false,
-                        "value": "$_id",
-                        "count": true
+                    '$project': {
+                        '_id': false,
+                        'value': '$_id',
+                        'count': true
                     }
                 },
                 {
-                    "$sort": {
-                        "count": -1
+                    '$sort': {
+                        'count': -1
                     }
                 },
                 {
-                    "$limit": 1
+                    '$limit': 1
                 }
             ];
 
             let pipeline_social_engagement = [
                 {
-                    "$match": {
-                        "statement.verb.id": {
-                            "$in": [
-                                "https://w3id.org/xapi/acrossx/verbs/shared",
-                                "http://adlnet.gov/expapi/verbs/commented",
-                                "https://w3id.org/xapi/acrossx/verbs/replied"
+                    '$match': {
+                        'statement.verb.id': {
+                            '$in': [
+                                'https://w3id.org/xapi/acrossx/verbs/shared',
+                                'http://adlnet.gov/expapi/verbs/commented',
+                                'https://w3id.org/xapi/acrossx/verbs/replied'
                             ]
                         },
-                        "statement.actor.account.name": username
+                        'statement.actor.account.name': username
                     }
                 },
                 {
-                    "$project": {
-                        "user": "$statement.actor.account.name"
+                    '$project': {
+                        'user': '$statement.actor.account.name'
                     }
                 },
                 {
-                    "$group": {
-                        "_id": "$user",
-                        "count": {
-                            "$sum": 1
+                    '$group': {
+                        '_id': '$user',
+                        'count': {
+                            '$sum': 1
                         }
                     }
                 },
                 {
-                    "$project": {
-                        "_id": false,
-                        "value": "$_id",
-                        "count": true
+                    '$project': {
+                        '_id': false,
+                        'value': '$_id',
+                        'count': true
                     }
                 },
                 {
-                    "$sort": {
-                        "count": -1
+                    '$sort': {
+                        'count': -1
                     }
                 },
                 {
-                    "$limit": 1
+                    '$limit': 1
                 }
             ];
 
@@ -342,7 +342,7 @@ export default {
                     norm = 0.5;
                 else
                     norm = 1;
-                return {"active_engagement" : norm};
+                return {'active_engagement' : norm};
             })
               .catch((err) => callback(err))
             );
@@ -363,7 +363,7 @@ export default {
                     norm = 0.5;
                 else
                     norm = 1;
-                return {"passive_engagement" : norm};                
+                return {'passive_engagement' : norm};                
             })
               .catch((err) => callback(err))
             );
@@ -384,18 +384,18 @@ export default {
                     norm = 0.5;
                 else
                     norm = 1;
-                return {"social_engagement" : norm};
+                return {'social_engagement' : norm};
             })
               .catch((err) => callback(err))
             );
-            Promise.all(promises).then(function(values) {
-                  let toReturn = {};
-                  values.forEach(function(value){
+            Promise.all(promises).then((values) => {
+                let toReturn = {};
+                values.forEach((value) => {
                     if(value)
                         Object.assign(toReturn, value);
-                  });
-                  callback(null, toReturn);
-                });  
+                });
+                callback(null, toReturn);
+            });
             
         } else if (resource === 'stats.groupMembersStats') {
             let memberUsernames;
