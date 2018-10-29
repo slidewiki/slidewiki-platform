@@ -94,12 +94,11 @@ class TransitionModal extends React.Component {
     }
 
     handleTransitionType(type) {
-        if (type === 'slide') {
-            this.context.executeAction(changeSlideTransition, {
-                slideTransition: this.props.transition
-            });
-            this.handleClose();
-        }
+        this.context.executeAction(changeSlideTransition, {
+            slideTransition: this.props.transition,
+            transitionType: type
+        });
+        this.handleClose();
     }
 
     render() {

@@ -15,6 +15,7 @@ class SlideEditStore extends BaseStore {
         this.template = '';
         this.slideSize = '';
         this.slideTransition = '';
+        this.transitionType = '';
         this.saveSlideClick = 'false';
         this.cancelClick = 'false';
         this.selector = '';
@@ -66,6 +67,7 @@ class SlideEditStore extends BaseStore {
     }
     changeSlideTransition(payload){
         this.slideTransition = payload.slideTransition;
+        this.transitionType = payload.transitionType;
         this.emitChange();
     }
     handleSaveSlideClick(){
@@ -181,6 +183,7 @@ class SlideEditStore extends BaseStore {
             template: this.template,
             slideSize: this.slideSize,
             slideTransition: this.slideTransition,
+            transitionType: this.transitionType,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
             uploadVideoClick: this.uploadVideoClick,
@@ -216,6 +219,7 @@ class SlideEditStore extends BaseStore {
         this.template = state.template;
         this.slideSize = state.slideSize;
         this.slideTransition = state.slideTransition;
+        this.transitionType = state.transitionType;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;

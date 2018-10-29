@@ -5,6 +5,7 @@ const log = require('../log/clog');
 export default function changeSlideSize(context, payload, done) {
     //catched by slideEditStore
     context.dispatch('CHANGE_SLIDE_TRANSITION', {
-        slideTransition: payload.slideTransition
+        slideTransition: payload.slideTransition,
+        transitionType: payload.transitionType
     });
 }
