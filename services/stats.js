@@ -335,7 +335,14 @@ export default {
                 headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
                 json: true
             }).then((response) => {
-                return {"active_engagement" : response[0].count};
+                let norm = response[0].count;
+                if(norm < 50)
+                    norm = 0;
+                else if (norm < 200)
+                    norm = 0.5;
+                else
+                    norm = 1;
+                return {"active_engagement" : norm};
             })
               .catch((err) => callback(err))
             );
@@ -349,7 +356,14 @@ export default {
                 headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
                 json: true
             }).then((response) => {
-                return {"passive_engagement" : response[0].count};
+                let norm = response[0].count;
+                if(norm < 50)
+                    norm = 0;
+                else if (norm < 200)
+                    norm = 0.5;
+                else
+                    norm = 1;
+                return {"passive_engagement" : norm};                
             })
               .catch((err) => callback(err))
             );
@@ -363,7 +377,14 @@ export default {
                 headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
                 json: true
             }).then((response) => {
-                return {"social_engagement" : response[0].count};
+                let norm = response[0].count;
+                if(norm < 50)
+                    norm = 0;
+                else if (norm < 200)
+                    norm = 0.5;
+                else
+                    norm = 1;
+                return {"social_engagement" : norm};
             })
               .catch((err) => callback(err))
             );
