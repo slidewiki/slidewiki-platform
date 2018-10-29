@@ -5,8 +5,7 @@ import PresentationSlide from './PresentationSlide';
 import { connectToStores } from 'fluxible-addons-react';
 import { Microservices } from '../../../configs/microservices';
 import PresentationStore from '../../../stores/PresentationStore';
-import loadPresentation from '../../../actions/loadPresentation';
-import ChartRender from '../ContentPanel/util/ChartRender';
+
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
@@ -147,7 +146,6 @@ class Presentation extends React.Component{
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
-                ChartRender.renderCharts(false);
                 this.resize();
             } );
 
@@ -155,7 +153,6 @@ class Presentation extends React.Component{
                 //console.log('slidechanged: ' + $('.present > .accessibilityWrapper > .pptx2html div:first').html());
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                ChartRender.renderCharts(true);
                 this.resize();
             } );
 
