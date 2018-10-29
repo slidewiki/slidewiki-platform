@@ -561,6 +561,23 @@ export default {
             })
             .catch((err) => callback(err));
         }
+        else if (resource === 'deck.transferOwnership') {
+            return callback(null, {});
+            //TODO
+            rp({
+                method: 'POST',
+                uri: Microservices.deck.uri + '/deck/' + params.deckid + '/transferOwnership',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                body: {
+                    user: params.userid
+                }
+            })
+            .then((body) => {
+                callback(null, body);
+            })
+            .catch((err) => callback(err));
+        }
     },
     delete: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;

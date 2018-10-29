@@ -27,6 +27,8 @@ class DeckEditStore extends BaseStore {
         this.queryParams = {};
 
         this.roots = [];
+        this.showTransferOwnershipModal = false;
+        this.allEditors = [];
     }
 
     updateProperties(payload) {
@@ -67,6 +69,8 @@ class DeckEditStore extends BaseStore {
             queryParams: this.queryParams,
             showGroupModal: this.showGroupModal,
             roots: this.roots,
+            showTransferOwnershipModal: this.showTransferOwnershipModal,
+            allEditors: this.allEditors
         };
     }
 
@@ -85,6 +89,8 @@ class DeckEditStore extends BaseStore {
         this.showGroupModal = state.showGroupModal;
         this.queryParams = state.queryParams;
         this.roots = state.roots;
+        this.showTransferOwnershipModal = state.showTransferOwnershipModal;
+        this.allEditors = state.allEditors;
     }
 
     updateAuthorizedUsers(users) {
@@ -149,6 +155,49 @@ class DeckEditStore extends BaseStore {
         this.emitChange();
         this.viewstate = '';
     }
+
+    startTransferOwnership() {
+        this.viewstate = 'loading';
+        this.emitChange();
+        this.viewstate = '';
+    }
+
+    editorsLoaded(editors) {
+        this.allEditors = editors;
+        this.viewstate = '';
+        this.showTransferOwnershipModal = true;
+        this.emitChange();
+    }
+
+    errorLoadingEditors(error) {
+        this.viewstate = 'errorEditors';
+        this.emitChange();
+        this.viewstate = '';
+    }
+
+    hideTOModal() {
+        this.showTransferOwnershipModal = false;
+        this.emitChange();
+    }
+
+    errorTO(error) {
+        this.viewstate = 'errorTransfer';
+        this.emitChange();
+        this.viewstate = '';
+    }
+
+    successTO() {
+        this.viewstate = 'successTransfer';
+        this.emitChange();
+        this.viewstate = '';
+    }
+
+    tryTransferOwnership() {
+      this.viewstate = 'loading';
+      this.showTransferOwnershipModal = false;
+      this.emitChange();
+      this.viewstate = '';
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -169,7 +218,14 @@ DeckEditStore.handlers = {
     'DELETE_DECK_SUCCESS': 'deleteDeck',
     'START_DELETE_DECK': 'startDeleteDeck',
     'REMOVE_DECK_ERROR': 'removeDeckError',
-    'REMOVE_DECK_SUCCESS': 'removeDeck'
+    'REMOVE_DECK_SUCCESS': 'removeDeck',
+    'START_TRANSFER_OWNERSHIP': 'startTransferOwnership',
+    'LOAD_EDITORS_LIST_SUCCESS': 'editorsLoaded',
+    'LOAD_EDITORS_LIST_ERROR': 'errorLoadingEditors',
+    'HIDE_TRANSFER_OWNERSHIP_MODAL': 'hideTOModal',
+    'TRY_TRANSFER_OWNERSHIP': 'tryTransferOwnership',
+    'TRANSFER_OWNERSHIP_ERROR': 'errorTO',
+    'TRANSFER_OWNERSHIP_SUCCESS': 'successTO'
 };
 
 export default DeckEditStore;

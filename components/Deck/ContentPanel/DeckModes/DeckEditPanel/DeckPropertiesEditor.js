@@ -23,6 +23,8 @@ import updateTheme from '../../../../../actions/updateTheme';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 import deckDeletion from '../../../../../actions/deckedit/deckDeletion';
 import deckRemove from '../../../../../actions/deckedit/deckRemove';
+import TransferOwnership from './TransferOwnership';
+import loadEditors from '../../../../../actions/deckedit/loadEditors';
 
 import {educationLevels} from '../../../../../lib/isced';
 import TagInput from '../../../ContentModulesPanel/TagsPanel/TagInput';
@@ -47,8 +49,8 @@ class DeckPropertiesEditor extends React.Component {
             theme: props.deckProps.theme || '',
             //license: props.deckProps.license || '',
             license: 'CC BY-SA',
-            users: editors.users,
-            groups: editors.groups,
+            users: editors.users || [],
+            groups: editors.groups || [],
             published: !props.deckProps.hidden,
             educationLevel: props.deckProps.educationLevel,
             tags: props.deckProps.tags || [],
@@ -119,7 +121,7 @@ class DeckPropertiesEditor extends React.Component {
                     confirmButtonText: 'Confirm',
                     confirmButtonClass: 'positive ui button',
                     allowEscapeKey: true,
-                    allowOutsideClick: true,
+                    allowOutsideClick: false,
                     buttonsStyling: false
                 })
                     .then(() => {
@@ -164,6 +166,60 @@ class DeckPropertiesEditor extends React.Component {
                         return true;
                     })
                     .catch();
+            }
+            else if (newProps.DeckEditStore.viewstate === 'errorEditors') {
+                swal({
+                    title: 'Error',
+                    text: 'Unknown error while loading editors.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false
+                })
+                    .then(() => {
+                        return true;
+                    })
+                    .catch();
+            }
+            else if (newProps.DeckEditStore.viewstate === 'errorTransfer') {
+                swal({
+                    title: 'Error',
+                    text: 'Unknown error while transfering ownership.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false
+                })
+                    .then(() => {
+                        return true;
+                    })
+                    .catch();
+            }
+            else if (newProps.DeckEditStore.viewstate === 'successTransfer') {
+                swal({
+                    title: 'Success',
+                    text: 'The ownership was transfered.',
+                    type: 'success',
+                    confirmButtonText: 'Confirm',
+                    confirmButtonClass: 'positive ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: false,
+                    buttonsStyling: false
+                })
+                    .then(() => {
+                        this.context.executeAction(navigateAction, {
+                            url: '/'
+                        });
+                    })
+                    .catch(() => {
+                        this.context.executeAction(navigateAction, {
+                            url: '/'
+                        });
+                    });
             }
         }
     }
@@ -311,17 +367,18 @@ class DeckPropertiesEditor extends React.Component {
 
     handleDelete(evt) {
         evt.preventDefault();
+        // console.log('handleDelete', this.state.users, this.state.groups, this.props.DeckEditStore.roots);
 
         if ( this.props.DeckEditStore.roots.length < 1 ) {
             // not used in other decks
 
-            if (this.state.editors.length < 1 && this.state.groups.length < 1) {
+            if (this.state.users.length < 1 && this.state.groups.length < 1) {
                 // no editors - could just be deleted
                 this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
             }
             else {
                 // transfer ownership
-
+                this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
             }
         }
         else {
@@ -352,13 +409,13 @@ class DeckPropertiesEditor extends React.Component {
                 })
                 .catch(() => {
                     // cancel btn
-                    if (this.state.editors.length < 1 && this.state.groups.length < 1) {
+                    if (this.state.users.length < 1 && this.state.groups.length < 1) {
                         // no editors - could just be deleted
                         this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
                     }
                     else {
                         // transfer ownership
-
+                        this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
                     }
                 });
         }
@@ -519,7 +576,7 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
-        console.log('render edit: published and roots', this.state.published, this.props.DeckEditStore.roots);
+        // console.log('render edit: published and roots', this.state.published, this.props.DeckEditStore.roots);
         //CSS
         let titleFieldClass = classNames({
             'required': true,
@@ -721,6 +778,7 @@ class DeckPropertiesEditor extends React.Component {
                                         <div className="ui hidden divider">
                                         </div>
                                         <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} show={this.props.DeckEditStore.showGroupModal} />
+                                        <TransferOwnership ref="transferownershipmodal_" users={this.props.DeckEditStore.allEditors} show={this.props.DeckEditStore.showTransferOwnershipModal} deckid={this.props.selector.id} />
                                     </div>
                                 </div>
                             ) : ''}

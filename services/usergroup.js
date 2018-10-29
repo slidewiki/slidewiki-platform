@@ -19,6 +19,21 @@ export default {
                 json: true
             }).then( (response) => callback(null, response.groups))
             .catch( (err) => callback(err));
+        } else if (resource === 'usergroup.getList') {
+            // console.log('service usergroup try to get group with id', params.groupid);
+            rp.post({
+                uri: Microservices.user.uri + '/usergroups',
+                body: params.groupids,
+                json: true
+            })
+            .then((res) => {
+                // console.log('Service got usergroups:', res);
+                callback(null, res);
+            })
+            .catch((err) => {
+                // console.warn('Error', err);
+                callback(err, null);
+            });
         } else {
             // usergroup.read got here
             // console.log('service usergroup try to get group with id', params.groupid);
@@ -36,6 +51,5 @@ export default {
                 callback(err, null);
             });
         }
-
     }
 };
