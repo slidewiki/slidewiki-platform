@@ -249,13 +249,13 @@ class DeckLandingPage extends React.Component {
                                     </Segment>
                                     <Segment attached>
                                         <Header size="small" as="h3">Tags:</Header>
-                                        <div className="sr-only">These decks have been recommended as they are similar to this deck"</div>
                                         {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
                                     <Segment attached='bottom'>
                                         <Header size="small" as="h3">You may also be interested in:</Header>
+                                        <div className="sr-only">These decks have been recommended as they are similar to this deck</div>
                                         {interestedInDecks}
-                                    </Segment>
+                                    </Segment
                                 </Grid.Column>
                                 <Grid.Column only="tablet computer" width={4}>
                                     <Segment>
