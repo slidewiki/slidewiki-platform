@@ -5,7 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
-import PresentationPanel from './PresentationsPanel';
+import PresentationsPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import TranslationStore from '../../../stores/TranslationStore';
 import PermissionsStore from '../../../stores/PermissionsStore';
@@ -81,7 +81,7 @@ class InfoPanelInfoView extends React.Component {
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
                   <div className="ui attached segment">
-                      <PresentationPanel />
+                      <PresentationsPanel />
                   </div>
                 ) : ''}
 

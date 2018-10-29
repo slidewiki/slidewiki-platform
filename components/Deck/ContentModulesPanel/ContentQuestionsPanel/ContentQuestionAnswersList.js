@@ -12,7 +12,6 @@ class ContentQuestionAnswersList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            // isEditButtonClicked: false,
             showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
@@ -26,16 +25,10 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
-        // this.setState({
-        //     isEditButtonClicked: true
-        // });
-
         this.context.executeAction(loadQuestion, {qstid: this.props.qstid});
     }
 
     render() {
-        const creatorId = this.props.DeckViewStore.creatorData._id;
-        const userId = this.props.UserProfileStore.userid;
         const editButton = (
             <button className="ui compact button primary" onClick={this.handleEditButtonClick}>
                 <i className="edit icon" />

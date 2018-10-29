@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
-import ChartRender from '../../util/ChartRender';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 const ReactDOM = require('react-dom');
@@ -34,14 +33,9 @@ class SlideContentView extends React.Component {
             //window.addEventListener('resize', this.handleResize);
         }
         this.forceUpdate();
-
-        // Resize of charts only necessary here.
-        ChartRender.renderCharts(true);
-
     }
 
     componentDidUpdate() {
-        ChartRender.renderCharts(false);
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
