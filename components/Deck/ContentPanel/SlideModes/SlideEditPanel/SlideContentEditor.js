@@ -1,32 +1,35 @@
+import {connectToStores} from 'fluxible-addons-react';
+import {NavLink, navigateAction} from 'fluxible-router';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
-import SlideEditStore from '../../../../../stores/SlideEditStore';
+let ReactDOM = require('react-dom');
+
+import ChartRender from '../../util/ChartRender';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
-import SlideViewStore from '../../../../../stores/SlideViewStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import { findDOMNode } from 'react-dom';
+import {FormattedMessage, defineMessages} from 'react-intl';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import {HotKeys} from 'react-hotkeys';
 import MediaStore from '../../../../../stores/MediaStore';
+import {Microservices} from '../../../../../configs/microservices';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
-import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
-import { findDOMNode } from 'react-dom';
-import UserProfileStore from '../../../../../stores/UserProfileStore';
-import {Microservices} from '../../../../../configs/microservices';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
-import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
 import Util from '../../../../common/Util';
-import {FormattedMessage, defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 
-let ReactDOM = require('react-dom');
+
+
 
 class SlideContentEditor extends React.Component {
     constructor(props) {
@@ -252,7 +255,7 @@ class SlideContentEditor extends React.Component {
                 $('.swal2-confirm').focus();
             }, 500);
         }
-    
+
     }
     rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv){
         if(keepExistingContent){
@@ -957,7 +960,7 @@ class SlideContentEditor extends React.Component {
     }
     handleEmbedQuestionsClick(content){
 
-        let title = content.options.title; 
+        let title = content.options.title;
         let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; width: 100%; height: 10%;"><h3>'+title+'</h3></div>';
 
         let questionhtml = '<div  _type="body" id="questions_content" class="block content v-up" style="position: absolute; top: 15%; left: 50px; overflow-y:auto; height:80%; max-height:800px; width:90%; font-family:Tahoma;">';
@@ -966,7 +969,7 @@ class SlideContentEditor extends React.Component {
 
         let showNumbers = content.options.showNumbers;
         let showAnsExp = content.options.showAnsExp;
-        
+
         for (let i = 0; i < questionsList.length; i++){
             let currentQuestion = questionsList[i];
             let currentAnswers = currentQuestion.answers;
@@ -1010,16 +1013,16 @@ class SlideContentEditor extends React.Component {
         //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
         //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
         let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + questionhtml+'</div>';
-        
+
         if($('.pptx2html').length) //if slide is in canvas mode
         {
             /*$('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
             this.hasChanges = true;
             //this.correctDimensionsBoxes('iframe'); */
             this.refs.inlineContent.innerHTML = pptx2htmlDiv;
-        
+
         } else { //if slide is in non-canvas mode
-            this.refs.inlineContent.innerHTML = scrolldiv; 
+            this.refs.inlineContent.innerHTML = scrolldiv;
         }
 
         //console.log(pptx2htmlDiv);
@@ -1100,7 +1103,7 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
-        
+
         CKEDITOR.instances.inlineContent.on('focus',(evt) => {
             this.context.executeAction(contentEditorClick, {
                 focus: true
@@ -1207,6 +1210,11 @@ class SlideContentEditor extends React.Component {
 
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
+        //('img');
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(true);
+
         let slideSizeTextTemp;
         if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         {
@@ -1227,6 +1235,10 @@ class SlideContentEditor extends React.Component {
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
         this.resize();
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(false);
+
     }
 
     correctDimensionsBoxesIframe()
@@ -2525,7 +2537,7 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
-        
+
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*
