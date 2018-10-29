@@ -20,12 +20,13 @@ class DefaultHTMLLayout extends React.Component {
                 <meta name="viewport" content="width=device-width" />
                 <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/home-custom.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/home-layout.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />
                 <link href="/glidejs/dist/css/glide.core.min.css" rel="stylesheet" type="text/css" />
                 <link href="/glidejs/dist/css/glide.theme.min.css" rel="stylesheet" type="text/css" />
-                <link href="/assets/css/nv.d3.min.css" rel="stylesheet" type="text/css" />
                 { user ?
                   <link href="/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" type="text/css" />
                   : <meta name="placeholder" content="jquery-ui" />

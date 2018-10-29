@@ -231,13 +231,11 @@ class TreePanel extends React.Component {
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
                     <div className="ui bottom attached segment">
-                        <div className="ui small header" >Beta feature
-                            <i className="yellow warning sign icon"></i>
-                        </div>
                         <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
                             <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" checked={this.state.showThumbnails ? 'checked' : ''}/>
                             <label htmlFor="ShowThumbnails">Show Thumbnails</label>
                         </div>
+                        <div className="ui small message" >Slide re-order not available in thumbnail view.</div>
                     </div>
 
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />

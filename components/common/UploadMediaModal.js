@@ -406,7 +406,7 @@ class UploadMediaModal extends React.Component {
                       <input id="checkbox_backgroundImage" type="checkbox" tabIndex="0" id="checkbox_backgroundImage" ref="checkbox_backgroundImage"
                          aria-label={this.context.intl.formatMessage(this.messages.background_aria)}
                          aria-required="false"/>
-                      <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)} (beta feature <i className="yellow warning sign icon"></i>)
+                      <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)}
                       </label>
                     </div>
                   </div>

@@ -158,7 +158,6 @@ class PresentationsPanel extends React.Component {
             </Button>;
         else
             toReturn = <div ref="presentationPanel">
-                <Icon name="warning sign" color="yellow"/><span className="ui small header" tabIndex="0"> Beta feature</span>
                 <div className="ui basic segment" style={panelDIVStyles}>
                     <Grid columns={2}>
                       <Grid.Column width={4}>
