@@ -345,6 +345,7 @@
   "TagsPanel.aria.save": "Save tags",
   "TagsPanel.aria.cancel": "Cancel tags",
   "TagsPanel.TagInput.placeholder": "Insert new tags",
+  "editpanel.handleAddQuestionsClick": "Add questions",
   "slidesModal.attachSlidesDescriptionStep1": "You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.",
   "slidesModal.attachSlidesDescriptionStep2": "Select slides to attach. We advise a maximum of 50 slides per (sub)deck for maximal performance/speed for viewing your presentation. You can also separate a large presentation, for example, a series of lectures, into a deck collection.",
   "subDeckModal.attachSubdeckModalDescription": "Select a deck to attach from your My Decks list or search SlideWiki. We recommend that decks have a maximum of 50 slides per (sub)deck for optimum performance when viewing your presentation. If you wish to collate lots of decks then we recommend creating a playlist.",

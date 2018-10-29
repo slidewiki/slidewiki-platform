@@ -14,7 +14,11 @@ import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick'
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
+import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal'; 
+import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
+import DeckPageStore from '../../../stores/DeckPageStore';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -41,6 +45,7 @@ class SlideEditLeftPanel extends React.Component {
             showSize: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
+            deckID: this.props.DeckPageStore.selector.id,
             slideSizeText: '',
             LeftPanelTitleChange: false,
             titleMissingError: false,
@@ -210,7 +215,7 @@ class SlideEditLeftPanel extends React.Component {
             this.setState({titleMissingError: true});
             $('#slideTitle').focus();
         } else {
-            console.log(this.state.slideTitle);
+            //console.log(this.state.slideTitle);
             this.context.executeAction(changeTitle, {
                 title: this.state.slideTitle,
                 LeftPanelTitleChange: true
@@ -260,6 +265,7 @@ class SlideEditLeftPanel extends React.Component {
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
     }
+
     handleHelpClick(){
         swal({
             title: this.context.intl.formatMessage({
@@ -325,7 +331,7 @@ class SlideEditLeftPanel extends React.Component {
         //console.log(event.key);
         //if(event.key === 'Enter' || event.key === ' '){
         if(event.key === 'Enter'){
-            console.log('enter key');
+            //console.log('enter key');
             switch (param) {
                 case 'handleBack':
                     this.handleBack();
@@ -419,6 +425,20 @@ class SlideEditLeftPanel extends React.Component {
         const error = {
             color: 'red',
         };
+        let selectorImm = this.props.DeckTreeStore.selector; 
+        let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')}; /*is this line still needed */
+        //let selectorDeck = this.props.DeckPageStore.selector;
+        let selectorDeck = {id: this.props.DeckPageStore.selector.id, stype: 'deck', sid: this.props.DeckPageStore.selector.id};
+        let currentDeck = {DeckTreeStore: this.props.DeckTreeStore};
+
+        let buttonStyle = {
+            classNames : classNames({
+                'help':true,
+                'icon':true
+            }),
+            iconSize : 'large',
+        } ;
+
         let otherList = (
                 <div>
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
@@ -694,6 +714,7 @@ class SlideEditLeftPanel extends React.Component {
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
+            <AttachQuestions currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck}/>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
@@ -752,9 +773,11 @@ SlideEditLeftPanel.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
-SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
+SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore, DeckPageStore, DeckTreeStore], (context, props) => {
     return {
-        SlideEditStore: context.getStore(SlideEditStore).getState()
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        DeckPageStore : context.getStore(DeckPageStore).getState(),
+        DeckTreeStore : context.getStore(DeckTreeStore).getState()
     };
 });
 export default SlideEditLeftPanel;

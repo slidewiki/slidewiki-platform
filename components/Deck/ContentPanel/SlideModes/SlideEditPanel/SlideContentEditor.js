@@ -1,35 +1,32 @@
-import {connectToStores} from 'fluxible-addons-react';
-import {NavLink, navigateAction} from 'fluxible-router';
 import PropTypes from 'prop-types';
 import React from 'react';
-let ReactDOM = require('react-dom');
-
-import ChartRender from '../../util/ChartRender';
+import {NavLink, navigateAction} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
-import { findDOMNode } from 'react-dom';
-import {FormattedMessage, defineMessages} from 'react-intl';
-import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
-import {HotKeys} from 'react-hotkeys';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
 import MediaStore from '../../../../../stores/MediaStore';
-import {Microservices} from '../../../../../configs/microservices';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
+import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
-import SlideEditStore from '../../../../../stores/SlideEditStore';
-import SlideViewStore from '../../../../../stores/SlideViewStore';
-//import TemplateDropdown from '../../../../common/TemplateDropdown';
-import UploadMediaModal from '../../../../common/UploadMediaModal';
+import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import {Microservices} from '../../../../../configs/microservices';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+//import TemplateDropdown from '../../../../common/TemplateDropdown';
+import {HotKeys} from 'react-hotkeys';
+import UploadMediaModal from '../../../../common/UploadMediaModal';
 import Util from '../../../../common/Util';
+import {FormattedMessage, defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 
-
-
+let ReactDOM = require('react-dom');
 
 class SlideContentEditor extends React.Component {
     constructor(props) {
@@ -255,7 +252,7 @@ class SlideContentEditor extends React.Component {
                 $('.swal2-confirm').focus();
             }, 500);
         }
-        //}
+    
     }
     rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv){
         if(keepExistingContent){
@@ -272,7 +269,6 @@ class SlideContentEditor extends React.Component {
         else{
             this.refs.inlineContent.innerHTML = pptx2htmlStartDiv + pptx2htmlcontent + pptx2htmlCloseDiv;
         }
-
     }
 
     applyTemplate(template, keepExistingContent){
@@ -959,6 +955,75 @@ class SlideContentEditor extends React.Component {
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
         return '<div id=\"' + id + '\" style="position: absolute; top: 300px; left: 250px; width: 300px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
+    handleEmbedQuestionsClick(content){
+
+        let title = content.options.title; 
+        let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; width: 100%; height: 10%;"><h3>'+title+'</h3></div>';
+
+        let questionhtml = '<div  _type="body" id="questions_content" class="block content v-up" style="position: absolute; top: 15%; left: 50px; overflow-y:auto; height:80%; max-height:800px; width:90%; font-family:Tahoma;">';
+        let questionsList = content.questions;
+        //let uniqueID = this.getuniqueID();
+
+        let showNumbers = content.options.showNumbers;
+        let showAnsExp = content.options.showAnsExp;
+        
+        for (let i = 0; i < questionsList.length; i++){
+            let currentQuestion = questionsList[i];
+            let currentAnswers = currentQuestion.answers;
+
+            if(showNumbers){
+                let questionNum = i + 1;
+                questionhtml += '<div style="padding-bottom:15px;"><div>' + questionNum + '. ' + currentQuestion.title + '</div><ul style="padding-bottom:5px; padding-top:5px;">';
+            }
+            else {
+                questionhtml += '<div style="padding-bottom:15px;"><div>' + currentQuestion.title + '</div><ul  style="padding-bottom:5px; padding-top:5px;">';
+            }
+
+            if(showAnsExp){
+                //if the answers and explanation should be shown for the embedded questions
+
+                for (let j = 0; j < currentAnswers.length; j++){
+                    let correctText = '';
+
+                    switch (currentAnswers[j].correct) {
+                        case true:
+                            correctText = '<strong> - correct </strong>';
+                            break;
+                    }
+                    questionhtml += '<li style="font-size:22px; margin-top:5px;">'+ currentAnswers[j].answer + correctText + '</li>';
+                }
+                let explanation = currentQuestion.explanation ? '<div style="padding-left:30px; padding-bottom:5px; font-size:24px; "><strong>Explanation:</strong> '+ currentQuestion.explanation + '</div>' : '';
+                questionhtml += '</ul>'+ explanation +'</div>';
+            }
+            else {
+                //if the answers and explanation shouldn't be included
+                for (let j = 0; j < currentAnswers.length; j++){
+                    questionhtml += '<li style="font-size:22px; margin-top:5px;">'+currentAnswers[j].answer + '</li>';
+                }
+
+                questionhtml += '</ul></div>';
+            }
+        }
+        questionhtml += '</div>';
+
+        let scrolldiv = '<div _type="body" id="questions_content" class="block content v-up context-menu-disabled" style="overflow-y:auto; height:80%; max-height:800px; position: absolute; top: 25px; left: 40px; ">'+titleDiv+questionhtml+'</div>';
+        //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
+        //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
+        let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + questionhtml+'</div>';
+        
+        if($('.pptx2html').length) //if slide is in canvas mode
+        {
+            /*$('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+            this.hasChanges = true;
+            //this.correctDimensionsBoxes('iframe'); */
+            this.refs.inlineContent.innerHTML = pptx2htmlDiv;
+        
+        } else { //if slide is in non-canvas mode
+            this.refs.inlineContent.innerHTML = scrolldiv; 
+        }
+
+        //console.log(pptx2htmlDiv);
+    }
     componentDidMount() {
         window.onbeforeunload = () => {
             if (this.hasChanges === true)
@@ -1035,7 +1100,7 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
-
+        
         CKEDITOR.instances.inlineContent.on('focus',(evt) => {
             this.context.executeAction(contentEditorClick, {
                 focus: true
@@ -1142,11 +1207,6 @@ class SlideContentEditor extends React.Component {
 
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
-        //('img');
-
-        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
-        ChartRender.renderCharts(true);
-
         let slideSizeTextTemp;
         if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         {
@@ -1167,10 +1227,6 @@ class SlideContentEditor extends React.Component {
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
         this.resize();
-
-        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
-        ChartRender.renderCharts(false);
-
     }
 
     correctDimensionsBoxesIframe()
@@ -2087,6 +2143,10 @@ class SlideContentEditor extends React.Component {
                 }, 1000);
             }
         }
+        //do something to change code for questions
+        if (nextProps.SlideEditStore.embedQuestionsClick === 'true' && nextProps.SlideEditStore.embedQuestionsClick !== this.props.SlideEditStore.embedQuestionsClick){
+            this.handleEmbedQuestionsClick(nextProps.SlideEditStore.embedQuestionsContent);
+        }
     }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
@@ -2465,7 +2525,7 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
-
+        
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*

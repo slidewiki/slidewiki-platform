@@ -276,6 +276,28 @@ function addSelectedToFacets(facets, query) {
     addToFacet(facets.tags, query.tag);
 }
 
+function getQuestionsCount(deckIdsSet) {
+    let questionsCount = {};
+    let questionsPromises = [];
+
+    for(let deckId of deckIdsSet){
+        let qPromise = rp.get({
+            uri: `${Microservices.questions.uri}/deck/${deckId}/questions`,
+            qs: {
+                metaonly: true,
+                include_subdecks_and_slides: true,
+            },
+            json: true,
+        }).then( (response) => {
+            questionsCount[deckId] = response.count;
+        }).catch( (err) => {
+            questionsCount[deckId] = 0;
+        });
+        questionsPromises.push(qPromise);
+    }
+    return Promise.all(questionsPromises).then( () => { return questionsCount; });
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -308,7 +330,8 @@ export default {
                     getActivity('share', deckIds),
                     getTags(response.facets),
                     getSlideAmount(deckIds),
-                ]).then( ([ users, { decks, deckRevisions }, likes, downloads, shares, tags, slides ]) => {
+                    getQuestionsCount(deckIds),
+                ]).then( ([ users, { decks, deckRevisions }, likes, downloads, shares, tags, slides, questions ]) => {
                     response.docs.forEach( (result) => {
                         parseDeck(result, users);
 
@@ -321,6 +344,7 @@ export default {
                         result.theme = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
                                                     deckRevisions[`${result.db_id}-${result.db_revision_id}`].theme : '';
 
+
                         result.firstSlide = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
                                                     deckRevisions[`${result.db_id}-${result.db_revision_id}`].firstSlide : '';
 
@@ -328,6 +352,7 @@ export default {
                         result.noOfLikes = likes[result.db_id];
                         result.downloadsCount = downloads[result.db_id];
                         result.sharesCount = shares[result.db_id];
+                        result.questionsCount = questions[result.db_id];
                         result.educationLevel = decks[result.db_id].educationLevel;
                         result.noOfSlides = slides[result.db_id];
                     });

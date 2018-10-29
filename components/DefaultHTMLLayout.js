@@ -27,7 +27,6 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />
                 <link href="/glidejs/dist/css/glide.core.min.css" rel="stylesheet" type="text/css" />
                 <link href="/glidejs/dist/css/glide.theme.min.css" rel="stylesheet" type="text/css" />
-                <link href="/assets/css/nv.d3.min.css" rel="stylesheet" type="text/css" />
                 { user ?
                   <link href="/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" type="text/css" />
                   : <meta name="placeholder" content="jquery-ui" />
