@@ -5,7 +5,7 @@ import updateUserStatsActivityType from '../../../actions/stats/updateUserStatsA
 import {TagCloud} from 'react-tagcloud';
 import {defineMessages} from 'react-intl';
 import ActivityTimeline from '../../../components/Stats/ActivityTimeline';
-
+import {PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer} from 'recharts';
 
 import PropTypes from 'prop-types';
 
@@ -21,6 +21,22 @@ class UserStats extends React.Component {
             tagCloudTitle: {
                 id: 'Stats.tagCloudTitle',
                 defaultMessage: 'Popular Tags'
+            },
+            userEngagementTitle: {
+                id: 'Stats.userEngagementTitle',
+                defaultMessage: 'User Engagement Overview'
+            },
+            activeEngagement: {
+                id: 'Stats.activeEngagement',
+                defaultMessage: 'Active Engagement'
+            },
+            passiveEngagement: {
+                id: 'Stats.passiveEngagement',
+                defaultMessage: 'Passive Engagement'
+            },
+            socialEngagement: {
+                id: 'Stats.socialEngagement',
+                defaultMessage: 'Social Engagement'
             },
         });
     }
@@ -56,6 +72,31 @@ class UserStats extends React.Component {
               </Table.Row>
             );
         });
+
+        let userEngagement = this.props.userStats.userEngagement;
+        let activeEngagementMsg = this.context.intl.formatMessage(this.messages.activeEngagement);
+        let passiveEngagementMsg = this.context.intl.formatMessage(this.messages.passiveEngagement);
+        let socialEngagementMsg = this.context.intl.formatMessage(this.messages.socialEngagement);
+        let radarData = [{
+            type: activeEngagementMsg,
+            value: userEngagement['active_engagement']
+        }, {
+            type: passiveEngagementMsg,
+            value: userEngagement['passive_engagement']
+        }, {
+            type: socialEngagementMsg,
+            value: userEngagement['social_engagement']
+        }];
+
+        let userEngagementRows = radarData.map((engagement, index) => {
+            return (
+              <Table.Row key={index}>
+                  <Table.Cell>{engagement.type}</Table.Cell>
+                  <Table.Cell>{engagement.value}</Table.Cell>
+              </Table.Row>
+            );
+        });
+
         return (
           <Grid relaxed>
               {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
@@ -86,6 +127,33 @@ class UserStats extends React.Component {
                           </Table.Header>
                           <Table.Body>
                               {statsByTagRows}
+                          </Table.Body>
+                      </Table>
+                  </Grid.Column>
+              </Grid.Row>}
+              {this.props.userStats.userEngagement &&
+              <Grid.Row centered columns={1}>
+                  <Grid.Column>
+                      <Message attached><h3>{this.context.intl.formatMessage(this.messages.userEngagementTitle)}</h3></Message>
+                      <Segment aria-describedby='userEngagementTable' attached textAlign='center' padded='very'
+                               loading={this.props.userStats.userEngagementLoading} aria-label='Data table for user engagement overview' tabIndex='0' aria-hidden='true'>
+                          <ResponsiveContainer height={300}>
+                              <RadarChart outerRadius={100} data={radarData}>
+                                  <PolarGrid />
+                                  <PolarAngleAxis dataKey="type" />
+                                  <Radar dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
+                              </RadarChart>
+                          </ResponsiveContainer>
+                      </Segment>
+                      <Table id='userEngagementTable' className="sr-only">
+                          <Table.Header>
+                              <Table.Row>
+                                  <Table.HeaderCell>User Engagement Type</Table.HeaderCell>
+                                  <Table.HeaderCell>Value</Table.HeaderCell>
+                              </Table.Row>
+                          </Table.Header>
+                          <Table.Body>
+                              {userEngagementRows}
                           </Table.Body>
                       </Table>
                   </Grid.Column>

@@ -389,13 +389,10 @@ export default {
               .catch((err) => callback(err))
             );
             Promise.all(promises).then(function(values) {
-                  // console.log("all", values);
-                  let toReturn = [];
+                  let toReturn = {};
                   values.forEach(function(value){
                     if(value)
-                        toReturn.push(value);
-                        //console.log("all", value);
-
+                        Object.assign(toReturn, value);
                   });
                   callback(null, toReturn);
                 });  
