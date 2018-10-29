@@ -46,22 +46,19 @@ export default {
                     return res;
                 });
             }).then((res) => {
-                // get likes per deck
-                let deckIdsSet = new Set(res.map((deck) => deck._id));
-                let likePromises = [];
-                let likes = {};
-
-                for(let deckId of deckIdsSet){
-                    likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
-                        likes[deckId] = noOfLikes;
-                    }).catch( (err) => {
-                        likes[deckId] = 0;
-                    }));
-                }
+                let deckIds = res.map( (deck) => deck._id );
                 
-                return Promise.all(likePromises).then( () => { 
+                return Promise.all([ 
+                    getActivity('download', deckIds), 
+                    getActivity('react', deckIds),
+                    getActivity('share', deckIds),
+                    getSlidesAmount(deckIds)
+                ]).then( ([downloads, likes, shares, slides]) => {
                     res.forEach((deck) => {
-                        deck.likes = likes[deck._id];
+                        deck.downloadsCount = downloads[deck._id];
+                        deck.likesCount = likes[deck._id];
+                        deck.sharesCount = shares[deck._id];
+                        deck.slidesCount = slides[deck._id];
                     });
                     return res; 
                 });
@@ -102,6 +99,23 @@ export default {
                         }
                     });
                     return res;
+                });
+            }).then((res) => {
+                let deckIds = res.map( (deck) => deck._id );
+                
+                return Promise.all([ 
+                    getActivity('download', deckIds), 
+                    getActivity('react', deckIds),
+                    getActivity('share', deckIds),
+                    getSlidesAmount(deckIds)
+                ]).then( ([downloads, likes, shares, slides]) => {
+                    res.forEach((deck) => {
+                        deck.downloadsCount = downloads[deck._id];
+                        deck.likesCount = likes[deck._id];
+                        deck.sharesCount = shares[deck._id];
+                        deck.slidesCount = slides[deck._id];
+                    });
+                    return res; 
                 });
             }).then((res) => {
                 callback(null, {recent: addSlugs(res)});
@@ -586,6 +600,45 @@ export default {
     }
     // delete: (req, resource, params, config, callback) => {}
 };
+
+function getActivity(activityType, deckIds) {
+    let activities = {};
+    
+    let activityPromises = deckIds.map( (deckId) => 
+        rp.get({
+            uri: `${Microservices.activities.uri}/activities/deck/${deckId}`, 
+            qs: {
+                metaonly: true, 
+                activity_type: activityType, 
+                all_revisions: true,
+            }
+        }).then((activity) => {
+            activities[deckId] = activity;
+        }).catch( (err) => {
+            activities[deckId] = 0;
+        }));
+
+    return Promise.all(activityPromises).then( () => { return activities; });
+}
+
+function getSlidesAmount(deckIds) {
+    let slidesAmounts = {};
+    
+    let slidesPromises = deckIds.map( (deckId) => 
+        rp.get({
+            uri: `${Microservices.deck.uri}/deck/${deckId}/slides`, 
+            qs: {
+                countOnly: true
+            },
+            json: true
+        }).then((noOfSlides) => {
+            slidesAmounts[deckId] = noOfSlides.slidesCount;
+        }).catch( (err) => {
+            slidesAmounts[deckId] = 0;
+        }));
+
+    return Promise.all(slidesPromises).then( () => { return slidesAmounts; });
+}
 
 function addSlugs(decks) {
     if (decks.forEach) {
