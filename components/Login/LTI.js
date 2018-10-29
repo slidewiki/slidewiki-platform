@@ -31,7 +31,7 @@ class LTI extends React.Component {
         //console.log('LTI. componentDidMount.this.state.resource_Id='+this.state.resource_id);
         if(this.state.resource_id !== '' && this.state.resource_id >0) {
             this.context.executeAction(navigateAction, {
-              url: '/deck/'+this.state.resource_id
+                url: '/deck/'+this.state.resource_id
             });
         }
 
