@@ -1,4 +1,5 @@
-import React from 'react';;
+import React from 'react';
+import {Card} from 'semantic-ui-react';;
 import { NavLink } from 'fluxible-router';
 import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
 
@@ -101,7 +102,18 @@ class DeckLandingPage extends React.Component {
         let interestedInDecks = 'No decks to show';
         if (this.props.SimilarContentStore.contents && this.props.SimilarContentStore.contents.length >= 1) {
             interestedInDecks =  this.props.SimilarContentStore.contents.map((deck, i) => {
-                return <Grid.Column key={i} width={5}><NavLink href={`/deck/${deck.deckId}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlideId}`} bordered /><h4>{deck.title}</h4></NavLink></Grid.Column>;
+                return <Grid.Column key={i} width={5}>
+                    <div className="ui card">
+                        <NavLink href={`/deck/${deck.deckId}`}>
+                                <div className="ui image fluid bordered">
+                                    <img src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlideId}`}  aria-hidden="true" tabIndex="-1" alt=' ' />
+                                </div>
+                                <h4 className="header">
+                                    {deck.title}
+                                </h4>
+                        </NavLink>
+                    </div>
+                </Grid.Column>;
             });
             interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
         }
@@ -237,6 +249,7 @@ class DeckLandingPage extends React.Component {
                                     </Segment>
                                     <Segment attached>
                                         <Header size="small" as="h3">Tags:</Header>
+                                        <div className="sr-only">These decks have been recommended as they are similar to this deck"</div>
                                         {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
                                     <Segment attached='bottom'>
