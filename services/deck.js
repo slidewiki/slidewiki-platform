@@ -577,6 +577,18 @@ export default {
             })
             .catch((err) => callback(err));
         }
+        else if (resource === 'deck.delete') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.deck.uri + '/deck/' + params.id + '/links',
+                headers: { '----jwt----': params.jwt },
+                json: true
+            })
+            .then((body) => {
+                callback(null, body);
+            })
+            .catch((err) => callback(err));
+        }
     }
 };
 

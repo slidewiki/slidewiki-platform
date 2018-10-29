@@ -39,7 +39,7 @@ class DeckEditStore extends BaseStore {
         this.originalEditors = JSON.parse(JSON.stringify(payload.deckProps.editors));
         // console.log('Now we have new origin editors:', this.originalEditors);
 
-        this.roots = payload.roots.filter(deck => parseInt(deck.id, 10) !== parseInt(this.deckProps.sid.split('-')[0], 10));
+        this.roots = payload.roots.filter((deck) => parseInt(deck.id, 10) !== parseInt(this.deckProps.sid.split('-')[0], 10));
         // console.log('DeckEditStore roots', payload.roots, this.roots, this.deckProps.sid, this.deckProps.sid.split('-')[0]);
 
         this.emitChange();
@@ -121,11 +121,33 @@ class DeckEditStore extends BaseStore {
     }
 
     deleteDeckError(error) {
-
+        this.viewstate = 'errorDelete';
+        this.emitChange();
+        this.viewstate = '';
     }
 
     deleteDeck(data) {
+        this.viewstate = 'successDelete';
+        this.emitChange();
+        this.viewstate = '';
+    }
 
+    startDeleteDeck() {
+        this.viewstate = 'loading';
+        this.emitChange();
+        this.viewstate = '';
+    }
+
+    removeDeckError(error) {
+        this.viewstate = 'errorRemove';
+        this.emitChange();
+        this.viewstate = '';
+    }
+
+    removeDeck(data) {
+        this.viewstate = 'successRemove';
+        this.emitChange();
+        this.viewstate = '';
     }
 }
 
@@ -144,7 +166,10 @@ DeckEditStore.handlers = {
 
     // Deck deletion/removable
     'DELETE_DECK_ERROR': 'deleteDeckError',
-    'DELETE_DECK_SUCCESS': 'deleteDeck'
+    'DELETE_DECK_SUCCESS': 'deleteDeck',
+    'START_DELETE_DECK': 'startDeleteDeck',
+    'REMOVE_DECK_ERROR': 'removeDeckError',
+    'REMOVE_DECK_SUCCESS': 'removeDeck'
 };
 
 export default DeckEditStore;
