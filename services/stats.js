@@ -336,12 +336,16 @@ export default {
                 json: true
             }).then((response) => {
                 let norm = response[0].count;
-                if(norm < 50)
-                    norm = 0;
-                else if (norm < 200)
-                    norm = 0.5;
-                else
-                    norm = 1;
+                let maxActive = 75.0;
+                if(norm >= maxActive)
+                    norm = maxActive;
+                norm = norm / maxActive;
+                // if(norm < 50)
+                //     norm = 0;
+                // else if (norm < 200)
+                //     norm = 0.5;
+                // else
+                //     norm = 1;
                 return {'active_engagement' : norm};
             })
               .catch((err) => callback(err))
@@ -357,12 +361,10 @@ export default {
                 json: true
             }).then((response) => {
                 let norm = response[0].count;
-                if(norm < 50)
-                    norm = 0;
-                else if (norm < 200)
-                    norm = 0.5;
-                else
-                    norm = 1;
+                let maxPassive = 350.0;
+                if(norm >= maxPassive)
+                    norm = maxPassive;
+                norm = norm / maxPassive;
                 return {'passive_engagement' : norm};                
             })
               .catch((err) => callback(err))
@@ -377,13 +379,11 @@ export default {
                 headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
                 json: true
             }).then((response) => {
-                let norm = response[0].count;
-                if(norm < 50)
-                    norm = 0;
-                else if (norm < 200)
-                    norm = 0.5;
-                else
-                    norm = 1;
+                let norm = response[0].count;                
+                let maxSocial = 10.0;
+                if(norm >= maxSocial)
+                    norm = maxSocial;
+                norm = norm / maxSocial;
                 return {'social_engagement' : norm};
             })
               .catch((err) => callback(err))
