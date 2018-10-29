@@ -9,6 +9,7 @@ let classNames = require('classnames');
 const NAME = 'ltilogin_data';
 
 let queryData = '';
+let resource_id= '';
 
 class LTI extends React.Component {
 
@@ -16,7 +17,8 @@ class LTI extends React.Component {
         super(props);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.state = {
-            queryData: this.props.currentRoute.query.data
+            queryData: this.props.currentRoute.query.data,
+            resource_id: this.props.currentRoute.query.resource_id
         };
         cookie.save('user_json_storage', this.state.queryData, {path: '/'});
     }
@@ -26,11 +28,17 @@ class LTI extends React.Component {
     }
     componentDidMount() {
         console.log('LTI. componentDidMount');
+        //console.log('LTI. componentDidMount.this.state.resource_Id='+this.state.resource_id);
+        if(this.state.resource_id !== '' && this.state.resource_id >0) {
+            this.context.executeAction(navigateAction, {
+              url: '/deck/'+this.state.resource_id
+            });
+        }
+
     }
 
     render() {
-        //console.log('LTILogin.render called. queryData='+this.state.queryData);
-        console.log('LTILogin.render called.');
+        //console.log('LTILogin.render called.resource_id='+this.state.resource_id);
         return (
             <div>
                 Welcome to LTI Login.
