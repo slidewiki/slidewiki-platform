@@ -254,7 +254,7 @@ class DeckLandingPage extends React.Component {
                                     <Segment attached='bottom'>
                                         <Header size="small" as="h3">You may also be interested in:</Header>
                                         {interestedInDecks}
-                                    </Segment
+                                    </Segment>
                                 </Grid.Column>
                                 <Grid.Column only="tablet computer" width={4}>
                                     <Segment>
