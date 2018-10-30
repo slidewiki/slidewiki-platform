@@ -530,9 +530,10 @@ textarea:focus{
     color: #fff;
     font-size: 24px;
     font-weight: 700;
-    line-height: 71px;
+    /*line-height: 71px;*/
     padding: 0 20px;
     min-width: 210px;
+    box-sizing: border-box;
 }
 
 .home.primary.button:hover {

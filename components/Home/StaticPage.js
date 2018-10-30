@@ -7,7 +7,7 @@ import updateTrap from '../../actions/loginModal/updateTrap';
 import UserProfileStore from '../../stores/UserProfileStore';
 
 class StaticPage extends React.Component {
-	constructor(props) {
+    constructor(props) {
         super(props);
         this.messages = defineMessages({
             findSlides: {
@@ -16,11 +16,11 @@ class StaticPage extends React.Component {
             },
             findSlidesSubtitle: {
                 id: 'staticPage.findSlidesSubtitle',
-                defaultMessage: 'Explore the deck lorem ipsum'           // TODO: change lorem ipsums
+                defaultMessage: 'Explore the deck'
             },
             findSlidesContent: {
                 id: 'staticPage.findSlidesContent',
-                defaultMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget elit sapien. Nunc semper urna in lectus consectetur fermentum. Vestibulum eu sem pulvinar, sollicitudin ipsum eu, porttitor elit. Maecenas bibendum congue lectus, viligula finibus, sit amet aliquam n ipsum eu, porttitor elit. Maecenas bibendum congue lectus, viligula finibus, sit amet.'           // TODO: change lorem ipsums
+                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
             },
             createSlides: {
                 id: 'staticPage.createSlides',
@@ -28,7 +28,7 @@ class StaticPage extends React.Component {
             },
             createSlidesSubtitle: {
                 id: 'staticPage.createSlidesSubtitle',
-                defaultMessage: 'Learn how to create slides with SlideWiki'
+                defaultMessage: 'Add and adapt course material'
             },
             createSlidesContent: {
                 id: 'staticPage.createSlidesContent',
@@ -36,7 +36,7 @@ class StaticPage extends React.Component {
             },
             sharingSlides: {
                 id: 'staticPage.sharingSlides',
-                defaultMessage: 'Sharing slides'
+                defaultMessage: 'Share slides'
             },
             sharingSlidesSubtitle: {
                 id: 'staticPage.sharingSlidesSubtitle',
@@ -65,7 +65,7 @@ class StaticPage extends React.Component {
         });
     }
 	
-	handleLoginButton() {
+    handleLoginButton() {
         this.context.executeAction(updateTrap,{activeTrap:true});
         //hidden the other page elements to readers
         $('#app').attr('aria-hidden','true');
@@ -74,78 +74,78 @@ class StaticPage extends React.Component {
         this.closeSidebar({target: '<a className="item"></a>'});
     }
 	
-	render() {
-		let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
+    render() {
+        let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
             <a onClick={this.handleLoginButton.bind(this)}>{this.context.intl.formatMessage(this.messages.signIn)}</a>:
             <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
                 {this.context.intl.formatMessage(this.messages.myDecks)}
             </NavLink>;	
-			
-		return (<div>
-			
-            <div className='ui hidden divider'></div>
-			
-            <div className='ui grid stackable container'>
-                <div className='row'>
-                    <div className='twelve wide column'>
-                        <div className='ui content'>
-							{this.props.children} 
-						</div>
-					</div>
-                    <div className='four wide column'>
-                        <div className='feature-content blue-block-terms'>
-                            <div className='feature-left'>
-                                <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
-                                <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
-                                <div className='text-div'>
-                                    {/*}  <div className='text'>
-                                                        <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
-                                                    </div> */}
-                                    <img src='/assets/images/home/search.jpg' className="ui tiny image" alt=''/>
-                                </div>
+
+        return (<div>		
+			<div className='ui hidden divider'></div>
+
+			<div className='ui grid stackable container'>
+			<div className='row'>
+			<div className='twelve wide column'>
+			    <div className='ui content'>
+					{this.props.children} 
+				</div>
+			</div>
+			<div className='four wide column'>
+			    <div className='feature-content blue-block-terms'>
+			        <div className='feature-left'>
+			            <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
+			            <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
+			            <div className='text-div'>
+			                <div className='text'>
+                             
+                                <p><img src='/assets/images/home/search.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
+                            </div> 
+			               
+			            </div>
+			        </div>
+			    </div>
+			    <div className='feature-content green-block-terms'>
+			        <div className='feature-left'>
+			            <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
+			            <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
+			            <div className='text-div'>
+			                <div className='text'>
+                                <p> <img src='/assets/images/home/add.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
+                            </div> 
+			               
+			            </div>
+			        </div>
+			    </div>
+			    <div className='feature-content red-block-terms'>
+			        <div className='feature-left'>
+			            <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
+			            <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
+			            <div className='text-div'>
+			                <div className='text'>
+                                <p><img src='/assets/images/home/share.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
                             </div>
-                        </div>
-                        <div className='feature-content green-block-terms'>
-                            <div className='feature-left'>
-                                <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
-                                <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
-                                <div className='text-div'>
-                                    {/*    <div className='text'>
-                                                        <p>{this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
-                                                    </div> */}
-                                    <img src='/assets/images/home/add.jpg' className="ui tiny image" alt=''/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='feature-content red-block-terms'>
-                            <div className='feature-left'>
-                                <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
-                                <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
-                                <div className='text-div'>
-                                    {/*   <div className='text'>
-                                                        <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
-                                                    </div> */}
-                                    <img src='/assets/images/home/share.jpg' className="ui tiny image" alt=''/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='row'>
-                    <div className='signin-blk wrapper'>
-                        <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
-                        <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
-                    </div>
-                </div>
-                
-                <div className='row'>
-                    {/*<div className='banner-container inner-image'>
-                        <img src='/assets/images/home/banner.jpg' alt=''/>
-                    </div>*/}
-                </div>
+			                
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			</div>
+			<div className='row'>
+			<div className='signin-blk wrapper'>
+			    <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
+			    <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
+			</div>
+			</div>
+
+			<div className='row'>
+			{/*<div className='banner-container inner-image'>
+			    <img src='/assets/images/home/banner.jpg' alt=''/>
+			</div>*/}
+			</div>
 			</div>
 			</div>);
-	}
+    }
 }
 
 StaticPage.contextTypes = {
