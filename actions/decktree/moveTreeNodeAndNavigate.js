@@ -19,7 +19,7 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
                 let {selector, sourceNode, targetNode} = payload;
                 if (selector.stype === 'deck' && selector.sid === selector.id) {
                     // if we were at the root deck stay there
-                    newURL = Util.makeNodeURL(selector, 'plaindeck', 'view');
+                    newURL = Util.makeNodeURL(selector, 'deck', 'view');
                 } else if (selector.stype === 'deck' && selector.sid === targetNode.get('id') && selector.spath === targetNode.get('path') && targetNode.get('children').includes(sourceNode)){
                     // if we are at the subdeck view and we move a node within *that* subdeck navigate there
                     newURL = Util.makeNodeURL({
