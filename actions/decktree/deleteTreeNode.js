@@ -12,7 +12,7 @@ export default function deleteTreeNode(context, payload, done) {
     let purge = false;
     if (payload.selector) {
         purge = payload.purge ? payload.purge : false;
-        payload = payload.selector
+        payload = payload.selector;
     }
     payload.purge = purge;
 
