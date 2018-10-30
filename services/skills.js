@@ -82,7 +82,7 @@ export default {
 				  		//console.log("all", value);
 
 				  });
-				  callback(null, toReturn);
+				  callback(null, Array.from(new Set(toReturn)));
 				});              
             })
               .catch((err) => callback(err)); //
