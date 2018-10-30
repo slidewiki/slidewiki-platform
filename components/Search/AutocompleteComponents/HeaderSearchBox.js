@@ -78,7 +78,7 @@ class HeaderSearchBox extends React.Component {
         if (this.props.type === 'home') {
             this.refs.searchHomeString.blur();
         } else {
-            this.refs.searchstring.blur();
+            this.refs.searchString.blur();
         }
 
 
