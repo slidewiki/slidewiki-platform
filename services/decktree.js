@@ -156,7 +156,8 @@ export default {
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 headers: {'----jwt----': args.jwt},
                 body: JSON.stringify({
-                    selector: selector
+                    selector: selector,
+                    purge: args.purge ? true : false
                 })
             };
             rp(options).then((res) => {

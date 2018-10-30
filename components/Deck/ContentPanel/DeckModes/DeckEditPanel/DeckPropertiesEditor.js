@@ -370,7 +370,8 @@ class DeckPropertiesEditor extends React.Component {
 
     handleDelete(evt) {
         evt.preventDefault();
-        // console.log('handleDelete', this.state.users, this.state.groups, this.props.DeckEditStore.roots);
+        console.log('handleDelete', this.state.users, this.state.groups, this.props.DeckEditStore.roots);
+        console.log('handleDelete more data', this.props.selector, this.props.DeckEditStore);
 
         if ( this.props.DeckEditStore.roots.length < 1 ) {
             // not used in other decks
@@ -700,9 +701,14 @@ class DeckPropertiesEditor extends React.Component {
                 <button className='ui primary button'
                     onClick={this.handleSave.bind(this)}>Save
                 </button>
-                <button className='negative ui button'
-                    onClick={this.handleDelete.bind(this)}>Delete
-                </button>
+                {
+                  (this.props.selector.spath) ?
+                    ''
+                    :
+                    <button className='negative ui button'
+                        onClick={this.handleDelete.bind(this)}>Delete
+                    </button>
+                }
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>
                     Cancel

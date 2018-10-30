@@ -96,7 +96,32 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleDeleteNode(selector) {
-        this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+        swal({
+            title: 'Deletion of subdeck',
+            html: 'You could remove this subdeck from its parent and keep it as your own deck or delete the deck complete which also removes it as subdeck.',
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Remove as subdeck',
+            confirmButtonClass: 'ui button',
+            cancelButtonText: 'Delete whole deck',
+            cancelButtonClass: 'negative ui button',
+            allowEscapeKey: true,
+            allowOutsideClick: true,
+            buttonsStyling: false
+        })
+            .then((result) => {
+                console.log(result);
+                // confirm btn
+                // remove deck as node from the parent deck
+                this.context.executeAction(deleteTreeNodeAndNavigate, {selector});
+            }, (action) => {
+                if (action === 'cancel') {
+                    this.context.executeAction(deleteTreeNodeAndNavigate, {selector, purge: true});
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     }
 
     handleSaveButtonClick(){
@@ -322,12 +347,12 @@ class ContentActionsHeader extends React.Component {
 
 
         }
-        
+
         const leftButtonsClass = classNames({
             'ui left floated top attached buttons': true,
-            'basic': editButton !== '' 
+            'basic': editButton !== ''
         });
-        
+
         /*
         <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
           type="button"
