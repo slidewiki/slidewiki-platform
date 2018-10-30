@@ -13,6 +13,8 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
+        this.embedQuestionsClick = 'false';
+        this.embedQuestionsContent = ''; //contains the content for the question embedding
         this.slideSize = '';
         this.slideSizeText = '';
         this.saveSlideClick = 'false';
@@ -32,6 +34,7 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+        this.embedTitle = '';
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
@@ -161,12 +164,14 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = payload.embedHeight;
         this.embedURL = payload.embedURL;
         this.embedCode = payload.embedCode;
+        this.embedTitle = payload.embedTitle;
         this.emitChange();
         this.embedClick = 'false';
         this.embedWidth = '';
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+        this.embedTitle = '';
         this.emitChange();
     }
 
@@ -181,6 +186,17 @@ class SlideEditStore extends BaseStore {
         this.emitChange();
         this.HTMLEditorClick = 'false';
         this.emitChange();
+    }
+    handleEmbedQuestions(payload){
+        //embedQuestionsContent - this is the content that will be embedded (questions and options)
+        //embedQuestions - this will be the trigger that causes the questions to be embedded.
+        //add some form of logic/error handling here?
+        this.embedQuestionsContent = payload; 
+        this.embedQuestionsClick = 'true';
+        this.emitChange();
+
+        this.embedQuestionsClick = 'false';
+        this.embedQuestionsContent = '';
     }
     handleContentEditorFocus(payload) {
         this.contentEditorFocus = payload.focus;
@@ -203,6 +219,8 @@ class SlideEditStore extends BaseStore {
             undoClick: this.undoClick,
             redoClick: this.redoClick,
             template: this.template,
+            embedQuestionsClick: this.embedQuestionsClick,
+            embedQuestionsContent: this.embedQuestionsContent,
             slideSize: this.slideSize,
             slideSizeText: this.slideSizeText,
             addInputBox: this.addInputBox,
@@ -215,6 +233,7 @@ class SlideEditStore extends BaseStore {
             embedClick: this.embedClick,
             embedURL: this.embedURL,
             embedCode: this.embedCode,
+            embedTitle: this.embedTitle,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
             HTMLEditorClick: this.HTMLEditorClick,
@@ -242,6 +261,8 @@ class SlideEditStore extends BaseStore {
         this.undoClick = state.undoClick;
         this.redoClick = state.redoClick;
         this.template = state.template;
+        this.embedQuestionsClick = state.embedQuestionsClick;
+        this.embedQuestionsContent = state.embedQuestionsContent;
         this.slideSize = state.slideSize;
         this.slideSizeText = state.slideSizeText;
         this.addInputBox = state.addInputBox;
@@ -254,6 +275,7 @@ class SlideEditStore extends BaseStore {
         this.embedClick = state.embedClick;
         this.embedURL = state.embedURL;
         this.embedCode = state.embedCode;
+        this.embedTitle = state.embedTitle;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
         this.HTMLEditorClick = state.HTMLEditorClick;
@@ -305,6 +327,7 @@ SlideEditStore.handlers = {
     'EMBED_CLICK': 'handleEmbedClick',
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
+    'SLIDE_EMBED_QUESTIONS': 'handleEmbedQuestions',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',
     'ZOOM': 'zoomContent',

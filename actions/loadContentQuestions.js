@@ -26,15 +26,12 @@ export default function loadContentQuestions(context, payload, done) {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('LOAD_CONTENT_QUESTIONS_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_QUESTIONS_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'questions'});
         }
         let pageTitle = shortTitle + ' | Content Questions | ' + payload.params.stype + ' | ' + payload.params.sid;
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
+
         done();
     });
 }

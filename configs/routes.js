@@ -16,6 +16,7 @@ import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
+import loadExamQuestions from '../actions/questions/loadExamQuestions';
 import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
@@ -444,7 +445,7 @@ export default {
         }
     },
     similarcontent: {
-        path: '/similarcontent/:stype/:sid',
+        path: '/similarcontent/:stype/:sid/:userid?',
         method: 'get',
         page: 'similarcontent',
         handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),
@@ -563,6 +564,15 @@ export default {
         handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentQuestions, payload, done);
+        }
+    },
+    exam: {
+        path: '/exam/:stype/:sid',
+        method: 'get',
+        page: 'exam',
+        handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ExamPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadExamQuestions, payload, done);
         }
     },
     discussion: {
