@@ -36,6 +36,7 @@ const localeLoaders = {
     gd: () => require('react-intl-loader?locale=gd!../intl/gd.json'),
     it: () => require('react-intl-loader?locale=it!../intl/it.json'),
     nl: () => require('react-intl-loader?locale=nl!../intl/nl.json'),
+    pt: () => require('react-intl-loader?locale=pt!../intl/pt.json'),
     ru: () => require('react-intl-loader?locale=ru!../intl/ru.json'),
     sr: () => require('react-intl-loader?locale=sr!../intl/sr.json'),
 };
@@ -76,13 +77,13 @@ const localeFlags = {
 const enabledLocales = [
     'en',
     'de',
+    'fr',
     'it',
     'es',
-    'fr',
+    'nl',
+    'pt',
     'el',
     'sr',
-    'nl',
-    'ca',
 ];
 
 export default {
