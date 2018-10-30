@@ -22,7 +22,6 @@ import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
 import deckDeletion from '../../../../../actions/deckedit/deckDeletion';
-import deckRemove from '../../../../../actions/deckedit/deckRemove';
 import TransferOwnership from './TransferOwnership';
 import loadEditors from '../../../../../actions/deckedit/loadEditors';
 
@@ -137,38 +136,6 @@ class DeckPropertiesEditor extends React.Component {
                             url: '/'
                         });
                     });
-            }
-            else if (newProps.DeckEditStore.viewstate === 'errorRemove') {
-                swal({
-                    title: 'Error',
-                    text: 'Unknown error while removing.',
-                    type: 'error',
-                    confirmButtonText: 'Close',
-                    confirmButtonClass: 'negative ui button',
-                    allowEscapeKey: true,
-                    allowOutsideClick: true,
-                    buttonsStyling: false
-                })
-                    .then(() => {
-                        return true;
-                    })
-                    .catch();
-            }
-            else if (newProps.DeckEditStore.viewstate === 'successRemove') {
-                swal({
-                    title: 'Success',
-                    text: 'The deck was removed from its parents.',
-                    type: 'success',
-                    confirmButtonText: 'Confirm',
-                    confirmButtonClass: 'positive ui button',
-                    allowEscapeKey: true,
-                    allowOutsideClick: true,
-                    buttonsStyling: false
-                })
-                    .then(() => {
-                        return true;
-                    })
-                    .catch();
             }
             else if (newProps.DeckEditStore.viewstate === 'errorEditors') {
                 swal({
@@ -373,83 +340,30 @@ class DeckPropertiesEditor extends React.Component {
         console.log('handleDelete', this.state.users, this.state.groups, this.props.DeckEditStore.roots);
         console.log('handleDelete more data', this.props.selector, this.props.DeckEditStore);
 
-        if ( this.props.DeckEditStore.roots.length < 1 ) {
-            // not used in other decks
+        // this.props.DeckEditStore.roots.length < 1
+        // not used in other decks
 
-            if (this.state.users.length < 1 && this.state.groups.length < 1) {
-                // no editors - could just be deleted
-                swal({
-                    title: 'Delete this deck?',
-                    text: `Do you really want to delete the deck ${this.props.DeckEditStore.deckProps.title} (${this.props.DeckEditStore.deckProps.sid})?`,
-                    type: 'question',
-                    showCloseButton: false,
-                    showCancelButton: true,
-                    allowEscapeKey: true,
-                    showConfirmButton: true
-                })
-                .then(() => {
-                    this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
-                }, (reason) => { // canceled
-                });
-            }
-            else {
-                // transfer ownership
-                this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
-            }
+        if (this.state.users.length < 1 && this.state.groups.length < 1) {
+            // no editors - could just be deleted
+            swal({
+                title: 'Delete this deck?',
+                text: `Do you really want to delete the deck ${this.props.DeckEditStore.deckProps.title} (${this.props.DeckEditStore.deckProps.sid})?`,
+                type: 'question',
+                showCloseButton: false,
+                showCancelButton: true,
+                allowEscapeKey: true,
+                showConfirmButton: true
+            })
+            .then(() => {
+                this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+            }, (reason) => { // canceled
+            });
         }
         else {
-            // is included as subdeck in one other deck and could not just deleted
-            // show modal with 2 options: delete and remove
-
-            const parentRootDecks = this.props.DeckEditStore.roots.map((deck) => `<a href="${location.origin}/deck/${deck.id}" target="_blank">${deck.id}</a>`);
-            swal({
-                title: 'Deck is in use',
-                html: 'The deck you want to delete is used as a subdeck in the following decks: <br>'
-                    + parentRootDecks.join('<br>')
-                    + '<br><br>You could remove your deck as a subdeck from the listed ones or delete the deck complete which also removes it as subdeck.',
-                type: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Remove as subdeck',
-                confirmButtonClass: 'ui button',
-                cancelButtonText: 'Delete whole deck',
-                cancelButtonClass: 'negative ui button',
-                allowEscapeKey: true,
-                allowOutsideClick: true,
-                buttonsStyling: false
-            })
-                .then((result) => {
-                    console.log(result);
-                    // confirm btn
-                    // remove deck as node from the parent deck
-                    this.context.executeAction(deckRemove, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
-                }, (action) => {
-                    if (action === 'cancel') {
-                        if (this.state.users.length < 1 && this.state.groups.length < 1) {
-                            // no editors - could just be deleted
-                            swal({
-                                title: 'Delete this deck?',
-                                text: `Do you really want to delete the deck ${this.props.DeckEditStore.deckProps.title} (${this.props.DeckEditStore.deckProps.sid})?`,
-                                type: 'question',
-                                showCloseButton: false,
-                                showCancelButton: true,
-                                allowEscapeKey: true,
-                                showConfirmButton: true
-                            })
-                            .then(() => {
-                                this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
-                            }, (reason) => { // canceled
-                            });
-                        }
-                        else {
-                            // transfer ownership
-                            this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
-                        }
-                    }
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+            // transfer ownership
+            this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
         }
+
     }
 
     handleChange(fieldName, event) {
@@ -702,7 +616,7 @@ class DeckPropertiesEditor extends React.Component {
                     onClick={this.handleSave.bind(this)}>Save
                 </button>
                 {
-                  (this.props.selector.spath) ?
+                  (this.props.selector.spath || this.props.DeckEditStore.roots.length > 0) ?
                     ''
                     :
                     <button className='negative ui button'

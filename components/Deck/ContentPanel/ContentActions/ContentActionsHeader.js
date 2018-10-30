@@ -24,6 +24,7 @@ import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
+import DeckViewStore from '../../../../stores/DeckViewStore';
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -96,6 +97,13 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleDeleteNode(selector) {
+        if (this.props.DeckViewStore.deckData.usage.length > 0) {
+            const otherParents = this.props.DeckViewStore.deckData.usage.filter((deck) => parseInt(deck.id, 10) !== parseInt(this.props.selector.id, 10));
+            if (otherParents && otherParents.length > 0) {
+                return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+            }
+        }
+
         swal({
             title: 'Deletion of subdeck',
             html: 'You could remove this subdeck from its parent and keep it as your own deck or delete the deck complete which also removes it as subdeck.',
@@ -458,13 +466,14 @@ ContentActionsHeader.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore, DeckViewStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
         ContentStore: context.getStore(ContentStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        DeckViewStore: context.getStore(DeckViewStore).getState()
     };
 });
 export default ContentActionsHeader;

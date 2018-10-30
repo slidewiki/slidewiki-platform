@@ -58,12 +58,12 @@ export default {
                         likes[deckId] = 0;
                     }));
                 }
-                
-                return Promise.all(likePromises).then( () => { 
+
+                return Promise.all(likePromises).then( () => {
                     res.forEach((deck) => {
                         deck.likes = likes[deck._id];
                     });
-                    return res; 
+                    return res;
                 });
             }).then((res) => {
                 callback(null, {featured: addSlugs(res)});
@@ -91,7 +91,7 @@ export default {
 
                 let deckIds = res.map( (deck) => deck._id);
                 let questionsPromise = (args.showQuestionCounts === true) ? getQuestionsCount(deckIds) : Promise.resolve();
-                
+
                 return Promise.all([usersPromise, questionsPromise]).then( ([users, questionCounts]) => {
                     let usernames = users.reduce((acc, user) => ({...acc, [user._id]: user.username}), {});
                     res.forEach((deck) => {
@@ -613,18 +613,6 @@ export default {
             rp({
                 method: 'DELETE',
                 uri: Microservices.deck.uri + '/deck/' + params.id,
-                headers: { '----jwt----': params.jwt },
-                json: true
-            })
-            .then((body) => {
-                callback(null, body);
-            })
-            .catch((err) => callback(err));
-        }
-        else if (resource === 'deck.remove') {
-            rp({
-                method: 'DELETE',
-                uri: Microservices.deck.uri + '/deck/' + params.id + '/links',
                 headers: { '----jwt----': params.jwt },
                 json: true
             })

@@ -144,18 +144,6 @@ class DeckEditStore extends BaseStore {
         this.viewstate = '';
     }
 
-    removeDeckError(error) {
-        this.viewstate = 'errorRemove';
-        this.emitChange();
-        this.viewstate = '';
-    }
-
-    removeDeck(data) {
-        this.viewstate = 'successRemove';
-        this.emitChange();
-        this.viewstate = '';
-    }
-
     startTransferOwnership() {
         this.viewstate = 'loading';
         this.emitChange();
@@ -217,8 +205,6 @@ DeckEditStore.handlers = {
     'DELETE_DECK_ERROR': 'deleteDeckError',
     'DELETE_DECK_SUCCESS': 'deleteDeck',
     'START_DELETE_DECK': 'startDeleteDeck',
-    'REMOVE_DECK_ERROR': 'removeDeckError',
-    'REMOVE_DECK_SUCCESS': 'removeDeck',
     'START_TRANSFER_OWNERSHIP': 'startTransferOwnership',
     'LOAD_EDITORS_LIST_SUCCESS': 'editorsLoaded',
     'LOAD_EDITORS_LIST_ERROR': 'errorLoadingEditors',
