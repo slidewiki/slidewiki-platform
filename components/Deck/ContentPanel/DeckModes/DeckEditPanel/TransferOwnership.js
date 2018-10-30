@@ -113,7 +113,7 @@ class TransferOwnership extends React.Component {
                       <Segment attached="bottom" textAlign="left">
       									<h3 className="header" ></h3>
       									<p>There are {this.props.users.length} users which have edit rights to the deck. Select one to transfer the ownership as precondition for deleting the deck.</p>
-      									<Menu size='small' vertical style={{width: "100%"}}>
+      									<Menu size='small' vertical style={{width: '100%'}}>
       											{editors}
       									</Menu>
                       </Segment>

@@ -592,7 +592,7 @@ export default {
             })
             .catch((err) => callback(err));
         }
-        else if (resource === 'deck.delete') {
+        else if (resource === 'deck.remove') {
             rp({
                 method: 'DELETE',
                 uri: Microservices.deck.uri + '/deck/' + params.id + '/links',

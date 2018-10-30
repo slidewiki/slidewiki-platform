@@ -126,7 +126,7 @@ class DeckPropertiesEditor extends React.Component {
                 })
                     .then(() => {
                         this.context.executeAction(navigateAction, {
-                            url: '/'
+                            url: '/user/' + this.context.getUser().username
                         });
                     })
                     .catch(() => {
@@ -374,7 +374,19 @@ class DeckPropertiesEditor extends React.Component {
 
             if (this.state.users.length < 1 && this.state.groups.length < 1) {
                 // no editors - could just be deleted
-                this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+                swal({
+                    title: 'Delete this deck?',
+                    text: `Do you really want to delete the deck ${this.props.DeckEditStore.deckProps.title} (${this.props.DeckEditStore.deckProps.sid})?`,
+                    type: 'question',
+                    showCloseButton: false,
+                    showCancelButton: true,
+                    allowEscapeKey: true,
+                    showConfirmButton: true
+                })
+                .then(() => {
+                    this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+                }, (reason) => { // canceled
+                });
             }
             else {
                 // transfer ownership
@@ -398,7 +410,7 @@ class DeckPropertiesEditor extends React.Component {
                 cancelButtonText: 'Delete whole deck',
                 cancelButtonClass: 'negative ui button',
                 allowEscapeKey: true,
-                allowOutsideClick: false,
+                allowOutsideClick: true,
                 buttonsStyling: false
             })
                 .then((result) => {
@@ -406,17 +418,32 @@ class DeckPropertiesEditor extends React.Component {
                     // confirm btn
                     // remove deck as node from the parent deck
                     this.context.executeAction(deckRemove, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+                }, (action) => {
+                    if (action === 'cancel') {
+                        if (this.state.users.length < 1 && this.state.groups.length < 1) {
+                            // no editors - could just be deleted
+                            swal({
+                                title: 'Delete this deck?',
+                                text: `Do you really want to delete the deck ${this.props.DeckEditStore.deckProps.title} (${this.props.DeckEditStore.deckProps.sid})?`,
+                                type: 'question',
+                                showCloseButton: false,
+                                showCancelButton: true,
+                                allowEscapeKey: true,
+                                showConfirmButton: true
+                            })
+                            .then(() => {
+                                this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+                            }, (reason) => { // canceled
+                            });
+                        }
+                        else {
+                            // transfer ownership
+                            this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
+                        }
+                    }
                 })
-                .catch(() => {
-                    // cancel btn
-                    if (this.state.users.length < 1 && this.state.groups.length < 1) {
-                        // no editors - could just be deleted
-                        this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
-                    }
-                    else {
-                        // transfer ownership
-                        this.context.executeAction(loadEditors, {users: this.state.users, groups: this.state.groups});
-                    }
+                .catch((e) => {
+                    console.log(e);
                 });
         }
     }
@@ -799,7 +826,8 @@ class DeckPropertiesEditor extends React.Component {
 }
 
 DeckPropertiesEditor.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore], (context, props) => {

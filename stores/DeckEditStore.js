@@ -193,10 +193,10 @@ class DeckEditStore extends BaseStore {
     }
 
     tryTransferOwnership() {
-      this.viewstate = 'loading';
-      this.showTransferOwnershipModal = false;
-      this.emitChange();
-      this.viewstate = '';
+        this.viewstate = 'loading';
+        this.showTransferOwnershipModal = false;
+        this.emitChange();
+        this.viewstate = '';
     }
 }
 
