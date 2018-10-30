@@ -24,7 +24,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
 
         return <Decks decks={this.props.UserProfileStore.userDecks}
@@ -42,7 +42,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
 
         return <GroupCollections group={this.props.UserGroupsStore.currentUsergroup}
@@ -54,7 +54,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
         const isMember = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid;
@@ -114,7 +114,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
         return (
           <div className = "ui vertically padded stackable grid container" >
