@@ -562,11 +562,9 @@ export default {
             .catch((err) => callback(err));
         }
         else if (resource === 'deck.transferOwnership') {
-            return callback(null, {});
-            //TODO
             rp({
-                method: 'POST',
-                uri: Microservices.deck.uri + '/deck/' + params.deckid + '/transferOwnership',
+                method: 'PATCH',
+                uri: Microservices.deck.uri + '/deck/' + parseInt(params.deckid),
                 headers: { '----jwt----': params.jwt },
                 json: true,
                 body: {
