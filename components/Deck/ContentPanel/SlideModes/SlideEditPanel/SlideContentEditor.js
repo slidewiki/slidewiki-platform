@@ -9,6 +9,7 @@ import MediaStore from '../../../../../stores/MediaStore';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
+import saveSlideWithDeckTransition from '../../../../../actions/slide/saveSlideWithDeckTransition';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -179,8 +180,6 @@ class SlideContentEditor extends React.Component {
         }
     }
     handleSlideTransitionchange(slideTransition){
-        console.log(slideTransition);
-
         if($('.pptx2html').length) {
             //$('.pptx2html').append(pptx2htmlcontent);
             $('.pptx2html').prop('data-transition', slideTransition);
@@ -786,20 +785,39 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
             let transition = this.props.SlideEditStore.slideTransition ? this.props.SlideEditStore.slideTransition : 'none';
+            let transitionType = this.props.SlideEditStore.transitionType ? this.props.SlideEditStore.transitionType : 'slide';
 
             //setTimeout(function() {
-            this.context.executeAction(saveSlide, {
-                id: currentSelector.sid,
-                deckID: deckID,
-                title: title,
-                content: content,
-                speakernotes: speakernotes,
-                dataSources: dataSources,
-                selector: currentSelector,
-                tags: tags,
-                transition: transition
-            });
-            //},500);
+            if (transitionType === 'slide') {
+                this.context.executeAction(saveSlide, {
+                    id: currentSelector.sid,
+                    deckID: deckID,
+                    title: title,
+                    content: content,
+                    speakernotes: speakernotes,
+                    dataSources: dataSources,
+                    selector: currentSelector,
+                    tags: tags,
+                    transition: transition
+                });
+                //},500);
+            } else {
+                let currentSlidePayload = {
+                    id: currentSelector.sid,
+                    deckID: deckID,
+                    title: title,
+                    content: content,
+                    speakernotes: speakernotes,
+                    dataSources: dataSources,
+                    selector: currentSelector,
+                    tags: tags,
+                    transition: transition
+                };
+                this.context.executeAction(saveSlideWithDeckTransition, {
+                    currentSlidePayload: currentSlidePayload
+                });
+            }
+
 
             this.resize();
             //this.forceUpdate();
