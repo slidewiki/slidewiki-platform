@@ -97,34 +97,49 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleDeleteNode(selector) {
+        // plain remove for slides 
+        if (selector.stype !== 'deck') {
+            return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+        }
+
+        // plain remove for decks with subdecks
+        if (this.props.DeckViewStore.deckData.contentItems.find((i) => i.kind === 'deck')) {
+            return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+        }
+
+        // plain remove for shared subdecks
         if (this.props.DeckViewStore.deckData.usage.length > 0) {
-            const otherParents = this.props.DeckViewStore.deckData.usage.filter((deck) => parseInt(deck.id, 10) !== parseInt(this.props.selector.id, 10));
-            if (otherParents && otherParents.length > 0) {
+            // TODO make this test more strict: check for actual ids in usage matching current deck parent
+            const otherParents = this.props.DeckViewStore.deckData.usage;
+            if (otherParents.length > 1) {
                 return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
             }
         }
 
         swal({
-            title: 'Deletion of subdeck',
-            html: 'You could remove this subdeck from its parent and keep it as your own deck or delete the deck complete which also removes it as subdeck.',
+            title: 'Remove subdeck',
+            html: 'You have the option to simply remove this subdeck and keep it in "My Decks" or delete this subdeck completely.',
             type: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Remove as subdeck',
+            confirmButtonText: 'Remove',
             confirmButtonClass: 'ui button',
-            cancelButtonText: 'Delete whole deck',
+            cancelButtonText: 'Delete',
             cancelButtonClass: 'negative ui button',
             allowEscapeKey: true,
             allowOutsideClick: true,
             buttonsStyling: false
         })
             .then((result) => {
-                console.log(result);
                 // confirm btn
                 // remove deck as node from the parent deck
-                this.context.executeAction(deleteTreeNodeAndNavigate, {selector});
+                selector.confirmed = true;
+                selector.purge = false;
+                this.context.executeAction(deleteTreeNodeAndNavigate, selector);
             }, (action) => {
                 if (action === 'cancel') {
-                    this.context.executeAction(deleteTreeNodeAndNavigate, {selector, purge: true});
+                    selector.confirmed = true;
+                    selector.purge = true;
+                    this.context.executeAction(deleteTreeNodeAndNavigate, selector);
                 }
             })
             .catch((e) => {

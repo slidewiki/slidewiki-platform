@@ -43,20 +43,25 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
             });
     };
 
-    if (payload.selector && !payload.id) {
+    // skip swal as a previous modal already got approval
+    console.log(payload);
+    if (payload.confirmed) {
         return callback(true);
     }
 
-    let elementTitle = payload.stype;
-    if (elementTitle === 'deck')
-        elementTitle = 'sub' + elementTitle;
+    let elementTitle = payload.stype, html;
+    if (elementTitle === 'deck') {
+        elementTitle = 'subdeck';
+        html = 'You will still be able to find this deck "My Decks" after removing it. You can only delete non-shared subdecks that have no subdecks of their own.';
+    }
     swal({
-        title: 'Delete ' + elementTitle + '. Are you sure?',
+        title: 'Remove ' + elementTitle + '. Are you sure?',
+        html,
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, remove it!'
 
     }).then(callback, (reason) => { /*do nothing*/ }).catch(swal.noop);
 }
