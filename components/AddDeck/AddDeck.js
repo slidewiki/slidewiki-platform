@@ -278,7 +278,7 @@ class AddDeck extends React.Component {
                         '</div></td>'; //THUMBNAIL
                 }
                 html += '</tr></table></div>';
-                html += '<br><h3><div><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
+                html += '<h3><div class="ui checkbox" style="text-align:left"><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
 
                 swal({
                     title: this.context.intl.formatMessage(success_messages.success_title_text),
