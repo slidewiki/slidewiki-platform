@@ -70,6 +70,8 @@ class DeckLandingPage extends React.Component {
         let openDeckUrl = ['', 'deck', selector.id , deckSlug, 'deck', selector.id].join('/');
         let presentationUrl = this.getPresentationHref();
 
+        let deckStatsUrl = ['', 'deck', selector.id , deckSlug, 'stats'].join('/');
+
         let deckTags = deckData.tags || [];
         let deckTopics = deckData.topics || [];
 
@@ -121,14 +123,14 @@ class DeckLandingPage extends React.Component {
         return (
             <div>
                 <Container fluid>
-                    <Divider hidden/>
-                    <Grid divided='vertically' stackable>
+
+                    <Grid padded='vertically' divided='vertically' stackable>
                         <Grid.Column only="tablet computer" tablet={1} computer={2}>
                         </Grid.Column>
 
                         <Grid.Column mobile={16} tablet={14} computer={12}>
                             <Grid.Row>
-                                <Segment>
+                                <Segment attached="top">
                                     <Grid stackable>
                                         <Grid.Column width={4}>
                                             <NavLink className="image" aria-hidden tabIndex='-1' href={openDeckUrl}>
@@ -210,9 +212,14 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                     </Grid>
                                 </Segment>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}}>
+                                    <div className="ui icon buttons huge attached">
+                                        <NavLink href={deckStatsUrl} tabIndex={-1} >
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">
+                                                <Icon name="line graph" />
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >

@@ -375,6 +375,16 @@ export default {
         }
     },
 
+    deckstatspage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/stats',
+        method: 'get',
+        handler: require('../components/Deck/DeckStatsPage'),
+        page: 'deckstatspage',
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
     // stype: 'type of selected content e.g. slide, deck or question',
