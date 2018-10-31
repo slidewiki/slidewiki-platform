@@ -4,6 +4,7 @@ import customDate from '../components/Deck/util/CustomDate';
 import slugify from 'slugify';
 import { isEmpty, compact, flatten, uniq, keyBy, pick } from 'lodash';
 import { getLanguageName }  from '../common';
+import { getEducationLevel } from '../lib/isced.js';
 const url = require('url');
 const querystring = require('querystring');
 const log = require('../configs/log').log;
@@ -192,6 +193,10 @@ function fillFacetsInfo(facets, usernames, tags) {
 
     facets.tags.forEach( (item) => {
         item.text = tags[item.val];
+    });
+
+    facets.educationLevel.forEach( (item) => {
+        item.text = getEducationLevel(item.val); 
     });
 }
 
