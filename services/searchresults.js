@@ -30,7 +30,9 @@ function parseDeck(deck, users){
     let deckSlug = buildSlug(deck);
 
     // different link if this is a root deck or a sub-deck
-    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
+    deck.link = (deck.isRoot || !deck.usage) 
+        ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}?language=${deck.language}` 
+        : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}?language=${deck.language}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -299,6 +301,18 @@ function getQuestionsCount(deckIdsSet) {
     return Promise.all(questionsPromises).then( () => { return questionsCount; });
 }
 
+function getForks(deck) {
+    let forks = [];
+    forks = deck.translations.concat(deck.forks);
+    deck.forks.forEach( (fork) => {
+        if (!isEmpty(fork.translations)) {
+            forks = forks.concat(fork.translations);
+        }
+    });
+
+    return forks;
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -334,7 +348,9 @@ export default {
                 ]).then( ([ users, likes, downloads, shares, tags, slides, questions ]) => {
                     response.docs.forEach( (result) => {
 
-                        result.forks = result.forks.concat(result.translations);
+                        // currently forks and translations are merged
+                        // TODO: present them separately in the results
+                        result.forks = getForks(result);
 
                         parseDeck(result, users);
 
