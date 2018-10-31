@@ -9,8 +9,8 @@ class SimilarContentList extends React.Component {
             );
         });
         return (
-            <div ref="similarContentList">
-                <div className="ui relaxed divided list">
+            <div >
+                <div className="ui cards">
                     {list}
                 </div>
              </div>

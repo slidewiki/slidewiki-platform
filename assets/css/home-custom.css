@@ -680,10 +680,6 @@ textarea:focus{
     content: '\f107';
     font-family: Icons;
 }
-i.flag:not(.icon):before {
-    background-image: url(../images/flags.png);
-}
-
 
 .banner-content .ui.primary.button{
     margin-right: 16px;
