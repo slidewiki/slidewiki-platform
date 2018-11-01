@@ -112,6 +112,9 @@ class TagInput extends React.Component {
         // select the recommended tag
         $(this.rootElement).dropdown('set selected', `tagName:${value}`);
     }
+    clear() {
+        $(this.rootElement).dropdown('clear');
+    }
     render(){
         let classes = classNames({
             'ui': true,
