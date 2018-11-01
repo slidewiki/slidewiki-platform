@@ -159,29 +159,30 @@ export default {
                 method: 'GET',
                 uri: Microservices.deck.uri + '/alldecks/' + params.id2,
                 json: true
-            }).then((body) => {
-                //get the number of likes
-                let arrayOfPromises = [];
-                body.forEach((deck) => {
-                    let promise = rp.get({
-                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
-                        qs: {
-                            metaonly: true,
-                            activity_type: 'react',
-                            all_revisions: true
-                        }
+            }).then((response) => {
+                if (params.showQuestionCounts === true) {
+                    let questionPromises = response.map( (deck) => {
+                        return rp.get({
+                            uri: `${Microservices.questions.uri}/deck/${deck._id}/questions`,
+                            qs: {
+                                metaonly: true,
+                                include_subdecks_and_slides: true,
+                            },
+                            json: true,
+                        });
                     });
-                    arrayOfPromises.push(promise);
-                });
 
-                return Promise.all(arrayOfPromises).then((numbers) => {
-                    for (let i = 0; i < numbers.length; i++) {
-                        body[i].noOfLikes = numbers[i];
-                    }
-
-                    let converted = body.map((deck) => { return transform(deck); });
-                    callback(null, converted);
-                });
+                    return Promise.all(questionPromises).then( (questionCounts) => {
+                        for (let i = 0; i < questionCounts.length; i++) {
+                            response[i].questionsCount = questionCounts[i].count;
+                        }
+                        let converted = response.map((deck) => { return transform(deck); });
+                        callback(null, converted);
+                    });
+                } else {
+                    callback(null, response.map( (deck) => transform(deck)));
+                }
+                
             }).catch((err) => callback(err));
         } else if (resource === 'userProfile.fetchUserOwnedDecks'){
             let requestCall = '';
@@ -217,33 +218,34 @@ export default {
             rp(requestCall).then( (response) => {
                 let decks = response.items;
 
-                //get the number of likes
-                let arrayOfPromises = [];
-                decks.forEach((deck) => {
-                    let promise = rp.get({
+                // get the number of likes
+                let arrayOfPromises = decks.map((deck) => {
+                    return rp.get({
                         uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
                         qs: {
                             metaonly: true,
                             activity_type: 'react',
                             all_revisions: true
                         }
+                    }).catch((err) => {
+                        // ignore errors from activities service
+                        return 0;
                     });
-                    arrayOfPromises.push(promise);
                 });
 
                 return Promise.all(arrayOfPromises).then((numbers) => {
+                    // wait for it to fill in the likes
                     for (let i = 0; i < numbers.length; i++) {
                         decks[i].noOfLikes = numbers[i];
                     }
-
-                    let converted = decks.map((deck) => { return transform(deck); });
-
-                    callback(null, {
-                        metadata: response._meta,
-                        decks: converted
-                    });
+                    return { metadata: response._meta, decks };
                 });
-            }).catch((err) => callback(err));
+
+            }).then(({ metadata, decks }) => {
+                let converted = decks.map((deck) => { return transform(deck); });
+
+                callback(null, { metadata, decks: converted });
+            }).catch((err) => callback(err, { metadata: {}, decks: [] }));
         }  else if (resource === 'userProfile.fetchGroupOwnedDecks'){
             let requestCall = '';
 
@@ -390,8 +392,8 @@ function transform(deck){
         theme: deck.theme,
         language:deck.language,
         countRevisions:deck.countRevisions,
-        noOfLikes: deck.noOfLikes
-
+        noOfLikes: deck.noOfLikes,
+        questionsCount: deck.questionsCount,
     };
 }
 

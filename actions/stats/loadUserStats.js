@@ -3,6 +3,8 @@ const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import loadUserStatsByTime from './loadUserStatsByTime';
 import loadUserStatsByTag from './loadUserStatsByTag';
+import loadUserEngagement from './loadUserEngagement';
+
 
 
 export default function loadUserStats(context, payload, done) {
@@ -13,6 +15,9 @@ export default function loadUserStats(context, payload, done) {
         },
         (callback) => {
             context.executeAction(loadUserStatsByTag, payload, callback);
+        },
+        (callback) => {
+            context.executeAction(loadUserEngagement, payload, callback);
         },
     ], (err, results) => {
         if (err) {

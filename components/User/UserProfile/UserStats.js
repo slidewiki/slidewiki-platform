@@ -1,12 +1,11 @@
 import React from 'react';
-import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
-import {Dropdown, Grid, Message, Segment, Table} from 'semantic-ui-react';
-import moment from 'moment';
+import {Grid, Message, Segment, Table, Header, Label} from 'semantic-ui-react';
 import updateUserStatsPeriod from '../../../actions/stats/updateUserStatsPeriod';
 import updateUserStatsActivityType from '../../../actions/stats/updateUserStatsActivityType';
 import {TagCloud} from 'react-tagcloud';
 import {defineMessages} from 'react-intl';
-
+import ActivityTimeline from '../../../components/Stats/ActivityTimeline';
+import {PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip} from 'recharts';
 
 import PropTypes from 'prop-types';
 
@@ -19,24 +18,42 @@ class UserStats extends React.Component {
 
     getIntlMessages() {
         return defineMessages({
-            activityTimelineTitle: {
-                id: 'Stats.activityTimelineTitle',
-                defaultMessage: 'Activity Timeline'
+            userStatsTitle: {
+                id: 'Stats.userStatsTitle',
+                defaultMessage: 'User Statistics'
             },
             tagCloudTitle: {
                 id: 'Stats.tagCloudTitle',
                 defaultMessage: 'Popular Tags'
             },
-            last7Days: {id: 'Stats.period.last7Days', defaultMessage: 'Last 7 days'},
-            last30Days: {id: 'Stats.period.last30Days', defaultMessage: 'Last 30 days'},
-            last2Months: {id: 'Stats.period.last2Months', defaultMessage: 'Last 2 months'},
-            last6Months: {id: 'Stats.period.last6Months', defaultMessage: 'Last 6 months'},
-            last1Year: {id: 'Stats.period.last1Year', defaultMessage: 'Last 1 year'},
-            last2Years: {id: 'Stats.period.last2Years', defaultMessage: 'Last 2 years'},
-            edits: {id: 'Stats.activityType.edits', defaultMessage: 'Edits'},
-            likes: {id: 'Stats.activityType.likes', defaultMessage: 'Likes'},
-            views: {id: 'Stats.activityType.views', defaultMessage: 'Views'},
-
+            userEngagementTitle: {
+                id: 'Stats.userEngagementTitle',
+                defaultMessage: 'User Engagement Overview'
+            },
+            activeEngagement: {
+                id: 'Stats.activeEngagement',
+                defaultMessage: 'Active Engagement'
+            },
+            passiveEngagement: {
+                id: 'Stats.passiveEngagement',
+                defaultMessage: 'Passive Engagement'
+            },
+            socialEngagement: {
+                id: 'Stats.socialEngagement',
+                defaultMessage: 'Social Engagement'
+            },
+            activeEngagementDesc: {
+                id: 'Stats.activeEngagementDesc',
+                defaultMessage: 'The degree of active participation based on the user\'s content creation history'
+            },
+            passiveEngagementDesc: {
+                id: 'Stats.passiveEngagementDesc',
+                defaultMessage: 'The degree of passive participation based on the user\'s content usage'
+            },
+            socialEngagementDesc: {
+                id: 'Stats.socialEngagementDesc',
+                defaultMessage: 'The degree of social interaction through SW content'
+            },
         });
     }
 
@@ -63,34 +80,6 @@ class UserStats extends React.Component {
             }}>{tag.value}</span>;
         };
 
-        const periodOptions = [{value: 'LAST_7_DAYS', text: this.context.intl.formatMessage(this.messages.last7Days)},
-            {value: 'LAST_30_DAYS', text: this.context.intl.formatMessage(this.messages.last30Days)},
-            {value: 'LAST_2_MONTHS', text: this.context.intl.formatMessage(this.messages.last2Months)},
-            {value: 'LAST_6_MONTHS', text: this.context.intl.formatMessage(this.messages.last6Months)},
-            {value: 'LAST_1_YEAR', text: this.context.intl.formatMessage(this.messages.last1Year)},
-            {value: 'LAST_2_YEARS', text: this.context.intl.formatMessage(this.messages.last2Years)},
-        ];
-
-        const typeOptions = [{
-            value: 'edit',
-            text: this.context.intl.formatMessage(this.messages.edits)
-        }, {
-            value: 'like',
-            text: this.context.intl.formatMessage(this.messages.likes)
-        }, {
-            value: 'view',
-            text: this.context.intl.formatMessage(this.messages.views)
-        }];
-
-        let statsByTimeRows = this.props.userStats.statsByTime.map((stat, index) => {
-            return (
-              <Table.Row key={index}>
-                  <Table.Cell>{new Date(stat.date).toLocaleDateString()}</Table.Cell>
-                  <Table.Cell>{stat.count}</Table.Cell>
-              </Table.Row>
-            );
-        });
-
         let statsByTagRows = this.props.userStats.statsByTag.map((stat, index) => {
             return (
               <Table.Row key={index}>
@@ -99,87 +88,114 @@ class UserStats extends React.Component {
               </Table.Row>
             );
         });
+
+        let userEngagement = this.props.userStats.userEngagement;
+        let activeEngagementTitle = this.context.intl.formatMessage(this.messages.activeEngagement);
+        let passiveEngagementTitle = this.context.intl.formatMessage(this.messages.passiveEngagement);
+        let socialEngagementTitle = this.context.intl.formatMessage(this.messages.socialEngagement);
+        let activeEngagementDesc = this.context.intl.formatMessage(this.messages.activeEngagementDesc);
+        let passiveEngagementDesc = this.context.intl.formatMessage(this.messages.passiveEngagementDesc);
+        let socialEngagementDesc = this.context.intl.formatMessage(this.messages.socialEngagementDesc);
+        let radarData = [{
+            type: activeEngagementTitle,
+            value: userEngagement.active_engagement
+        }, {
+            type: passiveEngagementTitle,
+            value: userEngagement.passive_engagement
+        }, {
+            type: socialEngagementTitle,
+            value: userEngagement.social_engagement
+        }];
+
+        let userEngagementRows = radarData.map((engagement, index) => {
+            return (
+              <Table.Row key={index}>
+                  <Table.Cell>{engagement.type}</Table.Cell>
+                  <Table.Cell>{engagement.value}</Table.Cell>
+              </Table.Row>
+            );
+        });
+
         return (
-          <Grid relaxed>
-              {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
-              <Grid.Row columns={1}>
-                  <Grid.Column>
-                      <Message attached>
-                          <h3>{this.context.intl.formatMessage(this.messages.activityTimelineTitle)}</h3>
-                      </Message>
-                      <Segment attached padded loading={this.props.userStats.statsByTimeLoading}>
-                          <span>
-                              <Grid>
-                                  <Grid.Row columns={2}>
-                                      <Grid.Column textAlign='left'>
-                                          <Dropdown inline placeholder='Activity Type'
-                                                    options={typeOptions}
-                                                    value={this.props.userStats.activityType}
-                                                    onChange={this.handleActivityTypeChange.bind(this)}/>
-                                      </Grid.Column>
-                                      <Grid.Column textAlign='right'>
-                                          <Dropdown
-                                            inline placeholder='Period' options={periodOptions}
-                                            value={this.props.userStats.datePeriod}
-                                            onChange={this.handleDatePeriodChange.bind(this)}/>
-                                      </Grid.Column>
-                                  </Grid.Row>
-                                  <Grid.Row columns={1}>
-                                      <Grid.Column aria-describedby='userStatsByDateTable' aria-label='Data table for graph' tabIndex='0' aria-hidden='true'>
-                                          <ResponsiveContainer height={300}>
-                                              <LineChart data={this.props.userStats.statsByTime}
-                                                         margin={{top: 5, right: 30, left: 30, bottom: 5}}>
-                                                  <YAxis type="number" width={10} allowDecimals={false} stroke='#767676'/>
-                                                  <XAxis dataKey='date' name='Date'
-                                                         type='category' stroke='#767676'
-                                                         tickFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
-                                                  <Tooltip
-                                                    labelFormatter={(unixTime) => moment(unixTime).format('Y-M-D')}/>
-                                                  <Line dataKey="count" dot={false} type="monotone"/>
-                                              </LineChart>
-                                          </ResponsiveContainer>
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                          <Table id='userStatsByDateTable' className="sr-only">
-                                              <Table.Header>
-                                                  <Table.Row>
-                                                      <Table.HeaderCell>Date</Table.HeaderCell>
-                                                      <Table.HeaderCell>Count</Table.HeaderCell>
-                                                  </Table.Row>
-                                              </Table.Header>
-                                              <Table.Body>
-                                                  {statsByTimeRows}
-                                              </Table.Body>
-                                          </Table>
-                                      </Grid.Column>
-                                  </Grid.Row>
-                              </Grid>
-                          </span>
-                      </Segment>
-                  </Grid.Column>
-              </Grid.Row>}
-              {this.props.userStats.statsByTag && this.props.userStats.statsByTag.length > 0 &&
-              <Grid.Row centered columns={1}>
-                  <Grid.Column>
-                      <Message attached><h3>{this.context.intl.formatMessage(this.messages.tagCloudTitle)}</h3></Message>
-                      <Segment aria-describedby='userStatsByTagTable' attached textAlign='center' padded='very'
-                               loading={this.props.userStats.statsByTagLoading} aria-label='Data table for popular tags' tabIndex='0' aria-hidden='true'>
-                          <TagCloud minSize={14} maxSize={38} tags={this.props.userStats.statsByTag} colorOptions={{luminosity: 'dark'}} renderer={customTagRenderer} />
-                      </Segment>
-                      <Table id='userStatsByTagTable' className="sr-only">
-                          <Table.Header>
-                              <Table.Row>
-                                  <Table.HeaderCell>Tag</Table.HeaderCell>
-                                  <Table.HeaderCell>Count</Table.HeaderCell>
-                              </Table.Row>
-                          </Table.Header>
-                          <Table.Body>
-                              {statsByTagRows}
-                          </Table.Body>
-                      </Table>
-                  </Grid.Column>
-              </Grid.Row>}
-          </Grid>
+          <div>
+              <Header as='h1' className='sr-only'>{this.context.intl.formatMessage(this.messages.userStatsTitle)}</Header>
+              <Grid relaxed>
+                  {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
+                  <Grid.Row columns={1}>
+                      <Grid.Column>
+                          <ActivityTimeline statsByTime={this.props.userStats.statsByTime}
+                                            loading={this.props.userStats.statsByTimeLoading}
+                                            activityType={this.props.userStats.activityType}
+                                            datePeriod={this.props.userStats.datePeriod}
+                                            handleActivityTypeChange={this.handleActivityTypeChange.bind(this)}
+                                            handleDatePeriodChange={this.handleDatePeriodChange.bind(this)} />
+                      </Grid.Column>
+                  </Grid.Row>}
+                  {this.props.userStats.statsByTag && this.props.userStats.statsByTag.length > 0 &&
+                  <Grid.Row centered columns={1}>
+                      <Grid.Column>
+                          <Message attached><h2>{this.context.intl.formatMessage(this.messages.tagCloudTitle)}</h2></Message>
+                          <Segment aria-describedby='userStatsByTagTable' attached textAlign='center' padded='very'
+                                   loading={this.props.userStats.statsByTagLoading} aria-label='Data table for popular tags' tabIndex='0' aria-hidden='true'>
+                              <TagCloud minSize={14} maxSize={38} tags={this.props.userStats.statsByTag} colorOptions={{luminosity: 'dark'}} renderer={customTagRenderer} />
+                          </Segment>
+                          <Table id='userStatsByTagTable' className="sr-only">
+                              <Table.Header>
+                                  <Table.Row>
+                                      <Table.HeaderCell>Tag</Table.HeaderCell>
+                                      <Table.HeaderCell>Count</Table.HeaderCell>
+                                  </Table.Row>
+                              </Table.Header>
+                              <Table.Body>
+                                  {statsByTagRows}
+                              </Table.Body>
+                          </Table>
+                      </Grid.Column>
+                  </Grid.Row>}
+                  {this.props.userStats.userEngagement &&
+                  <Grid.Row centered columns={1}>
+                      <Grid.Column>
+                          <Message attached><h2>{this.context.intl.formatMessage(this.messages.userEngagementTitle)}</h2></Message>
+                          <Segment aria-describedby='userEngagementTable' attached textAlign='center' padded='very'
+                                   loading={this.props.userStats.userEngagementLoading} aria-label='Data table for user engagement overview' tabIndex='0' aria-hidden='true'>
+                              <ResponsiveContainer height={300}>
+                                  <RadarChart outerRadius={100} data={radarData}>
+                                      <PolarGrid />
+                                      <PolarAngleAxis dataKey="type" />
+                                      <Radar dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
+                                      <Tooltip content={(props) => {
+                                          let desc;
+                                          switch(props.label) {
+                                              case(activeEngagementTitle):
+                                                  desc = activeEngagementDesc;
+                                                  break;
+                                              case(passiveEngagementTitle):
+                                                  desc = passiveEngagementDesc;
+                                                  break;
+                                              case(socialEngagementTitle):
+                                                  desc = socialEngagementDesc;
+                                                  break;
+                                          }
+                                          return <Label>{desc}</Label>;
+                                      }}/>
+                                  </RadarChart>
+                              </ResponsiveContainer>
+                          </Segment>
+                          <Table id='userEngagementTable' className="sr-only">
+                              <Table.Header>
+                                  <Table.Row>
+                                      <Table.HeaderCell>User Engagement Type</Table.HeaderCell>
+                                      <Table.HeaderCell>Value</Table.HeaderCell>
+                                  </Table.Row>
+                              </Table.Header>
+                              <Table.Body>
+                                  {userEngagementRows}
+                              </Table.Body>
+                          </Table>
+                      </Grid.Column>
+                  </Grid.Row>}
+              </Grid>
+          </div>
         );
     }
 }

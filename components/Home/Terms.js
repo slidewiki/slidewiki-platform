@@ -1,200 +1,287 @@
+import {connectToStores} from 'fluxible-addons-react';
+import {defineMessages} from 'react-intl';
+import {NavLink} from 'fluxible-router';
+import PropTypes from 'prop-types';
 import React from 'react';
-import {FormattedMessage, defineMessages} from 'react-intl';
+import updateTrap from '../../actions/loginModal/updateTrap';
+import UserProfileStore from '../../stores/UserProfileStore';
 
 class terms extends React.Component {
+    constructor(props) {
+        super(props);
+        this.messages = defineMessages({
+            mainTitle: {
+                id: 'terms.mainTitle',
+                defaultMessage: 'Terms of us of SlideWiki'
+            },
+            summary: {
+                id: 'terms.summary',
+                defaultMessage: 'This is a human-readable summary of the Terms of Use for SlideWiki (the project).'
+            },
+            disclaimer: {
+                id: 'terms.disclaimer',
+                defaultMessage: 'Disclaimer: This summary is not a part of the Terms of Use and is not a legal document. It is simply a handy reference for understanding the full terms. Think of it as the user-friendly interface to the legal language of our Terms of Use.'
+            },
+            missionTitle: {
+                id: 'terms.missionTitle',
+                defaultMessage: 'Part of our mission is to:'
+            },
+            mission1: {
+                id: 'terms.mission1',
+                defaultMessage: 'Empower and engage people around the world to collect and develop educational content and either publish it under a free license or dedicate it to the public   domain.'
+            },
+            mission2: {
+                id: 'terms.mission2',
+                defaultMessage: 'Disseminate this content effectively and globally, free of charge.'
+            },
+            freeTo: {
+                id: 'terms.freeTo',
+                defaultMessage: 'You are free to:'
+            },
+            free1: {
+                id: 'terms.free1',
+                defaultMessage: 'Read and Print our presentations and other media free of charge.'
+            },
+            free2: {
+                id: 'terms.free2',
+                defaultMessage: 'Share and Reuse our presentations and other media under free and open licenses.'
+            },
+            free3: {
+                id: 'terms.free3',
+                defaultMessage: 'Contribute To and Edit our various sites or projects.'
+            },
+            conditionsTitle: {
+                id: 'terms.conditionsTitle',
+                defaultMessage: 'Under the following conditions'
+            },
+            condition1: {
+                id: 'terms.confition1',
+                defaultMessage: 'Responsibility – You take responsibility for your edits (since we only host your content).'
+            },
+            condition2: {
+                id: 'terms.condition2',
+                defaultMessage: 'Civility – You support a civil environment and do not harass other users.'
+            },
+            condition3: {
+                id: 'terms.condition3',
+                defaultMessage: 'Lawful behaviour – You do not violate copyright or other laws.'
+            },
+            condition4: {
+                id: 'terms.condition4',
+                defaultMessage: 'No Harm – You do not harm our technology infrastructure.'
+            },
+            condition5: {
+                id: 'terms.condition5',
+                defaultMessage: 'Terms of Use and Policies – You adhere to the Terms of Use and to the applicable community policies when you visit our sites or participate in our communities.'
+            },
+            understandingTitle: {
+                id: 'terms.understanding',
+                defaultMessage: 'With the understanding that'
+            },
+            understanding1: {
+                id: 'terms.understanding1',
+                defaultMessage: 'This service may contain translations powered by third party services. Selecting to use the translate service will result in data being sent to third-party services. We disclaims all warranties related to the translations, expressed or implied, including any warranties of accuracy, reliability, and any implied warranties of  merchantability, fitness for a particular purpose and noninfringement.'
+            },
+            understanding2: {
+                id: 'terms.understanding2',
+                defaultMessage: 'You license freely your contributions – you generally must license your contributions and edits to our sites or projects under a free and open license (unless your contribution is in the public domain).'
+            },
+            understanding3: {
+                id: 'terms.understanding3',
+                defaultMessage: 'No professional advice – the content of presentations and other projects is for informational purposes only and does not constitute professional advice.'
+            },
+            paragraph1: {       // TODO: change lorem ipsums in the following paragraphs
+                id: 'terms.paragraph1',
+                defaultMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id nisl magna. Sed a metus vel dui vehicula viverra. Quisque sed tellus at justo semper dictum. Nullam at rutrum leo. Vivamus at aliquam metus. Aliquam nec nunc in libero posuere hendrerit nec at lacus. Nunc malesuada lobortis tortor nec porta. Cras vulputate mollis nisi, at sollicitudin quam eleifend ac. Nam sed venenatis turpis. Sed vestibulum malesuada nunc vitae ultricies. Donec bibendum ultrices facilisis. Mauris sollicitudin mi et vulputate rhoncus.'
+            },
+            paragraph2: {
+                id: 'terms.paragraph2',
+                defaultMessage: 'Mauris tincidunt, urna non aliquam dapibus, enim metus varius tellus, non dignissim urna odio ac augue. Fusce id lacinia ipsum, id egestas dui. Suspendisse nec quam vel mi tincidunt bibendum a vel mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin magna elit, molestie eu libero ut, bibendum facilisis turpis. Mauris sem lorem, dignissim a ex sit amet, suscipit fermentum turpis. Integer porttitor arcu non porttitor faucibus. Fusce nisi risus, rutrum vitae vulputate vitae, consectetur et nunc. Aliquam placerat ipsum felis, nec fermentum arcu sagittis nec. Aenean imperdiet laoreet quam ac placerat. Ut accumsan tristique elementum. Etiam congue venenatis lorem, malesuada tristique mauris congue vel. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam tincidunt libero a nisi consequat sodales.'
+            },
+            paragraph3: {
+                id: 'terms.paragraph3',
+                defaultMessage: 'Aliquam vitae velit iaculis, vestibulum felis eu, lacinia risus. Donec mollis enim nec accumsan tristique. Morbi dapibus condimentum erat quis placerat. Integer velit augue, sodales quis scelerisque nec, facilisis nec velit. Maecenas rhoncus sagittis lectus, vel feugiat nulla aliquet quis. Quisque condimentum sapien nec eros tristique, vitae pulvinar sem tempus. Nulla ut odio id elit accumsan interdum. Maecenas sagittis sed sem a malesuada. Vivamus venenatis ex sed ex pretium, et pellentesque purus vehicula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egesta'
+            },
+            findSlides: {
+                id: 'terms.findSlides',
+                defaultMessage: 'Find slides'
+            },
+            findSlidesSubtitle: {
+                id: 'terms.findSlidesSubtitle',
+                defaultMessage: 'Explore the deck lorem ipsum'           // TODO: change lorem ipsums
+            },
+            findSlidesContent: {
+                id: 'terms.findSlidesContent',
+                defaultMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget elit sapien. Nunc semper urna in lectus consectetur fermentum. Vestibulum eu sem pulvinar, sollicitudin ipsum eu, porttitor elit. Maecenas bibendum congue lectus, viligula finibus, sit amet aliquam n ipsum eu, porttitor elit. Maecenas bibendum congue lectus, viligula finibus, sit amet.'           // TODO: change lorem ipsums
+            },
+            createSlides: {
+                id: 'terms.createSlides',
+                defaultMessage: 'Create slides'
+            },
+            createSlidesSubtitle: {
+                id: 'terms.createSlidesSubtitle',
+                defaultMessage: 'Learn how to create slides with SlideWiki'
+            },
+            createSlidesContent: {
+                id: 'terms.createSlidesContent',
+                defaultMessage: 'Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML slides to allow you to continue to edit and add new slides.'
+            },
+            sharingSlides: {
+                id: 'terms.sharingSlides',
+                defaultMessage: 'Sharing slides'
+            },
+            sharingSlidesSubtitle: {
+                id: 'terms.sharingSlidesSubtitle',
+                defaultMessage: 'Present, Share and Communicate'
+            },
+            sharingSlidesContent: {
+                id: 'terms.sharingSlidesContent',
+                defaultMessage: 'There are many ways that you and your students can engage and interact with slides and decks. Use the Slideshow mode to view a deck as a slideshow. Includes a timer and speaker notes\' view. Share decks via social media or email.'
+            },
+            getStarted: {
+                id: 'terms.getStarted',
+                defaultMessage: 'Get started right away.  '
+            },
+            signIn: {
+                id: 'terms.signIn',
+                defaultMessage: 'Sign in'
+            },
+            getStartedDescription: {
+                id: 'terms.getStartedDescription',
+                defaultMessage: 'Create an account to start creating and sharing your decks. '
+            },
+            myDecks: {
+                id: 'terms.myDecks',
+                defaultMessage: 'My Decks.'
+            }
+        });
+    }
+
+    handleLoginButton() {
+        this.context.executeAction(updateTrap,{activeTrap:true});
+        //hidden the other page elements to readers
+        $('#app').attr('aria-hidden','true');
+        $('.ui.login.modal').modal('toggle');
+
+        this.closeSidebar({target: '<a className="item"></a>'});
+    }
+
     render() {
+
+        let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
+            <a onClick={this.handleLoginButton.bind(this)}>{this.context.intl.formatMessage(this.messages.signIn)}</a>:
+            <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
+                {this.context.intl.formatMessage(this.messages.myDecks)}
+            </NavLink>;
+
         return (
-            <div className="ui text container" ref="terms">
-                <div className="hidden divider"></div>
-                <h1 className="ui header"><FormattedMessage id="terms.header" defaultMessage="Terms of use of SlideWiki"/></h1>
-                <p>
-                  <FormattedMessage id="terms.p1"
-                    values={{
-                        summary: <b><FormattedMessage id="terms.p1.summary" defaultMessage="summary"/></b>
-                    }}
-                    defaultMessage="This is a human-readable {summary} of the Terms of Use for SlideWiki (the project)."/>
-                </p>
-                <p><FormattedMessage id="terms.p2" defaultMessage="Disclaimer: This summary is not a part of the Terms of Use and is not a legal document. It is simply a handy reference for understanding the full terms. Think of it as the user-friendly interface to the legal language of our Terms of Use."/></p>
-                <h2 className="ui header"><FormattedMessage id="terms.1.header" defaultMessage="Part of our mission is to:"/></h2>
-                <ul className="ui list">
-                    <li>
-                      <FormattedMessage id="terms.1.ul.empowerAndEngageLi"
-                        values={{
-                            empowerAndEngage: <b><FormattedMessage id="terms.1.ul.empowerAndEngage" defaultMessage="Empower and engage"/></b>
-                        }}
-                        defaultMessage="{empowerAndEngage} people around the world to collect and develop educational content and either publish it under a free license or dedicate it to the public domain."
-                      />
-                    </li>
-
-                    <li>
-                      <FormattedMessage id="terms.1.ul.disseminateLi"
-                        values={{
-                            disseminate: <b><FormattedMessage id="terms.1.ul.disseminate" defaultMessage="Disseminate"/></b>
-                        }}
-                        defaultMessage="{disseminate} this content effectively and globally, free of charge"
-                      />
-                    </li>
-                </ul>
-                <h2 className="ui header"><FormattedMessage id="terms.2.header" defaultMessage="You are free to:"/></h2>
-                <ul className="ui list">
-                    <li>
-                      <FormattedMessage id="terms.2.ul.readAndPrintLi"
-                        values={{
-                            readAndPrint: <b><FormattedMessage id="terms.2.ul.readAndPrint" defaultMessage="Read and Print"/></b>
-                        }}
-                        defaultMessage="{readAndPrint} our presentations and other media free of charge."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.2.ul.shareAndReuseLi"
-                        values={{
-                            shareAndReuse: <b><FormattedMessage id="terms.2.ul.shareAndReuse" defaultMessage="Share and Reuse"/></b>
-                        }}
-                        defaultMessage="{shareAndReuse} our presentations and other media under free and open licenses."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.2.ul.contributeToAndEditLi"
-                        values={{
-                            contributeToAndEdit: <b><FormattedMessage id="terms.2.ul.contributeToAndEdit" defaultMessage="Contribute To and Edit"/></b>
-                        }}
-                        defaultMessage="{contributeToAndEdit} our various sites or projects."
-                      />
-                    </li>
-                </ul>
-                <h2 className="ui header"><FormattedMessage id="terms.3.header" defaultMessage="Under the following conditions"/></h2>
-                <ul className="ui list">
-                    <li>
-                      <FormattedMessage id="terms.3.ul.responsibilityLi"
-                        values={{
-                            responsibility: <b><FormattedMessage id="terms.3.ul.responsibility" defaultMessage="Responsibility"/></b>,
-                            host: <i><FormattedMessage id="terms.3.ul.host" defaultMessage="host"/></i>
-                        }}
-                        defaultMessage="{responsibility} &#8211; You take responsibility for your edits (since we only {host} your content)."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.3.ul.civilityLi"
-                        values={{
-                            civility: <b><FormattedMessage id="terms.3.ul.civility" defaultMessage="Civility"/></b>
-                        }}
-                        defaultMessage="{civility} &#8211; You support a civil environment and do not harass other users."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.3.ul.lawfulBehaviourLi"
-                        values={{
-                            lawfulBehaviour: <b><FormattedMessage id="terms.3.ul.lawfulBehaviour" defaultMessage="Lawful behaviour"/></b>
-                        }}
-                        defaultMessage="{lawfulBehaviour} &#8211; You do not violate copyright or other laws."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.3.ul.noHarmLi"
-                        values={{
-                            noHarm: <b><FormattedMessage id="terms.3.ul.noHarm" defaultMessage="No Harm"/></b>
-                        }}
-                        defaultMessage="{noHarm} &#8211; You do not harm our technology infrastructure."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.3.ul.touAndPoliciesLi"
-                        values={{
-                            touAndPolicies: <b><FormattedMessage id="terms.3.ul.touAndPolicies" defaultMessage="Terms of Use and Policies"/></b>
-                        }}
-                        defaultMessage="{touAndPolicies} &#8211; You adhere to the Terms of Use and to the applicable community policies when you visit our sites or participate in our communities."
-                      />
-                    </li>
-                </ul>
-                <h2 className="ui header"><FormattedMessage id="terms.4.header" defaultMessage="With the understanding that"/></h2>
-                <ul className="ui list">
-                    <li>
-                      <FormattedMessage id="terms.4.ul.translationsLi"
-                        values={{
-                            translations: <b><FormattedMessage id="terms.4.ul.translations" defaultMessage="translations"/></b>
-                        }}
-                        defaultMessage="This service may contain {translations} powered by third party services. Selecting to use the translate service will result in data being sent to third-party services. We disclaims all warranties related to the translations, expressed or implied, including any warranties of accuracy, reliability, and any implied warranties of merchantability, fitness for a particular purpose and noninfringement."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.4.ul.contributionLicenceLi"
-                        values={{
-                            contributionLicence: <b><FormattedMessage id="temrs.4.ul.contributionLicenceLi" defaultMessage="You license freely your contributions"/></b>
-                        }}
-                        defaultMessage="{contributionLicence} &#8211; you generally must license your contributions and edits to our sites or projects under a free and open license (unless your contribution is in the public domain)."
-                      />
-                    </li>
-                    <li>
-                      <FormattedMessage id="terms.4.ul.noProfessionalAdviceLi"
-                        values={{
-                            noProfessionalAdvice: <b><FormattedMessage id="terms.4.ul.noProfessionalAdvice" defaultMessage="No professional advice"/></b>
-                        }}
-                        defaultMessage="{noProfessionalAdvice} &#8211; the content of presentations and other projects is for informational/educational purposes only and does not constitute professional advice or commercial advertisement. However, you can contact the SlideWiki foundation to support you in creating your own installation of SlideWiki on a website or webserver for commercial, educational, hybrid, or other purposes."
-                      />
-                    </li>
-                </ul>
-
-                <h2 className="ui header"><FormattedMessage id="terms.5.header" defaultMessage="Refraining from Certain Activities"/></h2>
-                <p><FormattedMessage id="terms.5.p1" defaultMessage="We reserve the rights to remove content that we consider to be inappropriate, offensive or spam. Certain activities, whether legal or illegal, may be harmful to other users and violate our rules, and some activities may also subject you to liability. Therefore, for your own protection and for that of other users, you may not engage in such activities on our sites. These activities include:"/></p>
-
-                <h3 className="ui header"><FormattedMessage id="terms.5.1.header" defaultMessage="Harassing and Abusing Others"/></h3>
-                <ul className="ui list">
-                    <li><FormattedMessage id="terms.5.1.ul.misconduct" defaultMessage="Engaging in harassment, threats, stalking, spamming, or vandalism; and"/></li>
-                    <li><FormattedMessage id="terms.5.1.ul.spam" defaultMessage="Transmitting chain mail, junk mail, or spam to other users."/></li>
-                </ul>
-                <h3 className="ui header"><FormattedMessage id="terms.5.2.header" defaultMessage="Violating the Privacy of Others"/></h3>
-                <ul className="ui list">
-                    <li><FormattedMessage id="terms.5.2.ul.privacyInfringement" defaultMessage="Infringing the privacy rights of others under the laws of Germany or other applicable laws (which may include the laws where you live or where you view or edit content);"/></li>
-                    <li><FormattedMessage id="terms.5.2.ul.indentifiableInfoSolicitationHarrasment" defaultMessage="Soliciting personally identifiable information for purposes of harassment, exploitation, violation of privacy, or any promotional or commercial purpose not explicitly approved by the project; and"/></li>
-                    <li><FormattedMessage id="terms.5.2.ul.indentifiableInfoSolicitationUnderAge" defaultMessage="Soliciting personally identifiable information from anyone under the age of 18 for an illegal purpose or violating any applicable law regarding the health or well-being of minors."/></li>
-                </ul>
-                <h3 className="ui header"><FormattedMessage id="terms.5.3.header" defaultMessage="Engaging in False Statements, Impersonation, or Fraud"/></h3>
-                <ul className="ui list">
-                    <li><FormattedMessage id="terms.5.3.ul.libelContent" defaultMessage="Intentionally or knowingly posting content that constitutes libel or defamation;"/></li>
-                    <li><FormattedMessage id="terms.5.3.ul.falseContent" defaultMessage="With the intent to deceive, posting content that is false or inaccurate;"/></li>
-                    <li><FormattedMessage id="terms.5.3.ul.impersonation" defaultMessage="Attempting to impersonate another user or individual, misrepresenting your affiliation with any individual or entity, or using the username of another user with the intent to deceive; and"/></li>
-                    <li><FormattedMessage id="terms.5.3.ul.fraud" defaultMessage="Engaging in fraud."/></li>
-                </ul>
-                <h3 className="ui header"><FormattedMessage id="terms.5.4.header" defaultMessage="Committing Infringement"/></h3>
-                <ul className="ui list">
-                    <li><FormattedMessage id="terms.5.4.ul.infringement" defaultMessage="Infringing copyrights, trademarks, patents, or other proprietary rights under applicable law."/></li>
-                </ul>
-                <h3 className="ui header"><FormattedMessage id="terms.5.5.header" defaultMessage="Misusing Our Services for Other Illegal Purposes"/></h3>
-                <ul className="ui list">
-                    <li><FormattedMessage id="terms.5.5.ul.childPorn" defaultMessage="Posting child pornography or any other content that violates applicable law concerning child pornography;"/></li>
-                    <li><FormattedMessage id="terms.5.5.ul.obsceneMaterial" defaultMessage="Posting or trafficking in obscene material that is unlawful under applicable law; and"/></li>
-                    <li><FormattedMessage id="terms.5.5.ul.inconsistentUsage" defaultMessage="Using the services in a manner that is inconsistent with applicable law."/></li>
-                </ul>
-                <h3 className="ui header"><FormattedMessage id="terms.5.6.header" defaultMessage="Engaging in Disruptive and Illegal Misuse of Facilities"/></h3>
-                <ul className="ui list">
-                    <li><FormattedMessage id="terms.5.6.ul.viruses" defaultMessage="Posting or distributing content that contains any viruses, malware, worms, Trojan horses, malicious code, or other device that could harm our technical infrastructure or system or that of our users;"/></li>
-                    <li><FormattedMessage id="terms.5.6.ul.disruptiveUses" defaultMessage="Engaging in automated uses of the site that are abusive or disruptive of the services and have not been approved by the project community;"/></li>
-                    <li><FormattedMessage id="terms.5.6.ul.disruptingByBurden" defaultMessage="Disrupting the services by placing an undue burden on a project website or the networks or servers connected with a project website;"/></li>
-                    <li><FormattedMessage id="terms.5.6.ul.disruptingByTraffic" defaultMessage="Disrupting the services by inundating any of the project websites with communications or other traffic that suggests no serious intent to use the project website for its stated purpose;"/></li>
-                    <li><FormattedMessage id="terms.5.6.ul.nonPublicAreasUsage" defaultMessage="Knowingly accessing, tampering with, or using any of our non-public areas in our computer systems without authorization; and"/></li>
-                    <li><FormattedMessage id="terms.5.6.ul.vulnerabilityTesting" defaultMessage="Probing, scanning, or testing the vulnerability of any of our technical systems or networks unless all the following conditions are met:"/></li>
-                    <ul className="ui list">
-                        <li><FormattedMessage id="terms.5.6.ul.ul.noAbuse" defaultMessage="such actions do not unduly abuse or disrupt our technical systems or networks;"/></li>
-                        <li><FormattedMessage id="terms.5.6.ul.ul.noGain" defaultMessage="such actions are not for personal gain (except for credit for your work);"/></li>
-                        <li><FormattedMessage id="terms.5.6.ul.ul.reportVulnerabilities" defaultMessage="you report any vulnerabilities to SlideWiki developers or administrators of this SlideWiki website (i.e., server on which SlideWiki is installed), or fix it yourself; and"/></li>
-                        <li><FormattedMessage id="terms.5.6.ul.ul.noMaliciousIntent" defaultMessage="you do not undertake such actions with malicious or destructive intent."/></li>
-                    </ul>
-                </ul>
-                <h3 className="ui header"><FormattedMessage id="terms.5.7.titile" defaultMessage="Compatibility with Wikipedia&apo;s terms of use"/></h3>
-                <p>
-                  <FormattedMessage id="terms.5.7.p1"
-                    values={{
-                        link1: <a href="http://wikimediafoundation.org/wiki/Terms_of_Use"><FormattedMessage id="terms.5.7.p1.wikipediaTou" defaultMessage="Wikipedia terms of use"/></a>,
-                        link2: <a href="http://creativecommons.org/licenses/by-sa/3.0/"><FormattedMessage id="ccAttribution" defaultMessage="Creative Commons Attribution/Share-Alike"/></a>
-                    }}
-                    defaultMessage="Our terms are adapted from the {link1}, which are available under the {link2} License."
-                  />
-                </p>
-                <p><FormattedMessage id="terms." defaultMessage="For full terms and conditions please read our Imprint page."/></p>
+            <div>
+                <div className='ui hidden divider'>
+                </div>
+            <div className='ui grid stackable container'>
+                <div className='row'>
+                    <div className='twelve wide column'>
+                        <div className='ui content'>
+                            <h1 className='ui header'>{this.context.intl.formatMessage(this.messages.mainTitle)}</h1>
+                            <p>{this.context.intl.formatMessage(this.messages.summary)}</p>
+                            <p>{this.context.intl.formatMessage(this.messages.disclaimer)}</p>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.missionTitle)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.mission1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.mission2)}</li>
+                            </ul>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.freeTo)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.free1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.free2)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.free3)}</li>
+                            </ul>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.conditionsTitle)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.condition1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition2)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition3)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition4)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.condition5)}</li>
+                            </ul>
+                            <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.understandingTitle)}</h2>
+                            <ul>
+                                <li>{this.context.intl.formatMessage(this.messages.understanding1)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.understanding2)}</li>
+                                <li>{this.context.intl.formatMessage(this.messages.understanding3)}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className='four wide column'>
+                        <div className='feature-content blue-block-terms'>
+                            <div className='feature-left'>
+                                <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
+                                <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
+                                <div className='text-div'>
+                                    {/*}  <div className='text'>
+                                                        <p>{this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
+                                                    </div> */}
+                                    <div className="ui small image" aria-hidden="true">
+                                        <img src='/assets/images/home/search.jpg' alt=''/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='feature-content green-block-terms'>
+                            <div className='feature-left'>
+                                <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
+                                <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
+                                <div className='text-div'>
+                                    {/*    <div className='text'>
+                                                        <p>{this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
+                                                    </div> */}
+                                    <img src='/assets/images/home/add.jpg' alt=''/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='feature-content red-block-terms'>
+                            <div className='feature-left'>
+                                <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
+                                <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
+                                <div className='text-div'>
+                                    {/*   <div className='text'>
+                                                        <p>{this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
+                                                    </div> */}
+                                    <img src='/assets/images/home/share.jpg' alt=''/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className='signin-blk'>
+                        <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
+                        <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
+                    </div>
+                </div>
+                {/*   </div>
+                </div> */}
+                <div className='row'>
+                    <div className='banner-container inner-image'>
+                        <img src='/assets/images/home/banner.jpg' alt=''/>
+                    </div>
+                </div>
             </div>
-
+            </div>
         );
     }
 }
+
+terms.contextTypes = {
+    intl: PropTypes.object.isRequired,
+    getUser: PropTypes.func.isRequired,
+    executeAction: PropTypes.func.isRequired
+};
+
+terms = connectToStores(terms, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 
 export default terms;

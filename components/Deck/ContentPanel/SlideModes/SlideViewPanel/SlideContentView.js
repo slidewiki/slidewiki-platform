@@ -126,7 +126,7 @@ class SlideContentView extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //to handle non-canvas display of slides
         let slideHTMLContent = this.props.content;
-        if(slideHTMLContent.indexOf('class="pptx2html"') === -1){
+        if (slideHTMLContent.indexOf('class="pptx2html"') === -1 && slideHTMLContent.indexOf('class=\'pptx2html\'') === -1) {
             slideHTMLContent = '<div class="pptx2html" style="width: 960px; position: relative; ">' + slideHTMLContent + '</div>';
         }
         return (

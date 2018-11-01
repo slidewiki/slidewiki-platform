@@ -1,4 +1,7 @@
-const log = require('../configs/log').log;
+import {log} from '../configs/log';
+import rp from 'request-promise';
+import {Microservices} from '../configs/microservices';
+
 
 export default {
     name: 'similarcontent',
@@ -10,14 +13,39 @@ export default {
         let selector= {'sid': args.sid, 'stype': args.stype};
         if(resource === 'similarcontent.list'){
             /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            let contents = [
-                {'id': '16', 'title': 'title deck related to ' + args.sid, 'author': 'soeren' , 'authorId':'2' , 'date':'15/05/2016' ,'liked': '20', 'downloaded': '5'},
-                {'id': '28', 'title': 'title deck related to ' + args.sid, 'author': 'soeren', 'authorId':'2' , 'date':'18/04/2016' ,'liked': '15', 'downloaded': '6'},
-                {'id': '39', 'title': 'title deck related to ' + args.sid, 'author': 'ali1k', 'authorId':'1' , 'date':'03/05/2016' ,'liked': '10', 'downloaded': '4'}
-            ];
-            callback(null, {contents: contents, selector: selector});
+            let numberReco = 3; //Number of recommendations to be retrieved from the service
+            let serviceUri = Microservices.recommender.uri;
+            let userId = params.userid?params.userid :args.userid;
+            if(userId){ //user logged
+                serviceUri= serviceUri+'/deckUserRecommendation/'+args.sid+'?user_id='+userId+'&numberReco='+numberReco;
+            }else{
+                serviceUri= serviceUri+'/deckRecommendation/'+args.sid+'?numberReco='+numberReco;
+            }
+            
+            rp.get({uri: serviceUri}).then((res) => {
+
+                let recommendations = JSON.parse(res);
+                let contents = [];
+                for(let deck of recommendations){
+                    contents.push({
+                        'deckId': deck.id,
+                        'title': deck.title,
+                        'firstSlideId': deck.firstSlide,   //TODO deck.firstSlide,
+                        'author': deck.author, //TODO deck.displayName,
+                        'authorId': deck.authorId, //TODO deck.authorId,
+                        'date': deck.date , //TODO deck.date
+                        'liked': deck.likes, //TODO deck.likes
+                        'downloaded': deck.downloads //TODO deck.downloads
+                    });
+                }
+
+                callback(null, {contents: contents, selector: selector});
+
+            }).catch((err) => { //error, no results
+                callback(err, []);
+            });
+
+
         }
     }
     // other methods
