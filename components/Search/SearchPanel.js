@@ -13,13 +13,14 @@ import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 import loadMoreResults from '../../actions/search/loadMoreResults';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {translationLanguages, getLanguageNativeName} from '../../common';
-import { isEmpty, pick, pickBy, isArray, filter, uniq } from 'lodash';
+import { isEmpty, pick, pickBy, isArray, filter, uniq, map } from 'lodash';
 import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
 import { Divider } from 'semantic-ui-react';
 import { educationLevels } from '../../lib/isced';
 import { Dropdown } from 'semantic-ui-react';
+import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -199,6 +200,7 @@ class SearchPanel extends React.Component {
             user: null, 
             tag: null, 
             educationLevel: null,
+            topics: null,
             facet_exclude: [],
         };
 
@@ -229,6 +231,13 @@ class SearchPanel extends React.Component {
             advancedFilters.educationLevel = educationLevel;
             advancedFilters.facet_exclude.push('educationLevel');
             this.educationLevelsDropdown.setValue(null);
+        }
+
+        let topics = this.topicsDropdown.getSelected();
+        if (!_.isEmpty(topics)) {
+            advancedFilters.topics = map(topics, 'tagName');
+            advancedFilters.facet_exclude.push('topics');
+            this.topicsDropdown.clear();
         }
 
         return advancedFilters;
@@ -272,6 +281,15 @@ class SearchPanel extends React.Component {
             }
         }
 
+        if (filters.topics) {
+            if (newState.topics) {
+                newState.topics = newState.topics.concat(filters.topics);
+                newState.topics = uniq(newState.topics);
+            } else {
+                newState.topics = filters.topics;
+            }
+        }
+
         if (filters.facet_exclude) {
             newState.facet_exclude = filters.facet_exclude;
         }
@@ -303,6 +321,7 @@ class SearchPanel extends React.Component {
                     tag: filters.tag || [], 
                     user: filters.user || [], 
                     educationLevel: filters.educationLevel || [],
+                    topics: filters.topics || [],
                     facet_exclude: filters.facet_exclude || [],
                 }, () => {
                     this.handleSearch(params);
@@ -413,6 +432,10 @@ class SearchPanel extends React.Component {
             newState.educationLevel = [];
         }
 
+        if (fieldName === 'topics' || fieldName === 'all') {
+            newState.topics = [];
+        }
+
         newState.facet_exclude = this.getSelectedFacetFields();
 
         this.setState(newState, () => {
@@ -435,17 +458,15 @@ class SearchPanel extends React.Component {
                 </select>
             </div>
             <div className="field">
+                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckProperty.Tag.Topic" defaultMessage="Subject" /></label>
+                <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
+                    ref={(e) => (this.topicsDropdown = e)} tagFilter={{ tagType: 'topic' }} initialTags={[]} placeholder="Select Subject" />
+            </div>
+            <div className="field">
                 <label htmlFor="level_input" id="level_label"><FormattedMessage id="DeckProperty.Education" defaultMessage="Education Level" /></label>
                 <Dropdown id="level_input" ref={ (e) => { this.educationLevelsDropdown = e; }} fluid selection aria-labelledby="level_label" aria-describedby="describe_level"
                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                     placeholder="Select Education Level" />
-            </div>
-            <div className="field">
-            {
-                // <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckProperty.Tag.Topic" defaultMessage="Subject" /></label>
-                // <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
-                //     ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} initialTags={this.state.topics} />
-            }
             </div>
         </div>;
 
@@ -503,6 +524,7 @@ class SearchPanel extends React.Component {
                                 tags: this.state.tag || [],
                                 users: this.state.user || [],
                                 educationLevel: this.state.educationLevel || [],
+                                topics: this.state.topics || [],
                             }}
                             loading={this.props.SearchResultsStore.loading}
                             error={this.props.SearchResultsStore.error}
