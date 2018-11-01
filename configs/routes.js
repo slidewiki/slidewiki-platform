@@ -445,7 +445,7 @@ export default {
         }
     },
     similarcontent: {
-        path: '/similarcontent/:stype/:sid',
+        path: '/similarcontent/:stype/:sid/:userid?',
         method: 'get',
         page: 'similarcontent',
         handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),
