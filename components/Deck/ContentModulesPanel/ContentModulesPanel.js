@@ -223,7 +223,7 @@ class ContentModulesPanel extends React.Component {
                     });
                     
                     //hide tags and playlists for slide view
-                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists')) {
+                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
                         return;
                     }
                     

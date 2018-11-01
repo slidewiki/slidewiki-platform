@@ -162,7 +162,7 @@ class AddDeck extends React.Component {
         //console.log('AddDeck: handleRedirect()');
         this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.props.AddDeckStore.redirectID
+            url: '/deck/' + this.props.AddDeckStore.redirectID + '/_/deck/' + this.props.AddDeckStore.redirectID
         });
     }
     handleImportRedirect() {
