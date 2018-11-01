@@ -458,12 +458,12 @@ class SearchPanel extends React.Component {
                 </select>
             </div>
             <div className="field">
-                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckProperty.Tag.Topic" defaultMessage="Subject" /></label>
+                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckFilter.Tag.Topic" defaultMessage="Subject" /></label>
                 <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
                     ref={(e) => (this.topicsDropdown = e)} tagFilter={{ tagType: 'topic' }} initialTags={[]} placeholder="Select Subject" />
             </div>
             <div className="field">
-                <label htmlFor="level_input" id="level_label"><FormattedMessage id="DeckProperty.Education" defaultMessage="Education Level" /></label>
+                <label htmlFor="level_input" id="level_label"><FormattedMessage id="DeckFilter.Education" defaultMessage="Education Level" /></label>
                 <Dropdown id="level_input" ref={ (e) => { this.educationLevelsDropdown = e; }} fluid selection aria-labelledby="level_label" aria-describedby="describe_level"
                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                     placeholder="Select Education Level" />
