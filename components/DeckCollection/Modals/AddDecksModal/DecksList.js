@@ -22,7 +22,7 @@ class DecksList extends React.Component {
         this.messages = this.getIntlMessages();
         this.activeStyle = {
             backgroundColor: '#f8ffff',
-            color: '#2185d0'
+            color: '#1e78bb'
         };
     }
     getIntlMessages(){
