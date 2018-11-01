@@ -355,9 +355,9 @@ export default {
                     getActivity('download', deckIds), 
                     getActivity('share', deckIds),
                     getTags(response.facets),
-                    getSlideAmount(deckIds),
+                    // getSlideAmount(deckIds),
                     getQuestionsCount(deckIds),
-                ]).then( ([ users, likes, downloads, shares, tags, slides, questions ]) => {
+                ]).then( ([ users, likes, downloads, shares, tags, /*slides,*/ questions ]) => {
                     response.docs.forEach( (result) => {
 
                         // currently forks and translations are merged
@@ -376,7 +376,7 @@ export default {
                         result.downloadsCount = downloads[result.db_id];
                         result.sharesCount = shares[result.db_id];
                         result.questionsCount = questions[result.db_id];
-                        result.noOfSlides = slides[result.db_id];
+                        // result.noOfSlides = slides[result.db_id];
                     });
 
                     if (response.facets) {
