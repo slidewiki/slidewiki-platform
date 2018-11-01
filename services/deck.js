@@ -5,6 +5,8 @@ import slugify from 'slugify';
 import {fillInUserInfo, fillInGroupInfo} from '../lib/services/user';
 import {fetchTagInfo} from '../lib/services/tag';
 
+import pick from 'lodash/pick';
+
 const log = require('../configs/log').log;
 
 export default {
@@ -400,7 +402,7 @@ export default {
 //            if (params.tags.length === 1 && params.tags[0].length === 0)
 //                params.tags = undefined;
 
-            // prepare tagName and defaultName to send to deck service
+            // prepare tag data to send to deck service
             let tagsPromise = Promise.resolve([]);
             if (params.tags && params.tags.length) {
                 // send tags to tag-service
@@ -411,10 +413,7 @@ export default {
                         user: params.userid,
                         tags: params.tags,
                     }
-                }).then((tags) => tags.map((t) => ({
-                    tagName: t.tagName,
-                    defaultName:  t.defaultName
-                })));
+                }).then((tags) => tags.map((t) => pick(t, 'tagType', 'tagName', 'defaultName')));
                 // TODO maybe catch an error here ?
             }
 
@@ -473,47 +472,45 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'deck.update') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            try {
-                if (params.tags.length === 1 && params.tags[0].length === 0)
-                    params.tags = undefined;
-            } catch (e) {
 
-            }
-
+            // fetch the tags data
             // we don't upload tags here as we don't expect user submitted tags here
+            let tagsPromise = fetchTagInfo(params.tags).then((tags) =>  tags.map((t) => pick(t, 'tagName', 'tagType', 'defaultName')));
+            // TODO maybe catch an error here ?
 
-            let toSend = {
-                description: params.description,
-                language: params.language,
-                tags: params.tags? params.tags: [],
-                title: params.title,
-                license: params.license,
-                theme: params.theme,
-                educationLevel: params.educationLevel,
-                allowMarkdown: params.allowMarkdown,
-                new_revision: false,
-                top_root_deck: String(params.selector.id),
-                tags: params.tags,
-                hidden: params.hidden,
-            };
-            // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
-            rp({
-                method: 'PUT',
-                uri: Microservices.deck.uri + '/deck/' + params.deckId,
-                json: true,
-                headers: {'----jwt----': params.jwt},
-                body: toSend
-            }).then((deck) => {
-                // support old style deck api response
-                // TODO remove this
-                if (deck.revisions) {
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = deck.revisions[0].id;
-                    deck.title = deck.revisions[0].title;
+            tagsPromise.then((tags) => {
+                let toSend = {
+                    description: params.description,
+                    language: params.language,
+                    title: params.title,
+                    license: params.license,
+                    theme: params.theme,
+                    educationLevel: params.educationLevel,
+                    allowMarkdown: params.allowMarkdown,
+                    new_revision: false,
+                    top_root_deck: String(params.selector.id),
+                    tags: tags,
+                    hidden: params.hidden,
+                };
+                // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
+                return rp({
+                    method: 'PUT',
+                    uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                    json: true,
+                    headers: {'----jwt----': params.jwt},
+                    body: toSend
+                }).then((deck) => {
+                    // support old style deck api response
+                    // TODO remove this
+                    if (deck.revisions) {
+                        if (!deck.id) deck.id = deck._id;
+                        deck.revision = deck.revisions[0].id;
+                        deck.title = deck.revisions[0].title;
 
-                    delete deck.revisions;
-                }
-                return deck;
+                        delete deck.revisions;
+                    }
+                    return deck;
+                });
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
@@ -553,13 +550,8 @@ export default {
                 }
             }).then((tags) => {
 
-                // send tagName and defaultName to deck-service
-                let deckTags = tags.map( (t) => {
-                    return {
-                        tagName: t.tagName,
-                        defaultName:  t.defaultName
-                    };
-                });
+                // send tag data to deck-service
+                let deckTags = tags.map((t) => pick(t, 'tagType', 'tagName', 'defaultName'));
 
                 return rp.put({
                     uri: Microservices.deck.uri + '/deck/' + params.selector.sid + '/tags',
