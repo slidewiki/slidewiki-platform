@@ -415,22 +415,22 @@ class Details extends React.Component {
                           (this.props.isAdmin || this.props.isCreator) ?
                             (member.role === 'admin') ?
                               <div className="one wide column middle aligned">
-                                <button className="ui basic icon button" data-tooltip="Remove admin role" aria-label="remove admin role">
-                                  <i className="user times middle aligned icon" key={member.userid} onClick={handler2}></i>
+                                <button className="ui basic icon button" data-tooltip="Remove admin role" aria-label="remove admin role" onClick={handler2}>
+                                  <i className="user times middle aligned icon"></i>
                                 </button>
                               </div>
                             :
                               <div className="one wide column middle aligned">
-                                <button className="ui basic icon button" data-tooltip="Add admin role" aria-label="add admin role">
-                                  <i className="user plus middle aligned icon" key={member.userid} onClick={handler3}></i>
+                                <button className="ui basic icon button" data-tooltip="Add admin role" aria-label="add admin role" onClick={handler3}>
+                                  <i className="user plus middle aligned icon"></i>
                                 </button>
                               </div>
                             : ''
                         }
                         {(this.props.isAdmin || this.props.isCreator) ?
                           <div className="one wide column middle aligned">
-                            <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member">
-                              <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                            <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member" onClick={fct}>
+                              <i className="remove middle aligned icon"></i>
                             </button>
                           </div>
                         : ''}
