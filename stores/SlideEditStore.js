@@ -16,6 +16,7 @@ class SlideEditStore extends BaseStore {
         this.embedQuestionsClick = 'false';
         this.embedQuestionsContent = ''; //contains the content for the question embedding
         this.slideSize = '';
+        this.slideTransition = '';
         this.slideSizeText = '';
         this.saveSlideClick = 'false';
         this.cancelClick = 'false';
@@ -72,6 +73,11 @@ class SlideEditStore extends BaseStore {
         this.slideSize = payload.slideSize;
         this.emitChange();
         this.slideSize = '';
+        this.emitChange();
+    }
+    
+    changeSlideTransition(payload){
+        this.slideTransition = payload.slideTransition;
         this.emitChange();
     }
 
@@ -222,6 +228,7 @@ class SlideEditStore extends BaseStore {
             embedQuestionsClick: this.embedQuestionsClick,
             embedQuestionsContent: this.embedQuestionsContent,
             slideSize: this.slideSize,
+            slideTransition: this.slideTransition,
             slideSizeText: this.slideSizeText,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
@@ -264,6 +271,7 @@ class SlideEditStore extends BaseStore {
         this.embedQuestionsClick = state.embedQuestionsClick;
         this.embedQuestionsContent = state.embedQuestionsContent;
         this.slideSize = state.slideSize;
+        this.slideTransition = state.slideTransition;
         this.slideSizeText = state.slideSizeText;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
@@ -316,6 +324,7 @@ SlideEditStore.handlers = {
     'CANCEL_CLICK': 'handleCancelClick',
     'CHANGE_TEMPLATE': 'changeTemplate',
     'CHANGE_SLIDE_SIZE': 'changeSlideSize',
+    'CHANGE_SLIDE_TRANSITION': 'changeSlideTransition',
     'CHANGE_SLIDE_SIZE_TEXT': 'changeSlideSizeText',
     'ADD_INPUT_BOX': 'handleAddInputBox',
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
