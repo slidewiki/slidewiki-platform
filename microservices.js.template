@@ -1,5 +1,8 @@
 export default {
     Microservices: {
+        'platform': {
+            uri: '${URL_PLATFORM}'
+        },
         'deck': {
             uri: '${SERVICE_URL_DECK}'
         },

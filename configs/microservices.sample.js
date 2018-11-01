@@ -34,6 +34,9 @@ STEP 3: Verify that in STEP 2, you have correct operation mentioned. If you see 
 
 export default {
     Microservices: {
+        'platform': {
+            uri: 'https://platform.experimental.slidewiki.org',
+        },
         'deck': {
             uri: 'https://deckservice.experimental.slidewiki.org'
         },
