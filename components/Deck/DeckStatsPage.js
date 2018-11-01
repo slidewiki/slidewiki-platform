@@ -5,7 +5,7 @@ import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment,
 import { connectToStores } from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
 import DeckViewStore from '../../stores/DeckViewStore';
-import GroupStatsStore from '../../stores/GroupStatsStore'; // TODO remove this
+import DeckStatsStore from '../../stores/DeckStatsStore';
 
 import { Microservices } from '../../configs/microservices';
 import CustomDate from './util/CustomDate';
@@ -87,7 +87,7 @@ class DeckStatsPage extends React.Component {
             </div>
         );
 
-        let statsElement = <DeckStats deckid={null} deckStats={this.props.GroupStatsStore} />;
+        let statsElement = <DeckStats deckId={selector.id} deckStats={this.props.DeckStatsStore} />;
 
         return (
             <Grid padded="vertically" stackable>
@@ -110,11 +110,11 @@ class DeckStatsPage extends React.Component {
     }
 }
 
-DeckStatsPage = connectToStores(DeckStatsPage, [DeckPageStore, DeckViewStore, GroupStatsStore], (context, props) => {
+DeckStatsPage = connectToStores(DeckStatsPage, [DeckPageStore, DeckViewStore, DeckStatsStore], (context, props) => {
     return {
         DeckPageStore: context.getStore(DeckPageStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),
-        GroupStatsStore: context.getStore(GroupStatsStore).getState(),
+        DeckStatsStore: context.getStore(DeckStatsStore).getState(),
     };
 });
 

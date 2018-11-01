@@ -36,6 +36,8 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
+import loadDeckStats from '../actions/stats/loadDeckStats';
+
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -381,7 +383,19 @@ export default {
         handler: require('../components/Deck/DeckStatsPage'),
         page: 'deckstatspage',
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+
         }
     },
 

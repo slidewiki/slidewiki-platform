@@ -1,8 +1,8 @@
 import React from 'react';
 import {Grid} from 'semantic-ui-react';
 
-// import updateDeckActivityTimelineFilters from '../../actions/stats/updateDeckActivityTimelineFilters';
-// import updateDeckUsersStatsFilters from '../../actions/stats/updateDeckUsersStatsFilters';
+import updateDeckActivityTimelineFilters from '../../actions/stats/updateDeckActivityTimelineFilters';
+import updateDeckUserStatsFilters from '../../actions/stats/updateDeckUserStatsFilters';
 
 import {defineMessages} from 'react-intl';
 import ActivityTimeline from '../../components/Stats/ActivityTimeline';
@@ -20,43 +20,39 @@ class DeckStats extends React.Component {
 
     getIntlMessages() {
         return defineMessages({
-            membersStatsTitle: {
-                id: 'Stats.deckUsersStatsTitle',
+            deckUserStatsTitle: {
+                id: 'Stats.deckUserStatsTitle',
                 defaultMessage: 'User Activity'
             },
         });
     }
 
     handleTimelinePeriodChange(event, {value}) {
-        // TODO
-        // this.context.executeAction(updateDeckActivityTimelineFilters, {
-        //     datePeriod: value,
-        //     deckid: this.props.deckid,
-        // });
+         this.context.executeAction(updateDeckActivityTimelineFilters, {
+             datePeriod: value,
+             deckId: this.props.deckId,
+        });
     }
 
     handleTimelineActivityChange(event, {value}) {
-        // TODO
-        // this.context.executeAction(updateDeckActivityTimelineFilters, {
-        //     activityType: value,
-        //     deckid: this.props.deckid,
-        // });
+        this.context.executeAction(updateDeckActivityTimelineFilters, {
+            activityType: value,
+            deckId: this.props.deckId,
+        });
     }
 
     handleMembersStatsPeriodChange(event, {value}) {
-        // TODO
-        // this.context.executeAction(updateDeckUsersStatsFilters, {
-        //     datePeriod: value,
-        //     deckid: this.props.deckid,
-        // });
+        this.context.executeAction(updateDeckUserStatsFilters, {
+            datePeriod: value,
+            deckId: this.props.deckId,
+        });
     }
 
     handleMembersStatsActivityChange(event, {value}) {
-        // TODO
-        // this.context.executeAction(updateDeckUsersStatsFilters, {
-        //     activityType: value,
-        //     deckid: this.props.deckid,
-        // });
+        this.context.executeAction(updateDeckUserStatsFilters, {
+            activityType: value,
+            deckId: this.props.deckId,
+        });
     }
 
     render() {
@@ -74,10 +70,10 @@ class DeckStats extends React.Component {
               </Grid.Row>
               <Grid.Row columns={1}>
                   <Grid.Column>
-                      <UserBarChart title={this.context.intl.formatMessage(this.messages.membersStatsTitle)} data={this.props.deckStats.membersStats}
-                                    loading={this.props.deckStats.membersStatsLoading}
-                                    activityType={this.props.deckStats.membersStatsFilters.activityType}
-                                    datePeriod={this.props.deckStats.membersStatsFilters.datePeriod}
+                      <UserBarChart title={this.context.intl.formatMessage(this.messages.deckUserStatsTitle)} data={this.props.deckStats.deckUserStats}
+                                    loading={this.props.deckStats.deckUserStatsLoading}
+                                    activityType={this.props.deckStats.deckUserStatsFilters.activityType}
+                                    datePeriod={this.props.deckStats.deckUserStatsFilters.datePeriod}
                                     handleActivityTypeChange={this.handleMembersStatsActivityChange.bind(this)}
                                     handleDatePeriodChange={this.handleMembersStatsPeriodChange.bind(this)} />
                   </Grid.Column>

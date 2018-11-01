@@ -51,7 +51,7 @@ export default {
     name: 'stats',
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
-        let {username, activityType, datePeriod, groupid} = args;
+        let {username, activityType, datePeriod, groupid, deckId} = args;
 
         if (resource === 'stats.userStatsByTime') {
             let fromDate = periodToDate(datePeriod);
@@ -82,6 +82,46 @@ export default {
                     '_id': 1
                 }
             }];
+            rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => callback(null, fillMissingDates(fromDate, response)))
+              .catch((err) => callback(err));
+        } else if (resource === 'stats.deckStatsByTime') {
+            let fromDate = periodToDate(datePeriod);
+            let pipeline = [{
+                '$match': {
+                    'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
+                    'statement.verb.id': activityTypeToVerb(activityType),
+                    'statement.context.contextActivities.parent.id': {'$regex': new RegExp(`/deck/${deckId.split('-')[0]}$`)}
+                }
+            }, {
+                '$project': {
+                    'date': {
+                        '$dateToString': {
+                            'format': '%Y-%m-%d',
+                            'date': '$timestamp'
+                        }
+                    }
+                }
+            }, {
+                '$group': {
+                    '_id': '$date',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            }, {
+                '$sort': {
+                    '_id': 1
+                }
+            }];
+            console.log(JSON.stringify(pipeline));
             rp({
                 method: 'GET',
                 uri: Microservices.lrs.uri + '/statements/aggregate',
