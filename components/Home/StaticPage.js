@@ -20,7 +20,7 @@ class StaticPage extends React.Component {
             },
             findSlidesContent: {
                 id: 'staticPage.findSlidesContent',
-                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
+                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics. '
             },
             createSlides: {
                 id: 'staticPage.createSlides',
@@ -32,7 +32,7 @@ class StaticPage extends React.Component {
             },
             createSlidesContent: {
                 id: 'staticPage.createSlidesContent',
-                defaultMessage: 'Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML slides to allow you to continue to edit and add new slides.'
+                defaultMessage: 'Create a new deck or import existing slides  to create HTML slide decks. '
             },
             sharingSlides: {
                 id: 'staticPage.sharingSlides',
@@ -44,7 +44,7 @@ class StaticPage extends React.Component {
             },
             sharingSlidesContent: {
                 id: 'staticPage.sharingSlidesContent',
-                defaultMessage: 'There are many ways that you and your students can engage and interact with slides and decks. Use the Slideshow mode to view a deck as a slideshow. Includes a timer and speaker notes\' view. Share decks via social media or email.'
+                defaultMessage: 'Collaborate on decks with peers. Group decks in playlists and share via social media or email.'
             },
             getStarted: {
                 id: 'staticPage.getStarted',
@@ -84,9 +84,9 @@ class StaticPage extends React.Component {
         return (<div>		
 			<div className='ui hidden divider'></div>
 
-			<div className='ui grid stackable container'>
+			<div className='ui grid centered stackable container'>
 			<div className='row'>
-			<div className='twelve wide column'>
+			<div className='eleven wide column'>
 			    <div className='ui content'>
 					{this.props.children} 
 				</div>
@@ -94,12 +94,11 @@ class StaticPage extends React.Component {
 			<div className='four wide column'>
 			    <div className='feature-content blue-block-terms'>
 			        <div className='feature-left'>
-			            <h2>{this.context.intl.formatMessage(this.messages.findSlides)}</h2>
-			            <h4>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
+			            <div className="ui header blue medium">{this.context.intl.formatMessage(this.messages.findSlides)}</div>
+                        <div className="ui header blue small">{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</div>
 			            <div className='text-div'>
 			                <div className='text'>
-                             
-                                <p><img src='/assets/images/home/search.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
+                                <p><img src='/assets/images/home/search.jpg' className="ui tiny left floated  image" alt=''/> {this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                             </div> 
 			               
 			            </div>
@@ -107,8 +106,8 @@ class StaticPage extends React.Component {
 			    </div>
 			    <div className='feature-content green-block-terms'>
 			        <div className='feature-left'>
-			            <h2>{this.context.intl.formatMessage(this.messages.createSlides)}</h2>
-			            <h4>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
+                        <div className="ui header teal medium">{this.context.intl.formatMessage(this.messages.createSlides)}</div>
+			            <div className="ui header teal small">{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</div>
 			            <div className='text-div'>
 			                <div className='text'>
                                 <p> <img src='/assets/images/home/add.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
@@ -119,8 +118,8 @@ class StaticPage extends React.Component {
 			    </div>
 			    <div className='feature-content red-block-terms'>
 			        <div className='feature-left'>
-			            <h2>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h2>
-			            <h4>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
+                        <div className="ui header pink medium">{this.context.intl.formatMessage(this.messages.sharingSlides)}</div>
+			            <div className="ui header small pink">{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</div>
 			            <div className='text-div'>
 			                <div className='text'>
                                 <p><img src='/assets/images/home/share.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
