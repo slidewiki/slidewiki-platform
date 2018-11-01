@@ -35,7 +35,11 @@ class Facets extends React.Component {
             },
             educationLevelFacet: {
                 id: 'Facets.educationLevelFacet',
-                defaultMessage: 'Education Level'
+                defaultMessage: 'Education Levels'
+            },
+            topicsFacet: {
+                id: 'Facets.topicsFacet',
+                defaultMessage: 'Subjects'
             },
             showMore: {
                 id: 'Facets.showMore',
@@ -219,6 +223,7 @@ class Facets extends React.Component {
         const userItems = this.getFacetItems(data.creator, 'user', selected.users);
         const tagItems = this.getFacetItems(data.tags, 'tag', selected.tags);
         const educationLevelItems = this.getFacetItems(data.educationLevel, 'educationLevel', selected.educationLevel);
+        const topicsItems = this.getFacetItems(data.topics, 'topics', selected.topics);
 
         return (
             <div id="facets">
@@ -275,6 +280,30 @@ class Facets extends React.Component {
                             </Menu.Item>
                         }
                         { userItems }
+                    </Menu>
+                }
+
+                {
+                    <Menu fluid vertical>
+                        <Menu.Item key="topicsHeader" header>
+                            {this.context.intl.formatMessage(this.messages.topicsFacet)}
+                            {
+                                // <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}>
+                                //    <Icon name="search" />
+                                // </NavLink>
+                            }
+                            { 
+                                (!isEmpty(selected.topics) && !this.props.loading) 
+                                ? <span  style={{float: 'right'}}>
+                                        <NavLink href="#" onClick={this.clearFacets.bind(this, 'topics')}>
+                                            <Icon name="cancel" aria-label="clear subjects"/>
+                                        </NavLink>
+                                    </span> 
+                                : ''
+                            }
+                        </Menu.Item>
+                    
+                        { topicsItems }
                     </Menu>
                 }
 

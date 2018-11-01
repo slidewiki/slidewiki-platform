@@ -195,6 +195,10 @@ function fillFacetsInfo(facets, usernames, tags) {
         item.text = tags[item.val];
     });
 
+    facets.topics.forEach( (item) => {
+        item.text = tags[item.val];
+    });
+
     facets.educationLevel.forEach( (item) => {
         item.text = getEducationLevel(item.val); 
     });
@@ -246,13 +250,14 @@ function getRequestOptions(params) {
 }
 
 function getTags(facets) {
-    if (!facets || !facets.tags) {
+    if (!facets || (!facets.tags && !facets.topics)) {
         return Promise.resolve();
     }
 
     let tags = {};
+    let tagsAndTopics = (facets.tags || []).concat(facets.topics || []);
 
-    let tagPromises = facets.tags.map( (facetTag) => 
+    let tagPromises = tagsAndTopics.map( (facetTag) => 
         rp.get({uri: `${Microservices.tag.uri}/tag/${facetTag.val}`, json: true}).then( (tag) => {
             tags[tag.tagName] = tag.defaultName;
         }).catch( (err) => {
@@ -282,6 +287,8 @@ function addSelectedToFacets(facets, query) {
     addToFacet(facets.language, query.language);
     addToFacet(facets.creator, query.user);
     addToFacet(facets.tags, query.tag);
+    addToFacet(facets.educationLevel, query.educationLevel);
+    addToFacet(facets.topics, query.topics);
 }
 
 function getQuestionsCount(deckIdsSet) {
@@ -348,9 +355,9 @@ export default {
                     getActivity('download', deckIds), 
                     getActivity('share', deckIds),
                     getTags(response.facets),
-                    getSlideAmount(deckIds),
+                    // getSlideAmount(deckIds),
                     getQuestionsCount(deckIds),
-                ]).then( ([ users, likes, downloads, shares, tags, slides, questions ]) => {
+                ]).then( ([ users, likes, downloads, shares, tags, /*slides,*/ questions ]) => {
                     response.docs.forEach( (result) => {
 
                         // currently forks and translations are merged
@@ -369,7 +376,7 @@ export default {
                         result.downloadsCount = downloads[result.db_id];
                         result.sharesCount = shares[result.db_id];
                         result.questionsCount = questions[result.db_id];
-                        result.noOfSlides = slides[result.db_id];
+                        // result.noOfSlides = slides[result.db_id];
                     });
 
                     if (response.facets) {
