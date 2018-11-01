@@ -25,6 +25,10 @@ export default function loadSearchResults(context, payload, done) {
         payload.query.tag = [payload.query.tag];
     }
 
+    if (payload.query.educationLevel && !isArray(payload.query.educationLevel)) {
+        payload.query.educationLevel = [payload.query.educationLevel];
+    }
+
     if (payload.query.facet_exclude && !isArray(payload.query.facet_exclude)) {
         payload.query.facet_exclude = [payload.query.facet_exclude];
     }
