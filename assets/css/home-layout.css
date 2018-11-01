@@ -88,7 +88,7 @@
     .terms-feature-content.green-block{border: 1px solid #128571;}
 }
 @media only screen and (min-width: 1199px) {
-    .banner-container img {margin-bottom: -380px}
+    .banner-container img {margin-bottom: 80px}
     .results.home{margin-top: 5rem}
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -123,7 +123,7 @@
     .feature-content h2{font-size: 30px;line-height: 32px;margin-bottom: 5px;}
     .feature-content h4 {font-size: 20px;margin-top: 0;}
     .feature-content p {font-size: 14px;line-height: 20px;}
-    .banner-container > img {width: 2000px;margin-left: -1000px;}
+    .banner-container > img {width: 1250px;margin-left: -625px;}
     .banner-content .ui.input > input{line-height: 40px;font-size: 24px;}
     .banner-content .ui.icon.input > i.icon{font-size: 28px;}
     .footer-container{padding: 40px 0 0 0;}
@@ -178,7 +178,7 @@
     .content-right ul li .feature-left .text-div .text{padding: 0 12px 0 0;}
     .content-right .signin-blk{padding: 25px;}
     .content-right .signin-blk span{line-height: 40px;}
-    .banner-container img {margin-bottom: -305px}
+    .banner-container img {margin-bottom: 70px}
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -424,5 +424,3 @@
     .content-right .signin-blk span{padding: 0 0 10px;font-size: 17px;}
     .banner-container > img {width: 800px;margin-left: -400px; margin-bottom: -120px}
 }
-
-
