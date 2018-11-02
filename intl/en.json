@@ -465,6 +465,7 @@
   "DeckTranslationsModal.originLanguage": "Original Language:",
   "DeckTranslationsModal.switchSR": "Create a new deck translation",
   "InfoPanelInfoView.selectLanguage": "Select language",
+  "Stats.deckUserStatsTitle": "User Activity",
   "similarContentItem.creator": "Creator",
   "similarContentItem.likes": "Number of likes",
   "similarContentItem.open_deck": "Open deck",
