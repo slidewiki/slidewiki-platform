@@ -19,7 +19,7 @@ class UserBarChart extends React.Component {
         return (
           <div>
               <Message attached>
-                  <h3>{this.props.title}</h3>
+                  <h2>{this.props.title}</h2>
               </Message>
               <Segment attached padded loading={this.props.loading}>
                   <span>

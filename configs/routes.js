@@ -36,6 +36,8 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
+import loadDeckStats from '../actions/stats/loadDeckStats';
+
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -375,6 +377,28 @@ export default {
         }
     },
 
+    deckstatspage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/stats',
+        method: 'get',
+        handler: require('../components/Deck/DeckStatsPage'),
+        page: 'deckstatspage',
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
     // stype: 'type of selected content e.g. slide, deck or question',
@@ -445,7 +469,7 @@ export default {
         }
     },
     similarcontent: {
-        path: '/similarcontent/:stype/:sid',
+        path: '/similarcontent/:stype/:sid/:userid?',
         method: 'get',
         page: 'similarcontent',
         handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),

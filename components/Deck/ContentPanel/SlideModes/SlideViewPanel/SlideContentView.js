@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {findDOMNode} from 'react-dom';
-import ChartRender from '../../util/ChartRender';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 const ReactDOM = require('react-dom');
@@ -34,14 +33,9 @@ class SlideContentView extends React.Component {
             //window.addEventListener('resize', this.handleResize);
         }
         this.forceUpdate();
-
-        // Resize of charts only necessary here.
-        ChartRender.renderCharts(true);
-
     }
 
     componentDidUpdate() {
-        ChartRender.renderCharts(false);
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
@@ -132,8 +126,8 @@ class SlideContentView extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //to handle non-canvas display of slides
         let slideHTMLContent = this.props.content;
-        if(slideHTMLContent.indexOf('class="pptx2html"') === -1){
-            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">' + slideHTMLContent + '</div>';
+        if (slideHTMLContent.indexOf('class="pptx2html"') === -1 && slideHTMLContent.indexOf('class=\'pptx2html\'') === -1) {
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; position: relative; ">' + slideHTMLContent + '</div>';
         }
         return (
         <div ref='container' id='container'>

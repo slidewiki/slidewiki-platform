@@ -5,8 +5,7 @@ import PresentationSlide from './PresentationSlide';
 import { connectToStores } from 'fluxible-addons-react';
 import { Microservices } from '../../../configs/microservices';
 import PresentationStore from '../../../stores/PresentationStore';
-import loadPresentation from '../../../actions/loadPresentation';
-import ChartRender from '../ContentPanel/util/ChartRender';
+
 // if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
 // }
@@ -147,7 +146,6 @@ class Presentation extends React.Component{
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
-                ChartRender.renderCharts(false);
                 this.resize();
             } );
 
@@ -155,7 +153,6 @@ class Presentation extends React.Component{
                 //console.log('slidechanged: ' + $('.present > .accessibilityWrapper > .pptx2html div:first').html());
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                ChartRender.renderCharts(true);
                 this.resize();
             } );
 
@@ -236,7 +233,7 @@ class Presentation extends React.Component{
         return(
             //<ResizeAware ref='container' id='container'>
             <div ref='container' id='container'>
-                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv}  data-background-transition="none">
                     <div className={['slides', style.slides].join(' ')}>
       			     	     {slides}
         			      </div>
@@ -256,7 +253,8 @@ class Presentation extends React.Component{
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
                 let bgColor = content.split('background-color: ');
                 let bgImgTemp = content.split('background-image: ');
-                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                let transition = slide.transition ? slide.transition : 'none';
+                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={transition}/>;
                 //need to check if bg is provided
                 if (bgImgTemp.length > 1) {
                     let backgroundImageExtr = content.split('background-image: url(&quot;'); // url(&quot;
@@ -267,14 +265,14 @@ class Presentation extends React.Component{
                         content = content.split('background-image: url(&quot;')[0] + content.split('&quot;);')[1];
                         if(bgColor.length > 1) content =  content.split('background-color: ')[0] + content.split('background-color: ')[1].split(';').slice(1).join('');
                         // Add resulting slide.
-                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={transition}/>;
                     } else {
                         console.log('Problem extracting the background image: ', bgImgTemp[1]);
                     }
                 } else if (bgColor.length > 1) {
                     let backgroundColour = bgColor[1].split(';').length > 1 ? bgColor[1].split(';')[0] : undefined;
                     if (backgroundColour) {
-                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={transition}/>;
                     } else {
                         console.log('Problem extracting the background colour: ', bgColor[1]);
                     }

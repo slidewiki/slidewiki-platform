@@ -13,6 +13,7 @@ import {defineMessages} from 'react-intl';
 import zoom from '../../../actions/slide/zoom';
 import ContentStore from '../../../stores/ContentStore';
 
+
 class InfoPanelInfoView extends React.Component {
 
     constructor(props){

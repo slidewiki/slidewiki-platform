@@ -33,6 +33,14 @@ class Facets extends React.Component {
                 id: 'Facets.tagsFacet',
                 defaultMessage: 'Tags'  
             },
+            educationLevelFacet: {
+                id: 'Facets.educationLevelFacet',
+                defaultMessage: 'Education Levels'
+            },
+            topicsFacet: {
+                id: 'Facets.topicsFacet',
+                defaultMessage: 'Subjects'
+            },
             showMore: {
                 id: 'Facets.showMore',
                 defaultMessage: 'show more'                 
@@ -214,6 +222,8 @@ class Facets extends React.Component {
         const languageItems = this.getFacetItems(data.language, 'language', selected.languages);
         const userItems = this.getFacetItems(data.creator, 'user', selected.users);
         const tagItems = this.getFacetItems(data.tags, 'tag', selected.tags);
+        const educationLevelItems = this.getFacetItems(data.educationLevel, 'educationLevel', selected.educationLevel);
+        const topicsItems = this.getFacetItems(data.topics, 'topics', selected.topics);
 
         return (
             <div id="facets">
@@ -275,6 +285,54 @@ class Facets extends React.Component {
 
                 {
                     <Menu fluid vertical>
+                        <Menu.Item key="topicsHeader" header>
+                            {this.context.intl.formatMessage(this.messages.topicsFacet)}
+                            {
+                                // <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}>
+                                //    <Icon name="search" />
+                                // </NavLink>
+                            }
+                            { 
+                                (!isEmpty(selected.topics) && !this.props.loading) 
+                                ? <span  style={{float: 'right'}}>
+                                        <NavLink href="#" onClick={this.clearFacets.bind(this, 'topics')}>
+                                            <Icon name="cancel" aria-label="clear subjects"/>
+                                        </NavLink>
+                                    </span> 
+                                : ''
+                            }
+                        </Menu.Item>
+                    
+                        { topicsItems }
+                    </Menu>
+                }
+
+                {
+                    <Menu fluid vertical>
+                        <Menu.Item key="educationLevelHeader" header>
+                            {this.context.intl.formatMessage(this.messages.educationLevelFacet)}
+                            {
+                                // <NavLink href="#" onClick={this.handleShowFacetSearch.bind(this, 'tags')}>
+                                //    <Icon name="search" />
+                                // </NavLink>
+                            }
+                            { 
+                                (!isEmpty(selected.educationLevel) && !this.props.loading) 
+                                ? <span  style={{float: 'right'}}>
+                                        <NavLink href="#" onClick={this.clearFacets.bind(this, 'educationLevel')}>
+                                            <Icon name="cancel" aria-label="clear education levels"/>
+                                        </NavLink>
+                                    </span> 
+                                : ''
+                            }
+                        </Menu.Item>
+                    
+                        { educationLevelItems }
+                    </Menu>
+                }
+
+                {
+                    <Menu fluid vertical>
                         <Menu.Item key="tagFacetHeader" header>
                             {this.context.intl.formatMessage(this.messages.tagsFacet)}
                             {
@@ -295,11 +353,12 @@ class Facets extends React.Component {
                         { (this.state.showSearch.includes('tags')) && 
                             <Menu.Item>
                                 <Input id="tags_input" name="tag" placeholder='Search for tags' onChange={this.handleFacetsFilter.bind(this, 'tags')} onKeyDown={this.handleFacetsFilterKeyPress.bind(this, 'tags')}/>
-                                </Menu.Item>
+                            </Menu.Item>
                         }
                         { tagItems }
                     </Menu>
                 }
+
             </div>
         );
     }

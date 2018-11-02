@@ -19,6 +19,7 @@ import ForkModal from './ForkModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import TranslationStore from '../../../stores/TranslationStore';
 import updateTrap from '../../../actions/loginModal/updateTrap';
+import { makeNodeURL } from '../../common/Util';
 
 class TreePanel extends React.Component {
 
@@ -103,24 +104,25 @@ class TreePanel extends React.Component {
     }
 
     getPresentationHref(){
-        let presLocation = ['/presentation', this.props.DeckTreeStore.selector.toJS().id, this.props.deckSlug || '_'].join('/') + '/';
+        let selector = this.props.DeckTreeStore.selector.toJS();
+        selector.subdeck = this.getCurrentSubdeck(selector); //subdeck is not part of the selector from DeckTreeStore, so manually add it 
+        
+        return makeNodeURL(selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang);
+    }
+    
+    getCurrentSubdeck(selector){
+        let currentSubDeck;
+        let splitSpath = selector.spath.split(';');
 
-        if (this.props.DeckTreeStore.selector.toJS().spath.search(';') !== -1)
-        {
-            //if a subdeck is selected - use its selector
-            presLocation += this.props.DeckTreeStore.selector.toJS().spath.substring(0, this.props.DeckTreeStore.selector.toJS().spath.search(';')) + '/';
-        } else {
-            //if it is the main/root deck - use that id
-            presLocation += this.props.DeckTreeStore.selector.toJS().id + '/';
+        if(!selector.spath || (splitSpath.length === 1 && selector.stype === 'slide')){
+            return null;
         }
-        if(this.props.DeckTreeStore.selector.toJS().stype === 'slide'){
-            //if it is a slide, also add ID of slide
-            presLocation += this.props.DeckTreeStore.selector.toJS().sid;// + '/';
+        else if(selector.stype === 'deck' && selector.sid){
+            return selector.sid;
         }
-        if (this.props.TranslationStore.currentLang) {
-            presLocation += '?language=' + (this.props.TranslationStore.currentLang);
+        else{
+            return splitSpath[0].split(':')[0];
         }
-        return presLocation;
     }
 
     handleTheme() {
@@ -231,9 +233,6 @@ class TreePanel extends React.Component {
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
                     <div className="ui bottom attached segment">
-                        <div className="ui small header" >Beta feature
-                            <i className="yellow warning sign icon"></i>
-                        </div>
                         <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
                             <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" checked={this.state.showThumbnails ? 'checked' : ''}/>
                             <label htmlFor="ShowThumbnails">Show Thumbnails</label>
