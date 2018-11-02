@@ -53,6 +53,9 @@ export default {
         let args = params.params ? params.params : params;
         let {username, activityType, datePeriod, groupid, deckId} = args;
 
+        // remove the revision out of the deckId
+        deckId = parseInt(deckId);
+
         if (resource === 'stats.userStatsByTime') {
             let fromDate = periodToDate(datePeriod);
             let pipeline = [{
