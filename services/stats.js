@@ -540,7 +540,6 @@ export default {
                     '$limit': 5
                 }
             ];
-            console.log(JSON.stringify(pipeline));
             rp({
                 method: 'GET',
                 uri: Microservices.lrs.uri + '/statements/aggregate',

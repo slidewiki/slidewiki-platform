@@ -4,8 +4,8 @@ import DeckStatsStore from '../../stores/DeckStatsStore';
 
 
 export default function loadDeckUserStats(context, payload, done) {
-    let datePeriod = context.getStore(DeckStatsStore).membersStatsFilters.datePeriod;
-    let activityType = context.getStore(DeckStatsStore).membersStatsFilters.activityType;
+    let datePeriod = context.getStore(DeckStatsStore).deckUserStatsFilters.datePeriod;
+    let activityType = context.getStore(DeckStatsStore).deckUserStatsFilters.activityType;
 
     log.info(context);
 

@@ -41,14 +41,14 @@ class DeckStats extends React.Component {
         });
     }
 
-    handleMembersStatsPeriodChange(event, {value}) {
+    handleDeckUserStatsPeriodChange(event, {value}) {
         this.context.executeAction(updateDeckUserStatsFilters, {
             datePeriod: value,
             deckId: this.props.deckId,
         });
     }
 
-    handleMembersStatsActivityChange(event, {value}) {
+    handleDeckUserStatsActivityChange(event, {value}) {
         this.context.executeAction(updateDeckUserStatsFilters, {
             activityType: value,
             deckId: this.props.deckId,
@@ -74,8 +74,8 @@ class DeckStats extends React.Component {
                                     loading={this.props.deckStats.deckUserStatsLoading}
                                     activityType={this.props.deckStats.deckUserStatsFilters.activityType}
                                     datePeriod={this.props.deckStats.deckUserStatsFilters.datePeriod}
-                                    handleActivityTypeChange={this.handleMembersStatsActivityChange.bind(this)}
-                                    handleDatePeriodChange={this.handleMembersStatsPeriodChange.bind(this)} />
+                                    handleActivityTypeChange={this.handleDeckUserStatsActivityChange.bind(this)}
+                                    handleDatePeriodChange={this.handleDeckUserStatsPeriodChange.bind(this)} />
                   </Grid.Column>
               </Grid.Row>
           </Grid>
