@@ -408,7 +408,7 @@ class Details extends React.Component {
                         <div className="one wide column middle aligned">
                           <UserPicture picture={ member.picture } username={ member.username } avatar={ true } width= { 24 } />
                         </div>
-                        <div className={((this.props.isAdmin || this.props.isCreator) ? 'thirteen' : 'fourteen') + ' wide column'}>
+                        <div className={((this.props.isAdmin || this.props.isCreator) && member.userid !== this.props.userid ? 'thirteen' : 'fourteen') + ' wide column'}>
                           <div className="content">
                               <TextArea className="sr-only" id={'usernameIsALinkHint' + member.userid} value={this.context.intl.formatMessage(this.messages.messageUsericon)} tabIndex ='-1'/>
                               <a className="header" href={'/user/' + member.username} target="_blank">{member.displayName || member.username}</a>{(member.role === 'admin') ? <b>Admin</b> : ''}
@@ -416,7 +416,7 @@ class Details extends React.Component {
                           </div>
                         </div>
                         {
-                          (this.props.isAdmin || this.props.isCreator) ?
+                          (this.props.isAdmin || this.props.isCreator) && member.userid !== this.props.userid ?
                             (member.role === 'admin') ?
                               <div className="one wide column middle aligned">
                                 <button className="ui basic icon button" data-tooltip="Remove admin role" aria-label="remove admin role" onClick={handler2}>
@@ -431,7 +431,7 @@ class Details extends React.Component {
                               </div>
                             : ''
                         }
-                        {(this.props.isAdmin || this.props.isCreator) ?
+                        {(this.props.isAdmin || this.props.isCreator) && member.userid !== this.props.userid ?
                           <div className="one wide column middle aligned">
                             <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member" onClick={fct}>
                               <i className="remove middle aligned icon"></i>

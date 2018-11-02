@@ -59,6 +59,16 @@ class UserGroupPage extends React.Component {
         const isMember = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid;
         });
+
+        // sort members by joined, current user first
+        if (this.props.UserGroupsStore.currentUsergroup) {
+            this.props.UserGroupsStore.currentUsergroup.members.sort((a, b) => {
+                if (a.userid === this.props.UserProfileStore.userid) return -1;
+                if (b.userid === this.props.UserProfileStore.userid) return 1;
+                return a.joined < b.joined ? -1 : 1;
+            });
+        }
+
         return <Details currentUsergroup={ this.props.UserGroupsStore.currentUsergroup }
             isAdmin={ isAdmin } isCreator={ isCreator } isMember={isMember}
             saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError}
