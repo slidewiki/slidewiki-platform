@@ -100,6 +100,10 @@ class Details extends React.Component {
         this.initialize = this.initialize.bind(this);
     }
 
+    componentDidMount() {
+        this.initialize();
+    }
+
     componentDidUpdate() {
         this.initialize();
         // console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError, this.props.currentUsergroup);
