@@ -98,7 +98,7 @@ export default {
                 '$match': {
                     'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
                     'statement.verb.id': activityTypeToVerb(activityType),
-                    'statement.context.contextActivities.parent.id': {'$regex': new RegExp(`/deck/${deckId.split('-')[0]}$`)}
+                    'statement.context.contextActivities.parent.id': `${Microservices.platform.uri}/deck/${deckId}`
                 }
             }, {
                 '$project': {
@@ -121,7 +121,6 @@ export default {
                     '_id': 1
                 }
             }];
-            console.log(JSON.stringify(pipeline));
             rp({
                 method: 'GET',
                 uri: Microservices.lrs.uri + '/statements/aggregate',
@@ -502,6 +501,56 @@ export default {
                 }).sort((a, b) => b.count - a.count);
                 callback(null, callback(null, memberStats));
             }).catch((err) => callback(err));
+        } else if (resource === 'stats.deckUserStats') {
+            let fromDate = periodToDate(datePeriod);
+            let pipeline = [
+                {
+                    '$match': {
+                        'timestamp': {'$gte': {'$dte': periodToDate(datePeriod).toISOString()}},
+                        'statement.verb.id': activityTypeToVerb(activityType),
+                        'statement.context.contextActivities.parent.id': `${Microservices.platform.uri}/deck/${deckId}`
+                    }
+                },
+                {
+                    '$project': {
+                        'username': '$statement.actor.account.name'
+                    }
+                },
+                {
+                    '$group': {
+                        '_id': '$username',
+                        'count': {
+                            '$sum': 1
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        '_id': false,
+                        'username': '$_id',
+                        'count': true
+                    }
+                },
+                {
+                    '$sort': {
+                        'count': -1
+                    }
+                },
+                {
+                    '$limit': 5
+                }
+            ];
+            console.log(JSON.stringify(pipeline));
+            rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => callback(null, response))
+              .catch((err) => callback(err));
         }
     }
 };

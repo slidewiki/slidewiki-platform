@@ -6,12 +6,15 @@ import loadDeckStatsByTime from './loadDeckStatsByTime';
 
 
 export default function loadDeckStats(context, payload, done) {
+
     log.info(context);
     async.parallel([
         (callback) => {
             context.executeAction(loadDeckStatsByTime, payload, callback);
         },
         (callback) => {
+            console.log('loading user deck stats');
+
             context.executeAction(loadDeckUserStats, payload, callback);
         },
     ], (err, results) => {
