@@ -28,9 +28,9 @@ class DeckStats extends React.Component {
     }
 
     handleTimelinePeriodChange(event, {value}) {
-         this.context.executeAction(updateDeckActivityTimelineFilters, {
-             datePeriod: value,
-             deckId: this.props.deckId,
+        this.context.executeAction(updateDeckActivityTimelineFilters, {
+            datePeriod: value,
+            deckId: this.props.deckId,
         });
     }
 
