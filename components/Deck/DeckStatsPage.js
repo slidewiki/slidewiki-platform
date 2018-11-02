@@ -47,7 +47,13 @@ class DeckStatsPage extends React.Component {
 
         let summaryElement = (
             <div>
-                <Segment attached="top">
+                <NavLink href={viewDeckUrl} tabIndex={-1} >
+                    <Button aria-label="Return to Deck Info" data-tooltip="Return to Deck Info" role="button">
+                        <Icon name="arrow alternate circle left" />Return to Deck Info
+                    </Button>
+                </NavLink>
+
+                <Segment>
                     <NavLink className="image" aria-hidden tabIndex='-1' href={viewDeckUrl}>
                         <Image src={deckThumbURL} alt={deckThumbAlt}
                                fluid bordered />
@@ -73,16 +79,6 @@ class DeckStatsPage extends React.Component {
                     </div> }
 
                 </Segment>
-
-                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}}>
-                    <NavLink href={viewDeckUrl} tabIndex={-1} >
-                        <Button icon size="huge" aria-label="Return to Deck Info" data-tooltip="Return to Deck Info" role="button">
-                            <Icon name="arrow alternate circle left" />
-                        </Button>
-                    </NavLink>
-                    <div className="right inverted menu">
-                    </div>
-                </div>
 
             </div>
         );
