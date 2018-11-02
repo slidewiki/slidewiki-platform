@@ -51,7 +51,7 @@ export default {
     name: 'stats',
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
-        let {username, activityType, datePeriod, groupid} = args;
+        let {username, activityType, datePeriod, groupid, deckId} = args;
 
         if (resource === 'stats.userStatsByTime') {
             let fromDate = periodToDate(datePeriod);
@@ -60,6 +60,45 @@ export default {
                     'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
                     'statement.verb.id': activityTypeToVerb(activityType),
                     'statement.actor.account.name': username
+                }
+            }, {
+                '$project': {
+                    'date': {
+                        '$dateToString': {
+                            'format': '%Y-%m-%d',
+                            'date': '$timestamp'
+                        }
+                    }
+                }
+            }, {
+                '$group': {
+                    '_id': '$date',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            }, {
+                '$sort': {
+                    '_id': 1
+                }
+            }];
+            rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => callback(null, fillMissingDates(fromDate, response)))
+              .catch((err) => callback(err));
+        } else if (resource === 'stats.deckStatsByTime') {
+            let fromDate = periodToDate(datePeriod);
+            let pipeline = [{
+                '$match': {
+                    'timestamp': {'$gte': {'$dte': fromDate.toISOString()}},
+                    'statement.verb.id': activityTypeToVerb(activityType),
+                    'statement.context.contextActivities.parent.id': `${Microservices.platform.uri}/deck/${deckId}`
                 }
             }, {
                 '$project': {
@@ -462,6 +501,55 @@ export default {
                 }).sort((a, b) => b.count - a.count);
                 callback(null, callback(null, memberStats));
             }).catch((err) => callback(err));
+        } else if (resource === 'stats.deckUserStats') {
+            let fromDate = periodToDate(datePeriod);
+            let pipeline = [
+                {
+                    '$match': {
+                        'timestamp': {'$gte': {'$dte': periodToDate(datePeriod).toISOString()}},
+                        'statement.verb.id': activityTypeToVerb(activityType),
+                        'statement.context.contextActivities.parent.id': `${Microservices.platform.uri}/deck/${deckId}`
+                    }
+                },
+                {
+                    '$project': {
+                        'username': '$statement.actor.account.name'
+                    }
+                },
+                {
+                    '$group': {
+                        '_id': '$username',
+                        'count': {
+                            '$sum': 1
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        '_id': false,
+                        'username': '$_id',
+                        'count': true
+                    }
+                },
+                {
+                    '$sort': {
+                        'count': -1
+                    }
+                },
+                {
+                    '$limit': 5
+                }
+            ];
+            rp({
+                method: 'GET',
+                uri: Microservices.lrs.uri + '/statements/aggregate',
+                qs: {
+                    pipeline: JSON.stringify(pipeline),
+                },
+                headers: {'Authorization': 'Basic ' + Microservices.lrs.basicAuth},
+                json: true
+            }).then((response) => callback(null, response))
+              .catch((err) => callback(err));
         }
     }
 };
