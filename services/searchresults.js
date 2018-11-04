@@ -315,7 +315,7 @@ function getQuestionsCount(deckIdsSet) {
 
 function getForks(deck) {
     let forks = [];
-    forks = deck.translations.concat(deck.forks);
+    forks = (deck.translations || []).concat(deck.forks);
     deck.forks.forEach( (fork) => {
         if (!isEmpty(fork.translations)) {
             forks = forks.concat(fork.translations);
@@ -362,7 +362,9 @@ export default {
 
                         // currently forks and translations are merged
                         // TODO: present them separately in the results
-                        result.forks = getForks(result);
+                        if (result.forks) {
+                            result.forks = getForks(result);
+                        }
 
                         parseDeck(result, users);
 

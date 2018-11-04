@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import PopularDecks from './PopularDecks';
+import DecksGrid from './DecksGrid';
 import PublicUserData from './PublicUserData';
 import approveUser from '../../../actions/userReview/approveUser';
 import suspendUser from '../../../actions/userReview/suspendUser';
@@ -106,7 +106,7 @@ class UserProfileReviewDecks extends React.Component {
                           </div>
                       </div>
                       <div className="ui segment">
-                          <PopularDecks size={0} decks={this.props.decks} sort={this.sortBy} newTab={true}/>
+                          <DecksGrid size={0} decks={this.props.decks} sort={this.sortBy} newTab={true}/>
                       </div>
                   </div>
               </div>
