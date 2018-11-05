@@ -7,9 +7,11 @@ class UserStatsStore extends BaseStore {
         this.activityType = 'view';
         this.statsByTime = [];
         this.statsByTag = [];
-        this.chartHeight = 450;
+        this.userEngagement = {};
         this.statsByTimeLoading = true;
         this.statsByTagLoading = true;
+        this.userEngagementLoading = true;
+
     }
 
     updateStatsByTime(payload) {
@@ -21,6 +23,12 @@ class UserStatsStore extends BaseStore {
     updateStatsByTag(payload) {
         this.statsByTag = payload.statsByTag;
         this.statsByTagLoading = false;
+        this.emitChange();
+    }
+
+    updateUserEngagement(payload) {
+        this.userEngagement = payload.userEngagement;
+        this.userEngagementLoading = false;
         this.emitChange();
     }
 
@@ -44,15 +52,21 @@ class UserStatsStore extends BaseStore {
         this.emitChange();
     }
 
+    setUserEngagementLoading() {
+        this.userEngagementLoading = true;
+        this.emitChange();
+    }
+
     getState() {
         return {
             datePeriod: this.datePeriod,
             activityType: this.activityType,
             statsByTime: this.statsByTime,
             statsByTag: this.statsByTag,
-            chartHeight: this.chartHeight,
+            userEngagement: this.userEngagement,
             statsByTimeLoading: this.statsByTimeLoading,
-            statsByTagLoading: this.statsByTagLoading
+            statsByTagLoading: this.statsByTagLoading,
+            userEngagementLoading: this.userEngagementLoading,
         };
     }
 
@@ -65,9 +79,10 @@ class UserStatsStore extends BaseStore {
         this.activityType = state.activityType;
         this.statsByTime = state.statsByTime;
         this.statsByTag = state.statsByTag;
-        this.chartHeight = state.chartHeight;
         this.statsByTimeLoading = state.statsByTimeLoading;
         this.statsByTagLoading = state.statsByTagLoading;
+        this.userEngagement = state.userEngagement;
+        this.userEngagementLoading = state.userEngagementLoading;
     }
 }
 
@@ -77,8 +92,10 @@ UserStatsStore.handlers = {
     'UPDATE_USER_STATS_ACTIVITY_TYPE': 'updateActivityType',
     'LOAD_USER_STATS_BY_TIME': 'updateStatsByTime',
     'LOAD_USER_STATS_BY_TAG': 'updateStatsByTag',
+    'LOAD_USER_ENGAGEMENT': 'updateUserEngagement',
     'SET_USER_STATS_BY_TIME_LOADING': 'setStatsByTimeLoading',
     'SET_USER_STATS_BY_TAG_LOADING': 'setStatsByTagLoading',
+    'SET_USER_ENGAGEMENT_LOADING': 'setUserEngagementLoading',
 };
 
 export default UserStatsStore;

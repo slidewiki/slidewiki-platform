@@ -368,6 +368,15 @@ class UploadMediaModal extends React.Component {
                     aria-required="true"
                     required autoFocus/>
                 </div>
+                <div className="field">
+                  <div className="ui checkbox">
+                    <input id="checkbox_backgroundImage" type="checkbox" tabIndex="0" id="checkbox_backgroundImage" ref="checkbox_backgroundImage"
+                       aria-label={this.context.intl.formatMessage(this.messages.background_aria)}
+                       aria-required="false"/>
+                    <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)}
+                    </label>
+                  </div>
+                </div>                
                 <div className="required field">
                   <label htmlFor="mediaAltText">{this.context.intl.formatMessage(this.messages.media_altText_label)} </label>
                   <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText"
@@ -400,15 +409,6 @@ class UploadMediaModal extends React.Component {
                       <a href="/license"> {this.context.intl.formatMessage(this.messages.media_terms_label4)} </a>
                       {this.context.intl.formatMessage(this.messages.media_terms_label5)}
                     </label>
-                  </div>
-                  <div className="field">
-                    <div className="ui checkbox">
-                      <input id="checkbox_backgroundImage" type="checkbox" tabIndex="0" id="checkbox_backgroundImage" ref="checkbox_backgroundImage"
-                         aria-label={this.context.intl.formatMessage(this.messages.background_aria)}
-                         aria-required="false"/>
-                      <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)} (beta feature <i className="yellow warning sign icon"></i>)
-                      </label>
-                    </div>
                   </div>
                 </div>
                 <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
