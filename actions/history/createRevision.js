@@ -13,8 +13,10 @@ export default function createRevision(context, payload, done) {
         } else {
             context.dispatch('CREATE_REVISION_SUCCESS', res);
             //navigate to the new revision
+            let newFullId = `${res.id}-${res.active}`;
             context.executeAction(navigateAction, {
-                url: `/deck/${res.id}`,
+                url: `/deck/${newFullId}/_/deck/${newFullId}`,
+                runFetchTree: true,
             });
         }
         done();
