@@ -17,8 +17,9 @@ class DeckFamilyStore extends BaseStore {
         this.loadMoreLoading = false;
         this.hasMore = false;
         this.page = 1;
+        this.links = {};
     }
-    showLoading(payload){
+    showLoading(){
         this.loading = true;
         this.emitChange();
     }
@@ -33,6 +34,7 @@ class DeckFamilyStore extends BaseStore {
             return {
                 deckID: deck.db_id,
                 title: deck.title,
+                slug: deck.slug,
                 firstSlide: deck.firstSlide,
                 theme: deck.theme,
                 updated: deck.updated,
@@ -46,6 +48,7 @@ class DeckFamilyStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
+        this.links = payload.links;
 
         // hide loading
         this.loading = false;
@@ -61,6 +64,7 @@ class DeckFamilyStore extends BaseStore {
         this.error = payload.error;
         this.hasMore = payload.hasMore;
         this.page = payload.page;
+        this.links = payload.links;
 
         // hide loading
         this.loading = false;
@@ -84,7 +88,8 @@ class DeckFamilyStore extends BaseStore {
             error: this.error,
             hasMore: this.hasMore,
             loadMoreLoading: this.loadMoreLoading,
-            page: this.page
+            page: this.page,
+            links: this.links,
         };
     }
     dehydrate() {
@@ -100,6 +105,7 @@ class DeckFamilyStore extends BaseStore {
         this.hasMore = state.hasMore;
         this.loadMoreLoading = state.loadMoreLoading;
         this.page = state.page;
+        this.links = state.links;
     }
 }
 

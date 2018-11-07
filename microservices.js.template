@@ -1,5 +1,8 @@
 export default {
     Microservices: {
+        'platform': {
+            uri: '${URL_PLATFORM}'
+        },
         'deck': {
             uri: '${SERVICE_URL_DECK}'
         },
@@ -50,8 +53,15 @@ export default {
         'nlp': {
             uri: '${SERVICE_URL_NLP}'
         },
-        'recommendation': {
-            uri: '${SERVICE_URL_RECOMMENDATION}'
-        }
+        'recommender': {
+            uri: '${SERVICE_URL_RECOMMENDER}'
+        },
+        'analytics': {
+            uri: '${SERVICE_URL_ANALYTICS}'
+        },
+        lrs: {
+            uri: '${SERVICE_LEARNINGLOCKER_API_URL}',
+            basicAuth: '${SERVICE_LEARNINGLOCKER_API_AUTH}',
+        },
     }
 };

@@ -8,8 +8,10 @@ class Featured extends React.Component {
 
         return (
             <Container>
-                <Header as="h2" style={{marginTop: '1em'}}><FormattedMessage id="featured.header" defaultMessage="Featured decks"/></Header>
+                <Header as="h1" style={{marginTop: '1em'}}><FormattedMessage id="featured.header" defaultMessage="Featured decks"/></Header>
+                <div className="ui twelve wide container">
                 <DeckList scope="featured"/>
+                </div>
             </Container>
         );
     }

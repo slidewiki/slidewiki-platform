@@ -135,10 +135,7 @@ class ContentActionsFooter extends React.Component {
         let likeButton = 'ui button';
         let followButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
-        let iconFollowButton = <Icon.Group >
-            <Icon size='large' name='circle outline' />
-            <Icon name='rss'/>
-        </Icon.Group>;
+        let iconFollowButton = <Icon size='large' name='rss' />;
         let tooltipFollowButton = 'Subscribe to this deck';
         let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
@@ -153,16 +150,13 @@ class ContentActionsFooter extends React.Component {
             }
 
             if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
-                iconFollowButton = <Icon.Group >
-                    <Icon size='large' name='circle' color='blue'/>
-                    <Icon name='rss' inverted='true'/>
-                </Icon.Group>;
+                iconFollowButton = <Icon size='large' name='rss' color='blue' />;
                 tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
             }
         }
 
         let desktopButtons = <div>
-          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+          <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
           <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
               <i className="print large icon"></i>
           </button>
@@ -178,40 +172,43 @@ class ContentActionsFooter extends React.Component {
               {iconFollowButton}
           </button>
           </div>;
-
+          
+        let listStyle = {
+            listStyle: 'none'
+        };
+        
         let mobileButtons = <AriaMenuButton.Wrapper>
             <AriaMenuButton.Button >
              <div style={{'display': 'inline-flex'}}>
-               <i className="ui ellipsis vertical large icon" style={{'marginTop':'0.7em'}}></i>
+               <i className="ui ellipsis vertical large grey icon" style={{'marginTop':'0.6em'}}></i>
               </div>
             </AriaMenuButton.Button>
             <AriaMenuButton.Menu className='ui menu vertical'
-             style={{'position':'absolute', 'zIndex':'1', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
-                 <AriaMenuButton.MenuItem className='item' key= {0} tag='li'>
-                   <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+             style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
+                 <AriaMenuButton.MenuItem key= {0} tag='li' style={listStyle}>
+                   <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" className='item'>
                     <div aria-label="Print" data-tooltip="Print" >
-                        <i className="print large icon"></i>
-                        Print
+                        <i className="print large icon"></i> Print
                     </div>
                     </a>
                  </AriaMenuButton.MenuItem>
-                 <AriaMenuButton.MenuItem className='item' key= {1} tag='li'>
-                   <DownloadModal textOnly={true}/>
+                 <AriaMenuButton.MenuItem key= {1} tag='li' style={listStyle}>
+                   <DownloadModal textOnly={true} className='item'/>
                  </AriaMenuButton.MenuItem>
-                 <AriaMenuButton.MenuItem className='item' key= {2} tag='li'>
-                   <ReportModal textOnly={true}/>
+                 <AriaMenuButton.MenuItem key= {2} tag='li' style={listStyle}>
+                   <ReportModal textOnly={true} className='item'/>
                  </AriaMenuButton.MenuItem>
-                 <AriaMenuButton.MenuItem className='item' key= {3} tag='li'>
-                   <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} textOnly={true}/>
+                 <AriaMenuButton.MenuItem key= {3} tag='li' style={listStyle}>
+                   <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} textOnly={true} className='item'/>
                  </AriaMenuButton.MenuItem>
-                 <AriaMenuButton.MenuItem className='item' key= {4} tag='li'>
-                   <div aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
-                       <i className={classNameLikeButton}></i> Like
+                 <AriaMenuButton.MenuItem key= {4} tag='li' style={listStyle}>
+                   <div className='item' aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+                       <span><i className={classNameLikeButton}></i> Like</span>
                    </div>
                  </AriaMenuButton.MenuItem>
-                 <AriaMenuButton.MenuItem className='item' key= {5} tag='li'>
-                   <div aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
-                       {iconFollowButton} Subscribe
+                 <AriaMenuButton.MenuItem key= {5} tag='li' style={listStyle}>
+                   <div className='item' aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+                       <span>{iconFollowButton} Subscribe</span>
                    </div>
                  </AriaMenuButton.MenuItem>
              </AriaMenuButton.Menu>
@@ -222,12 +219,12 @@ class ContentActionsFooter extends React.Component {
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
                     {this.props.ContentStore.selector.stype === 'slide' ? <div className="bar"></div> : ''}
                 </div>
-                <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
+                <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
                     {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : (this.state.isMobile) ? <SlideControl mode={this.props.ContentStore.mode} isMobile={this.state.isMobile}/> : ''}
-                    <div className="right menu">
+                    <div className="right menu" role="menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank">
+                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>

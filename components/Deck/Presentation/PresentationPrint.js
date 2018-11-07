@@ -36,6 +36,7 @@ class PresentationPrint extends React.Component{
         this.startingSlide = this.props.PresentationStore.selector.sid;
         this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
+        this.state ={offset: 0, threshold: 85};
     }
 
     componentDidMount(){
@@ -47,11 +48,33 @@ class PresentationPrint extends React.Component{
     componentDidUpdate(){
 
     }
+    handlePageClick(offset){
+        this.setState({offset: offset});
+        setTimeout(() => { window.print(); }, 2000);
+    }
     render(){
-        this.slides = this.getSlides();
+        let slides = this.props.PresentationStore.content;
+        let totalNoOfSlides = slides.length;
+        let pageNumber = 1;
+        let pagesDIV = '';
+        if(totalNoOfSlides > this.state.threshold){
+            // use paging to prevent browser crash
+            pageNumber = Math.ceil(totalNoOfSlides / this.state.threshold);
+            //console.log(pageNumber);
+            let pages = [];
+            for(let c= 0; c < pageNumber; c++){
+                pages.push(<a key={c} className={'ui link circular label ' + ( c === this.state.offset ? 'grey' : 'white')} onClick={this.handlePageClick.bind(this, c)}>{c+1}</a>);
+            }
+            pagesDIV = <div><b>{pageNumber}</b> Pages: {pages}</div>;
+            this.slides = this.getSlides(this.state.offset, this.state.threshold , this.state.offset === pageNumber -1 ? 1 : 0);
+        }else{
+            this.slides = this.getSlides(0, slides.length, 1);
+        }
+
         return(
             <div id="presentationPrint" className="printView">
                 <div className="reveal-old" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                    <center>{pagesDIV}</center>
                     <div className="slides">
         			     	{this.slides}
         			      </div>
@@ -78,7 +101,7 @@ class PresentationPrint extends React.Component{
         }
         return out;
     }
-    getSlides(){
+    getSlides(offset, threshold, isLast){
         //console.log(this.props.DataSourceStore);
         //console.log(this.props.ContributorsStore);
         let contributors = [];
@@ -106,7 +129,8 @@ class PresentationPrint extends React.Component{
         `;
         let returnList = [];
         if(slides){
-            for (let i = 0; i < slides.length; i++) {
+            let max = isLast ? slides.length : (offset * threshold) + threshold;
+            for (let i = offset * threshold; i < max ; i++) {
                 let slide = slides[i];
                 let notes = '';
                 let slideSources = '';
@@ -118,10 +142,11 @@ class PresentationPrint extends React.Component{
                     notes = <div className="ui segment"><b><i className="ui icon caret square up"></i> Speaker Notes</b><div dangerouslySetInnerHTML={{__html: slide.speakernotes.replace('position: absolute;','')}}></div></div>;
                 }
                 let content = slide.content + notes;
-                returnList.push(<div key={slide.id + '-' + i} style={{'page-break-after' : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
+                returnList.push(<div key={slide.id + '-' + i} style={{pageBreakAfter : 'always'}}><SlideContentView content={slide.content} speakernotes={notes} hideSpeakerNotes={true} theme={slide.theme}/>{slideSources}{notes}<br/></div>);
             }
             //add last slide for licensing
-            returnList.push(<div key={'end-slide'} style={{'page-break-after' : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
+            if(isLast)
+                returnList.push(<div key={'end-slide'} style={{pageBreakAfter : 'always'}}><SlideContentView content={lastSlideContent} speakernotes={''} hideSpeakerNotes={true} theme={''}/></div>);
 
             return returnList;
 

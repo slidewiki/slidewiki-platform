@@ -1,5 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
+import PropTypes from 'prop-types';
 import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import {connectToStores} from 'fluxible-addons-react';
@@ -68,6 +69,12 @@ class EmbedModal extends React.Component {
                 defaultMessage: 'Other'
             },
         });
+    }
+    
+    handleKeyPress(event, param, template) {
+        if (event.key === 'Enter'){
+            this.handleEmbed();
+        }
     }
 
     handleEmbed() {
@@ -176,8 +183,8 @@ class EmbedModal extends React.Component {
         return(
             <Modal
                     trigger={
-                        <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbed.bind(this)}>
-                            <div role="button" tabIndex="0" className="SocialMediaShareButton Demo__some-network__share-button">
+                        <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbed.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
+                            <div role="button" className="SocialMediaShareButton Demo__some-network__share-button">
                                 <div style={{width: this.props.size + 'px', height: this.props.size + 'px'}}>
                                     <Icon name="share square" style={{
                                         width: (this.props.size - 2) + 'px',
@@ -312,8 +319,8 @@ class EmbedModal extends React.Component {
 }
 
 EmbedModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 EmbedModal = connectToStores(EmbedModal, [ContentStore, UserProfileStore, DeckViewStore, SlideViewStore,

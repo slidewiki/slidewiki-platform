@@ -16,6 +16,7 @@ import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
+import loadExamQuestions from '../actions/questions/loadExamQuestions';
 import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
@@ -25,6 +26,7 @@ import notFoundError from '../actions/error/notFoundError';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
+import chooseActionGroups from '../actions/usergroups/chooseActionGroups';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
@@ -34,6 +36,8 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
+import loadDeckStats from '../actions/stats/loadDeckStats';
+
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -287,6 +291,16 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
+    usergroup: {
+        path: '/usergroup/:id/:category?',
+        method: 'get',
+        page: 'usergroup',
+        title: 'SlideWiki -- User group',
+        handler: require('../components/UserGroups/UserGroupPage'),
+        action: (context, payload, done) => {
+            context.executeAction(chooseActionGroups, payload, done);
+        }
+    },
     userprofilereview: {
         path: '/Sfn87Pfew9Af09aM',
         method: 'get',
@@ -320,7 +334,7 @@ export default {
         }
     },
     search: {
-        path: '/search/:queryparams?',
+        path: '/search',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
@@ -353,6 +367,38 @@ export default {
         }
     },
 
+    decklandingpage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?',
+        method: 'get',
+        handler: require('../components/Deck/DeckLandingPage'),
+        page: 'decklandingpage',
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
+    },
+
+    deckstatspage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/stats',
+        method: 'get',
+        handler: require('../components/Deck/DeckStatsPage'),
+        page: 'deckstatspage',
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
     // stype: 'type of selected content e.g. slide, deck or question',
@@ -374,9 +420,11 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
+
             context.executeAction(loadDeck, payload, done);
         }
     },
+
     oldSlugDeck: {
         path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
@@ -421,7 +469,7 @@ export default {
         }
     },
     similarcontent: {
-        path: '/similarcontent/:stype/:sid',
+        path: '/similarcontent/:stype/:sid/:userid?',
         method: 'get',
         page: 'similarcontent',
         handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),
@@ -542,6 +590,15 @@ export default {
             context.executeAction(loadContentQuestions, payload, done);
         }
     },
+    exam: {
+        path: '/exam/:stype/:sid',
+        method: 'get',
+        page: 'exam',
+        handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ExamPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadExamQuestions, payload, done);
+        }
+    },
     discussion: {
         path: '/discussion/:stype/:sid',
         method: 'get',
@@ -564,7 +621,7 @@ export default {
         path: '/infopanel/:id/:spath?',
         method: 'get',
         page: 'decktree',
-        handler: require('../components/Deck/InfoPanel/InfoPanel'),
+        handler: require('../components/Deck/InfoPanel/InfoPanelInfoView'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }
@@ -575,6 +632,35 @@ export default {
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    // add missing sid in order to load the deck's title
+                    payload.params.slideID = payload.params.sid;
+                    payload.params.sid = payload.params.id;//this is needed to have loadDeckView working correctly
+                    // adding language to the params
+                    payload.params.language = payload.query.language;
+                    payload.params.presentation = true;
+                    context.executeAction(loadDeckView, payload, callback);
+                },
+                (callback) => {
+                    // adding language to the params
+                    payload.params.sid = payload.params.slideID;//needs to be reset for loadPresentation
+                    payload.params.language = payload.query.language;
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+        }
+    },
+    presentationIE: {
+        path: '/presentationIE/:id:slug(/[^/]+)?/:subdeck?/:sid?',
+        method: 'get',
+        page: 'presentationIE',
+        handler: require('../components/Deck/Presentation/PresentationIE'),
         action: (context, payload, done) => {
             async.series([
                 (callback) => {

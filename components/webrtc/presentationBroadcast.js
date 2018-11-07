@@ -7,6 +7,7 @@ import { isEmpty } from '../../common';
 import { Grid, Button, Popup, Label } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
+import SessionRecorder from './SessionRecorder.js';
 import SocialSharing from './SocialSharing.js';
 import Translation from './Translations';
 import Chat from './Chat.js';
@@ -40,7 +41,7 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc + '';
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
-        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
+        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
         this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];//['#javascript'];
         let lang = this.props.currentRoute.query.presentation.split('language=')[1];
         this.deckLanguage = (lang === undefined) ? lang : lang.slice(0,2);
@@ -86,6 +87,12 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
+            window.localforage.config({
+                driver: [window.localforage.WEBSQL, window.localforage.INDEXEDDB],
+                name: 'SlideWikiRecorder',
+                size: 524288000
+            });
+            window.localforage.clear();
             that.setState({
                 roleText: 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ',
                 peerCountText: 'People currently attending: '
@@ -324,9 +331,13 @@ class presentationBroadcast extends React.Component {
                     confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
+                })
+                .then(() => that.refs.sessionRecorder.recordSessionModal())
+                .then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
             }
             that.localStream = stream;
+            if(that.isInitiator)
+                that.refs.sessionRecorder.recordStream(stream);
 
             function sendASAP() {
                 if (that.presenterID) //wait for presenterID before sending the message
@@ -755,8 +766,10 @@ class presentationBroadcast extends React.Component {
             });
 
             if (that.isInitiator) {
+                that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, document.getElementById('slidewikiPresentation').contentWindow.location.href);
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    that.refs.sessionRecorder.recordSlideChange(that.currentSlide);
                     that.forceUpdate();
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
@@ -997,7 +1010,10 @@ class presentationBroadcast extends React.Component {
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
+                  <div>
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} role="button" aria-label="Show QR-Code">QR-Code</Button>
+                  <SessionRecorder ref="sessionRecorder" deckID={this.deckID.split('-')[0]} revision={this.deckID.split('-')[1]}/>
+                  </div>
               ) : ('')};
             </Grid.Row>
 

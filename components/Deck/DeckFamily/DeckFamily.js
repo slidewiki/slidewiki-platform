@@ -4,7 +4,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import DeckFamilyStore from '../../../stores/DeckFamilyStore';
-import PopularDecks from '../../User/UserProfile/PopularDecks';
+import DecksGrid from '../../User/UserProfile/DecksGrid';
 import loadMoreDeckFamily from '../../../actions/deckfamily/loadMoreDeckFamily';
 
 class DeckFamily extends React.Component {
@@ -27,15 +27,16 @@ class DeckFamily extends React.Component {
             params: {
                 tag: this.props.DeckFamilyStore.tag
             },
-            page: this.props.DeckFamilyStore.page + 1
+            nextLink: this.props.DeckFamilyStore.links.next,
         });
     }
     render() {
 
         // define load more results div
         let loadMoreDiv = '';
+        let nextLink = this.props.DeckFamilyStore.links.next;
 
-        if(this.props.DeckFamilyStore.hasMore){
+        if(nextLink){
             let loadMoreContent = <button className="ui button" onClick={this.loadMore.bind(this)}>Load More</button>;
             if(this.props.DeckFamilyStore.loadMoreLoading){
                 loadMoreContent = <div className="ui active text loader">Loading</div>;
@@ -67,7 +68,7 @@ class DeckFamily extends React.Component {
 
                       </div>
                       <div className="ui segment">
-                        <PopularDecks size={0} decks={this.props.DeckFamilyStore.decks} sort={this.sortBy}/>
+                        <DecksGrid size={0} decks={this.props.DeckFamilyStore.decks} sort={this.sortBy}/>
                       </div>
                       {loadMoreDiv}
                   </div>

@@ -344,7 +344,7 @@ class LoginModal extends React.Component {
         <div className="ui one column grid">
           <div className="ui center aligned column">
             <textarea className="sr-only" id="signinModalDescription"
-            value="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+            defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
             tabIndex ='-1'/>
             <div className={inputField_classes}>
               <div><label htmlFor="email1" hidden>
@@ -409,7 +409,7 @@ class LoginModal extends React.Component {
 
                         <br/>
                         <div className="ui center aligned">
-                            <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
+                            <button type="submit" className="ui blue large labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
                               <FormattedMessage
                                 id='LoginModal.button.signIn'
                                 defaultMessage='Sign In'
@@ -417,14 +417,11 @@ class LoginModal extends React.Component {
                             </button>
                         </div>
                         <br/>
-
                         <div className="ui error message"/>
                       </form>
                       <br/>
                       <div className="container">
-                        {/*<button className="ui big circular facebook icon button" onClick={this.socialLogin.bind(this, 'facebook')} role="button" tabIndex="0" aria-label="sign in with your Facebook account">
-                          <i className="large facebook icon"/>
-                        </button>*/}
+
                         <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label="sign in with your Google account">
                           <i className="large google plus icon"/>
                         </button>
@@ -434,14 +431,14 @@ class LoginModal extends React.Component {
                       </div>
                       <br/>
                       <div className="ui floated right">
-                          <a href="#" onClick={this.handleNoAccessClick}>
+                          <a className="ui teal inverted  button" role="button" tabIndex="0" href="#" onClick={this.handleNoAccessClick}>
                             <FormattedMessage
                               id='LoginModal.text.iCannotAccessMyAccount'
                               defaultMessage='I can not access my account'
                             />
                           </a>
                           <br/><br/>
-                          <a href="#" onClick={this.handleSignupClick}>
+                          <a className="ui teal inverted  button" role="button" tabIndex="0" href="#" onClick={this.handleSignupClick}>
                             <FormattedMessage
                               id='LoginModal.text.dontHaveAnAccount'
                               defaultMessage='Don&apos;t have an account? Sign up here.'

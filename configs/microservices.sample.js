@@ -34,6 +34,9 @@ STEP 3: Verify that in STEP 2, you have correct operation mentioned. If you see 
 
 export default {
     Microservices: {
+        'platform': {
+            uri: 'https://platform.experimental.slidewiki.org',
+        },
         'deck': {
             uri: 'https://deckservice.experimental.slidewiki.org'
         },
@@ -84,8 +87,15 @@ export default {
         'nlp': {
             uri: 'https://nlpservice.experimental.slidewiki.org'
         },
-        'recommendation': {
-            uri: 'http://slidewiki.imp.bg.ac.rs'
-        }
+        'recommender': {
+            uri: 'https://recommenderservice.experimental.slidewiki.org'
+        },
+        'analytics': {
+            uri: 'https://analyticsservice.experimental.slidewiki.org'
+        },
+        'lrs': {
+            uri: 'https://api.learninglocker.experimental.slidewiki.org',
+            basicAuth :'MWEwNTkwMTg5M2Y4ZjIyZTY4ZThkMzhlYWE0NDZkZjAxZWUyNjdhODo2YjE5MzAxODhmZWM0OTg0ZjE1YzVhODI1Njg2NTY5NDk5YzRmODEz'
+        },
     }
 };

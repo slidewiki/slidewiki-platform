@@ -29,7 +29,6 @@ import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
 import UserRegistrationStore from './stores/UserRegistrationStore';
 import SearchResultsStore from './stores/SearchResultsStore';
-import SearchParamsStore from './stores/SearchParamsStore';
 import UserProfileStore from './stores/UserProfileStore';
 import ErrorStore from './stores/ErrorStore';
 import AddDeckStore from './stores/AddDeckStore';
@@ -39,6 +38,7 @@ import DeckListStore from './stores/DeckListStore';
 import ContentActionsFooterStore from './stores/ContentActionsFooterStore';
 import IntlStore from './stores/IntlStore';
 import AttachSubdeckModalStore from './stores/AttachSubdeckModalStore';
+import AttachQuestionsModalStore from './stores/AttachQuestionsModalStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
 import ContentLikeStore from './stores/ContentLikeStore';
@@ -52,6 +52,11 @@ import SSOStore from './stores/SSOStore';
 import UserRecommendationsStore from './stores/UserRecommendationsStore';
 import UserFollowingsStore from './stores/UserFollowingsStore';
 import LoginModalStore from './stores/LoginModalStore';
+import UserStatsStore from './stores/UserStatsStore';
+import UserGroupsStore from './stores/UserGroupsStore';
+import GroupStatsStore from './stores/GroupStatsStore';
+import DeckStatsStore from './stores/DeckStatsStore';
+
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -84,7 +89,6 @@ const app = new Fluxible({
         UserNotificationsStore,
         UserRegistrationStore,
         SearchResultsStore,
-        SearchParamsStore,
         UserProfileStore,
         ErrorStore,
         AddDeckStore,
@@ -94,6 +98,7 @@ const app = new Fluxible({
         ContentActionsFooterStore,
         IntlStore,
         AttachSubdeckModalStore,
+        AttachQuestionsModalStore,
         ServiceErrorStore,
         PermissionsStore,
         ContentLikeStore,
@@ -107,6 +112,10 @@ const app = new Fluxible({
         UserRecommendationsStore,
         UserFollowingsStore,
         LoginModalStore,
+        UserStatsStore,
+        UserGroupsStore,
+        GroupStatsStore,
+        DeckStatsStore,
     ]
 });
 

@@ -1,19 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getIntlLanguage } from '../../../common.js';
-import CategoryBox from './CategoryBox';
-import ChangePicture from './ChangePicture';
-import ChangePassword from './ChangePassword';
-import DeactivateAccount from './DeactivateAccount';
-import ChangePersonalData from './ChangePersonalData';
-import UserGroups from './UserGroups';
-import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserReviewStore from '../../../stores/UserReviewStore';
 import UserProfileReviewDecks from './UserProfileReviewDecks';
-import Integrations from './Integrations';
-import { categories } from '../../../actions/user/userprofile/chooseAction';
 import getNextReviewableUser from '../../../actions/userReview/getNextReviewableUser';
 import updateTrap from '../../../actions/loginModal/updateTrap';
 

@@ -1,5 +1,6 @@
 import async from 'async';
 import {shortTitle} from '../configs/general';
+import { isEmpty } from '../common.js';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
@@ -25,10 +26,11 @@ import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
-import validateUsedLanguage from './translation/validateUsedLanguage';
 import loadNodeTranslations from './translation/loadNodeTranslations';
+import loadSimilarContentsSelector from './loadSimilarContentsSelector';
+import loadSimilarContents from './loadSimilarContents';
 
-const log = require('./log/clog');
+import log from './log/clog';
 
 
 export default function loadDeck(context, payload, done) {
@@ -183,6 +185,8 @@ export default function loadDeck(context, payload, done) {
                     const userId = context.getStore(UserProfileStore).getState().userid;
                     if (userId !== undefined && userId !== null && userId !== '') {
                         context.executeAction(getFollowing, {selector: payload.params, userId: userId, followed_type: 'deck'}, callback);
+                    } else {
+                        callback();
                     }
                 }else{
                     callback();
@@ -192,6 +196,24 @@ export default function loadDeck(context, payload, done) {
                 if(runNonContentActions || languageWillChange){
                     //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
                     context.executeAction(loadContributors, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadSimilarContentsSelector, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+
+                    if (payload.params.jwt){  //if user is logged
+                        payloadCustom.userid = context.getStore(UserProfileStore).getState().userid;
+                    }
+                    context.executeAction(loadSimilarContents, payloadCustom, callback);
                 }else{
                     callback();
                 }
@@ -215,6 +237,7 @@ export default function loadDeck(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
                 return;
             }
+
             if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
                 // console.log('loadDeck isSelectorValid=false, selector ', context.getStore(DeckTreeStore).getState().selector, '\npayload: ', payload);
                 context.executeAction(notFoundError, payload, done);
@@ -223,7 +246,7 @@ export default function loadDeck(context, payload, done) {
             // context.dispatch('UPDATE_PAGE_TITLE', {
             //     pageTitle: pageTitle
             // });
-            // context.executeAction(validateUsedLanguage, {language: payload.params.language});
+
             if (payload.query.interestedUser)
                 context.executeAction(fetchUser, {
                     params: {
@@ -243,6 +266,10 @@ export default function loadDeck(context, payload, done) {
                         content_id: payload.params.sid,
                         content_kind: payload.params.stype
                     };
+                    const contentRootId = payload.params.id;
+                    if (!isEmpty(contentRootId)) {
+                        activity.content_root_id = contentRootId;
+                    }
                     context.executeAction(addActivity, {activity: activity});
                 }
 

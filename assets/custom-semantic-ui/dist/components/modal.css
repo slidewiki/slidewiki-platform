@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.3.3 - Modal
+ * # Semantic UI 2.4.2 - Modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -26,7 +26,7 @@
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  border-radius: 0.28571429rem;
+  border-radius: 0.25rem;
   -webkit-user-select: text;
      -moz-user-select: text;
       -ms-user-select: text;
@@ -35,12 +35,12 @@
 }
 .ui.modal > :first-child:not(.icon),
 .ui.modal > .icon:first-child + * {
-  border-top-left-radius: 0.28571429rem;
-  border-top-right-radius: 0.28571429rem;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
 .ui.modal > :last-child {
-  border-bottom-left-radius: 0.28571429rem;
-  border-bottom-right-radius: 0.28571429rem;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
 }
 
 
@@ -86,7 +86,7 @@
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 }
 .ui.modal > .header:not(.ui) {
-  font-size: 1.42857143rem;
+  font-size: 1.4375rem;
   line-height: 1.2857em;
   font-weight: bold;
 }
@@ -221,7 +221,7 @@
     padding-right: 2.25rem;
   }
   .ui.modal > .close {
-    top: 1.0535rem;
+    top: 1.125rem;
     right: 1rem;
     color: rgba(0, 0, 0, 0.87);
   }
@@ -418,7 +418,7 @@
   padding-right: 2.25rem;
 }
 .ui.fullscreen.modal > .close {
-  top: 1.0535rem;
+  top: 1.125rem;
   right: 1rem;
   color: rgba(0, 0, 0, 0.87);
 }
