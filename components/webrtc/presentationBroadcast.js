@@ -39,6 +39,7 @@ class presentationBroadcast extends React.Component {
         this.eventForwarding = true;
         this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
+        this.lastRewrittenSlide = this.lastRemoteSlide;
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
         this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
@@ -752,18 +753,20 @@ class presentationBroadcast extends React.Component {
             // frame.dispatchEvent(newEvent);
         }
 
-        function activateIframeListeners() {
+        function activateIframeListeners(event, skipDocument = false) {
             console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
 
-            document.addEventListener('keydown', (e) => {//NOTE used for arrow keys
-                let frame = document.getElementById('slidewikiPresentation').contentDocument;
-                let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
-                newEvent.keyCode = e.keyCode;
-                newEvent.which = e.keyCode;
-                if(that.eventForwarding)
-                    frame.dispatchEvent(newEvent);
-            });
+            if(!skipDocument) {
+                document.addEventListener('keydown', (e) => {//NOTE used for arrow keys
+                    let frame = document.getElementById('slidewikiPresentation').contentDocument;
+                    let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
+                    newEvent.keyCode = e.keyCode;
+                    newEvent.which = e.keyCode;
+                    if(that.eventForwarding)
+                        frame.dispatchEvent(newEvent);
+                });
+            }
 
             if (that.isInitiator) {
                 that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, document.getElementById('slidewikiPresentation').contentWindow.location.href);
@@ -782,20 +785,23 @@ class presentationBroadcast extends React.Component {
             } else {
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
-                    if (that.currentSlide !== that.lastRemoteSlide) {
+                    if (that.currentSlide !== that.lastRewrittenSlide) {
                         that.setState({paused: true});
                     }
                     that.forceUpdate();
                 });
-                let textArea = $('#messageToSend');
-                textArea.on('focus', () => {
-                    that.eventForwarding = false;
-                });
-                textArea.on('focusout', () => {
-                    that.eventForwarding = true;
-                });
+                if(!skipDocument){
+                    let textArea = $('#messageToSend');
+                    textArea.on('focus', () => {
+                        that.eventForwarding = false;
+                    });
+                    textArea.on('focusout', () => {
+                        that.eventForwarding = true;
+                    });
+                }
             }
             $('#slidewikiPresentation').off('load');
+            that.activateIframeListeners = activateIframeListeners;
         }
 
         function handleNewUsername(username, peerID) {
@@ -851,18 +857,24 @@ class presentationBroadcast extends React.Component {
         }
     }
 
-    changeSlide(slideID) { // called by peers
+    changeSlide(slideID, reAddListeners = false) { // called by peers
+        this.lastRemoteSlide = slideID;
         let newSlideID = this.refs.translation.modifyURLtoLoad(slideID);
-        this.lastRemoteSlide = newSlideID;
+        this.lastRewrittenSlide = newSlideID;
         if (!this.state.paused) {
             let doc = document.getElementById('slidewikiPresentation');
             if(doc.contentDocument.readyState === 'complete'){
                 console.log('Changing to slide: ', newSlideID);
                 this.iframesrc = newSlideID;
                 doc.contentWindow.location.assign(newSlideID);
+                if(reAddListeners)
+                    $('#slidewikiPresentation').on('load', () => {
+                        this.activateIframeListeners(undefined, reAddListeners);
+                        this.changeSlide(this.lastRemoteSlide);
+                    });
             } else { //if readyState === 'loading' || readyState === 'interactive'
                 setTimeout(() => {
-                    this.changeSlide(slideID);
+                    this.changeSlide(slideID, reAddListeners);
                 }, 20);
             }
         }
@@ -1050,7 +1062,7 @@ class presentationBroadcast extends React.Component {
                   {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
                   ) : ''}
-                  <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide)}/>
+                  <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide, true)}/>
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>

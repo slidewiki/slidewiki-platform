@@ -81,8 +81,7 @@ class Translations extends React.Component {
             return url;
         //TODO the following code is a bit hacky
         let currentSlide = url.split('slide-')[1];
-        let newURL = '';
-        newURL = url.split('#/slide-')[0] + '#/slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
+        let newURL = url.split('#/slide-')[0] + '#/slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
         newURL = newURL.replace('language='+this.deckLanguage, 'language='+this.chosenLanguage);
         return newURL;
     }
@@ -90,7 +89,7 @@ class Translations extends React.Component {
     changeLanguage(lang){
         console.log('Changing language to ', lang);
         this.chosenLanguage = lang;
-        this.props.triggerReloadIframe();//BUG due to a bug of SlideWiki reveal usage, the slideshow will always start on the first slide
+        this.props.triggerReloadIframe();//BUG due to a bug of SlideWiki reveal usage, the slideshow will always start on the first slide - WORKAROUND on changing the language the changeSlide method is explicitely loading the lastRemoteSlide
     }
 
     openChooseLanguageModal() {
