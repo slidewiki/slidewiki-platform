@@ -1057,12 +1057,14 @@ class presentationBroadcast extends React.Component {
                   <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Open current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
                   {(this.isInitiator) ? ('') : (
+                    <div>
+                    <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide, true)}/>
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
+                    </div>
                   )}
                   {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
                   ) : ''}
-                  <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide, true)}/>
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>

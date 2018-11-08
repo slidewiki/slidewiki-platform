@@ -18,6 +18,7 @@ class Translations extends React.Component {
         this.languages = [];
         this.deckLanguage = undefined;
         this.chosenLanguage = undefined;
+        this.primaryLanguage = undefined;
     }
 
     createTranslationMap(deckID, deckLanguage, deck = undefined) {//NOTE deck is an optional argument
@@ -28,10 +29,7 @@ class Translations extends React.Component {
         }
 
         let translationArray = [];
-        this.deckLanguage = (deckLanguage) ? deckLanguage : this.getPrimaryLang(deck);
-        this.chosenLanguage = this.deckLanguage; //NOTE default lang is the deck lang
 
-        this.languages = deck.variants.map((variant) => variant.language);
         translationArray = deck.children.map((el) => {
             let tmp = new Map();
             el.variants.forEach((el) => {
@@ -40,8 +38,13 @@ class Translations extends React.Component {
             return tmp;
         });
 
-        if(!isEmpty(translationArray) && translationArray[0].size >= 2) {
-            //translations are available
+        this.primaryLanguage = this.getPrimaryLang(deck);
+        this.languages = deck.variants.map((variant) => variant.language);
+        this.deckLanguage = (deckLanguage) ? deckLanguage : this.primaryLanguage;
+        this.chosenLanguage = this.deckLanguage; //NOTE default lang is the deck lang
+
+        if(!isEmpty(translationArray) && translationArray[0].size > 1) {
+            //at least two langs are available
             this.translationArray = translationArray;
             this.setTranslationMapWithInitialLanguage(this.deckLanguage);
             console.log(this.translationArray);
@@ -68,9 +71,8 @@ class Translations extends React.Component {
     setTranslationMapWithInitialLanguage(lang) {
         let translationMapByLanguage = new Map();
         this.translationArray.forEach((el) => {
-            let key = el.get(lang);
+            let key = (el.has(lang)) ? el.get(lang) : el.get(this.primaryLanguage);
             let value = new Map(el);
-            value.delete(lang);
             translationMapByLanguage.set(key, value);
         });
         this.translationMapByLanguage = translationMapByLanguage;
@@ -109,7 +111,7 @@ class Translations extends React.Component {
 
         let dialog = {
             titleText: 'Choose your preferred language',
-            html: '<p>Translations of this deck are available. You may choose one of these to view the slides in this langauge instead of the langauge the presenter chose to present (<strong>'+ISO6391.getName(this.deckLanguage)+'</strong>). You can change your decision at any time.</p>',
+            html: '<p>Translations of this deck are available. You may choose one of these to view the slides in this langauge instead of the langauge the presenter chose to present (<strong>'+ISO6391.getName(this.deckLanguage)+'</strong>). You can change your decision at any time. Please keep in mind that not all slides might be translated to your chosen language.</p>',
             type: 'info',
             input: 'select',
             inputValue: this.chosenLanguage,
