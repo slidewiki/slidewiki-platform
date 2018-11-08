@@ -2,17 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 import ISO6391 from 'iso-639-1';
-import {Microservices} from '../../configs/microservices';
+import { Microservices } from '../../configs/microservices';
+import { isEmpty } from '../../common';
 
 class Translations extends React.Component {
-
-/*
-  1. GET deckservice/decktree/:ID and extract variants[]:language
-  2. GET deckservice/decktree/:ID?language=... and make sure each language in children[]:language is the requested one (100% translated)
-  3. Offer dialog to user
-  3. Build up a MAP (id(primary) --> MAP(lang --> slideID)) and use Map.get(sid).get(lang) to retreive the sid of the translated slide
-  4. New URI comes in - use map and modify the URI to use the correct sid
-*/
 
     constructor(props) {
         super(props);
@@ -20,90 +13,67 @@ class Translations extends React.Component {
         this.state = {
             translationsAvailable: false,
         };
-        this.translationMap = new Map();
-        this.translationMapByLanguage = new Map();
+        this.translationArray = [];//Array( A<Map( B<String> --> C<String> )> --> //[Map( lang --> slideID )]
+        this.translationMapByLanguage = new Map();//Map( X<String> --> Y<Map( B<String> --> C<String> )>) --> //(slideID --> Map( lang --> slideID))
         this.languages = [];
         this.deckLanguage = undefined;
         this.chosenLanguage = undefined;
     }
 
-    createTranslationMap(deckID, deckLanguage) {
+    createTranslationMap(deckID, deckLanguage, deck = undefined) {//NOTE deck is an optional argument
 
-        let translationMap = new Map();
-        let languages = [];
+        if(deck === undefined){
+            this.getDeckTranslations(deckID, deckLanguage, this.createTranslationMap.bind(this));
+            return;//NOTE stop execution as createTranslationMap is called async with the deck param
+        }
 
-        let result = this.processPrimaryLangauge(deckID, translationMap, languages); //translationMap: MAP{INT -> MAP{LANG -> slideID}}
-        this.deckLanguage = (deckLanguage) ? deckLanguage : result[0]; //primary lang if no lang provided by URL
-        this.chosenLanguage = this.deckLanguage; //default lang is the deck lang
-        languages = result[1];
-        translationMap = result[2];
+        let translationArray = [];
+        this.deckLanguage = (deckLanguage) ? deckLanguage : this.getPrimaryLang(deck);
+        this.chosenLanguage = this.deckLanguage; //NOTE default lang is the deck lang
 
-        console.log(languages, this.deckLanguage, translationMap);
-
-        languages.forEach((lang) => {
-            translationMap = this.processTranslation(translationMap, lang); //add data to the map for all translations
+        this.languages = deck.variants.map((variant) => variant.language);
+        translationArray = deck.children.map((el) => {
+            let tmp = new Map();
+            el.variants.forEach((el) => {
+                tmp.set(el.language,el.id);
+            });
+            return tmp;
         });
 
-
-        if(translationMap.get(0).size >= 1) {
+        if(!isEmpty(translationArray) && translationArray[0].size >= 2) {
             //translations are available
-            this.translationMap = translationMap;
+            this.translationArray = translationArray;
             this.setTranslationMapWithInitialLanguage(this.deckLanguage);
-            console.log(this.translationMap);
+            console.log(this.translationArray);
             console.log(this.translationMapByLanguage);
             this.setState({translationsAvailable: true});
             this.openChooseLanguageModal();
         } else {
-            //only primary langauge available
+            //NOTE only primary langauge available
         }
     }
 
-    processPrimaryLangauge(deckID, translationMap, languages) {
-        //GET e.g. deckservice/decktree/4492
-        console.log(Microservices.deck + '/decktree/' + deckID);
-        $.get(Microservices.deck.uri + '/decktree/' + deckID).done((deckTree) => {
-            console.log(deckTree);
+    getDeckTranslations(deckID, deckLanguage, toCallOnSuccess) {
+        $.getJSON(Microservices.deck.uri + '/decktree/' + deckID + '/translations').done((deck) => {
+            console.log(deck);
+            toCallOnSuccess(deckID, deckLanguage, deck);
         }).fail((jqxhr, status, error) => console.log(status, error));
-        let deckTree = {'type':'deck','id':'4492-1','revisionId':1,'latestRevisionId':1,'title':'Translation Test Deck','language':'en','theme':'default','allowMarkdown':false,'variants':[{'language':'de','title':'Übersetzungst-Deck','description':'Test Beschreibung'},{'language':'es'},{'language':'en','title':'Translation Test Deck','original':true}],'children':[{'type':'slide','id':'37645-3','title':'New slide','language':'en','theme':'default','allowMarkdown':false},{'type':'slide','id':'37647-2','title':'New slide','language':'en','theme':'default','allowMarkdown':false}]};
-
-        let primaryLanguage = deckTree.language;
-        languages = deckTree.variants.map((variant) => variant.language);
-        this.languages = deckTree.variants.map((variant) => variant.language);
-        deckTree.children.forEach((el, index) => {
-            let tmp = new Map();
-            tmp.set(deckTree.language, el.id);
-            translationMap.set(index, tmp);
-        });
-        languages = languages.filter((el) => el !== primaryLanguage); //remove processed lang from array
-        return [primaryLanguage, languages, translationMap];
     }
 
-    processTranslation(translationMap, languageToProcess) {
-        //Get language from server, e.g. - GET deckservice/decktree/4492?language=de
-        let deckTree;
-        if(languageToProcess === 'de')
-            deckTree = {'type':'deck','id':'4492-1','revisionId':1,'latestRevisionId':1,'title':'Übersetzungst-Deck','language':'de','theme':'default','allowMarkdown':false,'variants':[{'language':'en','title':'Translation Test Deck','original':true},{'language':'de','title':'Übersetzungst-Deck','description':'Test Beschreibung'}],'children':[{'type':'slide','id':'37646-2','title':'New slide','language':'de','theme':'default','allowMarkdown':false},{'type':'slide','id':'37648-2','title':'New slide','language':'de','theme':'default','allowMarkdown':false}]};
-        else
-            deckTree = {'type':'deck','id':'4492-1','revisionId':1,'latestRevisionId':1,'title':'Translation Test Deck','language':'es','theme':'default','allowMarkdown':false,'variants':[{'language':'en','original':true},{'language':'de','title':'Übersetzungst-Deck','description':'Test Beschreibung'},{'language':'es'}],'children':[{'type':'slide','id':'40985-2','title':'New slide','language':'es','theme':'default','allowMarkdown':false},{'type':'slide','id':'40986-2','title':'New slide','language':'es','theme':'default','allowMarkdown':false}]};
-        let currentLanguage = deckTree.language;
-        let slideLanguages = deckTree.children.map((slide) => slide.language);
-        if(slideLanguages.every((el) => el === currentLanguage)) {
-            deckTree.children.forEach((child, index) => {
-                translationMap.get(index).set(deckTree.language, child.id);
-            });
-        }
-        return translationMap;
+    getPrimaryLang(deck) {
+        let primary = deck.variants.filter((obj) => Object.keys(obj).includes('original'));
+        return (primary.length > 0) ? primary[0].language : 'en';
     }
 
-    setTranslationMapWithInitialLanguage(lang) {//NOTE this code properly copies the map of maps and alters it
+    setTranslationMapWithInitialLanguage(lang) {
         let translationMapByLanguage = new Map();
-        this.translationMap.forEach((el, index) => {
+        this.translationArray.forEach((el) => {
             let key = el.get(lang);
             let value = new Map(el);
             value.delete(lang);
             translationMapByLanguage.set(key, value);
         });
-        this.translationMapByLanguage = translationMapByLanguage;//translationMap: MAP{slideID(ofLanguage) -> MAP{LANG -> slideID}}*/
+        this.translationMapByLanguage = translationMapByLanguage;
     }
 
     modifyURLtoLoad(url){
@@ -111,7 +81,8 @@ class Translations extends React.Component {
             return url;
         //TODO the following code is a bit hacky
         let currentSlide = url.split('slide-')[1];
-        let newURL = url.split('slide-')[0] + 'slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
+        let newURL = '';
+        newURL = url.split('#/slide-')[0] + '#/slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
         newURL = newURL.replace('language='+this.deckLanguage, 'language='+this.chosenLanguage);
         return newURL;
     }
@@ -119,7 +90,7 @@ class Translations extends React.Component {
     changeLanguage(lang){
         console.log('Changing language to ', lang);
         this.chosenLanguage = lang;
-        this.props.triggerReloadIframe();//TODO there is currently a bug preventing the iframe to being loaded at the current slide. It always loads the initial slide of the slideshow
+        this.props.triggerReloadIframe();//BUG due to a bug of SlideWiki reveal usage, the slideshow will always start on the first slide
     }
 
     openChooseLanguageModal() {
