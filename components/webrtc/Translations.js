@@ -81,8 +81,14 @@ class Translations extends React.Component {
             return url;
         //TODO the following code is a bit hacky
         let currentSlide = url.split('slide-')[1];
+        if(url.includes('language='))
+            url = url.replace('language=' + this.deckLanguage, 'language=' + this.chosenLanguage);
+        else {
+            let tmp = url.split('#/');
+            url= tmp[0] + '?language=' + this.chosenLanguage + '#/' + tmp[1];
+        }
         let newURL = url.split('#/slide-')[0] + '#/slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
-        newURL = newURL.replace('language='+this.deckLanguage, 'language='+this.chosenLanguage);
+
         return newURL;
     }
 
