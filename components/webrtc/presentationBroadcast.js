@@ -612,7 +612,7 @@ class presentationBroadcast extends React.Component {
             if (event.data === undefined)
                 return;
             let data = JSON.parse(event.data);
-            switch (data.cmd) {
+            switch (data.cmd) {//TODO validate whether "this" can be used at all occurences of "that" in the switch case statement - test carfully
                 case 'gotoslide':
                     if (!that.isInitiator)
                         this.changeSlide(data.data);
