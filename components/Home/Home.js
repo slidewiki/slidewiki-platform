@@ -121,9 +121,9 @@ class Home extends React.Component {
                 id: 'home.slideWikiAboutVisit',
                 defaultMessage: 'visit the project website.'
             },
-            myDecks: {
-                id: 'home.myDecks',
-                defaultMessage: 'My Decks.'
+            myDecksLink: {
+                id: 'home.myDecksLink',
+                defaultMessage: 'My Decks'
             },
             seeMoreDecks: {
                 id: 'home.seeMoreDecks',
@@ -141,6 +141,12 @@ class Home extends React.Component {
     handleSignUpButton() {
         this.context.executeAction(navigateAction, {
             url: '/signup'
+        });
+    }
+
+    handleMyDecksButton() {
+        this.context.executeAction(navigateAction, {
+            url: '/user/' + this.props.UserProfileStore.username
         });
     }
 
@@ -170,8 +176,18 @@ class Home extends React.Component {
         let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
             <a onClick={this.handleLoginButton.bind(this)} style={signInStyle} >{this.context.intl.formatMessage(this.messages.signIn)}</a> :
             <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
-                {this.context.intl.formatMessage(this.messages.myDecks)}
+                {this.context.intl.formatMessage(this.messages.myDecksLink)}.
             </NavLink>;
+
+        let signUpOrMyDecksElement = this.props.UserProfileStore.username === '' ?
+            <button className='home primary button' onClick={this.handleSignUpButton.bind(this)}>
+                {this.context.intl.formatMessage(this.messages.signUp)}
+            </button>
+            :
+            <button className='home primary button' onClick={this.handleMyDecksButton.bind(this)}>
+                {this.context.intl.formatMessage(this.messages.myDecksLink)}
+            </button>;
+
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
@@ -186,9 +202,7 @@ class Home extends React.Component {
                                     <div className='column '>
                                         <SearchBox type='home'/>
                                         <div className='button-blk'>
-                                            <button className='home primary button' onClick={this.handleSignUpButton.bind(this)}>
-                                                {this.context.intl.formatMessage(this.messages.signUp)}
-                                            </button>
+                                            {signUpOrMyDecksElement}
                                             <button className='home secondary  button' onClick={this.scrollToLearnMore.bind(this)}>
                                                 {this.context.intl.formatMessage(this.messages.learnMore)}
                                             </button>
