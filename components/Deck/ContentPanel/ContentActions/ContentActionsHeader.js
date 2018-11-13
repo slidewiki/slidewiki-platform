@@ -97,6 +97,11 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleDeleteNode(selector) {
+        this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+    }
+
+    // TODO Remove this unused code once it is decided we don't ever need to provide this option
+    handleDeleteNodeWithCheck(selector) {
         // plain remove for slides 
         if (selector.stype !== 'deck') {
             return this.context.executeAction(deleteTreeNodeAndNavigate, selector);

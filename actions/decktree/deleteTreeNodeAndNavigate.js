@@ -1,10 +1,8 @@
 import async from 'async';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import deleteTreeNode from './deleteTreeNode';
-const log = require('../log/clog');
-import {
-    navigateAction
-} from 'fluxible-router';
+import log from '../log/clog';
+import {navigateAction} from 'fluxible-router';
 import Util from '../../components/common/Util';
 import serviceUnavailable from '../error/serviceUnavailable';
 
@@ -52,7 +50,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
     let elementTitle = payload.stype, html;
     if (elementTitle === 'deck') {
         elementTitle = 'subdeck';
-        html = 'You will still be able to find this deck "My Decks" after removing it. You can only delete non-shared subdecks that have no subdecks of their own.';
+        html = 'This subdeck will become a proper deck after removing it. It will be available in its creator\'s "My Decks" page.';
     }
     swal({
         title: 'Remove ' + elementTitle + '. Are you sure?',
