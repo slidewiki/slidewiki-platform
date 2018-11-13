@@ -179,7 +179,7 @@ class Home extends React.Component {
                     <h1>{this.context.intl.formatMessage(this.messages.welcome)}</h1>
                 </div>
                 <section className='banner-container'>
-                    <img src='/assets/images/home/banner.jpg' alt=''/>
+                    <img src='/randomBanner' alt=''/>
                         <div className='banner-content' style={{zIndex: 0}}>
                             <div className='ui container'>
                                 <div className='ui  column  grid'>

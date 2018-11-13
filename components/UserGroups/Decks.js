@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import PopularDecks from '../User/UserProfile/PopularDecks';
+import DecksGrid from '../User/UserProfile/DecksGrid';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Icon } from 'semantic-ui-react';
@@ -108,7 +108,7 @@ class Decks extends React.Component {
             </div>
             <div className="ui segment">
                 { (this.props.decks) &&
-                    <PopularDecks size={0} decks={this.props.decks} />
+                    <DecksGrid size={0} decks={this.props.decks} />
                 }
             </div>
             {loadMoreDiv}

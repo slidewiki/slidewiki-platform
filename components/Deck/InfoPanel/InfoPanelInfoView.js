@@ -42,6 +42,11 @@ class InfoPanelInfoView extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
 
+        let deckId = selector.get('id');
+        if (deckId) { 
+            deckId = deckId.split('-')[0];
+        }
+
         return (
             <div className="ui container" ref="infoPanel" role="complementary">
                 {
@@ -65,9 +70,9 @@ class InfoPanelInfoView extends React.Component {
                         </div>
                 }
 
-                { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
+                { deckId && this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
-                        <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
+                        <NavLink href={['/deck', deckId, 'deck', deckId].join('/')}>
                             <i className='warning sign icon'></i>
                             Updated version available
                         </NavLink>

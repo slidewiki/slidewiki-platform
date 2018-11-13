@@ -36,7 +36,7 @@ class ActivityTimeline extends React.Component {
         return (
           <div>
               <Message attached>
-                  <h3>{this.context.intl.formatMessage(this.messages.activityTimelineTitle)}</h3>
+                  <h2>{this.context.intl.formatMessage(this.messages.activityTimelineTitle)}</h2>
               </Message>
               <Segment attached padded loading={this.props.loading}>
                   <span>

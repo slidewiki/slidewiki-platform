@@ -4,6 +4,7 @@ import customDate from '../components/Deck/util/CustomDate';
 import slugify from 'slugify';
 import { isEmpty, compact, flatten, uniq, keyBy, pick } from 'lodash';
 import { getLanguageName }  from '../common';
+import { getEducationLevel } from '../lib/isced.js';
 const url = require('url');
 const querystring = require('querystring');
 const log = require('../configs/log').log;
@@ -30,7 +31,9 @@ function parseDeck(deck, users){
     let deckSlug = buildSlug(deck);
 
     // different link if this is a root deck or a sub-deck
-    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
+    deck.link = (deck.isRoot || !deck.usage) 
+        ? `/deck/${deck.db_id}-${deck.db_revision_id}/${deckSlug}?language=${deck.language}` 
+        : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}?language=${deck.language}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -46,6 +49,7 @@ function parseDeck(deck, users){
     // needed for deck card
     deck.slug = deckSlug;
     deck.deckID = deck.db_id;
+    deck.revisionCount = deck.revision_count;
 }
 
 function buildSlug(deck) {
@@ -190,6 +194,14 @@ function fillFacetsInfo(facets, usernames, tags) {
     facets.tags.forEach( (item) => {
         item.text = tags[item.val];
     });
+
+    facets.topics.forEach( (item) => {
+        item.text = tags[item.val];
+    });
+
+    facets.educationLevel.forEach( (item) => {
+        item.text = getEducationLevel(item.val); 
+    });
 }
 
 function getRequestOptions(params) {
@@ -238,13 +250,14 @@ function getRequestOptions(params) {
 }
 
 function getTags(facets) {
-    if (!facets || !facets.tags) {
+    if (!facets || (!facets.tags && !facets.topics)) {
         return Promise.resolve();
     }
 
     let tags = {};
+    let tagsAndTopics = (facets.tags || []).concat(facets.topics || []);
 
-    let tagPromises = facets.tags.map( (facetTag) => 
+    let tagPromises = tagsAndTopics.map( (facetTag) => 
         rp.get({uri: `${Microservices.tag.uri}/tag/${facetTag.val}`, json: true}).then( (tag) => {
             tags[tag.tagName] = tag.defaultName;
         }).catch( (err) => {
@@ -274,6 +287,8 @@ function addSelectedToFacets(facets, query) {
     addToFacet(facets.language, query.language);
     addToFacet(facets.creator, query.user);
     addToFacet(facets.tags, query.tag);
+    addToFacet(facets.educationLevel, query.educationLevel);
+    addToFacet(facets.topics, query.topics);
 }
 
 function getQuestionsCount(deckIdsSet) {
@@ -296,6 +311,18 @@ function getQuestionsCount(deckIdsSet) {
         questionsPromises.push(qPromise);
     }
     return Promise.all(questionsPromises).then( () => { return questionsCount; });
+}
+
+function getForks(deck) {
+    let forks = [];
+    forks = (deck.translations || []).concat(deck.forks);
+    deck.forks.forEach( (fork) => {
+        if (!isEmpty(fork.translations)) {
+            forks = forks.concat(fork.translations);
+        }
+    });
+
+    return forks;
 }
 
 export default {
@@ -324,15 +351,21 @@ export default {
 
                 Promise.all([ 
                     getUsers(userIds), 
-                    getDecks(deckIds), 
                     getActivity('react', deckIds), 
                     getActivity('download', deckIds), 
                     getActivity('share', deckIds),
                     getTags(response.facets),
-                    getSlideAmount(deckIds),
+                    // getSlideAmount(deckIds),
                     getQuestionsCount(deckIds),
-                ]).then( ([ users, { decks, deckRevisions }, likes, downloads, shares, tags, slides, questions ]) => {
+                ]).then( ([ users, likes, downloads, shares, tags, /*slides,*/ questions ]) => {
                     response.docs.forEach( (result) => {
+
+                        // currently forks and translations are merged
+                        // TODO: present them separately in the results
+                        if (result.forks) {
+                            result.forks = getForks(result);
+                        }
+
                         parseDeck(result, users);
 
                         // fill forks data
@@ -340,21 +373,12 @@ export default {
                             result.forks.forEach( (fork) => parseDeck(fork, users));
                         }
 
-                        result.revisionCount = (decks[result.db_id]) ? decks[result.db_id].revisions.length : 1;
-                        result.theme = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
-                                                    deckRevisions[`${result.db_id}-${result.db_revision_id}`].theme : '';
-
-
-                        result.firstSlide = (deckRevisions[`${result.db_id}-${result.db_revision_id}`]) ?
-                                                    deckRevisions[`${result.db_id}-${result.db_revision_id}`].firstSlide : '';
-
                         //fill number of likes, downloads and shares
                         result.noOfLikes = likes[result.db_id];
                         result.downloadsCount = downloads[result.db_id];
                         result.sharesCount = shares[result.db_id];
                         result.questionsCount = questions[result.db_id];
-                        result.educationLevel = decks[result.db_id].educationLevel;
-                        result.noOfSlides = slides[result.db_id];
+                        // result.noOfSlides = slides[result.db_id];
                     });
 
                     if (response.facets) {
