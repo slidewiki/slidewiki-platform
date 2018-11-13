@@ -340,14 +340,39 @@ class DeckPropertiesEditor extends React.Component {
         console.log('handleDelete', this.state.users, this.state.groups, this.props.DeckEditStore.roots);
         console.log('handleDelete more data', this.props.selector, this.props.DeckEditStore);
 
-        // this.props.DeckEditStore.roots.length < 1
-        // not used in other decks
+        let isSubdeck = this.props.selector.spath || this.props.DeckEditStore.roots.length > 0;
+        let hasSubdecks = this.props.DeckEditStore.deckProps.contentItems.filter((n) => n.kind === 'deck').length > 0;
+
+        if (isSubdeck) {
+            swal({
+                title: 'Deck cannot be deleted',
+                text: 'This deck appears to be used as a subdeck in some other deck. You can only delete decks when they are not used as subdecks.',
+                type: 'warning',
+                allowEscapeKey: true,
+                showConfirmButton: true,
+            });
+
+            return;
+        }
+
+        if (hasSubdecks) {
+            swal({
+                title: 'Deck cannot be deleted',
+                text: 'You can only delete decks when they have no subdecks. Please remove any subdecks first and try again',
+                type: 'warning',
+                allowEscapeKey: true,
+                showConfirmButton: true,
+            });
+
+            return;
+        }
 
         if (this.state.users.length < 1 && this.state.groups.length < 1) {
+            let deckId = this.props.DeckEditStore.deckProps.sid.split('-')[0];
             // no editors - could just be deleted
             swal({
                 title: 'Delete this deck?',
-                text: `Do you really want to delete the deck ${this.props.DeckEditStore.deckProps.title} (${this.props.DeckEditStore.deckProps.sid})?`,
+                text: `Do you really want to delete the deck: "${this.props.DeckEditStore.deckProps.title}" (ID: ${deckId})?`,
                 type: 'question',
                 showCloseButton: false,
                 showCancelButton: true,
@@ -355,7 +380,7 @@ class DeckPropertiesEditor extends React.Component {
                 showConfirmButton: true
             })
             .then(() => {
-                this.context.executeAction(deckDeletion, {id: this.props.DeckEditStore.deckProps.sid.split('-')[0]});
+                this.context.executeAction(deckDeletion, {id: deckId});
             }, (reason) => { // canceled
             });
         }
@@ -610,19 +635,18 @@ class DeckPropertiesEditor extends React.Component {
                 </div>
             </div>;
 
+        let deleteButton = (this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? 
+            <button className='ui negative right floated button'
+                onClick={this.handleDelete.bind(this)}>Delete
+            </button>
+            : '';
+
         let buttons = (
             <div>
+                {deleteButton}
                 <button className='ui primary button'
                     onClick={this.handleSave.bind(this)}>Save
                 </button>
-                {
-                  (this.props.selector.spath || this.props.DeckEditStore.roots.length > 0) ?
-                    ''
-                    :
-                    <button className='negative ui button'
-                        onClick={this.handleDelete.bind(this)}>Delete
-                    </button>
-                }
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>
                     Cancel

@@ -337,7 +337,8 @@ export default {
                         revisionOwner: deck.revisionUser,
                         sid: args.sid,
                         localRootDeck: args.id,
-                        translations: deck.translations || []
+                        translations: deck.translations || [],
+                        contentItems: deck.contentItems,
                     };
 
                     callback(null, {
