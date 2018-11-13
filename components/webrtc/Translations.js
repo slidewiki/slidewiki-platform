@@ -89,7 +89,9 @@ class Translations extends React.Component {
             let tmp = url.split('#/');
             url= tmp[0] + '?language=' + this.chosenLanguage + '#/' + tmp[1];
         }
-        let newURL = url.split('#/slide-')[0] + '#/slide-' + this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
+        let rewrittenSlide = this.translationMapByLanguage.get(currentSlide).get(this.chosenLanguage);
+        rewrittenSlide = (rewrittenSlide === undefined) ? currentSlide : rewrittenSlide;
+        let newURL = url.split('#/slide-')[0] + '#/slide-' + rewrittenSlide;
 
         return newURL;
     }

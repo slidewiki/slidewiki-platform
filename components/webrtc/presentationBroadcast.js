@@ -612,17 +612,17 @@ class presentationBroadcast extends React.Component {
             if (event.data === undefined)
                 return;
             let data = JSON.parse(event.data);
-            switch (data.cmd) {//TODO validate whether "this" can be used at all occurences of "that" in the switch case statement - test carfully
+            switch (data.cmd) {
                 case 'gotoslide':
-                    if (!that.isInitiator)
+                    if (!this.isInitiator)
                         this.changeSlide(data.data);
                     break;
                 case 'toggleblackscreen':
-                    if (!that.isInitiator)
+                    if (!this.isInitiator)
                         toggleBlackScreen();
                     break;
                 case 'message':
-                    if (that.isInitiator) {
+                    if (this.isInitiator) {
                         this.refs.chat.addMessage(data, false, peerID);
                     }
                     break;
@@ -639,8 +639,8 @@ class presentationBroadcast extends React.Component {
                     handleNewUsername(data.data, peerID);
                     break;
                 case 'username':
-                    if(!that.isInitiator){
-                        that.setState({myName: data.data});
+                    if(!this.isInitiator){
+                        this.setState({myName: data.data});
                     }
                     break;
                 case 'completeTask':
@@ -653,13 +653,13 @@ class presentationBroadcast extends React.Component {
                     closeModal();
                     break;
                 case 'statusObject':
-                    if(!that.isInitiator){
+                    if(!this.isInitiator){
                         this.setState({subtitle: data.data.subtitle});
                         this.changeSlide(data.data.slide);
                     }
                     break;
                 case 'new tweets':
-                    if(!that.isInitiator){
+                    if(!this.isInitiator){
                         this.refs.chat.addTweet(data.data);
                     }
                     break;
@@ -754,7 +754,7 @@ class presentationBroadcast extends React.Component {
         }
 
         function activateIframeListeners(event, skipDocument = false) {
-            console.log('Adding iframe listeners');
+            // console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
 
             if(!skipDocument) {
@@ -945,7 +945,7 @@ class presentationBroadcast extends React.Component {
     showInviteModal() {
         swal({
             titleText: 'Invite other people',
-            html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
+            html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><i id="clipboardtarget"/></p>',
             type: 'info',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Copy to Clipboard',
@@ -1026,21 +1026,21 @@ class presentationBroadcast extends React.Component {
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} role="button" aria-label="Show QR-Code">QR-Code</Button>
                   <SessionRecorder ref="sessionRecorder" deckID={this.deckID.split('-')[0]} revision={this.deckID.split('-')[1]}/>
                   </div>
-              ) : ('')};
+              ) : ('')}
             </Grid.Row>
 
             <Grid.Row>
               <Grid.Column width={13}>
                 <Grid stackable columns={2} rows={1}>
                   <Grid.Column width={15}>
-                    <h4>
+                    <h4>{/*TODO the following code creates the validateDOMNesting error*/}
                       {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
                           trigger={<Label icon='group' content={Object.keys(this.pcs).length}/>}
                           content={peernames}
                         /></p>) : <p>{this.state.roleText}</p>}
                     </h4>
                   </Grid.Column>
-                  <Grid.Column width={1} style={{'padding-left': '0'}}>
+                  <Grid.Column width={1} style={{'paddingLeft': '0'}}>
                     <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} hashTags={this.hashTags} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
                   </Grid.Column>
                 </Grid>
