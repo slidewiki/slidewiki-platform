@@ -1,8 +1,11 @@
-const log = require('../log/clog');
+import log from '../log/clog';
+import UserProfileStore from '../../stores/UserProfileStore';
 
 export default function loadEditors(context, payload, done) {
     log.info(context);
     context.dispatch('START_TRANSFER_OWNERSHIP');
+
+    let userid = context.getStore(UserProfileStore).userid;
     const groupids = payload.groups.map((group) => parseInt(group.id, 10));
 
     if (groupids.length < 1) {
@@ -20,15 +23,17 @@ export default function loadEditors(context, payload, done) {
                 ret.push(group.creator);
                 return ret.concat(group.members);
             }, []));
-            //remove duplicates
+
+            // purge duplicates and current user
             users = users.reduce((ret, user) => {
                 let found = ret.find((u) => ((u.id || u.userid) === (user.id || user.userid)));
-                if (!found) {
+                if (!found && (user.id || user.userid) !== userid) {
                     ret.push(user);
                 }
                 return ret;
             }, []);
-            console.log('got all editors', users);
+
+            // console.log('got all editors', users);
             context.dispatch('LOAD_EDITORS_LIST_SUCCESS', users);
         }
         done();

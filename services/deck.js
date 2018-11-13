@@ -616,10 +616,12 @@ export default {
     delete: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
+
+        let deckId = parseInt(params.id);
         if (resource === 'deck.delete') {
             rp({
                 method: 'DELETE',
-                uri: Microservices.deck.uri + '/deck/' + params.id,
+                uri: Microservices.deck.uri + '/deck/' + deckId,
                 headers: { '----jwt----': params.jwt },
                 json: true
             })

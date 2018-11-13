@@ -182,7 +182,7 @@ class DeckPropertiesEditor extends React.Component {
                 })
                     .then(() => {
                         this.context.executeAction(navigateAction, {
-                            url: '/'
+                            url: '/user/' + this.context.getUser().username
                         });
                     })
                     .catch(() => {

@@ -7,6 +7,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import UserPicture from '../../../../common/UserPicture';
 import hideTransferOwnershipModal from '../../../../../actions/deckedit/hideTransferOwnershipModal';
 import transferOwnership from '../../../../../actions/deckedit/transferOwnership';
+import deckDeletion from '../../../../../actions/deckedit/deckDeletion';
 
 class TransferOwnership extends React.Component {
     constructor(props) {
@@ -20,8 +21,8 @@ class TransferOwnership extends React.Component {
                 defaultMessage: 'Transfer Ownership'
             },
             close: {
-                id: 'TransferOwnership.close',
-                defaultMessage: 'Close'
+                id: 'TransferOwnership.cancel',
+                defaultMessage: 'Cancel'
             },
             unknownCountry: {
                 id: 'TransferOwnership.unknownCountry',
@@ -38,7 +39,11 @@ class TransferOwnership extends React.Component {
             continue: {
                 id: 'TransferOwnership.continue',
                 defaultMessage: 'Transfer ownership'
-            }
+            },
+            delete: {
+                id: 'TransferOwnership.delete',
+                defaultMessage: 'Delete'
+            },
         });
 
         this.state = {
@@ -47,17 +52,25 @@ class TransferOwnership extends React.Component {
     }
 
     handleClose() {
-	      $('#app').attr('aria-hidden','false');
-	      this.context.executeAction(hideTransferOwnershipModal, {});
+        $('#app').attr('aria-hidden','false');
+        this.context.executeAction(hideTransferOwnershipModal, {});
     }
 
     unmountTrap() {
-        this.handleClose();
+        // TODO commented this out as it appeared to cause trouble with flux and cascading updates,
+        // and it was impossible to get the transfer success dialog up
+        // this.handleClose();
+        $('#app').attr('aria-hidden','false');
     }
 
     handleContinue() {
         $('#app').attr('aria-hidden','false');
         this.context.executeAction(transferOwnership, {deckid: this.props.deckid, userid: this.state.selectedUser});
+    }
+
+    handleDelete() {
+        $('#app').attr('aria-hidden','false');
+        this.context.executeAction(deckDeletion, { id: this.props.deckid });
     }
 
     render() {
@@ -109,22 +122,27 @@ class TransferOwnership extends React.Component {
 								<Modal.Header as="h1" content={this.context.intl.formatMessage(this.messages.modalHeading)} id='transferownershipmodal_header'/>
 								<Modal.Content id='transferownershipmodal_content' tabIndex="0">
                   <Container>
-                    <Segment color="blue" textAlign="center" padded>
-                      <Segment attached="bottom" textAlign="left">
-      									<h3 className="header" ></h3>
-      									<p>There are {this.props.users.length} users which have edit rights to the deck. Select one to transfer the ownership as precondition for deleting the deck.</p>
+                    <Segment color="blue">
+                      <Segment basic>
+      									<p>There are {this.props.users.length} users which have edit rights to this deck. You can make one of them the new deck owner, or delete the deck altogether.
+                        </p>
       									<Menu size='small' vertical style={{width: '100%'}}>
       											{editors}
       									</Menu>
                       </Segment>
-                      <Modal.Actions>
-  											<Button onClick={ this.handleContinue.bind(this) } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.continue)} disabled={this.state.selectedUser === ''} positive>
-  													{this.context.intl.formatMessage(this.messages.continue)}
-  											</Button>
-                        <Button onClick={ this.handleClose } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.close)}>
-  													{this.context.intl.formatMessage(this.messages.close)}
-  											</Button>
-      								</Modal.Actions>
+                      <Segment basic textAlign="center">
+                        <Modal.Actions>
+    											<Button onClick={ this.handleContinue.bind(this) } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.continue)} disabled={this.state.selectedUser === ''} positive>
+    													{this.context.intl.formatMessage(this.messages.continue)}
+    											</Button>
+                          <Button onClick={ this.handleDelete.bind(this) } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.delete)} negative>
+                              {this.context.intl.formatMessage(this.messages.delete)}
+                          </Button>
+                          <Button onClick={ this.handleClose } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.close)}>
+    													{this.context.intl.formatMessage(this.messages.close)}
+    											</Button>
+        								</Modal.Actions>
+                      </Segment>
                     </Segment>
                   </Container>
 								</Modal.Content>
