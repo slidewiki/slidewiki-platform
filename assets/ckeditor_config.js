@@ -21,7 +21,7 @@ CKEDITOR.disableAutoInline = true;
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
-
+    config.skin = 'moono-lisa-custom,/assets/custom-ckeditor-skin/moono-lisa-custom-build/';
 
     //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
@@ -42,7 +42,7 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'styles', items: [ 'FontSize',] },
         { name: 'styles', items: [ 'Font'] },
         //{ name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
-    
+
         { name: 'styles', items: [ 'Styles' ] },
         //{ name: 'basicstyles', items: [ ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor'] },
@@ -68,7 +68,7 @@ CKEDITOR.editorConfig = function( config ) {
         //{ name: 'document', items: [ 'CodeSnippet'] },
         { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'] },
         { name: 'tools', items: ['Undo', 'Redo'] }
-        
+
             /*{ name: 'styles', items: [ 'FontSize' ] },
             { name: 'basicstyles', items: ['CopyFormatting'] },
             { name: 'basicstyles', items: ['Bold'] },
