@@ -84,7 +84,7 @@ class ContentActionsHeader extends React.Component {
         this.resetZoom = this.resetZoom.bind(this);
         this.state = {
             windowInnerWidth: null
-        }
+        };
     }
 
     componentDidMount() {
