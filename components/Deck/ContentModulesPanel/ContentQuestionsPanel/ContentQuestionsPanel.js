@@ -123,7 +123,7 @@ class ContentQuestionsPanel extends React.Component {
             </button>
         ;
 
-        let downloadQuestionsButton = <QuestionDownloadModal />;
+        let downloadQuestionsButton = (questions.length > 0) ? <QuestionDownloadModal />: '';
 
         let editButtons = (editPermission) ? <div>
                 {addQuestionButton}
