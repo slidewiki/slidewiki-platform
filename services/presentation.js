@@ -28,7 +28,6 @@ export default {
             if (args.language)
                 url += '?language=' + args.language;
             // console.log(url, params);
-
             rp.get({uri: url}).then((res) => {
                 slideServiceRes = JSON.parse(res);
                 callback(null, {content: slideServiceRes.children, theme: slideServiceRes.theme, selector: selector});

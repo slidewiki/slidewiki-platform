@@ -739,7 +739,7 @@ class UserRegistration extends React.Component {
                 <div className="ui error message" ></div>
                 <br/>
                 <button type="submit" className="ui blue labeled submit icon button" >
-                    <i className="icon add user"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
+                    <i className="user plus icon"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
                 </button>
             </form>
             <div className="ui dividing header" ></div>

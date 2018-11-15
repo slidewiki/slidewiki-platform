@@ -25,7 +25,8 @@ class DeckRevision extends React.Component {
 
     handleViewRevisionClick() {
         //open the deck revision in a new tab
-        window.open('/deck/' + this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id, '_blank');
+        const redirectId = this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id;
+        window.open(`/deck/${redirectId}/_/deck/${redirectId}`, '_blank');
     }
 
 

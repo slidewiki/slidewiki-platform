@@ -6,6 +6,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { Segment, Grid, Image, Label, Icon, Divider, List } from 'semantic-ui-react';
 import { Microservices } from '../../../configs/microservices';
 import { getLanguageName }  from '../../../common';
+import { getEducationLevel } from '../../../lib/isced.js';
 
 class SearchResultsItem extends React.Component {
 
@@ -104,7 +105,20 @@ class SearchResultsItem extends React.Component {
                                 <div className="meta"><strong>{this.context.intl.formatMessage(this.messages.description)}:</strong> {result.description}</div>
                             </Grid.Column>
                              <Grid.Column width={5}>
-                                <div className="ui orange labels">
+                                <div className="ui labels">
+                                    <Label size="small">
+                                        <Icon name="comments" aria-label="Language"/>{ this.getLanguageName(result.language) }
+                                    </Label>
+                                    {/*<Label size="small">
+                                       <Icon name="block layout" aria-label="Number of slides"/>{result.noOfSlides}
+                                    </Label>*/}
+                                    { result.educationLevel &&
+                                    <div className="ui label" >
+                                        <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(result.educationLevel)}
+                                    </div>
+                                    }
+                                </div>
+                                <div className="ui labels">
                                     <Label  size="small">
                                        <Icon name="fork" aria-label="Number of forks"/>{result.fork_count - 1}
                                     </Label>
@@ -119,9 +133,6 @@ class SearchResultsItem extends React.Component {
                                     </Label>
                                 </div>
 
-                                <Label size="small" color="orange">
-                                   <Icon name="comments" aria-label="Language"/>{ this.getLanguageName(result.language) }
-                                </Label>
                                 <Divider hidden />
                                 <div>
                                     { otherVersions } 

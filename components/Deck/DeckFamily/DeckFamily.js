@@ -4,7 +4,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import DeckFamilyStore from '../../../stores/DeckFamilyStore';
-import PopularDecks from '../../User/UserProfile/PopularDecks';
+import DecksGrid from '../../User/UserProfile/DecksGrid';
 import loadMoreDeckFamily from '../../../actions/deckfamily/loadMoreDeckFamily';
 
 class DeckFamily extends React.Component {
@@ -68,7 +68,7 @@ class DeckFamily extends React.Component {
 
                       </div>
                       <div className="ui segment">
-                        <PopularDecks size={0} decks={this.props.DeckFamilyStore.decks} sort={this.sortBy}/>
+                        <DecksGrid size={0} decks={this.props.DeckFamilyStore.decks} sort={this.sortBy}/>
                       </div>
                       {loadMoreDiv}
                   </div>

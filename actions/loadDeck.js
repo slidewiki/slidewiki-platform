@@ -27,8 +27,10 @@ import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
 import loadNodeTranslations from './translation/loadNodeTranslations';
+import loadSimilarContentsSelector from './loadSimilarContentsSelector';
+import loadSimilarContents from './loadSimilarContents';
 
-const log = require('./log/clog');
+import log from './log/clog';
 
 
 export default function loadDeck(context, payload, done) {
@@ -199,6 +201,24 @@ export default function loadDeck(context, payload, done) {
                 }
             },
             (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadSimilarContentsSelector, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+
+                    if (payload.params.jwt){  //if user is logged
+                        payloadCustom.userid = context.getStore(UserProfileStore).getState().userid;
+                    }
+                    context.executeAction(loadSimilarContents, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
                 //if user is logged is and root deck changed load forks of this deck owned by the user
                 if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
                     context.executeAction(loadForks, {
@@ -217,6 +237,7 @@ export default function loadDeck(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
                 return;
             }
+
             if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
                 // console.log('loadDeck isSelectorValid=false, selector ', context.getStore(DeckTreeStore).getState().selector, '\npayload: ', payload);
                 context.executeAction(notFoundError, payload, done);

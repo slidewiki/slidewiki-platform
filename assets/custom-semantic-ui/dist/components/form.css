@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.4.1 - Form
+ * # Semantic UI 2.4.2 - Form
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -85,7 +85,7 @@
 /* Set max height on unusual input */
 .ui.form ::-webkit-datetime-edit,
 .ui.form ::-webkit-inner-spin-button {
-  height: 1.2142em;
+  height: 1.2875em;
 }
 .ui.form input:not([type]),
 .ui.form input[type="date"],
@@ -104,8 +104,8 @@
   outline: none;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
-  line-height: 1.2142em;
-  padding: 0.5804em 0.875em;
+  line-height: 1.2875em;
+  padding: 0.54375em 0.875em;
   font-size: 1em;
   background: #FFFFFF;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -372,16 +372,16 @@
   border-color: #85B7D9;
   border-radius: 0.25rem;
   background: #FFFFFF;
-  -webkit-box-shadow: 0px 0em 0em 0.25rem rgba(0, 125, 255, 0.35);
-          box-shadow: 0px 0em 0em 0.25rem rgba(0, 125, 255, 0.35);
+  -webkit-box-shadow: 0px 0em 0em 3px #5E9ACF;
+          box-shadow: 0px 0em 0em 3px #5E9ACF;
 }
 .ui.form textarea:focus {
   color: rgba(0, 0, 0, 0.95);
   border-color: #85B7D9;
   border-radius: 0.25rem;
   background: #FFFFFF;
-  -webkit-box-shadow: 0px 0em 0em 0.25rem rgba(0, 125, 255, 0.35);
-          box-shadow: 0px 0em 0em 0.25rem rgba(0, 125, 255, 0.35);
+  -webkit-box-shadow: 0px 0em 0em 3px #5E9ACF;
+          box-shadow: 0px 0em 0em 3px #5E9ACF;
   -webkit-appearance: none;
 }
 
