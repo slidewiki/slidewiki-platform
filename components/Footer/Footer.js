@@ -24,7 +24,7 @@ class Footer extends React.Component {
     render() {
         let rowClasses = {paddingTop: '0px', paddingBottom: '0px'};
         return (
-            <div className='footer-container'>
+            <footer className='footer-container'>
                 <div className='ui container'>
                     <div className='ui two column stackable grid'>
                         <div className='row' style={rowClasses}>
@@ -75,7 +75,7 @@ class Footer extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </footer>
 
         );
     }
