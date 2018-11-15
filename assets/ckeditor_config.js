@@ -39,15 +39,15 @@ CKEDITOR.editorConfig = function( config ) {
     config.toolbar = [
 
         { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'RemoveFormat'] }, //, 'CopyFormatting'
-        { name: 'styles', items: [ 'FontSize',] },
-        { name: 'styles', items: [ 'Font'] },
+        { name: 'styles', items: ['FontSize','Font'] },
+        //{ name: 'styles', items: [ 'Font'] },
         //{ name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
 
-        { name: 'styles', items: [ 'Styles' ] },
+        //{ name: 'styles', items: [ 'Styles' ] },
         //{ name: 'basicstyles', items: [ ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor'] },
         { name: 'colors', items: [ ] },
-        { name: 'styles', items: [ 'lineheight' ] },
+        { name: 'styles', items: [ 'Styles', 'lineheight' ] },
         { name: 'links', items: [ 'Link', 'Unlink' ] },
         { name: 'styles', items: [ 'Format'] },
     //'/',
