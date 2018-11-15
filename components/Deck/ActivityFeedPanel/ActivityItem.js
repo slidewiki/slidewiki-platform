@@ -7,6 +7,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Util from '../../common/Util';
+import {getLanguageName} from '../../../common'; 
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -70,7 +71,7 @@ class ActivityItem extends React.Component {
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'translated '} {nodeRef} {' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
-                        <a href={viewPath}>{node.translation_info.language}</a>
+                        {getLanguageName(node.translation_info.language)}
                         <br/>
                         {DateDiv}
                     </div>
