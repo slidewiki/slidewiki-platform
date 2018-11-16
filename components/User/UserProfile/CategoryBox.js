@@ -39,7 +39,7 @@ class CategoryBox extends React.Component {
                   <i className="icon lock"/>
                   <FormattedMessage
                     id='CategoryBox.account'
-                    defaultMessage=' Account'
+                    defaultMessage=' Accounts'
                   />
                 </p>
               </NavLink>
@@ -48,7 +48,7 @@ class CategoryBox extends React.Component {
                   <i className="icon cloud"/>
                   <FormattedMessage
                     id='CategoryBox.authorizedAccounts'
-                    defaultMessage=' Authorized Accounts'
+                    defaultMessage=' Authorized Accounts & Services'
                   />
                 </p>
               </NavLink>
@@ -82,28 +82,6 @@ class CategoryBox extends React.Component {
                 </p>
               </NavLink>
             </div>
-
-
-              <div className="ui vertical fluid menu">
-                <div className="item" style={ this.headerStyle }>
-                  <h3>
-                    <FormattedMessage
-                      id='CategoryBox.ltis'
-                      defaultMessage='LTIs'
-                    />
-                  </h3>
-                </div>
-                <NavLink className="item" href={'/user/' + this.props.username + '/ltis/overview'} activeStyle={this.styles}>
-                  <p>
-                    <i className="icon users"/>
-                    <FormattedMessage
-                      id='CategoryBox.myLTIs'
-                      defaultMessage=' My LTIs'
-                    />
-                  </p>
-                </NavLink>
-              </div>
-    
 
           </div>
         );

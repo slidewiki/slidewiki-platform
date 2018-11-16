@@ -254,6 +254,7 @@ class UserProfile extends React.Component {
         return (<UserStats userStats={this.props.UserStatsStore} />);
     }
 
+
     displayLTIs() {
         return (<UserLTIs error={this.props.UserProfileStore.deleteUserltiError} status={this.props.UserProfileStore.userltsViewStatus} ltis={this.props.UserProfileStore.user.ltis} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
     }

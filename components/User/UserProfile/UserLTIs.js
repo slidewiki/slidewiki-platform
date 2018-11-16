@@ -63,7 +63,7 @@ class UserLTIs extends React.Component {
         const ltiid = action.split('_')[1];
 
         swal({
-            titleText: 'Are you sure you want to delete this user LTI?',
+            titleText: 'Are you sure you want to delete this service?',
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -71,7 +71,7 @@ class UserLTIs extends React.Component {
             confirmButtonText: 'Yes, delete it!'
         }).then((accepted) => {
             this.context.executeAction(deleteUserlti, {ltiid: ltiid});
-            swal('User LTI successfully deleted');
+            swal('LTI Service successfully deleted');
         }, (cancelled) => {/*do nothing*/})
             .catch(swal.noop);
     }
@@ -153,7 +153,7 @@ class UserLTIs extends React.Component {
             items = [(
                 <div key="dummy" className="ui vertical segment" >
                   <div className="ui two column stackable grid container">
-                    <h4>Not a member of a LTI group.</h4>
+                    <h4>No LTI Services connected.</h4>
                   </div>
                 </div>
             )];
@@ -163,10 +163,10 @@ class UserLTIs extends React.Component {
             return (
               <div className="ui segments">
                   <div className="ui secondary clearing segment" >
-                    <h3 className="ui left floated header" >LTIs</h3>
+                    <h3 className="ui left floated header" >Learning Services (LTIs)</h3>
                     <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewLTI.bind(this)}>
                         <i className="icon users"/>
-                        <p>Create new LTI</p>
+                        <p>Add new Service</p>
                     </button>
                 </div>
 
@@ -180,7 +180,7 @@ class UserLTIs extends React.Component {
             return (
               <div className="ui segments">
                   <div className="ui secondary clearing segment" >
-                    <h3 className="ui left floated header" >LTIs</h3>
+                    <h3 className="ui left floated header" >Learning Services (LTIs)</h3>
                 </div>
 
                 {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}

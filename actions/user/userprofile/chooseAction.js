@@ -33,7 +33,7 @@ export function chooseAction(context, payload, done) {
                     title += 'Account';
                     break;
                 case categories.settings[2]:
-                    title += 'Authorized Accounts';
+                    title += 'Authorized Accounts & Services';
                     break;
                 default:
                     title = shortTitle;
@@ -67,19 +67,22 @@ export function chooseAction(context, payload, done) {
         case categories.categories[5]:
             title += 'User Stats';
             break;
+            /*
         case categories.categories[6]:
             switch(payload.params.item){
                 case categories.ltis[0]:
-                    title += 'My LTIs';
+                    title += 'My Learning Services';
                     break;
                 case categories.ltis[1]:
-                    title += 'Create LTI';
+                    title += 'Add Learning Service';
                     break;
                 default:
                     title = shortTitle;
                     break;
             };
             break;
+            */
+
 
         default:
             title = shortTitle;

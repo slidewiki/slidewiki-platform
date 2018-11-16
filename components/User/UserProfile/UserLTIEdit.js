@@ -146,9 +146,9 @@ class UserLTIEdit extends React.Component {
 
         let userlist = [];
         //change header and data depending on lti should be created or edited
-        let header = 'Create LTI';
+        let header = 'Add Learning Service';
         if (this.props.currentUserlti._id !== undefined) {
-            header = 'Edit LTI';
+            header = 'Edit Learning Service';
         }
 
         //add creator as default member
@@ -224,24 +224,20 @@ class UserLTIEdit extends React.Component {
                             <label htmlFor="userltiedit_input_LTIKey">
                                 LTI Key
                             </label>
-                            <input type="text" placeholder="Name" id="userltiedit_input_LTIKey" name="LTIKey" ref="LTIKey" aria-labelledby="LTIKey" aria-required="true" defaultValue={this.props.currentUserlti.key || ''}  />
+                            <input type="text" placeholder="Key" id="userltiedit_input_LTIKey" name="LTIKey" ref="LTIKey" aria-labelledby="LTIKey" aria-required="true" defaultValue={this.props.currentUserlti.key || ''}  />
                         </div>
 
                         <div className="field">
                             <label htmlFor="userltiedit_input_LTISecret">Secret</label>
                             <input type="text" aria-labelledby="LTISecret" id="userltiedit_input_LTISecret" name="LTISecret" ref="LTISecret" defaultValue={this.props.currentUserlti.secret || ''} />
                         </div>
-                            <div className="field">
-                                <label htmlFor="userltiedit_input_AddUserGr">Add user</label>
-                                <select className="ui search dropdown" aria-labelledby="AddUserGr" id="userltiedit_input_AddUserLti" name="AddUserLti" ref="AddUserLti" id="userlti_edit_dropdown_usernames_remote">
-                                </select>
-                            </div>
+
                         </form>
                         <div className="ui hidden divider">
                         </div>
                         <div className="ui buttons">
                             <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
-                                <i className="save icon"></i>Save LTI
+                                <i className="save icon"></i>Save Learning Service
                             </button>
                         </div>
                         {(this.props.saveUserltiIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
@@ -249,12 +245,7 @@ class UserLTIEdit extends React.Component {
                         <div className="ui hidden divider">
                         </div>
 
-                        <div className="ui header">
-                            <h3>Members</h3>
-                        </div>
-                        <div className="ui relaxed divided list">
-                            {userlist}
-                        </div>
+
                     </div>
                 </div>
             </div>
