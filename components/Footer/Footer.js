@@ -24,12 +24,12 @@ class Footer extends React.Component {
     render() {
         let rowClasses = {paddingTop: '0px', paddingBottom: '0px'};
         return (
-            <footer className='footer-container'>
+            <footer className='footer-container' role="contentinfo">
                 <div className='ui container'>
                     <div className='ui two column stackable grid'>
                         <div className='row' style={rowClasses}>
                             <div className='seven wide column'>
-                                <div className='footer-left' role="contentinfo">
+                                <div className='footer-left' >
                                     <h2 className="sr-only">Information about SlideWiki</h2>
                                     <div className='footer-menu'>
                                         <h3 className="ui medium inverted header">About</h3>
