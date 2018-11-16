@@ -90,7 +90,7 @@ class Header extends React.Component {
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
 
         return (
-            <div>
+            <header>
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
                     <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                         <div className="ui fluid container">
@@ -140,7 +140,7 @@ class Header extends React.Component {
                         <LocaleSwitcher mode="sidebar"/>
                     </div>
                 </MediaQuery>
-            </div>
+            </header>
         );
     }
 }
