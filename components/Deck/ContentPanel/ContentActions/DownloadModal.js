@@ -105,11 +105,11 @@ class DownloadModal extends React.Component{
                 return Microservices.pdf.uri +'/exportOfflineHTML/'+ splittedId[0];
                 break;
             case 'xAPI Launch (Live)':
-                    return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=false&format=xml';
-                    break;
+                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=false&format=xml';
+                break;
             case 'xAPI Launch (Offline)':
-                    return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=true&format=xml';
-                    break;
+                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=true&format=xml';
+                break;
             case 'SCORMv1.2':
             case 'SCORMv2':
             case 'SCORMv3':
