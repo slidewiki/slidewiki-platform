@@ -146,7 +146,7 @@ class DeckViewPanel extends React.Component {
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
                             <h2 className="ui header">{deckTitle}
-                                <div className={`ui label ${deckData.hidden ? 'red' : 'green'}`} tabIndex="0">{deckData.hidden ? 'Unlisted' : 'Published'}</div>
+                                <div className={`ui label ${deckData.hidden ? 'pink' : 'green'}`} >{deckData.hidden ? 'Unlisted' : 'Published'}</div>
                             </h2>
                         <div className="ui stackable grid container">
                             <div className="two column row">

@@ -159,16 +159,16 @@ class PresentationsPanel extends React.Component {
         else
             toReturn = <div ref="presentationPanel">
                 <div className="ui basic segment" style={panelDIVStyles}>
+                    <h4 className="ui  header">Live Sessions</h4>
                     <Grid columns={2}>
                       <Grid.Column width={4}>
-                        <Popup trigger={<Button icon onClick={this.openChooseASessionModal.bind(this)} aria-label="Create a live session, Beta"><Icon name="record" size="large"/></Button>} content='Create a live session (beta)' />
+                        <Popup trigger={<Button icon onClick={this.openChooseASessionModal.bind(this)} aria-label="Create a live session"><Icon name="record" size="large"/></Button>} content='Create a live session (beta)' />
                       </Grid.Column>
                       <Grid.Column width={12}>
                         Create a live session for this deck and invite participants
                       </Grid.Column>
                     </Grid>
                     <Divider />
-                    <h5 className="ui small header" tabIndex="0">Live Sessions</h5>
                     <div ref="presentationList">
                         {(this.props.ActivityFeedStore.presentations.length < 1)
                             ?
