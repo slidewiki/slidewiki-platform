@@ -142,7 +142,6 @@ class DeckViewPanel extends React.Component {
 
         return (
             <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
-                <main role="main">
                     <div className="ui segment" style={heightStyle}>
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
@@ -264,7 +263,6 @@ class DeckViewPanel extends React.Component {
                             })}
                         </div>
                     </div>
-                </main>
             </div>
         );
     }

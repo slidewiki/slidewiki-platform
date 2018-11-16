@@ -10,7 +10,7 @@ class ContributorItem extends React.Component {
                     <div className="ui image">
                         <UserPicture picture={ this.props.data.picture }
                             username={ this.props.data.username } link={ false }
-                            private={ false } size={ 'mini' } avatar={ true } width= { 24 } bordered={ false } alt={'""'}/>
+                            private={ false } size={ 'mini' } avatar={ true } width= { 24 } bordered={ false } alt={'""'} aria-hidden="true"/>
                     </div>
                     <div className="content">
                         <div className="description">
