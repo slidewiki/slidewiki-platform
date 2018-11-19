@@ -17,6 +17,7 @@ import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import InfoPanelInfoView from './InfoPanel/InfoPanelInfoView';
 import TranslationStore from '../../stores/TranslationStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import AUskipLink from '@gov.au/skip-link';
 
 class Deck extends React.Component {
 
@@ -132,7 +133,7 @@ class Deck extends React.Component {
         {
             //TODO -> add check on wether you have edit rights!!!
             //if we view a slide in edit mode - show slide edit panel
-            leftPanel = <div className={leftColClassSlideEdit}>
+            leftPanel = <div className={leftColClassSlideEdit} id="navigation">
                             <div className="row">
                                 <div className={SlideEditLeftPanelClass}>
                                     <SlideEditLeftPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
@@ -141,7 +142,7 @@ class Deck extends React.Component {
                             </div>
                         </div>;
             centerPanel = (
-                    <div className={contentAndRightPanelClass} role="main">
+                    <div className={contentAndRightPanelClass} role="main" id="main">
                         <div className="row">
                             <div className={contentAndRightPanelClass}>
                                 <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
@@ -160,7 +161,7 @@ class Deck extends React.Component {
             if(this.props.DeckPageStore.mode === 'markdownEdit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '') {
                 leftPanel = '';
                 centerPanel = (
-                        <div className="sixteen wide column">
+                        <div className="sixteen wide column" id="main">
                             <div className="row">
                                 <div className="sixteen wide column">
                                     <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
@@ -171,7 +172,7 @@ class Deck extends React.Component {
                 );
             } else {
               //if we view something else - show decktree
-                leftPanel =     <div className={leftColClass}>
+                leftPanel =     <div className={leftColClass} id="navigation">
                                   <div className="ui stackable grid">
                                     <div className="computer tablet only sixteen wide column">
                                       <div className={treePanelClass}>
@@ -197,7 +198,7 @@ class Deck extends React.Component {
 
                 centerPanel = (
                       <div className={centerColClass}>
-                          <div className="row" role="main">
+                          <div className="row" role="main" id="main">
                               <div className={contentPanelClass}>
                                   <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                               </div>
@@ -224,6 +225,24 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui fluid container" ref="deck">
+		        <AUskipLink  links={[
+                    {
+                        link: '#navigation',
+                        text: 'Skip to navigation',
+                        onClick: () => console.log('#navigation')
+                    },
+                    {
+                        link: '#main',
+                        text: 'Skip to main content',
+                        onClick: () => console.log('#main')
+                    },
+                    {
+                        link: '#content',
+                        text: 'Skip link with onClick',
+                        onClick: () => console.log('This function is called when the last skip link is clicked'),
+                    },
+                ]} 
+                />
                 <div className="ui padded stackable grid ">
                 {/*}<div className="row">
                     <div className={navigationPanelClass}>
