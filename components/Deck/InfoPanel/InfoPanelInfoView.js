@@ -48,28 +48,28 @@ class InfoPanelInfoView extends React.Component {
         }
 
         return (
-            <div className="ui container" ref="infoPanel" role="complementary">
+            <div className="ui container" ref="infoPanel" role="complementary" aria-labelledby="infopanel-title">
                 {
                     showZoomControls &&
-                        <div className="ui top attached basic buttons menu">
-                            <button className="ui icon button" onClick={this.zoomOut}
+                        <div className="ui top attached basic buttons menu" role="menu">
+                            <button className="ui icon button" role="menuitem" onClick={this.zoomOut}
                                     aria-label="Zoom out" data-tooltip="Zoom out">
                                 <i className="large zoom out icon"></i>
                             </button>
-                            <button className="ui button" onClick={this.resetZoom}
+                            <button className="ui icon button" role="menuitem" onClick={this.resetZoom}
                                     aria-label="Reset zoom" data-tooltip="Reset zoom">
                                 <i className="large stacked icons">
                                     <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
                                     <i className="search icon"></i>
                                 </i>
                             </button>
-                            <button className="ui icon button" onClick={this.zoomIn}
+                            <button className="ui icon button" role="menuitem" onClick={this.zoomIn}
                                     aria-label="Zoom in" data-tooltip="Zoom in">
                                 <i className="large zoom in icon"></i>
                             </button>
                         </div>
                 }
-
+                <h3 className="sr-only" id="infopanel-title">Additional content information</h3>
                 { deckId && this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
                         <NavLink href={['/deck', deckId, 'deck', deckId].join('/')}>
@@ -78,8 +78,8 @@ class InfoPanelInfoView extends React.Component {
                         </NavLink>
                     </div>
                 }
-
                 <div className="ui attached segment">
+
                     <ContributorsPanel />
                 </div>
                 <div className="ui attached segment">
