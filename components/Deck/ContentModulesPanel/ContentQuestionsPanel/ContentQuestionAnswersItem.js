@@ -4,16 +4,11 @@ class ContentQuestionAnswersItem extends React.Component {
 
     render() {
         const answer = this.props.answer;
-        
+        //const answerListSymbol = `${this.props.number + 1}) `;
         return (
-            <div className="field">
-              <div className="ui ">
-                <i className="ui small circle outline icon" />
-                <label >
-                  {answer.answer}
-                </label>
-              </div>
-            </div>
+            <li className="questionsList" >
+                {answer.answer}
+            </li>
 
         );
     }

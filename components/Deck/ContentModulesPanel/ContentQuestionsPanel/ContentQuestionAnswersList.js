@@ -45,7 +45,7 @@ class ContentQuestionAnswersList extends React.Component {
 
         let list = this.props.items.map((node, index) => {
             return (
-                <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index}/>
+                <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index} number={index}/>
             );
         });
 
@@ -68,11 +68,9 @@ class ContentQuestionAnswersList extends React.Component {
         let answers = (
             <div className="ui two column stackable grid">
                 <div className="column">
-                    <div className="ui grouped fields">
-                        <fieldset>
-                            {list}
-                        </fieldset>
-                    </div>
+                    <ul className="questionsList" >
+                        {list}
+                    </ul>
                 </div>
                 <div className="column">
                   <button className="ui compact button primary" onClick={this.handleButtonClick}>
@@ -92,9 +90,7 @@ class ContentQuestionAnswersList extends React.Component {
 
         return (
             <div ref="contentquestionanswersList">
-                <div className="ui relaxed list">
                     {answers}
-                </div>
             </div>
         );
     }
