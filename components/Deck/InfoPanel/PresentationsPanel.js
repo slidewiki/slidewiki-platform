@@ -21,12 +21,12 @@ class PresentationsPanel extends React.Component {
             <h3>Presentation Room</h3>
             <p style={{textAlign: 'left'}}>Broadcast your slides to attendees in other locations. Attendees will hear your voice and be able to send you messages.</p>
             <p style={{textAlign: 'left'}}>The Presentation Room will open a new tab. Presentation Rooms are public and listed on the deck. You will also see an link to invite attendees. You should test this feature before sharing your room as network security may prevent others from accessing it.</p>
-            <div style={{width: '100%'}}><Button icon labelPosition="left" floated='right' size='large' onClick={this.openPRModal.bind(this)} aria-label="Create a presentation room, beta"><Icon name="record" size="large"/> Presentation Room</Button></div>
+            <div style={{width: '100%'}}><Button icon labelPosition="left" floated='right' size='large' onClick={this.openPRModal.bind(this)} aria-label="Create a presentation room"><Icon name="record" size="large"/> Presentation Room</Button></div>
           </Grid.Row>
           <Grid.Row>
             <h3>Follow Along</h3>
             <p style={{textAlign: 'left'}}>Attendees can Follow Along with your slides on their own device when on the same network as slides will be synced to the presenter’s display. You will be provided with two links - a Presenters Link and an Attendees link to share beforehand.</p>
-            <div style={{width: '100%'}}><Button icon labelPosition="left" floated='right' size='large' onClick={this.openFAModal.bind(this)} aria-label="Create a follow along, beta"><Icon name="share alternate" size="large"/> Follow Along</Button></div>
+            <div style={{width: '100%'}}><Button icon labelPosition="left" floated='right' size='large' onClick={this.openFAModal.bind(this)} aria-label="Create a follow along session"><Icon name="share alternate" size="large"/> Follow Along</Button></div>
           </Grid.Row>
         </Grid>;
         if(process.env.BROWSER){
@@ -159,16 +159,16 @@ class PresentationsPanel extends React.Component {
         else
             toReturn = <div ref="presentationPanel">
                 <div className="ui basic segment" style={panelDIVStyles}>
+                    <h4 className="ui  header">Live Sessions</h4>
                     <Grid columns={2}>
                       <Grid.Column width={4}>
-                        <Popup trigger={<Button icon onClick={this.openChooseASessionModal.bind(this)} aria-label="Create a live session, Beta"><Icon name="record" size="large"/></Button>} content='Create a live session (beta)' />
+                        <Popup trigger={<Button icon onClick={this.openChooseASessionModal.bind(this)} aria-label="Create a live session"><Icon name="record" size="large"/></Button>} content='Create a live session (beta)' />
                       </Grid.Column>
                       <Grid.Column width={12}>
                         Create a live session for this deck and invite participants
                       </Grid.Column>
                     </Grid>
                     <Divider />
-                    <h5 className="ui small header" tabIndex="0">Live Sessions</h5>
                     <div ref="presentationList">
                         {(this.props.ActivityFeedStore.presentations.length < 1)
                             ?

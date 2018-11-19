@@ -6,6 +6,7 @@ class ApplicationStore extends BaseStore {
         super(dispatcher);
         this.pageTitle = '';
         this.pageThumbnail = '/assets/images/slideWiki-logo-linear.png'; //can add a default image here
+        this.showActivationMessage = false;
         //this.frozen = false;
     }
     handlePageTitle(payload) {
@@ -22,29 +23,37 @@ class ApplicationStore extends BaseStore {
             this.pageThumbnail = '/thumbnail/slide/' + payload.thumbnailID;
             this.emitChange();
         });
+    handleActivationMessage(payload) {
+        this.showActivationMessage = true;
+        this.emitChange();
     }
     getPageTitle() {
         return this.pageTitle;
     }
     getPageThumbnail() {
         return this.pageThumbnail;
+    getActivationMessage(){
+        return this.showActivationMessage;
     }
     dehydrate() {
         return {
             pageTitle: this.pageTitle,
             pageThumbnail: this.pageThumbnail
+            showActivationMessage: this.showActivationMessage
         };
     }
     rehydrate(state) {
         this.pageTitle = state.pageTitle;
         this.pageThumbnail = state.pageThumbnail;
+        this.showActivationMessage = state.showActivationMessage;
     }
 }
 
 ApplicationStore.storeName = 'ApplicationStore';
 ApplicationStore.handlers = {
     'UPDATE_PAGE_TITLE': 'handlePageTitle',
-    'LOAD_DECK_METADATA_SUCCESS': 'updatePageMetadata'
+    'LOAD_DECK_METADATA_SUCCESS': 'updatePageMetadata',
+    'SHOW_ACTIVATION_MESSAGE': 'handleActivationMessage'
 };
 
 export default ApplicationStore;
