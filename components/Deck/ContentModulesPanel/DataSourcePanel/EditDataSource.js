@@ -74,7 +74,7 @@ class EditDataSource extends React.Component {
         dataSources.splice(selectedIndex, 1);
         this.context.executeAction(updateDataSources, {
             dataSources: dataSources,
-            sid: this.props.DataSourceStore.selector.sid
+            selector: this.props.DataSourceStore.selector
         });
     }
 
@@ -103,7 +103,7 @@ class EditDataSource extends React.Component {
         }
         this.context.executeAction(updateDataSources, {
             dataSources: dataSources,
-            sid: this.props.DataSourceStore.selector.sid
+            selector: this.props.DataSourceStore.selector
         });
         return false;
     }

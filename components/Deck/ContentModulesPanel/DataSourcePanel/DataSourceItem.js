@@ -136,10 +136,10 @@ class DataSourceItem extends React.Component {
         const node = this.props.node;
         //append origin of the datasource
         const selector = this.props.selector;
-        const cheerioSlideName =  (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
-        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioSlideName}</a>)</i> </span> : '';
+        const cheerioRefName =  (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
+        const appendOrigin = (selector.stype === 'deck' && (node.stype === 'slide' || node.sid !== selector.sid)) ? <span><i>(originally from {node.stype} <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioRefName}</a>)</i> </span> : '';
 
-        const appendEdit = (this.props.editable) ? (
+        const appendEdit = (this.props.editable && selector.stype === node.stype && selector.sid === node.sid) ? (
             <a href="#" className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>

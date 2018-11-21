@@ -26,7 +26,7 @@ class DataSourcePanel extends React.Component {
         const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
 
-        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit) && (selector.stype === 'slide');
+        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
         let newDataSourceButton = (editPermission) ?
             <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
                 <i className="icon plus"></i> Add source
@@ -36,8 +36,7 @@ class DataSourcePanel extends React.Component {
         let sourcesHeader = <h3 className="ui dividing header">Sources</h3>;
 
         let showMoreLink = (!showAllDataSources && arrayOfDataSourcesIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div> : '';
-        let sourcesList = (dataSources.length === 0)
-            ?
+        let sourcesList = (dataSources.length === 0) ?
             <div>There are currently no sources for this {this.props.DataSourceStore.selector.stype}.</div>
             :
             <div>
