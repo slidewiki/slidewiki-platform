@@ -82,6 +82,13 @@ class ContentActionsHeader extends React.Component {
         this.zoomIn = this.zoomIn.bind(this);
         this.zoomOut = this.zoomOut.bind(this);
         this.resetZoom = this.resetZoom.bind(this);
+        this.state = {
+            windowInnerWidth: null
+        };
+    }
+
+    componentDidMount() {
+        this.setState({windowInnerWidth: window.innerWidth});
     }
 
 
@@ -189,6 +196,7 @@ class ContentActionsHeader extends React.Component {
 
     render() {
         const contentDetails = this.props.ContentStore;
+        const smallButtons = this.state.windowInnerWidth != null && this.state.windowInnerWidth < 950;
 
         const buttonsAreDisabled = this.props.PermissionsStore.permissions.readOnly
             || !this.props.PermissionsStore.permissions.edit
@@ -209,18 +217,22 @@ class ContentActionsHeader extends React.Component {
         const addSlideClass = classNames({
             'ui basic button': true,
             'disabled': buttonsAreDisabled,
+            'icon': smallButtons,
         });
         const addDeckClass = classNames({
             'ui basic button': true,
             'disabled': buttonsAreDisabled,
+            'icon': smallButtons,
         });
         const duplicateItemClass = classNames({
             'ui basic button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled,
+            'icon': smallButtons,
         });
         const deleteItemClass = classNames({
             'ui basic button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled,
+            'icon': smallButtons,
         });
         const red = {
             backgroundColor: 'red'
@@ -233,6 +245,7 @@ class ContentActionsHeader extends React.Component {
             classNames : classNames({
                 'ui basic button':true,
                 'disabled': buttonsAreDisabled,
+                'icon': smallButtons,
             }),
             iconSize : 'large',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
@@ -322,12 +335,12 @@ class ContentActionsHeader extends React.Component {
 
 
         }
-        
+
         const leftButtonsClass = classNames({
             'ui left floated top attached buttons': true,
-            'basic': editButton !== '' 
+            'basic': editButton !== ''
         });
-        
+
         /*
         <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
           type="button"
@@ -339,7 +352,7 @@ class ContentActionsHeader extends React.Component {
         </button>
         */
         let mobileMessage = <div className="ui top attached warning message">
-          <p>You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use the desktop version.</p>
+          <p>Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.</p>
         </div>;
 
         return (
@@ -389,7 +402,9 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="grey large copy outline horizontally flipped icon"></i>
+                            <i className="large icons">
+                                <i className="grey copy outline horizontally flipped icon"></i>
+                            </i>
 
                         </button>,
                         <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
@@ -397,7 +412,9 @@ class ContentActionsHeader extends React.Component {
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="red large trash alternate icon"></i>
+                            <i className="large icons">
+                                <i className="red trash alternate icon"></i>
+                            </i>
                         </button>,
                     ] }
                             {
