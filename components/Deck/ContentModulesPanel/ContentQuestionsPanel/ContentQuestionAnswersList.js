@@ -118,7 +118,7 @@ class ContentQuestionAnswersList extends React.Component {
 }
 
 ContentQuestionAnswersList.contextTypes = {
-    executeAction: PropTypes.func.isRequiredd,
+    executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 
