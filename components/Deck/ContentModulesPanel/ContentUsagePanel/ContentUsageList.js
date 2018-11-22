@@ -11,7 +11,7 @@ class ContentUsageList extends React.Component {
                 defaultMessage: 'There is currently no usage of this',
             }
         });
-        const noUsageMessage = <div>{this.context.intl.formatMessage(form_messages.comment_title_placeholder) + ' ' + this.props.selector.stype}.</div>;
+        const noUsageMessage = <div>{this.context.intl.formatMessage(form_messages.no_usage) + ' ' + this.props.selector.stype}.</div>;
 
         const selector = this.props.selector;
         const list = this.props.usage.map((node, index) => <ContentUsageItem key={index} usageItem={node} selector={selector}/>);
