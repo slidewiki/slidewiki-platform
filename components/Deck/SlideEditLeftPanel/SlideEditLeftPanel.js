@@ -14,7 +14,7 @@ import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick'
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
-import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal'; 
+import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal';
 import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import DeckPageStore from '../../../stores/DeckPageStore';
@@ -100,7 +100,7 @@ class SlideEditLeftPanel extends React.Component {
             });
         }
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.setState({ slideSizeText: nextProps.SlideEditStore.slideSizeText });
         if(nextProps.SlideEditStore.contentEditorFocus !== this.props.SlideEditStore.contentEditorFocus
@@ -474,7 +474,7 @@ class SlideEditLeftPanel extends React.Component {
         const error = {
             color: 'red',
         };
-        let selectorImm = this.props.DeckTreeStore.selector; 
+        let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')}; /*is this line still needed */
         //let selectorDeck = this.props.DeckPageStore.selector;
         let selectorDeck = {id: this.props.DeckPageStore.selector.id, stype: 'deck', sid: this.props.DeckPageStore.selector.id};
@@ -831,10 +831,17 @@ class SlideEditLeftPanel extends React.Component {
         } else {
             panelcontent = normalContent;
         }
-        
+
         const tabActive = {
             background: '#767676',
             color: '#ffffff'
+        };
+
+        const editorStyle = {
+            //!this.state.editText ? {display: 'none'} ,
+            display: !this.state.editText ? 'none' : 'block',
+            maxWidth: 250,
+            margin: '0 auto'
         };
 
         return (
@@ -845,7 +852,7 @@ class SlideEditLeftPanel extends React.Component {
                     <button className="ui button" style={this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, true)}>Edit</button>
                 </div>
               <div className="ui grey inverted segment bottom attached active tab">
-                <div id="CKeditorMenu" style={!this.state.editText ? {display: 'none'} : {}}></div>
+                <div id="CKeditorMenu" style={editorStyle}></div>
                 <div className="ui center aligned grid" style={this.state.editText ? {display: 'none'} : {}}>
                     <div className="ui vertical labeled icon grey inverted large menu">
                           {panelcontent}

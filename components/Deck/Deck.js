@@ -141,7 +141,7 @@ class Deck extends React.Component {
                             </div>
                         </div>;
             centerPanel = (
-                    <div className={contentAndRightPanelClass}>
+                    <div className={contentAndRightPanelClass} role="main">
                         <div className="row">
                             <div className={contentAndRightPanelClass}>
                                 <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
@@ -197,7 +197,7 @@ class Deck extends React.Component {
 
                 centerPanel = (
                       <div className={centerColClass}>
-                          <div className="row">
+                          <div className="row" role="main">
                               <div className={contentPanelClass}>
                                   <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                               </div>
