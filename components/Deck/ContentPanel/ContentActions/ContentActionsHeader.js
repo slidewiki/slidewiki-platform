@@ -352,7 +352,7 @@ class ContentActionsHeader extends React.Component {
         </button>
         */
         let mobileMessage = <div className="ui top attached warning message">
-          <p>You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use the desktop version.</p>
+          <p>Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.</p>
         </div>;
 
         return (

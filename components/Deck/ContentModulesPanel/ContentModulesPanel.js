@@ -263,8 +263,9 @@ class ContentModulesPanel extends React.Component {
         });
         
         return (
-            <div ref="contentModulesPanel" role="tabpanel">
-                <div style={pointingMenuStyle}>
+            <div ref="contentModulesPanel" >
+                <h2 className="sr-only">Content Tools</h2>
+                <div style={pointingMenuStyle} role="tabpanel">
                     {pointingMenu}
                 </div>
                 <div style={mobileMenuStyle}>
