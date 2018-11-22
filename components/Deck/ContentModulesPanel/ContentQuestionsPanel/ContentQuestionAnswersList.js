@@ -74,11 +74,11 @@ class ContentQuestionAnswersList extends React.Component {
         const form_messages = defineMessages({
             button_answer_show: {
                 id: 'ContentQuestionAnswersList.form.button_answer_show',
-                defaultMessage: 'Hide answer',
+                defaultMessage: 'Show answer',
             },
             button_answer_hide: {
                 id: 'ContentQuestionAnswersList.form.button_answer_hide',
-                defaultMessage: 'Show answer',
+                defaultMessage: 'Hide answer',
             }
         });
         let showButtonLabel = this.context.intl.formatMessage(this.state.showCorrect ? form_messages.button_answer_hide : form_messages.button_answer_show);

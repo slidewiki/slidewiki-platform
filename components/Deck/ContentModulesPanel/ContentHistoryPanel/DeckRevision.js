@@ -88,7 +88,7 @@ class DeckRevision extends React.Component {
                 defaultMessage: 'Show details',
             },
             version_changes: {
-                id: 'DeckRevision.form.header',
+                id: 'DeckRevision.form.version_changes',
                 defaultMessage: 'Version changes',
             },
             button_aria_restore: {

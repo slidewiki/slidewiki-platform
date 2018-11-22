@@ -52,11 +52,11 @@ class ContentQuestionEdit extends React.Component {
     componentDidMount() {
         const messages = defineMessages({
             no_question: {
-                id: 'ContentQuestionAdd.no_question',
+                id: 'ContentQuestionEdit.no_question',
                 defaultMessage: 'Please, enter question',
             },
             no_answers: {
-                id: 'ContentQuestionAdd.no_answers',
+                id: 'ContentQuestionEdit.no_answers',
                 defaultMessage: 'Please, add answers',
             },
             
@@ -74,7 +74,7 @@ class ContentQuestionEdit extends React.Component {
                     identifier: 'response1',
                     rules: [{
                         type: 'atleastoneanswer',
-                        prompt: this.context.intl.formatMessage(messages.passwordMismatch),
+                        prompt: this.context.intl.formatMessage(messages.no_answers),
                     }]
                 }
             },
@@ -190,7 +190,7 @@ class ContentQuestionEdit extends React.Component {
                             <div className="required field">
                                 <label htmlFor="question">
                                     <FormattedMessage
-                                        id='ContentQuestionAdd.form.question'
+                                        id='ContentQuestionEdit.form.question'
                                         defaultMessage='Question' />
                                 </label>
                                 <textarea rows="3"  name="question" id="question" aria-required="true" defaultValue={this.state.title} onChange={this.updateQuestionTitle} />
@@ -199,7 +199,7 @@ class ContentQuestionEdit extends React.Component {
                                 <fieldset>
                                     <legend>
                                         <FormattedMessage
-                                            id='ContentQuestionAdd.form.difficulty'
+                                            id='ContentQuestionEdit.form.difficulty'
                                             defaultMessage='Difficulty' />
                                     </legend>
                                     <div className="inline fields">
@@ -211,7 +211,7 @@ class ContentQuestionEdit extends React.Component {
                                                 }
                                                 <label htmlFor="easy">
                                                     <FormattedMessage
-                                                        id='ContentQuestionAdd.form.difficulty_easy'
+                                                        id='ContentQuestionEdit.form.difficulty_easy'
                                                         defaultMessage='Easy' />
                                                 </label>
                                             </div>
@@ -224,7 +224,7 @@ class ContentQuestionEdit extends React.Component {
                                                 }
                                                 <label htmlFor="moderate">
                                                     <FormattedMessage
-                                                        id='ContentQuestionAdd.form.difficulty_moderate'
+                                                        id='ContentQuestionEdit.form.difficulty_moderate'
                                                         defaultMessage='Moderate' />
                                                 </label>
                                             </div>
@@ -237,7 +237,7 @@ class ContentQuestionEdit extends React.Component {
                                             }
                                                 <label htmlFor="hard">
                                                     <FormattedMessage
-                                                        id='ContentQuestionAdd.form.difficulty_hard'
+                                                        id='ContentQuestionEdit.form.difficulty_hard'
                                                         defaultMessage='Hard' />
                                                 </label>
                                             </div>
@@ -250,7 +250,7 @@ class ContentQuestionEdit extends React.Component {
                             <fieldset>
                                 <legend>
                                     <FormattedMessage
-                                        id='ContentQuestionAdd.form.answer_choices'
+                                        id='ContentQuestionEdit.form.answer_choices'
                                         defaultMessage='Answer Choices' />
                                 </legend>
                                 <div className="inline field">
@@ -290,7 +290,7 @@ class ContentQuestionEdit extends React.Component {
                         <div className="field">
                             <label htmlFor="explanation">
                                 <FormattedMessage
-                                    id='ContentQuestionAdd.form.explanation'
+                                    id='ContentQuestionEdit.form.explanation'
                                     defaultMessage='Explanation (optional)' />
                             </label>
                             <textarea rows="2" id="explanation" defaultValue={this.state.explanation} onChange={this.updateExplanation}></textarea>
@@ -300,7 +300,7 @@ class ContentQuestionEdit extends React.Component {
                                 <input type="checkbox" name="exam" id="exam" tabIndex="0" className="hidden" defaultChecked={this.state.isExamQuestion} onChange={this.updateIsExamQuestion}/>
                                 <label htmlFor="exam">
                                     <FormattedMessage
-                                        id='ContentQuestionAdd.form.exam_question'
+                                        id='ContentQuestionEdit.form.exam_question'
                                         defaultMessage='This is an exam question' />
                                 </label>
                             </div>
@@ -311,13 +311,13 @@ class ContentQuestionEdit extends React.Component {
                                     <button type="submit" className="ui blue labeled submit icon button" >
                                         <i className="icon check" />
                                         <FormattedMessage
-                                            id='ContentQuestionAdd.form.button_save'
+                                            id='ContentQuestionEdit.form.button_save'
                                             defaultMessage='Save' />
                                     </button>
                                     <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
                                         <i className="icon close" />
                                         <FormattedMessage
-                                            id='ContentQuestionAdd.form.button_cancel'
+                                            id='ContentQuestionEdit.form.button_cancel'
                                             defaultMessage='Cancel' />
                                     </button>
                                     <button type="button" className="ui red labeled icon button" onClick={this.deleteButtonClick}>

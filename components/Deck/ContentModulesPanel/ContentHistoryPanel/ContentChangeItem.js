@@ -88,12 +88,12 @@ class ContentChangeItem extends React.Component {
                 id: 'ContentChangeItem.form.revise_description',
                 defaultMessage: 'created a new version of',
             },
-            renamed_description_renamed: {
-                id: 'ContentChangeItem.form.renamed_description_renamed',
+            rename_description_renamed: {
+                id: 'ContentChangeItem.form.rename_description_renamed',
                 defaultMessage: 'renamed',
             },
-            renamed_description_to: {
-                id: 'ContentChangeItem.form.renamed_description_to',
+            rename_description_to: {
+                id: 'ContentChangeItem.form.rename_description_to',
                 defaultMessage: 'to',
             },
             revert_description_restored: {
@@ -108,12 +108,12 @@ class ContentChangeItem extends React.Component {
                 id: 'ContentChangeItem.form.remove_description',
                 defaultMessage: 'removed',
             },
-            edited_description_slide_translation: {
-                id: 'ContentChangeItem.form.edited_description_slide_translation',
+            edit_description_slide_translation: {
+                id: 'ContentChangeItem.form.edit_description_slide_translation',
                 defaultMessage: 'edited slide translation',
             },
-            edited_description_slide: {
-                id: 'ContentChangeItem.form.edited_description_slide',
+            edit_description_slide: {
+                id: 'ContentChangeItem.form.edit_description_slide',
                 defaultMessage: 'edited slide',
             },
             move_description_slide: {
@@ -184,7 +184,7 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'attach':
                 iconName = change.value.kind === 'slide'? 'file text' :'folder';
-                description = <span>{this.context.intl.formatMessage(form_messages.attached_description) + ' ' + change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
+                description = <span>{this.context.intl.formatMessage(form_messages.attach_description) + ' ' + change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
             case 'fork':
                 iconName = 'fork';
@@ -198,10 +198,10 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'revise':
                 iconName = 'save';
-                description = <span>{this.context.intl.formatMessage(form_messages.attached_description) + ' ' + change.oldValue.kind} <em>{change.oldValue.ref.title}</em></span>;
+                description = <span>{this.context.intl.formatMessage(form_messages.revise_description) + ' ' + change.oldValue.kind} <em>{change.oldValue.ref.title}</em></span>;
                 break;
             case 'rename':
-                description = <span>{this.context.intl.formatMessage(form_messages.renamed_description_renamed) + ' ' + change.renamed.kind} <em>{change.renamed.from}</em> {this.context.intl.formatMessage(form_messages.renamed_description_to)} <em>{change.renamed.to}</em></span>;
+                description = <span>{this.context.intl.formatMessage(form_messages.rename_description_renamed) + ' ' + change.renamed.kind} <em>{change.renamed.from}</em> {this.context.intl.formatMessage(form_messages.rename_description_to)} <em>{change.renamed.to}</em></span>;
                 break;
             case 'revert':
                 iconName='history';
@@ -209,10 +209,10 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'remove':
                 iconName = 'trash alternate';
-                description = <span>{this.context.intl.formatMessage(form_messages.revert_description_restored) + ' ' + change.value.kind} <em>{change.value.ref.title}</em></span>;
+                description = <span>{this.context.intl.formatMessage(form_messages.remove_description) + ' ' + change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'edit':
-                actionText = this.context.intl.formatMessage(change.value.variant ? form_messages.edited_description_slide_translation : form_messages.edited_description_slide);
+                actionText = this.context.intl.formatMessage(change.value.variant ? form_messages.edit_description_slide_translation : form_messages.edit_description_slide);
                 description = <span>{actionText} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'move':

@@ -71,7 +71,7 @@ class ContentQuestionAdd extends React.Component {
                     identifier: 'response1',
                     rules: [{
                         type: 'atleastoneanswer',
-                        prompt: this.context.intl.formatMessage(messages.passwordMismatch),
+                        prompt: this.context.intl.formatMessage(messages.no_answers),
                     }]
                 }
             },
