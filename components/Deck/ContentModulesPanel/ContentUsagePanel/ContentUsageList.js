@@ -1,10 +1,17 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ContentUsageItem from './ContentUsageItem';
+import { defineMessages } from 'react-intl';
 
 class ContentUsageList extends React.Component {
     render() {
-        const noUsageMessage = <div>There is currently no usage of
-            this {this.props.selector.stype}.</div>;
+        const form_messages = defineMessages({
+            no_usage: {
+                id: 'ContentUsageList.form.no_usage',
+                defaultMessage: 'There is currently no usage of this',
+            }
+        });
+        const noUsageMessage = <div>{this.context.intl.formatMessage(form_messages.comment_title_placeholder) + ' ' + this.props.selector.stype}.</div>;
 
         const selector = this.props.selector;
         const list = this.props.usage.map((node, index) => <ContentUsageItem key={index} usageItem={node} selector={selector}/>);
@@ -22,5 +29,9 @@ class ContentUsageList extends React.Component {
         );
     }
 }
+
+ContentUsageList.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 export default ContentUsageList;
