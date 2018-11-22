@@ -35,7 +35,16 @@ The visual representation of a rich combo widget looks as follows:
 	display:flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	flex: 1 1 auto;
+	flex: 1 1 50%;
+    min-width: 0;
+    margin-top:1px;
+}
+
+@media only screen and (max-width: 1175px) {
+    .cke_combo
+    {
+        flex: 1 1 100%;
+    }
 }
 
 .cke_rtl .cke_combo
@@ -90,7 +99,8 @@ a.cke_combo_button
 	background:#e6e6e6;
 	border-radius: 4px;
 	margin-right: 1px;
-	flex:1 1 auto;
+	/*flex:1 1 auto;*/
+    width:calc(100% - 3px);
 }
 
 .cke_rtl a.cke_combo_button
@@ -165,8 +175,8 @@ a.cke_combo_button
 .cke_toolbar_start + .cke_combo_off a.cke_combo_button:active
 {
 	/* Move first combo so borders cover separators. Adjust padding to borders. */
-	padding: 0 0 0 3px;
-	margin-left: -3px;
+	/*padding: 0 0 0 3px;
+	margin-left: -3px;*/
 }
 
 .cke_rtl .cke_toolbar_start + .cke_combo_on a.cke_combo_button,
@@ -278,7 +288,7 @@ a.cke_combo_button
    See: .cke_combo_inlinelabel */
 .cke_combo_text
 {
-	line-height: 32px;
+	line-height: 30px;
 	padding-left: 10px;
 	text-overflow: ellipsis;
 	overflow: hidden;

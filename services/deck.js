@@ -5,6 +5,8 @@ import slugify from 'slugify';
 import {fillInUserInfo, fillInGroupInfo} from '../lib/services/user';
 import {fetchTagInfo} from '../lib/services/tag';
 
+import pick from 'lodash/pick';
+
 const log = require('../configs/log').log;
 
 export default {
@@ -46,22 +48,19 @@ export default {
                     return res;
                 });
             }).then((res) => {
-                // get likes per deck
-                let deckIdsSet = new Set(res.map((deck) => deck._id));
-                let likePromises = [];
-                let likes = {};
-
-                for(let deckId of deckIdsSet){
-                    likePromises.push(rp.get({uri: `${Microservices.activities.uri}/activities/deck/${deckId}?metaonly=true&activity_type=react&all_revisions=true`}).then((noOfLikes) => {
-                        likes[deckId] = noOfLikes;
-                    }).catch( (err) => {
-                        likes[deckId] = 0;
-                    }));
-                }
+                let deckIds = res.map( (deck) => deck._id );
                 
-                return Promise.all(likePromises).then( () => { 
+                return Promise.all([ 
+                    getActivity('download', deckIds), 
+                    getActivity('react', deckIds),
+                    getActivity('share', deckIds),
+                    getSlidesAmount(deckIds)
+                ]).then( ([downloads, likes, shares, slides]) => {
                     res.forEach((deck) => {
-                        deck.likes = likes[deck._id];
+                        deck.downloadsCount = downloads[deck._id];
+                        deck.likesCount = likes[deck._id];
+                        deck.sharesCount = shares[deck._id];
+                        deck.slidesCount = slides[deck._id];
                     });
                     return res; 
                 });
@@ -102,6 +101,23 @@ export default {
                         }
                     });
                     return res;
+                });
+            }).then((res) => {
+                let deckIds = res.map( (deck) => deck._id );
+                
+                return Promise.all([ 
+                    getActivity('download', deckIds), 
+                    getActivity('react', deckIds),
+                    getActivity('share', deckIds),
+                    getSlidesAmount(deckIds)
+                ]).then( ([downloads, likes, shares, slides]) => {
+                    res.forEach((deck) => {
+                        deck.downloadsCount = downloads[deck._id];
+                        deck.likesCount = likes[deck._id];
+                        deck.sharesCount = shares[deck._id];
+                        deck.slidesCount = slides[deck._id];
+                    });
+                    return res; 
                 });
             }).then((res) => {
                 callback(null, {recent: addSlugs(res)});
@@ -386,7 +402,7 @@ export default {
 //            if (params.tags.length === 1 && params.tags[0].length === 0)
 //                params.tags = undefined;
 
-            // prepare tagName and defaultName to send to deck service
+            // prepare tag data to send to deck service
             let tagsPromise = Promise.resolve([]);
             if (params.tags && params.tags.length) {
                 // send tags to tag-service
@@ -397,10 +413,7 @@ export default {
                         user: params.userid,
                         tags: params.tags,
                     }
-                }).then((tags) => tags.map((t) => ({
-                    tagName: t.tagName,
-                    defaultName:  t.defaultName
-                })));
+                }).then((tags) => tags.map((t) => pick(t, 'tagType', 'tagName', 'defaultName')));
                 // TODO maybe catch an error here ?
             }
 
@@ -459,47 +472,45 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'deck.update') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            try {
-                if (params.tags.length === 1 && params.tags[0].length === 0)
-                    params.tags = undefined;
-            } catch (e) {
 
-            }
-
+            // fetch the tags data
             // we don't upload tags here as we don't expect user submitted tags here
+            let tagsPromise = fetchTagInfo(params.tags).then((tags) =>  tags.map((t) => pick(t, 'tagName', 'tagType', 'defaultName')));
+            // TODO maybe catch an error here ?
 
-            let toSend = {
-                description: params.description,
-                language: params.language,
-                tags: params.tags? params.tags: [],
-                title: params.title,
-                license: params.license,
-                theme: params.theme,
-                educationLevel: params.educationLevel,
-                allowMarkdown: params.allowMarkdown,
-                new_revision: false,
-                top_root_deck: String(params.selector.id),
-                tags: params.tags,
-                hidden: params.hidden,
-            };
-            // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
-            rp({
-                method: 'PUT',
-                uri: Microservices.deck.uri + '/deck/' + params.deckId,
-                json: true,
-                headers: {'----jwt----': params.jwt},
-                body: toSend
-            }).then((deck) => {
-                // support old style deck api response
-                // TODO remove this
-                if (deck.revisions) {
-                    if (!deck.id) deck.id = deck._id;
-                    deck.revision = deck.revisions[0].id;
-                    deck.title = deck.revisions[0].title;
+            tagsPromise.then((tags) => {
+                let toSend = {
+                    description: params.description,
+                    language: params.language,
+                    title: params.title,
+                    license: params.license,
+                    theme: params.theme,
+                    educationLevel: params.educationLevel,
+                    allowMarkdown: params.allowMarkdown,
+                    new_revision: false,
+                    top_root_deck: String(params.selector.id),
+                    tags: tags,
+                    hidden: params.hidden,
+                };
+                // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
+                return rp({
+                    method: 'PUT',
+                    uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                    json: true,
+                    headers: {'----jwt----': params.jwt},
+                    body: toSend
+                }).then((deck) => {
+                    // support old style deck api response
+                    // TODO remove this
+                    if (deck.revisions) {
+                        if (!deck.id) deck.id = deck._id;
+                        deck.revision = deck.revisions[0].id;
+                        deck.title = deck.revisions[0].title;
 
-                    delete deck.revisions;
-                }
-                return deck;
+                        delete deck.revisions;
+                    }
+                    return deck;
+                });
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
@@ -539,13 +550,8 @@ export default {
                 }
             }).then((tags) => {
 
-                // send tagName and defaultName to deck-service
-                let deckTags = tags.map( (t) => {
-                    return {
-                        tagName: t.tagName,
-                        defaultName:  t.defaultName
-                    };
-                });
+                // send tag data to deck-service
+                let deckTags = tags.map((t) => pick(t, 'tagType', 'tagName', 'defaultName'));
 
                 return rp.put({
                     uri: Microservices.deck.uri + '/deck/' + params.selector.sid + '/tags',
@@ -586,6 +592,45 @@ export default {
     }
     // delete: (req, resource, params, config, callback) => {}
 };
+
+function getActivity(activityType, deckIds) {
+    let activities = {};
+    
+    let activityPromises = deckIds.map( (deckId) => 
+        rp.get({
+            uri: `${Microservices.activities.uri}/activities/deck/${deckId}`, 
+            qs: {
+                metaonly: true, 
+                activity_type: activityType, 
+                all_revisions: true,
+            }
+        }).then((activity) => {
+            activities[deckId] = activity;
+        }).catch( (err) => {
+            activities[deckId] = 0;
+        }));
+
+    return Promise.all(activityPromises).then( () => { return activities; });
+}
+
+function getSlidesAmount(deckIds) {
+    let slidesAmounts = {};
+    
+    let slidesPromises = deckIds.map( (deckId) => 
+        rp.get({
+            uri: `${Microservices.deck.uri}/deck/${deckId}/slides`, 
+            qs: {
+                countOnly: true
+            },
+            json: true
+        }).then((noOfSlides) => {
+            slidesAmounts[deckId] = noOfSlides.slidesCount;
+        }).catch( (err) => {
+            slidesAmounts[deckId] = 0;
+        }));
+
+    return Promise.all(slidesPromises).then( () => { return slidesAmounts; });
+}
 
 function addSlugs(decks) {
     if (decks.forEach) {

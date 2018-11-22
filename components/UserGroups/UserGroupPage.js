@@ -24,7 +24,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
 
         return <Decks decks={this.props.UserProfileStore.userDecks}
@@ -42,7 +42,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
 
         return <GroupCollections group={this.props.UserGroupsStore.currentUsergroup}
@@ -54,11 +54,21 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
         const isMember = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid;
         });
+
+        // sort members by joined, current user first
+        if (this.props.UserGroupsStore.currentUsergroup) {
+            this.props.UserGroupsStore.currentUsergroup.members.sort((a, b) => {
+                if (a.userid === this.props.UserProfileStore.userid) return -1;
+                if (b.userid === this.props.UserProfileStore.userid) return 1;
+                return a.joined < b.joined ? -1 : 1;
+            });
+        }
+
         return <Details currentUsergroup={ this.props.UserGroupsStore.currentUsergroup }
             isAdmin={ isAdmin } isCreator={ isCreator } isMember={isMember}
             saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError}
@@ -114,7 +124,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
         return (
           <div className = "ui vertically padded stackable grid container" >

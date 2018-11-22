@@ -1,13 +1,14 @@
 import React from 'react';
+import StaticPage from './StaticPage';
 
 class Imprint extends React.Component {
     render() {
         return (
-            <div className="ui container grid" ref="imprint">
-                <div className="ui row">
-                    <div className="twelve wide centered column">
+            <StaticPage>
+                <div className="ui container grid" ref="imprint">
+                    <div className="ui row">
                         <div className="ui content">
-                            <h2 className="ui header">Imprint – also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)</h2>
+                            <h1 className="ui header">Imprint – also serves as provider identification according to &sect; 5 Telemediengesetz (TMG)</h1>
                             <h3>Provider:</h3>
                             <p>Technische Informationsbibliothek (TIB)<br/>Welfengarten 1 B, 30167 Hannover<br/><br/>Postfach 6080, 30060 Hannover</p>
                             <h3>Authorised Representative:</h3>
@@ -34,9 +35,10 @@ class Imprint extends React.Component {
                             We cannot assume any liability for the content of external pages. Solely the operators of those linked pages are responsible for their content.
                             </p>
                         </div>
+                
                     </div>
                 </div>
-            </div>
+            </StaticPage>
         );
     }
 }

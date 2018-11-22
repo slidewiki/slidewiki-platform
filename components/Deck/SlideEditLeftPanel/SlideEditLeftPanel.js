@@ -14,13 +14,14 @@ import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick'
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
-import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal'; 
+import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal';
 import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import DeckPageStore from '../../../stores/DeckPageStore';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import changeTitle from '../../../actions/slide/changeTitle';
 import changeSlideSize from '../../../actions/slide/changeSlideSize';
+import changeSlideTransition from '../../../actions/slide/changeSlideTransition';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import PaintModal from '../../Paint/PaintModal';
 
@@ -43,6 +44,7 @@ class SlideEditLeftPanel extends React.Component {
             showProperties: false,
             showNameChange: false,
             showSize: false,
+            showTransition: false,
             showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
             deckID: this.props.DeckPageStore.selector.id,
@@ -56,6 +58,17 @@ class SlideEditLeftPanel extends React.Component {
             colorPopupIsOpen: false,
             editText: false
         };
+
+        this.messages = defineMessages({
+            transitionAlertTitle: {
+                id: 'slideEditLeftPanel.transitionAlertTitle',
+                defaultMessage: 'Changing Transition for the presentation'
+            },
+            transitionAlertContent: {
+                id: 'slideEditLeftPanel.transitionAlertContent',
+                defaultMessage: 'This transition will be used for the transition to this slide, do you want to proceed?'
+            }
+        });
     }
     componentDidUpdate(prevProps, prevState){
         if (prevState.showTemplate !== this.state.showTemplate ||
@@ -64,6 +77,7 @@ class SlideEditLeftPanel extends React.Component {
             prevState.showProperties !== this.state.showProperties ||
             prevState.showTitleChange !== this.state.showTitleChange ||
             prevState.showSize !== this.state.showSize ||
+            prevState.showTransition !== this.state.showTransition ||
             prevState.showBackground !== this.state.showBackground)
         {
             //set focus on buttons depending on submenu navigation
@@ -86,7 +100,7 @@ class SlideEditLeftPanel extends React.Component {
             });
         }
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.setState({ slideSizeText: nextProps.SlideEditStore.slideSizeText });
         if(nextProps.SlideEditStore.contentEditorFocus !== this.props.SlideEditStore.contentEditorFocus
@@ -234,6 +248,11 @@ class SlideEditLeftPanel extends React.Component {
             backgroundColor: $('.pptx2html').css('background-color')
         });
     }
+    changeSlideTransitionClick(){
+        this.setState({showTransition: true});
+        this.setState({showProperties: false});
+        this.forceUpdate();
+    }
     changeSlideSizeClick(){
         //console.log('change slide size button clicked');
         this.setState({showSize: true});
@@ -249,6 +268,32 @@ class SlideEditLeftPanel extends React.Component {
             });
             //this.forceUpdate();
         }
+    }
+    handleSlideTransitionchange(slideTransition){
+        if(slideTransition !== ''){
+            swal({
+                title: this.context.intl.formatMessage(this.messages.transitionAlertTitle),
+                text: this.context.intl.formatMessage(this.messages.transitionAlertContent),
+                type: 'warning',
+                showCloseButton: false,
+                showCancelButton: true,
+                allowEscapeKey: true,
+                showConfirmButton: true
+            }).then(() => {
+                this.setState({showTemplate: false});
+                this.setState({showProperties: true});
+                this.context.executeAction(changeSlideTransition, {
+                    //slideSize: this.refs.template.slideSize
+                    slideTransition: slideTransition
+                });
+            });
+        }
+    }
+    changeSlideBackgroundClick(){
+        //console.log('change slide background clicked');
+        this.setState({showBackground: true});
+        this.setState({showProperties: false});
+        this.forceUpdate();
     }
     changeBackgroundColor(){
         this.setState({
@@ -315,6 +360,7 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showEmbed: false});
         this.setState({showProperties: false});
         this.setState({showSize: false});
+        this.setState({showTransition: false});
         this.forceUpdate();
     }
     handleChangeBackgroundColorClick(){
@@ -390,6 +436,9 @@ class SlideEditLeftPanel extends React.Component {
                 case 'changeSlideSizeClick':
                     this.changeSlideSizeClick();
                     break;
+                case 'changeSlideTransitionClick':
+                    this.changeSlideTransitionClick();
+                    break;
                 case 'handleSlideSizeChange':
                     this.handleSlideSizeChange(slideSize);
                     break;
@@ -425,7 +474,7 @@ class SlideEditLeftPanel extends React.Component {
         const error = {
             color: 'red',
         };
-        let selectorImm = this.props.DeckTreeStore.selector; 
+        let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')}; /*is this line still needed */
         //let selectorDeck = this.props.DeckPageStore.selector;
         let selectorDeck = {id: this.props.DeckPageStore.selector.id, stype: 'deck', sid: this.props.DeckPageStore.selector.id};
@@ -619,10 +668,13 @@ class SlideEditLeftPanel extends React.Component {
                                     size: this.state.slideSizeText,
                                 }}
                                 defaultMessage={'(current: {size})'}/>
-                    </a>
-                 <Popup id='colorpopup' trigger={
+                  </a>
+                  <a className="item" id="changeSlideTransitionClick" role="button" onClick={this.changeSlideTransitionClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideTransitionClick')}>
+                      <i tabIndex="0" className="share square icon"></i><FormattedMessage id='editpanel.slideTransition' defaultMessage='Slide Transition' />
+                  </a>
+                  <Popup id='colorpopup' trigger={
                       <a className="item" id="handleChangeBackgroundColor" role="button" onClick={this.handleChangeBackgroundColorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleChangeBackgroundColorClick')}>
-                          <i tabIndexn="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
+                          <i tabIndex="0"  className="tint icon"></i><FormattedMessage id='editpanel.changeBackgroundColor' defaultMessage='Change Background Colour' />
                       </a>
                     }
                     content={
@@ -699,6 +751,40 @@ class SlideEditLeftPanel extends React.Component {
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1080p.png" alt="template - Title and bullets" />
               </a>
             </div>);
+
+        // none, default, convex-in fade-out, zoom, slide, slide-in fade-out, fade-in slide-out, zoom-in fade-out, convex, convex-in concave-out, concave
+        // default, fast or slow
+        // TODO: make gif animations of transitions
+        let transitionContent = (
+            <div >
+              <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                  <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'none')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'none')}>
+                  <i tabIndex="0" className="eye slash outline icon"></i><FormattedMessage id='transitionpanel.none' defaultMessage='No slide transition' />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'convex')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'convex')}>
+                  <i tabIndex="0" aria-label="Convex slide transition"><FormattedMessage id='transitionpanel.convex' defaultMessage='Convex' /></i>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/convex.gif" alt="Convex slide transition" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'fade')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'fade')}>
+                  <i tabIndex="0" aria-label="Fade slide transition"><FormattedMessage id='transitionpanel.fade' defaultMessage='Fade' /></i>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/fade.gif" alt="Fade slide transition" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'slide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'slide')}>
+                  <i tabIndex="0" aria-label="Slide slide transition"></i><FormattedMessage id='transitionpanel.slide' defaultMessage='Slide' />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/slide.gif" alt="Slide slide transition" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'zoom')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'zoom')}>
+                  <i tabIndex="0" aria-label="Zoom slide transition"></i><FormattedMessage id='transitionpanel.zoom' defaultMessage='Zoom' />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/zoom.gif" alt="Zoom slide transition" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'concave')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'concave')}>
+                  <i tabIndex="0" aria-label="Concave slide transition"></i><FormattedMessage id='transitionpanel.concave' defaultMessage='Concave' />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/concave.gif" alt="Concave slide transition" />
+              </a>
+            </div>);
+
         let normalContent = (
           <div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
@@ -740,13 +826,22 @@ class SlideEditLeftPanel extends React.Component {
             panelcontent = titleChangeContent;
         } else if (this.state.showSize){
             panelcontent = sizeContent;
+        } else if (this.state.showTransition){
+            panelcontent = transitionContent;
         } else {
             panelcontent = normalContent;
         }
-        
+
         const tabActive = {
             background: '#767676',
             color: '#ffffff'
+        };
+
+        const editorStyle = {
+            //!this.state.editText ? {display: 'none'} ,
+            display: !this.state.editText ? 'none' : 'block',
+            maxWidth: 250,
+            margin: '0 auto'
         };
 
         return (
@@ -757,7 +852,7 @@ class SlideEditLeftPanel extends React.Component {
                     <button className="ui button" style={this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, true)}>Edit</button>
                 </div>
               <div className="ui grey inverted segment bottom attached active tab">
-                <div id="CKeditorMenu" style={!this.state.editText ? {display: 'none'} : {}}></div>
+                <div id="CKeditorMenu" style={editorStyle}></div>
                 <div className="ui center aligned grid" style={this.state.editText ? {display: 'none'} : {}}>
                     <div className="ui vertical labeled icon grey inverted large menu">
                           {panelcontent}

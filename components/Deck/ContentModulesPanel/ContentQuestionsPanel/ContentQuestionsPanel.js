@@ -123,13 +123,16 @@ class ContentQuestionsPanel extends React.Component {
             </button>
         ;
 
+        let downloadQuestionsButton = (questions.length > 0) ? <QuestionDownloadModal />: '';
+
         let editButtons = (editPermission) ? <div>
                 {addQuestionButton}
                 {examQuestionsButton}
+                {downloadQuestionsButton}
             </div>
             : '';
 
-        let downloadQuestionsButton = <QuestionDownloadModal />;
+
 
         /*
         let addQuestionButton = (
@@ -160,7 +163,6 @@ class ContentQuestionsPanel extends React.Component {
                                 </div>
                                 <div className="twelve wide column right aligned">
                                     {editButtons}
-                                    {downloadQuestionsButton}
                                 </div>
                             </div>
                         </div>

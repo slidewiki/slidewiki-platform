@@ -109,9 +109,9 @@ class SearchResultsItem extends React.Component {
                                     <Label size="small">
                                         <Icon name="comments" aria-label="Language"/>{ this.getLanguageName(result.language) }
                                     </Label>
-                                    <Label size="small">
+                                    {/*<Label size="small">
                                        <Icon name="block layout" aria-label="Number of slides"/>{result.noOfSlides}
-                                    </Label>
+                                    </Label>*/}
                                     { result.educationLevel &&
                                     <div className="ui label" >
                                         <i className="university icon" aria-label="Education Level"></i>{getEducationLevel(result.educationLevel)}

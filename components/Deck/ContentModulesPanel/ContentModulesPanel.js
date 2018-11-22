@@ -223,7 +223,7 @@ class ContentModulesPanel extends React.Component {
                     });
                     
                     //hide tags and playlists for slide view
-                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists')) {
+                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
                         return;
                     }
                     
@@ -263,8 +263,9 @@ class ContentModulesPanel extends React.Component {
         });
         
         return (
-            <div ref="contentModulesPanel" role="tabpanel">
-                <div style={pointingMenuStyle}>
+            <div ref="contentModulesPanel" >
+                <h2 className="sr-only">Content Tools</h2>
+                <div style={pointingMenuStyle} role="tabpanel">
                     {pointingMenu}
                 </div>
                 <div style={mobileMenuStyle}>

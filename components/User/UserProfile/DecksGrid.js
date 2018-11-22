@@ -6,7 +6,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from './../../../common';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
-class PublicUserDecks extends React.Component {
+class DecksGrid extends React.Component {
 
     render() {
         let size = 0;
@@ -40,13 +40,13 @@ class PublicUserDecks extends React.Component {
     }
 }
 
-PublicUserDecks.contextTypes = {
+DecksGrid.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
-PublicUserDecks = connectToStores(PublicUserDecks, [UserProfileStore], (context, props) => {
+DecksGrid = connectToStores(DecksGrid, [UserProfileStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 
-export default PublicUserDecks;
+export default DecksGrid;
