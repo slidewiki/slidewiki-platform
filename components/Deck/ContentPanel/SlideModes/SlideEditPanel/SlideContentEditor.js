@@ -2686,19 +2686,18 @@ class SlideContentEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="ui horizontal segments">
-                    {
-                        this.props.hideSpeakerNotes ?  null :
-                        <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
-                                style={compSpeakerStyle}>
-                            <b>Speaker notes:</b><br />
-                            <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
-                                    ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
-                                    dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                { this.props.hideSpeakerNotes ? null :
+                    <div className="ui horizontal segments">
+                            <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
+                                    style={compSpeakerStyle}>
+                                <b>Speaker notes:</b><br />
+                                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
+                                        ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
+                                        dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         );
     }

@@ -51,10 +51,14 @@ class SlideViewPanel extends React.Component {
             }
         }
         if (this.currentID === selector.sid){
+            let hideSpeakerNotes = true;
+            if (this.props.SlideViewStore.speakernotes !== '' && this.props.SlideViewStore.speakernotes !== ' '){hideSpeakerNotes = false;}
+
             this.slideContentView = (
                 <div className="ui bottom attached segment">
                     <SlideContentView content={this.props.SlideViewStore.content}
                             speakernotes={this.props.SlideViewStore.speakernotes}
+                            hideSpeakerNotes={hideSpeakerNotes}
                             theme={deckTheme}/>
                 </div>);
         } else {
