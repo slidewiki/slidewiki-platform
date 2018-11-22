@@ -6,6 +6,7 @@ import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import loadQuestion from '../../../../actions/questions/loadQuestion';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentQuestionAnswersList extends React.Component {
 
@@ -32,7 +33,9 @@ class ContentQuestionAnswersList extends React.Component {
         const editButton = (
             <button className="ui compact button primary" onClick={this.handleEditButtonClick}>
                 <i className="edit icon" />
-                Edit question
+                <FormattedMessage
+                    id='ContentQuestionAnswersList.form.button_edit'
+                    defaultMessage='Edit question' />
             </button>
         );
 
@@ -60,11 +63,25 @@ class ContentQuestionAnswersList extends React.Component {
         let explanation = (this.props.explanation && this.props.explanation.trim() !== '') ?
             <div className="description">
                 <p>
-                    <label><strong>Explanation:</strong></label> {this.props.explanation}
+                    <label><strong>
+                        <FormattedMessage
+                            id='ContentQuestionAnswersList.form.explanation'
+                            defaultMessage='Explanation:' />
+                    </strong></label> {this.props.explanation}
                 </p>
             </div>
         : '';
-        let showButtonLabel = this.state.showCorrect ? 'Hide answer' : 'Show answer';
+        const form_messages = defineMessages({
+            button_answer_show: {
+                id: 'ContentQuestionAnswersList.form.button_answer_show',
+                defaultMessage: 'Hide answer',
+            },
+            button_answer_hide: {
+                id: 'ContentQuestionAnswersList.form.button_answer_hide',
+                defaultMessage: 'Show answer',
+            }
+        });
+        let showButtonLabel = this.context.intl.formatMessage(this.state.showCorrect ? form_messages.button_answer_hide : form_messages.button_answer_show);
         let answers = (
             <div className="ui two column stackable grid">
                 <div className="column">
@@ -101,7 +118,8 @@ class ContentQuestionAnswersList extends React.Component {
 }
 
 ContentQuestionAnswersList.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequiredd,
+    intl: PropTypes.object.isRequired
 };
 
 ContentQuestionAnswersList = connectToStores(ContentQuestionAnswersList, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {

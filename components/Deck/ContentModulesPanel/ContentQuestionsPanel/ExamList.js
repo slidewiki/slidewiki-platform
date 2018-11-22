@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
@@ -8,6 +9,7 @@ import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import Util from '../../../common/Util';
 import showCorrectExamAnswers from '../../../../actions/questions/showCorrectExamAnswers';
 import addActivity from '../../../../actions/activityfeed/addActivity';
+import { FormattedMessage, defineMessages } from 'react-intl';
 class ExamList extends React.Component {
     getPath(){
         const selector = this.props.selector;
@@ -50,9 +52,19 @@ class ExamList extends React.Component {
             }
         });
         const roundedScore = Math.round((questions.length - errorsCount) / questions.length * 100);
+        const swal_messages = defineMessages({
+            title: {
+                id: 'ExamList.swal.title',
+                defaultMessage: 'Exam submitted',
+            },
+            text: {
+                id: 'ExamList.swal.text',
+                defaultMessage: 'Your score:',
+            }
+        });
         swal({
-            title: 'Exam submitted',
-            text: 'Your score: ' + roundedScore + ' %',
+            title: context.intl.formatMessage(swal_messages.title),
+            text: context.intl.formatMessage(swal_messages.text) + ' ' + roundedScore + ' %',
             type: 'success',
             showCloseButton: false,
             showCancelButton: false,
@@ -86,10 +98,16 @@ class ExamList extends React.Component {
                 {list}
                 <div className="ui hidden divider" />
                 <button type="submit" className="ui blue labeled submit icon button" disabled={showCorrectAnswers}>
-                    <i className="icon checkmark"/>Submit answers
+                    <i className="icon checkmark"/>
+                    <FormattedMessage
+                        id='ExamList.form.button_submit'
+                        defaultMessage='Submit answers' />
                 </button>
                 <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
-                    <i className="icon close" />Cancel
+                    <i className="icon close" />
+                    <FormattedMessage
+                        id='ExamList.form.button_cancel'
+                        defaultMessage='Cancel' />
                 </button>
               </form>
             </div>
@@ -97,7 +115,8 @@ class ExamList extends React.Component {
     }
 }
 ExamList.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ExamList = connectToStores(ExamList, [UserProfileStore, DeckTreeStore, ContentQuestionsStore], (context, props) => {
     return {

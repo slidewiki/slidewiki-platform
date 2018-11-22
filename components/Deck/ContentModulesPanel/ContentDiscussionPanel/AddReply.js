@@ -37,12 +37,8 @@ class AddReply extends React.Component {
 
     render() {
         const form_messages = defineMessages({
-            reply_title_placeholder: {
-                id: 'AddReply.form.comment_title_placeholder',
-                defaultMessage: 'Title',
-            },
             reply_text_placeholder: {
-                id: 'AddReply.form.comment_text_placeholder',
+                id: 'AddReply.form.reply_text_placeholder',
                 defaultMessage: 'Text',
             }
         });
