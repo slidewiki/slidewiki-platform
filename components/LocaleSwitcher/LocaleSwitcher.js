@@ -49,10 +49,14 @@ class LocaleSwitcher extends React.Component {
         switch (this.props.mode) {
             case 'sidebar':
                 return(
-                  <div key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className="item">
-                    {flag ? <i className={`flag ${flag}`} /> : <span><i className='flag icon' /></span>}
-                    {getLanguageName(locale)}
-                  </div>
+                    <a
+                        href='#'
+                        key={locale}
+                        onClick={this.handleLocaleClick.bind(this, locale)}
+                        href={`?locale=${locale}`} className="item">
+                            {flag ? <i className={`flag ${flag}`} /> : <span><i className='flag icon' /></span>}
+                            {getLanguageName(locale)}
+                    </a>
                 );
                 break;
             default:
