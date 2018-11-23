@@ -21,7 +21,33 @@ class UserMenuDropdown extends React.Component {
         };
         this.onHandleSelection = this.onHandleSelection.bind(this);
 
-        this.messages = defineMessages({
+    }
+    componentDidMount(){
+        if(this.props.UserProfileStore.userpicture === undefined)
+            this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
+
+        this.context.executeAction(loadNewUserNotificationsCount, { uid: this.props.UserProfileStore.userid });
+    }
+
+    componentDidUpdate() {
+
+        if(this.props.UserProfileStore.userpicture === undefined)
+            this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
+    }
+
+    onHandleSelection(value, event) {
+        if(value === 'logout')
+            this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
+        else
+            this.context.executeAction(navigateAction, {url: value});
+
+    }
+
+
+
+
+    render() {
+        const messages = defineMessages({
             myDecks: {
                 id: 'UserMenuDropdown.mydecks',
                 defaultMessage: 'My Decks'
@@ -67,32 +93,7 @@ class UserMenuDropdown extends React.Component {
                 defaultMessage: 'Sign Out'
             },            
         });
-    }
-    componentDidMount(){
-        if(this.props.UserProfileStore.userpicture === undefined)
-            this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
 
-        this.context.executeAction(loadNewUserNotificationsCount, { uid: this.props.UserProfileStore.userid });
-    }
-
-    componentDidUpdate() {
-
-        if(this.props.UserProfileStore.userpicture === undefined)
-            this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
-    }
-
-    onHandleSelection(value, event) {
-        if(value === 'logout')
-            this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
-        else
-            this.context.executeAction(navigateAction, {url: value});
-
-    }
-
-
-
-
-    render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
         const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
         const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" style={{'marginTop':'0.5em'}}/>) : '';
@@ -115,9 +116,10 @@ class UserMenuDropdown extends React.Component {
                    key= {0}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username}
-                   text={this.context.intl.formatMessage(this.messages.myDecks)}>
+                   text= {this.context.intl.formatMessage(messages.myDecks)}
+                   >
                    <span style={{color:'black'}}>
-                   <i className="user icon link"  aria-hidden={true} />{this.context.intl.formatMessage(this.messages.decks)}
+                   <i className="user icon link"  aria-hidden={true} />{<FormattedMessage{...messages.decks} />}
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -125,9 +127,9 @@ class UserMenuDropdown extends React.Component {
                    key= {5}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/playlists'}
-                   text={this.context.intl.formatMessage(this.messages.myPlaylists)}>
+                   text={this.context.intl.formatMessage(messages.myPlaylists)}>
                    <span style={{color:'black'}}>
-                   <i className="grid layout icon"  aria-hidden={true} />{this.context.intl.formatMessage(this.messages.playlists)}
+                   <i className="grid layout icon"  aria-hidden={true} />{<FormattedMessage{...messages.playlists} />}
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -135,9 +137,9 @@ class UserMenuDropdown extends React.Component {
                    key= {1}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}
-                   text={this.context.intl.formatMessage(this.messages.myGroups)}>
+                   text={this.context.intl.formatMessage(messages.myGroups)}>
                    <span style={{color:'black'}}>
-                   <i className="icon users" aria-hidden={true} />{this.context.intl.formatMessage(this.messages.groups)} 
+                   <i className="icon users" aria-hidden={true} />{<FormattedMessage{...messages.groups} />} 
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -145,9 +147,9 @@ class UserMenuDropdown extends React.Component {
                    key= {2}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}
-                   text={this.context.intl.formatMessage(this.messages.mySettings)}>
+                   text={this.context.intl.formatMessage(messages.mySettings)}>
                     <span style={{color:'black'}}>
-                   <i className="setting icon" aria-hidden={true} />{this.context.intl.formatMessage(this.messages.settings)}
+                   <i className="setting icon" aria-hidden={true} />{<FormattedMessage{...messages.settings} />}
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -155,9 +157,9 @@ class UserMenuDropdown extends React.Component {
                    key= {3}
                    tag='li'
                    value={'/notifications'}
-                   text={this.context.intl.formatMessage(this.messages.myNotifications)}>
+                   text={this.context.intl.formatMessage(messages.myNotifications)}>
                    <span style={{color:'black'}}>
-                   <i className={alarmClassName} aria-hidden={true} />{this.context.intl.formatMessage(this.messages.notifications)}
+                   <i className={alarmClassName} aria-hidden={true} />{<FormattedMessage{...messages.notifications}/>}
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -165,9 +167,9 @@ class UserMenuDropdown extends React.Component {
                    key= {4}
                    tag='li'
                    value={'logout'}
-                   text={this.context.intl.formatMessage(this.messages.signout)}>
+                   text={this.context.intl.formatMessage(messages.signout)}>
                    <span style={{color:'black'}}>
-                    <i className="sign out icon" aria-hidden={true} />{this.context.intl.formatMessage(this.messages.signout)}
+                    <i className="sign out icon" aria-hidden={true} />{<FormattedMessage{...messages.signout}/>}
                     </span>
                   </AriaMenuButton.MenuItem>
                 </AriaMenuButton.Menu>
@@ -177,7 +179,8 @@ class UserMenuDropdown extends React.Component {
 }
 
 UserMenuDropdown.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 UserMenuDropdown = connectToStores(UserMenuDropdown, [UserProfileStore, UserNotificationsStore], (context, props) => {

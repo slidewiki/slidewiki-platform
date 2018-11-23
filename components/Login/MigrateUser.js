@@ -122,7 +122,7 @@ class MigrateUser extends React.Component {
             <div>
                 <b><FormattedMessage id="Migrate.text1" defaultMessage="We are merging your user account. This will take just a few seconds."/>
                 <br/>
-                <FormattedMessage id="Migrate.text1" defaultMessage="You will be directed to next view."/>
+                <FormattedMessage id="Migrate.text2" defaultMessage="You will be directed to next view."/>
                 </b>
                 <ReviseUser ref='modal' hash={this.hash} />
             </div>
