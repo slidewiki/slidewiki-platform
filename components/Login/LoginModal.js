@@ -338,6 +338,14 @@ class LoginModal extends React.Component {
                 id:'userSignIn.headerText',
                 defaultMessage:'Sign In'
             },
+            aria_google:{
+                id: 'LoginModal.aria.google',
+                defaultMessage: 'sign in with your Google account'
+            },
+            aria_github:{
+                id: 'LoginModal.aria.github',
+                defaultMessage: 'sign in with your Github account'
+            }
         });
 
         let inputs =
@@ -422,10 +430,10 @@ class LoginModal extends React.Component {
                       <br/>
                       <div className="container">
 
-                        <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label="sign in with your Google account">
+                        <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.aria_google)}>
                           <i className="large google plus icon"/>
                         </button>
-                        <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label="sign in with your Github account">
+                        <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.aria_github)}>
                           <i className="large github icon"/>
                         </button>
                       </div>

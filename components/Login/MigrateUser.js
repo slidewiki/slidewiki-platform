@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 import ReviseUser from './ReviseUser';
 let classNames = require('classnames');
 import updateSSOData from '../../actions/user/updateSSOData';
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 
 const MODI = 'sso_modi';
 const NAME = 'sso_data';
@@ -43,10 +45,19 @@ class MigrateUser extends React.Component {
                     onDeny    : function(){
                         console.log('Modal closed');
                         swal({
-                            title: 'Modal closed',
-                            text: 'The modal was closed. It is needed for completion, thus this page will be reloaded in order to show the modal again.',
+                            title: this.context.intl.formatMessage({
+                                id: 'Migrate.closed',
+                                defaultMessage: 'Modal closed'
+                            }),
+                            text: this.context.intl.formatMessage({
+                                id: 'Migrate.closed.text',
+                                defaultMessage: 'The modal was closed. It is needed for completion, thus this page will be reloaded in order to show the modal again.'
+                            }),
                             type: 'warning',
-                            confirmButtonText: 'Confirm',
+                            confirmButtonText: this.context.intl.formatMessage({
+                                id: 'Migrate.confirm',
+                                defaultMessage: 'Confirm'
+                            }),
                             confirmButtonClass: 'negative ui button',
                             buttonsStyling: false
                         }).then(() => {location.reload();}).catch();
@@ -60,10 +71,19 @@ class MigrateUser extends React.Component {
         }
         else {
             swal({
-                title: 'Data Error',
-                text: 'There was an error with the URL data. Either you used the wrong URL or there was an implementation error. The window will be closed now.',
+                title: this.context.intl.formatMessage({
+                    id: 'Migrate.error',
+                    defaultMessage: 'Data Error'
+                }),
+                text: this.context.intl.formatMessage({
+                    id: 'Migrate.error.text',
+                    defaultMessage: 'There was an error with the URL data. Either you used the wrong URL or there was an implementation error. The window will be closed now.'
+                }),
                 type: 'error',
-                confirmButtonText: 'Confirm',
+                confirmButtonText: this.context.intl.formatMessage({
+                    id: 'Migrate.confirm',
+                    defaultMessage: 'Confirm'
+                }),
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             }).then(() => {
@@ -100,7 +120,10 @@ class MigrateUser extends React.Component {
     render() {
         return (
             <div>
-                <b>We are merging your user account. This will take just a few seconds.<br/>You will be directed to next view.</b>
+                <b><FormattedMessage id="Migrate.text1" defaultMessage="We are merging your user account. This will take just a few seconds."/>
+                <br/>
+                <FormattedMessage id="Migrate.text1" defaultMessage="You will be directed to next view."/>
+                </b>
                 <ReviseUser ref='modal' hash={this.hash} />
             </div>
         );
