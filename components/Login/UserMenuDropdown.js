@@ -9,6 +9,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import UserNotificationsStore from '../../stores/UserNotificationsStore';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 import AriaMenuButton from 'react-aria-menubutton';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 
 class UserMenuDropdown extends React.Component {
@@ -19,6 +20,53 @@ class UserMenuDropdown extends React.Component {
             userMenuButtonExpanded : false
         };
         this.onHandleSelection = this.onHandleSelection.bind(this);
+
+        this.messages = defineMessages({
+            myDecks: {
+                id: 'UserMenuDropdown.mydecks',
+                defaultMessage: 'My Decks'
+            },
+            decks: {
+                id: 'UserMenuDropdown.decks',
+                defaultMessage: 'Decks'
+            },
+            myPlaylists: {
+                id: 'UserMenuDropdown.myplaylists',
+                defaultMessage: 'My Playlists'
+            },
+            playlists: {
+                id: 'UserMenuDropdown.playlists',
+                defaultMessage: 'Playlists'
+            },
+            myGroups: {
+                id: 'UserMenuDropdown.mygroups',
+                defaultMessage: 'My Groups'
+            },
+            groups: {
+                id: 'UserMenuDropdown.groups',
+                defaultMessage: 'Groups'
+            },
+            mySettings: {
+                id: 'UserMenuDropdown.mySettings',
+                defaultMessage: 'My Settings'
+            },
+            settings: {
+                id: 'UserMenuDropdown.settings',
+                defaultMessage: 'Settings'
+            },
+            myNotifications: {
+                id: 'UserMenuDropdown.myNotifications',
+                defaultMessage: 'My Notifications'
+            },
+            notifications: {
+                id: 'UserMenuDropdown.notifications',
+                defaultMessage: 'Notifications'
+            },
+            signout: {
+                id: 'UserMenuDropdown.signout',
+                defaultMessage: 'Sign Out'
+            },            
+        });
     }
     componentDidMount(){
         if(this.props.UserProfileStore.userpicture === undefined)
@@ -67,36 +115,39 @@ class UserMenuDropdown extends React.Component {
                    key= {0}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username}
-                   text='My Decks'>
+                   text={this.context.intl.formatMessage(this.messages.myDecks)}>
                    <span style={{color:'black'}}>
-                   <i className="user icon link"  aria-hidden={true} />Decks</span>
+                   <i className="user icon link"  aria-hidden={true} />{this.context.intl.formatMessage(this.messages.decks)}
+                   </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className='item'
                    key= {5}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/playlists'}
-                   text='My Playlists'>
+                   text={this.context.intl.formatMessage(this.messages.myPlaylists)}>
                    <span style={{color:'black'}}>
-                   <i className="grid layout icon"  aria-hidden={true} />Playlists</span>
+                   <i className="grid layout icon"  aria-hidden={true} />{this.context.intl.formatMessage(this.messages.playlists)}
+                   </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className='item'
                    key= {1}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}
-                   text='My Groups'>
+                   text={this.context.intl.formatMessage(this.messages.myGroups)}>
                    <span style={{color:'black'}}>
-                   <i className="icon users" aria-hidden={true} />Groups </span>
+                   <i className="icon users" aria-hidden={true} />{this.context.intl.formatMessage(this.messages.groups)} 
+                   </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className="item"
                    key= {2}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}
-                   text=' My Settings'>
+                   text={this.context.intl.formatMessage(this.messages.mySettings)}>
                     <span style={{color:'black'}}>
-                   <i className="setting icon" aria-hidden={true} />Settings
+                   <i className="setting icon" aria-hidden={true} />{this.context.intl.formatMessage(this.messages.settings)}
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -104,9 +155,9 @@ class UserMenuDropdown extends React.Component {
                    key= {3}
                    tag='li'
                    value={'/notifications'}
-                   text='My Notifications'>
+                   text={this.context.intl.formatMessage(this.messages.myNotifications)}>
                    <span style={{color:'black'}}>
-                   <i className={alarmClassName} aria-hidden={true} />Notifications
+                   <i className={alarmClassName} aria-hidden={true} />{this.context.intl.formatMessage(this.messages.notifications)}
                    </span>
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
@@ -114,9 +165,9 @@ class UserMenuDropdown extends React.Component {
                    key= {4}
                    tag='li'
                    value={'logout'}
-                   text='Sign Out'>
+                   text={this.context.intl.formatMessage(this.messages.signout)}>
                    <span style={{color:'black'}}>
-                    <i className="sign out icon" aria-hidden={true} /> Sign Out
+                    <i className="sign out icon" aria-hidden={true} />{this.context.intl.formatMessage(this.messages.signout)}
                     </span>
                   </AriaMenuButton.MenuItem>
                 </AriaMenuButton.Menu>
