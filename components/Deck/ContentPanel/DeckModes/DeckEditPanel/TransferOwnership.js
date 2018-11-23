@@ -38,11 +38,11 @@ class TransferOwnership extends React.Component {
             },
             continue: {
                 id: 'TransferOwnership.continue',
-                defaultMessage: 'Transfer ownership'
+                defaultMessage: 'Transfer deck'
             },
             delete: {
                 id: 'TransferOwnership.delete',
-                defaultMessage: 'Delete'
+                defaultMessage: 'Delete deck'
             },
         });
 
@@ -124,7 +124,7 @@ class TransferOwnership extends React.Component {
                   <Container>
                     <Segment color="blue">
                       <Segment basic>
-      									<p>There are {this.props.users.length} users which have edit rights to this deck. You can make one of them the new deck owner, or delete the deck altogether.
+      									<p>Other users have rights to edit this deck. You can transfer the deck to another editor or delete the deck for everyone.
                         </p>
       									<Menu size='small' vertical style={{width: '100%'}}>
       											{editors}

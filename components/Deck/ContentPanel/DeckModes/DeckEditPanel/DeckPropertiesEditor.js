@@ -120,7 +120,7 @@ class DeckPropertiesEditor extends React.Component {
                     title: 'Success',
                     text: 'The deck was deleted.',
                     type: 'success',
-                    confirmButtonText: 'Confirm',
+                    confirmButtonText: 'OK',
                     confirmButtonClass: 'positive ui button',
                     allowEscapeKey: true,
                     allowOutsideClick: false,
@@ -350,6 +350,7 @@ class DeckPropertiesEditor extends React.Component {
                 type: 'warning',
                 allowEscapeKey: true,
                 showConfirmButton: true,
+                buttonsStyling: false
             });
 
             return;
@@ -358,10 +359,11 @@ class DeckPropertiesEditor extends React.Component {
         if (hasSubdecks) {
             swal({
                 title: 'Deck cannot be deleted',
-                text: 'You can only delete decks when they have no subdecks. Please remove any subdecks first and try again',
+                text: 'You can only delete decks with no sub-decks. Please remove the sub-decks first and try again.',
                 type: 'warning',
                 allowEscapeKey: true,
                 showConfirmButton: true,
+                buttonsStyling: false
             });
 
             return;
@@ -372,12 +374,13 @@ class DeckPropertiesEditor extends React.Component {
             // no editors - could just be deleted
             swal({
                 title: 'Delete this deck?',
-                text: `Do you really want to delete the deck: "${this.props.DeckEditStore.deckProps.title}" (ID: ${deckId})?`,
+                text: `Do you want to delete the deck "${this.props.DeckEditStore.deckProps.title}"? his action can not be reverted.`,
                 type: 'question',
                 showCloseButton: false,
                 showCancelButton: true,
                 allowEscapeKey: true,
-                showConfirmButton: true
+                showConfirmButton: true,
+                buttonsStyling: false
             })
             .then(() => {
                 this.context.executeAction(deckDeletion, {id: deckId});
@@ -635,9 +638,9 @@ class DeckPropertiesEditor extends React.Component {
                 </div>
             </div>;
 
-        let deleteButton = (this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? 
+        let deleteButton = (this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ?
             <button className='ui negative right floated button'
-                onClick={this.handleDelete.bind(this)}>Delete
+                onClick={this.handleDelete.bind(this)}>Delete Deck
             </button>
             : '';
 
