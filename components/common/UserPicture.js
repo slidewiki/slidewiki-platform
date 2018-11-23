@@ -42,11 +42,11 @@ class UserPicture extends React.Component {
             picture = <div className={ classes } style={ styles } height={ width }><Identicons id={ this.props.username } width={ width } size={ 5 }/></div>;
         } else if (this.props.picture.includes('gravatar')) {
             if (this.props.private)
-                picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={ this.props.picture } className={ classes } alt=' ' role='presentation'/></div>;
+                picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true"/></div>;
             else
-                picture = <img src={ this.props.picture } className={ classes } alt=' ' role='presentation'/>;
+                picture = <img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true" />;
         } else
-            picture = <img src={ this.props.picture } className={ classes } alt=' ' role='presentation'/>;
+            picture = <img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true" />;
         return (
         <div > { this.props.link ? <a href={ '/user/' + this.props.username }>picture</a> : picture}</div>
         );
