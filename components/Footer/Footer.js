@@ -78,7 +78,7 @@ class Footer extends React.Component {
             },
             fundingtext: {
                 id: 'footer.funding.text',
-                defaultMessage: "The SlideWiki project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 688095"
+                defaultMessage: 'The SlideWiki project has received funding from the European Union\\u0027s Horizon 2020 research and innovation programme under grant agreement No 688095'
             },
             copyright: {
                 id: 'footer.copyright',
@@ -148,6 +148,6 @@ class Footer extends React.Component {
 
 Footer.contextTypes = {
     intl: PropTypes.object.isRequired
-}
+};
 
 export default Footer;

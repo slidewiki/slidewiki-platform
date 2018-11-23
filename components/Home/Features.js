@@ -187,6 +187,6 @@ class features extends React.Component {
 
 features.contextTypes = {
     intl: PropTypes.object.isRequired
-}
+};
 
 export default features;
