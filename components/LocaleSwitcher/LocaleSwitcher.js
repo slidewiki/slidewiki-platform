@@ -23,6 +23,26 @@ class LocaleSwitcher extends React.Component {
         window.location.reload();
     }
 
+    handleLocaleChange(e, localeDropdown) {
+        console.log(e);
+        console.log(localeDropdown);
+        writeCookie('locale', localeDropdown.value, 365);
+        this.setState({currentLocale: localeDropdown.value});
+        window.location.reload();
+    }
+
+    getLocaleOptions() {
+        return locales.map((locale) => {
+            let flag = flagForLocale(locale) || 'icon';
+            let options = {
+                key: locale,
+                text: <span><i className={`flag ${flag}`} />{getLanguageName(locale)}</span>,
+                value: locale
+            };
+            return options;
+        });
+    }
+
     renderLocaleLink(locale) {
         let flag = flagForLocale(locale);
         let className = (locale === this.state.currentLocale) ? 'active' : '';
@@ -72,11 +92,18 @@ class LocaleSwitcher extends React.Component {
                 break;
             default:
                 current_header = <span>{current_header}{getLanguageName(this.state.currentLocale)}</span>;
-                return (
+                return (<div>
                     <Dropdown item trigger={current_header}>
                       <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
                     </Dropdown>
-                );
+                    <Dropdown
+                        item
+                        selectOnNavigation={false}
+                        value={this.state.currentLocale}
+                        options={ this.getLocaleOptions() }
+                        onChange={this.handleLocaleChange.bind(this)}
+                    />
+                </div>);
         }
     }
 }
