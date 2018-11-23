@@ -67,6 +67,8 @@ class ActivityFeedUtil {
         let msPerYear = msPerDay * 365;
 
         let elapsed = nowTime - thenTime;
+        if (elapsed < 0)
+            elapsed = 0;
 
         if (elapsed < msPerMinute) {
             return Math.round(elapsed/1000) + ' seconds ago';
