@@ -115,7 +115,17 @@ export default {
             });
         }
     },
-
+    activationSuccessful: {
+        path: '/account-activated',
+        method: 'get',
+        page: 'activationSuccessful',
+        title: 'SlideWiki -- Activation successful',
+        handler: require('../components/Home/Home'),
+        action: (context, payload, done) => {
+            context.dispatch('SHOW_ACTIVATION_MESSAGE');
+            done();
+        }
+    },
     about: {
         path: '/about',
         method: 'get',
