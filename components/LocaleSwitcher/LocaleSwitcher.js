@@ -4,9 +4,10 @@ import IntlStore from '../../stores/IntlStore';
 import {flagForLocale, locales} from '../../configs/locales';
 import {connectToStores} from 'fluxible-addons-react';
 import {Dropdown} from 'semantic-ui-react';
+import AriaMenuButton from 'react-aria-menubutton';
 
 class LocaleSwitcher extends React.Component {
-    //HACK This component is reused but also reimplemented in User/UserProfile/ChangePersonalData.js for better integration reasons.
+
     constructor(props){
         super(props);
         this.state = {
@@ -15,27 +16,45 @@ class LocaleSwitcher extends React.Component {
         };
     }
 
+    /**
+     * Sets the app Locale (UI language) to the selected value and reloads the page.
+     *
+     * @param {string} [locale] The Locale to change to.
+     * @returns {void}
+     */
     handleLocaleClick(locale, e) {
+
+        // Prevent navigation when this is called from an <a> element.
         e.preventDefault();
+
+        // If the newly-selected Locale is the same as the currentLocale, stop here.
+        if (locale === this.state.currentLocale) return;
+
+        // Otherwise, the Locale has changed so set the new Locale and reload the page.
         writeCookie('locale', locale, 365);
         this.setState({currentLocale: locale});
         window.location.reload();
     }
 
-    handleLocaleChange(e, localeDropdown) {
-        writeCookie('locale', localeDropdown.value, 365);
-        this.setState({currentLocale: localeDropdown.value});
-        window.location.reload();
-    }
-
-    getLocaleOptions() {
-        return locales.map((locale) => {
+    /**
+     * Builds and returns an array of AriaMenuButtons from the list of Locales.
+     *
+     * @returns {array}
+     */
+    getAriaLocaleOptions() {
+        return locales.map((locale, i) => {
             let flag = flagForLocale(locale) || 'icon';
-            return {
-                key: locale,
-                text: <span><i className={`flag ${flag}`}/>{getLanguageName(locale)}</span>,
-                value: locale
-            };
+            return <AriaMenuButton.MenuItem
+                className='item'
+                value={locale}
+                key={i}
+                tag='li'
+                //onSelection={this.handleLocaleClick.bind(this, locale)}
+                text={getLanguageName(locale)}>
+                    <span style={{color:'black'}}>
+                        <i className={`flag ${flag}`} aria-hidden={true}/>{getLanguageName(locale)}
+                    </span>
+            </AriaMenuButton.MenuItem>;
         });
     }
 
@@ -64,11 +83,11 @@ class LocaleSwitcher extends React.Component {
     }
 
     render() {
+        let currentFlag = flagForLocale(this.state.currentLocale);
 
         switch (this.props.mode) {
             // Mobile sidebar: Button showing current locale.
             case 'sidebarLocaleChangeButton':
-                let currentFlag = flagForLocale(this.state.currentLocale);
                 return(
                     <div>
                         <span>{getLanguageName(this.state.currentLocale)}</span>
@@ -85,13 +104,22 @@ class LocaleSwitcher extends React.Component {
 
             // Default renders the desktop UX.
             default:
-                return (<Dropdown
-                    item
-                    selectOnNavigation={false}
-                    value={this.state.currentLocale}
-                    options={ this.getLocaleOptions() }
-                    onChange={this.handleLocaleChange.bind(this)}
-                />);
+                return (
+                    <AriaMenuButton.Wrapper
+                    onSelection={this.handleLocaleClick.bind(this)}>
+                        <AriaMenuButton.Button aria-label={'Language menu: '+getLanguageName(this.state.currentLocale)}>
+                            <div style={{'display': 'inline-flex'}} >
+                                <span>{getLanguageName(this.state.currentLocale)}</span>
+                                <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>
+                                <i className="ui caret down icon" style={{'marginTop':'0.5em'}}/>
+                            </div>
+                        </AriaMenuButton.Button>
+                        <AriaMenuButton.Menu className='ui menu vertical'
+                                             style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
+                            {this.getAriaLocaleOptions()}
+                        </AriaMenuButton.Menu>
+                    </AriaMenuButton.Wrapper>
+                );
         }
     }
 }
