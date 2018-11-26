@@ -129,7 +129,7 @@ class Header extends React.Component {
                         </NavLink>
                         <a href='#' className="item" onClick={this.toggleLanguageBar.bind(this)}>
                             <i className="caret right icon"/>
-                            <LocaleSwitcher mode="headeronly"/>
+                            <LocaleSwitcher mode="sidebarLocaleChangeButton"/>
                         </a>
                         {mobileLoginButton}
                         <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
@@ -138,7 +138,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                     <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
-                        <LocaleSwitcher mode="sidebar"/>
+                        <LocaleSwitcher mode="sidebarLocalesMenu"/>
                     </div>
                 </MediaQuery>
             </header>

@@ -68,44 +68,36 @@ class LocaleSwitcher extends React.Component {
     }
 
     render() {
-        let currentFlag = flagForLocale(this.state.currentLocale);
-        let current_header = <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>;
+
         switch (this.props.mode) {
-            case 'icon':
-                return (
-                    <Dropdown trigger={current_header}>
-                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
-                    </Dropdown>
-                );
-                break;
-            case 'headeronly':
+            // Mobile sidebar: Button showing current locale.
+            case 'sidebarLocaleChangeButton':
+                let currentFlag = flagForLocale(this.state.currentLocale);
                 return(
                     <div>
-                      <span>{getLanguageName(this.state.currentLocale)}  </span>
-                      {current_header}
+                        <span>{getLanguageName(this.state.currentLocale)}</span>
+                        <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>
                     </div>);
                 break;
-            case 'sidebar':
+
+            // Mobile sidebar: List of locale options.
+            case 'sidebarLocalesMenu':
                 return (
                       <div>
                       { locales.map(this.renderLocaleLink, this) }
                       </div>
                 );
                 break;
+
+            // Default renders the desktop UX.
             default:
-                current_header = <span>{current_header}{getLanguageName(this.state.currentLocale)}</span>;
-                return (<div>
-                    <Dropdown item trigger={current_header}>
-                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
-                    </Dropdown>
-                    <Dropdown
-                        item
-                        selectOnNavigation={false}
-                        value={this.state.currentLocale}
-                        options={ this.getLocaleOptions() }
-                        onChange={this.handleLocaleChange.bind(this)}
-                    />
-                </div>);
+                return (<Dropdown
+                    item
+                    selectOnNavigation={false}
+                    value={this.state.currentLocale}
+                    options={ this.getLocaleOptions() }
+                    onChange={this.handleLocaleChange.bind(this)}
+                />);
         }
     }
 }
