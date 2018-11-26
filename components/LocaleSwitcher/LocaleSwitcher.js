@@ -56,7 +56,6 @@ class LocaleSwitcher extends React.Component {
                             {getLanguageName(locale)}
                     </a>
                 );
-                break;
             default:
                 return (
                     <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
@@ -78,7 +77,6 @@ class LocaleSwitcher extends React.Component {
                         <span>{getLanguageName(this.state.currentLocale)}</span>
                         <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>
                     </div>);
-                break;
 
             // Mobile sidebar: List of locale options.
             case 'sidebarLocalesMenu':
@@ -87,7 +85,6 @@ class LocaleSwitcher extends React.Component {
                       { locales.map(this.renderLocaleLink, this) }
                       </div>
                 );
-                break;
 
             // Default renders the desktop UX.
             default:
