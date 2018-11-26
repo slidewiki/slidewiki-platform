@@ -24,8 +24,6 @@ class LocaleSwitcher extends React.Component {
     }
 
     handleLocaleChange(e, localeDropdown) {
-        console.log(e);
-        console.log(localeDropdown);
         writeCookie('locale', localeDropdown.value, 365);
         this.setState({currentLocale: localeDropdown.value});
         window.location.reload();
