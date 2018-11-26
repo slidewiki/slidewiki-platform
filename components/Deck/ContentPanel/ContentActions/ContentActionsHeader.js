@@ -297,8 +297,9 @@ class ContentActionsHeader extends React.Component {
         } else{ //No buttons
             if(this.props.UserProfileStore.username !== '') /* Edit button only visible if logged user*/
             {
+                const editDisabled = (this.props.ContentStore.mode === 'loading');
                 editButton =
-                    <button className={editClass} onClick={this.handleEditButton.bind(this,selector)}
+                    <button className={editClass} disabled={editDisabled} onClick={this.handleEditButton.bind(this,selector)}
                         type="button"
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}

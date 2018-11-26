@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
@@ -14,6 +15,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../stores/ContentStore';
 import {Button, Popup, Icon} from 'semantic-ui-react';
 import {Microservices} from '../../../configs/microservices';
+import updateMode from '../../../actions/decktree/updateMode';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -85,6 +87,10 @@ class TreeNode extends React.Component {
             this.props.onRename(selector);
             e.stopPropagation();
         }
+    }
+    
+    handleClick() {
+        this.context.executeAction(updateMode, {mode: 'loading'});
     }
 
     handleUndoRenameClick(selector, e) {
@@ -191,13 +197,13 @@ class TreeNode extends React.Component {
                 divToInsert =
                     <div>
                         <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassTextMode} aria-hidden="true"> </i>
-                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{content}</NavLink>
+                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onClick={this.handleClick.bind(this)} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{content}</NavLink>
                     </div>;
             } else {
                 divToInsert =
                     <div onFocus={this.handleFocus} onBlur={this.handleBlur}>
                         {(this.props.item.get('type') === 'deck') && this.props.showThumbnails ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassImageMode} aria-hidden="true"> </i> : ''}
-                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }}>{content}</NavLink>
+                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onClick={this.handleClick.bind(this)}>{content}</NavLink>
                         {(this.props.item.get('type') === 'deck'  && this.props.showThumbnails) ? <div className="ui fitted divider"/> : ''}
                     </div>;
             }
@@ -222,6 +228,10 @@ class TreeNode extends React.Component {
         );
     }
 }
+
+TreeNode.contextTypes = {
+    executeAction: PropTypes.func.isRequired
+};
 
 TreeNode = connectToStores(TreeNode,[ContentStore], (context, props) => {
     return {

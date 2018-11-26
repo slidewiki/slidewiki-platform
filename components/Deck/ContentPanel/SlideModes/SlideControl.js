@@ -6,6 +6,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import updateMode from '../../../../actions/decktree/updateMode';
 
 class SlideControl extends React.Component {
     constructor(props) {
@@ -39,6 +40,7 @@ class SlideControl extends React.Component {
     handleNextClick(selector, flatTree, mode){
         let nextPath = SlideControlUtil.nextSlidePath(selector, flatTree, mode);
         if(nextPath){
+            this.context.executeAction(updateMode, {mode: 'loading'});
             this.context.executeAction(navigateAction, {
                 url: nextPath
             });
@@ -49,6 +51,7 @@ class SlideControl extends React.Component {
     handlePreviousClick(selector, flatTree, mode){
         let prevPath = SlideControlUtil.prevSlidePath(selector, flatTree, mode);
         if(prevPath){
+            this.context.executeAction(updateMode, {mode: 'loading'});
             this.context.executeAction(navigateAction, {
                 url: prevPath
             });
@@ -58,6 +61,7 @@ class SlideControl extends React.Component {
     handleForwardClick(selector, flatTree, mode){
         let lastPath = SlideControlUtil.lastSlidePath(selector, flatTree, mode);
         if(lastPath){
+            this.context.executeAction(updateMode, {mode: 'loading'});
             this.context.executeAction(navigateAction, {
                 url: lastPath
             });
@@ -67,6 +71,7 @@ class SlideControl extends React.Component {
     handleBackwardClick(selector, flatTree, mode){
         let firstPath = SlideControlUtil.firstSlidePath(selector, flatTree, mode);
         if(firstPath){
+            this.context.executeAction(updateMode, {mode: 'loading'});
             this.context.executeAction(navigateAction, {
                 url: firstPath
             });
