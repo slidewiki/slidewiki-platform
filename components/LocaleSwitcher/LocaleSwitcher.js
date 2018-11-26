@@ -1,10 +1,9 @@
 import React from 'react';
-import {getLanguageName, getLanguageNativeName} from '../../common';
-import { writeCookie } from '../../common';
+import {getLanguageName, getLanguageNativeName, writeCookie} from '../../common';
 import IntlStore from '../../stores/IntlStore';
-import { locales, flagForLocale } from '../../configs/locales';
-import { connectToStores } from 'fluxible-addons-react';
-import { Dropdown, Menu } from 'semantic-ui-react';
+import {flagForLocale, locales} from '../../configs/locales';
+import {connectToStores} from 'fluxible-addons-react';
+import {Dropdown} from 'semantic-ui-react';
 
 class LocaleSwitcher extends React.Component {
     //HACK This component is reused but also reimplemented in User/UserProfile/ChangePersonalData.js for better integration reasons.
@@ -32,12 +31,11 @@ class LocaleSwitcher extends React.Component {
     getLocaleOptions() {
         return locales.map((locale) => {
             let flag = flagForLocale(locale) || 'icon';
-            let options = {
+            return {
                 key: locale,
-                text: <span><i className={`flag ${flag}`} />{getLanguageName(locale)}</span>,
+                text: <span><i className={`flag ${flag}`}/>{getLanguageName(locale)}</span>,
                 value: locale
             };
-            return options;
         });
     }
 
@@ -48,7 +46,6 @@ class LocaleSwitcher extends React.Component {
             case 'sidebar':
                 return(
                     <a
-                        href='#'
                         key={locale}
                         onClick={this.handleLocaleClick.bind(this, locale)}
                         href={`?locale=${locale}`} className="item">
