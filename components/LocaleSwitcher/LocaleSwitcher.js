@@ -3,7 +3,7 @@ import {getLanguageName, getLanguageNativeName, writeCookie} from '../../common'
 import IntlStore from '../../stores/IntlStore';
 import {flagForLocale, locales} from '../../configs/locales';
 import {connectToStores} from 'fluxible-addons-react';
-import {Dropdown} from 'semantic-ui-react';
+import {Button, Dropdown, Icon} from 'semantic-ui-react';
 import AriaMenuButton from 'react-aria-menubutton';
 
 class LocaleSwitcher extends React.Component {
@@ -49,7 +49,6 @@ class LocaleSwitcher extends React.Component {
                 value={locale}
                 key={i}
                 tag='li'
-                //onSelection={this.handleLocaleClick.bind(this, locale)}
                 text={getLanguageName(locale)}>
                     <span style={{color:'black'}}>
                         <i className={`flag ${flag}`} aria-hidden={true}/>{getLanguageName(locale)}
@@ -105,14 +104,13 @@ class LocaleSwitcher extends React.Component {
             // Default renders the desktop UX.
             default:
                 return (
-                    <AriaMenuButton.Wrapper
-                    onSelection={this.handleLocaleClick.bind(this)}>
+                    <AriaMenuButton.Wrapper onSelection={this.handleLocaleClick.bind(this)}>
                         <AriaMenuButton.Button aria-label={'Language menu: '+getLanguageName(this.state.currentLocale)}>
-                            <div style={{'display': 'inline-flex'}} >
-                                <span>{getLanguageName(this.state.currentLocale)}</span>
+                            <Button basic inverted icon labelPosition='right'>
                                 <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>
-                                <i className="ui caret down icon" style={{'marginTop':'0.5em'}}/>
-                            </div>
+                                {getLanguageName(this.state.currentLocale)}
+                                <Icon name='down caret' />
+                            </Button>
                         </AriaMenuButton.Button>
                         <AriaMenuButton.Menu className='ui menu vertical'
                                              style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
