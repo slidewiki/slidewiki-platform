@@ -1,32 +1,35 @@
+import {connectToStores} from 'fluxible-addons-react';
+import {NavLink, navigateAction} from 'fluxible-router';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
-import SlideEditStore from '../../../../../stores/SlideEditStore';
+let ReactDOM = require('react-dom');
+
+import ChartRender from '../../util/ChartRender';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
-import SlideViewStore from '../../../../../stores/SlideViewStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import { findDOMNode } from 'react-dom';
+import {FormattedMessage, defineMessages} from 'react-intl';
+import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
+import {HotKeys} from 'react-hotkeys';
 import MediaStore from '../../../../../stores/MediaStore';
+import {Microservices} from '../../../../../configs/microservices';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
-import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
-import { findDOMNode } from 'react-dom';
-import UserProfileStore from '../../../../../stores/UserProfileStore';
-import {Microservices} from '../../../../../configs/microservices';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
-import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
 import Util from '../../../../common/Util';
-import {FormattedMessage, defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 
-let ReactDOM = require('react-dom');
+
+
 
 class SlideContentEditor extends React.Component {
     constructor(props) {
@@ -1224,6 +1227,11 @@ class SlideContentEditor extends React.Component {
 
         this.correctDimensionsBoxesImg();
         this.resetZIndexSpeakerNotes();
+        //('img');
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(true);
+
         let slideSizeTextTemp;
         if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         {
@@ -1244,6 +1252,10 @@ class SlideContentEditor extends React.Component {
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
         this.resize();
+
+        // WARNING: Since this function is affected by the usage of contextMenuAll I decided to put it here right after of it...
+        ChartRender.renderCharts(false);
+
     }
 
     correctDimensionsBoxesIframe()
