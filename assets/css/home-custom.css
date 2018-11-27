@@ -363,6 +363,11 @@ textarea:focus{
     color: #000;
 }
 
+/* LocaleSwitcher: forces text to black. Necessary because the inverted menu defaults text to white */
+.locale-switcher.ui.menu.vertical .item {
+    color: rgba(0,0,0,.87);
+}
+
 /*--section--*/
 
 .content-inner {

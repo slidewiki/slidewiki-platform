@@ -50,9 +50,7 @@ class LocaleSwitcher extends React.Component {
                 key={i}
                 tag='li'
                 text={getLanguageName(locale)}>
-                    <span style={{color:'black'}}>
                         <i className={`flag ${flag}`} aria-hidden={true}/>{getLanguageName(locale)}
-                    </span>
             </AriaMenuButton.MenuItem>;
         });
     }
@@ -112,7 +110,7 @@ class LocaleSwitcher extends React.Component {
                                 <Icon name='down caret' />
                             </Button>
                         </AriaMenuButton.Button>
-                        <AriaMenuButton.Menu className='ui menu vertical'
+                        <AriaMenuButton.Menu className='ui menu vertical locale-switcher'
                                              style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
                             {this.getAriaLocaleOptions()}
                         </AriaMenuButton.Menu>
