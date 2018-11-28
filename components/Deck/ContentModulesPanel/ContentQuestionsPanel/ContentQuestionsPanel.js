@@ -15,6 +15,7 @@ import ContentQuestionAdd from './ContentQuestionAdd';
 import ContentQuestionEdit from './ContentQuestionEdit';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import QuestionDownloadModal from './Download/QuestionDownloadModal';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentQuestionsPanel extends React.Component {
 
@@ -93,7 +94,9 @@ class ContentQuestionsPanel extends React.Component {
                     <div className='ui buttons'>
                         <button className='ui button blue' onClick={this.handleExamClick.bind(this)}>
                             <i className='clipboard outline icon'></i>
-                            Exam mode
+                            <FormattedMessage
+                                id='ContentQuestionsPanel.form.button_exam'
+                                defaultMessage='Exam mode' />
                         </button>
                     </div>
                 ) : '';
@@ -112,14 +115,18 @@ class ContentQuestionsPanel extends React.Component {
         let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
             <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <i className="small check icon" />
-                Select exam questions
+                <FormattedMessage
+                    id='ContentQuestionsPanel.form.button_select'
+                    defaultMessage='Select exam questions' />
             </button> : '';
 
 
         let addQuestionButton =
             <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                 <i className="small plus icon"/>
-                Add question
+                <FormattedMessage
+                    id='ContentQuestionsPanel.form.button_add'
+                    defaultMessage='Add question' />
             </button>
         ;
 
@@ -159,7 +166,12 @@ class ContentQuestionsPanel extends React.Component {
                         <div className="ui vertical segment">
                             <div className="ui stackable grid"> 
                                 <div className="four wide column">
-                                    <h3 className="ui header">Questions</h3>
+                                    <h3 className="ui header">
+                                    
+                                        <FormattedMessage
+                                            id='ContentQuestionsPanel.form.questions_header'
+                                            defaultMessage='Questions' />
+                                    </h3>
                                 </div>
                                 <div className="twelve wide column right aligned">
                                     {editButtons}
@@ -221,11 +233,17 @@ class ContentQuestionsPanel extends React.Component {
         let examQuestionsList = (<ExamQuestionsList items={questions} selector={selector} />);
         let questionAdd = (<ContentQuestionAdd selector={this.props.selector} userId={userId} />);
         let questionEdit = (<ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId}/>);
+        const form_messages = defineMessages({
+            no_questions: {
+                id: 'ContentQuestionsPanel.form.no_questions',
+                defaultMessage: 'There are currently no questions for this',
+            }
+        });
         let content = (
             <div>
                 {buttonBar}
                 {questionsHeader}
-                {visibleQuestions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
+                {visibleQuestions.length === 0 ? this.context.intl.formatMessage(form_messages.no_questions) + ' ' + selector.stype + '.' : questionsList}
                 {/* {pagination} */}
             </div>
         );
@@ -239,7 +257,8 @@ class ContentQuestionsPanel extends React.Component {
 }
 
 ContentQuestionsPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, DeckViewStore, UserProfileStore, PermissionsStore], (context, props) => {
     return {

@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {NavLink} from 'fluxible-router';
+import { defineMessages } from 'react-intl';
 
 class ContentUsageItem extends React.Component {
 
     render() {
+        const form_messages = defineMessages({
+            by: {
+                id: 'ContentUsageItem.form.by',
+                defaultMessage: 'by',
+            }
+        });
         const usingDeckId = this.props.usageItem.id + '-' + this.props.usageItem.revision;
         const usingDeckLink = <NavLink
         href={'/deck/' + usingDeckId}>{this.props.usageItem.title} </NavLink>;
@@ -17,7 +24,7 @@ class ContentUsageItem extends React.Component {
                     {usingDeckLink}
                 </div>
                 <div className="description">
-                    <span>{'by '}</span>
+                    <span>{this.context.intl.formatMessage(form_messages.by) + ' '}</span>
                     {userLink}
                 </div>
             </div>
@@ -27,7 +34,8 @@ class ContentUsageItem extends React.Component {
 }
 
 ContentUsageItem.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default ContentUsageItem;
