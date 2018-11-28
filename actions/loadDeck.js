@@ -21,6 +21,7 @@ import DeckTreeStore from '../stores/DeckTreeStore';
 import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
+import loadQuestionsCount from './questions/loadQuestionsCount';
 import loadLikes from './activityfeed/loadLikes';
 import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
@@ -148,8 +149,14 @@ export default function loadDeck(context, payload, done) {
                         if (!(payloadCustom.params.stype === 'deck' && payload.query.interestedUser))
                             payloadCustom.params.mode = 'view';
                     }
+                    
+                    let editPermission = (permissions.admin || permissions.edit);
+                    payloadCustom.params.nonExamQuestionsOnly = !editPermission;
+                    context.executeAction(loadQuestionsCount, payloadCustom);
+                    
                     // console.log('now mode is', payloadCustom.params.mode);
                     context.executeAction(loadContent, payloadCustom, callback);
+                    
                 });
             },
             (callback) => {
