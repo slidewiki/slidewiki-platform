@@ -25,10 +25,11 @@ class Breadcrumb extends React.Component {
                         </div>
                     );
                 }else{
+                    let nodeId = node.split(':')[0];
                     let url = Util.makeNodeURL({
                         id: self.props.selector.get('id'),
                         stype: 'deck',
-                        sid: self.props.selector.get('sid'),
+                        sid: nodeId,
                         spath: (nodes[index - 1] ? (nodes[index - 1] + ';') : '') + node
                     }, 'deck', '', slugify(this.props.rootDeckName || '').toLowerCase() || '_');
                     return (
