@@ -2,15 +2,12 @@ import async from 'async';
 // import { shortTitle } from '../configs/general';
 // import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
 import loadDataSources from './datasource/loadDataSources';
-import loadDataSourceCount from './datasource/loadDataSourceCount';
-import loadQuestionsCount from './questions/loadQuestionsCount';
 import loadCommentsCount from './contentdiscussion/loadCommentsCount';
 import loadPlaylistsCount from './collections/loadPlaylistsCount';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
-import PermissionsStore from '../stores/PermissionsStore';
 const log = require('./log/clog');
 
 
@@ -35,12 +32,6 @@ export default function loadContentModules(context, payload, done) {
         //     context.executeAction(loadDataSourceCount, payload, callback);
         // },
 
-        (callback) => {
-            let editPermission = (context.getStore(PermissionsStore) && context.getStore(PermissionsStore).permissions && (context.getStore(PermissionsStore).permissions.admin || context.getStore(PermissionsStore).permissions.edit));
-
-            payload.params.nonExamQuestionsOnly = !editPermission;
-            context.executeAction(loadQuestionsCount, payload, callback);
-        },
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
         },
