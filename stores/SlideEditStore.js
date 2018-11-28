@@ -3,7 +3,6 @@ import {BaseStore} from 'fluxible/addons';
 class SlideEditStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        //this.dispatcher = dispatcher; // Provides access to waitFor and getStore methods
         this.id = '';
         this.slideId = '';
         this.title = '';
@@ -39,17 +38,20 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
+
+        /* Whether there are unsaved changes in editor. */
+        this.hasChanges = false;
     }
 
     updateContent(payload) {
-        //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
-        //console.log('test' + payload.slide.title + ' id: ' + payload.slide.id);
         this.id = payload.slide.id;
         this.slideId = payload.selector.sid;
         this.title = payload.slide.title || ' ';
         this.content = payload.slide.content || ' ';
         this.markdown = payload.slide.markdown || ' ';
         this.speakernotes = payload.slide.speakernotes || ' ';
+
+        this.hasChanges = false;
 
         this.emitChange();
     }
@@ -246,6 +248,7 @@ class SlideEditStore extends BaseStore {
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
+            hasChanges: this.hasChanges,
         };
     }
 
@@ -289,6 +292,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
+        this.hasChanges = state.hasChanges;
     }
 
     zoomContent(payload) {
@@ -311,6 +315,11 @@ class SlideEditStore extends BaseStore {
                     break;
             }
         }
+        this.emitChange();
+    }
+
+    registerChange(payload) {
+        this.hasChanges = payload.hasChanges;
         this.emitChange();
     }
 }
@@ -341,6 +350,7 @@ SlideEditStore.handlers = {
     'REDO_CLICK': 'handleRedoClick',
     'ZOOM': 'zoomContent',
     'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus',
+    'REGISTER_CHANGE': 'registerChange',
 };
 
 export default SlideEditStore;

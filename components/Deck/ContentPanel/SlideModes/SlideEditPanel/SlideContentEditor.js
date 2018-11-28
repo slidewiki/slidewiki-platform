@@ -1,21 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
+import {navigateAction, NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import MediaStore from '../../../../../stores/MediaStore';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
-import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
-import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
 //import ResizeAware from 'react-resize-aware';
-import { findDOMNode } from 'react-dom';
+import {findDOMNode} from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
@@ -23,8 +21,9 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import Util from '../../../../common/Util';
-import {FormattedMessage, defineMessages} from 'react-intl';
+import {defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
+import registerChange from "../../../../../actions/slide/registerChange";
 
 let ReactDOM = require('react-dom');
 
@@ -40,7 +39,6 @@ class SlideContentEditor extends React.Component {
         this.previousCaretRange;
         //this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
-        this.hasChanges = false;
         this.finishLoading = false;
         this.idContext = null;
         //this.oldContent = '';
@@ -74,8 +72,7 @@ class SlideContentEditor extends React.Component {
                     if (ev2.data.$.clipboardData.files.length !== 0){
                         let file = ev2.data.$.clipboardData.files[0];
                         let params = {};
-                        let url = URL.createObjectURL(file);
-                        file.preview = url;
+                        file.preview = URL.createObjectURL(file);
                         params.file = file;
 
                         this.context.executeAction(handleDroppedFile, file);
@@ -85,6 +82,15 @@ class SlideContentEditor extends React.Component {
         });
 
     }
+
+    hasChanges = () => {
+        let hasChanges = this.context.SlideEditStore.hasChanges;
+        return hasChanges;
+    };
+
+    setChanges = (value) => {
+        this.context.executeAction(registerChange, { hasChanges: value });
+    };
 
     handleSlideSizechange(slideSize){
         if (slideSize !== ''){
@@ -649,7 +655,7 @@ class SlideContentEditor extends React.Component {
             });
         }
 
-        this.hasChanges = true;
+        this.setChanges(true);
         //fix to prevent Firefox caret from resetting
         $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
             CKEDITOR.instances.inlineContent.getSelection().unlock();
@@ -696,7 +702,7 @@ class SlideContentEditor extends React.Component {
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
-                                this.hasChanges = true;
+                                this.setChanges(true);
                                 ////this.forceUpdate();
                             }, 500);
                         });
@@ -721,7 +727,7 @@ class SlideContentEditor extends React.Component {
                             this.refreshCKeditor();
                             this.resizeDrag();
                             //this.forceUpdate();
-                            this.hasChanges = true;
+                            this.setChanges(true);
                         }, 500);
                     });
                 }, 500);
@@ -903,7 +909,7 @@ class SlideContentEditor extends React.Component {
             let uniqueID = this.getuniqueID();
             $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10, uniqueID));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
-            this.hasChanges = true;
+            this.setChanges(true);
             //this.emitChange(); //confirm non-save on-leave
             //fix to prevent Firefox caret from resetting
             $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
@@ -957,7 +963,7 @@ class SlideContentEditor extends React.Component {
                 //update content
                 //TODO replace with this.refs.inlineContent.innerHTML
                 //CKEDITOR.instances.inlineContent.setData(newContent);
-                this.hasChanges = true;
+                this.setChanges(true);
                 //this.forceUpdate();
                 this.resizeDrag();
                 this.resize();
@@ -1043,7 +1049,7 @@ class SlideContentEditor extends React.Component {
     }
     componentDidMount() {
         window.onbeforeunload = () => {
-            if (this.hasChanges === true)
+            if (this.hasChanges())
             {
                 const messagesUnsavedChangesAlert = defineMessages({
                     alert:{
@@ -1136,7 +1142,7 @@ class SlideContentEditor extends React.Component {
             this.finishLoading = true;
             //console.log('test');
             CKEDITOR.instances.inlineContent.on( 'key', () => {
-                this.hasChanges = true;
+                this.setChanges(true);
             });
 
             //$('.cke_iframe').attr('src', 'data:image/png;base64,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');
@@ -1173,7 +1179,7 @@ class SlideContentEditor extends React.Component {
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
-                                this.hasChanges = true;
+                                this.setChanges(true);
                                 ////this.forceUpdate();
                             }, 500);
                         });
@@ -1194,7 +1200,7 @@ class SlideContentEditor extends React.Component {
                             this.refreshCKeditor();
                             this.resizeDrag();
                             //this.forceUpdate();
-                            this.hasChanges = true;
+                            this.setChanges(true);
                         }, 500);
                     });
                 }, 500);
@@ -1235,14 +1241,17 @@ class SlideContentEditor extends React.Component {
             slideSizeText: slideSizeTextTemp
         });
     }
+
     handleResize = () => {
         this.forceUpdate();
-    }
+    };
 
     componentDidUpdate() {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
+        // console.log(`componentDidUpdate().`);
+        // this.setChanges(false);
         this.resize();
     }
 
@@ -1372,7 +1381,7 @@ class SlideContentEditor extends React.Component {
                             ui.position.top = newTop;
                         },
                         stop: function(event, ui) {
-                            slideEditorContext.hasChanges = true;
+                            slideEditorContext.setChanges(true);
                             let zIndex = $('.ui-draggable-dragging').css('z-index');
                             $('.ui-draggable-dragging').css('z-index', zIndex - 100000);
                         }
@@ -1413,7 +1422,7 @@ class SlideContentEditor extends React.Component {
                         stop: function(event, ui) {
                             let zIndex = $('.ui-resizable-resizing').css('z-index');
                             $('.ui-resizable-resizing').css('z-index', zIndex - 100000);
-                            slideEditorContext.hasChanges = true;
+                            slideEditorContext.setChanges(true);
                         }
                     });
                 };
@@ -1768,7 +1777,7 @@ class SlideContentEditor extends React.Component {
         {
             //if there are no changes!!! -> otherwise show SWAL menu
             //console.log('cancel clicked');
-            if (this.hasChanges === true)
+            if (this.hasChanges())
             {
                 //console.log('there are changes!');
                 const messagesSaveChangesModal = defineMessages({
@@ -1893,7 +1902,7 @@ class SlideContentEditor extends React.Component {
                         //this.resize();
                         this.resizeDrag();
                     }
-                    this.hasChanges = true;
+                    this.setChanges(true);
 
                     //this.forceUpdate();
 
@@ -1960,7 +1969,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.hasChanges = true;
+                this.setChanges(true);
 
             }
             //make async/callback/promise -> async/await
@@ -1993,7 +2002,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.hasChanges = true;
+                this.setChanges(true);
 
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
@@ -2009,7 +2018,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.hasChanges = true;
+                this.setChanges(true);
 
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
@@ -2025,7 +2034,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
-                this.hasChanges = true;
+                this.setChanges(true);
 
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
@@ -2059,14 +2068,14 @@ class SlideContentEditor extends React.Component {
                     //Overwrite Iframe title with title entered in slide edit left panel to improve accessbility
                     $('#'+uniqueID + ' > iframe').attr('title', nextProps.SlideEditStore.embedTitle);
                 }
-                this.hasChanges = true;
+                this.setChanges(true);
             }
             else {
                 let iframe = '<iframe title="'+nextProps.SlideEditStore.embedTitle+'" src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'px" height="'+nextProps.SlideEditStore.embedHeight+'px" frameborder="0" allow="encrypted-media"></iframe>';
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
-                    this.hasChanges = true;
+                    this.setChanges(true);
                     //this.correctDimensionsBoxes('iframe');
                 } else { //if slide is in non-canvas mode
                     this.refs.inlineContent.innerHTML += iframe;
@@ -2157,7 +2166,7 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.resizeDrag();
-                            this.hasChanges = true;
+                            this.setChanges(true);
                             ////this.forceUpdate();
                         }, 500);
                     });
