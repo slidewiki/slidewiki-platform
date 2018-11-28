@@ -3834,8 +3834,8 @@
 .ui.primary.button:focus,
 .ui.blue.buttons .button:focus,
 .ui.blue.button:focus {
-  -webkit-box-shadow: 0 0 0 2px #56b0f3 inset !important;
-          box-shadow: 0 0 0 2px #56b0f3 inset !important;
+  -webkit-box-shadow: 0 0 0 2px #731516 inset !important;
+          box-shadow: 0 0 0 2px #731516 inset !important;
 }
 .ui.secondary.buttons .button:focus,
 .ui.secondary.button:focus {
