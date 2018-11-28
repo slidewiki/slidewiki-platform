@@ -182,7 +182,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'liststyle,' +
         'lineheight,' +
         'sharedspace,' +
-		'magicline,' +
+		//'magicline,' +
 		'maximize,' +
 		'newpage,' +
 		'pagebreak,' +
