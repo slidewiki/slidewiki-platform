@@ -83,16 +83,24 @@ class TransferOwnership extends React.Component {
                     '';
                 editors.push(
                   (
-                    <Menu.Item name={'item_' + user.username} key={user.id || user.userid} active={this.state.selectedUser === (user.id || user.userid)} onClick={() => {console.log('onItemClicked'); this.setState({selectedUser: user.id || user.userid});}}>
-                      <div className="ui grid">
-                        <div className="two wide column">
-                          <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 30 } size="tiny" />
+                    <Menu.Item name={'item_' + user.username} key={user.id || user.userid} tabIndex={0}
+                      active={this.state.selectedUser === (user.id || user.userid)}
+                      onClick={() => this.setState({selectedUser: user.id || user.userid})}
+                      onKeyPress={(e) => e.key === 'Enter' && this.setState({selectedUser: user.id || user.userid})} >
+                      <div className="ui grid middle aligned">
+                        <div className="two wide column center aligned">
+                          <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 30 } />
                         </div>
-                        <div className="fourten wide column">
+                        <div className="twelve wide column">
                           <TextArea className="sr-only" id={'usernameIsALinkHint' + (user.id || user.userid)} value={this.context.intl.formatMessage(this.messages.linkHint)} tabIndex ='-1'/>
                           <a className="header" href={'/user/' + user.username} target="_blank">{user.displayName || user.username}</a>
                           <br/>
                           {optionalText}
+                        </div>
+                        <div className="two wide column center aligned">
+                        { this.state.selectedUser === (user.id || user.userid) && 
+                          <i className="big check circle green icon"></i>
+                        }
                         </div>
                       </div>
                     </Menu.Item>
