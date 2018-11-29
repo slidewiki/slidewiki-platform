@@ -304,12 +304,12 @@ export default {
             let tagsPromise = deckPromise.then((deck) => fetchTagInfo(deck.tags));
 
             //fetch root decks
-            let rootsPromise = rp.get({
-                uri: Microservices.deck.uri + '/deck/' + args.sid.split('-')[0] + '/rootDecks',
+            let usagePromise = rp.get({
+                uri: Microservices.deck.uri + '/deck/' + args.sid + '/usage',
                 json:true,
             });
 
-            Promise.all([deckPromise, tagsPromise, rootsPromise]).then(([deck, tags, roots]) => {
+            Promise.all([deckPromise, tagsPromise, usagePromise]).then(([deck, tags, usage]) => {
                 // prepare users and groups from editors object
                 let {users, groups} = deck.editors || {};
                 if (!users) users = [];
@@ -343,7 +343,7 @@ export default {
 
                     callback(null, {
                         deckProps: deckProps,
-                        roots
+                        usage
                     });
                 });
             }).catch((err) => {

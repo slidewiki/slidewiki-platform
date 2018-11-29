@@ -337,10 +337,8 @@ class DeckPropertiesEditor extends React.Component {
 
     handleDelete(evt) {
         evt.preventDefault();
-        console.log('handleDelete', this.state.users, this.state.groups, this.props.DeckEditStore.roots);
-        console.log('handleDelete more data', this.props.selector, this.props.DeckEditStore);
 
-        let isSubdeck = this.props.selector.spath || this.props.DeckEditStore.roots.length > 0;
+        let isSubdeck = this.props.selector.spath || this.props.DeckEditStore.usage.length > 0;
         let hasSubdecks = this.props.DeckEditStore.deckProps.contentItems.filter((n) => n.kind === 'deck').length > 0;
 
         if (isSubdeck) {
@@ -554,7 +552,7 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
-        // console.log('render edit: published and roots', this.state.published, this.props.DeckEditStore.roots);
+
         //CSS
         let titleFieldClass = classNames({
             'required': true,

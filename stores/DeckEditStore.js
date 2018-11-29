@@ -5,7 +5,7 @@ class DeckEditStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.deckProps = {};
-        this.editors = [];
+
         this.authorizedUsers = [];
         this.authorizedGroups = [];
         this.viewstate = '';
@@ -26,14 +26,13 @@ class DeckEditStore extends BaseStore {
 
         this.queryParams = {};
 
-        this.roots = [];
+        this.usage = [];
         this.showTransferOwnershipModal = false;
         this.allEditors = [];
     }
 
     updateProperties(payload) {
         this.deckProps = payload.deckProps;
-        this.editors = payload.editors;
 
         //edit rights adoptions
         this.authorizedUsers = JSON.parse(JSON.stringify(payload.deckProps.editors.users));
@@ -41,8 +40,7 @@ class DeckEditStore extends BaseStore {
         this.originalEditors = JSON.parse(JSON.stringify(payload.deckProps.editors));
         // console.log('Now we have new origin editors:', this.originalEditors);
 
-        this.roots = payload.roots.filter((deck) => parseInt(deck.id, 10) !== parseInt(this.deckProps.sid.split('-')[0], 10));
-        // console.log('DeckEditStore roots', payload.roots, this.roots, this.deckProps.sid, this.deckProps.sid.split('-')[0]);
+        this.usage = payload.usage;
 
         this.emitChange();
     }
@@ -59,7 +57,6 @@ class DeckEditStore extends BaseStore {
     getState() {
         return {
             deckProps: this.deckProps,
-            editors: this.editors,
             authorizedUsers: this.authorizedUsers,
             authorizedGroups: this.authorizedGroups,
             viewstate: this.viewstate,
@@ -68,7 +65,7 @@ class DeckEditStore extends BaseStore {
             showGroupModal: this.showGroupModal,
             queryParams: this.queryParams,
             showGroupModal: this.showGroupModal,
-            roots: this.roots,
+            usage: this.usage,
             showTransferOwnershipModal: this.showTransferOwnershipModal,
             allEditors: this.allEditors
         };
@@ -80,7 +77,6 @@ class DeckEditStore extends BaseStore {
 
     rehydrate(state) {
         this.deckProps = state.deckProps;
-        this.editors = state.editors;
         this.authorizedUsers = state.authorizedUsers;
         this.viewstate = state.viewstate;
         this.authorizedGroups = state.authorizedGroups;
@@ -88,7 +84,7 @@ class DeckEditStore extends BaseStore {
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
         this.queryParams = state.queryParams;
-        this.roots = state.roots;
+        this.usage = state.usage;
         this.showTransferOwnershipModal = state.showTransferOwnershipModal;
         this.allEditors = state.allEditors;
     }
