@@ -23,6 +23,7 @@ class SlideControl extends React.Component {
     confirmLeaving = () => {
         const hasChanges = this.hasChanges();
         if (this.props.ContentStore.mode === 'edit' && hasChanges) {
+            // eslint-disable-next-line no-alert
             let confirmed = confirm('You have unsaved changes. If you do not save the slide, it will not be updated. ' +
                 'Are you sure you want to exit this page?');
             if (confirmed) {
