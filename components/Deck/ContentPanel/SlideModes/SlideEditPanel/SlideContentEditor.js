@@ -23,7 +23,7 @@ import UploadMediaModal from '../../../../common/UploadMediaModal';
 import Util from '../../../../common/Util';
 import {defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
-import registerChange from "../../../../../actions/slide/registerChange";
+import registerChange from '../../../../../actions/slide/registerChange';
 
 let ReactDOM = require('react-dom');
 
