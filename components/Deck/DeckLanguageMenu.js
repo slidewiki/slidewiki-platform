@@ -33,9 +33,12 @@ class DeckLanguageMenu extends React.Component {
         if (!(e.code && e.code === 'Enter' || !e.code)) {
             return;
         }
-
-        if (!language) {
+        if (language === 'addNew') {
             $('#DeckTranslationsModalOpenButton').click();
+            return;
+        }
+        if (language === 'translateSlide') {
+            $('#SlideTranslationsModalOpenButton').click();
             return;
         }
 
@@ -92,8 +95,16 @@ class DeckLanguageMenu extends React.Component {
         if (canEdit) {
             languageOptions.push({
                 text: 'Add a new translation',
+                value: 'addNew',
                 icon: 'translate',
                 key: 'placeholderForAddANewTranslation'
+            });
+            //TODO: detect whether on slide edit/view screen
+            languageOptions.push({
+                text: 'Translate Slide',
+                value: 'translateSlide',
+                icon: 'translate',
+                key: 'placeholderForTranslateSlide'
             });
         }
 
