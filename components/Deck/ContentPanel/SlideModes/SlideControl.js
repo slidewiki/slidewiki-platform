@@ -5,9 +5,9 @@ import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction, NavLink} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
-import registerChange from "../../../../actions/slide/registerChange";
-import ContentStore from "../../../../stores/ContentStore";
-import SlideEditStore from "../../../../stores/SlideEditStore";
+import registerChange from '../../../../actions/slide/registerChange';
+import ContentStore from '../../../../stores/ContentStore';
+import SlideEditStore from '../../../../stores/SlideEditStore';
 
 class SlideControl extends React.Component {
     constructor(props) {
