@@ -350,7 +350,8 @@ class DeckPropertiesEditor extends React.Component {
                 type: 'warning',
                 allowEscapeKey: true,
                 showConfirmButton: true,
-                buttonsStyling: false
+                confirmButtonClass: "positive ui button",
+                buttonsStyling: false,
             });
 
             return;
@@ -363,7 +364,8 @@ class DeckPropertiesEditor extends React.Component {
                 type: 'warning',
                 allowEscapeKey: true,
                 showConfirmButton: true,
-                buttonsStyling: false
+                confirmButtonClass: "positive ui button",
+                buttonsStyling: false,
             });
 
             return;
@@ -374,13 +376,16 @@ class DeckPropertiesEditor extends React.Component {
             // no editors - could just be deleted
             swal({
                 title: 'Delete this deck?',
-                text: `Do you want to delete the deck "${this.props.DeckEditStore.deckProps.title}"? his action can not be reverted.`,
+                text: `Do you want to delete the deck "${this.props.DeckEditStore.deckProps.title}"? This action can not be reverted.`,
                 type: 'question',
+
                 showCloseButton: false,
                 showCancelButton: true,
                 allowEscapeKey: true,
                 showConfirmButton: true,
-                buttonsStyling: false
+                confirmButtonClass: "positive ui button",
+                cancelButtonClass: "ui button",
+                buttonsStyling: false,
             })
             .then(() => {
                 this.context.executeAction(deckDeletion, {id: deckId});
@@ -639,8 +644,8 @@ class DeckPropertiesEditor extends React.Component {
             </div>;
 
         let deleteButton = (this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ?
-            <button className='ui negative right floated button'
-                onClick={this.handleDelete.bind(this)}>Delete Deck
+            <button className='ui negative right floated left labeled icon button'
+                onClick={this.handleDelete.bind(this)}><i className='ui icon trash' aria-hidden />Delete Deck
             </button>
             : '';
 
