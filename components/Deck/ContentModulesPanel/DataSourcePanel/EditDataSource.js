@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
 import updateDataSources from '../../../../actions/datasource/updateDataSources';
 import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataSource';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class EditDataSource extends React.Component {
     componentDidMount() {
@@ -31,14 +32,28 @@ class EditDataSource extends React.Component {
                 return false;
             }
         };
-
+        
+        const messages = defineMessages({
+            no_title: {
+                id: 'EditDataSource.no_title',
+                defaultMessage: 'This field cannot be empty.'
+            },
+            valid_url: {
+                id: 'EditDataSource.valid_url',
+                defaultMessage: 'The URL must be a valid one.'
+            },
+            valid_year: {
+                id: 'EditDataSource.valid_year',
+                defaultMessage: 'Enter a valid number for a Year, which is less or equal the current one.'
+            }
+        });
         const dataSourceValidation = {
             fields: {
                 title: {
                     identifier: 'title',
                     rules: [{
                         type: 'empty',
-                        prompt: 'This field cannot be empty.'
+                        prompt: this.context.intl.formatMessage(messages.no_title)
                     }]
                 },
                 url: {
@@ -46,7 +61,7 @@ class EditDataSource extends React.Component {
                     optional: true,
                     rules: [{
                         type: 'urlRule[url]',
-                        prompt: 'The URL must be a valid one.'
+                        prompt: this.context.intl.formatMessage(messages.valid_url)
                     }]
                 },
                 year: {
@@ -54,7 +69,7 @@ class EditDataSource extends React.Component {
                     optional: true,
                     rules: [{
                         type: 'yearRule[year]',
-                        prompt: 'Enter a valid number for a Year, which is less or equal the current one.'
+                        prompt: this.context.intl.formatMessage(messages.valid_year)
                     }]
                 }
             },
@@ -109,24 +124,73 @@ class EditDataSource extends React.Component {
     }
 
     render() {
-        let header = 'Edit source';
+        const form_messages = defineMessages({
+            header_edit: {
+                id: 'EditDataSource.form.header_edit',
+                defaultMessage: 'Edit source',
+            },
+            header_add: {
+                id: 'EditDataSource.form.header_add',
+                defaultMessage: 'Add source',
+            },
+            placeholder_title: {
+                id: 'EditDataSource.form.placeholder_title',
+                defaultMessage: 'Title',
+            },
+            placeholder_authors: {
+                id: 'EditDataSource.form.placeholder_authors',
+                defaultMessage: 'Authors',
+            },
+            placeholder_year: {
+                id: 'EditDataSource.form.placeholder_year',
+                defaultMessage: 'Year',
+            },
+            placeholder_comment: {
+                id: 'EditDataSource.form.placeholder_comment',
+                defaultMessage: 'Comment',
+            }
+        });
+        let header = this.context.intl.formatMessage(form_messages.header_edit);
         let dataSource = this.props.dataSource;
         let deleteButton = (
             <button tabIndex="0" type="button" onClick={this.handleDeleteClick.bind(this)} className="ui red labeled icon button">
-                <i className="icon minus circle"></i> Delete
+                <i className="icon minus circle"></i>
+                <FormattedMessage
+                    id='EditDataSource.form.button_delete'
+                    defaultMessage='Delete' />
             </button>
         );
         if (dataSource === null) {
-            header = 'Add source';
+            header = this.context.intl.formatMessage(form_messages.header_add);
             dataSource = {title: '', url: '', comment: ''};
             deleteButton = '';
         }
         let dataSourceTypeOptions = <select className="ui search dropdown" defaultValue={dataSource.type} aria-labelledby="type" id="type" ref="select_types">
-            <option value="webpage" >Web page</option>publication
-            <option value="webdocument" >Web document</option>
-            <option value="publication" >Publication</option>
-            <option value="person" >Person</option>
-            <option value="plaintext" >Plain text</option>
+            <option value="webpage" >
+                <FormattedMessage
+                    id='EditDataSource.form.type_webpage'
+                    defaultMessage='Web page' />
+            </option>
+            <option value="webdocument" >
+                <FormattedMessage
+                    id='EditDataSource.form.type_webdocument'
+                    defaultMessage='Web document' />
+            </option>
+            <option value="publication" >
+                <FormattedMessage
+                    id='EditDataSource.form.type_publication'
+                    defaultMessage='Publication' />
+            </option>
+            <option value="person" >
+                <FormattedMessage
+                    id='EditDataSource.form.type_person'
+                    defaultMessage='Person' />
+            </option>
+            <option value="plaintext" >
+                <FormattedMessage
+                    id='EditDataSource.form.type_text'
+                    defaultMessage='Plain text' />
+            </option>
         </select>;
 
         return (
@@ -134,36 +198,62 @@ class EditDataSource extends React.Component {
                 <h3 className="ui dividing header">{header}</h3>
                 <form className="ui form edit">
                     <div className="ui seven wide required field" ref="div_types" >
-                        <label htmlFor="type">Type</label>
+                        <label htmlFor="type">
+                            <FormattedMessage
+                                id='EditDataSource.form.label_type'
+                                defaultMessage='Type' />
+                        </label>
                         {dataSourceTypeOptions}
                     </div>
                     <div className="ui required field">
-                        <label htmlFor="title">Title</label>
-                        <input type="text" ref="title" id="title" name="title" placeholder="Title" defaultValue={dataSource.title} autoFocus />
+                        <label htmlFor="title">
+                            <FormattedMessage
+                                id='EditDataSource.form.label_title'
+                                defaultMessage='Title' />
+                        </label>
+                        <input type="text" ref="title" id="title" name="title" placeholder={this.context.intl.formatMessage(form_messages.placeholder_title)} defaultValue={dataSource.title} autoFocus />
                     </div>
                     <div className="ui field">
                         <label htmlFor="url">URL</label>
                         <input type="text" ref="url" id="url" name="url" placeholder="Url" defaultValue={dataSource.url} />
                     </div>
                     <div className="ui field">
-                        <label htmlFor="authors">Authors</label>
-                        <input type="text" ref="authors" id="authors" name="authors" placeholder="Authors" defaultValue={dataSource.authors} />
+                        <label htmlFor="authors">
+                            <FormattedMessage
+                                id='EditDataSource.form.label_authors'
+                                defaultMessage='Authors' />
+                        </label>
+                        <input type="text" ref="authors" id="authors" name="authors" placeholder={this.context.intl.formatMessage(form_messages.placeholder_authors)} defaultValue={dataSource.authors} />
                     </div>
                     <div className="ui field">
-                        <label htmlFor="year">Year</label>
-                        <input type="text" ref="year" id="year" name="year" placeholder="Year" defaultValue={dataSource.year} />
+                        <label htmlFor="year">
+                            <FormattedMessage
+                                id='EditDataSource.form.label_year'
+                                defaultMessage='Year' />
+                        </label>
+                        <input type="text" ref="year" id="year" name="year" placeholder={this.context.intl.formatMessage(form_messages.placeholder_year)} defaultValue={dataSource.year} />
                     </div>
                     <div className="ui field">
-                        <label htmlFor="comment">Comment</label>
-                        <input type="text" ref="comment" id="comment" name="comment" placeholder="Comment" defaultValue={dataSource.comment} />
+                        <label htmlFor="comment">
+                            <FormattedMessage
+                                id='EditDataSource.form.label_comment'
+                                defaultMessage='Comment' />
+                        </label>
+                        <input type="text" ref="comment" id="comment" name="comment" placeholder={this.context.intl.formatMessage(form_messages.placeholder_comment)} defaultValue={dataSource.comment} />
                     </div>
 
                     <div className="ui hidden divider"></div>
                     <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
-                        <i className="icon check"></i> Submit
+                        <i className="icon check"></i>
+                            <FormattedMessage
+                                id='EditDataSource.form.button_submit'
+                                defaultMessage='Submit' />
                     </button>
                     <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui secondary labeled icon button">
-                        <i className="icon close"></i> Cancel
+                        <i className="icon close"></i>
+                            <FormattedMessage
+                                id='EditDataSource.form.button_cancel'
+                                defaultMessage='Cancel' />
                     </button>
                     {deleteButton}
                     <div className="ui error message"/>
@@ -174,7 +264,8 @@ class EditDataSource extends React.Component {
 }
 
 EditDataSource.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 EditDataSource = connectToStores(EditDataSource, [DataSourceStore], (context, props) => {
