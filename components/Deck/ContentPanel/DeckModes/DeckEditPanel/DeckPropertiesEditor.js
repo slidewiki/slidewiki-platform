@@ -350,7 +350,7 @@ class DeckPropertiesEditor extends React.Component {
                 type: 'warning',
                 allowEscapeKey: true,
                 showConfirmButton: true,
-                confirmButtonClass: "positive ui button",
+                confirmButtonClass: 'positive ui button',
                 buttonsStyling: false,
             });
 
@@ -364,7 +364,7 @@ class DeckPropertiesEditor extends React.Component {
                 type: 'warning',
                 allowEscapeKey: true,
                 showConfirmButton: true,
-                confirmButtonClass: "positive ui button",
+                confirmButtonClass: 'positive ui button',
                 buttonsStyling: false,
             });
 
@@ -383,8 +383,8 @@ class DeckPropertiesEditor extends React.Component {
                 showCancelButton: true,
                 allowEscapeKey: true,
                 showConfirmButton: true,
-                confirmButtonClass: "positive ui button",
-                cancelButtonClass: "ui button",
+                confirmButtonClass: 'positive ui button',
+                cancelButtonClass: 'ui button',
                 buttonsStyling: false,
             })
             .then(() => {
