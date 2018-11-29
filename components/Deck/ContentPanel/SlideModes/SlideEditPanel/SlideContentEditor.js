@@ -84,7 +84,7 @@ class SlideContentEditor extends React.Component {
     }
 
     hasChanges = () => {
-        let hasChanges = this.context.SlideEditStore.hasChanges;
+        let hasChanges = this.props.SlideEditStore.hasChanges;
         return hasChanges;
     };
 
