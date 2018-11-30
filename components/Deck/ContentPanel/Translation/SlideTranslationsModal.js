@@ -8,6 +8,10 @@ import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageDisplayName, compareLanguageCodes} from '../../../../common';
 import {navigateAction} from 'fluxible-router';
 import addNodeTranslation from '../../../../actions/translation/addNodeTranslation';
+import { makeNodeURL } from '../../../common/Util';
+import ContentStore from '../../../../stores/ContentStore';
+import DeckPageStore from '../../../../stores/DeckPageStore';
+
 
 class SlideTranslationsModal extends React.Component {
 
@@ -61,7 +65,7 @@ class SlideTranslationsModal extends React.Component {
 
     handleActionClick(e) {
         if (this.state.action === 'translate') {
-            $('#PresentationNewWindow').click();
+            //$('#PresentationNewWindow').click();
             console.log('test');
             this.handleClose();
 
@@ -100,13 +104,21 @@ class SlideTranslationsModal extends React.Component {
                 id: 'SlideTranslationsModal.autoSelect',
                 defaultMessage: 'The source and target language of this translation are automatically selected. Only select a different language if this automatic selection is incorrect.',
             },
-            alternativeTranslation: {
-                id: 'SlideTranslationsModal.alternativeTranslation',
-                defaultMessage: 'We have a limit amount of automatic translation each month. Alternatively, you can use the via the <a href="https://tinyurl.com/ychtmdy9" target="_blank">Google Chrome</a> built-in translation feature, Microsoft Edge <a href="https://tinyurl.com/ycdhg9db"  target="_blank">translation extension</a> or “app”, and via one of the Mozilla Firefox extensions for translations (<a href="https://tinyurl.com/y88t4jtq"  target="_blank">example</a> ).',
+            alternativeTranslation1: {
+                id: 'SlideTranslationsModal.alternativeTranslation1',
+                defaultMessage: 'We have a limit amount of automatic translation each month. Alternatively, you can use the ',
+            },
+            alternativeTranslation2: {
+                id: 'SlideTranslationsModal.alternativeTranslation2',
+                defaultMessage: ' built-in translation feature, ',
+            },
+            alternativeTranslation3: {
+                id: 'SlideTranslationsModal.alternativeTranslation3',
+                defaultMessage: ' translation extension or “app”, and via one of the Mozilla Firefox extensions for translations (',
             },
             openOriginal: {
                 id: 'SlideTranslationsModal.openOriginal',
-                defaultMessage: 'The original untranslate version of this slide will be openend in a new window, which can help you to evaluate the automatic translation.',
+                defaultMessage: 'With the play button below you can open the original untranslated version of this slide in a new window. This can help you to evaluate the automatic translation. This button is also always available in the footer below the slide edit area.',
             },
             sourceLanguageSearchOptions: {
                 id: 'SlideTranslationsModal.sourceLanguageSearchOptions',
@@ -179,9 +191,11 @@ class SlideTranslationsModal extends React.Component {
                   }}>
                   <Modal.Header className="ui left aligned" as="h1" id="SlideTranslationsModalHeader">
                     {this.context.intl.formatMessage(messages.header)}
+                    <br/>
                   </Modal.Header>
                   <Modal.Content id="SlideTranslationsModalDescription">
                       <div className="sr-only" id="SlideTranslationsModalDescription2">{this.context.intl.formatMessage(messages.switchSR)}</div>
+                      {this.context.intl.formatMessage(messages.autoSelect)}
                       <Divider />
 
                       <div>
@@ -211,9 +225,22 @@ class SlideTranslationsModal extends React.Component {
                         /> {this.context.intl.formatMessage(messages.targetLanguageSearchOptions)}
                         </div>
                       <Divider />
-
-
+                      <br/>
+                      {this.context.intl.formatMessage(messages.alternativeTranslation1)}
+                      <a href="https://tinyurl.com/ychtmdy9" target="_blank">Google Chrome</a>
+                      {this.context.intl.formatMessage(messages.alternativeTranslation2)}
+                      <a href="https://tinyurl.com/ycdhg9db"  target="_blank">Microsoft Edge</a>
+                      {this.context.intl.formatMessage(messages.alternativeTranslation3)}
+                      <a href="https://tinyurl.com/y88t4jtq"  target="_blank">example</a> ).
+                      <br/>
+                      <br/>
                       {this.context.intl.formatMessage(messages.openOriginal)}
+                      <br/>
+                      <a id="PresentationNewWindow" href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.DeckPageStore.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
+                          <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                              <i className="circle play large icon"></i>
+                          </button>
+                      </a>
                       <br/>
 
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
@@ -231,9 +258,11 @@ SlideTranslationsModal.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
-SlideTranslationsModal = connectToStores(SlideTranslationsModal, [TranslationStore], (context, props) => {
+SlideTranslationsModal = connectToStores(SlideTranslationsModal, [TranslationStore, ContentStore, DeckPageStore ], (context, props) => {
     return {
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState(),
+        DeckPageStore: context.getStore(DeckPageStore).getState(),
     };
 });
 
