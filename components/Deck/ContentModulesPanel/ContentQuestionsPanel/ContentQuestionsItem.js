@@ -7,6 +7,7 @@ import ContentQuestionAnswersList from './ContentQuestionAnswersList';
 import toggleAnswers from '../../../../actions/questions/toggleAnswers';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import Util from '../../../common/Util';
+import { defineMessages } from 'react-intl';
 
 class ContentQuestionsItem extends React.Component {
     //return the position of the node in the deck
@@ -86,9 +87,15 @@ class ContentQuestionsItem extends React.Component {
         };
 
         let activeIfFirst = this.props.index === 0 ? 'active' : ''; // something wrong with accordion - doesn't expand
-
+        
+        const form_messages = defineMessages({
+            originally: {
+                id: 'ContentQuestionsItem.form.originally',
+                defaultMessage: '(originally from',
+            }
+        });
         const cheerioContentName = (question.relatedObjectName) ? cheerio.load(question.relatedObjectName).text() : '';
-        const nodeRef = (question.relatedObject !== this.props.selector.stype || question.relatedObjectId !== this.props.selector.sid.split('-')[0]) ? (<span><i>{' (originally from ' + question.relatedObject + ' '}<a href={this.getPath(question)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</i></span>) : '';
+        const nodeRef = (question.relatedObject !== this.props.selector.stype || question.relatedObjectId !== this.props.selector.sid.split('-')[0]) ? (<span><i>{' ' + this.context.intl.formatMessage(form_messages.originally) + ' ' + question.relatedObject + ' '}<a href={this.getPath(question)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</i></span>) : '';
 
         return (
             // <div className="item">
@@ -125,7 +132,8 @@ class ContentQuestionsItem extends React.Component {
 }
 
 ContentQuestionsItem.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ContentQuestionsItem = connectToStores(ContentQuestionsItem, [DeckTreeStore], (context, props) => {
     return {

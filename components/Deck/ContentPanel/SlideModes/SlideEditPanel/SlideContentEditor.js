@@ -267,7 +267,7 @@ class SlideContentEditor extends React.Component {
                 $('.swal2-confirm').focus();
             }, 500);
         }
-    
+
     }
     rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv){
         if(keepExistingContent){
@@ -974,7 +974,7 @@ class SlideContentEditor extends React.Component {
     }
     handleEmbedQuestionsClick(content){
 
-        let title = content.options.title; 
+        let title = content.options.title;
         let titleDiv = '<div id="questions_title" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 20px; width: 100%; height: 10%;"><h3>'+title+'</h3></div>';
 
         let questionhtml = '<div  _type="body" id="questions_content" class="block content v-up" style="position: absolute; top: 15%; left: 50px; overflow-y:auto; height:80%; max-height:800px; width:90%; font-family:Tahoma;">';
@@ -983,7 +983,7 @@ class SlideContentEditor extends React.Component {
 
         let showNumbers = content.options.showNumbers;
         let showAnsExp = content.options.showAnsExp;
-        
+
         for (let i = 0; i < questionsList.length; i++){
             let currentQuestion = questionsList[i];
             let currentAnswers = currentQuestion.answers;
@@ -1027,16 +1027,16 @@ class SlideContentEditor extends React.Component {
         //let iframe = '<div class="iframe" style="position: absolute; top: 100px; left:80px; "><iframe width="800" height="550" srcdoc="'+ questionhtml + '" frameborder="0"></iframe></div>';
         //let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + iframe+'</div>';
         let pptx2htmlDiv = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+titleDiv + questionhtml+'</div>';
-        
+
         if($('.pptx2html').length) //if slide is in canvas mode
         {
             /*$('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 150px; left: 50px; width: 700px; height: 500px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
             this.hasChanges = true;
             //this.correctDimensionsBoxes('iframe'); */
             this.refs.inlineContent.innerHTML = pptx2htmlDiv;
-        
+
         } else { //if slide is in non-canvas mode
-            this.refs.inlineContent.innerHTML = scrolldiv; 
+            this.refs.inlineContent.innerHTML = scrolldiv;
         }
 
         //console.log(pptx2htmlDiv);
@@ -1117,7 +1117,7 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
-        
+
         CKEDITOR.instances.inlineContent.on('focus',(evt) => {
             this.context.executeAction(contentEditorClick, {
                 focus: true
@@ -2546,7 +2546,7 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
-        
+
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*
@@ -2628,19 +2628,18 @@ class SlideContentEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="ui horizontal segments">
-                    {
-                        this.props.hideSpeakerNotes ?  null :
-                        <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
-                                style={compSpeakerStyle}>
-                            <b>Speaker notes:</b><br />
-                            <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
-                                    ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
-                                    dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                { this.props.hideSpeakerNotes ? null :
+                    <div className="ui horizontal segments">
+                            <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
+                                    style={compSpeakerStyle}>
+                                <b>Speaker notes:</b><br />
+                                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
+                                        ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
+                                        dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         );
     }
