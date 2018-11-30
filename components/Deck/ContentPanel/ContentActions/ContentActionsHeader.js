@@ -66,6 +66,10 @@ class ContentActionsHeader extends React.Component {
                 id: 'ContentActionsHeader.deleteAriaText',
                 defaultMessage:'Delete slide'
             },
+            deleteDeckAriaText:{
+                id: 'ContentActionsHeader.deleteDeckAriaText',
+                defaultMessage:'Delete deck'
+            },
             language:{
                 id: 'ContentActionsHeader.language',
                 defaultMessage:'Language'
@@ -109,7 +113,7 @@ class ContentActionsHeader extends React.Component {
 
     // TODO Remove this unused code once it is decided we don't ever need to provide this option
     handleDeleteNodeWithCheck(selector) {
-        // plain remove for slides 
+        // plain remove for slides
         if (selector.stype !== 'deck') {
             return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
         }
@@ -463,7 +467,7 @@ class ContentActionsHeader extends React.Component {
                         <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
                             type="button" key="deleteItem"
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
+                            data-tooltip={this.context.intl.formatMessage((contentDetails.selector.stype==='deck') ? this.messages.deleteDeckAriaText : this.messages.deleteAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
                             <i className="large icons">
                                 <i className="red trash alternate icon"></i>
