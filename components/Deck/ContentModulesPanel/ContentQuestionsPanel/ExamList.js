@@ -29,11 +29,9 @@ class ExamList extends React.Component {
             return path;
         }
     }
-    cancelButtonClick(e) {
-        e.preventDefault();
-        this.context.executeAction(navigateAction, {
-            url: this.getPath()
-        });
+    closeButtonClick() {
+        window.open('','_parent','');
+        window.close();
     }
     handleSubmitAnswers(e) {
         e.preventDefault();
@@ -103,7 +101,7 @@ class ExamList extends React.Component {
                         id='ExamList.form.button_submit'
                         defaultMessage='Submit answers' />
                 </button>
-                <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
+                <button type="button" className="ui secondary labeled close icon button" onClick={this.closeButtonClick.bind(this)}>
                     <i className="icon close" />
                     <FormattedMessage
                         id='ExamList.form.button_cancel'
