@@ -7,18 +7,33 @@ import PermissionsStore from '../../../../stores/PermissionsStore';
 import createRevision from '../../../../actions/history/createRevision';
 import DeckRevision from './DeckRevision';
 import {Button, Divider, List} from 'semantic-ui-react';
+import { defineMessages } from 'react-intl';
 
 class DeckHistoryPanel extends React.Component {
 
     handleCreateRevisionClick() {
+        const swal_messages = defineMessages({
+            text: {
+                id: 'DeckHistoryPanel.swal.text',
+                defaultMessage: 'This action will create a new version for this deck. Do you want to continue?',
+            },
+            confirmButtonText: {
+                id: 'DeckHistoryPanel.swal.confirmButtonText',
+                defaultMessage: 'Yes, create a new version',
+            },
+            cancelButtonText: {
+                id: 'DeckHistoryPanel.swal.cancelButtonText',
+                defaultMessage: 'No',
+            }
+        });
         swal({
-            text: 'This action will create a new version for this deck. Do you want to continue?',
+            text: context.intl.formatMessage(swal_messages.text),
             type: 'question',
             showCloseButton: true,
             showCancelButton: true,
-            confirmButtonText: 'Yes, create a new version',
+            confirmButtonText: context.intl.formatMessage(swal_messages.confirmButtonText),
             confirmButtonClass: 'ui olive button',
-            cancelButtonText: 'No',
+            cancelButtonText: context.intl.formatMessage(swal_messages.cancelButtonText),
             cancelButtonClass: 'ui red button',
             buttonsStyling: false
         }).then((accepted) => {
@@ -31,6 +46,16 @@ class DeckHistoryPanel extends React.Component {
     }
 
     render() {
+        const form_messages = defineMessages({
+            button_aria: {
+                id: 'DeckHistoryPanel.form.button_aria',
+                defaultMessage: 'Create a new version of this deck',
+            },
+            button_content: {
+                id: 'DeckHistoryPanel.form.button_content',
+                defaultMessage: 'Create a new version',
+            }
+        });
         let selector = this.props.selector;
         let isRoot = selector.stype === 'deck' && selector.id === selector.sid;
         let deckRevisions = this.props.DeckHistoryStore.revisions.map((revision) => {
@@ -44,9 +69,9 @@ class DeckHistoryPanel extends React.Component {
         return (
         <div ref="deckHistoryPanel" className="ui">
             {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
-            <div><Button positive aria-label='Create a new version of this deck' size='small' floated='right'
+            <div><Button positive aria-label={this.context.intl.formatMessage(form_messages.button_aria)} size='small' floated='right'
                          icon='plus'
-                         content='Create a new version' onClick={this.handleCreateRevisionClick.bind(this)}/>
+                         content={this.context.intl.formatMessage(form_messages.button_content)} onClick={this.handleCreateRevisionClick.bind(this)}/>
                 <Divider hidden clearing/></div> : ''}
             <List relaxed verticalAlign='middle'>
                 {deckRevisions}
@@ -57,7 +82,8 @@ class DeckHistoryPanel extends React.Component {
 }
 
 DeckHistoryPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 DeckHistoryPanel = connectToStores(DeckHistoryPanel, [DeckHistoryStore, UserProfileStore, PermissionsStore], (context, props) => {

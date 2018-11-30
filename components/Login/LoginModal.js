@@ -385,10 +385,10 @@ class LoginModal extends React.Component {
                     active={this.state.activeTrap}
                     className = "header">
               <div className="header">
-                  <h1 id="siginModal_header" style={headerStyle}>
+                  <h2 id="siginModal_header" style={headerStyle}>
                      {this.context.intl.formatMessage(messages.headerText)}
 
-                  </h1>
+                  </h2>
               </div>
               <div className="content">
                 <div className="ui container">

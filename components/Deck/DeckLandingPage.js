@@ -18,12 +18,14 @@ import { Microservices } from '../../configs/microservices';
 
 import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
+import openReportModal from '../../actions/report/openReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationsPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
+import slugify from 'slugify';
 
 class DeckLandingPage extends React.Component {
 
@@ -68,13 +70,21 @@ class DeckLandingPage extends React.Component {
         let deckSlug = this.props.DeckPageStore.deckSlug || '_';
         let selector = this.props.DeckPageStore.selector;
         let openDeckUrl = ['', 'deck', selector.id , deckSlug, 'deck', selector.id].join('/');
+        if (this.props.TranslationStore.currentLang) {
+            openDeckUrl += '?language=' + (this.props.TranslationStore.currentLang);
+        }
+
         let presentationUrl = this.getPresentationHref();
+
+        let deckStatsUrl = ['', 'deck', selector.id , deckSlug, 'stats'].join('/');
 
         let deckTags = deckData.tags || [];
         let deckTopics = deckData.topics || [];
 
-        if(!deckData.variants)
-            deckData.variants = [];
+        let deckVariantSlugs = this.props.TranslationStore.nodeVariants.reduce((result, variant) => {
+            result[variant.language] = variant.title ? slugify(variant.title).toLowerCase() : deckSlug;
+            return result;
+        }, {});
 
         let deckLanguages = [this.props.TranslationStore.treeLanguage, ...this.props.TranslationStore.treeTranslations];
 
@@ -121,14 +131,14 @@ class DeckLandingPage extends React.Component {
         return (
             <div>
                 <Container fluid>
-                    <Divider hidden/>
-                    <Grid divided='vertically' stackable>
+
+                    <Grid padded='vertically' divided='vertically' stackable>
                         <Grid.Column only="tablet computer" tablet={1} computer={2}>
                         </Grid.Column>
 
                         <Grid.Column mobile={16} tablet={14} computer={12}>
                             <Grid.Row>
-                                <Segment>
+                                <Segment attached="top">
                                     <Grid stackable>
                                         <Grid.Column width={4}>
                                             <NavLink className="image" aria-hidden tabIndex='-1' href={openDeckUrl}>
@@ -210,9 +220,15 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                     </Grid>
                                 </Segment>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}}>
+                                    <div className="ui icon buttons huge attached">
+                                        <NavLink href={deckStatsUrl} tabIndex={-1} >
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">
+                                                <Icon name="line graph" />
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                    <ReportModal/>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
@@ -240,7 +256,7 @@ class DeckLandingPage extends React.Component {
                                         { deckLanguages.map((lang, i) =>
                                             <span key={i}>
                                                 {!!i && ',\xa0'}
-                                                <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + lang}>
+                                                <NavLink href={['', 'deck', selector.id , deckVariantSlugs[lang] || '_'].join('/') + '?language=' + lang}>
                                                     <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
                                                     { getLanguageDisplayName(lang) }
                                                 </NavLink>

@@ -6,6 +6,7 @@ import classNames from 'classnames/bind';
 import cheerio from 'cheerio';
 import readUserNotification from '../../../actions/user/notifications/readUserNotification';
 import deleteUserNotification from '../../../actions/user/notifications/deleteUserNotification';
+import {getLanguageName} from '../../../common'; 
 
 class UserNotificationsItem extends React.Component {
     handleMarkAsRead(notification) {
@@ -55,7 +56,7 @@ class UserNotificationsItem extends React.Component {
                         </a> {'translated ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>{' to '}
                         {/*<a href={'/slideview/' + notification.translation_info.content_id}>{notification.translation_info.language}</a>*/}
-                        <a href={viewPath}>{notification.translation_info.language}</a>
+                        {getLanguageName(notification.translation_info.language)}
                     </div>
                 );
                 break;
