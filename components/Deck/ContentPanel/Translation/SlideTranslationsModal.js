@@ -33,11 +33,17 @@ class SlideTranslationsModal extends React.Component {
 
     handleOpen(){
         $('#app').attr('aria-hidden','true');
+
+        let primaryLanguage = this.props.TranslationStore.treeLanguage;
+        let selectedLanguage = this.props.TranslationStore.currentLang || primaryLanguage;
+        this.setState({
+        });
         this.setState({
             modalOpen:true,
             activeTrap:true,
             action: '',
-            languageCode: ''
+            sourceLanguageCode: primaryLanguage,
+            targetLanguageCode: selectedLanguage
         });
     }
 
@@ -69,8 +75,9 @@ class SlideTranslationsModal extends React.Component {
             console.log('test');
             this.handleClose();
 
-            //let primaryLanguage = this.props.TranslationStore.treeLanguage;
-            //let selectedLanguage = this.props.TranslationStore.currentLang || primaryLanguage;
+            console.log(this.state.sourceLanguageCode);
+            console.log(this.state.targetLanguageCode);
+
 
             //this.context.executeAction(addNodeTranslation, {
             //    language: this.state.languageCode
@@ -134,7 +141,7 @@ class SlideTranslationsModal extends React.Component {
             },
             translate: {
                 id: 'SlideTranslationsModal.translate',
-                defaultMessage: 'Start translation',
+                defaultMessage: 'Translate slide',
             },
             originLanguage: {
                 id: 'SlideTranslationsModal.originLanguage',
@@ -146,14 +153,13 @@ class SlideTranslationsModal extends React.Component {
             }
         });
 
-        let primaryLanguage = this.props.TranslationStore.treeLanguage;
-        let selectedLanguage = this.props.TranslationStore.currentLang || primaryLanguage;
+
         let sourceLanguagesOptions = [];
         if (this.props.TranslationStore.supportedLangs && this.props.TranslationStore.supportedLangs.length > 0) {
             sourceLanguagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
                 if (this.props.TranslationStore.treeTranslations.find((t) => compareLanguageCodes(t, current)) //include only tranlations and original deck language
                   || compareLanguageCodes(current, this.props.TranslationStore.treeLanguage))
-                    arr.push({key: current, value: current, text:  (current === primaryLanguage  ? ' ' : '') + getLanguageDisplayName(current) + (current === primaryLanguage ? ' (primary)' : '')});
+                    arr.push({key: current, value: current, text:  (current === this.state.sourceLanguageCode  ? ' ' : '') + getLanguageDisplayName(current) + (current === this.state.sourceLanguageCode ? ' (primary)' : '')});
                 return arr;
             }, []).sort((a, b) => (a.text > b.text) ? 1 : -1);
         }
@@ -162,7 +168,7 @@ class SlideTranslationsModal extends React.Component {
             targetLanguagesOptions = this.props.TranslationStore.supportedLangs.reduce((arr, current)  => {
                 if (this.props.TranslationStore.treeTranslations.find((t) => compareLanguageCodes(t, current)) //include only tranlations and original deck language
                   || compareLanguageCodes(current, this.props.TranslationStore.treeLanguage))
-                    arr.push({key: current, value: current, text:  (current === selectedLanguage  ? ' ' : '') + getLanguageDisplayName(current) + (current === selectedLanguage ? ' (current)' : '')});
+                    arr.push({key: current, value: current, text:  (current === this.state.targetLanguageCode  ? ' ' : '') + getLanguageDisplayName(current) + (current === this.state.targetLanguageCode ? ' (current)' : '')});
                 return arr;
             }, []).sort((a, b) => (a.text > b.text) ? 1 : -1);
         }
@@ -204,11 +210,12 @@ class SlideTranslationsModal extends React.Component {
                       <Dropdown
                           className="ui"
                           placeholder={this.context.intl.formatMessage(messages.chooseSourceLanguage)}
-                          search
+                          defaultValue={this.state.sourceLanguageCode}
                           options={sourceLanguagesOptions}
                           onChange={this.handleSourceLanguageSelection.bind(this)}
                           name='sourceLanguageSelection'
-                        /> {this.context.intl.formatMessage(messages.sourceLanguageSearchOptions)}
+                        />
+                        {/*this.context.intl.formatMessage(messages.sourceLanguageSearchOptions)*/}
                         </div>
                       <Divider />
 
@@ -218,11 +225,12 @@ class SlideTranslationsModal extends React.Component {
                       <Dropdown
                           className="ui"
                           placeholder={this.context.intl.formatMessage(messages.chooseTargetLanguage)}
-                          search
+                          defaultValue={this.state.targetLanguageCode}
                           options={targetLanguagesOptions}
                           onChange={this.handleTargetLanguageSelection.bind(this)}
                           name='targetLanguageSelection'
-                        /> {this.context.intl.formatMessage(messages.targetLanguageSearchOptions)}
+                        />
+                        {/*this.context.intl.formatMessage(messages.targetLanguageSearchOptions)*/}
                         </div>
                       <Divider />
                       <br/>
