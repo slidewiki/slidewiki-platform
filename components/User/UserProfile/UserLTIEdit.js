@@ -244,7 +244,7 @@ class UserLTIEdit extends React.Component {
                         </div>
 
                         <div>
-                          {(this.props.currentUserlti._id == undefined) ?
+                          {(this.props.currentUserlti._id === undefined) ?
                             <button className="ui button" onClick={this.handleCancel.bind(this)} >Cancel </button> : ''}
                             <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
                                 Save
