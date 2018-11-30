@@ -444,15 +444,17 @@ class Integrations extends React.Component {
                   </h3>
                 </div>
                 <div className="ui segment">
-                    <NavLink className="item" href={'/user/'+this.props.UserProfileStore.username+'/ltis/overview'} activeStyle={this.styles}>
-                      <p>
-                        <i className="icon users"/>
+
+                    <p>
+                    <i className="icon big graduation cap"/>
+                      <NavLink className="item" href={'/user/'+this.props.UserProfileStore.username+'/ltis/overview'} activeStyle={this.styles}>
                         <FormattedMessage
                           id='Integration.myLTIs'
                           defaultMessage=' My Learning Services'
                         />
-                      </p>
-                    </NavLink>
+                      </NavLink>
+                    </p>
+
                 </div>
               </div>
 

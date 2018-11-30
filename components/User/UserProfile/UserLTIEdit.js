@@ -7,6 +7,7 @@ import { timeSince } from '../../../common';
 import UserPicture from '../../common/UserPicture';
 import updateUserlti from '../../../actions/user/userprofile/updateUserlti';
 import saveUserlti from '../../../actions/user/userprofile/saveUserlti';
+import cancelUserlti from '../../../actions/user/userprofile/cancelUserlti';
 
 class UserLTIEdit extends React.Component {
     constructor(props){
@@ -129,6 +130,12 @@ class UserLTIEdit extends React.Component {
         this.context.executeAction(saveUserlti, lti);
     }
 
+    handleCancel(e) {
+        e.preventDefault();
+        console.log('handleCancel:');
+        this.context.executeAction(cancelUserlti);
+    }
+
     handleClickRemoveMember(member) {
         // console.log('handleClickRemoveMember', member, 'from', this.props.currentUserlti.members);
         let lti = this.getLTI(this.props.currentUserlti.members);
@@ -235,11 +242,16 @@ class UserLTIEdit extends React.Component {
                         </form>
                         <div className="ui hidden divider">
                         </div>
-                        <div className="ui buttons">
+
+                        <div>
+                          {(this.props.currentUserlti._id == undefined) ?
+                            <button className="ui button" onClick={this.handleCancel.bind(this)} >Cancel </button> : ''}
                             <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
-                                <i className="save icon"></i>Save Learning Service
+                                Save
                             </button>
                         </div>
+
+
                         {(this.props.saveUserltiIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
                         <div className="ui hidden divider">

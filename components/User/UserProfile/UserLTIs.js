@@ -165,8 +165,8 @@ class UserLTIs extends React.Component {
                   <div className="ui secondary clearing segment" >
                     <h3 className="ui left floated header" >Learning Services (LTIs)</h3>
                     <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewLTI.bind(this)}>
-                        <i className="icon users"/>
-                        <p>Add new Service</p>
+                        <i className="icon plus"/>
+                        <p>Add new service</p>
                     </button>
                 </div>
 

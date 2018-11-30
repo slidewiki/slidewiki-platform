@@ -49,6 +49,9 @@ class UserProfileStore extends BaseStore {
         this.saveUserltiError = '';
         this.saveUserltiIsLoading = false;
 
+        this.cancelUserltiError = '';
+
+
         this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
@@ -111,6 +114,8 @@ class UserProfileStore extends BaseStore {
         this.currentUserlti = {};
         this.saveUserltiError = '';
         this.saveUserltiIsLoading = false;
+        this.cancelUserltiError = '';
+
         this.saveProfileIsLoading = false;
 
         this.deleteUsergroupError = '';
@@ -154,8 +159,9 @@ class UserProfileStore extends BaseStore {
             currentUserlti: this.currentUserlti,
             saveUserltiError: this.saveUserltiError,
             saveUserltiIsLoading: this.saveUserltiIsLoading,
-            saveProfileIsLoading: this.saveProfileIsLoading,
+            cancelUserltiError: this.cancelUserltiError,
 
+            saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
             usergroupsViewStatus: this.usergroupsViewStatus,
 
@@ -202,6 +208,8 @@ class UserProfileStore extends BaseStore {
         this.currentUserlti = state.currentUserlti;
         this.saveUserltiError = state.saveUserltiError;
         this.saveUserltiIsLoading = state.saveUserltiIsLoading;
+        this.cancelUserltiError = state.cancelUserltiError;
+
         this.deleteUserltiError = state.deleteUserltiError;
         this.userltisViewStatus = state.userltisViewStatus;
 
@@ -424,6 +432,12 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    cancelUserltiSuccess() {
+        this.currentUserlti = {};
+        this.cancelUserltiError = '';
+        this.emitChange();
+    }
+
     deleteUsergroupFailed(error) {
         this.deleteUsergroupError = {
             action: 'delete',
@@ -567,6 +581,10 @@ UserProfileStore.handlers = {
     'SAVE_USERLTI_START': 'saveUserltiStart',
     'SAVE_USERLTI_FAILED': 'saveUserltiFailed',
     'SAVE_USERLTI_SUCCESS': 'saveUserltiSuccess',
+
+
+    'CANCEL_USERLTI_SUCCESS': 'cancelUserltiSuccess',
+
     'DELETE_USERLTI_FAILED': 'deleteUserltiFailed',
     'DELETE_USERLTI_SUCCESS': 'deleteUserltiSuccess',
     'UPDATE_USERLTIS_STATUS': 'updateUserltisStatus',
