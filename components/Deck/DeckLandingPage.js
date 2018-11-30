@@ -93,15 +93,24 @@ class DeckLandingPage extends React.Component {
         let originInfo = null;
         let originCreator = this.props.DeckViewStore.originCreatorData;
         if (deckData.origin) {
-            originInfo = (
-                <div className="meta" tabIndex="0">
-                    <strong>Origin: </strong>
-                    <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink>
-                    {originCreator ? ' by ' : ''}
-                    {originCreator && <a href={'/user/' + originCreator.username}>{originCreator.displayName || originCreator.username}</a>}
-                    {/* TODO check if this URL is working with languages! */}
-                </div>
-            );
+            if (deckData.origin.id) {
+                originInfo = (
+                    <div className="meta" tabIndex="0">
+                        <strong>Origin: </strong>
+                        <NavLink href={['/deck', deckData.origin.id + '-' + deckData.origin.revision, deckData.origin.slug].join('/')}>{deckData.origin.title}</NavLink>
+                        {originCreator ? ' by ' : ''}
+                        {originCreator && <NavLink href={'/user/' + originCreator.username}>{originCreator.displayName || originCreator.username}</NavLink>}
+                        {/* TODO check if this URL is working with languages! */}
+                    </div>
+                );
+            } else {
+                originInfo = (
+                    <div className="meta" tabIndex="0">
+                        <strong>Origin: </strong>
+                        {deckData.origin.title}
+                    </div>
+                );
+            }
         }
 
         const ColPadding = {

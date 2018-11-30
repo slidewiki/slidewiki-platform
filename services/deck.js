@@ -137,25 +137,28 @@ export default {
                 qs: { root: args.id, language: args.language },
                 json: true,
             }).then((deck) => {
-                if (deck.revisions) {
-                    // support old style api response
-                    // TODO remove this
-                    let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
-                        return rev.id === deck.active;
-                    });
-
-                    currentRevision.revisionUser = currentRevision.user;
-                    delete currentRevision.user;
-
-                    deck.revision = currentRevision.id;
-                    delete deck.revisions;
-
-                    // override everything else
-                    Object.assign(deck, currentRevision);
-                    deck.id = deck._id;
-                }
-
-                return deck;
+                // support old style api response
+                // TODO remove this
+                return toDeckRevision(deck);
+            }).then((deck) => {
+                // also check if the origin exists still
+                if (!deck.origin) return deck;
+                return rp.get({
+                    uri: `${Microservices.deck.uri}/deck/${deck.origin.id}`,
+                    json: true,
+                }).catch((err) => {
+                    if (err.statusCode === 404) {
+                        // deck origin is missing, remove user and id
+                        delete deck.origin.id;
+                        delete deck.origin.user;
+                    }
+                    // ignore any other error retrieving the origin data
+                }).then((origin) => {
+                    // update the user in case the origin was transferred at some point after the fork
+                    if (origin) deck.origin.user = origin.user;
+                    // always forward the current deck (not the origin)
+                    return deck;
+                });
             });
 
             /* Create promise for slides data success */
@@ -280,24 +283,7 @@ export default {
                 json:true,
             }).then((deck) => {
                 // TODO remove this
-                if (deck.revisions) {
-                    // support old style api response
-                    // TODO remove this
-                    let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
-                        return rev.id === deck.active;
-                    });
-
-                    currentRevision.revisionUser = currentRevision.user;
-                    delete currentRevision.user;
-
-                    deck.revision = currentRevision.id;
-                    delete deck.revisions;
-
-                    // override everything else
-                    Object.assign(deck, currentRevision);
-                    deck.id = deck._id;
-                }
-                return deck;
+                return toDeckRevision(deck);
             });
 
             // fetch the tags data
@@ -632,6 +618,27 @@ export default {
         }
     }
 };
+
+function toDeckRevision(deck) {
+    if (deck.revisions) {
+        // support old style api response
+        // TODO remove this
+        let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
+            return rev.id === deck.active;
+        });
+
+        currentRevision.revisionUser = currentRevision.user;
+        delete currentRevision.user;
+
+        deck.revision = currentRevision.id;
+        delete deck.revisions;
+
+        // override everything else
+        Object.assign(deck, currentRevision);
+        deck.id = deck._id;
+    }
+    return deck;
+}
 
 function getActivity(activityType, deckIds) {
     let activities = {};
