@@ -29,7 +29,7 @@ class InfoPanelInfoView extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        let samePropsState = equals(this.props, nextProps);
+        const samePropsState = equals(this.props, nextProps);
         this.isLoading = nextProps.loadingIndicator;
         // Content should be updated only when properties have changed.
         return !samePropsState;
@@ -59,24 +59,6 @@ class InfoPanelInfoView extends React.Component {
         return (
             <div className="ui container" ref="infoPanel" role="complementary" aria-labelledby="infopanel-title">
                 {this.isLoading && <div className="ui active dimmer"><div className="ui text loader">Loading</div></div>}
-                <div className="ui top attached icon buttons menu">
-                    <Dropdown pointing="top left" disabled={languageOptions.length < 2 && !canEdit}
-                              button basic className="attached" style={{textAlign: 'center'}}
-                              trigger={<h5 className='ui small header'>{this.context.intl.formatMessage(this.messages.selectLanguage)}: <i className={currentLangIconName + ' flag'} style={{marginRight: 0, verticalAlign: 'middle'}}></i> {currentLanguageName ? ('(' + currentLanguageName + ')') : ''}</h5>}
-                              icon={null}
-                              aria-label="Select language" data-tooltip="Select language"
-                              defaultValue={activeLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
-                </div>
-                <div className="ui attached segment">
-                    {
-                        this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
-                        <div className="ui attached segment">
-                            <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
-                                <i className='warning sign icon'></i>
-                                Updated version available
-                            </NavLink>
-                        </div>
-                    }
                 {
                     showZoomControls &&
                         <div className="ui top attached basic buttons menu" role="menu">
@@ -107,6 +89,7 @@ class InfoPanelInfoView extends React.Component {
                     </div>
                 }
 
+                <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
                 <div className="ui attached segment">
