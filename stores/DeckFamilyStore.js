@@ -34,6 +34,7 @@ class DeckFamilyStore extends BaseStore {
             return {
                 deckID: deck.db_id,
                 title: deck.title,
+                slug: deck.slug,
                 firstSlide: deck.firstSlide,
                 theme: deck.theme,
                 updated: deck.updated,

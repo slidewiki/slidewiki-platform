@@ -2,8 +2,6 @@ import async from 'async';
 // import { shortTitle } from '../configs/general';
 // import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
 import loadDataSources from './datasource/loadDataSources';
-import loadDataSourceCount from './datasource/loadDataSourceCount';
-import loadQuestionsCount from './questions/loadQuestionsCount';
 import loadCommentsCount from './contentdiscussion/loadCommentsCount';
 import loadPlaylistsCount from './collections/loadPlaylistsCount';
 import deckContentTypeError from './error/deckContentTypeError';
@@ -34,9 +32,6 @@ export default function loadContentModules(context, payload, done) {
         //     context.executeAction(loadDataSourceCount, payload, callback);
         // },
 
-        (callback) => {
-            context.executeAction(loadQuestionsCount, payload, callback);
-        },
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
         },

@@ -4,10 +4,12 @@ import { connectToStores } from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import UserGroupsStore from '../../stores/UserGroupsStore';
 import UserProfileStore from '../../stores/UserProfileStore';
+import GroupStatsStore from '../../stores/GroupStatsStore';
 import Info from './Info';
 import Menu from './Menu';
 import Details from './Details';
 import Decks from './Decks';
+import GroupStats from './GroupStats';
 import GroupCollections from '../DeckCollection/GroupCollections';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {navigateAction} from 'fluxible-router';
@@ -22,7 +24,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
 
         return <Decks decks={this.props.UserProfileStore.userDecks}
@@ -40,7 +42,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
 
         return <GroupCollections group={this.props.UserGroupsStore.currentUsergroup}
@@ -52,11 +54,21 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
         const isMember = group.members && group.members.find((m) => {
             return m.userid === this.props.UserProfileStore.userid;
         });
+
+        // sort members by joined, current user first
+        if (this.props.UserGroupsStore.currentUsergroup) {
+            this.props.UserGroupsStore.currentUsergroup.members.sort((a, b) => {
+                if (a.userid === this.props.UserProfileStore.userid) return -1;
+                if (b.userid === this.props.UserProfileStore.userid) return 1;
+                return a.joined < b.joined ? -1 : 1;
+            });
+        }
+
         return <Details currentUsergroup={ this.props.UserGroupsStore.currentUsergroup }
             isAdmin={ isAdmin } isCreator={ isCreator } isMember={isMember}
             saveUsergroupError={this.props.UserGroupsStore.saveUsergroupError}
@@ -66,6 +78,11 @@ class UserGroupPage extends React.Component {
             userid={this.props.UserProfileStore.userid}
             saveUsergroupIsLoading={this.props.UserGroupsStore.saveUsergroupIsLoading}
             picture={this.props.UserProfileStore.user.picture} />;
+    }
+
+    showStats(){
+        let group = this.props.UserGroupsStore.currentUsergroup;
+        return <GroupStats groupid={this.props.UserGroupsStore.currentUsergroup._id} groupStats={this.props.GroupStatsStore} />;
     }
 
     chooseView(){
@@ -78,6 +95,8 @@ class UserGroupPage extends React.Component {
                 return this.showDecks();
             case 'playlists':
                 return this.showCollections();
+            case 'stats':
+                return this.showStats();
             default:
                 return this.showDetails();
         }
@@ -105,7 +124,7 @@ class UserGroupPage extends React.Component {
         let group = this.props.UserGroupsStore.currentUsergroup;
         const isCreator = group.creator && group.creator.userid === this.props.UserProfileStore.userid;
         const isAdmin = group.members && group.members.find((m) => {
-            return m.userid === this.props.UserProfileStore.userid && (m.role && m.role[0] === 'admin');
+            return m.userid === this.props.UserProfileStore.userid && (m.role === 'admin');
         });
         return (
           <div className = "ui vertically padded stackable grid container" >
@@ -148,10 +167,12 @@ UserGroupPage.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-UserGroupPage = connectToStores(UserGroupPage, [UserGroupsStore, UserProfileStore], (context, props) => {
+UserGroupPage = connectToStores(UserGroupPage, [UserGroupsStore, UserProfileStore, GroupStatsStore], (context, props) => {
     return {
         UserGroupsStore: context.getStore(UserGroupsStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        GroupStatsStore: context.getStore(GroupStatsStore).getState(),
+
     };
 });
 

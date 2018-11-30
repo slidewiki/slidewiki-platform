@@ -19,11 +19,22 @@ import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import TagsPanel from './TagsPanel/TagsPanel';
 //import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
+import PermissionsStore from '../../../stores/PermissionsStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
+import {  Dropdown } from 'semantic-ui-react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentModulesPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            showMobileMenu: false
+        };
+    }
+
     componentWillMount() {
         let selector = this.props.ContentModulesStore.selector;
         //check localStorage to see if invalid data have been read from the browser cache
@@ -46,11 +57,33 @@ class ContentModulesPanel extends React.Component {
             }
         }
     }
+    
+    componentDidMount(){
+        $(this.refs.selectTab).dropdown({selectOnKeydown: false});
+        this.checkOverflowingChildren();
+    }
+    
+    componentDidUpdate() {
+        this.checkOverflowingChildren();
+    }
+    
+    checkOverflowingChildren() {
+        const element = this.refs.pointerMenu;
+        
+        const hasOverflowingChildren = element.offsetWidth < element.scrollWidth; //only check the width
+                
+        if (this.state.showMobileMenu !== hasOverflowingChildren) {
+            this.setState({showMobileMenu: hasOverflowingChildren}); // show the mobile menu if menu items are overflowing
+        }
+    }
 
     handleTabClick(type, e) {
         switch (type) {
             case 'questions':
-                this.context.executeAction(loadContentQuestions, {params: this.props.ContentModulesStore.selector});
+                let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
+                let params = this.props.ContentModulesStore.selector;
+                this.context.executeAction(loadContentQuestions, {params: params});
+                
                 break;
             case 'datasource':
                 this.context.executeAction(loadDataSources, {params: this.props.ContentModulesStore.selector});
@@ -76,7 +109,115 @@ class ContentModulesPanel extends React.Component {
             default:
         }
     }
+    handleKeyPress(type, e) {
+        this.handleTabClick(type);
+        e.preventDefault();
+    }
+    
+    handleDropdownChange(e, dropdown) {
+        let selectedItem = dropdown.value;
+        this.handleTabClick(selectedItem);
+    }
+    
+    getContentModuleOptions(showLabels) {
+        let labelClasses = 'ui tiny circular label';
+        
+        const options_messages = defineMessages({
+            label_sources: {
+                id: 'ContentModulesPanel.form.label_sources',
+                defaultMessage: 'Sources',
+            },
+            label_tags: {
+                id: 'ContentModulesPanel.form.label_tags',
+                defaultMessage: 'Tags',
+            },
+            label_comments: {
+                id: 'ContentModulesPanel.form.label_comments',
+                defaultMessage: 'Comments',
+            },
+            label_history: {
+                id: 'ContentModulesPanel.form.label_history',
+                defaultMessage: 'History',
+            },
+            label_usage: {
+                id: 'ContentModulesPanel.form.label_usage',
+                defaultMessage: 'Usage',
+            },
+            label_questions: {
+                id: 'ContentModulesPanel.form.label_questions',
+                defaultMessage: 'Questions',
+            },
+            label_playlists: {
+                id: 'ContentModulesPanel.form.label_playlists',
+                defaultMessage: 'Playlists',
+            },
+            aria_additional: {
+                id: 'ContentModulesPanel.form.aria_additional',
+                defaultMessage: 'Additional deck tools',
+            }
+        });
+        return [
+            {
+                text: <span>{this.context.intl.formatMessage(options_messages.label_sources)} {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.datasource}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.datasource})</span>}
+                    </span>,
+                value: 'datasource'
+            },
+            {
+                text: <span>{this.context.intl.formatMessage(options_messages.label_tags)} {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.tags}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.tags})</span>}
+                    </span>,
+                value: 'tags'
+            },
+            { // TODO add correct moduleCount
+                text: <span>{this.context.intl.formatMessage(options_messages.label_comments)} {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.comments}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.comments})</span>}
+                    </span>,
+                value: 'discussion'
+            },
+            {
+                text: this.context.intl.formatMessage(options_messages.label_history),
+                value: 'history'
+            },
+            {
+                text: this.context.intl.formatMessage(options_messages.label_usage),
+                value: 'usage'
+            },
+            /*{
+                text: 'Contributors',
+                value: 'contributors'
+            },*/
+            {
+                text: <span>{this.context.intl.formatMessage(options_messages.label_questions)} {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.questions}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.questions})</span>}
+                    </span>,
+                value: 'questions'
+            },
+            {
+                text: <span>{this.context.intl.formatMessage(options_messages.label_playlists)} {showLabels ? 
+                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.playlists}</span> : 
+                        <span> ({this.props.ContentModulesStore.moduleCount.playlists})</span>}
+                    </span>,
+                value: 'playlists'
+            }
+        ];
+    }
+    
     render() {
+        const form_messages = defineMessages({
+            aria_additional: {
+                id: 'ContentModulesPanel.form.aria_additional',
+                defaultMessage: 'Additional deck tools',
+            },
+            dropdown_text: {
+                id: 'ContentModulesPanel.form.dropdown_text',
+                defaultMessage: 'Tools',
+            }
+        });
         let pointingMenu = '';
         let activityDIV = '';
         const hrefPath = '/activities/' + this.props.ContentModulesStore.selector.stype + '/' + this.props.ContentModulesStore.selector.sid;
@@ -95,97 +236,90 @@ class ContentModulesPanel extends React.Component {
             //    activityDIV = <ContributorsPanel selector={this.props.ContentModulesStore.selector} />;
             //    break;
             case 'questions':
-                activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} id="questions_panel" aria-labelledby="questions_label"/>;
                 break;
             case 'datasource':
-                activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} id="sources_panel" aria-labelledby="sources_label"/>;
                 break;
             case 'tags':
-                activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <TagsPanel selector={this.props.ContentModulesStore.selector} id="tags_panel" aria-labelledby="tags_label"/>;
                 break;
             case 'playlists': 
-                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} id="playlist_panel" aria-labelledby="playlist_label"/>;
                 break;
             default:
-                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} id="comments_panel" aria-labelledby="comments_label"/>;
         }
-        //set pointingMenu
-        let historyTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'history')
-        });
-        let usageTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'usage')
-        });
-        let discussionTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'discussion')
-        });
-        let questionsTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'questions')
-        });
-        let datasourceTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'datasource')
-        });
-        let tagsTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'tags')
-        });
-        let playlistsTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'playlists')
-        });
-
-        //let contributorsTabClass = classNames({
-        //    'item': true,
-        //    'active': (this.props.ContentModulesStore.moduleType === 'contributors')
-        //});
+        
         //hide focused outline
         let compStyle = {
             outline: 'none'
         };
-      
-        // hide tags tab in slides 
-        let tagsTab = (this.props.ContentModulesStore.selector.stype === 'deck') 
-        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>
-            Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span>
-        </a> : '';
-
-        // hide playlists tab in slides
-        let palylistsTab = (this.props.ContentModulesStore.selector.stype === 'deck') ?
-        <a tabIndex="0" className={playlistsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'playlists')}>
-            Playlists<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.playlists}</span>
-        </a> : '';
-
+        
         pointingMenu = (
-            <div className="ui top attached pointing menu">
-                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
-                {tagsTab}
-                {/*TODO add correct moduleCount*/}
-                <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')}>Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
-                <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
-                <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
-                {/*<a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>*/}
-                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
-                {palylistsTab}
-                {/*
-                <a className="item">
-                    <img src="/assets/images/mock-avatars/helen.jpg" className="ui mini image circular"/>
-                    <img src="/assets/images/mock-avatars/elliot.jpg" className="ui mini image circular" />
-                    <img src="/assets/images/mock-avatars/jenny.jpg" className="ui mini image circular" />
-                    <img src="/assets/images/mock-avatars/joe.jpg" className="ui mini image circular" />
-                </a>*/}
-
+            <div className="ui top attached pointing menu" ref="pointerMenu" role="tablist" aria-label={this.context.intl.formatMessage(form_messages.aria_additional)}>
+                {this.getContentModuleOptions(true).map((item) => {
+                    let active = this.props.ContentModulesStore.moduleType === item.value;
+                    
+                    let classes = classNames({
+                        'item': true,
+                        'active': active && !this.state.showMobileMenu
+                    });
+                    
+                    //hide tags and playlists for slide view
+                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
+                        return;
+                    }
+                    
+                    return (<a tabIndex="0" className={classes} style={compStyle} 
+                        onClick={this.handleTabClick.bind(this, item.value)} onKeyPress={this.handleKeyPress.bind(this, item.value)} 
+                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="button">{item.text}</a>);
+                        
+                    {/*
+                    <a className="item">
+                        <img src="/assets/images/mock-avatars/helen.jpg" className="ui mini image circular"/>
+                        <img src="/assets/images/mock-avatars/elliot.jpg" className="ui mini image circular" />
+                        <img src="/assets/images/mock-avatars/jenny.jpg" className="ui mini image circular" />
+                        <img src="/assets/images/mock-avatars/joe.jpg" className="ui mini image circular" />
+                    </a>*/}
+                })}                
             </div>
         );
-
+        
+        let mobileMenu = (
+            <Dropdown fluid pointing button text={this.context.intl.formatMessage(form_messages.dropdown_text)} value={this.props.ContentModulesStore.moduleType} options={this.getContentModuleOptions(false)} onChange={this.handleDropdownChange.bind(this)}/>
+        );
+        
+        //make sure element is still rendered by the browser, in order to get the dimensions to detect overflowing children
+        let pointingMenuStyle = this.state.showMobileMenu ? { 
+            visibility: 'hidden',
+            height: 0
+        } : {};
+        
+        let mobileMenuStyle = {
+            display: this.state.showMobileMenu  ? 'block' : 'none' 
+        };
+        
+        let activityDIVClasses = classNames({
+            'ui': true,
+            'segment': true,
+            'attached': !this.state.showMobileMenu
+        });
+        
         return (
-            <div ref="contentModulesPanel">
-                {pointingMenu}
-                <div className="ui segment attached">
+            <div ref="contentModulesPanel" >
+                <h2 className="sr-only">
+                    <FormattedMessage
+                        id='ContentModulesPanel.form.header'
+                        defaultMessage='Content Tools' />
+                </h2>
+                <div style={pointingMenuStyle} role="tabpanel">
+                    {pointingMenu}
+                </div>
+                <div style={mobileMenuStyle}>
+                    {mobileMenu}
+                </div>
+                <div className={activityDIVClasses}>
                     {activityDIV}
                 </div>
             </div>
@@ -194,11 +328,13 @@ class ContentModulesPanel extends React.Component {
 }
 
 ContentModulesPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
-ContentModulesPanel = connectToStores(ContentModulesPanel, [ContentModulesStore], (context, props) => {
+ContentModulesPanel = connectToStores(ContentModulesPanel, [ContentModulesStore, PermissionsStore], (context, props) => {
     return {
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ContentModulesStore: context.getStore(ContentModulesStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 export default ContentModulesPanel;

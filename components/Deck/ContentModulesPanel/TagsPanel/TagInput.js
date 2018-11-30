@@ -12,10 +12,6 @@ class TagInput extends React.Component {
     }
     getIntlMessages(){
         return defineMessages({
-            placeholder:{
-                id: 'TagInput.placeholder',
-                defaultMessage: 'Insert new tags'
-            },
         });
     }
     componentWillReceiveProps(newProps){
@@ -26,31 +22,29 @@ class TagInput extends React.Component {
             // initialize pre-selected tags
             let values = this.state.initialTags.map( (tag) => `tagName:${tag.tagName}`);
 
-            $('#tags_input_div').dropdown('set selected', values);
+            $(this.rootElement).dropdown('set exactly', values);
         }
     }
     getStateFromProps(props){
         return {
             initialTags: props.initialTags,
-            recommendedTags: props.recommendedTags
+            recommendedTags: props.recommendedTags || [],
         };
     }
     initDropdown(){
-        $('#tags_input_div').dropdown({
+        $(this.rootElement).dropdown({
             fields: {
                 name: 'defaultName',
                 value: 'tagName'
             },
             minCharacters: 1,
-            allowAdditions: true,
+            allowAdditions: this.props.allowAdditions,
             hideAdditions: false,
             apiSettings:{
-                responseAsync: function(settings, callback) {
-                    const query = settings.urlData.query;
-
-                    context.executeAction(suggestTags, {
-                        query: encodeURIComponent(query),
-                    }).then( (response) => {
+                responseAsync: (settings, callback) => {
+                    let queryString = settings.urlData.query;
+                    let query = Object.assign({ q: queryString }, this.props.tagFilter);
+                    context.executeAction(suggestTags, { query } ).then( (response) => {
 
                         // this is needed to mark tags that have tagNames
                         // in multi-select it is not possible to get objects selected, only string(!?)
@@ -75,7 +69,7 @@ class TagInput extends React.Component {
     }
     getSelected(){
         // selected tags are return as string (!), so we split to ','
-        let tags = $('#tags_input_div').dropdown('get value');
+        let tags = $(this.rootElement).dropdown('get value');
 
         if(tags.trim() === ''){
             return [];
@@ -110,13 +104,16 @@ class TagInput extends React.Component {
     addRecommendedTag(value){
         // add the recommended tag as an option to the dropdown
         let newOption = `<div class="item" key="tagName:${value}" data-value="tagName:${value}">${value}</div>`;
-        $('#tags_menu').append(newOption);
+        $(this.menuElement).append(newOption);
 
         // after this addition the dropdown needs to be initialized again
         this.initDropdown();
 
         // select the recommended tag
-        $('#tags_input_div').dropdown('set selected', `tagName:${value}`);
+        $(this.rootElement).dropdown('set selected', `tagName:${value}`);
+    }
+    clear() {
+        $(this.rootElement).dropdown('clear');
     }
     render(){
         let classes = classNames({
@@ -130,14 +127,14 @@ class TagInput extends React.Component {
 
         // selection options are concatenated pre-selected tags and recommended tags 
         let initialOptions = this.props.initialTags.map( (t) => {
-            return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName}</div>;
+            return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName || t.tagName}</div>;
         });
 
         return (
-            <div id="tags_input_div" className={classes}>
+            <div ref={(i) => (this.rootElement = i)} className={classes}>
               <i className="dropdown icon"></i>
-              <div className="default text">{this.context.intl.formatMessage(this.messages.placeholder)}</div>
-              <div id="tags_menu" className="menu">
+              <div className="default text">{this.props.placeholder}</div>
+              <div ref={(i) => (this.menuElement = i)} className="menu">
                 {initialOptions}
               </div>
             </div>

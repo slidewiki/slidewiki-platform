@@ -20,6 +20,8 @@ import {loadIntlMessages} from '../actions/loadIntl'; //feeds the store with def
 import { IntlProvider } from 'react-intl';
 import cookie from 'react-cookie';
 
+const path = require('path');
+const fs = require('fs');
 const uuidV4 = require('uuid/v4');
 const log = require('../configs/log').log;
 const env = process.env.NODE_ENV;
@@ -81,6 +83,24 @@ export default function handleServerRendering(req, res, next){
         req: req,
         res: res
     });
+
+    //handle multiple banners
+    if(req.url === '/randomBanner') {
+        const bannerDir = '../assets/images/home/banners/';
+        let file = 'banner1.jpg';
+        fs.readdir(path.resolve(__dirname, bannerDir), (err, files) => {
+            if (err) {
+                //do nothing
+                console.log(err);
+                res.sendFile(path.resolve(__dirname, bannerDir) + '/' + file);
+            }else{
+                let randomIndex = Math.floor(Math.random() * files.length);
+                file = files[randomIndex];
+                res.sendFile(path.resolve(__dirname, bannerDir) + '/' + file);
+            }
+        });
+        return;
+    }
 
     log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
     cookie.plugToRequest(req,res);

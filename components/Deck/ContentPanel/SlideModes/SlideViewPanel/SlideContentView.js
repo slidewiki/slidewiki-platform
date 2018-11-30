@@ -126,8 +126,8 @@ class SlideContentView extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //to handle non-canvas display of slides
         let slideHTMLContent = this.props.content;
-        if(slideHTMLContent.indexOf('class="pptx2html"') === -1){
-            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">' + slideHTMLContent + '</div>';
+        if (slideHTMLContent.indexOf('class="pptx2html"') === -1 && slideHTMLContent.indexOf('class=\'pptx2html\'') === -1) {
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; position: relative; ">' + slideHTMLContent + '</div>';
         }
         return (
         <div ref='container' id='container'>
@@ -143,16 +143,15 @@ class SlideContentView extends React.Component {
                     <br />
                 </div>
             </div>
-            <div className="ui horizontal segments">
-                {this.props.hideSpeakerNotes ?  null
-                  :
-                  <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
-                      {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                      <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+            {this.props.hideSpeakerNotes ? null :
+                <div className="ui horizontal segments">
+                      <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
+                          <b>Speaker notes:</b>
+                          <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+                          </div>
                       </div>
-                  </div>
-                }
-            </div>
+                </div>
+            }
         </div>
         );
     }

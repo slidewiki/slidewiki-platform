@@ -7,6 +7,7 @@ import {List, Button, Icon, Header, Segment, Divider} from 'semantic-ui-react';
 import DeckRevisionChanges from './DeckRevisionChanges';
 //import moment from 'moment';
 import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
+import { defineMessages } from 'react-intl';
 
 class DeckRevision extends React.Component {
 
@@ -25,19 +26,34 @@ class DeckRevision extends React.Component {
 
     handleViewRevisionClick() {
         //open the deck revision in a new tab
-        window.open('/deck/' + this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id, '_blank');
+        const redirectId = this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id;
+        window.open(`/deck/${redirectId}/_/deck/${redirectId}`, '_blank');
     }
 
 
     handleRevertClick() {
+        const swal_messages = defineMessages({
+            text: {
+                id: 'DeckRevision.swal.text',
+                defaultMessage: 'This action will restore the deck to an earlier version. Do you want to continue?',
+            },
+            confirmButtonText: {
+                id: 'DeckRevision.swal.confirmButtonText',
+                defaultMessage: 'Yes, restore deck',
+            },
+            cancelButtonText: {
+                id: 'DeckRevision.swal.cancelButtonText',
+                defaultMessage: 'No',
+            }
+        });
         swal({
-            text: 'This action will restore the deck to an earlier version. Do you want to continue?',
+            text: context.intl.formatMessage(swal_messages.text),
             type: 'question',
             showCloseButton: true,
             showCancelButton: true,
-            confirmButtonText: 'Yes, restore deck',
+            confirmButtonText: context.intl.formatMessage(swal_messages.confirmButtonText),
             confirmButtonClass: 'ui olive button',
-            cancelButtonText: 'No',
+            cancelButtonText: context.intl.formatMessage(swal_messages.cancelButtonText),
             cancelButtonClass: 'ui red button',
             buttonsStyling: false
         }).then((accepted) => {
@@ -50,6 +66,40 @@ class DeckRevision extends React.Component {
     }
 
     render() {
+        const form_messages = defineMessages({
+            icon_aria_saved: {
+                id: 'DeckRevision.form.icon_aria_saved',
+                defaultMessage: 'Saved at',
+            },
+            date_on: {
+                id: 'DeckRevision.form.date_on',
+                defaultMessage: 'on',
+            },
+            date_at: {
+                id: 'DeckRevision.form.date_at',
+                defaultMessage: 'at',
+            },
+            by: {
+                id: 'DeckRevision.form.by',
+                defaultMessage: 'by',
+            },
+            button_aria_show: {
+                id: 'DeckRevision.form.button_aria_show',
+                defaultMessage: 'Show details',
+            },
+            version_changes: {
+                id: 'DeckRevision.form.version_changes',
+                defaultMessage: 'Version changes',
+            },
+            button_aria_restore: {
+                id: 'DeckRevision.form.button_aria_restore',
+                defaultMessage: 'Restore deck',
+            },
+            button_aria_view: {
+                id: 'DeckRevision.form.button_aria_view',
+                defaultMessage: 'View deck in new tab',
+            }
+        });
         const revision = this.props.revision;
         const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
         const datechange = new Date(revision.lastUpdate);
@@ -57,25 +107,25 @@ class DeckRevision extends React.Component {
             <List.Item>
                 <List.Content tabIndex='0'>
                     <List.Header><Icon color='grey' name='save' size='large' className='outline'
-                                       aria-label='Saved at'/>
-                        <span>{formatDate(revision.lastUpdate)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} by <a
+                                       aria-label={this.context.intl.formatMessage(form_messages.icon_aria_saved)}/>
+                        <span>{formatDate(revision.lastUpdate) + ', ' + this.context.intl.formatMessage(form_messages.date_on) + ' ' + datechange.toLocaleDateString('en-GB') + ' ' + this.context.intl.formatMessage(form_messages.date_at) + ' ' + datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} {this.context.intl.formatMessage(form_messages.by)} <a
                         className="user"
                         href={'/user/' + revision.username}> {revision.userDisplayName}</a>
                             </span>
                         <Button basic floated='right' size='tiny'
-                                aria-label='Show details' data-tooltip='Show details'
+                                aria-label={this.context.intl.formatMessage(form_messages.button_aria_show)} data-tooltip={this.context.intl.formatMessage(form_messages.button_aria_show)}
                                 icon='ellipsis horizontal'
                                 onClick={this.handleExpandClick.bind(this)}/>
                     </List.Header>
                     {revision.expanded &&
                         <Segment>
-                            <Header size='small'>Version changes
+                            <Header size='small'>{this.context.intl.formatMessage(form_messages.version_changes)}
                                 {revision.latest ? '' :
                                     <Button.Group basic size='tiny' floated='right'>
                                         <Button icon='history' disabled={!canEdit}
-                                                aria-label='Restore deck' data-tooltip='Restore deck'
+                                                aria-label={this.context.intl.formatMessage(form_messages.button_aria_restore)} data-tooltip={this.context.intl.formatMessage(form_messages.button_aria_restore)}
                                                 onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
-                                        <Button icon aria-label='View deck in new tab' data-tooltip='View deck in new tab'
+                                        <Button icon aria-label={this.context.intl.formatMessage(form_messages.button_aria_view)} data-tooltip={this.context.intl.formatMessage(form_messages.button_aria_view)}
                                                 onClick={this.handleViewRevisionClick.bind(this)} tabIndex='0'>
                                             <Icon.Group>
                                                 <Icon name='unhide'/>
@@ -97,7 +147,8 @@ class DeckRevision extends React.Component {
 }
 
 DeckRevision.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default DeckRevision;

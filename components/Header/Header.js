@@ -54,7 +54,7 @@ class Header extends React.Component {
     }
 
     render() {
-        let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>
+        let loginButton = <button ref="loginButton" className="ui inverted button sign-in" onClick={this.handleLoginButton.bind(this)}>
             <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
             </button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/>
@@ -90,11 +90,11 @@ class Header extends React.Component {
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
 
         return (
-            <div>
+            <header>
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
                     <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                         <div className="ui fluid container">
-                            <a className="item" href='/'>
+                            <a className="item sw-logo" href='/'>
                                 <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
                             </a>
                             <div className="item">
@@ -102,7 +102,7 @@ class Header extends React.Component {
                             </div>
                             <div className="ui right inverted blue menu">
                                 <div className="item">
-                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button" role="button">
+                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button add-deck" role="button">
                                       <i className="right plus icon"></i>
                                       <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
                                   </NavLink>
@@ -140,7 +140,7 @@ class Header extends React.Component {
                         <LocaleSwitcher mode="sidebar"/>
                     </div>
                 </MediaQuery>
-            </div>
+            </header>
         );
     }
 }

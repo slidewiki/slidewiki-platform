@@ -7,7 +7,9 @@ import { isEmpty } from '../../common';
 import { Grid, Button, Popup, Label } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
+import SessionRecorder from './SessionRecorder.js';
 import SocialSharing from './SocialSharing.js';
+import Translation from './Translations';
 import Chat from './Chat.js';
 import { QRCode } from 'react-qr-svg';
 
@@ -37,10 +39,13 @@ class presentationBroadcast extends React.Component {
         this.eventForwarding = true;
         this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
+        this.lastRewrittenSlide = this.lastRemoteSlide;
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
-        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];
+        this.deckID = this.props.currentRoute.query.presentation.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
         this.hashTags = ['#SWORG','#D' + this.deckID.replace('-','R')];//['#javascript'];
+        let lang = this.props.currentRoute.query.presentation.split('language=')[1];
+        this.deckLanguage = (lang === undefined) ? lang : lang.slice(0,2);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -51,6 +56,7 @@ class presentationBroadcast extends React.Component {
     componentDidMount() {
 
         let that = this;
+
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
             console.log('Navigating away because of missing paramenters in URL');
             swal({
@@ -82,6 +88,12 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
+            window.localforage.config({
+                driver: [window.localforage.WEBSQL, window.localforage.INDEXEDDB],
+                name: 'SlideWikiRecorder',
+                size: 524288000
+            });
+            window.localforage.clear();
             that.setState({
                 roleText: 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ',
                 peerCountText: 'People currently attending: '
@@ -140,6 +152,7 @@ class presentationBroadcast extends React.Component {
                 allowEscapeKey: false,
                 onOpen: () => {
                     swal.showLoading();
+                    that.refs.translation.createTranslationMap(that.deckID, this.deckLanguage);
                 },
                 preConfirm: () => {
                     return new Promise((resolve) => {
@@ -319,9 +332,13 @@ class presentationBroadcast extends React.Component {
                     confirmButtonText: 'Ok',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
+                })
+                .then(() => that.refs.sessionRecorder.recordSessionModal())
+                .then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
             }
             that.localStream = stream;
+            if(that.isInitiator)
+                that.refs.sessionRecorder.recordStream(stream);
 
             function sendASAP() {
                 if (that.presenterID) //wait for presenterID before sending the message
@@ -597,15 +614,15 @@ class presentationBroadcast extends React.Component {
             let data = JSON.parse(event.data);
             switch (data.cmd) {
                 case 'gotoslide':
-                    if (!that.isInitiator)
-                        changeSlide(data.data);
+                    if (!this.isInitiator)
+                        this.changeSlide(data.data);
                     break;
                 case 'toggleblackscreen':
-                    if (!that.isInitiator)
+                    if (!this.isInitiator)
                         toggleBlackScreen();
                     break;
                 case 'message':
-                    if (that.isInitiator) {
+                    if (this.isInitiator) {
                         this.refs.chat.addMessage(data, false, peerID);
                     }
                     break;
@@ -622,8 +639,8 @@ class presentationBroadcast extends React.Component {
                     handleNewUsername(data.data, peerID);
                     break;
                 case 'username':
-                    if(!that.isInitiator){
-                        that.setState({myName: data.data});
+                    if(!this.isInitiator){
+                        this.setState({myName: data.data});
                     }
                     break;
                 case 'completeTask':
@@ -636,13 +653,13 @@ class presentationBroadcast extends React.Component {
                     closeModal();
                     break;
                 case 'statusObject':
-                    if(!that.isInitiator){
+                    if(!this.isInitiator){
                         this.setState({subtitle: data.data.subtitle});
-                        changeSlide(data.data.slide);
+                        this.changeSlide(data.data.slide);
                     }
                     break;
                 case 'new tweets':
-                    if(!that.isInitiator){
+                    if(!this.isInitiator){
                         this.refs.chat.addTweet(data.data);
                     }
                     break;
@@ -736,22 +753,26 @@ class presentationBroadcast extends React.Component {
             // frame.dispatchEvent(newEvent);
         }
 
-        function activateIframeListeners() {
-            console.log('Adding iframe listeners');
+        function activateIframeListeners(event, skipDocument = false) {
+            // console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
 
-            document.addEventListener('keydown', (e) => {//NOTE used for arrow keys
-                let frame = document.getElementById('slidewikiPresentation').contentDocument;
-                let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
-                newEvent.keyCode = e.keyCode;
-                newEvent.which = e.keyCode;
-                if(that.eventForwarding)
-                    frame.dispatchEvent(newEvent);
-            });
+            if(!skipDocument) {
+                document.addEventListener('keydown', (e) => {//NOTE used for arrow keys
+                    let frame = document.getElementById('slidewikiPresentation').contentDocument;
+                    let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
+                    newEvent.keyCode = e.keyCode;
+                    newEvent.which = e.keyCode;
+                    if(that.eventForwarding)
+                        frame.dispatchEvent(newEvent);
+                });
+            }
 
             if (that.isInitiator) {
+                that.refs.sessionRecorder.StartRecordSlideChanges(that.deckID, document.getElementById('slidewikiPresentation').contentWindow.location.href);
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    that.refs.sessionRecorder.recordSlideChange(that.currentSlide);
                     that.forceUpdate();
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
@@ -764,39 +785,24 @@ class presentationBroadcast extends React.Component {
             } else {
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
-                    if (that.currentSlide !== that.lastRemoteSlide) {
+                    if (that.currentSlide !== that.lastRewrittenSlide) {
                         that.setState({paused: true});
                     }
                     that.forceUpdate();
                 });
-                let textArea = $('#messageToSend');
-                textArea.on('focus', () => {
-                    that.eventForwarding = false;
-                });
-                textArea.on('focusout', () => {
-                    that.eventForwarding = true;
-                });
-            }
-            $('#slidewikiPresentation').off('load');
-        }
-
-        function changeSlide(slideID) { // called by peers
-            that.lastRemoteSlide = slideID;
-            if (!that.state.paused) {
-                let doc = document.getElementById('slidewikiPresentation');
-                if(doc.contentDocument.readyState === 'complete'){
-                    console.log('Changing to slide: ', slideID);
-                    that.iframesrc = slideID;
-                    doc.contentWindow.location.assign(slideID);
-                } else { //if readyState === 'loading' || readyState === 'interactive'
-                    setTimeout(() => {
-                        changeSlide(slideID);
-                    }, 20);
+                if(!skipDocument){
+                    let textArea = $('#messageToSend');
+                    textArea.on('focus', () => {
+                        that.eventForwarding = false;
+                    });
+                    textArea.on('focusout', () => {
+                        that.eventForwarding = true;
+                    });
                 }
             }
+            $('#slidewikiPresentation').off('load');
+            that.activateIframeListeners = activateIframeListeners;
         }
-        that.changeSlide = changeSlide;
-
 
         function handleNewUsername(username, peerID) {
             if(isEmpty(username) || username === 'undefined')
@@ -848,6 +854,29 @@ class presentationBroadcast extends React.Component {
         function closeModal() {
             that.setState({showReopenModalButton: false});
             swal.closeModal();
+        }
+    }
+
+    changeSlide(slideID, reAddListeners = false) { // called by peers
+        this.lastRemoteSlide = slideID;
+        let newSlideID = this.refs.translation.modifyURLtoLoad(slideID);
+        this.lastRewrittenSlide = newSlideID;
+        if (!this.state.paused) {
+            let doc = document.getElementById('slidewikiPresentation');
+            if(doc.contentDocument.readyState === 'complete'){
+                console.log('Changing to slide: ', newSlideID);
+                this.iframesrc = newSlideID;
+                doc.contentWindow.location.assign(newSlideID);
+                if(reAddListeners)
+                    $('#slidewikiPresentation').on('load', () => {
+                        this.activateIframeListeners(undefined, reAddListeners);
+                        this.changeSlide(this.lastRemoteSlide);
+                    });
+            } else { //if readyState === 'loading' || readyState === 'interactive'
+                setTimeout(() => {
+                    this.changeSlide(slideID, reAddListeners);
+                }, 20);
+            }
         }
     }
 
@@ -916,7 +945,7 @@ class presentationBroadcast extends React.Component {
     showInviteModal() {
         swal({
             titleText: 'Invite other people',
-            html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
+            html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><i id="clipboardtarget"/></p>',
             type: 'info',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Copy to Clipboard',
@@ -993,22 +1022,25 @@ class presentationBroadcast extends React.Component {
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
+                  <div>
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} role="button" aria-label="Show QR-Code">QR-Code</Button>
-              ) : ('')};
+                  <SessionRecorder ref="sessionRecorder" deckID={this.deckID.split('-')[0]} revision={this.deckID.split('-')[1]}/>
+                  </div>
+              ) : ('')}
             </Grid.Row>
 
             <Grid.Row>
               <Grid.Column width={13}>
                 <Grid stackable columns={2} rows={1}>
                   <Grid.Column width={15}>
-                    <h4>
+                    <h4>{/*TODO the following code creates the validateDOMNesting error*/}
                       {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
                           trigger={<Label icon='group' content={Object.keys(this.pcs).length}/>}
                           content={peernames}
                         /></p>) : <p>{this.state.roleText}</p>}
                     </h4>
                   </Grid.Column>
-                  <Grid.Column width={1} style={{'padding-left': '0'}}>
+                  <Grid.Column width={1} style={{'paddingLeft': '0'}}>
                     <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} hashTags={this.hashTags} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
                   </Grid.Column>
                 </Grid>
@@ -1025,7 +1057,10 @@ class presentationBroadcast extends React.Component {
                   <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Open current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
                   {(this.isInitiator) ? ('') : (
+                    <div>
+                    <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide, true)}/>
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
+                    </div>
                   )}
                   {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
