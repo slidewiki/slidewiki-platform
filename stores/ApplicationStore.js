@@ -23,6 +23,7 @@ class ApplicationStore extends BaseStore {
             this.pageThumbnail = '/thumbnail/slide/' + payload.thumbnailID;
             this.emitChange();
         });
+    }
     handleActivationMessage(payload) {
         this.showActivationMessage = true;
         this.emitChange();
@@ -32,14 +33,15 @@ class ApplicationStore extends BaseStore {
     }
     getPageThumbnail() {
         return this.pageThumbnail;
+    }
     getActivationMessage(){
         return this.showActivationMessage;
     }
     dehydrate() {
         return {
             pageTitle: this.pageTitle,
-            pageThumbnail: this.pageThumbnail
-            showActivationMessage: this.showActivationMessage
+            pageThumbnail: this.pageThumbnail,
+            showActivationMessage: this.showActivationMessage,
         };
     }
     rehydrate(state) {
