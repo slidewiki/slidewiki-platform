@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import addQuestion from '../../../../actions/questions/addQuestion';
 import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentQuestionAdd extends React.Component {
 
@@ -46,20 +47,31 @@ class ContentQuestionAdd extends React.Component {
     }
 
     componentDidMount() {
+        const messages = defineMessages({
+            no_question: {
+                id: 'ContentQuestionAdd.no_question',
+                defaultMessage: 'Please, enter question',
+            },
+            no_answers: {
+                id: 'ContentQuestionAdd.no_answers',
+                defaultMessage: 'Please, add answers',
+            },
+            
+        });
         const questionValidation = {
             fields: {
                 question: {
                     identifier: 'question',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please, enter question',
+                        prompt: this.context.intl.formatMessage(messages.no_question),
                     }]
                 },
                 response1: {
                     identifier: 'response1',
                     rules: [{
                         type: 'atleastoneanswer',
-                        prompt: 'Please, add answers',
+                        prompt: this.context.intl.formatMessage(messages.no_answers),
                     }]
                 }
             },
@@ -149,29 +161,50 @@ class ContentQuestionAdd extends React.Component {
                 <div className="ui padded segment">
                     <form className="ui form" ref="questionadd_form">
                         <div className="two fields inline">
-                            <div className="required field"><label htmlFor="question">Question</label>
+                            <div className="required field">
+                                <label htmlFor="question">
+                                    <FormattedMessage
+                                        id='ContentQuestionAdd.form.question'
+                                        defaultMessage='Question' />
+                                </label>
                                 <textarea rows="3"  name="question" id="question" aria-required="true" defaultValue={this.state.title} onChange={this.updateQuestionTitle} />
                             </div>
                             <div className="ui grouped fields">
                                 <fieldset>
-                                    <legend>Difficulty</legend>
+                                    <legend>
+                                        <FormattedMessage
+                                            id='ContentQuestionAdd.form.difficulty'
+                                            defaultMessage='Difficulty' />
+                                    </legend>
                                     <div className="inline fields">
                                         <div className="field">
                                             <div className="ui radio checkbox">
                                                 <input type="radio" checked={this.state.difficulty === 1} id="easy" name="difficulty" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="easy">Easy</label>
+                                                <label htmlFor="easy">
+                                                    <FormattedMessage
+                                                        id='ContentQuestionAdd.form.difficulty_easy'
+                                                        defaultMessage='Easy' />
+                                                </label>
                                             </div>
                                         </div>
                                         <div className="field">
                                             <div className="ui radio checkbox">
                                                 <input type="radio" id="moderate" name="difficulty" defaultValue={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="moderate">Moderate</label>
+                                                <label htmlFor="moderate">
+                                                    <FormattedMessage
+                                                        id='ContentQuestionAdd.form.difficulty_moderate'
+                                                        defaultMessage='Moderate' />
+                                                </label>
                                             </div>
                                         </div>
                                         <div className="field">
                                             <div className="ui radio checkbox">
                                                 <input type="radio" id="hard" name="difficulty" defaultValue={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="hard">Hard</label>
+                                                <label htmlFor="hard">
+                                                    <FormattedMessage
+                                                        id='ContentQuestionAdd.form.difficulty_hard'
+                                                        defaultMessage='Hard' />
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -180,7 +213,11 @@ class ContentQuestionAdd extends React.Component {
                         </div>
                         <div className="ui grouped fields">
                             <fieldset>
-                                <legend>Answer Choices</legend>
+                                <legend>
+                                    <FormattedMessage
+                                        id='ContentQuestionAdd.form.answer_choices'
+                                        defaultMessage='Answer Choices' />
+                                </legend>
                                 <div className="inline field">
                                     <div className="ui checkbox">
                                         <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" onChange={this.updateCorrect1}/>
@@ -216,23 +253,37 @@ class ContentQuestionAdd extends React.Component {
                             </fieldset>
                         </div>
                         <div className="field">
-                            <label htmlFor="explanation">Explanation (optional)</label>
+                            <label htmlFor="explanation">
+                                <FormattedMessage
+                                    id='ContentQuestionAdd.form.explanation'
+                                    defaultMessage='Explanation (optional)' />
+                            </label>
                             <textarea rows="2" id="explanation" onChange={this.updateExplanation}></textarea>
                         </div>
                         <div className="field">
                             <div className="ui checkbox">
                                 <input type="checkbox" name="exam" id="exam" tabIndex="0" className="hidden" defaultChecked={this.state.isExamQuestion} onChange={this.updateIsExamQuestion}/>
-                                <label htmlFor="exam">This is an exam question</label>
+                                <label htmlFor="exam">
+                                    <FormattedMessage
+                                        id='ContentQuestionAdd.form.exam_question'
+                                        defaultMessage='This is an exam question' />
+                                </label>
                             </div>
                         </div>
                         <div className="field">
                             <div className="ui container">
                                 <div >
                                     <button type="submit" className="ui blue labeled submit icon button" >
-                                        <i className="icon check" />Save
+                                        <i className="icon check" />
+                                        <FormattedMessage
+                                            id='ContentQuestionAdd.form.button_save'
+                                            defaultMessage='Save' />
                                     </button>
                                     <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
-                                        <i className="icon close" />Cancel
+                                        <i className="icon close" />
+                                        <FormattedMessage
+                                            id='ContentQuestionAdd.form.button_cancel'
+                                            defaultMessage='Cancel' />
                                     </button>
                                 </div>
                             </div>
@@ -245,7 +296,8 @@ class ContentQuestionAdd extends React.Component {
 }
 
 ContentQuestionAdd.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default ContentQuestionAdd;

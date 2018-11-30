@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../../stores/ContentQuestionsStore';
 import updateDownloadQuestions from '../../../../../actions/questions/updateDownloadQuestions';
 import QuestionDownloadItem from './QuestionDownloadItem';
+import { FormattedMessage } from 'react-intl';
 
 class QuestionDownloadList extends React.Component {
     constructor(props){
@@ -76,10 +77,16 @@ class QuestionDownloadList extends React.Component {
 
         return (
             <div ref="downloadquestionsList">
-                <h3 className="ui dividing header">Select questions to download</h3>
+                <h3 className="ui dividing header">
+                    <FormattedMessage
+                        id='QuestionDownloadList.form.heading'
+                        defaultMessage='Select questions to download' />
+                </h3>
                 <button className="ui right floated compact button primary" onClick={this.props.handleSelectAll.bind(this)}>
-                    <i className="small check icon" />
-                    Select all
+                    <i className="small check icon" />                    
+                    <FormattedMessage
+                        id='QuestionDownloadList.form.button'
+                        defaultMessage='Select all' />
                 </button>
                 <div >
                     {questionslist}
