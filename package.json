@@ -131,6 +131,7 @@
     "pre-commit": "^1.2.2",
     "prop-types": "^15.6.2",
     "react": "^15.4.2",
+    "react-accessible-accordion": "^2.4.5",
     "react-aria-menubutton": "^5.1.1",
     "react-async-script": "^0.7.0",
     "react-color": "^2.14.1",

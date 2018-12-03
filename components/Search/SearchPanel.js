@@ -18,13 +18,16 @@ import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
 import { educationLevels } from '../../lib/isced';
-import { Dropdown, Accordion, Icon, Divider } from 'semantic-ui-react';
+import { Dropdown, Icon, Divider } from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
+import {
+    Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody,
+} from 'react-accessible-accordion';
 
 class SearchPanel extends React.Component {
     constructor(props){
         super(props);
-        this.state = Object.assign({}, this.props.SearchResultsStore.queryparams);
+        this.state = Object.assign({advanced_options_visible: false}, this.props.SearchResultsStore.queryparams);
         this.messages = this.getIntlMessages();
     }
     getIntlMessages(){
@@ -383,21 +386,14 @@ class SearchPanel extends React.Component {
     }
 
     /**
-     * Switches between <Accordion.Content> panel elements.
-     * Triggered by <Accordion.Title> elements.
+     * Toggles the state of advanced_options_visible.
+     * Triggered by clicks on <AccordionItemTitle> elements.
      *
-     * @param {object} [e] The triggering event.
-     * @param {object} [titleProps] The properties of the <Accordion.Title> that triggered this event.
      * @returns {void}
      */
-    handleAccordionClick = (e, titleProps) => {
-        e.preventDefault(); // Prevent navigation onClick of <a>
-
-        const { index } = titleProps;
-        const { activeIndex } = this.state;
-        const newIndex = activeIndex === index ? -1 : index;
-
-        this.setState({ activeIndex: newIndex });
+    handleAccordionChange = () => {
+        const { advanced_options_visible } = this.state;
+        this.setState({ advanced_options_visible: !advanced_options_visible });
     };
 
     handleFacetClick(facetItem) {
@@ -458,7 +454,7 @@ class SearchPanel extends React.Component {
         });
     }
     render() {
-        const { activeIndex } = this.state;
+        const { advanced_options_visible } = this.state;
 
         let firstRowOptions = <div className="three fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
@@ -505,16 +501,17 @@ class SearchPanel extends React.Component {
                 <form className="ui form success">
                     <div className="field">
                         <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
-                        <Accordion>
-                            <Accordion.Title
-                                active={activeIndex === 0} index={0} onClick={this.handleAccordionClick} as='a' href='#'>
-                                <Icon name='dropdown' />
-                                Advanced Options
-                            </Accordion.Title>
-                            <Accordion.Content active={activeIndex === 0}>
-                                { firstRowOptions }
-                                { secondRowOptions }
-                            </Accordion.Content>
+                        <Accordion onChange={this.handleAccordionChange} accordion={false}>
+                            <AccordionItem>
+                                <AccordionItemTitle>
+                                    <Icon name={advanced_options_visible ? 'caret down' : 'caret right'} />
+                                    Advanced Options
+                                </AccordionItemTitle>
+                                <AccordionItemBody hideBodyClassName='hidden'>
+                                    { firstRowOptions }
+                                    { secondRowOptions }
+                                </AccordionItemBody>
+                            </AccordionItem>
                         </Accordion>
                     </div>
                 </form>
