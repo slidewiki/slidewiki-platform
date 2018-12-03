@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
@@ -6,6 +7,7 @@ import DeckViewStore from '../../../../stores/DeckViewStore';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import Util from '../../../common/Util';
 import ExamList from './ExamList';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ExamPanel extends React.Component {
     getPath(){
@@ -33,6 +35,16 @@ class ExamPanel extends React.Component {
         });
     }
     render() {
+        const form_messages = defineMessages({
+            no_questions: {
+                id: 'ExamPanel.form.no_questions',
+                defaultMessage: 'There are currently no exam questions for this',
+            },
+            exam_mode: {
+                id: 'ExamPanel.form.exam_mode',
+                defaultMessage: 'Exam mode',
+            }
+        });
         const questions = this.props.ContentQuestionsStore.questions;
         let examQuestions = [];
         questions.forEach((question) => {
@@ -50,9 +62,12 @@ class ExamPanel extends React.Component {
         let questionsList = (<ExamList items={examQuestions} selector={selector} />);
         let noExamQuestionsNotification = (
             <div>
-                <h4>There are currently no exam questions for this {selector.stype}.</h4>
+                <h4>{this.context.intl.formatMessage(form_messages.no_questions) + ' ' + selector.stype}.</h4>
                 <button type="button" className="ui blue labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
-                    <i className="icon angle left" />Back
+                    <i className="icon angle left" />
+                    <FormattedMessage
+                        id='ExamPanel.form.button_back'
+                        defaultMessage='Back' />
                 </button>
             </div>
         );
@@ -60,7 +75,7 @@ class ExamPanel extends React.Component {
         return (
             <div ref="examPanel" className="ui container segments">
                 <div className="ui secondary segment">
-                    <h1 className="ui medium header">{title}Exam mode</h1>
+                    <h1 className="ui medium header">{title + this.context.intl.formatMessage(form_messages.exam_mode)}</h1>
                 </div>
                 {examQuestions.length === 0 ? noExamQuestionsNotification : questionsList}
             </div>
@@ -68,7 +83,8 @@ class ExamPanel extends React.Component {
     }
 }
 ExamPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 ExamPanel = connectToStores(ExamPanel, [ContentQuestionsStore, DeckTreeStore, DeckViewStore], (context, props) => {
     return {

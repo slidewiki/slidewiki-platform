@@ -52,7 +52,7 @@ class UserMenuDropdown extends React.Component {
         return(
             <AriaMenuButton.Wrapper
               onSelection={this.onHandleSelection}>
-               <AriaMenuButton.Button aria-label='User menu'>
+               <AriaMenuButton.Button aria-label='User menu' className="sw-usermenu">
                 <div style={{'display': 'inline-flex'}} >
                  <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                   {alarmIcon}
