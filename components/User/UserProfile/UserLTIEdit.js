@@ -132,7 +132,6 @@ class UserLTIEdit extends React.Component {
 
     handleCancel(e) {
         e.preventDefault();
-        console.log('handleCancel:');
         this.context.executeAction(cancelUserlti);
     }
 
@@ -244,11 +243,11 @@ class UserLTIEdit extends React.Component {
                         </div>
 
                         <div>
-                          {(this.props.currentUserlti._id === undefined) ?
-                            <button className="ui button" onClick={this.handleCancel.bind(this)} >Cancel </button> : ''}
-                            <button className="ui blue labeled submit icon button" onClick={this.handleSave.bind(this)} >
-                                Save
-                            </button>
+                            <button className="ui blue submit button" onClick={this.handleSave.bind(this)} >Save</button>
+                            {   (this.props.currentUserlti._id === undefined) ?
+                                <button className="ui button" onClick={this.handleCancel.bind(this)} >Cancel</button>
+                                : ''
+                            }
                         </div>
 
 
