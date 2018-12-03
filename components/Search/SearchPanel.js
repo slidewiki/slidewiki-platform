@@ -17,9 +17,8 @@ import { isEmpty, pick, pickBy, isArray, filter, uniq, map } from 'lodash';
 import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
-import { Divider } from 'semantic-ui-react';
 import { educationLevels } from '../../lib/isced';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Accordion, Icon, Divider } from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
 class SearchPanel extends React.Component {
@@ -154,9 +153,6 @@ class SearchPanel extends React.Component {
     }
     initDropdown(){
         $('#languageDropdown').dropdown();
-        $('#advanced_options').accordion({
-            'collapsible': true
-        });
     }
     componentDidMount(){
         this.initDropdown();
@@ -352,7 +348,7 @@ class SearchPanel extends React.Component {
         });
 
         this.keywordsInput.blur();
-        $('#advanced_options').accordion('close', 0);
+        this.setState({ activeIndex: null }); // Close the advanced options <Accordion>
     }
     changeSort(_sort){
         this.setState({
@@ -385,6 +381,17 @@ class SearchPanel extends React.Component {
 
         return fields;
     }
+
+    handleAccordionClick = (e, titleProps) => {
+        e.preventDefault(); // Prevent navigation onClick of <a>
+
+        const { index } = titleProps;
+        const { activeIndex } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({ activeIndex: newIndex });
+    }
+
     handleFacetClick(facetItem) {
         const facetField = facetItem.field;
         const facetValue = facetItem.value;
@@ -442,7 +449,9 @@ class SearchPanel extends React.Component {
             this.handleRedirect(null, 'facets');
         });
     }
-    render() {      
+    render() {
+        const { activeIndex } = this.state;
+
         let firstRowOptions = <div className="three fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
             <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete</div>
@@ -488,16 +497,16 @@ class SearchPanel extends React.Component {
                 <form className="ui form success">
                     <div className="field">
                         <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
-                        <div id="advanced_options" className="ui accordion">
-                            <div className="title">
-                                <i className="icon dropdown" ></i>
+                        <Accordion>
+                            <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick} as='a' href='#'>
+                                <Icon name='dropdown' />
                                 Advanced Options
-                            </div>
-                            <div className="content field">
+                            </Accordion.Title>
+                            <Accordion.Content active={activeIndex === 0}>
                                 { firstRowOptions }
-                                { secondRowOptions } 
-                            </div>
-                        </div>
+                                { secondRowOptions }
+                            </Accordion.Content>
+                        </Accordion>
                     </div>
                 </form>
                 <Divider hidden />
