@@ -24,6 +24,7 @@ import Cookie from 'js-cookie';
 import locale from 'locale';
 import handleServerRendering from './server/handleServerRendering'; //moved here the rendering part
 import setLocale from './server/setLocale'; //sets the locale from browser or cookies
+import robots from 'express-robots-txt' ;
 
 
 const env = process.env.NODE_ENV;
@@ -42,6 +43,7 @@ if(env === 'production'){
 }
 
 const server = express();
+server.use(robots(__dirname + '/robots.txt'));
 server.use(cookieParser());
 server.use(bodyParser.json({limit: '50mb'}));
 server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
