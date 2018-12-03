@@ -382,6 +382,14 @@ class SearchPanel extends React.Component {
         return fields;
     }
 
+    /**
+     * Switches between <Accordion.Content> panel elements.
+     * Triggered by <Accordion.Title> elements.
+     *
+     * @param {object} [e] The triggering event.
+     * @param {object} [titleProps] The properties of the <Accordion.Title> that triggered this event.
+     * @returns {void}
+     */
     handleAccordionClick = (e, titleProps) => {
         e.preventDefault(); // Prevent navigation onClick of <a>
 
@@ -390,7 +398,7 @@ class SearchPanel extends React.Component {
         const newIndex = activeIndex === index ? -1 : index;
 
         this.setState({ activeIndex: newIndex });
-    }
+    };
 
     handleFacetClick(facetItem) {
         const facetField = facetItem.field;
@@ -498,7 +506,8 @@ class SearchPanel extends React.Component {
                     <div className="field">
                         <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
                         <Accordion>
-                            <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick} as='a' href='#'>
+                            <Accordion.Title
+                                active={activeIndex === 0} index={0} onClick={this.handleAccordionClick} as='a' href='#'>
                                 <Icon name='dropdown' />
                                 Advanced Options
                             </Accordion.Title>
