@@ -30,7 +30,7 @@ class ExamList extends React.Component {
         }
     }
     closeButtonClick() {
-        window.open('','_parent','');
+        window.history.back();//try to go back ; if history is empty then the next line will close the tab
         window.close();
     }
     handleSubmitAnswers(e) {
