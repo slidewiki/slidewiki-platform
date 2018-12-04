@@ -37,21 +37,6 @@ class AddDeck extends React.Component {
         this.formValidationErrorMessages = [];
     }
     componentDidMount() {
-        // let that = this;
-        /* deleted by Sole
-        $('.ui.small.modal').modal({
-            onDeny: function(){
-                //console.log('modal cancelled');
-                that.handleCancelSelectFile();
-                $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
-            },
-            onApprove : function(data) {
-                //console.log('modal clicked on upload', data);
-                // that.handleFileSubmit();
-                $('.ui.small.modal').modal('hide');
-            }
-        });
-        */
     }
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
@@ -66,8 +51,6 @@ class AddDeck extends React.Component {
         }
     }
     handleUploadModal(x) {
-        //console.log('handleUploadModal: ', x);
-
         $('.ui.small.modal').modal('show');
     }
     handleKeyPressAddDeck(event) {
@@ -76,8 +59,6 @@ class AddDeck extends React.Component {
         }
     }
     handleAddDeck(x) {
-        //console.log('handleAddDeck');
-
         this.context.executeAction(addDeckDeleteError, null);
 
         //validate input
@@ -86,12 +67,10 @@ class AddDeck extends React.Component {
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
         const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
-        // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
         const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
-        //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
         let everythingIsFine = true;
@@ -404,7 +383,6 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set error');
     }
     handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions) {
-        //console.log('handleFileSubmit()');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -434,11 +412,9 @@ class AddDeck extends React.Component {
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
-            // setTimeout( () => {
             this.redirectID = this.props.AddDeckStore.redirectID;
             this.handleRedirect();
             this.context.executeAction(addDeckDestruct, {});
-            // }, 1000);
         }
 
 
@@ -447,11 +423,6 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.title
         });
-        // let fieldClass_license = classNames({
-        //     'required': true,
-        //     'field': true,
-        //     'error': this.props.AddDeckStore.wrongFields.license
-        // });
         let fieldClass_conditions = classNames({
             'required': true,
             'inline': true,
@@ -484,25 +455,10 @@ class AddDeck extends React.Component {
             'error': this.props.AddDeckStore.wrongFields.language
         });
 
-
         let filename = this.props.ImportStore.filename;
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        /*    let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
-        </select>;
-        */
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme" ref="select_themes">
             <option value="default">White - Default</option>
             <option value="beige">Cream</option>
@@ -519,12 +475,6 @@ class AddDeck extends React.Component {
             <option value="odimadrid">ODI Madrid</option>
             <option value="oeg">OEG</option>
         </select>;
-        // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
-        //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-        //   <option value="CC BY" >Creative Commons Attribution</option>
-        //   <option value="CC0" >Creative Commons CC0 Public Domain</option>
-        // </select>;
-
 
         const form_messages = defineMessages({
             hint_title: {
@@ -544,10 +494,6 @@ class AddDeck extends React.Component {
                 defaultMessage: 'Create deck',
             }
         });
-        let hint_title = this.props.AddDeckStore.wrongFields.title ? this.context.intl.formatMessage(form_messages.hint_title) : undefined;
-        let hint_language = this.props.AddDeckStore.wrongFields.language ? this.context.intl.formatMessage(form_messages.hint_language) : undefined;
-        // let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
-        //let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
         if (this.props.ImportStore.deckId !== null &&
@@ -647,16 +593,7 @@ class AddDeck extends React.Component {
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
-                                    {/*
-                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
-                                        <FormattedMessage
-                                            id='AddDeck.form.button_select'
-                                            defaultMessage='Select file' />
-                                    </div>
-                                    */}
                                     <ImportModal />
-                                    {/*    <Import />*/}
-
                                 </div>
                                 <div className="column" ref="div_filename">
                                     {filename ? this.context.intl.formatMessage(form_messages.selected_message, { filename: filename }) : ''}
@@ -708,7 +645,6 @@ class AddDeck extends React.Component {
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>
