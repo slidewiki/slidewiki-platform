@@ -20,7 +20,7 @@ import ImportModal from '../Import/ImportModal';
 import LanguageDropdown from '../common/LanguageDropdown';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
-import { Dropdown } from 'semantic-ui-react';
+import {Dropdown, Message} from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import classNames from 'classnames';
 
@@ -33,6 +33,8 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
+        this.formIsValid = true;
+        this.formValidationErrorMessages = [];
     }
     componentDidMount() {
         // let that = this;
@@ -94,41 +96,56 @@ class AddDeck extends React.Component {
         //check empty or not selected
         let everythingIsFine = true;
         let wrongFields = {};
+
+        // Clear any existing validation errors.
+        this.formValidationErrorMessages = [];
+
+        // Validate title
         if (title === null || title === undefined || title === '') {
             wrongFields.title = true;
+            this.formValidationErrorMessages.push('Specify a title.');
             everythingIsFine = false;
-        }
-        else {
+        } else {
             wrongFields.title = false;
         }
+
+        // Validate language
         if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
+            this.formValidationErrorMessages.push('Specify a language.');
             everythingIsFine = false;
-        }
-        else {
+        } else {
             wrongFields.language = false;
         }
+
+        // Validate T&Cs acceptance
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
+            this.formValidationErrorMessages.push('You must agree to the SlideWiki terms and conditions.');
             everythingIsFine = false;
-        }
-        else {
+        } else {
             wrongFields.conditions = false;
         }
+
+        // Validate image rights declaration
         if (acceptedImagesLicense === false) {
             wrongFields.imageslicense = true;
+            this.formValidationErrorMessages.push('You must agree to the rights declaration.');
             everythingIsFine = false;
-        }
-        else {
+        } else {
             wrongFields.imageslicense = false;
         }
 
-        //call action to update view
+        // Annotate invalid fields with an error state
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
+            this.formIsValid = true;
             this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
+        } else {
+            this.formIsValid = false;
+            console.log(this.formIsValid);
         }
     }
     correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense) {
@@ -551,8 +568,8 @@ class AddDeck extends React.Component {
                     </h3>
                 </div>
                 <div className="sixteen wide column">
-                    <form className="ui form upload">
-                        <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                    <form className={'ui form upload' + (this.formIsValid ? '' : ' error')}>
+                        <div className={fieldClass_title} ref="div_title" >
                             <label htmlFor="title">
                                 <FormattedMessage
                                     id='AddDeck.form.label_title'
@@ -567,7 +584,7 @@ class AddDeck extends React.Component {
                                         id='AddDeck.form.label_language'
                                         defaultMessage='Language' />
                                 </label>
-                                <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
+                                <LanguageDropdown type="spoken" required={true} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
                             </div>
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
@@ -679,8 +696,15 @@ class AddDeck extends React.Component {
                             </div>
                         </div>
 
+                        <Message
+                            error
+                            header='We found some problems'
+                            list={this.formValidationErrorMessages}
+                            role="region"
+                            aria-live="polite"
+                        />
                         <div className="ui buttons">
-                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
+                            <div className={btnClasses_submit} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
