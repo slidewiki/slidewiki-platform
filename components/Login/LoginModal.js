@@ -417,7 +417,7 @@ class LoginModal extends React.Component {
                             </button>
                         </div>
                         <br/>
-                        <div className="ui error message"/>
+                        <div className="ui error message" role="region" aria-live="polite"/>
                       </form>
                       <br/>
                       <div className="container">
