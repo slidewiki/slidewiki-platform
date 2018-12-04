@@ -33,7 +33,6 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
-        this.formIsValid = true;
         this.formValidationErrors = {};
     }
     componentDidMount() {
@@ -72,54 +71,25 @@ class AddDeck extends React.Component {
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
 
-        // Begin by removing all previous error states.
-        let wrongFields = {};
-        this.formIsValid = true;
-
         // Clear any existing validation errors.
         this.formValidationErrors = [];
 
         // Validate title
-        if (title === null || title === undefined || title === '') {
-            wrongFields.title = true;
-            this.formValidationErrors.title = 'Specify a title.';
-            this.formIsValid = false;
-        } else {
-            wrongFields.title = false;
-        }
+        if (!title) this.formValidationErrors.title = 'Specify a title.';
 
         // Validate language
-        if (language === null || language === undefined || language.length < 2) {
-            wrongFields.language = true;
-            this.formValidationErrors.language = 'Specify a language.';
-            this.formIsValid = false;
-        } else {
-            wrongFields.language = false;
-        }
+        if (!language || language.length < 2) this.formValidationErrors.language = 'Specify a language.';
 
         // Validate T&Cs acceptance
-        if (acceptedConditions === false) {
-            wrongFields.conditions = true;
+        if (acceptedConditions === false)
             this.formValidationErrors.conditions = 'You must agree to the SlideWiki terms and conditions.';
-            this.formIsValid = false;
-        } else {
-            wrongFields.conditions = false;
-        }
 
         // Validate image rights declaration
-        if (acceptedImagesLicense === false) {
-            wrongFields.imageslicense = true;
+        if (acceptedImagesLicense === false)
             this.formValidationErrors.imagesLicence = 'You must agree to the rights declaration.';
-            this.formIsValid = false;
-        } else {
-            wrongFields.imageslicense = false;
-        }
 
-        // Annotate invalid fields with an error state
-        this.context.executeAction(addDeckShowWrongFields, wrongFields);
-
-        //if everything is fine then create the deck
-        if(this.formIsValid) {
+        // If there are no validation errors, then create the deck
+        if(Object.keys(this.formValidationErrors).length === 0) {
             this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
@@ -510,7 +480,7 @@ class AddDeck extends React.Component {
                     </h3>
                 </div>
                 <div className="sixteen wide column">
-                    <form className={'ui form upload' + (this.formIsValid ? '' : ' error')}>
+                    <form className={'ui form upload' + (Object.keys(this.formValidationErrors).length === 0 ? '' : ' error')}>
                         <div className={fieldClass_title} ref="div_title" >
                             <label htmlFor="title">
                                 <FormattedMessage
