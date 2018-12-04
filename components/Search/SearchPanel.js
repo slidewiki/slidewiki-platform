@@ -18,7 +18,7 @@ import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
 import { educationLevels } from '../../lib/isced';
-import { Dropdown, Icon, Divider } from 'semantic-ui-react';
+import {Dropdown, Divider, Button, Grid} from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 import {
     Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody,
@@ -396,6 +396,14 @@ class SearchPanel extends React.Component {
         this.setState({ advanced_options_visible: !advanced_options_visible });
     };
 
+    /**
+     * Prevents the Advanced Options button from submitting and reloading the page.
+     *
+     * @param {object} [e] The event/element that triggered this handler.
+     * @returns {void}
+     */
+    handleAdvancedButtonClick = (e) => { e.preventDefault(); }
+
     handleFacetClick(facetItem) {
         const facetField = facetItem.field;
         const facetValue = facetItem.value;
@@ -500,19 +508,28 @@ class SearchPanel extends React.Component {
                 <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
                 <form className="ui form success">
                     <div className="field">
-                        <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
-                        <Accordion onChange={this.handleAccordionChange} accordion={false}>
-                            <AccordionItem>
-                                <AccordionItemTitle>
-                                    <Icon name={advanced_options_visible ? 'caret down' : 'caret right'} />
-                                    Advanced Options
-                                </AccordionItemTitle>
-                                <AccordionItemBody hideBodyClassName='hidden'>
-                                    { firstRowOptions }
-                                    { secondRowOptions }
-                                </AccordionItemBody>
-                            </AccordionItem>
-                        </Accordion>
+                        <Grid>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <Accordion onChange={this.handleAccordionChange} accordion={false}>
+                                        <AccordionItem>
+                                            <AccordionItemTitle>
+                                                <Button toggle active={advanced_options_visible} labelPosition='right' icon={advanced_options_visible ? 'down chevron' : 'right chevron'} content='Advanced Options' onClick={this.handleAdvancedButtonClick} />
+                                            </AccordionItemTitle>
+                                            <AccordionItemBody hideBodyClassName='hidden'>
+                                                { firstRowOptions }
+                                                { secondRowOptions }
+                                            </AccordionItemBody>
+                                        </AccordionItem>
+                                    </Accordion>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </div>
                 </form>
                 <Divider hidden />
