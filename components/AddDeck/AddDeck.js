@@ -72,9 +72,9 @@ class AddDeck extends React.Component {
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
 
-        //check empty or not selected
-        let everythingIsFine = true;
+        // Begin by removing all previous error states.
         let wrongFields = {};
+        this.formIsValid = true;
 
         // Clear any existing validation errors.
         this.formValidationErrorMessages = [];
@@ -83,7 +83,7 @@ class AddDeck extends React.Component {
         if (title === null || title === undefined || title === '') {
             wrongFields.title = true;
             this.formValidationErrorMessages.push('Specify a title.');
-            everythingIsFine = false;
+            this.formIsValid = false;
         } else {
             wrongFields.title = false;
         }
@@ -92,7 +92,7 @@ class AddDeck extends React.Component {
         if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
             this.formValidationErrorMessages.push('Specify a language.');
-            everythingIsFine = false;
+            this.formIsValid = false;
         } else {
             wrongFields.language = false;
         }
@@ -101,7 +101,7 @@ class AddDeck extends React.Component {
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
             this.formValidationErrorMessages.push('You must agree to the SlideWiki terms and conditions.');
-            everythingIsFine = false;
+            this.formIsValid = false;
         } else {
             wrongFields.conditions = false;
         }
@@ -110,7 +110,7 @@ class AddDeck extends React.Component {
         if (acceptedImagesLicense === false) {
             wrongFields.imageslicense = true;
             this.formValidationErrorMessages.push('You must agree to the rights declaration.');
-            everythingIsFine = false;
+            this.formIsValid = false;
         } else {
             wrongFields.imageslicense = false;
         }
@@ -119,12 +119,8 @@ class AddDeck extends React.Component {
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
         //if everything is fine then create the deck
-        if (everythingIsFine) {
-            this.formIsValid = true;
+        if(this.formIsValid) {
             this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
-        } else {
-            this.formIsValid = false;
-            console.log(this.formIsValid);
         }
     }
     correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense) {
