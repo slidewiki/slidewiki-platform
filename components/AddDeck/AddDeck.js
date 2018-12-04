@@ -34,7 +34,7 @@ class AddDeck extends React.Component {
         super(props);
         this.percentage = 0;
         this.formIsValid = true;
-        this.formValidationErrorMessages = [];
+        this.formValidationErrors = {};
     }
     componentDidMount() {
     }
@@ -77,12 +77,12 @@ class AddDeck extends React.Component {
         this.formIsValid = true;
 
         // Clear any existing validation errors.
-        this.formValidationErrorMessages = [];
+        this.formValidationErrors = [];
 
         // Validate title
         if (title === null || title === undefined || title === '') {
             wrongFields.title = true;
-            this.formValidationErrorMessages.push('Specify a title.');
+            this.formValidationErrors.title = 'Specify a title.';
             this.formIsValid = false;
         } else {
             wrongFields.title = false;
@@ -91,7 +91,7 @@ class AddDeck extends React.Component {
         // Validate language
         if (language === null || language === undefined || language.length < 2) {
             wrongFields.language = true;
-            this.formValidationErrorMessages.push('Specify a language.');
+            this.formValidationErrors.language = 'Specify a language.';
             this.formIsValid = false;
         } else {
             wrongFields.language = false;
@@ -100,7 +100,7 @@ class AddDeck extends React.Component {
         // Validate T&Cs acceptance
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
-            this.formValidationErrorMessages.push('You must agree to the SlideWiki terms and conditions.');
+            this.formValidationErrors.conditions = 'You must agree to the SlideWiki terms and conditions.';
             this.formIsValid = false;
         } else {
             wrongFields.conditions = false;
@@ -109,7 +109,7 @@ class AddDeck extends React.Component {
         // Validate image rights declaration
         if (acceptedImagesLicense === false) {
             wrongFields.imageslicense = true;
-            this.formValidationErrorMessages.push('You must agree to the rights declaration.');
+            this.formValidationErrors.imagesLicence = 'You must agree to the rights declaration.';
             this.formIsValid = false;
         } else {
             wrongFields.imageslicense = false;
@@ -417,19 +417,19 @@ class AddDeck extends React.Component {
         let fieldClass_title = classNames({
             'required': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.title
+            'error': this.formValidationErrors.title
         });
         let fieldClass_conditions = classNames({
             'required': true,
             'inline': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.conditions
+            'error': this.formValidationErrors.conditions
         });
         let fieldClass_imageslicense = classNames({
             'required': true,
             'inline': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.imageslicense
+            'error': this.formValidationErrors.imagesLicence
         });
         let btnClasses_submit = classNames({
             'ui': true,
@@ -448,7 +448,7 @@ class AddDeck extends React.Component {
         let fieldClass_language = classNames({
             'required': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.language
+            'error': this.formValidationErrors.language
         });
 
         let filename = this.props.ImportStore.filename;
@@ -632,7 +632,7 @@ class AddDeck extends React.Component {
                         <Message
                             error
                             header='We found some problems'
-                            list={this.formValidationErrorMessages}
+                            list={Object.values(this.formValidationErrors)}
                             role="region"
                             aria-live="polite"
                         />
