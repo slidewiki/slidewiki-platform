@@ -1,5 +1,6 @@
 import BaseStore from 'fluxible/addons/BaseStore';
 import RouteStore from './RouteStore';
+import { Microservices } from '../configs/microservices';
 
 class ApplicationStore extends BaseStore {
     constructor(dispatcher) {
@@ -20,7 +21,8 @@ class ApplicationStore extends BaseStore {
     }
     updatePageMetadata(payload) {
         this.dispatcher.waitFor(RouteStore, () => {
-            this.pageThumbnail = '/thumbnail/slide/' + payload.thumbnailID;
+            this.pageThumbnail = Microservices.file.uri + '/thumbnail/slide/' + payload.thumbnailID;
+            console.warn('!!! thumbnail:', this.pageThumbnail);
             this.emitChange();
         });
     }
