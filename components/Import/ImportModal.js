@@ -126,7 +126,7 @@ class Import extends React.Component {
         }
     }
     handleFileSelect(evt){
-
+        this.props.savetags();
 
         this.context.executeAction(importFinished, null);
 

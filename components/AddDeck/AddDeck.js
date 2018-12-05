@@ -33,6 +33,8 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
+        this.tagsInputList = [];
+        this.topicsInputList = [];
     }
     componentDidMount() {
         // let that = this;
@@ -87,6 +89,7 @@ class AddDeck extends React.Component {
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
         const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
+        console.log(tags);
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
@@ -413,6 +416,12 @@ class AddDeck extends React.Component {
             console.error('Submission not possible - no file or not pptx/odp/zip');
         }
     }
+    
+    saveTags() {
+        this.tagsInputList = this.tagInput.getSelected();
+        this.topicsInputList = this.topicInput.getSelected();
+        console.log(this.tagsInputList);
+    }
 
     render() {
         //redirect to new deck if created
@@ -540,6 +549,7 @@ class AddDeck extends React.Component {
                 this.context.executeAction(checkNoOfSlides, { id: this.props.ImportStore.deckId });
             }, 100);
         }
+        console.log('render ', this.tagsInputList);
 
         return (
             <div className="ui vertically padded grid container">
@@ -611,13 +621,13 @@ class AddDeck extends React.Component {
                             </div>
                             <div className="field">
                                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
-                                <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
+                                <TagInput id="topics_input_field" initialTags={this.topicsInputList} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
                             </div>
                         </div>
 
                         <div className="field">
                             <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
+                            <TagInput id="tags_input_field" initialTags={this.tagsInputList} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
@@ -637,7 +647,7 @@ class AddDeck extends React.Component {
                                             defaultMessage='Select file' />
                                     </div>
                                     */}
-                                    <ImportModal />
+                                    <ImportModal savetags={this.saveTags.bind(this)}/>
                                     {/*    <Import />*/}
 
                                 </div>
