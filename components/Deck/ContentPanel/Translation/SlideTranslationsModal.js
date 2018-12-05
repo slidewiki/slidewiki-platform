@@ -76,9 +76,9 @@ class SlideTranslationsModal extends React.Component {
             console.log('test');
             this.handleClose();
 
-            console.log(this.state.sourceLanguageCode);
-            console.log(this.state.targetLanguageCode);
-            console.log(this.props.SlideEditStore.content);
+            //console.log(this.state.sourceLanguageCode);
+            //console.log(this.state.targetLanguageCode);
+            //console.log(this.props.SlideEditStore.content);
 
             this.context.executeAction(translateSlideRevision, {
                 targetLang: this.state.targetLanguageCode,

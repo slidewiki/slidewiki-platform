@@ -39,10 +39,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
-    }
-    updateSlideContentAfterTranslation(payload){
-        this.content = payload.translations.translations;
-        this.emitChange();
+        this.refreshEditor = 'false';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -211,7 +208,13 @@ class SlideEditStore extends BaseStore {
         this.contentEditorFocus = payload.focus;
         this.emitChange();
     }
-
+    updateSlideContentAfterTranslation(payload){
+        this.content = payload.translations.translations;
+        this.refreshEditor = 'true';
+        this.emitChange();
+        this.refreshEditor = 'false';
+        this.emitChange();
+    }
     getState() {
         return {
             id: this.id,
@@ -249,6 +252,7 @@ class SlideEditStore extends BaseStore {
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
+            refreshEditor: this.refreshEditor
         };
     }
 
@@ -292,6 +296,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
+        this.refreshEditor = state.refreshEditor;
     }
 
     zoomContent(payload) {
