@@ -11,7 +11,8 @@ import addNodeTranslation from '../../../../actions/translation/addNodeTranslati
 import { makeNodeURL } from '../../../common/Util';
 import ContentStore from '../../../../stores/ContentStore';
 import DeckPageStore from '../../../../stores/DeckPageStore';
-
+import SlideEditStore from '../../../../stores/SlideEditStore';
+import translateSlideRevision from '../../../../actions/translation/translateSlideRevision';
 
 class SlideTranslationsModal extends React.Component {
 
@@ -77,7 +78,13 @@ class SlideTranslationsModal extends React.Component {
 
             console.log(this.state.sourceLanguageCode);
             console.log(this.state.targetLanguageCode);
+            console.log(this.props.SlideEditStore.content);
 
+            this.context.executeAction(translateSlideRevision, {
+                targetLang: this.state.targetLanguageCode,
+                sourceLang: this.state.sourceLanguageCode,
+                content: this.props.SlideEditStore.content
+            });
 
             //this.context.executeAction(addNodeTranslation, {
             //    language: this.state.languageCode
@@ -113,7 +120,7 @@ class SlideTranslationsModal extends React.Component {
             },
             alternativeTranslation1: {
                 id: 'SlideTranslationsModal.alternativeTranslation1',
-                defaultMessage: 'We have a limit amount of automatic translation each month. Alternatively, you can use the ',
+                defaultMessage: 'We have a limited amount of automatic translation each month. Alternatively, you can use the ',
             },
             alternativeTranslation2: {
                 id: 'SlideTranslationsModal.alternativeTranslation2',
@@ -121,7 +128,7 @@ class SlideTranslationsModal extends React.Component {
             },
             alternativeTranslation3: {
                 id: 'SlideTranslationsModal.alternativeTranslation3',
-                defaultMessage: ' translation extension or “app”, and via one of the Mozilla Firefox extensions for translations (',
+                defaultMessage: ' translation extension or “app”, or translate via one of the Mozilla Firefox translations extensions (',
             },
             openOriginal: {
                 id: 'SlideTranslationsModal.openOriginal',
@@ -234,11 +241,11 @@ class SlideTranslationsModal extends React.Component {
                         </div>
                       <Divider />
                       <br/>
-                      {this.context.intl.formatMessage(messages.alternativeTranslation1)}
+                       {this.context.intl.formatMessage(messages.alternativeTranslation1)}
                       <a href="https://tinyurl.com/ychtmdy9" target="_blank">Google Chrome</a>
-                      {this.context.intl.formatMessage(messages.alternativeTranslation2)}
+                       {this.context.intl.formatMessage(messages.alternativeTranslation2)}
                       <a href="https://tinyurl.com/ycdhg9db"  target="_blank">Microsoft Edge</a>
-                      {this.context.intl.formatMessage(messages.alternativeTranslation3)}
+                       {this.context.intl.formatMessage(messages.alternativeTranslation3)}
                       <a href="https://tinyurl.com/y88t4jtq"  target="_blank">example</a> ).
                       <br/>
                       <br/>
@@ -266,11 +273,12 @@ SlideTranslationsModal.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
-SlideTranslationsModal = connectToStores(SlideTranslationsModal, [TranslationStore, ContentStore, DeckPageStore ], (context, props) => {
+SlideTranslationsModal = connectToStores(SlideTranslationsModal, [TranslationStore, ContentStore, DeckPageStore, SlideEditStore ], (context, props) => {
     return {
         TranslationStore: context.getStore(TranslationStore).getState(),
         ContentStore: context.getStore(ContentStore).getState(),
         DeckPageStore: context.getStore(DeckPageStore).getState(),
+        SlideEditStore: context.getStore(SlideEditStore).getState()
     };
 });
 
