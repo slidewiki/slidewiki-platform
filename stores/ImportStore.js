@@ -42,6 +42,8 @@ class ImportStore extends BaseStore {
         this.description = '';
         this.theme = '';
         this.license = '';
+        this.tags = [];
+        this.topics = [];
     }
     cancel() {
         this.destructor();
