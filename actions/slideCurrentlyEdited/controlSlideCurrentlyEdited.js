@@ -22,6 +22,22 @@ export default function controlSlidesCurrentlyEdited(context, payload, done) {
             slideCurrentlyEdited: sid
         };
 
+        let params = {
+            slideCurrentlyEditedId: sid,
+            usersCurrentlyEditing: []
+        };
+        
+        // take only different users currently editing the slide.
+        res.slidesCurrentlyEdited = res.slidesCurrentlyEdited.filter((elem) => elem.userId !== username);
+        res.slidesCurrentlyEdited.forEach((elem) => {
+            params.usersCurrentlyEditing.push({
+                user: elem.userId,
+                timestamp: elem.timestamp
+            });
+        });
+
+        context.dispatch('GET_USERS_EDITING_SLIDE', params);
+
         context.service.create('slidesCurrentlyEdited.slide', payload, {timeout: 20 * 1000}, {}, (err2, res2) => {
             if (err2) {
                 //
