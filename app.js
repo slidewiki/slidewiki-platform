@@ -56,6 +56,7 @@ import UserStatsStore from './stores/UserStatsStore';
 import UserGroupsStore from './stores/UserGroupsStore';
 import GroupStatsStore from './stores/GroupStatsStore';
 import DeckStatsStore from './stores/DeckStatsStore';
+import SlideCurrentlyEditedStore from './stores/SlideCurrentlyEditedStore';
 
 
 // create new fluxible instance & register all stores
@@ -116,6 +117,7 @@ const app = new Fluxible({
         UserGroupsStore,
         GroupStatsStore,
         DeckStatsStore,
+        SlideCurrentlyEditedStore
     ]
 });
 
