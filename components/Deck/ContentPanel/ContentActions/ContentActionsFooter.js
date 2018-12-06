@@ -172,11 +172,11 @@ class ContentActionsFooter extends React.Component {
               {iconFollowButton}
           </button>
           </div>;
-          
+
         let listStyle = {
             listStyle: 'none'
         };
-        
+
         let mobileButtons = <AriaMenuButton.Wrapper>
             <AriaMenuButton.Button >
              <div style={{'display': 'inline-flex'}}>
@@ -224,7 +224,7 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu" role="menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
+                            <a id="PresentationNewWindow" href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
                                 <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
