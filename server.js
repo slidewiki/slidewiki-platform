@@ -110,6 +110,8 @@ fetchrPlugin.registerService(require('./services/recommendations'));
 fetchrPlugin.registerService(require('./services/following'));
 fetchrPlugin.registerService(require('./services/tags'));
 fetchrPlugin.registerService(require('./services/stats'));
+fetchrPlugin.registerService(require('./services/slidesCurrentlyEdited'));
+
 
 
 // ************************** UI Internationalisation routines ***************************************
