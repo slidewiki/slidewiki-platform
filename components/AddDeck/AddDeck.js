@@ -77,7 +77,8 @@ class AddDeck extends React.Component {
     }
     handleAddDeck(x) {
         //console.log('handleAddDeck');
-
+        this.saveTags();
+        
         this.context.executeAction(addDeckDeleteError, null);
 
         //validate input
