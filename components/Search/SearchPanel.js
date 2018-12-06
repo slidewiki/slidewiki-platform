@@ -519,7 +519,7 @@ class SearchPanel extends React.Component {
                                     <Accordion onChange={this.handleAccordionChange} accordion={false}>
                                         <AccordionItem>
                                             <AccordionItemTitle>
-                                                <Button toggle active={advanced_options_visible} labelPosition='right' icon={advanced_options_visible ? 'down chevron' : 'right chevron'} content='Advanced Options' onClick={this.handleAdvancedButtonClick} />
+                                                <Button basic active={advanced_options_visible} labelPosition='right' icon={advanced_options_visible ? 'down chevron' : 'right chevron'} content='Advanced Options' onClick={this.handleAdvancedButtonClick} />
                                             </AccordionItemTitle>
                                             <AccordionItemBody hideBodyClassName='hidden'>
                                                 { firstRowOptions }
