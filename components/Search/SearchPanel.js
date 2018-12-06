@@ -20,9 +20,7 @@ import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
 import { educationLevels } from '../../lib/isced';
 import {Dropdown, Divider, Button, Grid} from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
-import {
-    Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody,
-} from 'react-accessible-accordion';
+import { Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody } from 'react-accessible-accordion';
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -519,7 +517,7 @@ class SearchPanel extends React.Component {
                                     <Accordion onChange={this.handleAccordionChange} accordion={false}>
                                         <AccordionItem>
                                             <AccordionItemTitle>
-                                                <Button basic active={advanced_options_visible} labelPosition='right' icon={advanced_options_visible ? 'down chevron' : 'right chevron'} content='Advanced Options' onClick={this.handleAdvancedButtonClick} />
+                                                <Button basic active={advanced_options_visible} labelPosition='right' icon={advanced_options_visible ? 'down caret' : 'right caret'} content='Advanced Options' onClick={this.handleAdvancedButtonClick} />
                                             </AccordionItemTitle>
                                             <AccordionItemBody hideBodyClassName='hidden'>
                                                 { firstRowOptions }
