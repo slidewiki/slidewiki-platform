@@ -3,6 +3,7 @@ import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import SlideAnnotationView from './SlideAnnotationView';
 const ReactDOM = require('react-dom');
 
 class SlideContentView extends React.Component {
@@ -135,8 +136,8 @@ class SlideContentView extends React.Component {
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
-                                 dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
+                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0">
+                                <SlideAnnotationView slideId={this.props.SlideViewStore.slideId}>{slideHTMLContent}</SlideAnnotationView>
                             </div>
                         </section>
                     </div>

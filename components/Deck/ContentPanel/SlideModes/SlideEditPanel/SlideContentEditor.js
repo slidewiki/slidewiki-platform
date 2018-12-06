@@ -48,7 +48,6 @@ class SlideContentEditor extends React.Component {
         this.scaleRatio = null;
 
         CKEDITOR.on('instanceReady', (ev) => {
-
             ev.editor.on('fileUploadRequest', (ev2) => {
                 ev2.cancel();
             });
@@ -668,6 +667,7 @@ class SlideContentEditor extends React.Component {
             //console.log('destroy CKEDITOR instance');
             CKEDITOR.instances.inlineContent.destroy();
         }
+        
         CKEDITOR.inline('inlineContent', {
             customConfig: '/assets/ckeditor_config.js',
             removePlugins: 'floatingspace,resize',
@@ -804,6 +804,12 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
+            
+            // get the annotations before CKEditor is destroyed
+            //CKEDITOR.instances.inlineContent.plugins.semanticannotations.collectionId = this.props.selector.sid;
+            CKEDITOR.instances.inlineContent.execCommand('saveAnnotations');
+            let annotations = CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationToStore;
+            
             if (CKEDITOR.instances.inlineContent != null) {
             //    console.log('destroy previous CKEDITOR instance');
                 CKEDITOR.instances.inlineContent.destroy();
@@ -840,7 +846,6 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
             let transition = this.props.SlideEditStore.slideTransition ? this.props.SlideEditStore.slideTransition : 'none';
-
             //setTimeout(function() {
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
@@ -851,7 +856,8 @@ class SlideContentEditor extends React.Component {
                 dataSources: dataSources,
                 selector: currentSelector,
                 tags: tags,
-                transition: transition
+                transition: transition,
+                annotations: annotations
             });
             //},500);
 
@@ -1065,7 +1071,7 @@ class SlideContentEditor extends React.Component {
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
-
+        
         //destroy previous ckeditor-plugins
         if (CKEDITOR.instances.inlineContent != null) {
             //console.log('destroy previous CKEDITOR instance');
@@ -1117,7 +1123,7 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
         //    return false;
         //});
-
+        
         CKEDITOR.instances.inlineContent.on('focus',(evt) => {
             this.context.executeAction(contentEditorClick, {
                 focus: true
@@ -1132,7 +1138,10 @@ class SlideContentEditor extends React.Component {
 
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-
+            // provide the slide id to the annotation plugin
+            CKEDITOR.instances.inlineContent.plugins.semanticannotations.collectionId = this.props.selector.sid;
+            CKEDITOR.instances.inlineContent.execCommand('loadAnnotations');
+                
             this.finishLoading = true;
             //console.log('test');
             CKEDITOR.instances.inlineContent.on( 'key', () => {
@@ -1756,6 +1765,14 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.scaleRatio && nextProps.SlideEditStore.scaleRatio !== this.scaleRatio) {
             this.scaleRatio = nextProps.SlideEditStore.scaleRatio;
             this.resize();
+        }
+
+        if (nextProps.SlideEditStore.newSlideId !== '' && nextProps.SlideEditStore.newSlideId !== this.props.SlideEditStore.newSlideId)
+        {
+            //console.log('SAVED', nextProps.SlideEditStore.newSlideId);
+            // check if ckeditor is loaded
+            //CKEDITOR.instances.inlineContent.plugins.semanticannotations.collectionId = nextProps.SlideEditStore.newSlideId;
+            //CKEDITOR.instances.inlineContent.execCommand('saveAnnotations');
         }
 
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
@@ -2582,6 +2599,7 @@ class SlideContentEditor extends React.Component {
             //if none of above yield a theme they will be legacy decks:
             styleName = 'white';
         }
+        
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (

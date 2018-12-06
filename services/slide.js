@@ -176,6 +176,21 @@ export default {
                 }else{
                     pathArr=[];
                 }
+                
+                if (args.annotations.length > 0) {
+                    let url = 'http://localhost:3030/annotations/' + newSlideID;
+                    
+                    rp.post({
+                        uri: url,
+                        json: true,
+                        body: args.annotations,
+                    });
+                    
+                    /*.then((res) => {
+                        //callback(null, {slide: {id: newSlideID, path: pathArr.join(';'), theme: resParse.theme ? resParse.theme : 'default'}, selector: selector});
+                    });*/
+                }
+                
                 callback(null, {slide: {id: newSlideID, path: pathArr.join(';'), theme: resParse.theme ? resParse.theme : 'default'}, selector: selector});
             }).catch((err) => {
                 console.log(err);
