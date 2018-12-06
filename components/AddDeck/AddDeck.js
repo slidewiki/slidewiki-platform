@@ -14,6 +14,7 @@ import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importCanceled from '../../actions/import/importCanceled';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
+import storeTags from '../../actions/import/storeTags';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
@@ -33,8 +34,6 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
-        this.tagsInputList = [];
-        this.topicsInputList = [];
     }
     componentDidMount() {
         // let that = this;
@@ -90,7 +89,6 @@ class AddDeck extends React.Component {
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
         const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
-        console.log(tags);
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
@@ -419,9 +417,7 @@ class AddDeck extends React.Component {
     }
     
     saveTags() {
-        this.tagsInputList = this.tagInput.getSelected();
-        this.topicsInputList = this.topicInput.getSelected();
-        console.log(this.tagsInputList);
+        this.context.executeAction(storeTags, {tags: this.tagInput.getSelected(), topics: this.topicInput.getSelected()});
     }
 
     render() {
@@ -550,7 +546,6 @@ class AddDeck extends React.Component {
                 this.context.executeAction(checkNoOfSlides, { id: this.props.ImportStore.deckId });
             }, 100);
         }
-        console.log('render ', this.tagsInputList);
 
         return (
             <div className="ui vertically padded grid container">
@@ -622,13 +617,13 @@ class AddDeck extends React.Component {
                             </div>
                             <div className="field">
                                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
-                                <TagInput id="topics_input_field" initialTags={this.topicsInputList} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
+                                <TagInput id="topics_input_field" initialTags={this.props.ImportStore.topics} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
                             </div>
                         </div>
 
                         <div className="field">
                             <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={this.tagsInputList} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
+                            <TagInput id="tags_input_field" initialTags={this.props.ImportStore.tags} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
