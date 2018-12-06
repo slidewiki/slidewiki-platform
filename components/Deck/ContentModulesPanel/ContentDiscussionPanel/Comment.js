@@ -12,6 +12,7 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import Util from '../../../common/Util';
 import UserPicture from '../../../common/UserPicture';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class Comment extends React.Component {
     handleReply(e) {
@@ -77,10 +78,32 @@ class Comment extends React.Component {
     }
 
     render() {
+        const form_messages = defineMessages({
+            revision_note: {
+                id: 'Comment.form.revision_note',
+                defaultMessage: 'revision',
+            },
+            from_note: {
+                id: 'Comment.form.from_note',
+                defaultMessage: 'from',
+            },
+            comment_removed: {
+                id: 'Comment.form.comment_removed',
+                defaultMessage: 'Comment was removed',
+            },
+            delete_aria: {
+                id: 'Comment.form.delete_aria', 
+                defaultMessage: 'Delete comment'
+            },
+        });
         const comment = this.props.comment;
         const replyLink = (
             <div className="actions">
-                <a href="#" tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+                <a href="#" tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>
+                    <FormattedMessage
+                        id='Comment.form.label_reply'
+                        defaultMessage='Reply' />
+                </a>
             </div>
         );
         
@@ -89,16 +112,16 @@ class Comment extends React.Component {
         if (nodePath === '') {
             nodePath = this.getPathRegardlessRevision(comment);
             if (nodePath !== '' && comment.content_id.split('-').length > 1) {
-                revisionNote = ' (revision ' + comment.content_id.split('-')[1] + ')';
+                revisionNote = ' (' + this.context.intl.formatMessage(form_messages.revision_note) + ' ' + comment.content_id.split('-')[1] + ')';
             }
         }
         
         let nodeRef = '';
         const cheerioContentName = (comment.content_name) ? cheerio.load(comment.content_name).text() + revisionNote : '';
         if (comment.content_kind !== this.props.selector.stype || comment.content_id.split('-')[0] !== this.props.selector.sid.split('-')[0]) {
-            nodeRef = (<span>{' (from ' + comment.content_kind + ' '}<a href={nodePath} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>);
+            nodeRef = (<span>{' (' + this.context.intl.formatMessage(form_messages.from_note) + ' ' + comment.content_kind + ' '}<a href={nodePath} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>);
         } else if (comment.content_id.split('-').length > 1 && this.props.selector.sid.split('-').length > 1 && comment.content_id.split('-')[1] !== this.props.selector.sid.split('-')[1]) {
-            nodeRef = '(revision ' + comment.content_id.split('-')[1] + ')';
+            nodeRef = '(' + this.context.intl.formatMessage(form_messages.revision_note) + ' ' + comment.content_id.split('-')[1] + ')';
         }
         
         const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
@@ -108,7 +131,7 @@ class Comment extends React.Component {
 
         let commentContent = (comment.visibility === false) ?
             <div className="text">
-                <i>{'Comment was removed'}</i><br/>
+                <i>{this.context.intl.formatMessage(form_messages.comment_removed)}</i><br/>
             </div> :
             <div className="text">
                 <strong>{comment.title}</strong><br/>
@@ -126,7 +149,7 @@ class Comment extends React.Component {
                         {nodeRef}
                         {deletePermission ? (
                             <div>
-                                <button className="ui basic icon tiny button" title='Delete comment' aria-label='Delete comment' onClick={this.handleDeleteComment.bind(this, comment)}>
+                                <button className="ui basic icon tiny button" title='Delete comment' aria-label={this.context.intl.formatMessage(form_messages.delete_aria)} onClick={this.handleDeleteComment.bind(this, comment)}>
                                     <i className="remove icon" ></i>
                                 </button>
                             </div>
@@ -143,7 +166,8 @@ class Comment extends React.Component {
 }
 
 Comment.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 Comment = connectToStores(Comment, [DeckTreeStore, PermissionsStore], (context, props) => {
     return {

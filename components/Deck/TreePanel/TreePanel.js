@@ -105,11 +105,11 @@ class TreePanel extends React.Component {
 
     getPresentationHref(){
         let selector = this.props.DeckTreeStore.selector.toJS();
-        selector.subdeck = this.getCurrentSubdeck(selector); //subdeck is not part of the selector from DeckTreeStore, so manually add it 
-        
+        selector.subdeck = this.getCurrentSubdeck(selector); //subdeck is not part of the selector from DeckTreeStore, so manually add it
+
         return makeNodeURL(selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang);
     }
-    
+
     getCurrentSubdeck(selector){
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
