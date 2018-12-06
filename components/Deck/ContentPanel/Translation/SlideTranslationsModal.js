@@ -108,31 +108,31 @@ class SlideTranslationsModal extends React.Component {
             },
             sourceTranslation: {
                 id: 'SlideTranslationsModal.sourceTranslation',
-                defaultMessage: 'Source (current) language of slide:',
+                defaultMessage: 'Current language:',
             },
             targetTranslation: {
                 id: 'SlideTranslationsModal.targetTranslation',
-                defaultMessage: 'Target language of slide (translate to):',
+                defaultMessage: 'Target language:',
             },
             autoSelect: {
                 id: 'SlideTranslationsModal.autoSelect',
-                defaultMessage: 'The source and target language of this translation are automatically selected. Only select a different language if this automatic selection is incorrect.',
+                defaultMessage: 'Current and target language are automatically selected. You may alter manually if required.',
             },
             alternativeTranslation1: {
                 id: 'SlideTranslationsModal.alternativeTranslation1',
-                defaultMessage: 'We have a limited amount of automatic translation each month. Alternatively, you can use the ',
+                defaultMessage: 'We have a limited amount of automatic translation each month. Alternatively, you can use the... ',
             },
             alternativeTranslation2: {
                 id: 'SlideTranslationsModal.alternativeTranslation2',
-                defaultMessage: ' built-in translation feature, ',
+                defaultMessage: ' ...built-in translation feature, ...',
             },
             alternativeTranslation3: {
                 id: 'SlideTranslationsModal.alternativeTranslation3',
-                defaultMessage: ' translation extension or “app”, or translate via one of the Mozilla Firefox translations extensions (',
+                defaultMessage: ' ...translation extension or “app”, or translate via one of the Mozilla Firefox translations extensions (...',
             },
             openOriginal: {
                 id: 'SlideTranslationsModal.openOriginal',
-                defaultMessage: 'With the play button below you can open the original untranslated version of this slide in a new window. This can help you to evaluate the automatic translation. This button is also always available in the footer below the slide edit area.',
+                defaultMessage: 'To assist with translation, you can open the current version of this deck in a new browser tab via the Play button.',
             },
             sourceLanguageSearchOptions: {
                 id: 'SlideTranslationsModal.sourceLanguageSearchOptions',
