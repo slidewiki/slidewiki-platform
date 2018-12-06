@@ -69,11 +69,8 @@ class ContentQuestionsPanel extends React.Component {
         this.context.executeAction(invertExamListFlag, {});
     }
     
-    handleExamClick() {
+    resetExamAnswers() {
         this.context.executeAction(resetExamAnswers, {});
-        this.context.executeAction(navigateAction, {
-            url: '/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid
-        });
     }
     
     render() {
@@ -92,12 +89,14 @@ class ContentQuestionsPanel extends React.Component {
             case 'deck':
                 buttonBar = (userId !== '' && questions.length > 0) ? (
                     <div className='ui buttons'>
-                        <button className='ui button blue' onClick={this.handleExamClick.bind(this)}>
-                            <i className='clipboard outline icon'></i>
-                            <FormattedMessage
-                                id='ContentQuestionsPanel.form.button_exam'
-                                defaultMessage='Exam mode' />
-                        </button>
+                        <a href={'/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid} target="_blank" tabIndex="-1">
+                            <button className='ui button blue' onClick={this.resetExamAnswers.bind(this)}>
+                                <i className='clipboard outline icon' />
+                                <FormattedMessage
+                                    id='ContentQuestionsPanel.form.button_exam'
+                                    defaultMessage='Exam mode' />
+                            </button>
+                        </a>
                     </div>
                 ) : '';
                 break;

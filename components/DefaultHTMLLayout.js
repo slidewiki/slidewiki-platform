@@ -17,6 +17,7 @@ class DefaultHTMLLayout extends React.Component {
             <head>
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
+                <meta name="thumbnail" content={this.props.context.getStore(ApplicationStore).getPageThumbnail()} />
                 <meta name="viewport" content="width=device-width" />
                 <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
