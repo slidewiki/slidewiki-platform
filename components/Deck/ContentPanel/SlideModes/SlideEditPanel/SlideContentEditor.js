@@ -1953,13 +1953,13 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.refreshEditor === 'true' && nextProps.SlideEditStore.refreshEditor !== this.props.SlideEditStore.refreshEditor)
         {
             //currently used used for refreshing slide content editor after translation
-            setTimeout(() => {
-                console.log('test resize');
+            //setTimeout(() => {
+                //console.log('test resize');
                 this.refreshCKeditor();
                 //this.resizeDrag();
                 //this.forceUpdate();
                 this.hasChanges = true;
-            }, 500);
+            //}, 500);
         }
         if (nextProps.SlideEditStore.uploadVideoClick === 'true' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
         {

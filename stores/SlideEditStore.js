@@ -210,6 +210,7 @@ class SlideEditStore extends BaseStore {
     }
     updateSlideContentAfterTranslation(payload){
         this.content = payload.translations.translations;
+        this.emitChange();
         this.refreshEditor = 'true';
         this.emitChange();
         this.refreshEditor = 'false';
