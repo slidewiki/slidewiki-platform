@@ -20,7 +20,7 @@ import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
 import { educationLevels } from '../../lib/isced';
 import {Dropdown, Divider, Button, Grid} from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
-import { Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody } from 'react-accessible-accordion';
+import SingleItemAccordion from '../common/SingleItemAccordion';
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -383,25 +383,6 @@ class SearchPanel extends React.Component {
         return fields;
     }
 
-    /**
-     * Toggles the state of advanced_options_visible.
-     * Triggered by clicks on <AccordionItemTitle> elements.
-     *
-     * @returns {void}
-     */
-    handleAccordionChange = () => {
-        const { advanced_options_visible } = this.state;
-        this.setState({ advanced_options_visible: !advanced_options_visible });
-    };
-
-    /**
-     * Prevents the Advanced Options button from submitting and reloading the page.
-     *
-     * @param {object} [e] The event/element that triggered this handler.
-     * @returns {void}
-     */
-    handleAdvancedButtonClick = (e) => { e.preventDefault(); }
-
     handleFacetClick(facetItem) {
         const facetField = facetItem.field;
         const facetValue = facetItem.value;
@@ -460,9 +441,7 @@ class SearchPanel extends React.Component {
         });
     }
     render() {
-        const { advanced_options_visible } = this.state;
-
-        let firstRowOptions = <div className="three fields">
+        let options = <div><div className="three fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
             <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete</div>
             
@@ -487,9 +466,8 @@ class SearchPanel extends React.Component {
                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                     placeholder="Select Education Level" />
             </div>
-        </div>;
-
-        let secondRowOptions = <div className="two fields">
+        </div>
+        <div className="two fields">
             <div className="field">
                 <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
                 <UsersInput ref={ (e) => { this.userDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
@@ -499,7 +477,7 @@ class SearchPanel extends React.Component {
                 <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
                 <TagsInput ref={ (e) => { this.tagDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
             </div>
-        </div>;
+        </div></div>;
 
         return (
             <div className="ui container">
@@ -514,17 +492,11 @@ class SearchPanel extends React.Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column>
-                                    <Accordion onChange={this.handleAccordionChange} accordion={false}>
-                                        <AccordionItem>
-                                            <AccordionItemTitle>
-                                                <Button basic active={advanced_options_visible} labelPosition='right' icon={advanced_options_visible ? 'down caret' : 'right caret'} content='Advanced Options' onClick={this.handleAdvancedButtonClick} />
-                                            </AccordionItemTitle>
-                                            <AccordionItemBody hideBodyClassName='hidden'>
-                                                { firstRowOptions }
-                                                { secondRowOptions }
-                                            </AccordionItemBody>
-                                        </AccordionItem>
-                                    </Accordion>
+                                    <SingleItemAccordion
+                                        buttonContent='Advanced Options'
+                                        buttonAs='button'
+                                        revealContent={ options }
+                                    />
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
