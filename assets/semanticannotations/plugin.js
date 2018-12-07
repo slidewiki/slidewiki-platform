@@ -2,8 +2,9 @@
 
 CKEDITOR.plugins.add('semanticannotations', {
     icons: 'automaticAnnotation',
-    collectionId: null,
-    annotationToStore: [],
+    //collectionId: null,
+    annotationsFromServer: [],
+    annotationsToStore: [],
     onLoad: function() {
        CKEDITOR.addCss(
            `annotation {
@@ -50,6 +51,7 @@ CKEDITOR.plugins.add('semanticannotations', {
                 if (selectedAnnotation != null) {
                     selectedAnnotation.remove(true);
                 }
+                editor.execCommand('getAnnotationsToStore');
             }
         });
                 
@@ -62,6 +64,7 @@ CKEDITOR.plugins.add('semanticannotations', {
                 let textToAnnotate = editor.getData();
                 annotationHandler.automaticAnnotation(textToAnnotate).then((annotatedText) => {
                     editor.setData(annotatedText, {noSnapshot: true});
+                    editor.execCommand('getAnnotationsToStore');
                 });
             }
         });
@@ -83,10 +86,13 @@ CKEDITOR.plugins.add('semanticannotations', {
         
         editor.addCommand('loadAnnotations', {
             exec: function(editor) {
-                annotationHandler.collectionId = editor.plugins.semanticannotations.collectionId;
+                //annotationHandler.annotationsFromServer = editor.plugins.semanticannotations.annotationsFromServer;
                 if (!annotationHandler.inlineAnnotations) {
                     // load annotations from server
-                    annotationHandler.loadAnnotationsFromServer();
+                    //annotationHandler.loadAnnotationsFromServer();
+                    var annotations = editor.plugins.semanticannotations.annotationsFromServer;
+                    //console.log('ADD!', annotations);
+                    annotationHandler.loadAnnotations(annotations);
                 } else {
                     // load annotations from inline script 
                     editor.plugins.semanticannotations.loadAnnotationsInlineJsonLd(editor);
@@ -94,16 +100,16 @@ CKEDITOR.plugins.add('semanticannotations', {
             }
         });
         
-        editor.addCommand('saveAnnotations', {
+        editor.addCommand('getAnnotationsToStore', {
             exec: function(editor) {
                 if (!annotationHandler.inlineAnnotations) {
                     let annotationIds = editor.plugins.semanticannotations.getAllAnnotationIds(editor);
                     let annotationsToStore = annotationHandler.getAnnotationsToStore(annotationIds);
-                    editor.plugins.semanticannotations.annotationToStore = annotationsToStore;
+                    
+                    editor.plugins.semanticannotations.annotationsToStore = annotationsToStore;
                 } else {
                     editor.plugins.semanticannotations.updateInlineJsonLd(editor, annotationHandler);
-                }
-                
+                }                
             }
         });
         
@@ -306,6 +312,7 @@ CKEDITOR.plugins.add('semanticannotations', {
                     };
                     
                     editor.plugins.semanticannotations.setAnnotationData(editor, annotationHandler, data, annotationId);
+                    editor.execCommand('getAnnotationsToStore');
                 }
             };
         });
@@ -423,7 +430,7 @@ class AnnotationHandler {
     constructor(){
         this.jsonLdStore = {};
         this.inlineAnnotations = false; 
-        this.collectionId = null;
+        //this.collectionId = null;
     }
     
     automaticAnnotation(textToAnnotate) {
@@ -495,7 +502,7 @@ class AnnotationHandler {
         types = this.typesStringToArray(types);
         
         let jsonLd = {
-        	"_collectionId": this.collectionId, // == slide id 
+        	//"_collectionId": this.collectionId, // == slide id 
         	"@context": {
                 "Schema": "http://schema.org/",
                 "Wikidata": "http://www.wikidata.org/entity/",
@@ -511,8 +518,11 @@ class AnnotationHandler {
         this.jsonLdStore[id] = jsonLd;
     }
     
+    // ensure that 'types' is always an array
     typesStringToArray(types) {
-        return types.indexOf(',') > -1 ? types.split(',') : types;
+        types = types.indexOf(',') > -1 ? types.split(',') : types;
+        types = Array.isArray(types) ? types : types != '' ? [types] : [];
+        return types;
     }
     
     removeJsonLd(id) {
@@ -580,7 +590,13 @@ class AnnotationHandler {
         }
     }
     
-    loadAnnotationsFromServer() {        
+    loadAnnotations(annotations) {
+        for (let i=0; i<annotations.length; i++) {
+            this.jsonLdStore[annotations[i]['Schema:identifier']] = annotations[i];
+        }
+    }
+    
+    /*loadAnnotationsFromServer() {        
         fetch('http://localhost:3030/annotations/' + this.collectionId)
             .then(function(response) {
                 return response.json();
@@ -593,5 +609,5 @@ class AnnotationHandler {
                     this.jsonLdStore[annotations[i]['Schema:identifier']] = annotations[i];
                 }
             }.bind(this));
-    }
+    }*/
 }

@@ -39,7 +39,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
-        this.newSlideId = '';
+        this.annotations = [];
     }
 
     updateContent(payload) {
@@ -51,14 +51,12 @@ class SlideEditStore extends BaseStore {
         this.content = payload.slide.content || ' ';
         this.markdown = payload.slide.markdown || ' ';
         this.speakernotes = payload.slide.speakernotes || ' ';
+        this.annotations = payload.slide.annotations || [];
 
         this.emitChange();
     }
 
-    saveSlide(payload) {
-        this.newSlideId = payload.slide.id;
-        this.emitChange();
-        this.newSlideId = '';
+    saveSlide() {
         this.emitChange();
     }
 
@@ -250,7 +248,7 @@ class SlideEditStore extends BaseStore {
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
-            newSlideId: this.newSlideId
+            annotations: this.annotations,
         };
     }
 
@@ -294,7 +292,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
-        this.newSlideId = state.newSlideId;
+        this.annotations = state.annotations;
     }
 
     zoomContent(payload) {

@@ -137,7 +137,7 @@ class SlideContentView extends React.Component {
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0">
-                                <SlideAnnotationView slideId={this.props.SlideViewStore.slideId}>{slideHTMLContent}</SlideAnnotationView>
+                                <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations}>{slideHTMLContent}</SlideAnnotationView>
                             </div>
                         </section>
                     </div>
