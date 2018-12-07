@@ -33,7 +33,10 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
-        this.formValidationErrors = {};
+
+        this.state = {
+            formValidationErrors: []
+        };
     }
     componentDidMount() {
     }
@@ -72,24 +75,24 @@ class AddDeck extends React.Component {
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
 
         // Clear any existing validation errors.
-        this.formValidationErrors = [];
+        this.state.formValidationErrors = [];
 
         // Validate title
-        if (!title) this.formValidationErrors.title = 'Specify a title.';
+        if (!title) this.state.formValidationErrors.title = 'Specify a title.';
 
         // Validate language
-        if (!language || language.length < 2) this.formValidationErrors.language = 'Specify a language.';
+        if (!language || language.length < 2) this.state.formValidationErrors.language = 'Specify a language.';
 
         // Validate T&Cs acceptance
         if (acceptedConditions === false)
-            this.formValidationErrors.conditions = 'You must agree to the SlideWiki terms and conditions.';
+            this.state.formValidationErrors.conditions = 'You must agree to the SlideWiki terms and conditions.';
 
         // Validate image rights declaration
         if (acceptedImagesLicense === false)
-            this.formValidationErrors.imagesLicence = 'You must agree to the rights declaration.';
+            this.state.formValidationErrors.imagesLicence = 'You must agree to the rights declaration.';
 
         // If there are no validation errors, then create the deck
-        if(Object.keys(this.formValidationErrors).length === 0) {
+        if(Object.keys(this.state.formValidationErrors).length === 0) {
             this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
@@ -387,19 +390,19 @@ class AddDeck extends React.Component {
         let fieldClass_title = classNames({
             'required': true,
             'field': true,
-            'error': this.formValidationErrors.title
+            'error': this.state.formValidationErrors.title
         });
         let fieldClass_conditions = classNames({
             'required': true,
             'inline': true,
             'field': true,
-            'error': this.formValidationErrors.conditions
+            'error': this.state.formValidationErrors.conditions
         });
         let fieldClass_imageslicense = classNames({
             'required': true,
             'inline': true,
             'field': true,
-            'error': this.formValidationErrors.imagesLicence
+            'error': this.state.formValidationErrors.imagesLicence
         });
         let btnClasses_submit = classNames({
             'ui': true,
@@ -418,7 +421,7 @@ class AddDeck extends React.Component {
         let fieldClass_language = classNames({
             'required': true,
             'field': true,
-            'error': this.formValidationErrors.language
+            'error': this.state.formValidationErrors.language
         });
 
         let filename = this.props.ImportStore.filename;
@@ -480,7 +483,7 @@ class AddDeck extends React.Component {
                     </h3>
                 </div>
                 <div className="sixteen wide column">
-                    <form className={'ui form upload' + (Object.keys(this.formValidationErrors).length === 0 ? '' : ' error')}>
+                    <form className={'ui form upload' + (Object.keys(this.state.formValidationErrors).length === 0 ? '' : ' error')}>
                         <div className={fieldClass_title} ref="div_title" >
                             <label htmlFor="title">
                                 <FormattedMessage
@@ -598,12 +601,11 @@ class AddDeck extends React.Component {
                                 </label>
                             </div>
                         </div>
-
                         <Message
                             error
-                            header='We found some problems'
-                            list={Object.values(this.formValidationErrors)}
                             role="region"
+                            header='We found some problems'
+                            list={Object.values(this.state.formValidationErrors)}
                             aria-live="polite"
                         />
                         <div className="ui buttons">
