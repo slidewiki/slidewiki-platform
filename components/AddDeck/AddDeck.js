@@ -603,9 +603,9 @@ class AddDeck extends React.Component {
                         </div>
                         <Message
                             error
-                            role="region"
                             header='We found some problems'
                             list={Object.values(this.state.formValidationErrors)}
+                            role="alert"
                             aria-live="polite"
                         />
                         <div className="ui buttons">
