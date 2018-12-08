@@ -777,6 +777,11 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
+    loadAnnotationsCkeditor(annotations) {
+        let annotationsConverted = this.convertAnnotationsToJsonLd(annotations);
+        CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsFromServer = annotationsConverted;
+        CKEDITOR.instances.inlineContent.execCommand('loadAnnotations');
+    }
     convertAnnotationsToJsonLd(annotations) {
         let returnData = [];
                         
@@ -1174,9 +1179,7 @@ class SlideContentEditor extends React.Component {
 
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-            let annotations = this.convertAnnotationsToJsonLd(this.props.SlideEditStore.annotations);
-            CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsFromServer = annotations;
-            CKEDITOR.instances.inlineContent.execCommand('loadAnnotations');
+            this.loadAnnotationsCkeditor(this.props.SlideEditStore.annotations);
                 
             this.finishLoading = true;
             //console.log('test');
@@ -1289,16 +1292,6 @@ class SlideContentEditor extends React.Component {
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
         this.resize();
-        
-        const newProps = this.props;
-        
-        if (newProps.SlideEditStore.slideId !== prevProps.SlideEditStore.slideId) {
-            if (CKEDITOR.instances.inlineContent != null) {
-                let annotations = this.convertAnnotationsToJsonLd(this.props.SlideEditStore.annotations);
-                CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsFromServer = annotations;
-                CKEDITOR.instances.inlineContent.execCommand('loadAnnotations');
-            }
-        }
     }
 
     correctDimensionsBoxesIframe()
@@ -2055,6 +2048,10 @@ class SlideContentEditor extends React.Component {
             }
             CKEDITOR.instances.inlineContent.execCommand('table');
         }
+        if (nextProps.SlideEditStore.annotateClick === 'true' && nextProps.SlideEditStore.annotateClick !== this.props.SlideEditStore.annotateClick)
+        {
+            CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
+        }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
         {
             if($('.pptx2html').length) //if slide is in canvas mode
@@ -2222,6 +2219,17 @@ class SlideContentEditor extends React.Component {
         //do something to change code for questions
         if (nextProps.SlideEditStore.embedQuestionsClick === 'true' && nextProps.SlideEditStore.embedQuestionsClick !== this.props.SlideEditStore.embedQuestionsClick){
             this.handleEmbedQuestionsClick(nextProps.SlideEditStore.embedQuestionsContent);
+        }
+        if (nextProps.SlideEditStore.slideId !== this.props.SlideEditStore.slideId) {
+            // if ckeditor is loaded
+            if (CKEDITOR.instances.inlineContent != null && CKEDITOR.instances.inlineContent.plugins.semanticannotations != null) {
+                this.loadAnnotationsCkeditor(nextProps.SlideEditStore.annotations);
+            } else if(CKEDITOR.instances.inlineContent) {
+                // if ckeditor is not ready yet, create listener to load annotations when ready
+                CKEDITOR.instances.inlineContent.once('instanceReady', (evt) => {
+                    this.loadAnnotationsCkeditor(nextProps.SlideEditStore.annotations);
+                });
+            }
         }
     }
     addBorders() { //not used at the moment

@@ -21,6 +21,18 @@ CKEDITOR.plugins.add('semanticannotations', {
     init: function(editor) {
         let annotationHandler = new AnnotationHandler;
         var pluginDirectory = this.path;
+        
+        // disable delete annotation toolbar button when no annotation is selected
+        editor.on('selectionChange', function(evt) {
+            var command = editor.getCommand( 'deleteAnnotation' );
+            var element = evt.data.path.lastElement;
+            
+            if (element.getAscendant('annotation', true)) {
+                command.setState( CKEDITOR.TRISTATE_OFF );
+            } else {
+                command.setState( CKEDITOR.TRISTATE_DISABLED );
+            }
+        });
             
         editor.addCommand('editAnnotation', new CKEDITOR.dialogCommand('annotationDialog'));
         
@@ -114,15 +126,17 @@ CKEDITOR.plugins.add('semanticannotations', {
         });
         
         editor.ui.addButton('createManualAnnotation', {
-            label: 'Create annotation',
+            label: 'Create/edit annotation',
             command: 'createManualAnnotation',
-            toolbar: 'insert'
+            toolbar: 'insert',
+            icon: this.path + 'icons/createManualAnnotation.png',
         });
         
         editor.ui.addButton('deleteAnnotation', {
             label: 'Delete annotation',
             command: 'deleteAnnotation',
-            toolbar: 'insert'
+            toolbar: 'insert',
+            icon: this.path + 'icons/deleteAnnotation.png',
         });
         
         editor.ui.addButton('automaticAnnotation', {

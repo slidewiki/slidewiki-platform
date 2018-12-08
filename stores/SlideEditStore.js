@@ -27,6 +27,7 @@ class SlideEditStore extends BaseStore {
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
         this.tableClick = 'false';
+        this.annotateClick = 'false';
         this.mathsClick = 'false';
         this.codeClick = 'false';
         this.removeBackgroundClick = 'false';
@@ -144,6 +145,13 @@ class SlideEditStore extends BaseStore {
         this.tableClick = 'false';
         this.emitChange();
     }
+    
+    handleAnnotateClick(){
+        this.annotateClick = 'true';
+        this.emitChange();
+        this.annotateClick = 'false';
+        this.emitChange();
+    }
 
     handleMathsClick(){
         this.mathsClick = 'true';
@@ -236,6 +244,7 @@ class SlideEditStore extends BaseStore {
             uploadMediaClick: this.uploadMediaClick,
             uploadVideoClick: this.uploadVideoClick,
             tableClick: this.tableClick,
+            annotateClick: this.annotateClick,
             mathsClick: this.mathsClick,
             codeClick: this.codeClick,
             removeBackgroundClick: this.removeBackgroundClick,
@@ -280,6 +289,7 @@ class SlideEditStore extends BaseStore {
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;
         this.tableClick = state.tableClick;
+        this.annotateClick = state.annotateClick;
         this.mathsClick = state.mathsClick;
         this.codeClick = state.codeClick;
         this.removeBackgroundClick = state.removeBackgroundClick;
@@ -334,6 +344,7 @@ SlideEditStore.handlers = {
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
     'UPLOAD_VIDEO_CLICK': 'handleuploadVideoClick',
     'TABLE_CLICK': 'handleTableClick',
+    'ANNOTATE_CLICK': 'handleAnnotateClick',
     'MATHS_CLICK': 'handleMathsClick',
     'CODE_CLICK': 'handleCodeClick',
     'REMOVE_BACKGROUND_CLICK': 'handleRemoveBackgroundClick',

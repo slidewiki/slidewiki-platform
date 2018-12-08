@@ -8,6 +8,7 @@ import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
 import tableClick from '../../../actions/slide/tableClick';
+import annotateClick from '../../../actions/slide/annotateClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
 import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
@@ -203,6 +204,9 @@ class SlideEditLeftPanel extends React.Component {
         //console.log('clicked');
         this.setState({showTemplate: true});
         this.forceUpdate();
+    }
+    handleAnnotateClick() {
+        this.context.executeAction(annotateClick, {});
     }
     handleTemplatechange(templateID){
         if(templateID !== ''){
@@ -418,6 +422,8 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleTemplatechange':
                     this.handleTemplatechange(template);
                     break;
+                case 'handleAnnotateClick':
+                    this.handleAnnotateClick();
                 case 'handlePropertiesClick':
                     this.handlePropertiesClick();
                     break;
@@ -801,6 +807,9 @@ class SlideEditLeftPanel extends React.Component {
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
             <AttachQuestions currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck}/>
+            <a  className="item" id="handleAnnotateClick" role="button" onClick={this.handleAnnotateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAnnotateClick')}>
+                <i tabIndex="0"  className="edit icon"></i>Auto annotate
+            </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
