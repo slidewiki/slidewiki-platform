@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /presentationbroadcast/
+Disallow: /ltiLogin/
+Disallow: /socialLogin/
+Disallow: /migrateUser/
+Disallow: /SSO/
+Disallow: /Sfn87Pfew9Af09aM/

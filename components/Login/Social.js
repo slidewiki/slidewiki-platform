@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import ReactDOM from 'react-dom';
 let classNames = require('classnames');
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 const NAME = 'sociallogin_data';
 
@@ -47,7 +48,10 @@ class Social extends React.Component {
     render() {
         return (
             <div>
-                <b>We acquire your data. This will take just a few seconds.<br/>This window will close automatically.</b>
+                <b><FormattedMessage id="socialLogin.text1" defaultMessage="We are acquiring your data. This will take just a few seconds."/>
+                <br/>
+                <FormattedMessage id="socialLogin.text2" defaultMessage="This window will close automatically."/>
+                </b>
             </div>
         );
     }

@@ -12,6 +12,7 @@ import Util from '../common/Util';
 import {Dropdown, Button, Icon, Flag} from 'semantic-ui-react';
 
 import DeckTreeStore from '../../stores/DeckTreeStore';
+import DeckPageStore from '../../stores/DeckPageStore';
 import PermissionsStore from '../../stores/PermissionsStore';
 import TranslationStore from '../../stores/TranslationStore';
 
@@ -33,9 +34,12 @@ class DeckLanguageMenu extends React.Component {
         if (!(e.code && e.code === 'Enter' || !e.code)) {
             return;
         }
-
-        if (!language) {
+        if (language === 'addNew') {
             $('#DeckTranslationsModalOpenButton').click();
+            return;
+        }
+        if (language === 'translateSlide') {
+            $('#SlideTranslationsModalOpenButton').click();
             return;
         }
 
@@ -92,9 +96,21 @@ class DeckLanguageMenu extends React.Component {
         if (canEdit) {
             languageOptions.push({
                 text: 'Add a new translation',
+                value: 'addNew',
                 icon: 'translate',
                 key: 'placeholderForAddANewTranslation'
             });
+            // we need to create the href to navigate to
+            let selector = this.props.DeckTreeStore.selector.toJS();
+            if (selector.stype === 'slide' && (this.props.DeckPageStore.mode === 'markdownEdit' || this.props.DeckPageStore.mode === 'edit'))
+            {
+                languageOptions.push({
+                    text: 'Translate Slide',
+                    value: 'translateSlide',
+                    icon: 'translate',
+                    key: 'placeholderForTranslateSlide'
+                });
+            }
         }
 
         // the user selected language (defaults to the primary deck tree language)
@@ -128,8 +144,9 @@ DeckLanguageMenu.contextTypes = {
     intl: PropTypes.object.isRequired,
 };
 
-DeckLanguageMenu = connectToStores(DeckLanguageMenu, [DeckTreeStore, PermissionsStore, TranslationStore], (context, props) => {
+DeckLanguageMenu = connectToStores(DeckLanguageMenu, [DeckTreeStore, DeckPageStore, PermissionsStore, TranslationStore], (context, props) => {
     return {
+        DeckPageStore: context.getStore(DeckPageStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
         TranslationStore: context.getStore(TranslationStore).getState(),

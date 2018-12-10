@@ -35,12 +35,19 @@ class SlideEditStore extends BaseStore {
         this.embedHeight = '';
         this.embedURL = '';
         this.embedCode = '';
+        this.ltiClick = 'false';
+        this.ltiWidth = '';
+        this.ltiHeight = '';
+        this.ltiURL = '';
+        this.ltiKey = '';
+        this.ltiResponseURL = '',
+        this.ltiResponseHTML = '',
         this.embedTitle = '';
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
+        this.refreshEditor = 'false';
     }
-
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
         //console.log('test' + payload.slide.title + ' id: ' + payload.slide.id);
@@ -75,7 +82,7 @@ class SlideEditStore extends BaseStore {
         this.slideSize = '';
         this.emitChange();
     }
-    
+
     changeSlideTransition(payload){
         this.slideTransition = payload.slideTransition;
         this.emitChange();
@@ -193,11 +200,23 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.emitChange();
     }
+    handleLTIAddClick(payload){
+        this.ltiURL = payload.ltiURL;
+        this.ltiKey = payload.ltiKey;
+        this.ltiWidth = payload.ltiWidth;
+        this.ltiHeight = payload.ltiHeight;
+        this.ltiResponseURL = payload.ltiResponseURL;
+        this.ltiResponseHTML = payload.ltiResponseHTML;
+        this.ltiClick = 'true';
+        this.emitChange();
+        this.ltiClick = 'false';
+        this.emitChange();
+    }
     handleEmbedQuestions(payload){
         //embedQuestionsContent - this is the content that will be embedded (questions and options)
         //embedQuestions - this will be the trigger that causes the questions to be embedded.
         //add some form of logic/error handling here?
-        this.embedQuestionsContent = payload; 
+        this.embedQuestionsContent = payload;
         this.embedQuestionsClick = 'true';
         this.emitChange();
 
@@ -208,7 +227,14 @@ class SlideEditStore extends BaseStore {
         this.contentEditorFocus = payload.focus;
         this.emitChange();
     }
-
+    updateSlideContentAfterTranslation(payload){
+        this.content = payload.translations.translations;
+        this.emitChange();
+        this.refreshEditor = 'true';
+        this.emitChange();
+        this.refreshEditor = 'false';
+        this.emitChange();
+    }
     getState() {
         return {
             id: this.id,
@@ -243,9 +269,17 @@ class SlideEditStore extends BaseStore {
             embedTitle: this.embedTitle,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
+            ltiClick: this.ltiClick,
+            ltiURL: this.ltiURL,
+            ltiKey: this.ltiKey,
+            ltiWidth: this.ltiWidth,
+            ltiHeight: this.ltiHeight,
+            ltiResponseURL: this.ltiResponseURL,
+            ltiResponseHTML: this.ltiResponseHTML,
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
+            refreshEditor: this.refreshEditor
         };
     }
 
@@ -286,9 +320,17 @@ class SlideEditStore extends BaseStore {
         this.embedTitle = state.embedTitle;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
+        this.ltiClick = state.ltiClick;
+        this.ltiURL = state.ltiURL;
+        this.ltiKey = state.ltiKey;
+        this.ltiWidth = state.ltiWidth;
+        this.ltiHeight = state.ltiHeight;
+        this.ltiResponseURL = state.ltiResponseURL;
+        this.ltiResponseHTML = state.ltiResponseHTML;
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
+        this.refreshEditor = state.refreshEditor;
     }
 
     zoomContent(payload) {
@@ -334,6 +376,7 @@ SlideEditStore.handlers = {
     'CODE_CLICK': 'handleCodeClick',
     'REMOVE_BACKGROUND_CLICK': 'handleRemoveBackgroundClick',
     'EMBED_CLICK': 'handleEmbedClick',
+    'ADD_LTI_SUCCESS': 'handleLTIAddClick',
     'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
     'SLIDE_EMBED_QUESTIONS': 'handleEmbedQuestions',
@@ -341,6 +384,7 @@ SlideEditStore.handlers = {
     'REDO_CLICK': 'handleRedoClick',
     'ZOOM': 'zoomContent',
     'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus',
+    'UPDATE_SLIDE_CONTENT_AFTER_TRANSLATION': 'updateSlideContentAfterTranslation',
 };
 
 export default SlideEditStore;
