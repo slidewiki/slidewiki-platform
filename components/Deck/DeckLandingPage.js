@@ -18,12 +18,14 @@ import { Microservices } from '../../configs/microservices';
 
 import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
+import openReportModal from '../../actions/report/openReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationsPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
+import slugify from 'slugify';
 
 class DeckLandingPage extends React.Component {
 
@@ -68,6 +70,10 @@ class DeckLandingPage extends React.Component {
         let deckSlug = this.props.DeckPageStore.deckSlug || '_';
         let selector = this.props.DeckPageStore.selector;
         let openDeckUrl = ['', 'deck', selector.id , deckSlug, 'deck', selector.id].join('/');
+        if (this.props.TranslationStore.currentLang) {
+            openDeckUrl += '?language=' + (this.props.TranslationStore.currentLang);
+        }
+
         let presentationUrl = this.getPresentationHref();
 
         let deckStatsUrl = ['', 'deck', selector.id , deckSlug, 'stats'].join('/');
@@ -75,8 +81,10 @@ class DeckLandingPage extends React.Component {
         let deckTags = deckData.tags || [];
         let deckTopics = deckData.topics || [];
 
-        if(!deckData.variants)
-            deckData.variants = [];
+        let deckVariantSlugs = this.props.TranslationStore.nodeVariants.reduce((result, variant) => {
+            result[variant.language] = variant.title ? slugify(variant.title).toLowerCase() : deckSlug;
+            return result;
+        }, {});
 
         let deckLanguages = [this.props.TranslationStore.treeLanguage, ...this.props.TranslationStore.treeTranslations];
 
@@ -220,6 +228,7 @@ class DeckLandingPage extends React.Component {
                                             </Button>
                                         </NavLink>
                                     </div>
+                                    <ReportModal/>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
@@ -247,7 +256,7 @@ class DeckLandingPage extends React.Component {
                                         { deckLanguages.map((lang, i) =>
                                             <span key={i}>
                                                 {!!i && ',\xa0'}
-                                                <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + lang}>
+                                                <NavLink href={['', 'deck', selector.id , deckVariantSlugs[lang] || '_'].join('/') + '?language=' + lang}>
                                                     <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
                                                     { getLanguageDisplayName(lang) }
                                                 </NavLink>

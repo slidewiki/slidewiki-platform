@@ -8,7 +8,9 @@ import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
-import {connectToStores} from 'fluxible-addons-react';
+import UserLTIs from './UserLTIs';
+import UserLTIEdit from './UserLTIEdit';
+import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserStatsStore from '../../../stores/UserStatsStore';
 import UserGroupsStore from '../../../stores/UserGroupsStore';
@@ -107,6 +109,15 @@ class UserProfile extends React.Component {
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
                         return this.displayGroups();
+                        break;
+                }});
+            case categories.categories[6]:
+                return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
+                    case categories.ltis[0]:
+                        return this.displayLTIs();
+                        break;
+                    case categories.ltis[1]:
+                        return this.displayLTIedit();
                         break;
                 }});
             case 'stats':
@@ -241,6 +252,15 @@ class UserProfile extends React.Component {
 
     displayUserStats(){
         return (<UserStats userStats={this.props.UserStatsStore} />);
+    }
+
+
+    displayLTIs() {
+        return (<UserLTIs error={this.props.UserProfileStore.deleteUserltiError} status={this.props.UserProfileStore.userltsViewStatus} ltis={this.props.UserProfileStore.user.ltis} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+    }
+
+    displayLTIedit() {
+        return (<UserLTIEdit saveUserltiError={this.props.UserProfileStore.saveUserltiError} username={this.props.UserProfileStore.username} currentUserlti={this.props.UserProfileStore.currentUserlti} userid={this.props.UserProfileStore.userid} saveUserltiIsLoading={this.props.UserProfileStore.saveUserltiIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
     render() {

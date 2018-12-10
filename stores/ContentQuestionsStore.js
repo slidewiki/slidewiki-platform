@@ -35,7 +35,7 @@ class ContentQuestionsStore extends BaseStore {
                 this.questions[index].isExamQuestion = !this.questions[index].isExamQuestion;
             }
         });
-      
+
         this.showExamList = false;
         this.emitChange();
     }
@@ -50,6 +50,8 @@ class ContentQuestionsStore extends BaseStore {
     loadQuestions(payload) {
         this.questions = payload.questions;
         this.question = null;
+        this.showExamList = false;
+        this.showAddBox = false;
         this.selector = payload.selector;
         this.questionsCount = this.questions.length;
         this.showCorrectExamAnswers = false;

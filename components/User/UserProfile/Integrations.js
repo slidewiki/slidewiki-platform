@@ -10,6 +10,11 @@ import updateProviderAction from '../../../actions/user/userprofile/updateProvid
 import common from '../../../common';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {Microservices} from '../../../configs/microservices';
+import { NavLink } from 'fluxible-router';
+
+import UserProfileStore from '../../../stores/UserProfileStore';
+
+
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
@@ -17,7 +22,6 @@ const NAME = 'sociallogin_data';
 class Integrations extends React.Component {
     constructor(props){
         super(props);
-
         this.provider = '';
     }
 
@@ -284,7 +288,6 @@ class Integrations extends React.Component {
                         break;
                 }
             });
-        // console.log('Integrations render()', this.props.providers);
 
         let facebook_icon_classes = classNames({
             'big': true,
@@ -370,6 +373,8 @@ class Integrations extends React.Component {
               </div>
               <div className="ui segments">
 
+
+
                   <div className="ui secondary segment">
                       <h3>
                         <FormattedMessage
@@ -425,7 +430,37 @@ class Integrations extends React.Component {
                       {(this.props.providerAction) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='Integration.loading' defaultMessage='loading'/></div></div> : ''}
                   </div>
 
+
               </div>
+
+
+              <div className="ui segments">
+                <div className="ui secondary segment">
+                  <h3>
+                    <FormattedMessage
+                      id='Integration.ltis'
+                      defaultMessage='Learning Services (LTIs)'
+                    />
+                  </h3>
+                </div>
+                <div className="ui segment">
+
+                    <p>
+                    <i className="icon big graduation cap"/>
+                      <NavLink className="item" href={'/user/'+this.props.UserProfileStore.username+'/ltis/overview'} activeStyle={this.styles}>
+                        <FormattedMessage
+                          id='Integration.myLTIs'
+                          defaultMessage=' My Learning Services'
+                        />
+                      </NavLink>
+                    </p>
+
+                </div>
+              </div>
+
+
+
+
           </div>
         );
     }
@@ -435,5 +470,11 @@ Integrations.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
+
+Integrations = connectToStores(Integrations, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 
 export default Integrations;

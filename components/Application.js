@@ -16,7 +16,8 @@ import cleanStore from '../actions/error/cleanStore';
 import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
+import {navigateAction} from 'fluxible-router';
 
 
 class Application extends React.Component {
@@ -24,6 +25,41 @@ class Application extends React.Component {
     constructor(props) {
         super(props);
         this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
+    }
+
+    componentDidMount() {
+        const activationMessages = defineMessages({
+            swal_title:{
+                id: 'activationMessages.swalTitle',
+                defaultMessage: 'Account activated',
+            },
+            swal_text:{
+                id: 'activationMessages.swalText',
+                defaultMessage: 'Your account has been successfully activated. You are now able to login'
+            },
+            swal_confirm:{
+                id: 'activationMessages.swalConfirm',
+                defaultMessage: 'Close',
+            }
+        });
+
+        if (this.props.showActivationMessage) {
+            swal({
+                title: this.context.intl.formatMessage(activationMessages.swal_title),
+                text: this.context.intl.formatMessage(activationMessages.swal_text),
+                type: 'success',
+                confirmButtonText: this.context.intl.formatMessage(activationMessages.swal_confirm),
+                confirmButtonClass: 'positive ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            }).then(() => {
+                this.context.executeAction(navigateAction, {//go to home page after showing activation message
+                    url: '/'
+                });
+                return true;
+            });
+        }
     }
 
     render() {
@@ -59,9 +95,6 @@ class Application extends React.Component {
         return true;
     }
 
-    componentDidMount() {
-    }
-
     componentDidUpdate(prevProps, prevState) {
 
         const newProps = this.props;
@@ -76,7 +109,8 @@ class Application extends React.Component {
 Application.contextTypes = {
     getStore: PropTypes.func,
     executeAction: PropTypes.func,
-    getUser: PropTypes.func
+    getUser: PropTypes.func,
+    intl: PropTypes.object.isRequired
 };
 
 Application = provideContext(Application, { //jshint ignore:line
@@ -90,6 +124,7 @@ export default provideContext(handleHistory(connectToStores(
         let appStore = context.getStore(ApplicationStore);
         return {
             pageTitle: appStore.getPageTitle(),
+            showActivationMessage: appStore.getActivationMessage(),
             ErrorStore: context.getStore(ErrorStore).getState(),
         };
     }
