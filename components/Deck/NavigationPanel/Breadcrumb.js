@@ -4,7 +4,7 @@ import slugify from 'slugify';
 import cheerio from 'cheerio';
 import Util from '../../common/Util';
 
-class Breadcrumb extends React.Component {        
+class Breadcrumb extends React.Component {
     render() {
         let self = this;
         let nodes = [];
