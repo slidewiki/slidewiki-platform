@@ -1,16 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {NavLink} from 'fluxible-router';
 import slugify from 'slugify';
 import cheerio from 'cheerio';
 import Util from '../../common/Util';
-import updateMode from '../../../actions/decktree/updateMode';
 
-class Breadcrumb extends React.Component {
-    handleClick() {
-        this.context.executeAction(updateMode, {mode: 'loading'});
-    }
-    
+class Breadcrumb extends React.Component {        
     render() {
         let self = this;
         let nodes = [];
@@ -65,7 +59,7 @@ class Breadcrumb extends React.Component {
             <div className="ui top attached compact segment">
                 <h2 className="ui large breadcrumb">
                 <i className="small yellow open folder icon"></i>
-                    <NavLink href={urlStandard} onClick={this.handleClick.bind(this)}> {this.props.rootDeckName} </NavLink>
+                    <NavLink href={urlStandard}> {this.props.rootDeckName} </NavLink>
                     <i className="right chevron icon divider"></i>
                     {list}
                 </h2>
@@ -73,10 +67,5 @@ class Breadcrumb extends React.Component {
         );
     }
 }
-
-
-Breadcrumb.contextTypes = {
-    executeAction: PropTypes.func.isRequired
-};
 
 export default Breadcrumb;
