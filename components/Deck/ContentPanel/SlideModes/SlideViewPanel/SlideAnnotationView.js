@@ -141,7 +141,7 @@ class SlideAnnotationView extends Component {
                return res.json();
            })
            .then((res) => {
-               let desc = res.results.bindings.length > 0 ? res.results.bindings['0']['callret-0'].value.substring(0, 250) + '...' : null;
+               let desc = typeof res.results.bindings['0'] !== 'undefined' && typeof res.results.bindings['0']['callret-0'] !== 'undefined' ? res.results.bindings['0']['callret-0'].value.substring(0, 250) + '...' : null;
                let thumbnail = typeof res.results.bindings['1'] !== 'undefined' ? res.results.bindings['1'].thumbnail.value : null;
            
                return {
