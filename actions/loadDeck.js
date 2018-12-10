@@ -102,16 +102,6 @@ export default function loadDeck(context, payload, done) {
 
     payload.params.jwt = context.getStore(UserProfileStore).getState().jwt;
 
-    let permissionsPromise;
-    //if user is not logged in, only allow view mode and reset permissions, else load this user's permissions on the selected root deck
-    if (!payload.params.jwt){
-        if (!payload.query.interestedUser) //NOTE should not be changed in the special case: Link from email for deck owner to add new editor
-            payloadCustom.params.mode = 'view';
-        permissionsPromise = context.executeAction(resetPermissions, payloadCustom);
-    } else {
-        permissionsPromise = context.executeAction(loadPermissions, payloadCustom);
-    }
-
     context.dispatch('UPDATE_DECK_PAGE_CONTENT', payloadCustom);
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
@@ -131,6 +121,12 @@ export default function loadDeck(context, payload, done) {
 
     // load translation stuff
     context.executeAction(loadNodeTranslations, payload.params, (err, results) => {
+        if (err) {
+            // log the error and return!!!
+            log.error(context, {filepath: __filename, message: err.message});
+            return done(err);
+        }
+
         //load all required actions in parallel
         async.parallel([
             (callback) => {
@@ -141,6 +137,16 @@ export default function loadDeck(context, payload, done) {
                 }, callback);
             },
             (callback) => {
+                let permissionsPromise;
+                //if user is not logged in, only allow view mode and reset permissions, else load this user's permissions on the selected root deck
+                if (!payload.params.jwt){
+                    if (!payload.query.interestedUser) //NOTE should not be changed in the special case: Link from email for deck owner to add new editor
+                        payloadCustom.params.mode = 'view';
+                    permissionsPromise = context.executeAction(resetPermissions, payloadCustom);
+                } else {
+                    permissionsPromise = context.executeAction(loadPermissions, payloadCustom);
+                }
+
                 permissionsPromise.then(() => {
                     let permissions = context.getStore(PermissionsStore).getState().permissions;
                     //special handling for special case: Link from email for deck owner to add new editor

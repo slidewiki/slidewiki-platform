@@ -23,6 +23,7 @@ import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import notFoundError from '../actions/error/notFoundError';
+import serviceUnavailable from '../actions/error/serviceUnavailable';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
@@ -381,7 +382,16 @@ export default {
         handler: require('../components/Deck/DeckLandingPage'),
         page: 'decklandingpage',
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadDeck, payload, (err) => {
+                if (err) {
+                    if (err.statusCode === 404) {
+                        return context.executeAction(notFoundError, payload, done);
+                    } else {
+                        return context.executeAction(serviceUnavailable, payload, done);
+                    }
+                }
+                done();
+            });
         }
     },
 
@@ -397,12 +407,12 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if(err)console.log(err);
                     done();
                 }
-            ]);
+            );
 
         }
     },
@@ -448,7 +458,7 @@ export default {
             ];
             urlParts = urlParts.filter((u) => !!u);
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            done({statusCode: 301, redirectURL: urlParts.join('/')});
         },
     },
     legacydeck: {
@@ -735,7 +745,7 @@ export default {
             ];
             urlParts = urlParts.filter((u) => !!u);
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            done({statusCode: 301, redirectURL: urlParts.join('/')});
         },
     },
     neo4jguide: {
@@ -760,7 +770,7 @@ export default {
             ];
             urlParts = urlParts.filter((u) => !!u);
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            done({statusCode: 301, redirectURL: urlParts.join('/')});
         },
     },
     importfile: {
