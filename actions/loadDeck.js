@@ -29,14 +29,13 @@ import loadForks from './permissions/loadForks';
 import loadNodeTranslations from './translation/loadNodeTranslations';
 import loadSimilarContentsSelector from './loadSimilarContentsSelector';
 import loadSimilarContents from './loadSimilarContents';
-import updateMode from './decktree/updateMode';
 
 import log from './log/clog';
 
 
 export default function loadDeck(context, payload, done) {
     log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
-    context.executeAction(updateMode, {mode: 'loading'});
+    context.dispatch('UPDATE_MODE', {mode: 'loading'});
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
