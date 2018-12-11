@@ -8,7 +8,7 @@ class DataProtection extends React.Component {
                 <div className="ui row">
                     <div className="twelve wide centered column">
                         <div className="ui content">
-                            <h2 className="ui header"><FormattedMessage id="dataProtection.header" defaultMessage="Statement of Data Protection Conditions"/></h2>
+                            <h1 className="ui header" id="main"><FormattedMessage id="dataProtection.header" defaultMessage="Statement of Data Protection Conditions"/></h1>
                             <p><FormattedMessage id="dataProtection.p1" defaultMessage="The Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V. (Fraunhofer-Gesellschaft) takes the protection of your personal data very seriously. When we process the personal data that is collected during your visits to our Web site, we always observe the rules laid down in the applicable data protection laws. Your data will not be disclosed publicly by us, nor transferred to any third parties without your consent."/></p>
                             <p><FormattedMessage id="dataProtection.p2" defaultMessage="In the following sections, we explain what types of data we record when you visit our Web site, and precisely how they are used:"/></p>
                             <h3><FormattedMessage id="dataProtection.1.header" defaultMessage="1. Recording and processing of data in connection with access over the Internet"/></h3>

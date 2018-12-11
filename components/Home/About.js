@@ -7,7 +7,7 @@ class About extends React.Component {
         return (
             <StaticPage>
                 <div className="ui container" ref="about">
-                    <h1 className="ui header"><FormattedMessage id="about.header" defaultMessage="About SlideWiki"/></h1>
+                    <h1 className="ui header" id="main"><FormattedMessage id="about.header" defaultMessage="About SlideWiki"/></h1>
                     <p>
                         <FormattedMessage id="about.p1" defaultMessage="SlideWiki is an online slideshow tool that offers users the chance to create and collaborate on slides, assessments and to share content as structured open educational resources using a Creative Commons licence. With SlideWiki you can engage with your audience by collaborating with colleagues to co-design and co-create course materials and share your knowledge across the world."/>
                     </p>

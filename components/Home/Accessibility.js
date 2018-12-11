@@ -7,7 +7,7 @@ class Accessibility extends React.Component {
         return (
             <StaticPage>
                 <div className="ui container" ref="accessibility">
-                    <h1 className="ui header"><FormattedMessage id="accessibility.header" defaultMessage="Accessibility Statement "/></h1>
+                    <h1 className="ui header" id="main"><FormattedMessage id="accessibility.header" defaultMessage="Accessibility Statement "/></h1>
                     <p><FormattedMessage id="accessibility.p1" defaultMessage="SlideWiki aims to make its website as accessible and usable as possible."/></p>
                     <h2 className="ui header"><FormattedMessage id="accessibility.1.header" defaultMessage="What does this mean?"/></h2>
                     <p><FormattedMessage id="accessibility.1.p1" defaultMessage="This means that texts, images, forms and navigation should be accessible and understandable by as many people as possible. All users of the SlideWiki platform, with or without disabilities, should be offered the best possible browsing experience."/></p>
