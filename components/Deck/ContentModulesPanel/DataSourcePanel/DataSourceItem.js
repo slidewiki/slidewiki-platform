@@ -137,16 +137,15 @@ class DataSourceItem extends React.Component {
         const form_messages = defineMessages({
             originally: {
                 id: 'DataSourceItem.form.originally',
-                defaultMessage: 'originally from slide',
+                defaultMessage: 'originally from',
             }
         });
         const node = this.props.node;
         //append origin of the datasource
-        const selector = this.props.selector;
-        const cheerioSlideName =  (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
-        const appendOrigin = (selector.stype === 'deck') ? <span><i>({this.context.intl.formatMessage(form_messages.originally)} <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioSlideName}</a>)</i> </span> : '';
+        const cheerioRefName = (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
+        const appendOrigin = (node.stype !== undefined) ? <span><i>({this.context.intl.formatMessage(form_messages.originally) + ' ' + node.stype} <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioRefName}</a>)</i> </span> : '';
 
-        const appendEdit = (this.props.editable) ? (
+        const appendEdit = (this.props.editable && node.stype === undefined) ? (
             <a href="#" className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
