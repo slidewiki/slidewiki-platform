@@ -70,7 +70,7 @@ CKEDITOR.editorConfig = function( config ) {
         //{ name: 'document', items: [ 'CodeSnippet'] },
         { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'] },
         { name: 'tools', items: ['Undo', 'Redo'] },
-        { name: 'tools', items: ['createManualAnnotation', 'deleteAnnotation'] },
+        { name: 'tools', items: ['createManualAnnotation', 'deleteAnnotation', 'automaticAnnotation'] },
 
             /*{ name: 'styles', items: [ 'FontSize' ] },
             { name: 'basicstyles', items: ['CopyFormatting'] },

@@ -499,6 +499,9 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
+                  <a  className="item" id="handleAnnotateClick" role="button" onClick={this.handleAnnotateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAnnotateClick')}>
+                      <i tabIndex="0"  className="edit icon"></i>Auto annotate
+                  </a>
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
                   </a>
@@ -807,9 +810,6 @@ class SlideEditLeftPanel extends React.Component {
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>
             <AttachQuestions currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck}/>
-            <a  className="item" id="handleAnnotateClick" role="button" onClick={this.handleAnnotateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAnnotateClick')}>
-                <i tabIndex="0"  className="edit icon"></i>Auto annotate
-            </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
