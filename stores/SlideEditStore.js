@@ -86,7 +86,7 @@ class SlideEditStore extends BaseStore {
 
     changeSlideTransition(payload){
         this.slideTransition = payload.slideTransition;
-        this.transitionType = payload.transitionType;
+        // this.transitionType = payload.transitionType;
         this.emitChange();
     }
 

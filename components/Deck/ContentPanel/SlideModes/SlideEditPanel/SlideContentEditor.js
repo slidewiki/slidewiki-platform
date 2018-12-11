@@ -861,20 +861,20 @@ class SlideContentEditor extends React.Component {
             */
 
             //setTimeout(function() {
-            if (transitionType === 'slide') {
-                this.context.executeAction(saveSlide, {
-                    id: currentSelector.sid,
-                    deckID: deckID,
-                    title: title,
-                    content: content,
-                    speakernotes: speakernotes,
-                    dataSources: dataSources,
-                    selector: currentSelector,
-                    tags: tags,
-                    transition: transition
-                });
-                //},500);
-            } else {
+            //if (transitionType === 'slide') {
+            this.context.executeAction(saveSlide, {
+                id: currentSelector.sid,
+                deckID: deckID,
+                title: title,
+                content: content,
+                speakernotes: speakernotes,
+                dataSources: dataSources,
+                selector: currentSelector,
+                tags: tags,
+                transition: transition
+            });
+            //},500);
+            /*} else {
                 let currentSlidePayload = {
                     id: currentSelector.sid,
                     deckID: deckID,
@@ -889,7 +889,7 @@ class SlideContentEditor extends React.Component {
                 this.context.executeAction(saveSlideWithDeckTransition, {
                     currentSlidePayload: currentSlidePayload
                 });
-            }
+            }*/
 
             this.resize();
             //this.forceUpdate();
