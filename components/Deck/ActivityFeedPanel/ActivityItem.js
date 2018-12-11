@@ -81,7 +81,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui share alternate icon"></i>);
                 const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 SummaryNode = (
-                    <div className="description">
+                    <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'shared '} {nodeRef} {onPlatform}
