@@ -17,7 +17,6 @@ import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
-import LanguageDropdown from '../common/LanguageDropdown';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
 import { Dropdown } from 'semantic-ui-react';
@@ -27,6 +26,7 @@ import classNames from 'classnames';
 
 import { educationLevels } from '../../lib/isced';
 import SWAutoComplete from '../common/SWAutoComplete';
+import {getLanguageDisplayName, translationLanguages} from '../../common';
 
 //TODO: update link to terms of use;
 
@@ -37,6 +37,8 @@ class AddDeck extends React.Component {
         this.state = {
             language: null
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
     componentDidMount() {
         // let that = this;
@@ -85,7 +87,7 @@ class AddDeck extends React.Component {
         //validate input
         const title = this.refs.input_title.value;
         // const language = this.refs.div_languages-old.getSelected();
-        const language = this.refs.div_languages.getValue();
+        const language = this.state.language;
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
         const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
@@ -95,10 +97,6 @@ class AddDeck extends React.Component {
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
-
-        //console.log(this.refs.div_languages);
-        //console.log(this.refs.div_languages.getValue());
-        //console.log(this.state);
 
         //check empty or not selected
         let everythingIsFine = true;
@@ -423,6 +421,12 @@ class AddDeck extends React.Component {
         }
     }
 
+    handleInputChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
@@ -571,22 +575,17 @@ class AddDeck extends React.Component {
                         </div>
                         <div className="two fields">
                             <div className={fieldClass_language}>
-                                {/*<label htmlFor="language">*/}
-                                    {/*<FormattedMessage*/}
-                                        {/*id='AddDeck.form.label_language'*/}
-                                        {/*defaultMessage='Language' />*/}
-                                {/*</label>*/}
-                                {/*<LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages-old" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />*/}
-
                                 <SWAutoComplete
                                     ref="div_languages"
                                     required={true}
-                                    error={this.props.AddDeckStore.wrongFields.language}
                                     label={<FormattedMessage
                                         id='AddDeck.form.label_language'
                                         defaultMessage='Language' />
                                     }
-                                    selectedItem={this.state.language}
+                                    name='language'
+                                    value={this.state.language}
+                                    items={translationLanguages.map((s) => ({name: getLanguageDisplayName(s), id: s}))}
+                                    onChange={this.handleInputChange}
                                 />
                             </div>
                             <div className="field" ref="div_themes" >

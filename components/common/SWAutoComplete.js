@@ -1,5 +1,4 @@
 import React from 'react';
-import {translationLanguages, getLanguageDisplayName} from '../../common';
 import {
     Label,
     BaseMenu,
@@ -12,40 +11,54 @@ import {
     css,
     itemToString,
     getItems,
+    filterItems
 } from '../../lib/swAutoCompleteShared';
 import Downshift from 'downshift';
 import PropTypes from 'prop-types';
 
+/**
+ * Renders an accessible autocomplete component, using the Downshift library.
+ */
 class SWAutoComplete extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            value: this.props.value
-        };
+        // this.state = {
+        //     value: this.props.value
+        // };
+        this.handleOnChange = this.handleOnChange.bind(this);
     }
 
     static propTypes = {
         /** Whether the AutoComplete input is required. */
         required: PropTypes.bool,
+        /** Dropdown selection items. Must be an array of objects, each with 'id' and 'value' attributes. */
+        items: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.node,
+            name: PropTypes.string
+        })),
     };
 
-    getValue() {
-        return this.state.value;
+    /**
+     * Handles the value change event for this component.
+     * Exists only to trigger a React-compatible event up to the parent component.
+     * Sends the value (id) of the selected item in the Autocomplete,
+     * or null if the Autocomplete was cleared.
+     *
+     * @returns {void}
+     */
+    handleOnChange(selectedItem, stateAndHelpers) {
+        this.props.onChange({
+            target: {
+                name: this.props.name,
+                value: (selectedItem ? selectedItem.id : null)
+            }
+        });
     }
 
     render() {
         return (
             <Downshift
-                onChange={(selection) => {
-                    console.log(
-                        selection
-                            ? `You selected ${itemToString(selection)}`
-                            : 'selection cleared',
-                    );
-                    this.setState({value: selection});
-                    this.props.value = selection;
-                }
-                }
+                onChange={this.handleOnChange}
                 itemToString={itemToString}
             >
                 {({
@@ -60,9 +73,7 @@ class SWAutoComplete extends React.Component {
                       inputValue,
                       highlightedIndex,
                   }) => (
-                    <div
-                    //    {...css({width: 250, margin: 'auto'})}
-                    >
+                    <div>
                         <Label {...getLabelProps()}>{this.props.label}</Label>
                         <div {...css({position: 'relative'})}>
                             <Input
@@ -84,10 +95,10 @@ class SWAutoComplete extends React.Component {
                                 </ControllerButton>
                             )}
                         </div>
-                        <div {...css({position: 'relative'})}>
+                        <div {...css({position: 'relative', zIndex: 9})}>
                             <BaseMenu {...getMenuProps({isOpen})}>
                                 {isOpen
-                                    ? getItems(inputValue).map((item, index) => (
+                                    ? filterItems(inputValue, this.props.items).map((item, index) => (
                                         <Item
                                             key={item.id}
                                             {...getItemProps({
@@ -109,10 +120,5 @@ class SWAutoComplete extends React.Component {
         );
     }
 }
-
-// LanguageDropdown.contextTypes = {
-//     executeAction: PropTypes.func.isRequired,
-//     intl: PropTypes.object.isRequired
-// };
 
 export default SWAutoComplete;
