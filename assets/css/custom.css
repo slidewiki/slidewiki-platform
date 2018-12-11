@@ -243,3 +243,24 @@ div#embedModal .fields>label {
 .ui.questions.padded.text{
     padding: 5px 15px 10px 15px;
 }
+
+/* Downshift autofill dropdown CSS customisations */
+    .ui.form .field > div > label {
+        display: block;
+        margin: 0 0 .25rem 0;
+        color: rgba(0,0,0,.87);
+        font-size: .9375em;
+        font-weight: 700;
+        text-transform: none;
+    }
+
+    .ui.form .required.field > div > label:after {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .ui.form .required.field > div > label:after {
+        margin: -.2em 0 0 .2em;
+        content: '*';
+        color: #c42424;
+    }

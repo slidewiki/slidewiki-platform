@@ -26,6 +26,7 @@ import classNames from 'classnames';
 
 
 import { educationLevels } from '../../lib/isced';
+import SWAutoComplete from '../common/SWAutoComplete';
 
 //TODO: update link to terms of use;
 
@@ -33,6 +34,9 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
+        this.state = {
+            language: null
+        };
     }
     componentDidMount() {
         // let that = this;
@@ -80,7 +84,8 @@ class AddDeck extends React.Component {
 
         //validate input
         const title = this.refs.input_title.value;
-        const language = this.refs.div_languages.getSelected();
+        // const language = this.refs.div_languages-old.getSelected();
+        const language = this.refs.div_languages.getValue();
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
         const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
@@ -90,6 +95,10 @@ class AddDeck extends React.Component {
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
+
+        //console.log(this.refs.div_languages);
+        //console.log(this.refs.div_languages.getValue());
+        //console.log(this.state);
 
         //check empty or not selected
         let everythingIsFine = true;
@@ -562,12 +571,23 @@ class AddDeck extends React.Component {
                         </div>
                         <div className="two fields">
                             <div className={fieldClass_language}>
-                                <label htmlFor="language">
-                                    <FormattedMessage
+                                {/*<label htmlFor="language">*/}
+                                    {/*<FormattedMessage*/}
+                                        {/*id='AddDeck.form.label_language'*/}
+                                        {/*defaultMessage='Language' />*/}
+                                {/*</label>*/}
+                                {/*<LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages-old" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />*/}
+
+                                <SWAutoComplete
+                                    ref="div_languages"
+                                    required={true}
+                                    error={this.props.AddDeckStore.wrongFields.language}
+                                    label={<FormattedMessage
                                         id='AddDeck.form.label_language'
                                         defaultMessage='Language' />
-                                </label>
-                                <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
+                                    }
+                                    selectedItem={this.state.language}
+                                />
                             </div>
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
