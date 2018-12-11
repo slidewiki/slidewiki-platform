@@ -63,6 +63,9 @@ class AddDeck extends React.Component {
     handleAddDeck(x) {
         this.context.executeAction(addDeckDeleteError, null);
 
+        // Clear any existing validation errors.
+        this.state.formValidationErrors = [];
+
         //validate input
         const title = this.refs.input_title.value;
         const language = this.refs.div_languages.getSelected();
@@ -73,9 +76,6 @@ class AddDeck extends React.Component {
         const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
-
-        // Clear any existing validation errors.
-        this.state.formValidationErrors = [];
 
         // Validate title
         if (!title) this.state.formValidationErrors.title = 'Specify a title.';
@@ -424,6 +424,13 @@ class AddDeck extends React.Component {
             'error': this.state.formValidationErrors.language
         });
 
+        let formClasses = classNames({
+            'ui': true,
+            'form': true,
+            'upload': true,
+            'error': Object.keys(this.state.formValidationErrors).length === 0 ? '' : ' error'
+        });
+
         let filename = this.props.ImportStore.filename;
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
@@ -483,7 +490,7 @@ class AddDeck extends React.Component {
                     </h3>
                 </div>
                 <div className="sixteen wide column">
-                    <form className={'ui form upload' + (Object.keys(this.state.formValidationErrors).length === 0 ? '' : ' error')}>
+                    <form className={formClasses}>
                         <div className={fieldClass_title} ref="div_title" >
                             <label htmlFor="title">
                                 <FormattedMessage
@@ -605,8 +612,9 @@ class AddDeck extends React.Component {
                             error
                             header='We found some problems'
                             list={Object.values(this.state.formValidationErrors)}
-                            role="alert"
+                            role="region"
                             aria-live="polite"
+                            visible={Object.values(this.state.formValidationErrors).length > 0}
                         />
                         <div className="ui buttons">
                             <div className={btnClasses_submit} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
