@@ -444,8 +444,8 @@ class SearchPanel extends React.Component {
     }
     render() {      
         let firstRowOptions = <div className="three fields">
-            <div className="sr-only" id="describe_level">Select education level of deck content</div>
-            <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete</div>
+            <div className="sr-only" id="describe_level" aria-hidden="true">Select education level of deck content</div>
+            <div className="sr-only" id="describe_topic" aria-hidden="true">Select subject of deck content from autocomplete</div>
             
             <div className="field">
                 <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>

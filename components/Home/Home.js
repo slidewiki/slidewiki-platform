@@ -191,7 +191,7 @@ class Home extends React.Component {
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
-                <div className='sr-only' role='main'>
+                <div className='sr-only' role='main' id="main">
                     <h1>{this.context.intl.formatMessage(this.messages.welcome)}</h1>
                 </div>
                 <section className='banner-container'>

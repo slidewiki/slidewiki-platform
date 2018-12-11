@@ -147,14 +147,14 @@ class UserProfile extends React.Component {
         return (
           <div>
               <div className="ui segments">
-
-                  <div className="ui secondary segment">
-                      <h3>
+                  <h1 className="sr-only" id="main" role="main">Profile Settings</h1>
+                  <div className="ui secondary segment" >
+                      <h2>
                         <FormattedMessage
                           id='UserProfile.exchangePicture'
                           defaultMessage='Exchange picture'
                         />
-                      </h3>
+                      </h2>
                   </div>
                   <div className="ui segment">
                       <ChangePicture user={ this.props.UserProfileStore.user }/>
@@ -162,14 +162,13 @@ class UserProfile extends React.Component {
 
               </div>
               <div className="ui segments">
-
                   <div className="ui secondary segment">
-                      <h3>
+                      <h2>
                         <FormattedMessage
                           id='UserProfile.alterData'
                           defaultMessage='Alter my personal data'
                         />
-                      </h3>
+                      </h2>
                   </div>
                   <div className="ui segment">
                       <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
@@ -183,12 +182,12 @@ class UserProfile extends React.Component {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
-                    <h3>
+                    <h2>
                       <FormattedMessage
                         id='UserProfile.changePassword'
                         defaultMessage='Change password'
                       />
-                    </h3>
+                    </h2>
                   </div>
 
                   <div className="ui segment">
@@ -201,12 +200,12 @@ class UserProfile extends React.Component {
             {changePassword}
             <div className="ui segments">
               <div className="ui red inverted segment">
-                <h3>
+                <h2>
                   <FormattedMessage
                     id='UserProfile.deactivateAccount'
                     defaultMessage='Deactivate Account'
                   />
-                </h3>
+                </h2>
               </div>
 
               <div className="ui segment">

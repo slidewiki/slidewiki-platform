@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid} from 'semantic-ui-react';
+import {Grid, Header} from 'semantic-ui-react';
 import updateGroupActivityTimelineFilters from '../../actions/stats/updateGroupActivityTimelineFilters';
 import updateGroupMembersStatsFilters from '../../actions/stats/updateGroupMembersStatsFilters';
 
@@ -58,6 +58,7 @@ class GroupStats extends React.Component {
         return (
           <Grid relaxed>
               <Grid.Row columns={1}>
+                  <Header as="h1" className="sr-only" id="main">Group Stats</Header>
                   <Grid.Column>
                       <ActivityTimeline statsByTime={this.props.groupStats.statsByTime}
                                         loading={this.props.groupStats.statsByTimeLoading}
