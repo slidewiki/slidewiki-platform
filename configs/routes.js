@@ -439,7 +439,17 @@ export default {
                 }
             }
 
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadDeck, payload, (err) => {
+                if (err) {
+                    // check for either 404 or 422. 422 is returned from deck service when the deck/slide combo do not match
+                    if (err.statusCode === 404 || err.statusCode === 422) {
+                        return context.executeAction(notFoundError, payload, done);
+                    } else {
+                        return context.executeAction(serviceUnavailable, payload, done);
+                    }
+                }
+                done();
+            });
         }
     },
 
