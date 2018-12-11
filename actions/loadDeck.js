@@ -40,7 +40,7 @@ export default function loadDeck(context, payload, done) {
 
     // resets the deck view store
     // TODO (what other store to reset ???)
-    context.dispatch('LOAD_DECK_CONTENT_START');
+    context.dispatch('LOAD_DECK_PAGE_START');
 
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);

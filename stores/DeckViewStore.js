@@ -69,7 +69,7 @@ class DeckViewStore extends BaseStore {
 
 DeckViewStore.storeName = 'DeckViewStore';
 DeckViewStore.handlers = {
-    'LOAD_DECK_CONTENT_START': 'resetContent',
+    'LOAD_DECK_PAGE_START': 'resetContent',
     'LOAD_DECK_CONTENT_SUCCESS': 'updateContent',
     'UPDATE_DECK_VIEW_PANEL_HEIGHT': 'updateDeckViewPanelHeight',
     'INCREMENT_DECK_VIEW_COUNTER': 'incrementDeckViewCounter'
