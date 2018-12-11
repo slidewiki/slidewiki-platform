@@ -46,42 +46,83 @@ class SlideContentEditor extends React.Component {
         //this.redoContent = '';
         this.scaleRatio = null;
 
-        CKEDITOR.on('instanceReady', (ev) => {
+        if (typeof CKEDITOR === 'undefined') {
+            setTimeout(() => {
+                CKEDITOR.on('instanceReady', (ev) => {
 
-            ev.editor.on('fileUploadRequest', (ev2) => {
-                ev2.cancel();
-            });
+                    ev.editor.on('fileUploadRequest', (ev2) => {
+                        ev2.cancel();
+                    });
 
-            ev.editor.document.on('drop', (ev2) => {
-                if (ev2.data.$.dataTransfer.files) {
-                    console.log('droppped');
-                    if (ev2.data.$.dataTransfer.files.length !== 0) {
-                        let file = ev2.data.$.dataTransfer.files[0];
-                        let params = {};
-                        let url = URL.createObjectURL(file);
-                        file.preview = url;
-                        params.file = file;
+                    ev.editor.document.on('drop', (ev2) => {
+                        if (ev2.data.$.dataTransfer.files) {
+                            console.log('droppped');
+                            if (ev2.data.$.dataTransfer.files.length !== 0) {
+                                let file = ev2.data.$.dataTransfer.files[0];
+                                let params = {};
+                                let url = URL.createObjectURL(file);
+                                file.preview = url;
+                                params.file = file;
 
-                        this.context.executeAction(handleDroppedFile, file);
+                                this.context.executeAction(handleDroppedFile, file);
+                            }
+                        }
+                    });
+
+                    ev.editor.document.on('paste', (ev2) => {
+                        if (ev2.data.$.clipboardData.files) {
+                            console.log('pasted');
+                            if (ev2.data.$.clipboardData.files.length !== 0){
+                                let file = ev2.data.$.clipboardData.files[0];
+                                let params = {};
+                                let url = URL.createObjectURL(file);
+                                file.preview = url;
+                                params.file = file;
+
+                                this.context.executeAction(handleDroppedFile, file);
+                            }
+                        }
+                    });
+                });
+            }, 500);
+        } else {
+            CKEDITOR.on('instanceReady', (ev) => {
+
+                ev.editor.on('fileUploadRequest', (ev2) => {
+                    ev2.cancel();
+                });
+
+                ev.editor.document.on('drop', (ev2) => {
+                    if (ev2.data.$.dataTransfer.files) {
+                        console.log('droppped');
+                        if (ev2.data.$.dataTransfer.files.length !== 0) {
+                            let file = ev2.data.$.dataTransfer.files[0];
+                            let params = {};
+                            let url = URL.createObjectURL(file);
+                            file.preview = url;
+                            params.file = file;
+
+                            this.context.executeAction(handleDroppedFile, file);
+                        }
                     }
-                }
-            });
+                });
 
-            ev.editor.document.on('paste', (ev2) => {
-                if (ev2.data.$.clipboardData.files) {
-                    console.log('pasted');
-                    if (ev2.data.$.clipboardData.files.length !== 0){
-                        let file = ev2.data.$.clipboardData.files[0];
-                        let params = {};
-                        file.preview = URL.createObjectURL(file);
-                        params.file = file;
+                ev.editor.document.on('paste', (ev2) => {
+                    if (ev2.data.$.clipboardData.files) {
+                        console.log('pasted');
+                        if (ev2.data.$.clipboardData.files.length !== 0){
+                            let file = ev2.data.$.clipboardData.files[0];
+                            let params = {};
+                            let url = URL.createObjectURL(file);
+                            file.preview = url;
+                            params.file = file;
 
-                        this.context.executeAction(handleDroppedFile, file);
+                            this.context.executeAction(handleDroppedFile, file);
+                        }
                     }
-                }
+                });
             });
-        });
-
+        }
     }
 
     hasChanges = () => {
