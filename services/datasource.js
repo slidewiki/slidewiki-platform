@@ -49,7 +49,7 @@ export default {
         let args = params.params? params.params : params;
         if(resource === 'datasource.array') {
             rp.put({
-                uri: `${Microservices.deck.uri}/slide/${args.sid}/datasources`,
+                uri: `${Microservices.deck.uri}/${args.selector.stype}/${args.selector.sid}/datasources`,
                 headers: {'----jwt----': args.jwt},
                 body: args.dataSources,
                 json: true,

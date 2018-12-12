@@ -22,6 +22,7 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
+import SlideTranslationsModal from '../Translation/SlideTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 
@@ -297,8 +298,9 @@ class ContentActionsHeader extends React.Component {
         } else{ //No buttons
             if(this.props.UserProfileStore.username !== '') /* Edit button only visible if logged user*/
             {
+                const editDisabled = (this.props.ContentStore.mode === 'loading');
                 editButton =
-                    <button className={editClass} onClick={this.handleEditButton.bind(this,selector)}
+                    <button className={editClass} disabled={editDisabled} onClick={this.handleEditButton.bind(this,selector)}
                         type="button"
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
@@ -368,6 +370,7 @@ class ContentActionsHeader extends React.Component {
                         </div>
                     </div>
                     <DeckTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
+                    <SlideTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
                     <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
                         {mobileMessage}
                     </div>
