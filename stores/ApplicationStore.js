@@ -7,6 +7,7 @@ class ApplicationStore extends BaseStore {
         super(dispatcher);
         this.pageTitle = '';
         this.pageThumbnail = '/assets/images/slideWiki-logo-linear.png'; //can add a default image here
+        this.pageDescription = '';
         this.showActivationMessage = false;
         //this.frozen = false;
     }
@@ -55,12 +56,14 @@ class ApplicationStore extends BaseStore {
         return {
             pageTitle: this.pageTitle,
             pageThumbnail: this.pageThumbnail,
+            pageDescription: this.pageDescription,
             showActivationMessage: this.showActivationMessage,
         };
     }
     rehydrate(state) {
         this.pageTitle = state.pageTitle;
         this.pageThumbnail = state.pageThumbnail;
+        this.pageDescription = state.pageDescription;
         this.showActivationMessage = state.showActivationMessage;
     }
 }
