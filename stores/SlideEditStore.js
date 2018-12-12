@@ -291,11 +291,8 @@ class SlideEditStore extends BaseStore {
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
-<<<<<<< HEAD
             annotations: this.annotations,
-=======
             hasChanges: this.hasChanges,
->>>>>>> master
             refreshEditor: this.refreshEditor
         };
     }
@@ -348,11 +345,8 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
-<<<<<<< HEAD
         this.annotations = state.annotations;
-=======
         this.hasChanges = state.hasChanges;
->>>>>>> master
         this.refreshEditor = state.refreshEditor;
     }
 
