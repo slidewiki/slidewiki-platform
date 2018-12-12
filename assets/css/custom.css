@@ -268,7 +268,7 @@ div#embedModal .fields>label {
         vertical-align: top;
     }
 
-    .ui.form .required.field > div > label:after {
+    .ui.form .required.field > div:not(.checkbox) > label:after {
         margin: -.2em 0 0 .2em;
         content: '*';
         color: #c42424;
