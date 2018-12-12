@@ -19,7 +19,7 @@ import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
-import {Dropdown, Message} from 'semantic-ui-react';
+import {Message} from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import classNames from 'classnames';
 
@@ -444,11 +444,6 @@ class AddDeck extends React.Component {
             'button': true
 
         });
-        let fieldClass_language = classNames({
-            'required': true,
-            'field': true,
-            'error': this.state.formValidationErrors.language
-        });
 
         let formClasses = classNames({
             'ui': true,
@@ -526,20 +521,19 @@ class AddDeck extends React.Component {
                             <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
                         </div>
                         <div className="two fields">
-                            <div className={fieldClass_language}>
-                                <SWAutoComplete
-                                    ref="div_languages"
-                                    required={true}
-                                    label={<FormattedMessage
-                                        id='AddDeck.form.label_language'
-                                        defaultMessage='Language' />
-                                    }
-                                    name='language'
-                                    value={this.state.language}
-                                    items={translationLanguages.map((s) => ({name: getLanguageDisplayName(s), id: s}))}
-                                    onChange={this.handleInputChange}
-                                />
-                            </div>
+                            <SWAutoComplete
+                                ref="div_languages"
+                                required={true}
+                                error={this.state.formValidationErrors.language}
+                                label={<FormattedMessage
+                                    id='AddDeck.form.label_language'
+                                    defaultMessage='Language' />
+                                }
+                                name='language'
+                                value={this.state.language}
+                                items={translationLanguages.map((s) => ({name: getLanguageDisplayName(s), id: s}))}
+                                onChange={this.handleInputChange}
+                            />
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
                                     <FormattedMessage
@@ -573,20 +567,17 @@ class AddDeck extends React.Component {
                             <div className="sr-only" id="describe_level"><FormattedMessage id='AddDeck.sr.education' defaultMessage='Select education level of deck content'/></div>
                             <div className="sr-only" id="describe_topic"><FormattedMessage id='AddDeck.sr.subject' defaultMessage='Select subject of deck content from autocomplete. Multiple subjects can be selected'/></div>
                             <div className="sr-only" id="describe_tags"><FormattedMessage id='AddDeck.sr.tags' defaultMessage='Add tags or keywords for your deck. Multiple tags can be provided.'/></div>
-                            <div className="field">
-                                <SWAutoComplete
-                                    ref="dropdown_level"
-                                    required={true}
-                                    label={<FormattedMessage
-                                        id='DeckProperty.Education.Choose'
-                                        defaultMessage='Choose Education Level' />
-                                    }
-                                    name='educationLevel'
-                                    value={this.state.educationLevel}
-                                    items={Object.entries(educationLevels).map(([value, text]) => ({id: value, name: text}) )}
-                                    onChange={this.handleInputChange}
-                                />
-                            </div>
+                            <SWAutoComplete
+                                ref="dropdown_level"
+                                label={<FormattedMessage
+                                    id='DeckProperty.Education.Choose'
+                                    defaultMessage='Choose Education Level' />
+                                }
+                                name='educationLevel'
+                                value={this.state.educationLevel}
+                                items={Object.entries(educationLevels).map(([value, text]) => ({id: value, name: text}) )}
+                                onChange={this.handleInputChange}
+                            />
                             <div className="field">
                                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
                                 <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />

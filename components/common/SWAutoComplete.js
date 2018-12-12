@@ -15,6 +15,7 @@ import {
 } from '../../lib/swAutoCompleteShared';
 import Downshift from 'downshift';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * Renders an accessible autocomplete component, using the Downshift library.
@@ -33,7 +34,8 @@ class SWAutoComplete extends React.Component {
             id: PropTypes.node,
             name: PropTypes.string
         })),
-        placeholder: PropTypes.string
+        placeholder: PropTypes.string,
+        error: PropTypes.bool,
     };
 
     /**
@@ -54,67 +56,76 @@ class SWAutoComplete extends React.Component {
     }
 
     render() {
+        // Generate classes for the wrapping element
+        let wrapperClasses = classNames({
+            field: true,
+            required: this.props.required,
+            error: this.props.error,
+        });
+
         return (
-            <Downshift
-                onChange={this.handleOnChange}
-                itemToString={itemToString}
-            >
-                {({
-                      getLabelProps,
-                      getInputProps,
-                      getToggleButtonProps,
-                      getMenuProps,
-                      getItemProps,
-                      isOpen,
-                      clearSelection,
-                      selectedItem,
-                      inputValue,
-                      highlightedIndex,
-                  }) => (
-                    <div>
-                        <Label {...getLabelProps()}>{this.props.label}</Label>
-                        <div {...css({position: 'relative'})}>
-                            <Input
-                                {...getInputProps({
-                                    isOpen,
-                                    placeholder: this.props.placeholder,
-                                })}
-                            />
-                            {selectedItem ? (
-                                <ControllerButton
-                                    onClick={clearSelection}
-                                    aria-label="clear selection"
-                                >
-                                    <XIcon />
-                                </ControllerButton>
-                            ) : (
-                                <ControllerButton {...getToggleButtonProps()}>
-                                    <ArrowIcon isOpen={isOpen} />
-                                </ControllerButton>
-                            )}
+            <div className={wrapperClasses}>
+                <Downshift
+                    onChange={this.handleOnChange}
+                    itemToString={itemToString}
+                >
+                    {({
+                          getLabelProps,
+                          getInputProps,
+                          getToggleButtonProps,
+                          getMenuProps,
+                          getItemProps,
+                          isOpen,
+                          clearSelection,
+                          selectedItem,
+                          inputValue,
+                          highlightedIndex,
+                      }) => (
+                        <div>
+                            <Label {...getLabelProps()}>{this.props.label}</Label>
+                            <div {...css({position: 'relative'})}>
+                                <Input
+                                    {...getInputProps({
+                                        isOpen,
+                                        placeholder: this.props.placeholder,
+                                    })}
+                                />
+                                {selectedItem ? (
+                                    <ControllerButton
+                                        onClick={clearSelection}
+                                        aria-label="clear selection"
+                                    >
+                                        <XIcon />
+                                    </ControllerButton>
+                                ) : (
+                                    <ControllerButton {...getToggleButtonProps()}>
+                                        <ArrowIcon isOpen={isOpen} />
+                                    </ControllerButton>
+                                )}
+                            </div>
+                            <div {...css({position: 'relative', zIndex: 9})}>
+                                <BaseMenu {...getMenuProps({isOpen})}>
+                                    {isOpen
+                                        ? filterItems(inputValue, this.props.items).map((item, index) => (
+                                            <Item
+                                                key={item.id}
+                                                {...getItemProps({
+                                                    item,
+                                                    index,
+                                                    isActive: highlightedIndex === index,
+                                                    isSelected: selectedItem === item,
+                                                })}
+                                            >
+                                                {itemToString(item)}
+                                            </Item>
+                                        ))
+                                        : null}
+                                </BaseMenu>
+                            </div>
                         </div>
-                        <div {...css({position: 'relative', zIndex: 9})}>
-                            <BaseMenu {...getMenuProps({isOpen})}>
-                                {isOpen
-                                    ? filterItems(inputValue, this.props.items).map((item, index) => (
-                                        <Item
-                                            key={item.id}
-                                            {...getItemProps({
-                                                item,
-                                                index,
-                                                isActive: highlightedIndex === index,
-                                                isSelected: selectedItem === item,
-                                            })}
-                                        >
-                                            {itemToString(item)}
-                                        </Item>
-                                    ))
-                                    : null}
-                            </BaseMenu>
-                        </div>
-                    </div>
-                )}
-            </Downshift>
+                    )}
+                </Downshift>
+            </div>
         );
     }
 }
