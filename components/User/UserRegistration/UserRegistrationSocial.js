@@ -66,7 +66,7 @@ class UserRegistrationSocial extends React.Component {
             mailprompt3: {
                 id: 'UserRegistrationSocial.mailprompt3',
                 defaultMessage: 'The email address is already in use',
-            }
+            },
         });
         //Form validation
         const validationRules = {
@@ -253,6 +253,10 @@ class UserRegistrationSocial extends React.Component {
                 id: 'UserRegistrationSocial.usernameNotAllowed',
                 defaultMessage: 'This Username has already been used by someone else. Please choose another one.',
             },
+            usernameSuggest:{
+                id: 'UserRegistrationSocial.usernamesuggestion',
+                defaultMessage: 'Here are some suggestions:'
+            }
         });
         const signUpLabelStyle = {width: '150px'};
 
@@ -284,7 +288,7 @@ class UserRegistrationSocial extends React.Component {
         });
         let usernameToolTipp = usernameNotAllowed ? this.context.intl.formatMessage(messages.usernameNotAllowed) : undefined;
         if (this.props.UserRegistrationStore.suggestedUsernames.length > 0) {
-            usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
+            usernameToolTipp += '\n' + this.context.intl.formatMessage(messages.usernameSuggest) + this.props.UserRegistrationStore.suggestedUsernames;
         }
         return (
           <div>

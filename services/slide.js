@@ -53,6 +53,22 @@ export default {
         //let selector= args.selector;
         //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
+
+        if(resource === 'slide.translate'){
+            /*********connect to microservices*************/
+            rp.post(
+                {uri: Microservices.translation.uri + '/translate/' + args.targetLang,
+                    body: JSON.stringify({
+                        content: args.content,
+                        language: args.sourceLang,
+                        html: true
+                    })
+                }).then((res) => {
+                    callback(null, {translations: JSON.parse(res)});
+                }).catch((err) => {
+                    callback(null, {translations: {}});
+                });
+        }
         if(resource === 'slide.content'){
             //TODO check if the attributes where content_id is used could be removed here (seems to be not regarded in deckservice 17/4/13)
             //TODO get real content_id
