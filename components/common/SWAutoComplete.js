@@ -108,7 +108,7 @@ class SWAutoComplete extends React.Component {
                                     {isOpen
                                         ? filterItems(inputValue, this.props.items).map((item, index) => (
                                             <Item
-                                                key={item.id}
+                                                key={item.key}
                                                 {...getItemProps({
                                                     item,
                                                     index,
