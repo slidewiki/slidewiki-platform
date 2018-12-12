@@ -88,6 +88,7 @@ class SWAutoComplete extends React.Component {
                                     {...getInputProps({
                                         isOpen,
                                         placeholder: this.props.placeholder,
+                                        autoComplete: 'nope'
                                     })}
                                 />
                                 {selectedItem ? (
