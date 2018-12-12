@@ -85,18 +85,21 @@ class AddDeck extends React.Component {
         if (!title) this.state.formValidationErrors.title = <FormattedMessage
             id='AddDeck.error.validation.title'
             defaultMessage='Specify a title.'
+            tagName='li'
         />;
 
         // Validate language
         if (!language || language.length < 2) this.state.formValidationErrors.language = <FormattedMessage
             id='AddDeck.error.validation.language'
             defaultMessage='Specify a language.'
+            tagName='li'
         />;
 
         // Validate T&Cs acceptance
         if (acceptedConditions === false) this.state.formValidationErrors.conditions = <FormattedMessage
             id='AddDeck.error.validation.conditions'
             defaultMessage='You must agree to the SlideWiki terms and conditions.'
+            tagName='li'
         />;
 
         // Validate image rights declaration
@@ -104,6 +107,7 @@ class AddDeck extends React.Component {
             this.state.formValidationErrors.imagesLicence = <FormattedMessage
                 id='AddDeck.error.validation.imagesLicence'
                 defaultMessage='You must agree to the rights declaration.'
+                tagName='li'
             />;
 
         // If there are no validation errors, then create the deck
@@ -637,7 +641,10 @@ class AddDeck extends React.Component {
                         </div>
                         <Message
                             error
-                            header={<FormattedMessage id='AddDeck.error.validation' defaultMessage='We found some problems.' />}
+                            header={this.context.intl.formatMessage({
+                                id: 'AddDeck.error.validation',
+                                defaultMessage: 'We found some problems'
+                            })}
                             list={Object.values(this.state.formValidationErrors)}
                             role="region"
                             aria-live="polite"
