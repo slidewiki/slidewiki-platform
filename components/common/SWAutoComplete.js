@@ -22,9 +22,6 @@ import PropTypes from 'prop-types';
 class SWAutoComplete extends React.Component {
     constructor(props){
         super(props);
-        // this.state = {
-        //     value: this.props.value
-        // };
         this.handleOnChange = this.handleOnChange.bind(this);
     }
 
@@ -36,6 +33,7 @@ class SWAutoComplete extends React.Component {
             id: PropTypes.node,
             name: PropTypes.string
         })),
+        placeholder: PropTypes.string
     };
 
     /**
@@ -79,7 +77,7 @@ class SWAutoComplete extends React.Component {
                             <Input
                                 {...getInputProps({
                                     isOpen,
-                                    placeholder: '',
+                                    placeholder: this.props.placeholder,
                                 })}
                             />
                             {selectedItem ? (
