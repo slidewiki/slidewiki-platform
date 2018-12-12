@@ -36,6 +36,7 @@ class AddDeck extends React.Component {
         this.percentage = 0;
         this.state = {
             language: null,
+            educationLevel: null,
             formValidationErrors: []
         };
 
@@ -71,11 +72,10 @@ class AddDeck extends React.Component {
 
         //validate input
         const title = this.refs.input_title.value;
-        // const language = this.refs.div_languages-old.getSelected();
         const language = this.state.language;
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
-        const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
+        const educationLevel = this.state.educationLevel;
         const license = 'CC BY-SA';//default license
         const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
@@ -398,6 +398,7 @@ class AddDeck extends React.Component {
     }
 
     handleInputChange(event) {
+        console.log(event);
         this.setState({
             [event.target.name]: event.target.value
         });
@@ -573,11 +574,18 @@ class AddDeck extends React.Component {
                             <div className="sr-only" id="describe_topic"><FormattedMessage id='AddDeck.sr.subject' defaultMessage='Select subject of deck content from autocomplete. Multiple subjects can be selected'/></div>
                             <div className="sr-only" id="describe_tags"><FormattedMessage id='AddDeck.sr.tags' defaultMessage='Add tags or keywords for your deck. Multiple tags can be provided.'/></div>
                             <div className="field">
-                                <label htmlFor="level_input" id="level-label">
-                                    <FormattedMessage id='DeckProperty.Education.Choose' defaultMessage='Choose Education Level' /></label>
-                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-labelledby="level-label" aria-describedby="describe_level"
-                                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
-                                    defaultValue={null} />
+                                <SWAutoComplete
+                                    ref="dropdown_level"
+                                    required={true}
+                                    label={<FormattedMessage
+                                        id='DeckProperty.Education.Choose'
+                                        defaultMessage='Choose Education Level' />
+                                    }
+                                    name='educationLevel'
+                                    value={this.state.educationLevel}
+                                    items={Object.entries(educationLevels).map(([value, text]) => ({id: value, name: text}) )}
+                                    onChange={this.handleInputChange}
+                                />
                             </div>
                             <div className="field">
                                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
