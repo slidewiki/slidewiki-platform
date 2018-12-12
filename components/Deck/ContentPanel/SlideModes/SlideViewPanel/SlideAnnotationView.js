@@ -40,7 +40,7 @@ class SlideAnnotationView extends Component {
             });
         }
         
-        this.$annotationContainer = $(this.annotationContainer);
+        this.$annotationContainer = $(this.props.inlineContentRef);
         
         this.$annotationContainer.find('annotation').each((i, elm) => {
             let annotationId = $(elm).attr('annotation-id');
@@ -176,11 +176,10 @@ class SlideAnnotationView extends Component {
     }
 
     render() {
-        let content = this.props.children;
         let jsonLd = this.generateJsonLd();
-        content += jsonLd;
         
-        return <div dangerouslySetInnerHTML={{__html: content}} ref={(annotationContainer) => this.annotationContainer = annotationContainer} ></div>;
+        // show the annotations as json-ld
+        return <div>{jsonLd}</div>;
     }
 }
 

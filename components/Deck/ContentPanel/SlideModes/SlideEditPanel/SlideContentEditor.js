@@ -779,12 +779,11 @@ class SlideContentEditor extends React.Component {
     }
     loadAnnotationsCkeditor(annotations) {
         let annotationsConverted = this.convertAnnotationsToJsonLd(annotations);
-        CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsFromServer = annotationsConverted;
-        CKEDITOR.instances.inlineContent.execCommand('loadAnnotations');
+        CKEDITOR.instances.inlineContent.plugins.semanticannotations.loadAnnotations(CKEDITOR.instances.inlineContent, annotationsConverted);
     }
     convertAnnotationsToJsonLd(annotations) {
         let returnData = [];
-        console.log('!!convertAnnotationsToJsonLd!!')
+
         for (let i=0; i<annotations.length; i++) {
             let annotation = annotations[i];
             returnData.push({
@@ -846,14 +845,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
-            
-            console.log('INSTANCE', CKEDITOR.instances.inlineContent);
-            
+                        
             let annotations = [];
             if (CKEDITOR.instances.inlineContent != null) {
                 // get the annotations before CKEditor is destroyed
+                CKEDITOR.instances.inlineContent.plugins.semanticannotations.getAnnotationsToStore(CKEDITOR.instances.inlineContent);
                 annotations = CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsToStore;
                 annotations = this.convertAnnotationsToDatabaseStructure(annotations);
+                
                 CKEDITOR.instances.inlineContent.destroy();
             }
             if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
@@ -2051,11 +2050,7 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.annotateClick === 'true' && nextProps.SlideEditStore.annotateClick !== this.props.SlideEditStore.annotateClick)
         {
-            console.log('automatic annotation');
-            setTimeout(() => {
-                //CKEDITOR.instances.inlineContent.execCommand('sourcedialog');
-                CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
-            }, 1000);
+            CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
             
         }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
@@ -2227,17 +2222,12 @@ class SlideContentEditor extends React.Component {
             this.handleEmbedQuestionsClick(nextProps.SlideEditStore.embedQuestionsContent);
         }
         if (nextProps.SlideEditStore.slideId !== this.props.SlideEditStore.slideId) {
-            console.log('do something');
             // if ckeditor is loaded
             if (CKEDITOR.instances.inlineContent != null && CKEDITOR.instances.inlineContent.plugins.semanticannotations != null) {
                 this.loadAnnotationsCkeditor(nextProps.SlideEditStore.annotations);
-                console.log('do something2');
-                console.log(nextProps.SlideEditStore.annotations);
             } else if(CKEDITOR.instances.inlineContent) {
                 // if ckeditor is not ready yet, create listener to load annotations when ready
                 CKEDITOR.instances.inlineContent.once('instanceReady', (evt) => {
-                    console.log('do something3');
-                    console.log(nextProps.SlideEditStore.annotations);
                     this.loadAnnotationsCkeditor(nextProps.SlideEditStore.annotations);
                 });
             }

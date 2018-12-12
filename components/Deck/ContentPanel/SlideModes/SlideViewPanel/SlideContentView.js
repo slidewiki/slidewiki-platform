@@ -136,9 +136,13 @@ class SlideContentView extends React.Component {
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0">
-                                <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations}>{slideHTMLContent}</SlideAnnotationView>
+                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
+                                 dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
+                            
+                            <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations} 
+                                inlineContentRef={this.refs.inlineContent}>
+                            </SlideAnnotationView>
                         </section>
                     </div>
                     <br />
