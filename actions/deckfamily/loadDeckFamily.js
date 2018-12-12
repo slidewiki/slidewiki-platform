@@ -19,7 +19,7 @@ export default function loadDeckFamily(context, payload, done) {
         // form appropriate search query params
         let args = {
             query: {
-                tag: [payload.params.tag],
+                keywords: `tags:"${payload.params.tag}" OR topics:"${payload.params.tag}"`,
                 sort: 'lastUpdate',
                 facets: false,
                 expand: false,

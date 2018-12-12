@@ -9,6 +9,7 @@ import {getLanguageName, getLanguageNativeName} from '../../../common';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
+import { LTI_ID } from '../../../configs/general';
 import { Dropdown, Label } from 'semantic-ui-react';
 
 
@@ -75,7 +76,12 @@ class ChangePersonalData extends React.Component {
         let emailToolTipp = this.props.failures.emailNotAllowed ? this.context.intl.formatMessage(messages.emailNotAllowed) : undefined;
         let languageOptions = this.getLocaleOptions();
         let currentLocale = (this.state.currentLocale.length <= 2) ? this.state.currentLocale : 'en';
-        return (
+
+        //console.log("ChangePersonalData.props.username="+this.props.user.uname);
+        //console.log("LTI_ID="+LTI_ID);
+        if (!this.props.user.uname.endsWith(LTI_ID))
+        {
+            return (
             <div>
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
                     <div className="two fields">
@@ -176,7 +182,15 @@ class ChangePersonalData extends React.Component {
                     </button>
                 </form>
             </div>
-        );
+            );
+        }//end if
+        else{
+
+            return (
+              <div>   </div>
+            );
+        }//end else
+
     }
 }
 
