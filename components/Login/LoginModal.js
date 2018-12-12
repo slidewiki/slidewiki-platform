@@ -98,6 +98,13 @@ class LoginModal extends React.Component {
 
     signin(e) {
         e.preventDefault();
+
+        // Remove any existing validation error messages.
+        // This is necessary because screenreaders will only read the form error messages when there is a change in the message.
+        // For instance, without this, the error message will be read by the screenreader on the first failed login attempt, and will not be read on subsequent attempts.
+        // Removing then re-adding the error message after failure ensures the screenreader always reads it.
+        $('.ui.form.signin > div.ui.error').empty();
+
         const email = this.refs.email1.value;
         let regExp = /\S+@\S+\.\S+/;
         if (email === '' || !regExp.test(email)) {//Check if email is valid
@@ -425,7 +432,7 @@ class LoginModal extends React.Component {
                             </button>
                         </div>
                         <br/>
-                        <div className="ui error message"/>
+                        <div className="ui error message" role="region" aria-live="polite"/>
                       </form>
                       <br/>
                       <div className="container">
