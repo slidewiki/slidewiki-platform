@@ -618,9 +618,9 @@ class AddDeck extends React.Component {
                             </p>
                         </div>
                         <div className="two fields">
-                            <div className="sr-only" id="describe_level">Select education level of deck content</div>
-                            <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete. Multiple subjects can be selected"</div>
-                            <div className="sr-only" id="describe_tags">Add tags or keywords for your deck. Multiple tags can be provided.</div>
+                            <div className="sr-only" id="describe_level"><FormattedMessage id='AddDeck.sr.education' defaultMessage='Select education level of deck content'/></div>
+                            <div className="sr-only" id="describe_topic"><FormattedMessage id='AddDeck.sr.subject' defaultMessage='Select subject of deck content from autocomplete. Multiple subjects can be selected'/></div>
+                            <div className="sr-only" id="describe_tags"><FormattedMessage id='AddDeck.sr.tags' defaultMessage='Add tags or keywords for your deck. Multiple tags can be provided.'/></div>
                             <div className="field">
                                 <label htmlFor="level_input" id="level-label">
                                     <FormattedMessage id='DeckProperty.Education.Choose' defaultMessage='Choose Education Level' /></label>
