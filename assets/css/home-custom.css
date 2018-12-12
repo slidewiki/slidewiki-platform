@@ -1183,3 +1183,8 @@ textarea:focus{
 .banner-container.inner-image img{
     float: left;
 }
+
+/* react-accessible-accordion styles */
+.hidden {
+    display: none;
+}
