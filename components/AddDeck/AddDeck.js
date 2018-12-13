@@ -34,6 +34,7 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
+        this.defaultTagNames = [];// used for saving defaultName properties for tags
     }
     componentDidMount() {
         // let that = this;
@@ -88,7 +89,15 @@ class AddDeck extends React.Component {
         const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
-        const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
+        let tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
+        tags.forEach((tag) => {
+            // check whether we have earlier assigned defaultName to tagName (in saveTags function) for this tag and restore the original state
+            if (this.defaultTagNames.includes(tag.tagName)) {
+                tag.defaultName = tag.tagName;
+                delete tag.tagName;
+            }
+        });
+        console.log('add', tags);
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
@@ -417,7 +426,22 @@ class AddDeck extends React.Component {
     }
     
     saveTags() {
-        this.context.executeAction(storeTags, {tags: this.tagInput.getSelected(), topics: this.topicInput.getSelected()});
+        let tags = this.tagInput.getSelected();
+        tags.forEach((tag) => {
+            if (!tag.tagName && tag.defaultName) {
+                tag.tagName = tag.defaultName;//assign defaultName to tagName to avoid errors during the initialization of the TagInput component
+                this.defaultTagNames.push((tag.defaultName));//save defaultName in the array so that in the end we can restore the tag state in handleAddDeck
+            }
+        });
+        let topics = this.topicInput.getSelected();
+        topics.forEach((topic) => {
+            if (!topic.tagName && topic.defaultName) {
+                topic.tagName = topic.defaultName;
+                this.defaultTagNames.push((topic.defaultName));
+            }
+        });
+        //save tags in the store so that they can be restored during the initialization of TagInput component
+        this.context.executeAction(storeTags, {tags:tags, topics: topics});
     }
 
     render() {
