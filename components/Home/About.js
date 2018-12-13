@@ -66,7 +66,7 @@ class About extends React.Component {
                                     <FormattedMessage id="about.euwebsite" defaultMessage="SlideWiki EU project website"/>
                                 </a>
                             }}
-                            defaultMessage={'SlideWiki development, large-scale trials and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' + 'For more details, see {link_1}'}/>
+                            defaultMessage={' SlideWiki development, large-scale trials and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' + 'For more details, see {link_1}'}/>
                     </p>
                 </div>
             </StaticPage>

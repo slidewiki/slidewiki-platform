@@ -39,7 +39,7 @@ class Home extends React.Component {
             },
             findSlidesContent: {
                 id: 'home.findSlidesContent',
-                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
+                defaultMessage: 'SlideWiki provides open educational resources and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
             },
             createSlides: {
                 id: 'home.createSlides',
