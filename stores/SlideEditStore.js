@@ -26,6 +26,7 @@ class SlideEditStore extends BaseStore {
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
         this.tableClick = 'false';
+        this.annotateClick = 'false';
         this.mathsClick = 'false';
         this.codeClick = 'false';
         this.removeBackgroundClick = 'false';
@@ -45,7 +46,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
-
+        this.annotations = [];
         /* Whether there are unsaved changes in editor. */
         this.hasChanges = false;
         this.refreshEditor = 'false';
@@ -57,6 +58,7 @@ class SlideEditStore extends BaseStore {
         this.content = payload.slide.content || ' ';
         this.markdown = payload.slide.markdown || ' ';
         this.speakernotes = payload.slide.speakernotes || ' ';
+        this.annotations = payload.slide.annotations || [];
 
         this.hasChanges = false;
 
@@ -149,6 +151,13 @@ class SlideEditStore extends BaseStore {
         this.tableClick = 'true';
         this.emitChange();
         this.tableClick = 'false';
+        this.emitChange();
+    }
+
+    handleAnnotateClick(){
+        this.annotateClick = 'true';
+        this.emitChange();
+        this.annotateClick = 'false';
         this.emitChange();
     }
 
@@ -262,6 +271,7 @@ class SlideEditStore extends BaseStore {
             uploadMediaClick: this.uploadMediaClick,
             uploadVideoClick: this.uploadVideoClick,
             tableClick: this.tableClick,
+            annotateClick: this.annotateClick,
             mathsClick: this.mathsClick,
             codeClick: this.codeClick,
             removeBackgroundClick: this.removeBackgroundClick,
@@ -281,6 +291,7 @@ class SlideEditStore extends BaseStore {
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
+            annotations: this.annotations,
             hasChanges: this.hasChanges,
             refreshEditor: this.refreshEditor
         };
@@ -314,6 +325,7 @@ class SlideEditStore extends BaseStore {
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;
         this.tableClick = state.tableClick;
+        this.annotateClick = state.annotateClick;
         this.mathsClick = state.mathsClick;
         this.codeClick = state.codeClick;
         this.removeBackgroundClick = state.removeBackgroundClick;
@@ -333,6 +345,7 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
+        this.annotations = state.annotations;
         this.hasChanges = state.hasChanges;
         this.refreshEditor = state.refreshEditor;
     }
@@ -381,6 +394,7 @@ SlideEditStore.handlers = {
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
     'UPLOAD_VIDEO_CLICK': 'handleuploadVideoClick',
     'TABLE_CLICK': 'handleTableClick',
+    'ANNOTATE_CLICK': 'handleAnnotateClick',
     'MATHS_CLICK': 'handleMathsClick',
     'CODE_CLICK': 'handleCodeClick',
     'REMOVE_BACKGROUND_CLICK': 'handleRemoveBackgroundClick',
