@@ -8,6 +8,7 @@ import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
 import tableClick from '../../../actions/slide/tableClick';
+import annotateClick from '../../../actions/slide/annotateClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
 import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
@@ -25,6 +26,7 @@ import changeSlideSize from '../../../actions/slide/changeSlideSize';
 import changeSlideTransition from '../../../actions/slide/changeSlideTransition';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import PaintModal from '../../Paint/PaintModal';
+import TransitionModal from './TransitionModal';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -278,6 +280,9 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showTemplate: true});
         this.forceUpdate();
     }
+    handleAnnotateClick() {
+        this.context.executeAction(annotateClick, {});
+    }
     handleTemplatechange(templateID){
         if(templateID !== ''){
             //this.setState({showTemplate: false});
@@ -492,6 +497,8 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleTemplatechange':
                     this.handleTemplatechange(template);
                     break;
+                case 'handleAnnotateClick':
+                    this.handleAnnotateClick();
                 case 'handlePropertiesClick':
                     this.handlePropertiesClick();
                     break;
@@ -575,6 +582,9 @@ class SlideEditLeftPanel extends React.Component {
                 <div>
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                  </a>
+                  <a  className="item" id="handleAnnotateClick" role="button" onClick={this.handleAnnotateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAnnotateClick')}>
+                      <i tabIndex="0"  className="edit icon"></i>Auto annotate
                   </a>
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />
@@ -889,33 +899,39 @@ class SlideEditLeftPanel extends React.Component {
         // default, fast or slow
         // TODO: make gif animations of transitions
         let transitionContent = (
-            <div >
+            <div>
               <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                   <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
               </a>
-              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'none')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'none')}>
-                  <i tabIndex="0" className="eye slash outline icon"></i><FormattedMessage id='transitionpanel.none' defaultMessage='No slide transition' />
-              </a>
-              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'convex')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'convex')}>
-                  <i tabIndex="0" aria-label="Convex slide transition"><FormattedMessage id='transitionpanel.convex' defaultMessage='Convex' /></i>
-                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/convex.gif" alt="Convex slide transition" />
-              </a>
-              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'fade')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'fade')}>
-                  <i tabIndex="0" aria-label="Fade slide transition"><FormattedMessage id='transitionpanel.fade' defaultMessage='Fade' /></i>
-                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/fade.gif" alt="Fade slide transition" />
-              </a>
-              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'slide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'slide')}>
-                  <i tabIndex="0" aria-label="Slide slide transition"></i><FormattedMessage id='transitionpanel.slide' defaultMessage='Slide' />
-                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/slide.gif" alt="Slide slide transition" />
-              </a>
-              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'zoom')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'zoom')}>
-                  <i tabIndex="0" aria-label="Zoom slide transition"></i><FormattedMessage id='transitionpanel.zoom' defaultMessage='Zoom' />
-                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/zoom.gif" alt="Zoom slide transition" />
-              </a>
-              <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'concave')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'concave')}>
-                  <i tabIndex="0" aria-label="Concave slide transition"></i><FormattedMessage id='transitionpanel.concave' defaultMessage='Concave' />
-                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/concave.gif" alt="Concave slide transition" />
-              </a>
+                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'none')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'none')}>
+                    <i tabIndex="0" className="eye slash outline icon"></i><FormattedMessage id='transitionpanel.none' defaultMessage='No slide transition' />
+                </a>
+                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'convex')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'convex')}>
+                    <i tabIndex="0" aria-label="Convex slide transition"><FormattedMessage id='transitionpanel.convex' defaultMessage='Convex' /></i>
+                    <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/convex.gif" alt="Convex slide transition" />
+                </a>
+                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'fade')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'fade')}>
+                    <i tabIndex="0" aria-label="Fade slide transition"><FormattedMessage id='transitionpanel.fade' defaultMessage='Fade' /></i>
+                    <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/fade.gif" alt="Fade slide transition" />
+                </a>
+                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'slide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'slide')}>
+                    <i tabIndex="0" aria-label="Slide slide transition"></i><FormattedMessage id='transitionpanel.slide' defaultMessage='Slide' />
+                    <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/slide.gif" alt="Slide slide transition" />
+                </a>
+                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'zoom')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'zoom')}>
+                    <i tabIndex="0" aria-label="Zoom slide transition"></i><FormattedMessage id='transitionpanel.zoom' defaultMessage='Zoom' />
+                    <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/zoom.gif" alt="Zoom slide transition" />
+                </a>
+                <a className="item" role="button" onClick={this.handleSlideTransitionchange.bind(this, 'concave')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideTransitionchange', 'concave')}>
+                    <i tabIndex="0" aria-label="Concave slide transition"></i><FormattedMessage id='transitionpanel.concave' defaultMessage='Concave' />
+                    <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidetransitions/concave.gif" alt="Concave slide transition" />
+                </a>
+              {/*<TransitionModal transition='none'/>
+              <TransitionModal transition='convex'/>
+              <TransitionModal transition='fade'/>
+              <TransitionModal transition='slide'/>
+              <TransitionModal transition='zoom'/>
+              <TransitionModal transition='concave'/>*/}
             </div>);
 
         let normalContent = (
