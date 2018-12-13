@@ -128,6 +128,14 @@ class Home extends React.Component {
             seeMoreDecks: {
                 id: 'home.seeMoreDecks',
                 defaultMessage: 'See more decks'
+            },
+            learnMoreSW: {
+                id: 'home.leanrMoreSW',
+                defaultMessage: 'Learn more about SlideWiki'
+            },
+            featuredDeck: {
+                id: 'home.featuredDeck',
+                defaultMessage: 'Featured Deck'
             }
         });
     }
@@ -217,7 +225,7 @@ class Home extends React.Component {
 
                 <section className='content-container'>
                     <div id="learnMore" className='sr-only'>
-                        <h2>Learn more about SlideWiki</h2>
+                        <h2>{this.context.intl.formatMessage(this.messages.learnMoreSW)}</h2>
                     </div>
                     <div className='feature-block'>
                         <div className='wrapper'>
@@ -324,7 +332,7 @@ class Home extends React.Component {
                                 <div className='column'>
                                     <h2>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
                                     <div className="featured-deck">
-                                        <h3>Featured deck</h3>
+                                        <h3>{this.context.intl.formatMessage(this.messages.featuredDeck)}</h3>
                                         <DeckList scope="featured" limit="1" inline="true"/>
                                         <div className="deck-link">
                                             <a href="/featured">{this.context.intl.formatMessage(this.messages.seeMoreDecks)}</a>

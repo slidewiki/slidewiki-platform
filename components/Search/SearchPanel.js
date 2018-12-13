@@ -17,15 +17,15 @@ import { isEmpty, pick, pickBy, isArray, filter, uniq, map } from 'lodash';
 import querystring from 'querystring';
 import KeywordsInputWithFilter from './AutocompleteComponents/KeywordsInputWithFilter';
 import SpellcheckPanel from './SearchResultsPanel/SpellcheckPanel';
-import { Divider } from 'semantic-ui-react';
 import { educationLevels } from '../../lib/isced';
-import { Dropdown } from 'semantic-ui-react';
+import {Dropdown, Divider, Button, Grid} from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
+import SingleItemAccordion from '../common/SingleItemAccordion';
 
 class SearchPanel extends React.Component {
     constructor(props){
         super(props);
-        this.state = Object.assign({}, this.props.SearchResultsStore.queryparams);
+        this.state = Object.assign({advanced_options_visible: false}, this.props.SearchResultsStore.queryparams);
         this.messages = this.getIntlMessages();
     }
     getIntlMessages(){
@@ -154,9 +154,6 @@ class SearchPanel extends React.Component {
     }
     initDropdown(){
         $('#languageDropdown').dropdown();
-        $('#advanced_options').accordion({
-            'collapsible': true
-        });
     }
     componentDidMount(){
         this.initDropdown();
@@ -352,7 +349,7 @@ class SearchPanel extends React.Component {
         });
 
         this.keywordsInput.blur();
-        $('#advanced_options').accordion('close', 0);
+        this.setState({ activeIndex: null }); // Close the advanced options <Accordion>
     }
     changeSort(_sort){
         this.setState({
@@ -385,6 +382,7 @@ class SearchPanel extends React.Component {
 
         return fields;
     }
+
     handleFacetClick(facetItem) {
         const facetField = facetItem.field;
         const facetValue = facetItem.value;
@@ -442,10 +440,10 @@ class SearchPanel extends React.Component {
             this.handleRedirect(null, 'facets');
         });
     }
-    render() {      
-        let firstRowOptions = <div className="three fields">
-            <div className="sr-only" id="describe_level" aria-hidden="true">Select education level of deck content</div>
-            <div className="sr-only" id="describe_topic" aria-hidden="true">Select subject of deck content from autocomplete</div>
+    render() {
+        let options = <div><div className="three fields">
+            <div className="sr-only" id="describe_level">Select education level of deck content</div>
+            <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete</div>
             
             <div className="field">
                 <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
@@ -468,9 +466,8 @@ class SearchPanel extends React.Component {
                     options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
                     placeholder="Select Education Level" />
             </div>
-        </div>;
-
-        let secondRowOptions = <div className="two fields">
+        </div>
+        <div className="two fields">
             <div className="field">
                 <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
                 <UsersInput ref={ (e) => { this.userDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
@@ -480,24 +477,29 @@ class SearchPanel extends React.Component {
                 <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
                 <TagsInput ref={ (e) => { this.tagDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
             </div>
-        </div>;
+        </div></div>;
 
         return (
             <div className="ui container">
                 <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
                 <form className="ui form success">
                     <div className="field">
-                        <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
-                        <div id="advanced_options" className="ui accordion">
-                            <div className="title">
-                                <i className="icon dropdown" ></i>
-                                Advanced Options
-                            </div>
-                            <div className="content field">
-                                { firstRowOptions }
-                                { secondRowOptions } 
-                            </div>
-                        </div>
+                        <Grid>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <SingleItemAccordion
+                                        buttonContent='Advanced Options'
+                                        buttonAs='button'
+                                        revealContent={ options }
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </div>
                 </form>
                 <Divider hidden />

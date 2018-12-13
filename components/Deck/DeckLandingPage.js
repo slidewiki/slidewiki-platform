@@ -18,6 +18,7 @@ import { Microservices } from '../../configs/microservices';
 
 import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
+import openReportModal from '../../actions/report/openReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationsPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
@@ -227,6 +228,7 @@ class DeckLandingPage extends React.Component {
                                             </Button>
                                         </NavLink>
                                     </div>
+                                    <ReportModal/>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >

@@ -111,13 +111,33 @@ class QuestionDownloadModal extends React.Component{
     }
 
     render() {
-        let downloadBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label="Download Questions" data-tooltip="Download Questions as JSON format" disabled={this.state.downloadQuestions.length===0} onClick={this.handleDownloadButton}>
+        const form_messages = defineMessages({
+            download_aria: {
+                id: 'QuestionDownloadModal.form.download_aria',
+                defaultMessage: 'Download Questions',
+            },
+            download_tooltip: {
+                id: 'QuestionDownloadModal.form.download_tooltip',
+                defaultMessage: 'Download Questions as JSON format',
+            },
+            modal_description: {
+                id: 'QuestionDownloadModal.form.modal_description',
+                defaultMessage: 'You can select one or more questions from this deck to download.',
+            },
+            button_cancel: {
+                id: 'QuestionDownloadModal.form.button_cancel',
+                defaultMessage: 'Cancel',
+            }
+        });
+        let downloadBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(form_messages.download_aria)} data-tooltip={this.context.intl.formatMessage(form_messages.download_tooltip)} disabled={this.state.downloadQuestions.length===0} onClick={this.handleDownloadButton}>
             <Icon name="download"/>
-                Download
+                <FormattedMessage
+                    id='QuestionDownloadModal.form.download_text'
+                    defaultMessage='Download' />
             <Icon name="download"/>
         </Button>; //download button to actually download questions
         
-        let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value="You can select one or more questions from this deck to download." tabIndex ='-1'/>;
+        let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value={this.context.intl.formatMessage(form_messages.modal_description)} tabIndex ='-1'/>;
 
         let segmentPanelContent = <QuestionDownloadList questions={this.props.ContentQuestionsStore.questions} handleSelectAll={() => this.handleSelectAll()}/>;
         let actionButton = downloadBtn;
@@ -140,7 +160,9 @@ class QuestionDownloadModal extends React.Component{
                 tabIndex="0">
                                 
                 <Modal.Header className="ui center aligned" as="h1" id="downloadModalHeader">
-                    Download questions
+                    <FormattedMessage
+                        id='QuestionDownloadModal.form.modal_header'
+                        defaultMessage='Download questions' />
                 </Modal.Header>
                 
                 <FocusTrap
@@ -162,8 +184,8 @@ class QuestionDownloadModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button id="cancelDownloadModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
-                                Cancel
+                              <Button id="cancelDownloadModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip={this.context.intl.formatMessage(form_messages.button_cancel)} onClick={this.handleClose} >
+                                  {this.context.intl.formatMessage(form_messages.button_cancel)}
                               </Button>
                             </Modal.Actions>
                         </Segment>
@@ -177,7 +199,8 @@ class QuestionDownloadModal extends React.Component{
 }
 
 QuestionDownloadModal.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 QuestionDownloadModal = connectToStores(QuestionDownloadModal,[ContentQuestionsStore,],(context,props) => {

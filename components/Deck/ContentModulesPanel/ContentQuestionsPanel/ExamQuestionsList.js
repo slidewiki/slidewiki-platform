@@ -3,6 +3,7 @@ import React from 'react';
 import {Divider} from 'semantic-ui-react';
 import invertExamListFlag from '../../../../actions/questions/invertExamListFlag';
 import updateExamList from '../../../../actions/questions/updateExamList';
+import { FormattedMessage } from 'react-intl';
 
 class ExamQuestionsList extends React.Component {
     constructor(props){
@@ -45,17 +46,27 @@ class ExamQuestionsList extends React.Component {
 
         return (
             <div ref="examquestionsList">
-                <h3 className="ui dividing header">Select exam questions</h3>
+                <h3 className="ui dividing header">
+                    <FormattedMessage
+                        id='ExamQuestionsList.form.header'
+                        defaultMessage='Select exam questions' />
+                </h3>
                 <div >
                     {list}
                 </div>
                 <Divider />
                 <div >
                     <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick.bind(this)}>
-                        <i className="icon check" />Save
+                        <i className="icon check" />
+                        <FormattedMessage
+                            id='ExamQuestionsList.form.button_save'
+                            defaultMessage='Save' />
                     </button>
                     <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
-                        <i className="icon close" />Cancel
+                        <i className="icon close" />
+                        <FormattedMessage
+                            id='ExamQuestionsList.form.button_cancel'
+                            defaultMessage='Cancel' />
                     </button>
                 </div>
                 

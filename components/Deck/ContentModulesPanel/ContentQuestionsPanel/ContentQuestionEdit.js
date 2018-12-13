@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
 import cancelQuestion from '../../../../actions/questions/cancelQuestion';
 import deleteQuestion from '../../../../actions/questions/deleteQuestion';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentQuestionEdit extends React.Component {
 
@@ -49,20 +50,31 @@ class ContentQuestionEdit extends React.Component {
     }
 
     componentDidMount() {
+        const messages = defineMessages({
+            no_question: {
+                id: 'ContentQuestionEdit.no_question',
+                defaultMessage: 'Please, enter question',
+            },
+            no_answers: {
+                id: 'ContentQuestionEdit.no_answers',
+                defaultMessage: 'Please, add answers',
+            },
+            
+        });
         const questionValidation = {
             fields: {
                 question: {
                     identifier: 'question',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please, enter question',
+                        prompt: this.context.intl.formatMessage(messages.no_question),
                     }]
                 },
                 response1: {
                     identifier: 'response1',
                     rules: [{
                         type: 'atleastoneanswer',
-                        prompt: 'Please, add answers',
+                        prompt: this.context.intl.formatMessage(messages.no_answers),
                     }]
                 }
             },
@@ -92,13 +104,23 @@ class ContentQuestionEdit extends React.Component {
     }
 
     deleteButtonClick() {
+        const swal_messages = defineMessages({
+            text: {
+                id: 'ContentQuestionEdit.swal.text',
+                defaultMessage: 'Delete this question. Are you sure?',
+            },
+            confirmButtonText: {
+                id: 'ContentQuestionEdit.swal.confirmButtonText',
+                defaultMessage: 'Yes, delete!',
+            }
+        });
         swal({
-            title: 'Delete this question. Are you sure?',
+            title: context.intl.formatMessage(swal_messages.text),
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete!'
+            confirmButtonText: context.intl.formatMessage(swal_messages.confirmButtonText),
         }).then((accepted) => {
             this.context.executeAction(deleteQuestion, {questionId: this.state.qid});
         }, (reason) => {/*do nothing*/}).catch(swal.noop);
@@ -165,12 +187,21 @@ class ContentQuestionEdit extends React.Component {
                 <div className="ui padded segment">
                     <form className="ui form" ref="questionedit_form">
                         <div className="two fields inline">
-                            <div className="required field"><label htmlFor="question">Question</label>
+                            <div className="required field">
+                                <label htmlFor="question">
+                                    <FormattedMessage
+                                        id='ContentQuestionEdit.form.question'
+                                        defaultMessage='Question' />
+                                </label>
                                 <textarea rows="3"  name="question" id="question" aria-required="true" defaultValue={this.state.title} onChange={this.updateQuestionTitle} />
                             </div>
                             <div className="ui grouped fields">
                                 <fieldset>
-                                    <legend>Difficulty</legend>
+                                    <legend>
+                                        <FormattedMessage
+                                            id='ContentQuestionEdit.form.difficulty'
+                                            defaultMessage='Difficulty' />
+                                    </legend>
                                     <div className="inline fields">
                                         <div className="field">
                                             <div className="ui radio checkbox">
@@ -178,7 +209,11 @@ class ContentQuestionEdit extends React.Component {
                                                     <input type="radio" id="easy" name="difficulty" checked="checked" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                                     : <input type="radio" id="easy" name="difficulty" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                                 }
-                                                <label htmlFor="easy">Easy</label>
+                                                <label htmlFor="easy">
+                                                    <FormattedMessage
+                                                        id='ContentQuestionEdit.form.difficulty_easy'
+                                                        defaultMessage='Easy' />
+                                                </label>
                                             </div>
                                         </div>
                                         <div className="field">
@@ -187,7 +222,11 @@ class ContentQuestionEdit extends React.Component {
                                                     <input type="radio" id="moderate" name="difficulty" checked="checked" defaultValue={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                                     : <input type="radio" id="moderate" name="difficulty" defaultValue={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                                 }
-                                                <label htmlFor="moderate">Moderate</label>
+                                                <label htmlFor="moderate">
+                                                    <FormattedMessage
+                                                        id='ContentQuestionEdit.form.difficulty_moderate'
+                                                        defaultMessage='Moderate' />
+                                                </label>
                                             </div>
                                         </div>
                                         <div className="field">
@@ -196,7 +235,11 @@ class ContentQuestionEdit extends React.Component {
                                                 <input type="radio" id="hard" name="difficulty" checked="checked" defaultValue={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                                 : <input type="radio" id="hard" name="difficulty" defaultValue={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                             }
-                                                <label htmlFor="hard">Hard</label>
+                                                <label htmlFor="hard">
+                                                    <FormattedMessage
+                                                        id='ContentQuestionEdit.form.difficulty_hard'
+                                                        defaultMessage='Hard' />
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +248,11 @@ class ContentQuestionEdit extends React.Component {
                         </div>
                         <div className="ui grouped fields">
                             <fieldset>
-                                <legend>Answer Choices</legend>
+                                <legend>
+                                    <FormattedMessage
+                                        id='ContentQuestionEdit.form.answer_choices'
+                                        defaultMessage='Answer Choices' />
+                                </legend>
                                 <div className="inline field">
                                     <div className="ui checkbox">
                                         <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" defaultChecked={this.state.correct1} onChange={this.updateCorrect1}/>
@@ -241,26 +288,43 @@ class ContentQuestionEdit extends React.Component {
                             </fieldset>
                         </div>
                         <div className="field">
-                            <label htmlFor="explanation">Explanation (optional)</label>
+                            <label htmlFor="explanation">
+                                <FormattedMessage
+                                    id='ContentQuestionEdit.form.explanation'
+                                    defaultMessage='Explanation (optional)' />
+                            </label>
                             <textarea rows="2" id="explanation" defaultValue={this.state.explanation} onChange={this.updateExplanation}></textarea>
                         </div>
                         <div className="field">
                             <div className="ui checkbox">
                                 <input type="checkbox" name="exam" id="exam" tabIndex="0" className="hidden" defaultChecked={this.state.isExamQuestion} onChange={this.updateIsExamQuestion}/>
-                                <label htmlFor="exam">This is an exam question</label>
+                                <label htmlFor="exam">
+                                    <FormattedMessage
+                                        id='ContentQuestionEdit.form.exam_question'
+                                        defaultMessage='This is an exam question' />
+                                </label>
                             </div>
                         </div>
                         <div className="field">
                             <div className="ui container">
                                 <div >
                                     <button type="submit" className="ui blue labeled submit icon button" >
-                                        <i className="icon check" />Save
+                                        <i className="icon check" />
+                                        <FormattedMessage
+                                            id='ContentQuestionEdit.form.button_save'
+                                            defaultMessage='Save' />
                                     </button>
                                     <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
-                                        <i className="icon close" />Cancel
+                                        <i className="icon close" />
+                                        <FormattedMessage
+                                            id='ContentQuestionEdit.form.button_cancel'
+                                            defaultMessage='Cancel' />
                                     </button>
                                     <button type="button" className="ui red labeled icon button" onClick={this.deleteButtonClick}>
-                                        <i className="icon minus circle" />Delete
+                                        <i className="icon minus circle" />
+                                        <FormattedMessage
+                                            id='ContentQuestionEdit.form.button_delete'
+                                            defaultMessage='Delete' />
                                     </button>
                                 </div>
                             </div>
@@ -273,7 +337,8 @@ class ContentQuestionEdit extends React.Component {
 }
 
 ContentQuestionEdit.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default ContentQuestionEdit;

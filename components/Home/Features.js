@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -183,5 +184,9 @@ class features extends React.Component {
         );
     }
 }
+
+features.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 export default features;

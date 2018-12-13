@@ -32,7 +32,8 @@ class Header extends React.Component {
         $(this.refs.menubar).sidebar('toggle');
     }
 
-    toggleLanguageBar() {
+    toggleLanguageBar(e) {
+        e.preventDefault();
         $(this.refs.languagebar).sidebar('toggle');
     }
 
@@ -55,7 +56,7 @@ class Header extends React.Component {
     }
 
     render() {
-        let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>
+        let loginButton = <button ref="loginButton" className="ui inverted button sign-in" onClick={this.handleLoginButton.bind(this)}>
             <FormattedMessage id='header.signin' defaultMessage='Sign In'/>
             </button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/>
@@ -107,7 +108,7 @@ class Header extends React.Component {
                                     text: 'Skip to navigation',
                                     onClick: () => console.log('#navigation')
                                 }, */}
-                            <a className="item" href='/'>
+                            <a className="item sw-logo" href='/'>
                                 <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>
                             </a>
                             <div className="item">
@@ -115,7 +116,7 @@ class Header extends React.Component {
                             </div>
                             <div className="ui right inverted blue menu">
                                 <div className="item">
-                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button" role="button">
+                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button add-deck" role="button">
                                       <i className="right plus icon"></i>
                                       <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
                                   </NavLink>
@@ -152,10 +153,10 @@ class Header extends React.Component {
                         <NavLink className="item" routeName="addDeck">
                             <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                         </NavLink>
-                        <div className="item" onClick={this.toggleLanguageBar.bind(this)}>
+                        <a href='#' className="item" onClick={this.toggleLanguageBar.bind(this)}>
                             <i className="caret right icon"/>
-                            <LocaleSwitcher mode="headeronly"/>
-                        </div>
+                            <LocaleSwitcher mode="sidebarLocaleChangeButton"/>
+                        </a>
                         {mobileLoginButton}
                         <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                         <div className="item search">
@@ -163,7 +164,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                     <div className="ui inverted left dimmed sidebar vertical menu" ref="languagebar">
-                        <LocaleSwitcher mode="sidebar"/>
+                        <LocaleSwitcher mode="sidebarLocalesMenu"/>
                     </div>
                 </MediaQuery>
             </header>

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { LTI_ID } from '../../../configs/general';
 
 class CategoryBox extends React.Component {
     constructor(props){
@@ -11,6 +12,7 @@ class CategoryBox extends React.Component {
     }
 
     render() {
+        //console.log('CategoryBox.props.username='+this.props.username);
         return (
           <div ref="menus">
 
@@ -37,7 +39,7 @@ class CategoryBox extends React.Component {
                   <i className="icon lock"/>
                   <FormattedMessage
                     id='CategoryBox.account'
-                    defaultMessage=' Account'
+                    defaultMessage=' Accounts'
                   />
                 </p>
               </NavLink>
@@ -46,7 +48,7 @@ class CategoryBox extends React.Component {
                   <i className="icon cloud"/>
                   <FormattedMessage
                     id='CategoryBox.authorizedAccounts'
-                    defaultMessage=' Authorized Accounts'
+                    defaultMessage=' Authorized Accounts & Services'
                   />
                 </p>
               </NavLink>
