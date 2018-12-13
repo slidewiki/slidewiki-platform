@@ -99,7 +99,6 @@ class Header extends React.Component {
                                 {
                                     link: '#main',
                                     text: 'Skip to main content',
-                                    onClick: () => console.log('#main')
                                 }
                             ]}
                             />
