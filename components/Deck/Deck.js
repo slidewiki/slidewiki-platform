@@ -17,7 +17,6 @@ import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import InfoPanelInfoView from './InfoPanel/InfoPanelInfoView';
 import TranslationStore from '../../stores/TranslationStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import AUskipLink from '@gov.au/skip-link';
 
 class Deck extends React.Component {
 
@@ -225,24 +224,6 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui fluid container" ref="deck">
-		        <AUskipLink  links={[
-                    {
-                        link: '#navigation',
-                        text: 'Skip to navigation',
-                        onClick: () => console.log('#navigation')
-                    },
-                    {
-                        link: '#main',
-                        text: 'Skip to main content',
-                        onClick: () => console.log('#main')
-                    },
-                    {
-                        link: '#content',
-                        text: 'Skip link with onClick',
-                        onClick: () => console.log('This function is called when the last skip link is clicked'),
-                    },
-                ]} 
-                />
                 <div className="ui padded stackable grid ">
                 {/*}<div className="row">
                     <div className={navigationPanelClass}>
