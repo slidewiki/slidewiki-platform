@@ -32,7 +32,11 @@ class DeckList extends React.Component {
                                 <div className="three wide column">
                                     <div className="ui medium image bordered">
                                         <NavLink href={['/deck', deck._id, deck.slug,].join('/')}>
-                                            <img src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} alt="Featured Image" style={{ maxHeight: '290px', height: 'initial'}} />
+                                            <FormattedMessage id="decklist.featured.alt" defaultMessage="Featured Image.">
+                                                {
+                                                    (alt) => <img alt={alt} src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} style={{ maxHeight: '290px', height: 'initial'}} />
+                                                }
+                                            </FormattedMessage>
                                         </NavLink>
                                     </div>
                                 </div>
