@@ -398,7 +398,6 @@ class AddDeck extends React.Component {
     }
 
     handleInputChange(event) {
-        console.log(event);
         this.setState({
             [event.target.name]: event.target.value
         });
@@ -531,7 +530,7 @@ class AddDeck extends React.Component {
                                 }
                                 name='language'
                                 value={this.state.language}
-                                items={translationLanguages.map((s) => ({name: getLanguageDisplayName(s), key: s}))}
+                                items={translationLanguages.map((s) => ({name: getLanguageDisplayName(s), value: s}))}
                                 onChange={this.handleInputChange}
                             />
                             <div className="field" ref="div_themes" >
@@ -575,7 +574,7 @@ class AddDeck extends React.Component {
                                 }
                                 name='educationLevel'
                                 value={this.state.educationLevel}
-                                items={Object.entries(educationLevels).map(([value, text]) => ({key: value, name: text}) )}
+                                items={Object.entries(educationLevels).map(([value, text]) => ({value: value, name: text}) )}
                                 onChange={this.handleInputChange}
                             />
                             <div className="field">

@@ -21,8 +21,16 @@ import classNames from 'classnames';
  * Renders an accessible autocomplete component, using the Downshift library.
  */
 class SWAutoComplete extends React.Component {
+
+    initialItem = null;
+
     constructor(props){
         super(props);
+
+        if(props.value) {
+            this.initialItem = this.props.items.find((i) => i.value === this.props.value);
+        }
+
         this.handleOnChange = this.handleOnChange.bind(this);
     }
 
@@ -34,8 +42,12 @@ class SWAutoComplete extends React.Component {
             id: PropTypes.node,
             name: PropTypes.string
         })),
+        /** A placeholder that should be rendered in the <input>. */
         placeholder: PropTypes.string,
+        /** Whether the element is in an error state. */
         error: PropTypes.bool,
+        /** The pre-set value of the <input>. */
+        value: PropTypes.string,
     };
 
     /**
@@ -50,7 +62,7 @@ class SWAutoComplete extends React.Component {
         this.props.onChange({
             target: {
                 name: this.props.name,
-                value: (selectedItem ? selectedItem.id : null)
+                value: (selectedItem ? selectedItem.value : null)
             }
         });
     }
@@ -68,6 +80,8 @@ class SWAutoComplete extends React.Component {
                 <Downshift
                     onChange={this.handleOnChange}
                     itemToString={itemToString}
+                    initialSelectedItem={this.initialItem}
+                    initialInputValue={itemToString(this.initialItem)}
                 >
                     {({
                           getLabelProps,
