@@ -268,7 +268,7 @@ div#embedModal .fields>label {
   clip:rect(0, 0, 0, 0);
   border:0}
   .au-skip-link__link:active,.au-skip-link__link:focus{
-    outline:3px solid #9263DE;
+    outline:3px solid #313131;
     outline-offset:2px;
     top:16px;
     top:1rem;
@@ -282,8 +282,8 @@ div#embedModal .fields>label {
     overflow:visible;
     position:absolute;
     width:auto;
-    color:#fff;
-    background-color:#00698f;
+    color:#1E78BB;
+    background-color:#fff;
     text-decoration:underline;
     -webkit-text-decoration-skip:ink;
     text-decoration-skip:ink;
