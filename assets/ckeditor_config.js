@@ -21,7 +21,7 @@ CKEDITOR.disableAutoInline = true;
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
-
+    config.skin = 'moono-lisa-custom,/assets/custom-ckeditor-skin/moono-lisa-custom-build/';
 
     //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
@@ -35,19 +35,21 @@ CKEDITOR.editorConfig = function( config ) {
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.resize_enabled = false;
     config.disableObjectResizing = true;
+    
+    CKEDITOR.plugins.addExternal( 'semanticannotations', '/assets/semanticannotations/' );
 
     config.toolbar = [
 
         { name: 'basicstyles', items: ['Bold', 'Italic','Underline', 'Strike', 'RemoveFormat'] }, //, 'CopyFormatting'
-        { name: 'styles', items: [ 'FontSize',] },
-        { name: 'styles', items: [ 'Font'] },
+        { name: 'styles', items: ['FontSize','Font'] },
+        //{ name: 'styles', items: [ 'Font'] },
         //{ name: 'basicstyles', items: ['Subscript', 'Superscript' ] },
-    
-        { name: 'styles', items: [ 'Styles' ] },
+
+        //{ name: 'styles', items: [ 'Styles' ] },
         //{ name: 'basicstyles', items: [ ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor'] },
         { name: 'colors', items: [ ] },
-        { name: 'styles', items: [ 'lineheight' ] },
+        { name: 'styles', items: [ 'Styles', 'lineheight' ] },
         { name: 'links', items: [ 'Link', 'Unlink' ] },
         { name: 'styles', items: [ 'Format'] },
     //'/',
@@ -67,8 +69,9 @@ CKEDITOR.editorConfig = function( config ) {
         //{ name: 'document', items: [ 'Sourcedialog'] },
         //{ name: 'document', items: [ 'CodeSnippet'] },
         { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'] },
-        { name: 'tools', items: ['Undo', 'Redo'] }
-        
+        { name: 'tools', items: ['Undo', 'Redo'] },
+        { name: 'tools', items: ['createManualAnnotation', 'deleteAnnotation'] },
+
             /*{ name: 'styles', items: [ 'FontSize' ] },
             { name: 'basicstyles', items: ['CopyFormatting'] },
             { name: 'basicstyles', items: ['Bold'] },
@@ -173,7 +176,6 @@ CKEDITOR.editorConfig = function( config ) {
 		'horizontalrule,' +
 		'htmlwriter,' +
         'image,' +
-		'iframe,' +
 		'indentlist,' +
 		'indentblock,' +
 		'justify,' +
@@ -183,7 +185,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'liststyle,' +
         'lineheight,' +
         'sharedspace,' +
-		'magicline,' +
+		//'magicline,' +
 		'maximize,' +
 		'newpage,' +
 		'pagebreak,' +
@@ -224,7 +226,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting,semanticannotations';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';

@@ -25,6 +25,7 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
+        //console.log('userProfile.resource='+resource);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'userProfile.updatePassword') {
@@ -144,7 +145,61 @@ export default {
             })
             .then((body) => callback(null, body))
             .catch((err) => callback(err));
-        } else {
+        } else if (resource === 'userProfile.saveUserlti') {
+            console.log('userProfile.saveUserlti');
+            //prepare data
+            if (params.members === null || params.members === undefined)
+                params.members = [];
+            let members = params.members.reduce((prev, curr) => {
+                let member = {
+                    userid: curr.userid,
+                    joined: curr.joined || ''
+                };
+                prev.push(member);
+                return prev;
+            }, []);
+            let tosend = {
+                id: params.id,
+                key: params.key,
+                secret: !isEmpty(params.secret) ? params.secret : '',
+                isActive: !isEmpty(params.isActive) ? params.isActive : true,
+                timestamp: !isEmpty(params.timestamp) ? params.timestamp : '',
+                members: members,
+                referenceDateTime: (new Date()).toISOString()
+            };
+            // console.log('sending:', tosend, params.jwt);
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/userlti/createorupdate',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                body: tosend,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.deleteUserlti') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.user.uri + '/userlti/' + params.ltiid,
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.leaveUserlti') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/userlti/' + params.ltiid + '/leave',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        }
+        else {
             callback('failure');
         }
     },
@@ -159,29 +214,30 @@ export default {
                 method: 'GET',
                 uri: Microservices.deck.uri + '/alldecks/' + params.id2,
                 json: true
-            }).then((body) => {
-                //get the number of likes
-                let arrayOfPromises = [];
-                body.forEach((deck) => {
-                    let promise = rp.get({
-                        uri: Microservices.activities.uri + '/activities/deck/' + deck._id,
-                        qs: {
-                            metaonly: true,
-                            activity_type: 'react',
-                            all_revisions: true
-                        }
+            }).then((response) => {
+                if (params.showQuestionCounts === true) {
+                    let questionPromises = response.map( (deck) => {
+                        return rp.get({
+                            uri: `${Microservices.questions.uri}/deck/${deck._id}/questions`,
+                            qs: {
+                                metaonly: true,
+                                include_subdecks_and_slides: true,
+                            },
+                            json: true,
+                        });
                     });
-                    arrayOfPromises.push(promise);
-                });
 
-                return Promise.all(arrayOfPromises).then((numbers) => {
-                    for (let i = 0; i < numbers.length; i++) {
-                        body[i].noOfLikes = numbers[i];
-                    }
-
-                    let converted = body.map((deck) => { return transform(deck); });
-                    callback(null, converted);
-                });
+                    return Promise.all(questionPromises).then( (questionCounts) => {
+                        for (let i = 0; i < questionCounts.length; i++) {
+                            response[i].questionsCount = questionCounts[i].count;
+                        }
+                        let converted = response.map((deck) => { return transform(deck); });
+                        callback(null, converted);
+                    });
+                } else {
+                    callback(null, response.map( (deck) => transform(deck)));
+                }
+                
             }).catch((err) => callback(err));
         } else if (resource === 'userProfile.fetchUserOwnedDecks'){
             let requestCall = '';
@@ -307,7 +363,7 @@ export default {
             }).catch((err) => callback(err));
         } else {
             if (params.loggedInUser === params.username || params.id === params.username) {
-                // console.log('trying to get private user with id: ', params);
+                 //console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.id + '/profile',
@@ -331,7 +387,8 @@ export default {
                         hasPassword: body.hasPassword || false,
                         providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : [],
-                        displayName: !isEmpty(body.displayName) ? body.displayName : ''
+                        displayName: !isEmpty(body.displayName) ? body.displayName : '',
+                        ltis: !isEmpty(body.ltis) ? body.ltis : []
                     };
                     callback(null, converted, {
                         headers: {
@@ -391,8 +448,8 @@ function transform(deck){
         theme: deck.theme,
         language:deck.language,
         countRevisions:deck.countRevisions,
-        noOfLikes: deck.noOfLikes
-
+        noOfLikes: deck.noOfLikes,
+        questionsCount: deck.questionsCount,
     };
 }
 

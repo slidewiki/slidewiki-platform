@@ -19,10 +19,12 @@ import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import TagsPanel from './TagsPanel/TagsPanel';
 //import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
+import PermissionsStore from '../../../stores/PermissionsStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
 import {  Dropdown } from 'semantic-ui-react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentModulesPanel extends React.Component {
     constructor(props) {
@@ -78,7 +80,10 @@ class ContentModulesPanel extends React.Component {
     handleTabClick(type, e) {
         switch (type) {
             case 'questions':
-                this.context.executeAction(loadContentQuestions, {params: this.props.ContentModulesStore.selector});
+                let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
+                let params = this.props.ContentModulesStore.selector;
+                this.context.executeAction(loadContentQuestions, {params: params});
+                
                 break;
             case 'datasource':
                 this.context.executeAction(loadDataSources, {params: this.props.ContentModulesStore.selector});
@@ -117,34 +122,68 @@ class ContentModulesPanel extends React.Component {
     getContentModuleOptions(showLabels) {
         let labelClasses = 'ui tiny circular label';
         
+        const options_messages = defineMessages({
+            label_sources: {
+                id: 'ContentModulesPanel.form.label_sources',
+                defaultMessage: 'Sources',
+            },
+            label_tags: {
+                id: 'ContentModulesPanel.form.label_tags',
+                defaultMessage: 'Tags',
+            },
+            label_comments: {
+                id: 'ContentModulesPanel.form.label_comments',
+                defaultMessage: 'Comments',
+            },
+            label_history: {
+                id: 'ContentModulesPanel.form.label_history',
+                defaultMessage: 'History',
+            },
+            label_usage: {
+                id: 'ContentModulesPanel.form.label_usage',
+                defaultMessage: 'Usage',
+            },
+            label_questions: {
+                id: 'ContentModulesPanel.form.label_questions',
+                defaultMessage: 'Questions',
+            },
+            label_playlists: {
+                id: 'ContentModulesPanel.form.label_playlists',
+                defaultMessage: 'Playlists',
+            },
+            aria_additional: {
+                id: 'ContentModulesPanel.form.aria_additional',
+                defaultMessage: 'Additional deck tools',
+            }
+        });
         return [
             {
-                text: <span>Sources {showLabels ? 
+                text: <span>{this.context.intl.formatMessage(options_messages.label_sources)} {showLabels ? 
                         <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.datasource}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.datasource})</span>}
                     </span>,
                 value: 'datasource'
             },
             {
-                text: <span>Tags {showLabels ? 
+                text: <span>{this.context.intl.formatMessage(options_messages.label_tags)} {showLabels ? 
                         <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.tags}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.tags})</span>}
                     </span>,
                 value: 'tags'
             },
             { // TODO add correct moduleCount
-                text: <span>Comments {showLabels ? 
+                text: <span>{this.context.intl.formatMessage(options_messages.label_comments)} {showLabels ? 
                         <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.comments}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.comments})</span>}
                     </span>,
                 value: 'discussion'
             },
             {
-                text: 'History',
+                text: this.context.intl.formatMessage(options_messages.label_history),
                 value: 'history'
             },
             {
-                text: 'Usage',
+                text: this.context.intl.formatMessage(options_messages.label_usage),
                 value: 'usage'
             },
             /*{
@@ -152,14 +191,14 @@ class ContentModulesPanel extends React.Component {
                 value: 'contributors'
             },*/
             {
-                text: <span>Questions {showLabels ? 
+                text: <span>{this.context.intl.formatMessage(options_messages.label_questions)} {showLabels ? 
                         <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.questions}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.questions})</span>}
                     </span>,
                 value: 'questions'
             },
             {
-                text: <span>Playlists {showLabels ? 
+                text: <span>{this.context.intl.formatMessage(options_messages.label_playlists)} {showLabels ? 
                         <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.playlists}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.playlists})</span>}
                     </span>,
@@ -169,7 +208,16 @@ class ContentModulesPanel extends React.Component {
     }
     
     render() {
-        
+        const form_messages = defineMessages({
+            aria_additional: {
+                id: 'ContentModulesPanel.form.aria_additional',
+                defaultMessage: 'Additional deck tools',
+            },
+            dropdown_text: {
+                id: 'ContentModulesPanel.form.dropdown_text',
+                defaultMessage: 'Tools',
+            }
+        });
         let pointingMenu = '';
         let activityDIV = '';
         const hrefPath = '/activities/' + this.props.ContentModulesStore.selector.stype + '/' + this.props.ContentModulesStore.selector.sid;
@@ -209,7 +257,7 @@ class ContentModulesPanel extends React.Component {
         };
         
         pointingMenu = (
-            <div className="ui top attached pointing menu" ref="pointerMenu" role="tablist" aria-label="Additional deck tools">
+            <div className="ui top attached pointing menu" ref="pointerMenu" role="tablist" aria-label={this.context.intl.formatMessage(form_messages.aria_additional)}>
                 {this.getContentModuleOptions(true).map((item) => {
                     let active = this.props.ContentModulesStore.moduleType === item.value;
                     
@@ -219,7 +267,7 @@ class ContentModulesPanel extends React.Component {
                     });
                     
                     //hide tags and playlists for slide view
-                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists')) {
+                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
                         return;
                     }
                     
@@ -239,7 +287,7 @@ class ContentModulesPanel extends React.Component {
         );
         
         let mobileMenu = (
-            <Dropdown fluid pointing button text='Tools' value={this.props.ContentModulesStore.moduleType} options={this.getContentModuleOptions(false)} onChange={this.handleDropdownChange.bind(this)}/>
+            <Dropdown fluid pointing button text={this.context.intl.formatMessage(form_messages.dropdown_text)} value={this.props.ContentModulesStore.moduleType} options={this.getContentModuleOptions(false)} onChange={this.handleDropdownChange.bind(this)}/>
         );
         
         //make sure element is still rendered by the browser, in order to get the dimensions to detect overflowing children
@@ -259,8 +307,13 @@ class ContentModulesPanel extends React.Component {
         });
         
         return (
-            <div ref="contentModulesPanel" role="tabpanel">
-                <div style={pointingMenuStyle}>
+            <div ref="contentModulesPanel" >
+                <h2 className="sr-only">
+                    <FormattedMessage
+                        id='ContentModulesPanel.form.header'
+                        defaultMessage='Content Tools' />
+                </h2>
+                <div style={pointingMenuStyle} role="tabpanel">
                     {pointingMenu}
                 </div>
                 <div style={mobileMenuStyle}>
@@ -275,11 +328,13 @@ class ContentModulesPanel extends React.Component {
 }
 
 ContentModulesPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
-ContentModulesPanel = connectToStores(ContentModulesPanel, [ContentModulesStore], (context, props) => {
+ContentModulesPanel = connectToStores(ContentModulesPanel, [ContentModulesStore, PermissionsStore], (context, props) => {
     return {
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ContentModulesStore: context.getStore(ContentModulesStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 export default ContentModulesPanel;

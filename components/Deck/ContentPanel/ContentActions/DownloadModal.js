@@ -104,6 +104,12 @@ class DownloadModal extends React.Component{
             case 'HTML':
                 return Microservices.pdf.uri +'/exportOfflineHTML/'+ splittedId[0];
                 break;
+            case 'xAPI Launch (Live)':
+                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=false&format=xml';
+                break;
+            case 'xAPI Launch (Offline)':
+                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=true&format=xml';
+                break;
             case 'SCORMv1.2':
             case 'SCORMv2':
             case 'SCORMv3':
@@ -111,6 +117,8 @@ class DownloadModal extends React.Component{
                 let version = type.split('v'); //separates format from version. In second position we have the version
                 return Microservices.pdf.uri + '/exportSCORM/' + splittedId[0]+ '?version='+version[1];
                 break;
+
+
             default:
                 return '';
 
@@ -163,8 +171,8 @@ class DownloadModal extends React.Component{
                               <Icon name='download' size='large'/>
                         </Button>
                         :
-                        <div aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
-                              <Icon name='download' size='large'/> Download
+                        <div className={this.props.className} aria-label="Download" data-tooltip="Download" onClick={this.handleOpen}>
+                            <span><Icon name='download' size='large'/> Download</span>
                         </div>
                   }
 
@@ -246,6 +254,37 @@ class DownloadModal extends React.Component{
 
                                           />
                                          </Form.Field>
+
+                                         <Form.Field>
+                                           <Radio
+                                               label='xAPI Launch (Live)'
+                                               name='downloadRadioGroup'
+                                               value='xAPI Launch (Live)'
+                                               checked={this.state.radioValue === 'xAPI Launch (Live)'}
+                                               onChange={this.handleRadioChange}
+                                               role="radio"
+                                               aria-checked={this.state.radioValue === 'xAPI Launch (Live)'}
+                                               aria-label='xAPI Launch (Live)'
+                                               tabIndex="-1"
+
+                                           />
+                                          </Form.Field>
+
+                                          <Form.Field>
+                                            <Radio
+                                                label='xAPI Launch (Offline)'
+                                                name='downloadRadioGroup'
+                                                value='xAPI Launch (Offline)'
+                                                checked={this.state.radioValue === 'xAPI Launch (Offline)'}
+                                                onChange={this.handleRadioChange}
+                                                role="radio"
+                                                aria-checked={this.state.radioValue === 'xAPI Launch (Offline)'}
+                                                aria-label='xAPI Launch (Offline)'
+                                                tabIndex="-1"
+
+                                            />
+                                           </Form.Field>
+
                                          <Form.Field>
                                            <Radio
                                                label='SCORM 1.2'

@@ -14,7 +14,7 @@ export default function loadMoreDeckFamily(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
         } else {
             context.dispatch('LOAD_MORE_DECKFAMILY_DECKS', {
-                tag: decodeURIComponent(payload.params.tag),
+                keywords: `tags:"${payload.params.tag}" OR topics:"${payload.params.tag}"`,
                 numFound: res.numFound,
                 decks: res.docs,
                 page: res.page,

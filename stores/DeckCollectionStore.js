@@ -255,7 +255,7 @@ class DeckCollectionStore extends BaseStore {
 
     loadRecentDecks(payload) {
         // also add _id in deckID field
-        payload.recent.forEach( (deck) => {
+        (payload.recent || []).forEach( (deck) => {
             deck.deckID = deck._id;
             deck.creationDate = deck.timestamp;
         });

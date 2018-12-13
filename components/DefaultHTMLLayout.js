@@ -12,14 +12,25 @@ hook({
 class DefaultHTMLLayout extends React.Component {
     render() {
         let user = this.props.context.getUser();
+        let pageDescription = this.props.context.getStore(ApplicationStore).getPageDescription();
+        
         return (
             <html lang={ this.props.lang }>
             <head>
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
+                <meta name="thumbnail" content={this.props.context.getStore(ApplicationStore).getPageThumbnail()} />
+                
+                <meta property="og:title" content={this.props.context.getStore(ApplicationStore).getPageTitle()} />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content={this.props.context.getStore(ApplicationStore).getPageThumbnail()} />
+                {pageDescription ? <meta property="og:description" content={pageDescription} /> : ''}
+                
                 <meta name="viewport" content="width=device-width" />
                 <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/home-custom.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/home-layout.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/lib/css/zenburn.css" rel="stylesheet" type="text/css" />

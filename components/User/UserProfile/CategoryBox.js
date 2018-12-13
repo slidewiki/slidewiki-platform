@@ -2,15 +2,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { LTI_ID } from '../../../configs/general';
 
 class CategoryBox extends React.Component {
     constructor(props){
         super(props);
-        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.styles = {'backgroundColor': '#1e78bb', 'color': 'white'};
         this.headerStyle = {'backgroundColor': 'rgb(243, 244, 245)', 'color': 'rgba(0,0,0,.6)'};
     }
 
     render() {
+        //console.log('CategoryBox.props.username='+this.props.username);
         return (
           <div ref="menus">
 
@@ -37,7 +39,7 @@ class CategoryBox extends React.Component {
                   <i className="icon lock"/>
                   <FormattedMessage
                     id='CategoryBox.account'
-                    defaultMessage=' Account'
+                    defaultMessage=' Accounts'
                   />
                 </p>
               </NavLink>
@@ -46,7 +48,7 @@ class CategoryBox extends React.Component {
                   <i className="icon cloud"/>
                   <FormattedMessage
                     id='CategoryBox.authorizedAccounts'
-                    defaultMessage=' Authorized Accounts'
+                    defaultMessage=' Authorized Accounts & Services'
                   />
                 </p>
               </NavLink>

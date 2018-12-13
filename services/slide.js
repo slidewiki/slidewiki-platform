@@ -53,6 +53,22 @@ export default {
         //let selector= args.selector;
         //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
+
+        if(resource === 'slide.translate'){
+            /*********connect to microservices*************/
+            rp.post(
+                {uri: Microservices.translation.uri + '/translate/' + args.targetLang,
+                    body: JSON.stringify({
+                        content: args.content,
+                        language: args.sourceLang,
+                        html: true
+                    })
+                }).then((res) => {
+                    callback(null, {translations: JSON.parse(res)});
+                }).catch((err) => {
+                    callback(null, {translations: {}});
+                });
+        }
         if(resource === 'slide.content'){
             //TODO check if the attributes where content_id is used could be removed here (seems to be not regarded in deckservice 17/4/13)
             //TODO get real content_id
@@ -156,7 +172,9 @@ export default {
                     position: content_id,
                     dataSources: args.dataSources,
                     license: 'CC BY-SA',
-                    tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []
+                    tags: (args.tags && (args.tags instanceof Array)) ? args.tags : [],
+                    transition: args.transition,
+                    annotations: args.annotations
                 })
             }).then((res) => {
                 let resParse = JSON.parse(res);
@@ -175,6 +193,21 @@ export default {
                 }else{
                     pathArr=[];
                 }
+                
+                if (args.annotations.length > 0) {
+                    let url = 'http://localhost:3030/annotations/' + newSlideID;
+                    
+                    rp.post({
+                        uri: url,
+                        json: true,
+                        body: args.annotations,
+                    });
+                    
+                    /*.then((res) => {
+                        //callback(null, {slide: {id: newSlideID, path: pathArr.join(';'), theme: resParse.theme ? resParse.theme : 'default'}, selector: selector});
+                    });*/
+                }
+                
                 callback(null, {slide: {id: newSlideID, path: pathArr.join(';'), theme: resParse.theme ? resParse.theme : 'default'}, selector: selector});
             }).catch((err) => {
                 console.log(err);

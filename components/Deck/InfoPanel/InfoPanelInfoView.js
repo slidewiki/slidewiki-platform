@@ -5,13 +5,14 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
-import PresentationPanel from './PresentationsPanel';
+import PresentationsPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import TranslationStore from '../../../stores/TranslationStore';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import {defineMessages} from 'react-intl';
 import zoom from '../../../actions/slide/zoom';
 import ContentStore from '../../../stores/ContentStore';
+
 
 class InfoPanelInfoView extends React.Component {
 
@@ -41,39 +42,44 @@ class InfoPanelInfoView extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
 
+        let deckId = selector.get('id');
+        if (deckId) { 
+            deckId = deckId.split('-')[0];
+        }
+
         return (
-            <div className="ui container" ref="infoPanel" role="complementary">
+            <div className="ui container" ref="infoPanel" role="complementary" aria-labelledby="infopanel-title">
                 {
                     showZoomControls &&
-                        <div className="ui top attached basic buttons menu">
-                            <button className="ui icon button" onClick={this.zoomOut}
+                        <div className="ui top attached basic buttons menu" role="menu">
+                            <button className="ui icon button" role="menuitem" onClick={this.zoomOut}
                                     aria-label="Zoom out" data-tooltip="Zoom out">
                                 <i className="large zoom out icon"></i>
                             </button>
-                            <button className="ui button" onClick={this.resetZoom}
+                            <button className="ui icon button" role="menuitem" onClick={this.resetZoom}
                                     aria-label="Reset zoom" data-tooltip="Reset zoom">
                                 <i className="large stacked icons">
                                     <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
                                     <i className="search icon"></i>
                                 </i>
                             </button>
-                            <button className="ui icon button" onClick={this.zoomIn}
+                            <button className="ui icon button" role="menuitem" onClick={this.zoomIn}
                                     aria-label="Zoom in" data-tooltip="Zoom in">
                                 <i className="large zoom in icon"></i>
                             </button>
                         </div>
                 }
-
-                { this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
+                <h3 className="sr-only" id="infopanel-title">Additional content information</h3>
+                { deckId && this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
-                        <NavLink href={'/deck/' + selector.get('id').split('-')[0]}>
+                        <NavLink href={['/deck', deckId, 'deck', deckId].join('/')}>
                             <i className='warning sign icon'></i>
                             Updated version available
                         </NavLink>
                     </div>
                 }
-
                 <div className="ui attached segment">
+
                     <ContributorsPanel />
                 </div>
                 <div className="ui attached segment">
@@ -81,7 +87,7 @@ class InfoPanelInfoView extends React.Component {
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
                   <div className="ui attached segment">
-                      <PresentationPanel />
+                      <PresentationsPanel />
                   </div>
                 ) : ''}
 

@@ -14,7 +14,7 @@ import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 //import ServiceUnavailable from '../Error/ServiceUnavailable';//NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory
-import InfoPanel from './InfoPanel/InfoPanel';
+import InfoPanelInfoView from './InfoPanel/InfoPanelInfoView';
 import TranslationStore from '../../stores/TranslationStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
@@ -141,7 +141,7 @@ class Deck extends React.Component {
                             </div>
                         </div>;
             centerPanel = (
-                    <div className={contentAndRightPanelClass}>
+                    <div className={contentAndRightPanelClass} role="main">
                         <div className="row">
                             <div className={contentAndRightPanelClass}>
                                 <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
@@ -197,7 +197,7 @@ class Deck extends React.Component {
 
                 centerPanel = (
                       <div className={centerColClass}>
-                          <div className="row">
+                          <div className="row" role="main">
                               <div className={contentPanelClass}>
                                   <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                               </div>
@@ -212,7 +212,7 @@ class Deck extends React.Component {
                 rightPanel = (
                   <div className={rightColClass}>
                       <div className={treePanelClass}>
-                          <InfoPanel />
+                          <InfoPanelInfoView />
                       </div>
 
                       <div className="ui hidden divider"></div>

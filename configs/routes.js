@@ -16,6 +16,7 @@ import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
+import loadExamQuestions from '../actions/questions/loadExamQuestions';
 import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
@@ -35,6 +36,8 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
+import loadDeckStats from '../actions/stats/loadDeckStats';
+
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -112,7 +115,17 @@ export default {
             });
         }
     },
-
+    activationSuccessful: {
+        path: '/account-activated',
+        method: 'get',
+        page: 'activationSuccessful',
+        title: 'SlideWiki -- Activation successful',
+        handler: require('../components/Home/Home'),
+        action: (context, payload, done) => {
+            context.dispatch('SHOW_ACTIVATION_MESSAGE');
+            done();
+        }
+    },
     about: {
         path: '/about',
         method: 'get',
@@ -153,15 +166,13 @@ export default {
         }
     },
     help: {
-        path: '/help', // /playlist/26?sort=order
+        path: '/help',
         method: 'get',
         page: 'help',
         title: 'SlideWiki -- Guides and Help',
-        handler: require('../components/Home/GuidesHelp'),
         action: (context, payload, done) => {
-            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
-            done();
-        }
+            done({statusCode: '301', redirectURL: '/playlist/26?sort=order'});
+        },
     },
     license: {
         path: '/license',
@@ -364,6 +375,38 @@ export default {
         }
     },
 
+    decklandingpage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?',
+        method: 'get',
+        handler: require('../components/Deck/DeckLandingPage'),
+        page: 'decklandingpage',
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
+    },
+
+    deckstatspage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/stats',
+        method: 'get',
+        handler: require('../components/Deck/DeckStatsPage'),
+        page: 'deckstatspage',
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
+                },
+                (err, result) => {
+                    if(err) console.log(err);
+                    done();
+                }
+            ]);
+
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',
     // stype: 'type of selected content e.g. slide, deck or question',
@@ -385,9 +428,11 @@ export default {
                     payload.params.slug = undefined;
                 }
             }
+
             context.executeAction(loadDeck, payload, done);
         }
     },
+
     oldSlugDeck: {
         path: '/deck:slug(_.+)?/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
@@ -432,7 +477,7 @@ export default {
         }
     },
     similarcontent: {
-        path: '/similarcontent/:stype/:sid',
+        path: '/similarcontent/:stype/:sid/:userid?',
         method: 'get',
         page: 'similarcontent',
         handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),
@@ -553,6 +598,15 @@ export default {
             context.executeAction(loadContentQuestions, payload, done);
         }
     },
+    exam: {
+        path: '/exam/:stype/:sid',
+        method: 'get',
+        page: 'exam',
+        handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ExamPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadExamQuestions, payload, done);
+        }
+    },
     discussion: {
         path: '/discussion/:stype/:sid',
         method: 'get',
@@ -575,7 +629,7 @@ export default {
         path: '/infopanel/:id/:spath?',
         method: 'get',
         page: 'decktree',
-        handler: require('../components/Deck/InfoPanel/InfoPanel'),
+        handler: require('../components/Deck/InfoPanel/InfoPanelInfoView'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }
@@ -745,6 +799,19 @@ export default {
             done();
         }
     },
+    ltiLogin: {
+        path: '/ltiLogin',
+        method: 'get',
+        page: 'ltiLogin',
+        title: 'SlideWiki -- Login',
+        handler: require('../components/Login/LTI'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Login'
+            });
+            done();
+        }
+    },    
     deckfamily: {
         path: '/deckfamily/:tag',
         method: 'get',

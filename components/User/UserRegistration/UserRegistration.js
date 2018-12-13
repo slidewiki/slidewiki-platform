@@ -249,7 +249,28 @@ class UserRegistration extends React.Component {
             form_noAccess:{
                 id:'UserRegistration.noAccess',
                 defaultMessage:'I can not access my account'
-            }
+            },
+            emailToolTipp:{
+                id:'UserRegistration.emailRegistered',
+                defaultMessage:'This E-Mail has already been registered by someone else. Please use another one.'
+            },
+            usernameToolTipp:{
+                id:'UserRegistration.usernameRegistered',
+                defaultMessage:'This Username has already been registered by someone else. Please choose another one.'
+            },
+            usernameSuggest:{
+                id:'UserRegistration.username.suggestion',
+                defaultMessage:'Here are some suggestions:'
+            },
+            SSOtitle:{
+                id:'UserRegistration.SSO.title',
+                defaultMessage:'Sign up with an account of another SlideWiki instance'
+            },
+            SSOaria:{
+                id:'UserRegistration.SSO.aria',
+                defaultMessage:'Sign up with another SlideWiki instance'
+            },
+            
         });
     }
 
@@ -670,7 +691,7 @@ class UserRegistration extends React.Component {
             'inverted circular red remove': (emailNotAllowed !== undefined) ? emailNotAllowed : false,
             'inverted circular green checkmark': (emailNotAllowed !== undefined) ? !emailNotAllowed : false
         });
-        let emailToolTipp = emailNotAllowed ? 'This E-Mail has already been registered by someone else. Please use another one.' : undefined;
+        let emailToolTipp = emailNotAllowed ? this.context.intl.formatMessage(this.messages.emailToolTipp) : undefined;
 
         const usernameNotAllowed = this.props.UserRegistrationStore.failures.usernameNotAllowed;
         let usernameClasses = classNames({
@@ -685,9 +706,9 @@ class UserRegistration extends React.Component {
             'inverted circular red remove': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false,
             'inverted circular green checkmark': (usernameNotAllowed !== undefined) ? !usernameNotAllowed : false
         });
-        let usernameToolTipp = usernameNotAllowed ? 'This Username has already been registered by someone else. Please choose another one.' : undefined;
+        let usernameToolTipp = usernameNotAllowed ? this.context.intl.formatMessage(this.messages.usernameToolTipp) : undefined;
         if (this.props.UserRegistrationStore.suggestedUsernames.length > 0) {
-            usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
+            usernameToolTipp += '\n' + this.context.intl.formatMessage(this.messages.usernameSuggest) + this.props.UserRegistrationStore.suggestedUsernames;
         }
 
         let content = <div className="ui blue padded center aligned segment">
@@ -695,7 +716,7 @@ class UserRegistration extends React.Component {
             <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h3>
 
             {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
-            {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title='Sign up with an account of another SlideWiki instance' aria-label="Sign up with another SlideWiki instance"><i className="big user icon"></i></button> : ''}
+            {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title={this.context.intl.formatMessage(this.messages.SSOtitle)} aria-label={this.context.intl.formatMessage(this.messages.SSOaria)}><i className="big user icon"></i></button> : ''}
             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label={this.context.intl.formatMessage(this.messages.modal_googleButton)}><i className="big google plus lnk icon"></i></button>
             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label={this.context.intl.formatMessage(this.messages.modal_githubButton)}><i className="big github icon"></i></button>
 
@@ -739,7 +760,7 @@ class UserRegistration extends React.Component {
                 <div className="ui error message" ></div>
                 <br/>
                 <button type="submit" className="ui blue labeled submit icon button" >
-                    <i className="icon add user"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
+                    <i className="user plus icon"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
                 </button>
             </form>
             <div className="ui dividing header" ></div>

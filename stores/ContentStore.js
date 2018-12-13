@@ -14,7 +14,7 @@ class ContentStore extends BaseStore {
             'stype': payload.params.stype,
             'page': payload.page,
             'theme': payload.params.theme,
-            'subdeck': this.getCurrentSubdeck({'id': payload.params.id, 'spath': payload.params.spath, 'stype': payload.params.stype})
+            'subdeck': this.getCurrentSubdeck({'sid': payload.params.sid, 'spath': payload.params.spath, 'stype': payload.params.stype})
         };
         this.mode = payload.params.mode;
         this.emitChange();
@@ -26,6 +26,10 @@ class ContentStore extends BaseStore {
         this.selector.stype = selector.stype;
         this.selector.theme = selector.theme;
         this.selector.currentSubDeck = this.getCurrentSubdeck();
+        this.emitChange();
+    }
+    updateMode(payload) {
+        this.mode = payload.mode;
         this.emitChange();
     }
     getState() {
@@ -61,7 +65,8 @@ class ContentStore extends BaseStore {
 ContentStore.storeName = 'ContentStore';
 ContentStore.handlers = {
     'UPDATE_CONTENT': 'updateContent',
-    'UPDATE_CONTENT_SELECTOR': 'updateSelector'
+    'UPDATE_CONTENT_SELECTOR': 'updateSelector',
+    'UPDATE_MODE': 'updateMode'
 };
 
 export default ContentStore;

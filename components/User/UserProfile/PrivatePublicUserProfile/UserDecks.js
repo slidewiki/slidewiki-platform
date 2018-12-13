@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import PopularDecks from '../PopularDecks';
+import DecksGrid from '../DecksGrid';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Icon } from 'semantic-ui-react';
@@ -8,12 +8,12 @@ import fetchUserDecks from '../../../../actions/user/userprofile/fetchUserDecks'
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 
 class UserDecks extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.messages = this.getIntlMessages();
     }
     componentDidMount() {
-        $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
+        $(this.refs.sortDropdown).dropdown({ onChange: this.dropdownSelect.bind(this) });
     }
 
     componentDidUpdate() { }
@@ -28,12 +28,12 @@ class UserDecks extends React.Component {
             }
         });
     }
-    loadMore(nextLink){
+    loadMore(nextLink) {
         this.context.executeAction(fetchNextUserDecks, {
             nextLink: nextLink
         });
     }
-    getIntlMessages(){
+    getIntlMessages() {
         return defineMessages({
             sortLastUpdated: {
                 id: 'UserDecks.sort.lastUpdated',
@@ -61,8 +61,8 @@ class UserDecks extends React.Component {
             }
         });
     }
-    getSelectedSort(sortBy){
-        switch(sortBy){
+    getSelectedSort(sortBy) {
+        switch (sortBy) {
             case 'timestamp':
                 return this.context.intl.formatMessage(this.messages.sortCreationDate);
             case 'title':
@@ -74,16 +74,16 @@ class UserDecks extends React.Component {
     }
 
     render() {
-         // define load more results div
+        // define load more results div
         let loadMoreDiv = '';
         let meta = this.props.decksMeta;
-        if(meta.links && meta.links.next){
-            let loadMoreContent = <button className="ui button" aria-label='Load more decks' onClick={this.loadMore.bind(this, meta.links.next)}>Load More</button>;
-            if(this.props.loadMoreLoading){
-                loadMoreContent = <div className="ui active text loader">Loading</div>;
+        if (meta.links && meta.links.next) {
+            let loadMoreContent = <button className="ui button" aria-label='Load more decks' onClick={this.loadMore.bind(this, meta.links.next)}><FormattedMessage id='user.userProfile.userDecks.loadMore' defaultMessage='Load More' /></button>;
+            if (this.props.loadMoreLoading) {
+                loadMoreContent = <div className="ui active text loader"><FormattedMessage id='user.userProfile.userDecks.loading' defaultMessage='Loading' /></div>;
             }
-            if(this.props.loadMoreError){
-                loadMoreContent = 'An unexpected error occurred while fetching more decks';
+            if (this.props.loadMoreError) {
+                loadMoreContent = <FormattedMessage id='user.userProfile.userDecks.error' defaultMessage='An unexpected error occurred while fetching more decks' />;
             }
             loadMoreDiv = <div key="loadMoreDiv" className="ui basic segment center aligned">
                 {loadMoreContent}
@@ -103,32 +103,32 @@ class UserDecks extends React.Component {
         let header = this.context.intl.formatMessage(headerMessage);
 
         return (
-          <div className="ui segments">
-            {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-            <div className="ui secondary clearing segment">
-                <h1 className="ui left floated header">{header}</h1>
+            <div className="ui segments">
+                {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='user.userProfile.userDecks.loading' defaultMessage='Loading' /></div></div> : ''}
+                <div className="ui secondary clearing segment">
+                    <h1 className="ui left floated header">{header}</h1>
 
-                <div style={{ float: 'right' }}>
+                    <div style={{ float: 'right' }}>
 
-                <div className="ui pointing labeled icon dropdown button" ref="sortDropdown">
-                    <i className="icon exchange"/>
-                    <div className="text">{this.getSelectedSort(sortBy)}</div>
-                    <div className="menu">
-                        <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
-                        <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
-                        <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
+                        <div className="ui pointing labeled icon dropdown button" ref="sortDropdown">
+                            <i className="icon exchange" />
+                            <div className="text">{this.getSelectedSort(sortBy)}</div>
+                            <div className="menu">
+                                <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
+                                <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
+                                <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
+                <div className="ui segment">
+                    {(this.props.decks) &&
+                        <DecksGrid size={0} decks={this.props.decks} />
+                    }
                 </div>
+                {loadMoreDiv}
             </div>
-            <div className="ui segment">
-                { (this.props.decks) &&
-                    <PopularDecks size={0} decks={this.props.decks} />
-                }
-            </div>
-            {loadMoreDiv}
-          </div>
         );
     }
 }
