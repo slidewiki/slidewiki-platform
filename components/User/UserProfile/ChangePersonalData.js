@@ -5,12 +5,13 @@ import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import {getLanguageName, getLanguageNativeName} from '../../../common';
+import {getLanguageDisplayName, getLanguageName, getLanguageNativeName, translationLanguages} from '../../../common';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
 import { LTI_ID } from '../../../configs/general';
 import { Dropdown, Label } from 'semantic-ui-react';
+import SWAutoComplete from '../../common/SWAutoComplete';
 
 
 class ChangePersonalData extends React.Component {
@@ -36,7 +37,7 @@ class ChangePersonalData extends React.Component {
         payload.description = this.refs.description.value;
         payload.displayName = this.refs.displayName.value;
 
-        console.log(payload.language);
+        console.log(payload.country);
 
         this.context.executeAction(changeUserData, payload);
         writeCookie('locale', payload.language, 365);
@@ -139,17 +140,7 @@ class ChangePersonalData extends React.Component {
                     </div>
 
                     <div className="two fields">
-                        <div className="ui field">
-                            <div className="ui field">
-                                <label htmlFor="country">
-                                  <FormattedMessage
-                                    id='ChangePersonalData.country'
-                                    defaultMessage='Country'
-                                  />
-                                </label>
-                                <CountryDropdown ref="country" id="country" required={false} country={this.props.user.country}/>
-                            </div>
-                        </div>
+                        <CountryDropdown ref="country" id="country" required={false} value={this.props.user.country}/>
                         <div className="ui field">
                             <label htmlFor="organization">
                               <FormattedMessage

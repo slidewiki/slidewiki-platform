@@ -1,31 +1,792 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import SWAutoComplete from './SWAutoComplete';
 
 /**
- * Properties:
- *   required: true|false
- *   country:  country short code, like US or GB
+ * Renders an accessible dropdown menu list of countries.
  */
-
 class CountryDropdown extends React.Component {
     constructor(props){
         super(props);
         this.messages = this.getIntlMessages();
-    }
-    componentDidMount() {
-        $(this.refs.countryDropdown).dropdown();
+        this.state = {
+            value: props.value
+        };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    componentDidUpdate() {
-        $(this.refs.countryDropdown).dropdown();
-    }
+    static propTypes = {
+        /** Whether the input should be a required in the form. */
+        required: PropTypes.bool,
 
+        /** The initial value of the input. */
+        value: PropTypes.string,
+    };
+
+    /**
+     * Returns the currently selected item in the dropdown.
+     *
+     * @returns {string}
+     */
     getSelected() {
-        return this.refs.country.value;
+        return this.state.value;
     }
 
+    /**
+     * The list of country names and associated values to be shown in the dropdown.
+     * Translations of country names are later created using entries in getIntlMessages().
+     *
+     * @returns {array}
+     */
+    countriesToRender = [
+        {
+            key: 'AF',
+            name: 'Afghanistan'
+        }, {
+            key: 'AL',
+            name: 'Albania'
+        }, {
+            key: 'DZ',
+            name: 'Algeria'
+        }, {
+            key: 'AS',
+            name: 'American_Samoa'
+        }, {
+            key: 'AD',
+            name: 'Andorra'
+        }, {
+            key: 'AG',
+            name: 'Angola'
+        }, {
+            key: 'AI',
+            name: 'Anguilla'
+        }, {
+            key: 'AG',
+            name: 'Antigua_and_Barbuda'
+        }, {
+            key: 'AR',
+            name: 'Argentina'
+        }, {
+            key: 'AA',
+            name: 'Armenia'
+        }, {
+            key: 'AW',
+            name: 'Aruba'
+        }, {
+            key: 'AU',
+            name: 'Australia'
+        }, {
+            key: 'AT',
+            name: 'Austria'
+        }, {
+            key: 'AZ',
+            name: 'Azerbaijan'
+        }, {
+            key: 'BS',
+            name: 'Bahamas'
+        }, {
+            key: 'BH',
+            name: 'Bahrain'
+        }, {
+            key: 'BD',
+            name: 'Bangladesh'
+        }, {
+            key: 'BB',
+            name: 'Barbados'
+        }, {
+            key: 'BY',
+            name: 'Belarus'
+        }, {
+            key: 'BE',
+            name: 'Belgium'
+        }, {
+            key: 'BZ',
+            name: 'Belize'
+        }, {
+            key: 'BJ',
+            name: 'Benin'
+        }, {
+            key: 'BM',
+            name: 'Bermuda'
+        }, {
+            key: 'BT',
+            name: 'Bhutan'
+        }, {
+            key: 'BO',
+            name: 'Bolivia'
+        }, {
+            key: 'BL',
+            name: 'Bonaire'
+        }, {
+            key: 'BA',
+            name: 'Bosnia_and_Herzegovina'
+        }, {
+            key: 'BW',
+            name: 'Botswana'
+        }, {
+            key: 'BR',
+            name: 'Brazil'
+        }, {
+            key: 'BC',
+            name: 'British_Indian_Ocean_Ter'
+        }, {
+            key: 'BN',
+            name: 'Brunei'
+        }, {
+            key: 'BG',
+            name: 'Bulgaria'
+        }, {
+            key: 'BF',
+            name: 'Burkina_Faso'
+        }, {
+            key: 'BI',
+            name: 'Burundi'
+        }, {
+            key: 'KH',
+            name: 'Cambodia'
+        }, {
+            key: 'CM',
+            name: 'Cameroon'
+        }, {
+            key: 'CA',
+            name: 'Canada'
+        }, {
+            key: 'IC',
+            name: 'Canary_Islands'
+        }, {
+            key: 'CV',
+            name: 'Cape_Verde'
+        }, {
+            key: 'KY',
+            name: 'Cayman_Islands'
+        }, {
+            key: 'CF',
+            name: 'Central_African_Republic'
+        }, {
+            key: 'TD',
+            name: 'Chad'
+        }, {
+            key: 'CD',
+            name: 'Channel_Islands'
+        }, {
+            key: 'CL',
+            name: 'Chile'
+        }, {
+            key: 'CN',
+            name: 'China'
+        }, {
+            key: 'CI',
+            name: 'Christmas_Island'
+        }, {
+            key: 'CS',
+            name: 'Cocos_Island'
+        }, {
+            key: 'CO',
+            name: 'Colombia'
+        }, {
+            key: 'CC',
+            name: 'Comoros'
+        }, {
+            key: 'CG',
+            name: 'Congo'
+        }, {
+            key: 'CK',
+            name: 'Cook_Islands'
+        }, {
+            key: 'CR',
+            name: 'Costa_Rica'
+        }, {
+            key: 'HR',
+            name: 'Croatia'
+        }, {
+            key: 'CU',
+            name: 'Cuba'
+        }, {
+            key: 'CB',
+            name: 'Curacao'
+        }, {
+            key: 'CY',
+            name: 'Cyprus'
+        }, {
+            key: 'CZ',
+            name: 'Czech_Republic'
+        }, {
+            key: 'DK',
+            name: 'Denmark'
+        }, {
+            key: 'DJ',
+            name: 'Djibouti'
+        }, {
+            key: 'DM',
+            name: 'Dominica'
+        }, {
+            key: 'DO',
+            name: 'Dominican_Republic'
+        }, {
+            key: 'TM',
+            name: 'East_Timor'
+        }, {
+            key: 'EC',
+            name: 'Ecuador'
+        }, {
+            key: 'EG',
+            name: 'Egypt'
+        }, {
+            key: 'SV',
+            name: 'El_Salvador'
+        }, {
+            key: 'GQ',
+            name: 'Equatorial_Guinea'
+        }, {
+            key: 'ER',
+            name: 'Eritrea'
+        }, {
+            key: 'EE',
+            name: 'Estonia'
+        }, {
+            key: 'ET',
+            name: 'Ethiopia'
+        }, {
+            key: 'FA',
+            name: 'Falkland_Islands'
+        }, {
+            key: 'FO',
+            name: 'Faroe_Islands'
+        }, {
+            key: 'FJ',
+            name: 'Fiji'
+        }, {
+            key: 'FI',
+            name: 'Finland'
+        }, {
+            key: 'FR',
+            name: 'France'
+        }, {
+            key: 'GF',
+            name: 'French_Guiana'
+        }, {
+            key: 'PF',
+            name: 'French_Polynesia'
+        }, {
+            key: 'FS',
+            name: 'French_Southern_Ter'
+        }, {
+            key: 'GA',
+            name: 'Gabon'
+        }, {
+            key: 'GM',
+            name: 'Gambia'
+        }, {
+            key: 'GE',
+            name: 'Georgia'
+        }, {
+            key: 'DE',
+            name: 'Germany'
+        }, {
+            key: 'GH',
+            name: 'Ghana'
+        }, {
+            key: 'GI',
+            name: 'Gibraltar'
+        }, {
+            key: 'GB',
+            name: 'Great_Britain'
+        }, {
+            key: 'GR',
+            name: 'Greece'
+        }, {
+            key: 'GL',
+            name: 'Greenland'
+        }, {
+            key: 'GD',
+            name: 'Grenada'
+        }, {
+            key: 'GP',
+            name: 'Guadeloupe'
+        }, {
+            key: 'GU',
+            name: 'Guam'
+        }, {
+            key: 'GT',
+            name: 'Guatemala'
+        }, {
+            key: 'GN',
+            name: 'Guinea'
+        }, {
+            key: 'GY',
+            name: 'Guyana'
+        }, {
+            key: 'HT',
+            name: 'Haiti'
+        }, {
+            key: 'HW',
+            name: 'Hawaii'
+        }, {
+            key: 'HN',
+            name: 'Honduras'
+        }, {
+            key: 'HK',
+            name: 'Hong_Kong'
+        }, {
+            key: 'HU',
+            name: 'Hungary'
+        }, {
+            key: 'IS',
+            name: 'Iceland'
+        }, {
+            key: 'IN',
+            name: 'India'
+        }, {
+            key: 'ID',
+            name: 'Indonesia'
+        }, {
+            key: 'IA',
+            name: 'Iran'
+        }, {
+            key: 'IQ',
+            name: 'Iraq'
+        }, {
+            key: 'IR',
+            name: 'Ireland'
+        }, {
+            key: 'IM',
+            name: 'Isle_of_Man'
+        }, {
+            key: 'IL',
+            name: 'Israel'
+        }, {
+            key: 'IT',
+            name: 'Italy'
+        }, {
+            key: 'JM',
+            name: 'Jamaica'
+        }, {
+            key: 'JP',
+            name: 'Japan'
+        }, {
+            key: 'JO',
+            name: 'Jordan'
+        }, {
+            key: 'KZ',
+            name: 'Kazakhstan'
+        }, {
+            key: 'KE',
+            name: 'Kenya'
+        }, {
+            key: 'KI',
+            name: 'Kiribati'
+        }, {
+            key: 'NK',
+            name: 'Korea_North'
+        }, {
+            key: 'KS',
+            name: 'Korea_South'
+        }, {
+            key: 'KW',
+            name: 'Kuwait'
+        }, {
+            key: 'KG',
+            name: 'Kyrgyzstan'
+        }, {
+            key: 'LA',
+            name: 'Laos'
+        }, {
+            key: 'LV',
+            name: 'Latvia'
+        }, {
+            key: 'LB',
+            name: 'Lebanon'
+        }, {
+            key: 'LS',
+            name: 'Lesotho'
+        }, {
+            key: 'LR',
+            name: 'Liberia'
+        }, {
+            key: 'LY',
+            name: 'Libya'
+        }, {
+            key: 'LI',
+            name: 'Liechtenstein'
+        }, {
+            key: 'LT',
+            name: 'Lithuania'
+        }, {
+            key: 'LU',
+            name: 'Luxembourg'
+        }, {
+            key: 'MO',
+            name: 'Macau'
+        }, {
+            key: 'MK',
+            name: 'Macedonia'
+        }, {
+            key: 'MG',
+            name: 'Madagascar'
+        }, {
+            key: 'MY',
+            name: 'Malaysia'
+        }, {
+            key: 'MW',
+            name: 'Malawi'
+        }, {
+            key: 'MV',
+            name: 'Maldives'
+        }, {
+            key: 'ML',
+            name: 'Mali'
+        }, {
+            key: 'MT',
+            name: 'Malta'
+        }, {
+            key: 'MH',
+            name: 'Marshall_Islands'
+        }, {
+            key: 'MQ',
+            name: 'Martinique'
+        }, {
+            key: 'MR',
+            name: 'Mauritania'
+        }, {
+            key: 'MU',
+            name: 'Mauritius'
+        }, {
+            key: 'ME',
+            name: 'Mayotte'
+        }, {
+            key: 'MX',
+            name: 'Mexico'
+        }, {
+            key: 'MI',
+            name: 'Midway_Islands'
+        }, {
+            key: 'MD',
+            name: 'Moldova'
+        }, {
+            key: 'MC',
+            name: 'Monaco'
+        }, {
+            key: 'MN',
+            name: 'Mongolia'
+        }, {
+            key: 'MS',
+            name: 'Montserrat'
+        }, {
+            key: 'MA',
+            name: 'Morocco'
+        }, {
+            key: 'MZ',
+            name: 'Mozambique'
+        }, {
+            key: 'MM',
+            name: 'Myanmar'
+        }, {
+            key: 'NA',
+            name: 'Nambia'
+        }, {
+            key: 'NU',
+            name: 'Nauru'
+        }, {
+            key: 'NP',
+            name: 'Nepal'
+        }, {
+            key: 'AN',
+            name: 'Netherland_Antilles'
+        }, {
+            key: 'NL',
+            name: 'Netherlands_Holland_Europe'
+        }, {
+            key: 'NV',
+            name: 'Nevis'
+        }, {
+            key: 'NC',
+            name: 'New_Caledonia'
+        }, {
+            key: 'NZ',
+            name: 'New_Zealand'
+        }, {
+            key: 'NI',
+            name: 'Nicaragua'
+        }, {
+            key: 'NE',
+            name: 'Niger'
+        }, {
+            key: 'NG',
+            name: 'Nigeria'
+        }, {
+            key: 'NW',
+            name: 'Niue'
+        }, {
+            key: 'NF',
+            name: 'Norfolk_Island'
+        }, {
+            key: 'NO',
+            name: 'Norway'
+        }, {
+            key: 'OM',
+            name: 'Oman'
+        }, {
+            key: 'PK',
+            name: 'Pakistan'
+        }, {
+            key: 'PW',
+            name: 'Palau_Island'
+        }, {
+            key: 'PS',
+            name: 'Palestine'
+        }, {
+            key: 'PA',
+            name: 'Panama'
+        }, {
+            key: 'PG',
+            name: 'Papua_New_Guinea'
+        }, {
+            key: 'PY',
+            name: 'Paraguay'
+        }, {
+            key: 'PE',
+            name: 'Peru'
+        }, {
+            key: 'PH',
+            name: 'Philippines'
+        }, {
+            key: 'PO',
+            name: 'Pitcairn_Island'
+        }, {
+            key: 'PL',
+            name: 'Poland'
+        }, {
+            key: 'PT',
+            name: 'Portugal'
+        }, {
+            key: 'PR',
+            name: 'Puerto_Rico'
+        }, {
+            key: 'QA',
+            name: 'Qatar'
+        }, {
+            key: 'ME',
+            name: 'Republic_of_Montenegro'
+        }, {
+            key: 'RS',
+            name: 'Republic_of_Serbia'
+        }, {
+            key: 'RE',
+            name: 'Reunion'
+        }, {
+            key: 'RO',
+            name: 'Romania'
+        }, {
+            key: 'RU',
+            name: 'Russia'
+        }, {
+            key: 'RW',
+            name: 'Rwanda'
+        }, {
+            key: 'NT',
+            name: 'St_Barthelemy'
+        }, {
+            key: 'EU',
+            name: 'St_Eustatius'
+        }, {
+            key: 'HE',
+            name: 'St_Helena'
+        }, {
+            key: 'KN',
+            name: 'St_Kitts_Nevis'
+        }, {
+            key: 'LC',
+            name: 'St_Lucia'
+        }, {
+            key: 'MB',
+            name: 'St_Maarten'
+        }, {
+            key: 'PM',
+            name: 'St_Pierre_and_Miquelon'
+        }, {
+            key: 'VC',
+            name: 'St_Vincent_and_Grenadines'
+        }, {
+            key: 'SP',
+            name: 'Saipan'
+        }, {
+            key: 'SO',
+            name: 'Samoa'
+        }, {
+            key: 'AS',
+            name: 'Samoa_American'
+        }, {
+            key: 'SM',
+            name: 'San_Marino'
+        }, {
+            key: 'ST',
+            name: 'Sao_Tome_and_Principe'
+        }, {
+            key: 'SA',
+            name: 'Saudi_Arabia'
+        }, {
+            key: 'SN',
+            name: 'Senegal'
+        }, {
+            key: 'RS',
+            name: 'Serbia'
+        }, {
+            key: 'SC',
+            name: 'Seychelles'
+        }, {
+            key: 'SL',
+            name: 'Sierra_Leone'
+        }, {
+            key: 'SG',
+            name: 'Singapore'
+        }, {
+            key: 'SK',
+            name: 'Slovakia'
+        }, {
+            key: 'SI',
+            name: 'Slovenia'
+        }, {
+            key: 'SB',
+            name: 'Solomon_Islands'
+        }, {
+            key: 'OI',
+            name: 'Somalia'
+        }, {
+            key: 'ZA',
+            name: 'South_Africa'
+        }, {
+            key: 'ES',
+            name: 'Spain'
+        }, {
+            key: 'LK',
+            name: 'Sri_Lanka'
+        }, {
+            key: 'SD',
+            name: 'Sudan'
+        }, {
+            key: 'SR',
+            name: 'Suriname'
+        }, {
+            key: 'SZ',
+            name: 'Swaziland'
+        }, {
+            key: 'SE',
+            name: 'Sweden'
+        }, {
+            key: 'CH',
+            name: 'Switzerland'
+        }, {
+            key: 'SY',
+            name: 'Syria'
+        }, {
+            key: 'TA',
+            name: 'Tahiti'
+        }, {
+            key: 'TW',
+            name: 'Taiwan'
+        }, {
+            key: 'TJ',
+            name: 'Tajikistan'
+        }, {
+            key: 'TZ',
+            name: 'Tanzania'
+        }, {
+            key: 'TH',
+            name: 'Thailand'
+        }, {
+            key: 'TG',
+            name: 'Togo'
+        }, {
+            key: 'TK',
+            name: 'Tokelau'
+        }, {
+            key: 'TO',
+            name: 'Tonga'
+        }, {
+            key: 'TT',
+            name: 'Trinidad_and_Tobago'
+        }, {
+            key: 'TN',
+            name: 'Tunisia'
+        }, {
+            key: 'TR',
+            name: 'Turkey'
+        }, {
+            key: 'TU',
+            name: 'Turkmenistan'
+        }, {
+            key: 'TC',
+            name: 'Turks_and_Caicos_Is'
+        }, {
+            key: 'TV',
+            name: 'Tuvalu'
+        }, {
+            key: 'UG',
+            name: 'Uganda'
+        }, {
+            key: 'UA',
+            name: 'Ukraine'
+        }, {
+            key: 'AE',
+            name: 'United_Arab_Emirates'
+        }, {
+            key: 'GB',
+            name: 'United_Kingdom'
+        }, {
+            key: 'US',
+            name: 'United_States_of_America'
+        }, {
+            key: 'UY',
+            name: 'Uruguay'
+        }, {
+            key: 'UZ',
+            name: 'Uzbekistan'
+        }, {
+            key: 'VU',
+            name: 'Vanuatu'
+        }, {
+            key: 'VS',
+            name: 'Vatican_City_State'
+        }, {
+            key: 'VE',
+            name: 'Venezuela'
+        }, {
+            key: 'VN',
+            name: 'Vietnam'
+        }, {
+            key: 'VB',
+            name: 'Virgin_Islands_Brit'
+        }, {
+            key: 'VA',
+            name: 'Virgin_Islands_USA'
+        }, {
+            key: 'WK',
+            name: 'Wake_Island'
+        }, {
+            key: 'WF',
+            name: 'Wallis_and_Futana_Is'
+        }, {
+            key: 'YE',
+            name: 'Yemen'
+        }, {
+            key: 'ZR',
+            name: 'Zaire'
+        }, {
+            key: 'ZM',
+            name: 'Zambia'
+        }, {
+            key: 'ZW',
+            name: 'Zimbabwe'
+        }
+    ];
+
+    /**
+     * Returns an array of translation key/values for FormattedMessage.
+     *
+     * @returns {array}
+     */
     getIntlMessages(){
         return defineMessages({
             placeholder: {
@@ -1019,269 +1780,34 @@ class CountryDropdown extends React.Component {
         });
     }
 
-    render() {
-        let classes = classNames({
-            'ui': true,
-            'fluid': true,
-            'search': true,
-            'selection': true,
-            'dropdown': true,
-            'required': this.props.required,
+    /**
+     * Handles the value change event for this component.
+     * Sets the internal value of the input.
+     *
+     * @returns {void}
+     */
+    handleInputChange(event) {
+        this.setState({
+            value: event.target.value
         });
+    }
+
+    render() {
         return (
-            <div className={classes} ref="countryDropdown">
-                {this.props.required ? <input type="hidden" name="country" ref="country" defaultValue={this.props.country} required/> : <input type="hidden" name="country" ref="country" defaultValue={this.props.country}/>}
-                <i className="dropdown icon"/>
-                <div className="default text" >{this.context.intl.formatMessage(this.messages.placeholder)}</div>
-                <div className="menu" id="country">
-                    <div className="item" data-value="AF"><FormattedMessage {...this.messages.Afghanistan} /></div>
-                    <div className="item" data-value="AL"><FormattedMessage {...this.messages.Albania} /></div>
-                    <div className="item" data-value="DZ"><FormattedMessage {...this.messages.Algeria} /></div>
-                    <div className="item" data-value="AS"><FormattedMessage {...this.messages.American_Samoa} /></div>
-                    <div className="item" data-value="AD"><FormattedMessage {...this.messages.Andorra} /></div>
-                    <div className="item" data-value="AG"><FormattedMessage {...this.messages.Angola} /></div>
-                    <div className="item" data-value="AI"><FormattedMessage {...this.messages.Anguilla} /></div>
-                    <div className="item" data-value="AG"><FormattedMessage {...this.messages.Antigua_and_Barbuda} /></div>
-                    <div className="item" data-value="AR"><FormattedMessage {...this.messages.Argentina} /></div>
-                    <div className="item" data-value="AA"><FormattedMessage {...this.messages.Armenia} /></div>
-                    <div className="item" data-value="AW"><FormattedMessage {...this.messages.Aruba} /></div>
-                    <div className="item" data-value="AU"><FormattedMessage {...this.messages.Australia} /></div>
-                    <div className="item" data-value="AT"><FormattedMessage {...this.messages.Austria} /></div>
-                    <div className="item" data-value="AZ"><FormattedMessage {...this.messages.Azerbaijan} /></div>
-                    <div className="item" data-value="BS"><FormattedMessage {...this.messages.Bahamas} /></div>
-                    <div className="item" data-value="BH"><FormattedMessage {...this.messages.Bahrain} /></div>
-                    <div className="item" data-value="BD"><FormattedMessage {...this.messages.Bangladesh} /></div>
-                    <div className="item" data-value="BB"><FormattedMessage {...this.messages.Barbados} /></div>
-                    <div className="item" data-value="BY"><FormattedMessage {...this.messages.Belarus} /></div>
-                    <div className="item" data-value="BE"><FormattedMessage {...this.messages.Belgium} /></div>
-                    <div className="item" data-value="BZ"><FormattedMessage {...this.messages.Belize} /></div>
-                    <div className="item" data-value="BJ"><FormattedMessage {...this.messages.Benin} /></div>
-                    <div className="item" data-value="BM"><FormattedMessage {...this.messages.Bermuda} /></div>
-                    <div className="item" data-value="BT"><FormattedMessage {...this.messages.Bhutan} /></div>
-                    <div className="item" data-value="BO"><FormattedMessage {...this.messages.Bolivia} /></div>
-                    <div className="item" data-value="BL"><FormattedMessage {...this.messages.Bonaire} /></div>
-                    <div className="item" data-value="BA"><FormattedMessage {...this.messages.Bosnia_and_Herzegovina} /></div>
-                    <div className="item" data-value="BW"><FormattedMessage {...this.messages.Botswana} /></div>
-                    <div className="item" data-value="BR"><FormattedMessage {...this.messages.Brazil} /></div>
-                    <div className="item" data-value="BC"><FormattedMessage {...this.messages.British_Indian_Ocean_Ter} /></div>
-                    <div className="item" data-value="BN"><FormattedMessage {...this.messages.Brunei} /></div>
-                    <div className="item" data-value="BG"><FormattedMessage {...this.messages.Bulgaria} /></div>
-                    <div className="item" data-value="BF"><FormattedMessage {...this.messages.Burkina_Faso} /></div>
-                    <div className="item" data-value="BI"><FormattedMessage {...this.messages.Burundi} /></div>
-                    <div className="item" data-value="KH"><FormattedMessage {...this.messages.Cambodia} /></div>
-                    <div className="item" data-value="CM"><FormattedMessage {...this.messages.Cameroon} /></div>
-                    <div className="item" data-value="CA"><FormattedMessage {...this.messages.Canada} /></div>
-                    <div className="item" data-value="IC"><FormattedMessage {...this.messages.Canary_Islands} /></div>
-                    <div className="item" data-value="CV"><FormattedMessage {...this.messages.Cape_Verde} /></div>
-                    <div className="item" data-value="KY"><FormattedMessage {...this.messages.Cayman_Islands} /></div>
-                    <div className="item" data-value="CF"><FormattedMessage {...this.messages.Central_African_Republic} />c</div>
-                    <div className="item" data-value="TD"><FormattedMessage {...this.messages.Chad} /></div>
-                    <div className="item" data-value="CD"><FormattedMessage {...this.messages.Channel_Islands} /></div>
-                    <div className="item" data-value="CL"><FormattedMessage {...this.messages.Chile} /></div>
-                    <div className="item" data-value="CN"><FormattedMessage {...this.messages.China} /></div>
-                    <div className="item" data-value="CI"><FormattedMessage {...this.messages.Christmas_Island} /></div>
-                    <div className="item" data-value="CS"><FormattedMessage {...this.messages.Cocos_Island} /></div>
-                    <div className="item" data-value="CO"><FormattedMessage {...this.messages.Colombia} /></div>
-                    <div className="item" data-value="CC"><FormattedMessage {...this.messages.Comoros} /></div>
-                    <div className="item" data-value="CG"><FormattedMessage {...this.messages.Congo} /></div>
-                    <div className="item" data-value="CK"><FormattedMessage {...this.messages.Cook_Islands} /></div>
-                    <div className="item" data-value="CR"><FormattedMessage {...this.messages.Costa_Rica} /></div>
-                    <div className="item" data-value="HR"><FormattedMessage {...this.messages.Croatia} /></div>
-                    <div className="item" data-value="CU"><FormattedMessage {...this.messages.Cuba} /></div>
-                    <div className="item" data-value="CB"><FormattedMessage {...this.messages.Curacao} /></div>
-                    <div className="item" data-value="CY"><FormattedMessage {...this.messages.Cyprus} /></div>
-                    <div className="item" data-value="CZ"><FormattedMessage {...this.messages.Czech_Republic} /></div>
-                    <div className="item" data-value="DK"><FormattedMessage {...this.messages.Denmark} /></div>
-                    <div className="item" data-value="DJ"><FormattedMessage {...this.messages.Djibouti} /></div>
-                    <div className="item" data-value="DM"><FormattedMessage {...this.messages.Dominica} /></div>
-                    <div className="item" data-value="DO"><FormattedMessage {...this.messages.Dominican_Republic} /></div>
-                    <div className="item" data-value="TM"><FormattedMessage {...this.messages.East_Timor} /></div>
-                    <div className="item" data-value="EC"><FormattedMessage {...this.messages.Ecuador} /></div>
-                    <div className="item" data-value="EG"><FormattedMessage {...this.messages.Egypt} /></div>
-                    <div className="item" data-value="SV"><FormattedMessage {...this.messages.El_Salvador} /></div>
-                    <div className="item" data-value="GQ"><FormattedMessage {...this.messages.Equatorial_Guinea} /></div>
-                    <div className="item" data-value="ER"><FormattedMessage {...this.messages.Eritrea} /></div>
-                    <div className="item" data-value="EE"><FormattedMessage {...this.messages.Estonia} /></div>
-                    <div className="item" data-value="ET"><FormattedMessage {...this.messages.Ethiopia} /></div>
-                    <div className="item" data-value="FA"><FormattedMessage {...this.messages.Falkland_Islands} /></div>
-                    <div className="item" data-value="FO"><FormattedMessage {...this.messages.Faroe_Islands} /></div>
-                    <div className="item" data-value="FJ"><FormattedMessage {...this.messages.Fiji} /></div>
-                    <div className="item" data-value="FI"><FormattedMessage {...this.messages.Finland} /></div>
-                    <div className="item" data-value="FR"><FormattedMessage {...this.messages.France} /></div>
-                    <div className="item" data-value="GF"><FormattedMessage {...this.messages.French_Guiana} /></div>
-                    <div className="item" data-value="PF"><FormattedMessage {...this.messages.French_Polynesia} /></div>
-                    <div className="item" data-value="FS"><FormattedMessage {...this.messages.French_Southern_Ter} /></div>
-                    <div className="item" data-value="GA"><FormattedMessage {...this.messages.Gabon} /></div>
-                    <div className="item" data-value="GM"><FormattedMessage {...this.messages.Gambia} /></div>
-                    <div className="item" data-value="GE"><FormattedMessage {...this.messages.Georgia} /></div>
-                    <div className="item" data-value="DE"><FormattedMessage {...this.messages.Germany} /></div>
-                    <div className="item" data-value="GH"><FormattedMessage {...this.messages.Ghana} /></div>
-                    <div className="item" data-value="GI"><FormattedMessage {...this.messages.Gibraltar} /></div>
-                    <div className="item" data-value="GB"><FormattedMessage {...this.messages.Great_Britain} /></div>
-                    <div className="item" data-value="GR"><FormattedMessage {...this.messages.Greece} /></div>
-                    <div className="item" data-value="GL"><FormattedMessage {...this.messages.Greenland} /></div>
-                    <div className="item" data-value="GD"><FormattedMessage {...this.messages.Grenada} /></div>
-                    <div className="item" data-value="GP"><FormattedMessage {...this.messages.Guadeloupe} /></div>
-                    <div className="item" data-value="GU"><FormattedMessage {...this.messages.Guam} /></div>
-                    <div className="item" data-value="GT"><FormattedMessage {...this.messages.Guatemala} /></div>
-                    <div className="item" data-value="GN"><FormattedMessage {...this.messages.Guinea} /></div>
-                    <div className="item" data-value="GY"><FormattedMessage {...this.messages.Guyana} /></div>
-                    <div className="item" data-value="HT"><FormattedMessage {...this.messages.Haiti} /></div>
-                    <div className="item" data-value="HW"><FormattedMessage {...this.messages.Hawaii} /></div>
-                    <div className="item" data-value="HN"><FormattedMessage {...this.messages.Honduras} /></div>
-                    <div className="item" data-value="HK"><FormattedMessage {...this.messages.Hong_Kong} /></div>
-                    <div className="item" data-value="HU"><FormattedMessage {...this.messages.Hungary} /></div>
-                    <div className="item" data-value="IS"><FormattedMessage {...this.messages.Iceland} /></div>
-                    <div className="item" data-value="IN"><FormattedMessage {...this.messages.India} /></div>
-                    <div className="item" data-value="ID"><FormattedMessage {...this.messages.Indonesia} /></div>
-                    <div className="item" data-value="IA"><FormattedMessage {...this.messages.Iran} /></div>
-                    <div className="item" data-value="IQ"><FormattedMessage {...this.messages.Iraq} /></div>
-                    <div className="item" data-value="IR"><FormattedMessage {...this.messages.Ireland} /></div>
-                    <div className="item" data-value="IM"><FormattedMessage {...this.messages.Isle_of_Man} /></div>
-                    <div className="item" data-value="IL"><FormattedMessage {...this.messages.Israel} /></div>
-                    <div className="item" data-value="IT"><FormattedMessage {...this.messages.Italy} /></div>
-                    <div className="item" data-value="JM"><FormattedMessage {...this.messages.Jamaica} /></div>
-                    <div className="item" data-value="JP"><FormattedMessage {...this.messages.Japan} /></div>
-                    <div className="item" data-value="JO"><FormattedMessage {...this.messages.Jordan} /></div>
-                    <div className="item" data-value="KZ"><FormattedMessage {...this.messages.Kazakhstan} /></div>
-                    <div className="item" data-value="KE"><FormattedMessage {...this.messages.Kenya} /></div>
-                    <div className="item" data-value="KI"><FormattedMessage {...this.messages.Kiribati} /></div>
-                    <div className="item" data-value="NK"><FormattedMessage {...this.messages.Korea_North} /></div>
-                    <div className="item" data-value="KS"><FormattedMessage {...this.messages.Korea_South} /></div>
-                    <div className="item" data-value="KW"><FormattedMessage {...this.messages.Kuwait} /></div>
-                    <div className="item" data-value="KG"><FormattedMessage {...this.messages.Kyrgyzstan} /></div>
-                    <div className="item" data-value="LA"><FormattedMessage {...this.messages.Laos} /></div>
-                    <div className="item" data-value="LV"><FormattedMessage {...this.messages.Latvia} /></div>
-                    <div className="item" data-value="LB"><FormattedMessage {...this.messages.Lebanon} /></div>
-                    <div className="item" data-value="LS"><FormattedMessage {...this.messages.Lesotho} /></div>
-                    <div className="item" data-value="LR"><FormattedMessage {...this.messages.Liberia} /></div>
-                    <div className="item" data-value="LY"><FormattedMessage {...this.messages.Libya} /></div>
-                    <div className="item" data-value="LI"><FormattedMessage {...this.messages.Liechtenstein} /></div>
-                    <div className="item" data-value="LT"><FormattedMessage {...this.messages.Lithuania} /></div>
-                    <div className="item" data-value="LU"><FormattedMessage {...this.messages.Luxembourg} /></div>
-                    <div className="item" data-value="MO"><FormattedMessage {...this.messages.Macau} /></div>
-                    <div className="item" data-value="MK"><FormattedMessage {...this.messages.Macedonia} /></div>
-                    <div className="item" data-value="MG"><FormattedMessage {...this.messages.Madagascar} /></div>
-                    <div className="item" data-value="MY"><FormattedMessage {...this.messages.Malaysia} /></div>
-                    <div className="item" data-value="MW"><FormattedMessage {...this.messages.Malawi} /></div>
-                    <div className="item" data-value="MV"><FormattedMessage {...this.messages.Maldives} /></div>
-                    <div className="item" data-value="ML"><FormattedMessage {...this.messages.Mali} /></div>
-                    <div className="item" data-value="MT"><FormattedMessage {...this.messages.Malta} /></div>
-                    <div className="item" data-value="MH"><FormattedMessage {...this.messages.Marshall_Islands} /></div>
-                    <div className="item" data-value="MQ"><FormattedMessage {...this.messages.Martinique} /></div>
-                    <div className="item" data-value="MR"><FormattedMessage {...this.messages.Mauritania} /></div>
-                    <div className="item" data-value="MU"><FormattedMessage {...this.messages.Mauritius} /></div>
-                    <div className="item" data-value="ME"><FormattedMessage {...this.messages.Mayotte} /></div>
-                    <div className="item" data-value="MX"><FormattedMessage {...this.messages.Mexico} /></div>
-                    <div className="item" data-value="MI"><FormattedMessage {...this.messages.Midway_Islands} /></div>
-                    <div className="item" data-value="MD"><FormattedMessage {...this.messages.Moldova} /></div>
-                    <div className="item" data-value="MC"><FormattedMessage {...this.messages.Monaco} /></div>
-                    <div className="item" data-value="MN"><FormattedMessage {...this.messages.Mongolia} /></div>
-                    <div className="item" data-value="MS"><FormattedMessage {...this.messages.Montserrat} /></div>
-                    <div className="item" data-value="MA"><FormattedMessage {...this.messages.Morocco} /></div>
-                    <div className="item" data-value="MZ"><FormattedMessage {...this.messages.Mozambique} /></div>
-                    <div className="item" data-value="MM"><FormattedMessage {...this.messages.Myanmar} /></div>
-                    <div className="item" data-value="NA"><FormattedMessage {...this.messages.Nambia} /></div>
-                    <div className="item" data-value="NU"><FormattedMessage {...this.messages.Nauru} /></div>
-                    <div className="item" data-value="NP"><FormattedMessage {...this.messages.Nepal} /></div>
-                    <div className="item" data-value="AN"><FormattedMessage {...this.messages.Netherland_Antilles} /></div>
-                    <div className="item" data-value="NL"><FormattedMessage {...this.messages.Netherlands_Holland_Europe} /></div>
-                    <div className="item" data-value="NV"><FormattedMessage {...this.messages.Nevis} /></div>
-                    <div className="item" data-value="NC"><FormattedMessage {...this.messages.New_Caledonia} /></div>
-                    <div className="item" data-value="NZ"><FormattedMessage {...this.messages.New_Zealand} /></div>
-                    <div className="item" data-value="NI"><FormattedMessage {...this.messages.Nicaragua} /></div>
-                    <div className="item" data-value="NE"><FormattedMessage {...this.messages.Niger} /></div>
-                    <div className="item" data-value="NG"><FormattedMessage {...this.messages.Nigeria} /></div>
-                    <div className="item" data-value="NW"><FormattedMessage {...this.messages.Niue} /></div>
-                    <div className="item" data-value="NF"><FormattedMessage {...this.messages.Norfolk_Island} /></div>
-                    <div className="item" data-value="NO"><FormattedMessage {...this.messages.Norway} /></div>
-                    <div className="item" data-value="OM"><FormattedMessage {...this.messages.Oman} /></div>
-                    <div className="item" data-value="PK"><FormattedMessage {...this.messages.Pakistan} /></div>
-                    <div className="item" data-value="PW"><FormattedMessage {...this.messages.Palau_Island} /></div>
-                    <div className="item" data-value="PS"><FormattedMessage {...this.messages.Palestine} /></div>
-                    <div className="item" data-value="PA"><FormattedMessage {...this.messages.Panama} /></div>
-                    <div className="item" data-value="PG"><FormattedMessage {...this.messages.Papua_New_Guinea} /></div>
-                    <div className="item" data-value="PY"><FormattedMessage {...this.messages.Paraguay} /></div>
-                    <div className="item" data-value="PE"><FormattedMessage {...this.messages.Peru} /></div>
-                    <div className="item" data-value="PH"><FormattedMessage {...this.messages.Philippines} /></div>
-                    <div className="item" data-value="PO"><FormattedMessage {...this.messages.Pitcairn_Island} /></div>
-                    <div className="item" data-value="PL"><FormattedMessage {...this.messages.Poland} /></div>
-                    <div className="item" data-value="PT"><FormattedMessage {...this.messages.Portugal} /></div>
-                    <div className="item" data-value="PR"><FormattedMessage {...this.messages.Puerto_Rico} /></div>
-                    <div className="item" data-value="QA"><FormattedMessage {...this.messages.Qatar} /></div>
-                    <div className="item" data-value="ME"><FormattedMessage {...this.messages.Republic_of_Montenegro} /></div>
-                    <div className="item" data-value="RS"><FormattedMessage {...this.messages.Republic_of_Serbia} /></div>
-                    <div className="item" data-value="RE"><FormattedMessage {...this.messages.Reunion} /></div>
-                    <div className="item" data-value="RO"><FormattedMessage {...this.messages.Romania} /></div>
-                    <div className="item" data-value="RU"><FormattedMessage {...this.messages.Russia} /></div>
-                    <div className="item" data-value="RW"><FormattedMessage {...this.messages.Rwanda} /></div>
-                    <div className="item" data-value="NT"><FormattedMessage {...this.messages.St_Barthelemy} /></div>
-                    <div className="item" data-value="EU"><FormattedMessage {...this.messages.St_Eustatius} /></div>
-                    <div className="item" data-value="HE"><FormattedMessage {...this.messages.St_Helena} /></div>
-                    <div className="item" data-value="KN"><FormattedMessage {...this.messages.St_Kitts_Nevis} /></div>
-                    <div className="item" data-value="LC"><FormattedMessage {...this.messages.St_Lucia} /></div>
-                    <div className="item" data-value="MB"><FormattedMessage {...this.messages.St_Maarten} /></div>
-                    <div className="item" data-value="PM"><FormattedMessage {...this.messages.St_Pierre_and_Miquelon} /></div>
-                    <div className="item" data-value="VC"><FormattedMessage {...this.messages.St_Vincent_and_Grenadines} /></div>
-                    <div className="item" data-value="SP"><FormattedMessage {...this.messages.Saipan} /></div>
-                    <div className="item" data-value="SO"><FormattedMessage {...this.messages.Samoa} /></div>
-                    <div className="item" data-value="AS"><FormattedMessage {...this.messages.Samoa_American} /></div>
-                    <div className="item" data-value="SM"><FormattedMessage {...this.messages.San_Marino} /></div>
-                    <div className="item" data-value="ST"><FormattedMessage {...this.messages.Sao_Tome_and_Principe} /></div>
-                    <div className="item" data-value="SA"><FormattedMessage {...this.messages.Saudi_Arabia} /></div>
-                    <div className="item" data-value="SN"><FormattedMessage {...this.messages.Senegal} /></div>
-                    <div className="item" data-value="RS"><FormattedMessage {...this.messages.Serbia} /></div>
-                    <div className="item" data-value="SC"><FormattedMessage {...this.messages.Seychelles} /></div>
-                    <div className="item" data-value="SL"><FormattedMessage {...this.messages.Sierra_Leone} /></div>
-                    <div className="item" data-value="SG"><FormattedMessage {...this.messages.Singapore} /></div>
-                    <div className="item" data-value="SK"><FormattedMessage {...this.messages.Slovakia} /></div>
-                    <div className="item" data-value="SI"><FormattedMessage {...this.messages.Slovenia} /></div>
-                    <div className="item" data-value="SB"><FormattedMessage {...this.messages.Solomon_Islands} /></div>
-                    <div className="item" data-value="OI"><FormattedMessage {...this.messages.Somalia} /></div>
-                    <div className="item" data-value="ZA"><FormattedMessage {...this.messages.South_Africa} /></div>
-                    <div className="item" data-value="ES"><FormattedMessage {...this.messages.Spain} /></div>
-                    <div className="item" data-value="LK"><FormattedMessage {...this.messages.Sri_Lanka} /></div>
-                    <div className="item" data-value="SD"><FormattedMessage {...this.messages.Sudan} /></div>
-                    <div className="item" data-value="SR"><FormattedMessage {...this.messages.Suriname} /></div>
-                    <div className="item" data-value="SZ"><FormattedMessage {...this.messages.Swaziland} /></div>
-                    <div className="item" data-value="SE"><FormattedMessage {...this.messages.Sweden} /></div>
-                    <div className="item" data-value="CH"><FormattedMessage {...this.messages.Switzerland} /></div>
-                    <div className="item" data-value="SY"><FormattedMessage {...this.messages.Syria} /></div>
-                    <div className="item" data-value="TA"><FormattedMessage {...this.messages.Tahiti} /></div>
-                    <div className="item" data-value="TW"><FormattedMessage {...this.messages.Taiwan} /></div>
-                    <div className="item" data-value="TJ"><FormattedMessage {...this.messages.Tajikistan} /></div>
-                    <div className="item" data-value="TZ"><FormattedMessage {...this.messages.Tanzania} /></div>
-                    <div className="item" data-value="TH"><FormattedMessage {...this.messages.Thailand} /></div>
-                    <div className="item" data-value="TG"><FormattedMessage {...this.messages.Togo} /></div>
-                    <div className="item" data-value="TK"><FormattedMessage {...this.messages.Tokelau} /></div>
-                    <div className="item" data-value="TO"><FormattedMessage {...this.messages.Tonga} /></div>
-                    <div className="item" data-value="TT"><FormattedMessage {...this.messages.Trinidad_and_Tobago} /></div>
-                    <div className="item" data-value="TN"><FormattedMessage {...this.messages.Tunisia} /></div>
-                    <div className="item" data-value="TR"><FormattedMessage {...this.messages.Turkey} /></div>
-                    <div className="item" data-value="TU"><FormattedMessage {...this.messages.Turkmenistan} /></div>
-                    <div className="item" data-value="TC"><FormattedMessage {...this.messages.Turks_and_Caicos_Is} /></div>
-                    <div className="item" data-value="TV"><FormattedMessage {...this.messages.Tuvalu} /></div>
-                    <div className="item" data-value="UG"><FormattedMessage {...this.messages.Uganda} /></div>
-                    <div className="item" data-value="UA"><FormattedMessage {...this.messages.Ukraine} /></div>
-                    <div className="item" data-value="AE"><FormattedMessage {...this.messages.United_Arab_Emirates} /></div>
-                    <div className="item" data-value="GB"><FormattedMessage {...this.messages.United_Kingdom} /></div>
-                    <div className="item" data-value="US"><FormattedMessage {...this.messages.United_States_of_America} /></div>
-                    <div className="item" data-value="UY"><FormattedMessage {...this.messages.Uruguay} /></div>
-                    <div className="item" data-value="UZ"><FormattedMessage {...this.messages.Uzbekistan} /></div>
-                    <div className="item" data-value="VU"><FormattedMessage {...this.messages.Vanuatu} /></div>
-                    <div className="item" data-value="VS"><FormattedMessage {...this.messages.Vatican_City_State} /></div>
-                    <div className="item" data-value="VE"><FormattedMessage {...this.messages.Venezuela} /></div>
-                    <div className="item" data-value="VN"><FormattedMessage {...this.messages.Vietnam} /></div>
-                    <div className="item" data-value="VB"><FormattedMessage {...this.messages.Virgin_Islands_Brit} /></div>
-                    <div className="item" data-value="VA"><FormattedMessage {...this.messages.Virgin_Islands_USA} /></div>
-                    <div className="item" data-value="WK"><FormattedMessage {...this.messages.Wake_Island} /></div>
-                    <div className="item" data-value="WF"><FormattedMessage {...this.messages.Wallis_and_Futana_Is} /></div>
-                    <div className="item" data-value="YE"><FormattedMessage {...this.messages.Yemen} /></div>
-                    <div className="item" data-value="ZR"><FormattedMessage {...this.messages.Zaire} /></div>
-                    <div className="item" data-value="ZM"><FormattedMessage {...this.messages.Zambia} /></div>
-                    <div className="item" data-value="ZW"><FormattedMessage {...this.messages.Zimbabwe} /></div>
-                </div>
-            </div>
+            <SWAutoComplete
+                label={<FormattedMessage
+                    id='ChangePersonalData.country'
+                    defaultMessage='Country' />
+                }
+                value={this.state.value}
+                items={this.countriesToRender.map((country) => ({
+                    key: country.name,
+                    value: country.key,
+                    name: this.context.intl.formatMessage(this.messages[country.name])
+                }))}
+                onChange={this.handleInputChange}
+                required={this.props.required}
+            />
         );
     }
 }
