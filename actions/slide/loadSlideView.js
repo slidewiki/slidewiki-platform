@@ -24,6 +24,10 @@ export default function loadSlideView(context, payload, done) {
         } else {
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
             context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
+            context.dispatch('LOAD_DECK_METADATA_SUCCESS', {
+                thumbnailID: res.selector.sid, 
+                thumbnailTheme: context.getStore(DeckTreeStore).theme
+            });
         }
         let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
         let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.title;

@@ -7,6 +7,7 @@ class ApplicationStore extends BaseStore {
         super(dispatcher);
         this.pageTitle = '';
         this.pageThumbnail = '/assets/images/slideWiki-logo-linear.png'; //can add a default image here
+        this.pageDescription = '';
         this.showActivationMessage = false;
         //this.frozen = false;
     }
@@ -21,7 +22,9 @@ class ApplicationStore extends BaseStore {
     }
     updatePageMetadata(payload) {
         this.dispatcher.waitFor(RouteStore, () => {
-            this.pageThumbnail = Microservices.file.uri + '/thumbnail/slide/' + payload.thumbnailID;
+            let thumbnailTheme = payload.thumbnailTheme || 'default';
+            this.pageThumbnail = Microservices.file.uri + '/thumbnail/slide/' + payload.thumbnailID + '/' + thumbnailTheme;
+            this.pageDescription = payload.description;
             console.warn('!!! thumbnail:', this.pageThumbnail);
             this.emitChange();
         });
@@ -36,6 +39,10 @@ class ApplicationStore extends BaseStore {
     getPageThumbnail() {
         return this.pageThumbnail;
     }
+    getPageDescription() {
+        // remove line breaks for page description
+        return this.pageDescription.replace(/(\r\n\t|\n|\r\t)/gm,' ');
+    }
     getActivationMessage(){
         return this.showActivationMessage;
     }
@@ -43,12 +50,14 @@ class ApplicationStore extends BaseStore {
         return {
             pageTitle: this.pageTitle,
             pageThumbnail: this.pageThumbnail,
+            pageDescription: this.pageDescription,
             showActivationMessage: this.showActivationMessage,
         };
     }
     rehydrate(state) {
         this.pageTitle = state.pageTitle;
         this.pageThumbnail = state.pageThumbnail;
+        this.pageDescription = state.pageDescription;
         this.showActivationMessage = state.showActivationMessage;
     }
 }
