@@ -409,11 +409,16 @@ export default {
                     context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
                 }],
                 (err, result) => {
-                    if(err)console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
             );
-
         }
     },
 
@@ -676,12 +681,18 @@ export default {
                     payload.params.sid = payload.params.slideID;//needs to be reset for loadPresentation
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
-            ]);
+            );
         }
     },
     presentationIE: {
@@ -703,12 +714,18 @@ export default {
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
-            ]);
+            );
         }
     },
     print: {
@@ -734,12 +751,18 @@ export default {
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
-            ]);
+            );
         }
     },
     oldSlugPresentation: {
