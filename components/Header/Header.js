@@ -95,7 +95,7 @@ class Header extends React.Component {
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
                     <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                         <div className="ui fluid container">
-                            <AUskipLink ariaLabel="skip links navigation" tabindex="0" links={[
+                            <AUskipLink ariaLabel="skip links navigation" tabIndex="0" links={[
                                 {
                                     link: '#main',
                                     text: 'Skip to main content',
