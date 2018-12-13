@@ -97,22 +97,17 @@ class Header extends React.Component {
                         <div className="ui fluid container">
                             <AUskipLink ariaLabel="skip links navigation" tabindex="0" links={[
                                 {
-                                    link: '#navigation',
-                                    text: 'Skip to navigation',
-                                    onClick: () => console.log('#navigation')
-                                },
-                                {
                                     link: '#main',
                                     text: 'Skip to main content',
                                     onClick: () => console.log('#main')
-                                },
-                                {
-                                    link: '#content',
-                                    text: 'Skip link with onClick',
-                                    onClick: () => console.log('This function is called when the last skip link is clicked'),
-                                },
+                                }
                             ]}
                             />
+                            {/* if navigation links are also wanted this could be included in the AUskipLink links array{
+                                    link: '#navigation',
+                                    text: 'Skip to navigation',
+                                    onClick: () => console.log('#navigation')
+                                }, */}
                             <a className="item" href='/'>
                                 <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>
                             </a>
