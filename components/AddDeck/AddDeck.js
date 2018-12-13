@@ -97,7 +97,6 @@ class AddDeck extends React.Component {
                 delete tag.tagName;
             }
         });
-        console.log('add', tags);
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
