@@ -16,8 +16,7 @@ export default function loadDeckView(context, payload, done) {
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log(err);
-            log.error(context, {filepath: __filename});
+            log.error(context, {filepath: __filename, message: err.message });
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
