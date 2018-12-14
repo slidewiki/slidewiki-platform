@@ -311,8 +311,7 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                         <Grid.Column width={12}>
                                             <div className="row">
-                                                <Header as="h1">
-                                                    <div className="sr-only">Deck title: </div>
+                                                <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
                                                     <div className="sr-only">Deck status: </div>
                                                     {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='pink'>Unlisted</Label>}</Header>
@@ -383,7 +382,7 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                     </Grid>
                                 </Segment>
-                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
                                     <div className="ui icon buttons huge attached">
                                         <NavLink href={deckStatsUrl} tabIndex={-1} >
                                             <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">

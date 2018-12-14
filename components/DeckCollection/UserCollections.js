@@ -192,7 +192,7 @@ class UserCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui small header"><h3><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
+                                    <div className="ui small header"><h2><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h2></div>
                                     <div className="meta">
                                         <div>{col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
                                         {nl2br(col.description)}
@@ -222,7 +222,7 @@ class UserCollections extends React.Component {
             <div className="ui segments">
                 {loadingDiv}
                 <div className="ui secondary clearing segment">
-                    <h2 className="ui left floated header">{this.context.intl.formatMessage((this.props.loggedinuser === this.props.user.uname) ? this.messages.myCollectionsTitle :this.messages.ownedCollectionsTitle)}</h2>
+                    <h1 className="ui left floated header" id="main">{this.context.intl.formatMessage((this.props.loggedinuser === this.props.user.uname) ? this.messages.myCollectionsTitle :this.messages.ownedCollectionsTitle)}</h1>
                     {(this.props.loggedinuser === this.props.user.uname && !this.state.isMobile) &&
                         <button className="ui right floated labeled icon button" onClick={this.showNewCollectionModal.bind(this)}>
                             <i className="icon plus"></i>

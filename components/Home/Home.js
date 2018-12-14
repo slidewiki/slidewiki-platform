@@ -39,7 +39,7 @@ class Home extends React.Component {
             },
             findSlidesContent: {
                 id: 'home.findSlidesContent',
-                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
+                defaultMessage: 'SlideWiki provides open educational resources and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
             },
             createSlides: {
                 id: 'home.createSlides',
@@ -199,7 +199,7 @@ class Home extends React.Component {
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
-                <div className='sr-only' role='main'>
+                <div className='sr-only' role='main' id="main">
                     <h1>{this.context.intl.formatMessage(this.messages.welcome)}</h1>
                 </div>
                 <section className='banner-container'>

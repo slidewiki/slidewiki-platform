@@ -7,7 +7,7 @@ class Recent extends React.Component {
     render() {
         return (
             <Container>
-                <Header as="h2" style={{marginTop: '1em'}}><FormattedMessage id="recent.header" defaultMessage="Recent decks added by users"/></Header>
+                <Header as="h1" id="main" style={{marginTop: '1em'}}><FormattedMessage id="recent.header" defaultMessage="Recent decks added by users"/></Header>
                 <DeckList scope="recent"/>
             </Container>
         );

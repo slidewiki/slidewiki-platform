@@ -106,7 +106,7 @@ class terms extends React.Component {
         return (
             <StaticPage>
                 <div className='ui content'>
-                    <h1 className='ui header'>{this.context.intl.formatMessage(this.messages.mainTitle)}</h1>
+                    <h1 className='ui header' id="main">{this.context.intl.formatMessage(this.messages.mainTitle)}</h1>
                     <p>{this.context.intl.formatMessage(this.messages.summary)}</p>
                     <p>{this.context.intl.formatMessage(this.messages.disclaimer)}</p>
                     <h2 className='ui small header'>{this.context.intl.formatMessage(this.messages.missionTitle)}</h2>
