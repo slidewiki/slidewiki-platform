@@ -20,6 +20,8 @@ class ImportStore extends BaseStore {
         this.description = '';
         this.theme = '';
         this.license = '';
+        this.tags = [];
+        this.topics = [];
     }
     destructor()
     {
@@ -40,6 +42,8 @@ class ImportStore extends BaseStore {
         this.description = '';
         this.theme = '';
         this.license = '';
+        this.tags = [];
+        this.topics = [];
     }
     cancel() {
         this.destructor();
@@ -63,7 +67,9 @@ class ImportStore extends BaseStore {
             language: this.language,
             description: this.description,
             theme: this.theme,
-            license: this.license
+            license: this.license,
+            tags: this.tags,
+            topics: this.topics
         };
     }
     dehydrate() {
@@ -87,6 +93,8 @@ class ImportStore extends BaseStore {
         this.description = state.description;
         this.theme = state.theme;
         this.license = state.license;
+        this.tags = state.tags;
+        this.topics = state.topics;
     }
 
     storeFile(payload) {
@@ -95,6 +103,11 @@ class ImportStore extends BaseStore {
         this.base64 = payload.base64;
         this.filename = this.file.name;
         this.fileReadyForUpload = true;
+        this.emitChange();
+    }
+    storeTags(payload) {
+        this.tags = payload.tags;
+        this.topics = payload.topics;
         this.emitChange();
     }
     uploadFailed(error) {
@@ -184,6 +197,7 @@ class ImportStore extends BaseStore {
 ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
     'STORE_FILE': 'storeFile',
+    'STORE_TAGS': 'storeTags',
     'IMPORT_CANCELED': 'cancel',
     'IMPORT_FINISHED': 'destructor',
     'UPLOAD_FAILED': 'uploadFailed',

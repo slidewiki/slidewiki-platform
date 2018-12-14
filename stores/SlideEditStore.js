@@ -16,7 +16,8 @@ class SlideEditStore extends BaseStore {
         this.embedQuestionsContent = ''; //contains the content for the question embedding
         this.slideSize = '';
         this.slideTransition = '';
-        this.slideSizeText = '';
+        this.transitionType = '';
+	    this.slideSizeText = '';
         this.saveSlideClick = 'false';
         this.cancelClick = 'false';
         this.selector = '';
@@ -89,6 +90,7 @@ class SlideEditStore extends BaseStore {
 
     changeSlideTransition(payload){
         this.slideTransition = payload.slideTransition;
+        // this.transitionType = payload.transitionType;
         this.emitChange();
     }
 
@@ -266,6 +268,7 @@ class SlideEditStore extends BaseStore {
             embedQuestionsContent: this.embedQuestionsContent,
             slideSize: this.slideSize,
             slideTransition: this.slideTransition,
+            transitionType: this.transitionType,
             slideSizeText: this.slideSizeText,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
@@ -320,6 +323,7 @@ class SlideEditStore extends BaseStore {
         this.embedQuestionsContent = state.embedQuestionsContent;
         this.slideSize = state.slideSize;
         this.slideTransition = state.slideTransition;
+        this.transitionType = state.transitionType;
         this.slideSizeText = state.slideSizeText;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;

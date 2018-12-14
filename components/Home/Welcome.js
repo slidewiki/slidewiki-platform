@@ -8,14 +8,13 @@ class welcome extends React.Component {
         };
         return (
             <div className="ui fluid container" ref="welcome">
-                <center>
                     <br/>
-                    <h1 className="ui header"><FormattedMessage id="welcome.header" defaultMessage="Welcome to SlideWiki"/></h1>
-                    <div className="text container">
+                    <h1 className="ui centered header" id="main"><FormattedMessage id="welcome.header" defaultMessage="Welcome to SlideWiki"/></h1>
+                    <div className="ui centered container">
                         <FormattedMessage id="welcome.div1"
                             defaultMessage="Thank you for signing up to SlideWiki. Now your account has been created, you can get started with creating, enhancing and sharing open educational resources."/>
                     </div>
-                    <div className="ui padded stackable grid ">
+                    <div className="ui padded stackable centered grid ">
                         <div className="one wide column"></div>
                         <div className="four wide column">
                             <div className="ui attached message">
@@ -136,7 +135,6 @@ class welcome extends React.Component {
                             </div>
                         </div>
                     </div>
-                </center>
             </div>
 
         );
