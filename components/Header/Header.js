@@ -106,7 +106,6 @@ class Header extends React.Component {
                             {/* if navigation links are also wanted this could be included in the AUskipLink links array{
                                     link: '#navigation',
                                     text: 'Skip to navigation',
-                                    onClick: () => console.log('#navigation')
                                 }, */}
                             <a className="item sw-logo" href='/'>
                                 <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>
@@ -132,12 +131,10 @@ class Header extends React.Component {
                         {
                             link: '#navigation',
                             text: 'Skip to navigation',
-                            onClick: () => console.log('#navigation')
                         },
                         {
                             link: '#main',
                             text: 'Skip to main content',
-                            onClick: () => console.log('#main')
                         },
                     ]}
                     />
