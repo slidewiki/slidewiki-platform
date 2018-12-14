@@ -11,12 +11,14 @@ class ActivityFeedStore extends BaseStore {
         this.selector = {};
         this.hasMore = true;
         this.presentations = [];
+        this.loadingIndicator = false;
     }
     updateActivities(payload) {
         this.activities = payload.activities;
         this.activityType = payload.activityType;
         this.selector = payload.selector;
         this.hasMore = payload.hasMore;
+        this.loadingIndicator = false;
         this.emitChange();
     }
     loadMoreActivities(payload) {
@@ -29,6 +31,7 @@ class ActivityFeedStore extends BaseStore {
     }
     updateActivityType(payload) {
         this.activityType = payload.activityType;
+        this.loadingIndicator = false;
         this.emitChange();
     }
     // incrementLikes(payload) {
@@ -61,6 +64,7 @@ class ActivityFeedStore extends BaseStore {
     // }
     addActivity(payload) {
         const activity = payload.activity;
+        this.loadingIndicator = false;
         if (activity_types_to_display.includes(activity.activity_type) && (this.selector.stype === activity.content_kind && this.selector.sid.split('-')[0] === activity.content_id.split('-')[0] ||
             activity.activity_type === 'move' && this.selector.stype === 'deck' && this.selector.sid.split('-')[0] === activity.move_info.source_id.split('-')[0])) {
             this.activities.unshift(activity);//add to the beginning
@@ -72,6 +76,7 @@ class ActivityFeedStore extends BaseStore {
         }
     }
     addActivities(payload) {
+        this.loadingIndicator = false;
         payload.activities.forEach((activity) => {
             if (activity_types_to_display.includes(activity.activity_type) && (this.selector.stype === activity.content_kind && this.selector.sid.split('-')[0] === activity.content_id.split('-')[0])) {
                 this.activities.unshift(activity);//add to the beginning
@@ -84,6 +89,7 @@ class ActivityFeedStore extends BaseStore {
         this.emitChange();
     }
     addLikeActivity(payload) {
+        this.loadingIndicator = false;
         if (payload.selector.stype === 'deck') {
             let activity = {
                 activity_type: 'react',
@@ -105,6 +111,7 @@ class ActivityFeedStore extends BaseStore {
         }
     }
     removeLikeActivity(payload) {
+        this.loadingIndicator = false;
         //find like activity and remove it
         if (payload.selector.stype === 'deck') {
             let i = 0;
@@ -121,6 +128,7 @@ class ActivityFeedStore extends BaseStore {
         }
     }
     updatePresentations(payload) {
+        this.loadingIndicator = false;
         // console.log('ActivityFeedStore: updatePresentations', payload);
         this.presentations = payload;
         this.emitChange();
@@ -145,6 +153,10 @@ class ActivityFeedStore extends BaseStore {
         this.hasMore = state.hasMore;
         this.presentations = state.presentations;
     }
+    loading(payload){
+        this.loadingIndicator = payload.loadingIndicator;
+        this.emitChange();
+    }
 }
 
 ActivityFeedStore.storeName = 'ActivityFeedStore';
@@ -159,7 +171,8 @@ ActivityFeedStore.handlers = {
     'ADD_ACTIVITIES_SUCCESS': 'addActivities',
     'LIKE_ACTIVITY_SUCCESS': 'addLikeActivity',
     'DISLIKE_ACTIVITY_SUCCESS': 'removeLikeActivity',
-    'LOAD_PRESENTATIONS_SUCCESS': 'updatePresentations'
+    'LOAD_PRESENTATIONS_SUCCESS': 'updatePresentations',
+    'LOAD_ACTIVITIES_LOAD': 'loading'
 };
 
 export default ActivityFeedStore;

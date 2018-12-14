@@ -34,8 +34,7 @@ class ActivityFeedPanel extends React.Component {
 
         return (
             <div ref="activityFeedPanel">
-                <h4 className="ui header" >Activity Feed
-                </h4>
+                <h4 className="ui header" >Activity Feed</h4>
                 <div className="ui basic segment" style={panelDIVStyles}>
                     {activityDIV}
                 </div>

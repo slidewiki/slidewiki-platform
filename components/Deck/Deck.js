@@ -12,22 +12,49 @@ import SlideEditLeftPanel from './SlideEditLeftPanel/SlideEditLeftPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
-//import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
-//import ServiceUnavailable from '../Error/ServiceUnavailable';//NOTE error code has been refactored - this component doesn't exist anymore, code was moved to Error.js in same directory
 import InfoPanelInfoView from './InfoPanel/InfoPanelInfoView';
 import TranslationStore from '../../stores/TranslationStore';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import ContributorsStore from '../../stores/ContributorsStore';
+import {equals} from '../../common';
 
 class Deck extends React.Component {
 
-    handleExpandClick(){
-        this.context.executeAction(hideLeftColumn, {});
-        return false;
+    constructor(props) {
+        super(props);
+        this.isLoading = this.isContentUndefined();
     }
-    handleCollapseClick(){
-        this.context.executeAction(restoreDeckPageLayout, {});
-        return false;
+
+    // handleExpandClick(){
+    //     this.context.executeAction(hideLeftColumn, {});
+    //     return false;
+    // }
+    //
+    // handleCollapseClick(){
+    //     this.context.executeAction(restoreDeckPageLayout, {});
+    //     return false;
+    // }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let samePropsState = equals(this.props, nextProps);
+        this.isLoading = this.isContentUndefined();
+        // Content should be updated only when properties have changed.
+        return !this.isLoading && !samePropsState;
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.isLoading = this.isContentUndefined();
+    }
+
+    componentWillUnmount() {
+        this.props.ContributorsStore.contributors = [];
+        this.isLoading = true;
+    }
+
+    isContentUndefined() {
+        return this.props.ContributorsStore.contributors === undefined
+            || this.props.ContributorsStore.contributors === [];
+    }
+
     render() {
         const error = this.props.ServiceErrorStore.error;
         let status = this.props.DeckPageStore.componentsStatus;
@@ -212,7 +239,7 @@ class Deck extends React.Component {
                 rightPanel = (
                   <div className={rightColClass}>
                       <div className={treePanelClass}>
-                          <InfoPanelInfoView />
+                          <InfoPanelInfoView loadingIndicator={this.props.ContributorsStore.loadingIndicator}/>
                       </div>
 
                       <div className="ui hidden divider"></div>
@@ -251,12 +278,13 @@ Deck.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
 };
-Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore, UserProfileStore, TranslationStore], (context, props) => {
+Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore, UserProfileStore, TranslationStore, ContributorsStore], (context, props) => {
     return {
         DeckPageStore: context.getStore(DeckPageStore).getState(),
         ServiceErrorStore: context.getStore(ServiceErrorStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        ContributorsStore: context.getStore(ContributorsStore).getState()
     };
 });
 export default Deck;

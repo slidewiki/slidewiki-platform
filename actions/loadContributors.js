@@ -18,7 +18,11 @@ export default function loadContributors(context, payload, done) {
         return;
     }
 
-    if (!payload.params.language) payload.params.language = context.getStore(TranslationStore).currentLang;
+    context.dispatch('LOAD_CONTRIBUTORS_LOAD', {loadingIndicator: true});
+
+    if (!payload.params.language) {
+        payload.params.language = context.getStore(TranslationStore).currentLang;
+    }
 
     context.service.read('contributors.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
@@ -30,9 +34,6 @@ export default function loadContributors(context, payload, done) {
             // context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'contributors'});
         }
         let pageTitle = shortTitle + ' | Contributors | ' + payload.params.stype + ' | ' + payload.params.sid;
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
         done();
     });
 }

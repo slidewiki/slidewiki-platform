@@ -7,6 +7,7 @@ import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import PresentationsPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
+import {getLanguageName, equals} from '../../../common';
 import TranslationStore from '../../../stores/TranslationStore';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import {defineMessages} from 'react-intl';
@@ -16,14 +17,22 @@ import ContentStore from '../../../stores/ContentStore';
 
 class InfoPanelInfoView extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.isLoading = true;
         this.messages = defineMessages({
         });
 
         this.zoomIn = this.zoomIn.bind(this);
         this.zoomOut = this.zoomOut.bind(this);
         this.resetZoom = this.resetZoom.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        const samePropsState = equals(this.props, nextProps);
+        this.isLoading = nextProps.loadingIndicator;
+        // Content should be updated only when properties have changed.
+        return !samePropsState;
     }
 
     zoomIn() {
@@ -43,12 +52,13 @@ class InfoPanelInfoView extends React.Component {
         let showZoomControls = this.props.ContentStore.selector.stype === 'slide';
 
         let deckId = selector.get('id');
-        if (deckId) { 
+        if (deckId) {
             deckId = deckId.split('-')[0];
         }
 
         return (
             <div className="ui container" ref="infoPanel" role="complementary" aria-labelledby="infopanel-title">
+                {this.isLoading && <div className="ui active dimmer"><div className="ui text loader">Loading</div></div>}
                 {
                     showZoomControls &&
                         <div className="ui top attached basic buttons menu" role="menu">
@@ -78,8 +88,8 @@ class InfoPanelInfoView extends React.Component {
                         </NavLink>
                     </div>
                 }
-                <div className="ui attached segment">
 
+                <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
                 <div className="ui attached segment">
@@ -110,6 +120,7 @@ InfoPanelInfoView.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
 };
+
 InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore, TranslationStore, PermissionsStore, ContentStore], (context, props) => {
     return {
         ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
