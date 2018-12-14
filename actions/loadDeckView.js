@@ -16,19 +16,14 @@ export default function loadDeckView(context, payload, done) {
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log(err);
-            log.error(context, {filepath: __filename});
+            log.error(context, {filepath: __filename, message: err.message });
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
             // console.log('loadDeckView params', payload.params, '\n', payload);
             res.isRootDeck = payload.params.spath === '';
             context.dispatch('LOAD_DECK_CONTENT_SUCCESS', res);
-            context.dispatch('LOAD_DECK_METADATA_SUCCESS', {
-                thumbnailID: res.slidesData.children[0].id, 
-                thumbnailTheme: res.slidesData.theme,
-                description: res.deckData.description
-            });
+            context.dispatch('LOAD_DECK_METADATA_SUCCESS', {thumbnailID: res.slidesData.children[0].id});
         }
         let pageTitle = shortTitle + ' | ' + res.slidesData.title;
         let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
