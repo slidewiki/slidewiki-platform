@@ -1185,6 +1185,6 @@ textarea:focus{
 }
 
 /* react-accessible-accordion styles */
-.hidden {
+.display-none {
     display: none;
 }
