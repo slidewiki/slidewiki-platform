@@ -1188,3 +1188,7 @@ textarea:focus{
 .display-none {
     display: none;
 }
+
+.accordion__title:hover {
+    cursor: pointer;
+}
