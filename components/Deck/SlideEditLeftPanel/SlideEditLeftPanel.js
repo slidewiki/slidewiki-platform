@@ -8,6 +8,7 @@ import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
 import tableClick from '../../../actions/slide/tableClick';
+import annotateClick from '../../../actions/slide/annotateClick';
 import mathsClick from '../../../actions/slide/mathsClick';
 import codeClick from '../../../actions/slide/codeClick';
 import removeBackgroundClick from '../../../actions/slide/removeBackgroundClick';
@@ -278,6 +279,9 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showTemplate: true});
         this.forceUpdate();
     }
+    handleAnnotateClick() {
+        this.context.executeAction(annotateClick, {});
+    }
     handleTemplatechange(templateID){
         if(templateID !== ''){
             //this.setState({showTemplate: false});
@@ -492,6 +496,8 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleTemplatechange':
                     this.handleTemplatechange(template);
                     break;
+                case 'handleAnnotateClick':
+                    this.handleAnnotateClick();
                 case 'handlePropertiesClick':
                     this.handlePropertiesClick();
                     break;
@@ -575,6 +581,9 @@ class SlideEditLeftPanel extends React.Component {
                 <div>
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
+                  </a>
+                  <a  className="item" id="handleAnnotateClick" role="button" onClick={this.handleAnnotateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAnnotateClick')}>
+                      <i tabIndex="0"  className="edit icon"></i>Auto annotate
                   </a>
                   <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i><FormattedMessage id='editpanel.embed' defaultMessage='Embed' />

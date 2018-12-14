@@ -5,27 +5,12 @@ import classNames from 'classnames/bind';
 import ContributorsStore from '../../../../stores/ContributorsStore';
 import ContributorsList from './ContributorsList';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import SingleItemAccordion from '../../../common/SingleItemAccordion';
 
 class ContributorsPanel extends React.Component {
-    componentDidMount() {
-        this.enableAccordion();
-    }
-
-    componentDidUpdate() {
-        this.refreshAccordion();
-    }
-
-    enableAccordion(status) {
-        let accordionDIV = this.refs.contributorsPanel;
-        $(accordionDIV).find('.ui.accordion').accordion({
-            exclusive: false
-        });
-    }
-
-    refreshAccordion(status) {
-        let accordionDIV = this.refs.contributorsPanel;
-        $(accordionDIV).find('.ui.accordion').accordion('refresh');
-    }
+    constructor(props) {
+        super(props);
+    };
 
     render() {
         const form_messages = defineMessages({
@@ -34,6 +19,7 @@ class ContributorsPanel extends React.Component {
                 defaultMessage: 'There are no contributors for this',
             }
         });
+
         return (
             <div className="sw-contributors-panel" ref="contributorsPanel">
                 <div className="ui">
@@ -42,23 +28,15 @@ class ContributorsPanel extends React.Component {
                             id='ContributorsPanel.form.header'
                             defaultMessage='Creator' />
                     </h4>
-                    <ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
-                    <div className="ui accordion">
-                        <div className="title" tabIndex="0">
-                            <i className="dropdown icon"></i>
-                            <FormattedMessage
-                                id='ContributorsPanel.form.title'
-                                defaultMessage='Contributors' />
-                        </div>
-                        <div className="content">
-                            {this.props.ContributorsStore.contributors.length === 0 ?
-                                <div>{this.context.intl.formatMessage(form_messages.no_contributors) + ' ' + this.props.ContributorsStore.selector.stype}.</div> :
-                                <ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>}
-                        </div>
-                    </div>
+                    <ContributorsList items={this.props.ContributorsStore.creator}/>
+                    <SingleItemAccordion
+                        buttonContent={<FormattedMessage id='ContributorsPanel.form.title' defaultMessage='Contributors' />}
+                        revealContent={this.props.ContributorsStore.contributors.length === 0 ?
+                                `${this.context.intl.formatMessage(form_messages.no_contributors) + ' ' + this.props.ContributorsStore.selector.stype}.` :
+                                <ContributorsList items={this.props.ContributorsStore.contributors}/>}
+                    />
                 </div>
             </div>
-
         );
     }
 }

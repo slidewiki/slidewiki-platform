@@ -3,7 +3,6 @@ import {BaseStore} from 'fluxible/addons';
 class SlideEditStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        //this.dispatcher = dispatcher; // Provides access to waitFor and getStore methods
         this.id = '';
         this.slideId = '';
         this.title = '';
@@ -27,6 +26,7 @@ class SlideEditStore extends BaseStore {
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
         this.tableClick = 'false';
+        this.annotateClick = 'false';
         this.mathsClick = 'false';
         this.codeClick = 'false';
         this.removeBackgroundClick = 'false';
@@ -46,17 +46,21 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = 'false';
         this.scaleRatio = null;
         this.contentEditorFocus = 'false';
+        this.annotations = [];
+        /* Whether there are unsaved changes in editor. */
+        this.hasChanges = false;
+        this.refreshEditor = 'false';
     }
-
     updateContent(payload) {
-        //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
-        //console.log('test' + payload.slide.title + ' id: ' + payload.slide.id);
         this.id = payload.slide.id;
         this.slideId = payload.selector.sid;
         this.title = payload.slide.title || ' ';
         this.content = payload.slide.content || ' ';
         this.markdown = payload.slide.markdown || ' ';
         this.speakernotes = payload.slide.speakernotes || ' ';
+        this.annotations = payload.slide.annotations || [];
+
+        this.hasChanges = false;
 
         this.emitChange();
     }
@@ -82,7 +86,7 @@ class SlideEditStore extends BaseStore {
         this.slideSize = '';
         this.emitChange();
     }
-    
+
     changeSlideTransition(payload){
         this.slideTransition = payload.slideTransition;
         this.emitChange();
@@ -147,6 +151,13 @@ class SlideEditStore extends BaseStore {
         this.tableClick = 'true';
         this.emitChange();
         this.tableClick = 'false';
+        this.emitChange();
+    }
+
+    handleAnnotateClick(){
+        this.annotateClick = 'true';
+        this.emitChange();
+        this.annotateClick = 'false';
         this.emitChange();
     }
 
@@ -216,7 +227,7 @@ class SlideEditStore extends BaseStore {
         //embedQuestionsContent - this is the content that will be embedded (questions and options)
         //embedQuestions - this will be the trigger that causes the questions to be embedded.
         //add some form of logic/error handling here?
-        this.embedQuestionsContent = payload; 
+        this.embedQuestionsContent = payload;
         this.embedQuestionsClick = 'true';
         this.emitChange();
 
@@ -227,7 +238,14 @@ class SlideEditStore extends BaseStore {
         this.contentEditorFocus = payload.focus;
         this.emitChange();
     }
-
+    updateSlideContentAfterTranslation(payload){
+        this.content = payload.translations.translations;
+        this.emitChange();
+        this.refreshEditor = 'true';
+        this.emitChange();
+        this.refreshEditor = 'false';
+        this.emitChange();
+    }
     getState() {
         return {
             id: this.id,
@@ -253,6 +271,7 @@ class SlideEditStore extends BaseStore {
             uploadMediaClick: this.uploadMediaClick,
             uploadVideoClick: this.uploadVideoClick,
             tableClick: this.tableClick,
+            annotateClick: this.annotateClick,
             mathsClick: this.mathsClick,
             codeClick: this.codeClick,
             removeBackgroundClick: this.removeBackgroundClick,
@@ -272,6 +291,9 @@ class SlideEditStore extends BaseStore {
             HTMLEditorClick: this.HTMLEditorClick,
             scaleRatio: this.scaleRatio,
             contentEditorFocus: this.contentEditorFocus,
+            annotations: this.annotations,
+            hasChanges: this.hasChanges,
+            refreshEditor: this.refreshEditor
         };
     }
 
@@ -303,6 +325,7 @@ class SlideEditStore extends BaseStore {
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;
         this.tableClick = state.tableClick;
+        this.annotateClick = state.annotateClick;
         this.mathsClick = state.mathsClick;
         this.codeClick = state.codeClick;
         this.removeBackgroundClick = state.removeBackgroundClick;
@@ -322,6 +345,9 @@ class SlideEditStore extends BaseStore {
         this.HTMLEditorClick = state.HTMLEditorClick;
         this.scaleRatio = state.scaleRatio = 1;
         this.contentEditorFocus = state.contentEditorFocus;
+        this.annotations = state.annotations;
+        this.hasChanges = state.hasChanges;
+        this.refreshEditor = state.refreshEditor;
     }
 
     zoomContent(payload) {
@@ -346,6 +372,11 @@ class SlideEditStore extends BaseStore {
         }
         this.emitChange();
     }
+
+    registerChange(payload) {
+        this.hasChanges = payload.hasChanges;
+        this.emitChange();
+    }
 }
 
 SlideEditStore.storeName = 'SlideEditStore';
@@ -363,6 +394,7 @@ SlideEditStore.handlers = {
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
     'UPLOAD_VIDEO_CLICK': 'handleuploadVideoClick',
     'TABLE_CLICK': 'handleTableClick',
+    'ANNOTATE_CLICK': 'handleAnnotateClick',
     'MATHS_CLICK': 'handleMathsClick',
     'CODE_CLICK': 'handleCodeClick',
     'REMOVE_BACKGROUND_CLICK': 'handleRemoveBackgroundClick',
@@ -375,6 +407,8 @@ SlideEditStore.handlers = {
     'REDO_CLICK': 'handleRedoClick',
     'ZOOM': 'zoomContent',
     'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus',
+    'REGISTER_CHANGE': 'registerChange',
+    'UPDATE_SLIDE_CONTENT_AFTER_TRANSLATION': 'updateSlideContentAfterTranslation',
 };
 
 export default SlideEditStore;
