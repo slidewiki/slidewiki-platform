@@ -249,12 +249,12 @@ class Presentation extends React.Component{
 
         let html = <section />;
         if (slides) {
-            html = slides.map((slide) => {
+            html = slides.map((slide, index) => {
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
                 let bgColor = content.split('background-color: ');
                 let bgImgTemp = content.split('background-image: ');
                 let transition = slide.transition ? slide.transition : 'none';
-                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={transition}/>;
+                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id + '-' + index} data-transition={transition}/>;
                 //need to check if bg is provided
                 if (bgImgTemp.length > 1) {
                     let backgroundImageExtr = content.split('background-image: url(&quot;'); // url(&quot;
@@ -265,14 +265,14 @@ class Presentation extends React.Component{
                         content = content.split('background-image: url(&quot;')[0] + content.split('&quot;);')[1];
                         if(bgColor.length > 1) content =  content.split('background-color: ')[0] + content.split('background-color: ')[1].split(';').slice(1).join('');
                         // Add resulting slide.
-                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={transition}/>;
+                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id + '-' + index} data-transition={transition}/>;
                     } else {
                         console.log('Problem extracting the background image: ', bgImgTemp[1]);
                     }
                 } else if (bgColor.length > 1) {
                     let backgroundColour = bgColor[1].split(';').length > 1 ? bgColor[1].split(';')[0] : undefined;
                     if (backgroundColour) {
-                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id} data-transition={transition}/>;
+                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id + '-' + index} data-transition={transition}/>;
                     } else {
                         console.log('Problem extracting the background colour: ', bgColor[1]);
                     }
