@@ -14,6 +14,16 @@ class SlideViewStore extends BaseStore {
         this.annotations = [];
     }
 
+    resetContent() {
+        this.id = '';
+        this.slideId = '';
+        this.title = '';
+        this.content = '';
+        this.speakernotes = '';
+        this.tags = [];
+        this.emitChange();
+    }
+
     updateContent(payload) {
         //this.id = payload.slide.id;
         this.slideId = payload.selector.sid;
@@ -78,6 +88,7 @@ class SlideViewStore extends BaseStore {
 
 SlideViewStore.storeName = 'SlideViewStore';
 SlideViewStore.handlers = {
+    'LOAD_DECK_PAGE_START': 'resetContent',
     'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent',
     'ZOOM': 'zoomContent'
 };

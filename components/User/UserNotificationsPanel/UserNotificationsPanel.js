@@ -118,19 +118,19 @@ class UserNotificationsPanel extends React.Component {
 
         let buttons = (
             <Button.Group basic >
-                <Button disabled={buttonMarkAsReadDisabled} aria-label='Mark all as read' onClick={this.handleMarkAsRead.bind(this)} tabIndex='0' data-tooltip={buttonMarkAsReadTitle}>
+                <Button disabled={buttonMarkAsReadDisabled} aria-label='Mark all as read' onClick={this.handleMarkAsRead.bind(this)}  data-tooltip={buttonMarkAsReadTitle}>
                     <i className="icons large">
                         <i className="check square outline icon" ></i>
                         <i className="corner check icon"></i>
                     </i>
                 </Button>
-                <Button disabled={buttonDeleteAllDisabled} aria-label='Delete all' onClick={this.handleDelete.bind(this)} tabIndex='0' data-tooltip={buttonDeleteAllTitle}>
+                <Button disabled={buttonDeleteAllDisabled} aria-label='Delete all' onClick={this.handleDelete.bind(this)}  data-tooltip={buttonDeleteAllTitle}>
                     <i className="icons large">
                         <i className="times circle outline icon" ></i>
                         <i className="corner remove icon"></i>
                     </i>
                 </Button>
-                <Button aria-label='Manage subscriptions' onClick={this.handleClickOnFollowingsSetting.bind(this)} tabIndex='0' data-tooltip={followingDisplay} >
+                <Button aria-label='Manage subscriptions' onClick={this.handleClickOnFollowingsSetting.bind(this)}  data-tooltip={followingDisplay} >
                     <i className="icons large">
                         <i className="setting icon" ></i>
                         <i className="corner rss icon"></i>
@@ -142,7 +142,7 @@ class UserNotificationsPanel extends React.Component {
             <div className="five wide column">
                 <div className="ui basic segment">
 
-                    <h4 className="ui header">Show activity types:</h4>
+                    <h4 className="ui header" id="navigation">Show activity types:</h4>
                     <div className="activityTypes">
                         <div ref="activityTypeList">
                             <div className="ui relaxed list" role="list" >
@@ -179,10 +179,10 @@ class UserNotificationsPanel extends React.Component {
                 <div className="ui hidden divider" />
                 <div className="ui container stackable two columm grid">
                     <div className="six wide column">
-                      <div className="ui huge header">
-                          Notifications <div className="ui mini label" > {newNotificationsCount} </div>
-                      </div>
-                      {buttons}
+                      <h1 className="ui huge header" id="main">Notifications
+                          <div className="ui mini label" aria-label="number of new notifications"> {newNotificationsCount} </div>
+                    </h1>
+                        {buttons}
                       <div className="ui basic segment">
                           <MediaQuery minDeviceWidth={768}>
                               {filters}

@@ -55,6 +55,7 @@
     "cache": false
   },
   "dependencies": {
+    "@gov.au/skip-link": "^2.0.10",
     "async": "^2.1.5",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -210,5 +211,9 @@
     "sloc": "0.2.0",
     "webpack-dev-server": "^2.4.1",
     "webpack-vendor-chunk-plugin": "1.0.0"
+  },
+  "pancake": {
+    "auto-save": false,
+    "plugins": false
   }
 }

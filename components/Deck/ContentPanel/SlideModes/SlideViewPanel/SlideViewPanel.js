@@ -50,7 +50,7 @@ class SlideViewPanel extends React.Component {
                 deckTheme = this.props.DeckTreeStore.theme;
             }
         }
-        if (this.currentID === selector.sid){
+        if (this.currentID === selector.sid && this.props.SlideViewStore.slideId) {
             let hideSpeakerNotes = true;
             if (this.props.SlideViewStore.speakernotes !== '' && this.props.SlideViewStore.speakernotes !== ' '){hideSpeakerNotes = false;}
 
@@ -73,8 +73,7 @@ class SlideViewPanel extends React.Component {
         };
         return (
             <div className="ui bottom attached segment">
-                {(this.currentID !== selector.sid) ? <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-                {this.slideContentView}
+                {this.slideContentView || <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div>}
             </div>
         );
     }

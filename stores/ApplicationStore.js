@@ -24,7 +24,9 @@ class ApplicationStore extends BaseStore {
         this.dispatcher.waitFor(RouteStore, () => {
             let thumbnailTheme = payload.thumbnailTheme || 'default';
             this.pageThumbnail = Microservices.file.uri + '/thumbnail/slide/' + payload.thumbnailID + '/' + thumbnailTheme;
-            this.pageDescription = payload.description;
+            if (payload.description !== undefined) {
+                this.pageDescription = payload.description;
+            }
             console.warn('!!! thumbnail:', this.pageThumbnail);
             this.emitChange();
         });
@@ -41,7 +43,11 @@ class ApplicationStore extends BaseStore {
     }
     getPageDescription() {
         // remove line breaks for page description
-        return this.pageDescription.replace(/(\r\n\t|\n|\r\t)/gm,' ');
+        if (this.pageDescription !== undefined) {
+            return this.pageDescription.replace(/(\r\n\t|\n|\r\t)/gm,' ');
+        }
+        
+        return '';    
     }
     getActivationMessage(){
         return this.showActivationMessage;

@@ -8,7 +8,7 @@ class features extends React.Component {
         return (
             <div className="ui container" ref="features">
                 <div className="ui hidden divider"></div>
-                <h1 className="ui header"><FormattedMessage id="features.header" defaultMessage="Discover SlideWiki"/></h1>
+                <h1 className="ui header" id="main"><FormattedMessage id="features.header" defaultMessage="Discover SlideWiki"/></h1>
                 <div className="basic container">
                     <p>
                         <FormattedMessage id="features.p1"
