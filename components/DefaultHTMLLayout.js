@@ -18,6 +18,7 @@ class DefaultHTMLLayout extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
                 <meta name="viewport" content="width=device-width" />
+                <meta name="google-site-verification" content="U7mnlzc3avfgSADgH5_zSIRm8wrXAgFPh8GLu6q84QY" />
                 <link href="/assets/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/home-custom.css" rel="stylesheet" type="text/css" />

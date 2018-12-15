@@ -17,6 +17,7 @@ class BasicHTMLLayout extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
                 <meta name="viewport" content="width=device-width" />
+                <meta name="google-site-verification" content="U7mnlzc3avfgSADgH5_zSIRm8wrXAgFPh8GLu6q84QY" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 {/* Vendors css bundle */
                     this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
