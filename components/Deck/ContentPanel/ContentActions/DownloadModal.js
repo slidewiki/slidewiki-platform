@@ -95,7 +95,7 @@ class DownloadModal extends React.Component{
 
         let language = '';
         if (this.props.TranslationStore.currentLanguage !== undefined && this.props.TranslationStore.currentLanguage !== '') {
-          language = this.props.TranslationStore.currentLanguage;
+            language = this.props.TranslationStore.currentLanguage;
         }
 
         switch (type) {
