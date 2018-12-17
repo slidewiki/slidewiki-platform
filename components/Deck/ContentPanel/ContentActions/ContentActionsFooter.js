@@ -134,6 +134,8 @@ class ContentActionsFooter extends React.Component {
     render() {
         let likeButton = 'ui button';
         let followButton = 'ui button';
+        let likeDisabled = '';
+        let followDisabled = '';
         let classNameLikeButton = 'thumbs up alternate large icon';
         let iconFollowButton = <Icon size='large' name='rss' />;
         let tooltipFollowButton = 'Subscribe to this deck';
@@ -142,6 +144,8 @@ class ContentActionsFooter extends React.Component {
             //undefined user
             likeButton = 'ui disabled button';
             followButton = 'ui disabled button';
+            likeDisabled = 'disabled';
+            followDisabled = 'disabled';
         } else {
             if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
                 //already liked
@@ -165,10 +169,10 @@ class ContentActionsFooter extends React.Component {
           <ReportModal/>
           <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
                 embedPresentationHref={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)}/>
-          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)} disabled={likeDisabled}>
               <i className={classNameLikeButton}></i>
           </button>
-          <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+          <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)} disabled={followDisabled}>
               {iconFollowButton}
           </button>
           </div>;
