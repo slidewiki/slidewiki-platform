@@ -50,11 +50,11 @@ export default {
             });
 
         }
-    }
+    },
 
-    delete: (req, resource, payload, config, emptyObject, callback) => {
+    delete: (req, resource, payload, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
 
         let jwt = payload.jwt;
         delete payload.jwt;
@@ -62,8 +62,8 @@ export default {
         if (resource === 'slidesCurrentlyEdited.deleteEvent') {
 
             /*********connect to microservices*************/
-            /*rp.delete({
-                uri: Microservices.activities.uri + '/slideCurrentlyEdited/new',
+            rp.delete({
+                uri: Microservices.activities.uri + '/slideCurrentlyEdited/delete',
                 headers: {'----jwt----': jwt},
                 body:JSON.stringify(payload)
             }).then((res) => {
@@ -73,7 +73,7 @@ export default {
                 // console.log(err);
                 callback(err, null);
             });
-        */
+
         }
 
 

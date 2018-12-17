@@ -7,12 +7,14 @@ import DataSourceStore from '../../../../../stores/DataSourceStore';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import MediaStore from '../../../../../stores/MediaStore';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
+import SlideCurrentlyEditedStore from '../../../../../stores/SlideCurrentlyEditedStore';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import saveSlideWithDeckTransition from '../../../../../actions/slide/saveSlideWithDeckTransition';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
 import contentEditorClick from '../../../../../actions/slide/contentEditorClick';
+import removeCurrentlyEditedSlideEvent from '../../../../../actions/slideCurrentlyEdited/removeCurrentlyEditedSlideEvent';
 //import ResizeAware from 'react-resize-aware';
 import {findDOMNode} from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
@@ -895,14 +897,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
-                        
+
             let annotations = [];
             if (CKEDITOR.instances.inlineContent != null) {
                 // get the annotations before CKEditor is destroyed
                 CKEDITOR.instances.inlineContent.plugins.semanticannotations.getAnnotationsToStore(CKEDITOR.instances.inlineContent);
                 annotations = CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsToStore;
                 annotations = this.convertAnnotationsToDatabaseStructure(annotations);
-                
+
                 CKEDITOR.instances.inlineContent.destroy();
             }
             if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
@@ -1960,6 +1962,8 @@ class SlideContentEditor extends React.Component {
 
             }
             else{
+                this.context.executeAction(removeCurrentlyEditedSlideEvent, {id: this.props.SlideCurrentlyEditedStore.eventId ?
+                    this.props.SlideCurrentlyEditedStore.eventId : null });
                 const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
                 this.context.executeAction(navigateAction, {
                     url: nodeURL
@@ -2159,7 +2163,7 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.annotateClick === 'true' && nextProps.SlideEditStore.annotateClick !== this.props.SlideEditStore.annotateClick)
         {
             CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
-            
+
         }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
         {
@@ -2860,7 +2864,7 @@ SlideContentEditor.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore, PaintModalStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore, PaintModalStore, SlideCurrentlyEditedStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
@@ -2869,7 +2873,8 @@ SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserPr
         DataSourceStore: context.getStore(DataSourceStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         MediaStore: context.getStore(MediaStore).getState(),
-        PaintModalStore: context.getStore(PaintModalStore).getState()
+        PaintModalStore: context.getStore(PaintModalStore).getState(),
+        SlideCurrentlyEditedStore: context.getStore(SlideCurrentlyEditedStore)
     };
 });
 export default SlideContentEditor;
