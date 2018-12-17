@@ -45,6 +45,30 @@ class AttachSubdeckModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleAttachButton = this.handleAttachButton.bind(this);
 
+        this.messages = defineMessages({
+            attachText:{
+                id: 'attachSubdeckModal.attachText',
+                defaultMessage: 'Attach Sub-deck'
+            },
+            attach:{
+                id: 'attachSubdeckModal.attach',
+                defaultMessage: 'Attach'
+            },
+            next:{
+                id: 'attachSubdeckModal.next',
+                defaultMessage: 'Next'
+            },
+            previous:{
+                id: 'attachSubdeckModal.previous',
+                defaultMessage: 'Previous'
+            },
+            cancel:{
+                id: 'attachSubdeckModal.cancel',
+                defaultMessage: 'Cancel'    
+            }
+
+        });
+
     }
 
     componentWillReceiveProps(nextProps){
@@ -185,7 +209,7 @@ class AttachSubdeckModal extends React.Component{
 
         let attachDeckBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
                                                     type="button"
-                                                    aria-label="Attach sub-deck"
+                                                    aria-label={this.context.intl.formatMessage(this.messages.attachText)}
                                                     aria-hidden={this.state.modalOpen}
                                                     basic icon onClick={this.handleOpen}
                                                     tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
@@ -193,7 +217,7 @@ class AttachSubdeckModal extends React.Component{
                 <Icon className="yellow" name="folder" />
                 <Icon className="corner" name="attach" />
             </Icon.Group>
-        </Button>} content='Attach sub-deck' on='hover'/>;
+        </Button>} content={this.context.intl.formatMessage(this.messages.attachText)} on='hover'/>;
 
         return (
            <Modal trigger={attachDeckBtn}
@@ -216,7 +240,7 @@ class AttachSubdeckModal extends React.Component{
                         className = "header">
 
                 <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModalHeader">
-                     Attach sub-deck
+                    {this.context.intl.formatMessage(this.messages.attachText)}
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
@@ -229,14 +253,14 @@ class AttachSubdeckModal extends React.Component{
                                {segmentPanelContent}
                             </Segment>
                             <Modal.Actions>
-                              <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
-                                  data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleAttachButton}>
+                              <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(this.messages.attach)}
+                                  data-tooltip={this.context.intl.formatMessage(this.messages.attach)} disabled={this.state.selectedDeckId===-1} onClick={this.handleAttachButton}>
                                 <Icon name="attach"/>
-                                  Attach
-                                  <Icon name="attach"/>
+                                    {this.context.intl.formatMessage(this.messages.attach)}
+                                <Icon name="attach"/>
                               </Button>
-                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
-                                Cancel
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(this.messages.cancel)} data-tooltip={this.context.intl.formatMessage(this.messages.cancel)} onClick={this.handleClose} >
+                              {this.context.intl.formatMessage(this.messages.cancel)}
                               </Button>
                             </Modal.Actions>
                          </Segment>
@@ -253,7 +277,8 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {
