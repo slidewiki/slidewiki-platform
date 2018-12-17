@@ -957,8 +957,13 @@ class SlideContentEditor extends React.Component {
             console.log('SlideContentEditor.ltiResponseHTML='+ltiResponseHTML);
             */
 
+            // Removing edition event on currently Edited slide.
+            this.context.executeAction(removeCurrentlyEditedSlideEvent, {id: this.props.SlideCurrentlyEditedStore.eventId ?
+                this.props.SlideCurrentlyEditedStore.eventId : null });
+
             //setTimeout(function() {
             //if (transitionType === 'slide') {
+
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
@@ -1949,6 +1954,8 @@ class SlideContentEditor extends React.Component {
                     buttonsStyling: false,
                     allowEnterKey: true
                 }).then((accepted) => {
+                    this.context.executeAction(removeCurrentlyEditedSlideEvent, {id: this.props.SlideCurrentlyEditedStore.eventId ?
+                        this.props.SlideCurrentlyEditedStore.eventId : null });
                     const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
                     this.context.executeAction(navigateAction, {
                         url: nodeURL
