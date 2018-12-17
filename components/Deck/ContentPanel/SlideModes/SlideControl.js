@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {HotKeys} from 'react-hotkeys';
-//import ReactDOM from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
-import {NavLink, navigateAction} from 'fluxible-router';
+import {navigateAction, NavLink} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import registerChange from '../../../../actions/slide/registerChange';
+import ContentStore from '../../../../stores/ContentStore';
+import SlideEditStore from '../../../../stores/SlideEditStore';
 
 class SlideControl extends React.Component {
     constructor(props) {
@@ -16,8 +18,32 @@ class SlideControl extends React.Component {
     }
     componentDidUpdate(){
         this.updateProgressbar();
-        //ReactDOM.findDOMNode(this.refs.slideControl).focus();
     }
+
+    confirmLeaving = () => {
+        const hasChanges = this.hasChanges();
+        if (this.props.ContentStore.mode === 'edit' && hasChanges) {
+            // eslint-disable-next-line no-alert
+            let confirmed = confirm('You have unsaved changes. If you do not save the slide, it will not be updated. ' +
+                'Are you sure you want to exit this page?');
+            if (confirmed) {
+                this.setChanges(false);
+            }
+            return confirmed;
+        } else {
+            this.setChanges(false);
+            return true;
+        }
+    };
+
+    hasChanges = () => {
+        return this.props.SlideEditStore && this.props.SlideEditStore.hasChanges;
+    };
+
+    setChanges = (value) => {
+        this.context.executeAction(registerChange, { hasChanges: value });
+    };
+
     getKeyMap() {
         const keyMap = {
             'moveForward': 'right',
@@ -38,7 +64,7 @@ class SlideControl extends React.Component {
     }
     handleNextClick(selector, flatTree, mode){
         let nextPath = SlideControlUtil.nextSlidePath(selector, flatTree, mode);
-        if(nextPath){
+        if (nextPath && this.confirmLeaving()) {
             this.context.executeAction(navigateAction, {
                 url: nextPath
             });
@@ -48,7 +74,7 @@ class SlideControl extends React.Component {
     }
     handlePreviousClick(selector, flatTree, mode){
         let prevPath = SlideControlUtil.prevSlidePath(selector, flatTree, mode);
-        if(prevPath){
+        if (prevPath && this.confirmLeaving()) {
             this.context.executeAction(navigateAction, {
                 url: prevPath
             });
@@ -57,7 +83,7 @@ class SlideControl extends React.Component {
     }
     handleForwardClick(selector, flatTree, mode){
         let lastPath = SlideControlUtil.lastSlidePath(selector, flatTree, mode);
-        if(lastPath){
+        if (lastPath && this.confirmLeaving()) {
             this.context.executeAction(navigateAction, {
                 url: lastPath
             });
@@ -66,7 +92,7 @@ class SlideControl extends React.Component {
     }
     handleBackwardClick(selector, flatTree, mode){
         let firstPath = SlideControlUtil.firstSlidePath(selector, flatTree, mode);
-        if(firstPath){
+        if (firstPath && this.confirmLeaving()) {
             this.context.executeAction(navigateAction, {
                 url: firstPath
             });
@@ -104,9 +130,11 @@ class SlideControl extends React.Component {
 SlideControl.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
-SlideControl = connectToStores(SlideControl, [DeckTreeStore], (context, props) => {
+SlideControl = connectToStores(SlideControl, [DeckTreeStore, ContentStore, SlideEditStore], (context, props) => {
     return {
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState(),
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
     };
 });
 

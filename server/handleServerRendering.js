@@ -120,26 +120,25 @@ export default function handleServerRendering(req, res, next){
                 reqId: req.reqId
             }, (err) => {
                 if (err) {
-                    if (err.statusCode && err.statusCode === '301') {
-                        //console.log('REDIRECTING to '+ JSON.stringify(err));
+                    if (err.statusCode === 301) {
                         res.redirect(301, err.redirectURL);
-                    }else
-                    if (err.statusCode && err.statusCode === '404') {
+                    } else if (err.statusCode) {
+                        // render page and also set status to the error code
                         let html = renderApp(req, res, context);
                         debug('Sending markup');
                         res.type('html');
                         res.status(err.statusCode);
                         log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                        res.write('<!DOCTYPE html>' + html);
                         res.end();
-                        return;
-                    }else{
+                    } else {
+                        // TODO render page even though there was an error ????
                         let html = renderApp(req, res, context);
                         debug('Sending markup');
                         res.type('html');
                         res.write('<!DOCTYPE html>' + html);
                         log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
                         res.end();
-                        return;
                     }
 
                 } else {

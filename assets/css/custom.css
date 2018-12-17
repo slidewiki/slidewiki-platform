@@ -243,3 +243,61 @@ div#embedModal .fields>label {
 .ui.questions.padded.text{
     padding: 5px 15px 10px 15px;
 }
+
+/*! @gov.au/core v3.0.3 *//*! @gov.au/skip-link v2.0.10 */
+@media print{
+  .au-skip-link__link{
+    background:#fff !important
+  }
+}
+
+.au-skip-link{
+  font-size:20px;
+  font-size:1.25rem;
+  line-height:1;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  color:#313131
+}
+.au-skip-link__link{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0, 0, 0, 0);
+  border:0}
+  .au-skip-link__link:active,.au-skip-link__link:focus{
+    outline:3px solid #313131;
+    outline-offset:2px;
+    top:16px;
+    top:1rem;
+    left:16px;
+    left:1rem;
+    padding:24px;
+    padding:1.5rem;
+    clip:auto;
+    height:auto;
+    margin:0;
+    overflow:visible;
+    position:absolute;
+    width:auto;
+    color:#1E78BB;
+    background-color:#fff;
+    text-decoration:underline;
+    -webkit-text-decoration-skip:ink;
+    text-decoration-skip:ink;
+    z-index:600
+  }
+  .au-body .au-skip-link__link:hover,.au-skip-link__link:hover{
+    text-decoration:none;
+    color:#fff
+  }
+/* Questions Display */
+.questionsList{
+  list-style-type: lower-alpha;
+  margin-block-end: 0px;
+  margin-block-start: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

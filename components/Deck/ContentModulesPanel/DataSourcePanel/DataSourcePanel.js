@@ -7,6 +7,7 @@ import DataSourceList from './DataSourceList';
 import EditDataSource from './EditDataSource';
 import newDataSource from '../../../../actions/datasource/newDataSource';
 import showMoreDataSources from '../../../../actions/datasource/showMoreDataSources';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 class DataSourcePanel extends React.Component {
     handleNewDataSource() {
@@ -26,19 +27,36 @@ class DataSourcePanel extends React.Component {
         const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
 
-        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit) && (selector.stype === 'slide');
+        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
         let newDataSourceButton = (editPermission) ?
             <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
-                <i className="icon plus"></i> Add source
+                <i className="icon plus"></i>
+                <FormattedMessage
+                    id='DataSourcePanel.form.button_add'
+                    defaultMessage='Add source' />
             </button>
             : '';
 
-        let sourcesHeader = <h3 className="ui dividing header">Sources</h3>;
+        let sourcesHeader = (
+            <h3 className="ui dividing header">
+                <FormattedMessage
+                    id='DataSourcePanel.form.header'
+                    defaultMessage='Sources' />
+            </h3>
+        );
 
-        let showMoreLink = (!showAllDataSources && arrayOfDataSourcesIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div> : '';
-        let sourcesList = (dataSources.length === 0)
-            ?
-            <div>There are currently no sources for this {this.props.DataSourceStore.selector.stype}.</div>
+        let showMoreLink = (!showAllDataSources && arrayOfDataSourcesIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >
+            <FormattedMessage
+                id='DataSourcePanel.form.show_more'
+                defaultMessage='Show more ...' /></a></div> : '';
+        const form_messages = defineMessages({
+            no_sources: {
+                id: 'DataSourcePanel.form.no_sources',
+                defaultMessage: 'There are currently no sources for this',
+            }
+        });
+        let sourcesList = (dataSources.length === 0) ?
+            <div>{this.context.intl.formatMessage(form_messages.no_sources) + ' ' + this.props.DataSourceStore.selector.stype}.</div>
             :
             <div>
                 <DataSourceList items={displayDataSources} editable ={editPermission} selector={selector}/>
@@ -62,7 +80,8 @@ class DataSourcePanel extends React.Component {
 }
 
 DataSourcePanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore, PermissionsStore], (context, props) => {

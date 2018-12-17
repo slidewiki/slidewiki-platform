@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { LTI_ID } from '../../../configs/general';
 
 class CategoryBox extends React.Component {
     constructor(props){
@@ -11,17 +12,18 @@ class CategoryBox extends React.Component {
     }
 
     render() {
+        //console.log('CategoryBox.props.username='+this.props.username);
         return (
           <div ref="menus">
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h3>
+                <h2 id="navigation">
                   <FormattedMessage
                     id='CategoryBox.personalSettings'
                     defaultMessage='Personal settings'
                   />
-                </h3>
+                </h2>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                 <p>
@@ -37,7 +39,7 @@ class CategoryBox extends React.Component {
                   <i className="icon lock"/>
                   <FormattedMessage
                     id='CategoryBox.account'
-                    defaultMessage=' Account'
+                    defaultMessage=' Accounts'
                   />
                 </p>
               </NavLink>
@@ -46,7 +48,7 @@ class CategoryBox extends React.Component {
                   <i className="icon cloud"/>
                   <FormattedMessage
                     id='CategoryBox.authorizedAccounts'
-                    defaultMessage=' Authorized Accounts'
+                    defaultMessage=' Authorized Accounts & Services'
                   />
                 </p>
               </NavLink>
@@ -63,12 +65,12 @@ class CategoryBox extends React.Component {
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h3>
+                <h2>
                   <FormattedMessage
                     id='CategoryBox.groups'
                     defaultMessage='Groups'
                   />
-                </h3>
+                </h2>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/groups/overview'} activeStyle={this.styles}>
                 <p>

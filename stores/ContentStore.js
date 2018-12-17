@@ -28,6 +28,10 @@ class ContentStore extends BaseStore {
         this.selector.currentSubDeck = this.getCurrentSubdeck();
         this.emitChange();
     }
+    updateMode(payload) {
+        this.mode = payload.mode;
+        this.emitChange();
+    }
     getState() {
         return {
             selector: this.selector,
@@ -61,7 +65,8 @@ class ContentStore extends BaseStore {
 ContentStore.storeName = 'ContentStore';
 ContentStore.handlers = {
     'UPDATE_CONTENT': 'updateContent',
-    'UPDATE_CONTENT_SELECTOR': 'updateSelector'
+    'UPDATE_CONTENT_SELECTOR': 'updateSelector',
+    'UPDATE_MODE': 'updateMode'
 };
 
 export default ContentStore;

@@ -90,7 +90,7 @@ class Decks extends React.Component {
           <div className="ui segments">
             {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <div className="ui secondary clearing segment">
-                <h1 className="ui left floated header">{header}</h1>
+                <h1 className="ui left floated header" id="main">{header}</h1>
 
                 <div style={{ float: 'right' }}>
 

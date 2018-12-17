@@ -73,6 +73,7 @@ class Import extends React.Component {
             $('#import_file_chooser').val('');
     }
     handleOpen(){
+        this.props.savetags();
         $('#app').attr('aria-hidden','true');
         this.setState({
             modalOpen:true,
@@ -126,7 +127,6 @@ class Import extends React.Component {
         }
     }
     handleFileSelect(evt){
-
 
         this.context.executeAction(importFinished, null);
 

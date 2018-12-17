@@ -107,6 +107,20 @@ body {
     margin: 0;
 }
 
+header .sw-logo:focus, header .sw-usermenu:focus {
+    box-shadow:inset 0 0 0 2px #0C273E;
+    outline: 0;
+}
+header .ui.search>input.sw-searchbox:focus {
+    box-shadow:0 0 0 2px #0C273E;
+}
+header .ui.button.add-deck:focus, header .ui.button.sign-in:focus {
+    box-shadow:inset 0 0 0 2px #0C273E!important;
+}
+header .sw-usermenu {
+    display: inline-block;
+    border-radius: 3px
+}
 
 
  h1 {
@@ -361,6 +375,11 @@ textarea:focus{
 .language-select .ui.search.dropdown > .text{
     font-size: 18px;
     color: #000;
+}
+
+/* LocaleSwitcher: forces text to black. Necessary because the inverted menu defaults text to white */
+.locale-switcher.ui.menu.vertical .item {
+    color: rgba(0,0,0,.87);
 }
 
 /*--section--*/
@@ -1163,4 +1182,13 @@ textarea:focus{
 }
 .banner-container.inner-image img{
     float: left;
+}
+
+/* react-accessible-accordion styles */
+.display-none {
+    display: none;
+}
+
+.accordion__title:hover {
+    cursor: pointer;
 }
