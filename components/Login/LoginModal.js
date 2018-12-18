@@ -190,6 +190,23 @@ class LoginModal extends React.Component {
             }
         }
     }
+    
+    componentDidMount() {
+        // Hotfix - SWIK-2619 - Fix bug in semantic-ui that binds "touchmove" preventDefault() to body, which disables touch scrolling
+        // https://github.com/Semantic-Org/Semantic-UI/issues/6449
+        if (!this.props.userid) {
+            document.body.removeEventListener('touchmove', this.allowScroll);
+            document.body.addEventListener('touchmove', this.allowScroll, true);
+        }
+    }
+    
+    componentWillUnmount() {
+        document.body.removeEventListener('touchmove', this.allowScroll);
+    }
+    
+    allowScroll(e) {
+        e.stopPropagation();
+    }
 
     handleSignupClick(e) {
         e.preventDefault();
