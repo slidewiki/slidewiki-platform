@@ -27,12 +27,12 @@ class SWDSDropdown extends React.Component {
     constructor(props){
         super(props);
 
-        // this.state = {
-        //     selectedItem: null
-        // };
+        this.state = {
+            value: props.defaultValue
+        };
 
-        if(props.value) {
-            this.initialItem = this.props.options.find((i) => i.value === this.props.value);
+        if(props.defaultValue) {
+            this.initialItem = this.props.options.find((i) => i.value === this.props.defaultValue);
         }
 
         this.handleOnChange = this.handleOnChange.bind(this);
@@ -50,8 +50,8 @@ class SWDSDropdown extends React.Component {
         placeholder: PropTypes.string,
         /** Whether the element is in an error state. */
         error: PropTypes.bool,
-        /** The pre-set value of the <input>. */
-        value: PropTypes.string,
+        /** The pre-set value of the Component. */
+        defaultValue: PropTypes.string,
         // TODO: Add label
     };
 
@@ -64,11 +64,10 @@ class SWDSDropdown extends React.Component {
      * @returns {void}
      */
     handleOnChange(selectedItem, stateAndHelpers) {
-        // console.log(selectedItem);
-        // this.state.selectedItem = selectedItem;
+        if(selectedItem) this.setState({value: selectedItem.value});
         if(this.props.onChange) this.props.onChange({
             target: {
-                text: this.props.text,
+                name: (selectedItem ? selectedItem.name : null),
                 value: (selectedItem ? selectedItem.value : null)
             }
         });
@@ -114,7 +113,6 @@ class SWDSDropdown extends React.Component {
                                 <Input
                                     {...getInputProps({
                                         isOpen,
-                                        // disabled: true,
                                         placeholder: this.props.placeholder,
                                         autoComplete: 'nope'
                                     })}
@@ -126,7 +124,7 @@ class SWDSDropdown extends React.Component {
                             <div {...css({position: 'relative', zIndex: 9})}>
                                 <BaseMenu {...getMenuProps({isOpen})}>
                                     {isOpen ?
-                                        this.props.options.map((item, index) => (
+                                        filterItems(inputValue, this.props.options).map((item, index) => (
                                             <Item
                                                 key={item.key}
                                                 {...getItemProps({
@@ -136,6 +134,7 @@ class SWDSDropdown extends React.Component {
                                                     isSelected: selectedItem === item,
                                                 })}
                                             >
+                                                {item.icon}
                                                 {itemToString(item)}
                                             </Item>
                                         )) : null}
