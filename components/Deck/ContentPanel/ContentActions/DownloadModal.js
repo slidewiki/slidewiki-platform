@@ -98,8 +98,8 @@ class DownloadModal extends React.Component{
         }
 
         let language = '';
-        if (this.props.TranslationStore.currentLanguage !== undefined && this.props.TranslationStore.currentLanguage !== '') {
-            language = this.props.TranslationStore.currentLanguage;
+        if (this.props.TranslationStore.currentLang !== undefined && this.props.TranslationStore.currentLang !== '') {
+            language = this.props.TranslationStore.currentLang;
         }
 
         switch (type) {
@@ -405,7 +405,7 @@ DownloadModal = connectToStores(DownloadModal,[ContentStore,UserProfileStore, Tr
     return{
         ContentStore : context.getStore(ContentStore).getState(),
         UserProfileStore : context.getStore(UserProfileStore).getState(),
-        TranslationStore : context.getStore(TranslationStore).getSTate()
+        TranslationStore : context.getStore(TranslationStore).getState()
     };
 });
 
