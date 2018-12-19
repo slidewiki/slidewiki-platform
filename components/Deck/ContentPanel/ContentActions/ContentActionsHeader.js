@@ -78,6 +78,22 @@ class ContentActionsHeader extends React.Component {
                 id: 'ContentActionsHeader.loading',
                 defaultMessage:'Loading'
             },
+            saveButtonText:{
+                id: 'ContentActionsHeader.save',
+                defaultMessage:'Save'
+            },
+            cancelButtonText:{
+                id: 'ContentActionsHeader.cancel',
+                defaultMessage:'Cancel'
+            },
+            markdownButtonText:{
+                id: 'ContentActionsHeader.markdown',
+                defaultMessage: 'Markdown'
+            },
+            mobileMessageText:{
+                id: 'ContentActionsHeader.mobile',
+                defaultMessage:'Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.'
+            },
         });
 
         this.zoomIn = this.zoomIn.bind(this);
@@ -230,11 +246,13 @@ class ContentActionsHeader extends React.Component {
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled,
             'icon': smallButtons,
         });
+        const duplicateItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled) ? 'disabled' : '' ;
         const deleteItemClass = classNames({
             'ui basic button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled,
             'icon': smallButtons,
         });
+        const deleteItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled) ? 'disabled' : '' ;
         const red = {
             backgroundColor: 'red'
         };
@@ -265,7 +283,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save
+                        {this.context.intl.formatMessage(this.messages.saveButtonText)}
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
@@ -273,7 +291,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="cancel icon "></i>
                             <i className=""></i>
                         </i>
-                        Cancel
+                        {this.context.intl.formatMessage(this.messages.cancelButtonText)}}
                     </button>;
             } else {
                 saveButton ='';
@@ -324,8 +342,7 @@ class ContentActionsHeader extends React.Component {
                                 <i className="large violet edit icon"></i>
                                 <i className=""></i>
                             </i>
-                            Markdown
-
+                            {this.context.intl.formatMessage(this.messages.markdownButtonText)}}
                         </button>;
                 }
 
@@ -354,7 +371,7 @@ class ContentActionsHeader extends React.Component {
         </button>
         */
         let mobileMessage = <div className="ui top attached warning message">
-          <p>Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.</p>
+          <p>{this.context.intl.formatMessage(this.messages.mobileMessageText)}</p>
         </div>;
 
         return (
@@ -404,7 +421,8 @@ class ContentActionsHeader extends React.Component {
                             type="button" key="duplicateItem"
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
+                            disabled={duplicateItemDisabled}>
                             <i className="large icons">
                                 <i className="grey copy outline horizontally flipped icon"></i>
                             </i>
@@ -414,7 +432,8 @@ class ContentActionsHeader extends React.Component {
                             type="button" key="deleteItem"
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
+                            disabled={deleteItemDisabled}>
                             <i className="large icons">
                                 <i className="red trash alternate icon"></i>
                             </i>
