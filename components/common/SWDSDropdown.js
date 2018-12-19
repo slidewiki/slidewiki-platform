@@ -16,6 +16,7 @@ import {
 import Downshift from 'downshift';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {Flag, Icon} from 'semantic-ui-react';
 
 /**
  * Renders an accessible dropdown component, using the Downshift library.
@@ -43,10 +44,11 @@ class SWDSDropdown extends React.Component {
         required: PropTypes.bool,
         /** Dropdown selection options. Must be an array of objects, each with 'text' and 'value' attributes. */
         options: PropTypes.arrayOf(PropTypes.shape({
-            name: PropTypes.node,
+            name: PropTypes.string,
             value: PropTypes.string,
+            icon: PropTypes.instanceOf([Icon, Flag]),
         })),
-        /** A placeholder that should be rendered in the <input>. */
+        /** A placeholder that should be rendered in the Component. */
         placeholder: PropTypes.string,
         /** Whether the element is in an error state. */
         error: PropTypes.bool,
