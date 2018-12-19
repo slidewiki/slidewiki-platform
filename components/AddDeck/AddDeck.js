@@ -529,8 +529,11 @@ class AddDeck extends React.Component {
                                     defaultMessage='Language' />
                                 }
                                 name='language'
-                                value={this.state.language}
-                                items={translationLanguages.map((s) => ({name: getLanguageDisplayName(s), value: s}))}
+                                defaultValue={this.state.language}
+                                options={translationLanguages.map((s) => ({
+                                    value: s,
+                                    name: getLanguageDisplayName(s),
+                                }))}
                                 onChange={this.handleInputChange}
                             />
                             <div className="field" ref="div_themes" >
@@ -574,7 +577,10 @@ class AddDeck extends React.Component {
                                 }
                                 name='educationLevel'
                                 value={this.state.educationLevel}
-                                items={Object.entries(educationLevels).map(([value, text]) => ({value: value, name: text}) )}
+                                options={Object.entries(educationLevels).map(([value, text]) => ({
+                                    value: value,
+                                    name: text,
+                                }))}
                                 onChange={this.handleInputChange}
                             />
                             <div className="field">

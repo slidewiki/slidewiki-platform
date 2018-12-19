@@ -1799,9 +1799,8 @@ class CountryDropdown extends React.Component {
                     id='ChangePersonalData.country'
                     defaultMessage='Country' />
                 }
-                value={this.state.value}
-                items={this.countriesToRender.map((country) => ({
-                    key: country.name,
+                defaultValue={this.state.value}
+                options={this.countriesToRender.map((country) => ({
                     value: country.key,
                     name: this.context.intl.formatMessage(this.messages[country.name])
                 }))}
