@@ -48,6 +48,10 @@ class DownloadModal extends React.Component{
             downloadModal_HTML:{
                 id:'downloadModal.downloadModal_HTML',
                 defaultMessage: 'HTML (unzip and open index.html to access off-line presentation)'
+            },
+            downloadModal_button:{
+                id:'downloadModal.downloadModal_button',
+                defaultMessage:'Download'
             }
         });
     }
@@ -174,12 +178,12 @@ class DownloadModal extends React.Component{
 
               <Modal
                   trigger={ !this.props.textOnly ?
-                        <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
+                        <Button icon aria-hidden="false" className="ui button" type="button" aria-label={this.context.intl.formatMessage(this.messages.downloadModal_button)} data-tooltip={this.context.intl.formatMessage(this.messages.downloadModal_button)} onClick={this.handleOpen} >
                               <Icon name='download' size='large'/>
                         </Button>
                         :
-                        <div className={this.props.className} aria-label="Download" data-tooltip="Download" onClick={this.handleOpen}>
-                            <span><Icon name='download' size='large'/> Download</span>
+                        <div className={this.props.className} aria-label={this.context.intl.formatMessage(this.messages.downloadModal_button)} data-tooltip={this.context.intl.formatMessage(this.messages.downloadModal_button)} onClick={this.handleOpen}>
+                            <span><Icon name='download' size='large'/> {this.context.intl.formatMessage(this.messages.downloadModal_button)}</span>
                         </div>
                   }
 
