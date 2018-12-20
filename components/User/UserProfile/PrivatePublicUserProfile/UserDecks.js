@@ -6,14 +6,12 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Icon } from 'semantic-ui-react';
 import fetchUserDecks from '../../../../actions/user/userprofile/fetchUserDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
+import AriaMenuButton from 'react-aria-menubutton';
 
 class UserDecks extends React.Component {
     constructor(props) {
         super(props);
         this.messages = this.getIntlMessages();
-    }
-    componentDidMount() {
-        $(this.refs.sortDropdown).dropdown({ onChange: this.dropdownSelect.bind(this) });
     }
 
     componentDidUpdate() { }
@@ -109,17 +107,23 @@ class UserDecks extends React.Component {
                     <h1 className="ui left floated header" id="main">{header}</h1>
 
                     <div style={{ float: 'right' }}>
-
-                        <div className="ui pointing labeled icon dropdown button" ref="sortDropdown">
-                            <i className="icon exchange" />
-                            <div className="text">{this.getSelectedSort(sortBy)}</div>
-                            <div className="menu">
-                                <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
-                                <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
-                                <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
-                            </div>
-                        </div>
-
+                        <AriaMenuButton.Wrapper onSelection={this.dropdownSelect.bind(this)} className="ui dropdown right top pointing">
+                            <AriaMenuButton.Button aria-label="Sort" className="ui icon right labeled button">
+                                {this.getSelectedSort(sortBy)}
+                                <Icon name='down caret' />
+                            </AriaMenuButton.Button>
+                            <AriaMenuButton.Menu className='ui menu vertical' style={{'display': 'flex'}} >
+                                <AriaMenuButton.MenuItem className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} value='lastUpdate' tag='li'>
+                                    {this.context.intl.formatMessage(this.messages.sortLastUpdated)}
+                                </AriaMenuButton.MenuItem>
+                                <AriaMenuButton.MenuItem className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} value='timestamp' tag='li'>
+                                    {this.context.intl.formatMessage(this.messages.sortCreationDate)}
+                                </AriaMenuButton.MenuItem>
+                                <AriaMenuButton.MenuItem className={(sortBy === 'title') ? 'item active selected' : 'item'} value='title' tag='li'>
+                                    {this.context.intl.formatMessage(this.messages.sortTitle)}
+                                </AriaMenuButton.MenuItem>
+                            </AriaMenuButton.Menu>
+                        </AriaMenuButton.Wrapper>
                     </div>
                 </div>
                 <div className="ui segment">
