@@ -757,7 +757,7 @@ class UserRegistration extends React.Component {
                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
                     <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                 </div>
-                <div className="ui error message" ></div>
+                <div className="ui error message" role="region" aria-live="polite"/>
                 <br/>
                 <button type="submit" className="ui blue labeled submit icon button" >
                     <i className="user plus icon"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}

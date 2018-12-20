@@ -367,7 +367,7 @@ class ReportModal extends React.Component {
                                             onClick={this.handleClose}
                                             content={this.context.intl.formatMessage(this.messages.cancel_button)}
                                         />
-                                        <div className="ui error message"/>
+                                        <div className="ui error message" role="region" aria-live="polite"/>
                                     </Form>
                                     </Segment>
                                 </Segment>
