@@ -5,7 +5,7 @@ import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
-import { TextArea, Dropdown, Checkbox } from 'semantic-ui-react';
+import {TextArea, Checkbox, Message} from 'semantic-ui-react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 import Util from '../../../../common/Util';
@@ -24,6 +24,7 @@ import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsFo
 
 import {educationLevels} from '../../../../../lib/isced';
 import TagInput from '../../../ContentModulesPanel/TagsPanel/TagInput';
+import SWAutoComplete from '../../../../common/SWAutoComplete';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -540,12 +541,19 @@ class DeckPropertiesEditor extends React.Component {
         let levelAndTopics = <div className="two fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
             <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete. Multiple subjects can be selected"</div>
-            <div className="field">
-                <label htmlFor="level_input" id="level_label"><FormattedMessage id="DeckProperty.Education" defaultMessage="Education Level" /></label>
-                <Dropdown id="level_input" fluid selection aria-labelledby="level_label" aria-describedby="describe_level"
-                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
-                    value={this.state.educationLevel} onChange={this.handleDropdownChange.bind(this, 'educationLevel')} />
-            </div>
+            <SWAutoComplete fluid selection
+                label={<FormattedMessage
+                    id="DeckProperty.Education"
+                    defaultMessage="Education Level"
+                />}
+                options={Object.entries(educationLevels).map(([value, text]) => ({
+                    value: value,
+                    name: text,
+                }))}
+                defaultValue={this.state.educationLevel}
+                onChange={this.handleChange.bind(this, 'educationLevel')}
+                ariaDescription='Select education level of deck content'
+            />
             <div className="field">
                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckProperty.Tag.Topic" defaultMessage="Subject" /></label>
                 <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
