@@ -38,7 +38,7 @@ class DeckPropertiesEditor extends React.Component {
         };
 
         return {
-            validationErrors: {},
+            formValidationErrors: {},
             title: props.deckProps.title || '',
             allowMarkdown: props.deckProps.allowMarkdown || false,
             description: props.deckProps.description || '',
@@ -187,32 +187,25 @@ class DeckPropertiesEditor extends React.Component {
 
     handleSave(event) {
         event.preventDefault();
-        let validationErrors = {}, isValid = true;
+        let validationErrors = {};
 
-        if (this.state.title == null || this.state.title.length === 0) {
-            validationErrors.title = 'Please enter a title.';
-            isValid = false;
-        }
+        if (!this.state.title) validationErrors.title = this.context.intl.formatMessage({
+            id: 'DeckPropertiesEditor.error.validation.title',
+            defaultMessage: 'Please enter a title.'
+        });
 
-        /*
-        if (this.state.license == null || this.state.license.length < 2) {
-            validationErrors.license = 'Please select a license.';
-            isValid = false;
-        }
-        */
-
-        let users = [], groups = [];
-        users = this.props.DeckEditStore.authorizedUsers;
-        groups = this.props.DeckEditStore.authorizedGroups;
-        // console.log('handleSave', users, groups, isValid);
+        let users = this.props.DeckEditStore.authorizedUsers;
+        let groups = this.props.DeckEditStore.authorizedGroups;
 
         // for topics we need to merge with tags in state
         let newTags = [...this.state.tags, ...this.topicInput.getSelected()];
         // as topics are never new, and we don't change the other tags, tagName is all we need
         newTags = newTags.map((t) => ({ tagName: t.tagName }));
 
-        this.setState({validationErrors: validationErrors});
-        if (isValid) {
+        this.setState({formValidationErrors: validationErrors});
+
+        // If there are no validation errors, save the new attributes.
+        if (Object.keys(validationErrors).length === 0) {
             let deckId = this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id;
 
             this.context.executeAction(updateDeckEditViewState, 'loading');
@@ -399,7 +392,7 @@ class DeckPropertiesEditor extends React.Component {
         let titleFieldClass = classNames({
             'required': true,
             'field': true,
-            'error': this.state.validationErrors.title != null
+            'error': this.state.formValidationErrors.title != null
         });
         /*
         let licenseFieldClass = classNames({
@@ -500,7 +493,7 @@ class DeckPropertiesEditor extends React.Component {
         let listOfAuthorized = this.getListOfAuthorized();
 
         let titleField = <div className="field">
-            <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
+            <div className={titleFieldClass}>
                 <label htmlFor="title_input">
                     Title
                 </label>
@@ -601,6 +594,17 @@ class DeckPropertiesEditor extends React.Component {
 
                             {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
+                            <Message
+                                error
+                                header={this.context.intl.formatMessage({
+                                    id: 'DeckPropertiesEditor.error.validation',
+                                    defaultMessage: 'We found some problems'
+                                })}
+                                list={Object.values(this.state.formValidationErrors)}
+                                role="region"
+                                aria-live="polite"
+                                visible={Object.values(this.state.formValidationErrors).length > 0}
+                            />
                             {buttons}
                         </form>
                     </div>
@@ -613,7 +617,8 @@ class DeckPropertiesEditor extends React.Component {
 }
 
 DeckPropertiesEditor.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore], (context, props) => {
