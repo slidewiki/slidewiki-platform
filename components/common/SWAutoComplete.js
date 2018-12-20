@@ -17,6 +17,7 @@ import Downshift from 'downshift';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Flag, Icon} from 'semantic-ui-react';
+import uuid from 'uuid/v1';
 
 /**
  * Renders an accessible autocomplete component, using the Downshift library.
@@ -56,6 +57,8 @@ class SWAutoComplete extends React.Component {
         defaultValue: PropTypes.string,
         /** The name of the input. Passed when this Component triggers events. */
         name: PropTypes.string,
+        /** Text for an associated ARIA described-by element. */
+        ariaDescription: PropTypes.string
     };
 
     /**
@@ -84,8 +87,13 @@ class SWAutoComplete extends React.Component {
             error: this.props.error,
         });
 
+        let describedBy = this.props.ariaDescription ? <div className="sr-only" id={uuid()}>
+            {this.props.ariaDescription}
+        </div> : null;
+
         return (
             <div className={wrapperClasses}>
+                {describedBy}
                 <Downshift
                     onChange={this.handleOnChange}
                     itemToString={itemToString}
@@ -113,6 +121,7 @@ class SWAutoComplete extends React.Component {
                                         placeholder: this.props.placeholder,
                                         autoComplete: 'nope'
                                     })}
+                                    aria-describedby={(describedBy ? describedBy.props.id : null)}
                                 />
                                 {selectedItem ? (
                                     <ControllerButton
