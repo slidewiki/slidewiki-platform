@@ -92,7 +92,7 @@ class Header extends React.Component {
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
 
         return (
-            <header>
+            <header tabIndex="-1" id="tabindex-start" style={{outline:'none'}}>
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
                     <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                         <div className="ui fluid container">

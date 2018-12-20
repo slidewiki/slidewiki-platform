@@ -438,10 +438,10 @@ a.ui.teal.header:hover {
 
 /* Inverted */
 .ui.inverted.teal.header {
-  color: #8AC2B8 !important;
+  color: #008572 !important;
 }
 a.ui.inverted.teal.header:hover {
-  color: #76bcb0 !important;
+  color: #006c5c !important;
 }
 
 /*--- Blue ---*/

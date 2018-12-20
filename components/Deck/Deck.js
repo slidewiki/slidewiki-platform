@@ -20,6 +20,13 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 
 class Deck extends React.Component {
 
+    componentDidMount() {
+        let tabindexStart = document.getElementById('tabindex-start');
+        
+        if (tabindexStart) {
+            tabindexStart.focus();
+        }
+    }
     handleExpandClick(){
         this.context.executeAction(hideLeftColumn, {});
         return false;
