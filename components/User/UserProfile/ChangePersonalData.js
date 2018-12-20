@@ -3,15 +3,15 @@ import React from 'react';
 import classNames from 'classnames';
 import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import {getLanguageDisplayName, getLanguageName, getLanguageNativeName, translationLanguages} from '../../../common';
 import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
 import { LTI_ID } from '../../../configs/general';
-import { Dropdown, Label } from 'semantic-ui-react';
-import SWAutoComplete from '../../common/SWAutoComplete';
+import {Flag} from 'semantic-ui-react';
+import SWDSDropdown from '../../common/SWDSDropdown';
 
 
 class ChangePersonalData extends React.Component {
@@ -19,9 +19,10 @@ class ChangePersonalData extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            currentLocale: this.props.IntlStore.currentLocale,
-            locales: this.props.IntlStore.locales
+            locale: (this.props.IntlStore.currentLocale.length <= 2) ? this.props.IntlStore.currentLocale : 'en',
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     handleChangeUserdata(e) {
@@ -31,7 +32,7 @@ class ChangePersonalData extends React.Component {
         payload.fname = this.refs.fname.value;
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
-        payload.language = this.refs.language.getSelectedItem().value;//common.getIntlLanguage();
+        payload.language = this.state.locale;
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
@@ -41,17 +42,22 @@ class ChangePersonalData extends React.Component {
 
         this.context.executeAction(changeUserData, payload);
         writeCookie('locale', payload.language, 365);
-        this.setState({currentLocale: payload.language});
         //See UserProfile.js for page reload
         return false;
     }
 
+    handleInputChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+
     getLocaleOptions() {
         return locales.map((locale) => {
-            let flag = flagForLocale(locale) || 'icon';
             let options = {
                 key: locale,
-                text: <span><i className={`flag ${flag}`} />{getLanguageName(locale)}</span>,
+                name: getLanguageName(locale),
+                icon: <Flag name={flagForLocale(locale)} />,
                 value: locale,
             };
             return options;
@@ -76,10 +82,8 @@ class ChangePersonalData extends React.Component {
         });
         let emailToolTipp = this.props.failures.emailNotAllowed ? this.context.intl.formatMessage(messages.emailNotAllowed) : undefined;
         let languageOptions = this.getLocaleOptions();
-        let currentLocale = (this.state.currentLocale.length <= 2) ? this.state.currentLocale : 'en';
+        let currentLocale = this.state.locale;
 
-        //console.log("ChangePersonalData.props.username="+this.props.user.uname);
-        //console.log("LTI_ID="+LTI_ID);
         if (!this.props.user.uname.endsWith(LTI_ID))
         {
             return (
@@ -126,17 +130,18 @@ class ChangePersonalData extends React.Component {
                             </label>
                             <input type="email" placeholder="j.doe@ex.org" name="email" id="email" defaultValue={this.props.user.email} ref="email" required/>
                         </div>
-                        <div className="ui field">
-                            <div className="ui field">
-                                <label htmlFor="language">
-                                  <FormattedMessage
-                                    id='ChangePersonalData.uilanguage'
-                                    defaultMessage='User Interface Language'
-                                  />
-                                </label>
-                                <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="language" required={true}/>
-                            </div>
-                        </div>
+                        <SWDSDropdown fluid selection
+                            options={languageOptions}
+                            defaultValue={currentLocale}
+                            required={true}
+                            label={<FormattedMessage
+                                id='ChangePersonalData.uilanguage'
+                                defaultMessage='User Interface Language'
+
+                            />}
+                            name='locale'
+                            onChange={this.handleInputChange}
+                        />
                     </div>
 
                     <div className="two fields">
