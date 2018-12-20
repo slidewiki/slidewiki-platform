@@ -240,12 +240,6 @@ class DeckPropertiesEditor extends React.Component {
         this.setState(stateChange);
     }
 
-    handleDropdownChange(fieldName, event, data) {
-        let stateChange = {};
-        stateChange[fieldName] = data.value;
-        this.setState(stateChange);
-    }
-
     onChangeMarkdown(event) {
         this.setState({allowMarkdown: !this.state.allowMarkdown});
     }
