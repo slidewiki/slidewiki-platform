@@ -258,7 +258,7 @@ class ResetPassword extends React.Component {
                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
                     <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                 </div>
-                <div className="ui error message"></div>
+                <div className="ui error message" role="region" aria-live="polite"/>
 
                 {this.props.ResetPasswordStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">
                   <FormattedMessage
