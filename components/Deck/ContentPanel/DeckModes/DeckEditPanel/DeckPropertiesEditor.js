@@ -44,7 +44,6 @@ class DeckPropertiesEditor extends React.Component {
             allowMarkdown: props.deckProps.allowMarkdown || false,
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            //license: props.deckProps.license || '',
             license: 'CC BY-SA',
             users: editors.users,
             groups: editors.groups,
@@ -216,7 +215,6 @@ class DeckPropertiesEditor extends React.Component {
                 allowMarkdown: this.state.allowMarkdown,
                 description: this.state.description,
                 theme: this.state.theme,
-                //license: this.state.license,
                 license: 'CC BY-SA',
                 selector: this.props.selector,
                 editors: {
@@ -389,13 +387,6 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.formValidationErrors.title != null
         });
-        /*
-        let licenseFieldClass = classNames({
-            'required': true,
-            'field': true,
-            'error': this.state.validationErrors.license != null
-        });
-        */
         let groupsFieldClass = classNames({
             'field': true,
         });
@@ -422,18 +413,6 @@ class DeckPropertiesEditor extends React.Component {
         let licenseOptions = <a className="ui label">
                 <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
             </a>;
-        /*
-        <i className="creative commons large icon"></i>
-        let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
-                                     value={this.state.license}
-                                     onChange={this.handleChange.bind(this, 'license')}>
-           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-           <option value="CC BY" >Creative Commons Attribution</option>
-           <option value="CC0" >Creative Commons CC0 Public Domain</option>
-        </select>;
-        //
-        //
-        */
 
         // TODO remove this once language codes have been fixed in code and database
         const fixedLanguageCodes = {
