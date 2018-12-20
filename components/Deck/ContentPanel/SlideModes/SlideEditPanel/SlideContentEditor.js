@@ -8,6 +8,7 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 import MediaStore from '../../../../../stores/MediaStore';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
 import saveSlide from '../../../../../actions/slide/saveSlide';
+import saveSlideWithDeckTransition from '../../../../../actions/slide/saveSlideWithDeckTransition';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
@@ -45,41 +46,83 @@ class SlideContentEditor extends React.Component {
         //this.redoContent = '';
         this.scaleRatio = null;
 
-        CKEDITOR.on('instanceReady', (ev) => {
-            ev.editor.on('fileUploadRequest', (ev2) => {
-                ev2.cancel();
-            });
+        if (typeof CKEDITOR === 'undefined') {
+            setTimeout(() => {
+                CKEDITOR.on('instanceReady', (ev) => {
 
-            ev.editor.document.on('drop', (ev2) => {
-                if (ev2.data.$.dataTransfer.files) {
-                    console.log('droppped');
-                    if (ev2.data.$.dataTransfer.files.length !== 0) {
-                        let file = ev2.data.$.dataTransfer.files[0];
-                        let params = {};
-                        let url = URL.createObjectURL(file);
-                        file.preview = url;
-                        params.file = file;
+                    ev.editor.on('fileUploadRequest', (ev2) => {
+                        ev2.cancel();
+                    });
 
-                        this.context.executeAction(handleDroppedFile, file);
+                    ev.editor.document.on('drop', (ev2) => {
+                        if (ev2.data.$.dataTransfer.files) {
+                            console.log('droppped');
+                            if (ev2.data.$.dataTransfer.files.length !== 0) {
+                                let file = ev2.data.$.dataTransfer.files[0];
+                                let params = {};
+                                let url = URL.createObjectURL(file);
+                                file.preview = url;
+                                params.file = file;
+
+                                this.context.executeAction(handleDroppedFile, file);
+                            }
+                        }
+                    });
+
+                    ev.editor.document.on('paste', (ev2) => {
+                        if (ev2.data.$.clipboardData.files) {
+                            console.log('pasted');
+                            if (ev2.data.$.clipboardData.files.length !== 0){
+                                let file = ev2.data.$.clipboardData.files[0];
+                                let params = {};
+                                let url = URL.createObjectURL(file);
+                                file.preview = url;
+                                params.file = file;
+
+                                this.context.executeAction(handleDroppedFile, file);
+                            }
+                        }
+                    });
+                });
+            }, 500);
+        } else {
+            CKEDITOR.on('instanceReady', (ev) => {
+
+                ev.editor.on('fileUploadRequest', (ev2) => {
+                    ev2.cancel();
+                });
+
+                ev.editor.document.on('drop', (ev2) => {
+                    if (ev2.data.$.dataTransfer.files) {
+                        console.log('droppped');
+                        if (ev2.data.$.dataTransfer.files.length !== 0) {
+                            let file = ev2.data.$.dataTransfer.files[0];
+                            let params = {};
+                            let url = URL.createObjectURL(file);
+                            file.preview = url;
+                            params.file = file;
+
+                            this.context.executeAction(handleDroppedFile, file);
+                        }
                     }
-                }
-            });
+                });
 
-            ev.editor.document.on('paste', (ev2) => {
-                if (ev2.data.$.clipboardData.files) {
-                    console.log('pasted');
-                    if (ev2.data.$.clipboardData.files.length !== 0){
-                        let file = ev2.data.$.clipboardData.files[0];
-                        let params = {};
-                        file.preview = URL.createObjectURL(file);
-                        params.file = file;
+                ev.editor.document.on('paste', (ev2) => {
+                    if (ev2.data.$.clipboardData.files) {
+                        console.log('pasted');
+                        if (ev2.data.$.clipboardData.files.length !== 0){
+                            let file = ev2.data.$.clipboardData.files[0];
+                            let params = {};
+                            let url = URL.createObjectURL(file);
+                            file.preview = url;
+                            params.file = file;
 
-                        this.context.executeAction(handleDroppedFile, file);
+                            this.context.executeAction(handleDroppedFile, file);
+                        }
                     }
-                }
+                });
             });
-        });
-
+        }
     }
 
     hasChanges = () => {
@@ -894,6 +937,7 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
             let transition = this.props.SlideEditStore.slideTransition ? this.props.SlideEditStore.slideTransition : 'none';
+            let transitionType = this.props.SlideEditStore.transitionType ? this.props.SlideEditStore.transitionType : 'slide';
 
 
             let ltiWidth =   this.props.SlideEditStore.ltiWidth;
@@ -912,6 +956,7 @@ class SlideContentEditor extends React.Component {
             */
 
             //setTimeout(function() {
+            //if (transitionType === 'slide') {
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
@@ -931,6 +976,22 @@ class SlideContentEditor extends React.Component {
                 ltiResponseHTML: ltiResponseHTML,
             });
             //},500);
+            /*} else {
+                let currentSlidePayload = {
+                    id: currentSelector.sid,
+                    deckID: deckID,
+                    title: title,
+                    content: content,
+                    speakernotes: speakernotes,
+                    dataSources: dataSources,
+                    selector: currentSelector,
+                    tags: tags,
+                    transition: transition
+                };
+                this.context.executeAction(saveSlideWithDeckTransition, {
+                    currentSlidePayload: currentSlidePayload
+                });
+            }*/
 
             this.resize();
             //this.forceUpdate();

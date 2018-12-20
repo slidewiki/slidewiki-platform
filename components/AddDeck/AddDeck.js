@@ -12,6 +12,7 @@ import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
+import storeTags from '../../actions/import/storeTags';
 import ImportModal from '../Import/ImportModal';
 import ImportPreviewModal from './ImportPreviewModal';
 import LanguageDropdown from '../common/LanguageDropdown';
@@ -34,6 +35,7 @@ class AddDeck extends React.Component {
         this.state = {
             showPreviewModal: false
         };
+        this.defaultTagNames = [];// used for saving defaultName properties for tags
     }
     componentDidMount() {
         // let that = this;
@@ -88,7 +90,8 @@ class AddDeck extends React.Component {
     }
     handleAddDeck(x) {
         //console.log('handleAddDeck');
-
+        this.saveTags();
+        
         this.context.executeAction(addDeckDeleteError, null);
 
         //validate input
@@ -99,7 +102,14 @@ class AddDeck extends React.Component {
         const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
         // const license = this.refs.select_licenses.value;
         const license = 'CC BY-SA';//default license
-        const tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
+        let tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
+        tags.forEach((tag) => {
+            // check whether we have earlier assigned defaultName to tagName (in saveTags function) for this tag and restore the original state
+            if (this.defaultTagNames.includes(tag.tagName)) {
+                tag.defaultName = tag.tagName;
+                delete tag.tagName;
+            }
+        });
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
@@ -322,6 +332,25 @@ class AddDeck extends React.Component {
             console.error('Submission not possible - no file or not pptx/odp/zip');
         }
     }
+    
+    saveTags() {
+        let tags = this.tagInput.getSelected();
+        tags.forEach((tag) => {
+            if (!tag.tagName && tag.defaultName) {
+                tag.tagName = tag.defaultName;//assign defaultName to tagName to avoid errors during the initialization of the TagInput component
+                this.defaultTagNames.push((tag.defaultName));//save defaultName in the array so that in the end we can restore the tag state in handleAddDeck
+            }
+        });
+        let topics = this.topicInput.getSelected();
+        topics.forEach((topic) => {
+            if (!topic.tagName && topic.defaultName) {
+                topic.tagName = topic.defaultName;
+                this.defaultTagNames.push((topic.defaultName));
+            }
+        });
+        //save tags in the store so that they can be restored during the initialization of TagInput component
+        this.context.executeAction(storeTags, {tags:tags, topics: topics});
+    }
 
     render() {
         //redirect to new deck if created
@@ -520,13 +549,13 @@ class AddDeck extends React.Component {
                             </div>
                             <div className="field">
                                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
-                                <TagInput id="topics_input_field" initialTags={[]} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
+                                <TagInput id="topics_input_field" initialTags={this.props.ImportStore.topics} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
                             </div>
                         </div>
 
                         <div className="field">
                             <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={[]} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
+                            <TagInput id="tags_input_field" initialTags={this.props.ImportStore.tags} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
@@ -546,7 +575,7 @@ class AddDeck extends React.Component {
                                             defaultMessage='Select file' />
                                     </div>
                                     */}
-                                    <ImportModal />
+                                    <ImportModal savetags={this.saveTags.bind(this)}/>
                                     {/*    <Import />*/}
 
                                 </div>

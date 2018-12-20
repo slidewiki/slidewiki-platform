@@ -20,6 +20,13 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 
 class Deck extends React.Component {
 
+    componentDidMount() {
+        let tabindexStart = document.getElementById('tabindex-start');
+        
+        if (tabindexStart) {
+            tabindexStart.focus();
+        }
+    }
     handleExpandClick(){
         this.context.executeAction(hideLeftColumn, {});
         return false;
@@ -132,7 +139,7 @@ class Deck extends React.Component {
         {
             //TODO -> add check on wether you have edit rights!!!
             //if we view a slide in edit mode - show slide edit panel
-            leftPanel = <div className={leftColClassSlideEdit}>
+            leftPanel = <div className={leftColClassSlideEdit} id="navigation">
                             <div className="row">
                                 <div className={SlideEditLeftPanelClass}>
                                     <SlideEditLeftPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
@@ -141,7 +148,7 @@ class Deck extends React.Component {
                             </div>
                         </div>;
             centerPanel = (
-                    <div className={contentAndRightPanelClass} role="main">
+                    <div className={contentAndRightPanelClass} role="main" id="main">
                         <div className="row">
                             <div className={contentAndRightPanelClass}>
                                 <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
@@ -160,7 +167,7 @@ class Deck extends React.Component {
             if(this.props.DeckPageStore.mode === 'markdownEdit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '') {
                 leftPanel = '';
                 centerPanel = (
-                        <div className="sixteen wide column">
+                        <div className="sixteen wide column" id="main">
                             <div className="row">
                                 <div className="sixteen wide column">
                                     <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
@@ -171,7 +178,7 @@ class Deck extends React.Component {
                 );
             } else {
               //if we view something else - show decktree
-                leftPanel =     <div className={leftColClass}>
+                leftPanel =     <div className={leftColClass} id="navigation">
                                   <div className="ui stackable grid">
                                     <div className="computer tablet only sixteen wide column">
                                       <div className={treePanelClass}>
@@ -197,7 +204,7 @@ class Deck extends React.Component {
 
                 centerPanel = (
                       <div className={centerColClass}>
-                          <div className="row" role="main">
+                          <div className="row" role="main" id="main">
                               <div className={contentPanelClass}>
                                   <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />
                               </div>
