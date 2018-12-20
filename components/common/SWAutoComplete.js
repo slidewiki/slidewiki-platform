@@ -17,6 +17,7 @@ import Downshift from 'downshift';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Flag, Icon} from 'semantic-ui-react';
+import {FormattedMessage} from 'react-intl';
 import uuid from 'uuid/v1';
 
 /**
@@ -49,6 +50,8 @@ class SWAutoComplete extends React.Component {
             value: PropTypes.string,
             icon: PropTypes.instanceOf([Icon, Flag]),
         })).isRequired,
+        /** Label to be rendered with the component. */
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(FormattedMessage)]),
         /** A placeholder that should be rendered in the <input>. */
         placeholder: PropTypes.string,
         /** Whether the element is in an error state. */
@@ -57,6 +60,8 @@ class SWAutoComplete extends React.Component {
         defaultValue: PropTypes.string,
         /** The name of the input. Passed when this Component triggers events. */
         name: PropTypes.string,
+        /** Function to run on the onChange event. */
+        onChange: PropTypes.func,
         /** Text for an associated ARIA described-by element. */
         ariaDescription: PropTypes.string
     };
