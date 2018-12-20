@@ -25,18 +25,15 @@ import uuid from 'uuid/v1';
  */
 class SWAutoComplete extends React.Component {
 
-    initialItem = null;
-
     constructor(props){
         super(props);
 
         this.state = {
-            value: props.defaultValue
+            value: props.defaultValue,
+            initialItem: props.defaultValue ?
+                this.props.options.find((i) => i.value === this.props.defaultValue)
+                : null,
         };
-
-        if(props.value) {
-            this.initialItem = this.props.options.find((i) => i.value === this.props.value);
-        }
 
         this.handleOnChange = this.handleOnChange.bind(this);
     }
@@ -66,6 +63,20 @@ class SWAutoComplete extends React.Component {
         ariaDescription: PropTypes.string
     };
 
+    // When new props are set, this update the state and changes the item selected in Downshift.
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            value: newProps.defaultValue,
+            initialItem: newProps.defaultValue ?
+                this.props.options.find((i) => i.value === newProps.defaultValue)
+                : null,
+        });
+
+        // If the new defaultValue has changed, select the corresponding option in Downshift.
+        if(newProps.defaultValue !== this.props.defaultValue)
+            this.refs.downshift.selectItem(this.props.options.find((i) => i.value === newProps.defaultValue));
+    };
+
     /**
      * Handles the value change event for this component.
      * Exists only to trigger a React-compatible event up to the parent component.
@@ -75,8 +86,11 @@ class SWAutoComplete extends React.Component {
      * @returns {void}
      */
     handleOnChange(selectedItem, stateAndHelpers) {
-        this.setState({value: selectedItem.value});
-        this.props.onChange({
+        // If an item was selected, the set it in state. No selectedItem means the input has been cleared.
+        this.setState({value: selectedItem ? selectedItem.value : null });
+
+        // Forward the event to an onChange handler, if one is registered.
+        if(this.props.onChange) this.props.onChange({
             target: {
                 name: this.props.name,
                 value: (selectedItem ? selectedItem.value : null)
@@ -92,6 +106,7 @@ class SWAutoComplete extends React.Component {
             error: this.props.error,
         });
 
+        // If ariaDescription is set, generate an element to contain an aria-describedBy description.
         let describedBy = this.props.ariaDescription ? <div className="sr-only" id={uuid()}>
             {this.props.ariaDescription}
         </div> : null;
@@ -102,8 +117,9 @@ class SWAutoComplete extends React.Component {
                 <Downshift
                     onChange={this.handleOnChange}
                     itemToString={itemToString}
-                    initialSelectedItem={this.initialItem}
-                    initialInputValue={itemToString(this.initialItem)}
+                    initialSelectedItem={this.state.initialItem}
+                    initialInputValue={itemToString(this.state.initialItem)}
+                    ref='downshift'
                 >
                     {({
                           getLabelProps,
