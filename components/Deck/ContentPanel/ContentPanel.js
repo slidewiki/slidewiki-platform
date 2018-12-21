@@ -69,7 +69,7 @@ class ContentPanel extends React.Component {
                             H1heading = 'Edit Slide with markdown ' ;
                             break;
                         default:
-                            H1heading = 'Current Slide  ;
+                            H1heading = 'Current Slide'  ;
                     }
                     break;
         }
