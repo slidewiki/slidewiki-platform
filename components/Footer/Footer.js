@@ -100,9 +100,9 @@ class Footer extends React.Component {
                                         <ul>
                                             <li><a href='/about'>{this.context.intl.formatMessage(messages.aboutus)}</a></li>
                                             <li><a href='/contactus'>{this.context.intl.formatMessage(messages.contact)}</a></li>
-                                            <li><a href='/help'>{this.context.intl.formatMessage(messages.guides)}</a></li>
+                                            <li><a href='https://slidewiki.org/playlist/26?sort=order' target="_blank">{this.context.intl.formatMessage(messages.guides)}</a></li>
                                             <li><a href='/accessibility'>{this.context.intl.formatMessage(messages.accessibility)}</a></li>
-                                            <li><a href='https://github.com/slidewiki'>Github</a></li>
+                                            <li><a href='https://github.com/slidewiki' target="_blank">Github</a></li>
                                         </ul>
                                     </div>
                                     <div className='footer-menu'>
