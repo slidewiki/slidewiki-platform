@@ -18,75 +18,78 @@ class ContentPanel extends React.Component {
             case 'deck':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug} />;
+                        targetComponent =
+                            <DeckViewPanel selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug}/>;
                         break;
                     case 'edit':
-                        targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <DeckEditPanel selector={this.props.ContentStore.selector}/>;
                         break;
                     default:
-                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug} />;
+                        targetComponent =
+                            <DeckViewPanel selector={this.props.ContentStore.selector} deckSlug={this.props.deckSlug}/>;
                 }
                 break;
             case 'slide':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <SlideViewPanel selector={this.props.ContentStore.selector}/>;
                         break;
                     case 'edit':
-                        targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
+                        targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector}/>;
                         break;
                     case 'markdownEdit':
-                        targetComponent = <SlideEditPanel useMarkdown={true} selector={this.props.ContentStore.selector} />;
+                        targetComponent =
+                            <SlideEditPanel useMarkdown={true} selector={this.props.ContentStore.selector}/>;
                         break;
                     default:
-                        targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
+                        targetComponent = <SlideViewPanel selector={this.props.ContentStore.selector}/>;
                 }
                 break;
         }
-            let H1heading = '';
-            switch (this.props.ContentStore.selector.stype) {
-                case 'deck':
-                    switch (this.props.ContentStore.mode) {
-                        case 'view':
-                            H1heading = 'Deck overview for ' + this.props.deckSlug;
-                            break;
-                        case 'edit':
-                            H1heading = 'Edit deck properties for ' + this.props.deckSlug;
-                            break;
-                        default:
-                            H1heading = 'Deck overview for ' + this.props.deckSlug;
-                    }
-                    break;
-                case 'slide':
-                    switch (this.props.ContentStore.mode) {
-                        case 'view':
-                            H1heading = 'Current Slide '  ;
-                            break;
-                        case 'edit':
-                            H1heading = 'Edit Slide ' ;
-                            break;
-                        case 'markdownEdit':
-                            H1heading = 'Edit Slide with markdown ' ;
-                            break;
-                        default:
-                            H1heading = 'Current Slide'  ;
-                    }
-                    break;
+        let H1heading = '';
+        switch (this.props.ContentStore.selector.stype) {
+            case 'deck':
+                switch (this.props.ContentStore.mode) {
+                    case 'view':
+                        H1heading = 'Deck overview for ' + this.props.deckSlug;
+                        break;
+                    case 'edit':
+                        H1heading = 'Edit deck properties for ' + this.props.deckSlug;
+                        break;
+                    default:
+                        H1heading = 'Deck overview for ' + this.props.deckSlug;
+                }
+                break;
+            case 'slide':
+                switch (this.props.ContentStore.mode) {
+                    case 'view':
+                        H1heading = 'Current Slide ';
+                        break;
+                    case 'edit':
+                        H1heading = 'Edit Slide ';
+                        break;
+                    case 'markdownEdit':
+                        H1heading = 'Edit Slide with markdown ';
+                        break;
+                    default:
+                        H1heading = 'Current Slide';
+                }
+                break;
         }
         return (
             <div ref="contentPanel">
                 <h1 className="sr-only"> {H1heading}</h1>
                 <div className="ui top attached">
-                    <ContentActionsHeader />
+                    <ContentActionsHeader/>
                 </div>
                 <div className="ui top attached">
                     {targetComponent}
                 </div>
                 <div className="ui bottom attached">
-                    <ContentActionsFooter ContentStore={this.props.ContentStore} deckSlug={this.props.deckSlug} />
+                    <ContentActionsFooter ContentStore={this.props.ContentStore} deckSlug={this.props.deckSlug}/>
                 </div>
-                <NoPermissionsModal selector={this.props.ContentStore.selector} />
-             </div>
+                <NoPermissionsModal selector={this.props.ContentStore.selector}/>
+            </div>
         );
     }
 }
