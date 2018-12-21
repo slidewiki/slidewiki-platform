@@ -167,7 +167,7 @@ class Deck extends React.Component {
             if(this.props.DeckPageStore.mode === 'markdownEdit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '') {
                 leftPanel = '';
                 centerPanel = (
-                        <div className="sixteen wide column" id="main">
+                        <div className="sixteen wide column" role="main" id="main">
                             <div className="row">
                                 <div className="sixteen wide column">
                                     <ContentPanel deckSlug={this.props.DeckPageStore.deckSlug} />

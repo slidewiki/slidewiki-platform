@@ -43,8 +43,39 @@ class ContentPanel extends React.Component {
                 }
                 break;
         }
+            let H1heading = '';
+            switch (this.props.ContentStore.selector.stype) {
+                case 'deck':
+                    switch (this.props.ContentStore.mode) {
+                        case 'view':
+                            H1heading = "Deck overview for " + this.props.deckSlug;
+                            break;
+                        case 'edit':
+                            H1heading = "Edit deck properties for " + this.props.deckSlug;
+                            break;
+                        default:
+                            H1heading = "Deck overview for " + this.props.deckSlug;
+                    }
+                    break;
+                case 'slide':
+                    switch (this.props.ContentStore.mode) {
+                        case 'view':
+                            H1heading = "Current Slide "  ;
+                            break;
+                        case 'edit':
+                            H1heading = "Edit Slide " ;
+                            break;
+                        case 'markdownEdit':
+                            H1heading = "Edit Slide with markdown " ;
+                            break;
+                        default:
+                            H1heading = "Current Slide " ;
+                    }
+                    break;
+        }
         return (
             <div ref="contentPanel">
+                <h1 className="sr-only"> {H1heading}</h1>
                 <div className="ui top attached">
                     <ContentActionsHeader />
                 </div>
