@@ -5,6 +5,7 @@ import {flagForLocale, locales} from '../../configs/locales';
 import {connectToStores} from 'fluxible-addons-react';
 import {Button, Dropdown, Icon} from 'semantic-ui-react';
 import AriaMenuButton from 'react-aria-menubutton';
+import PropTypes from 'prop-types';
 
 class LocaleSwitcher extends React.Component {
 
@@ -15,6 +16,14 @@ class LocaleSwitcher extends React.Component {
             locales: this.props.IntlStore.locales
         };
     }
+
+    static propTypes = {
+        /** Whether the LocaleSwitcher should trigger a language change when an item is selected. */
+        switchOnSelection: PropTypes.bool,
+
+        /** How this element should be rendered. */
+        mode: PropTypes.oneOf(['sidebarLocaleChangeButton', 'sidebarLocalesMenu', null]),
+    };
 
     /**
      * Sets the app Locale (UI language) to the selected value and reloads the page.
