@@ -12,6 +12,7 @@ import SlideEditStore from '../../stores/SlideEditStore';
 import MediaStore from '../../stores/MediaStore';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import SWAutoComplete from './SWAutoComplete';
+import {Form} from 'semantic-ui-react';
 
 class UploadMediaModal extends React.Component {
 
@@ -230,6 +231,9 @@ class UploadMediaModal extends React.Component {
         this.setState({
             files
         });
+
+        // Set the filename of the image as the default title
+        this.setState({title: files[0].name});
     }
 
     receiveDroppedFile(file) {
@@ -237,15 +241,15 @@ class UploadMediaModal extends React.Component {
         this.onDrop([file]);
     }
 
+    /**
+     * Generic field change handler.
+     * Sets the new value in state, according to the id or name of the calling component.
+     *
+     * @returns {void}
+     */
     handleInputChange(event) {
         this.setState({
-            [event.target.name]: event.target.value
-        });
-    }
-
-    changeLicense(event, data) {
-        this.setState({
-            licenseValue: data.value
+            [event.target.id]: event.target.value
         });
     }
 
@@ -368,14 +372,15 @@ class UploadMediaModal extends React.Component {
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
               <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
-                <div className="required field">
-                  <label htmlFor="mediaTitle">{this.context.intl.formatMessage(this.messages.media_title_label)}</label>
-                  <Input defaultValue={this.state.files[0].name} id="mediaTitle" ref="mediaTitle" name="title"
-                    onChange={this.handleChange.bind(this)}
-                    aria-label={this.context.intl.formatMessage(this.messages.media_title_aria)}
-                    aria-required="true"
-                    required autoFocus/>
-                </div>
+                <Form.Field
+                    id='title'
+                    required
+                    control={Form.Input}
+                    label={this.context.intl.formatMessage(this.messages.media_title_label)}
+                    defaultValue={this.state.title}
+                    onChange={this.handleInputChange}
+                    autoFocus
+                />
                 <div className="field">
                   <div className="ui checkbox">
                     <input id="checkbox_backgroundImage" type="checkbox" tabIndex="0" id="checkbox_backgroundImage" ref="checkbox_backgroundImage"
@@ -384,20 +389,20 @@ class UploadMediaModal extends React.Component {
                     <label htmlFor="checkbox_backgroundImage">{this.context.intl.formatMessage(this.messages.background_message1)}
                     </label>
                   </div>
-                </div>                
-                <div className="required field">
-                  <label htmlFor="mediaAltText">{this.context.intl.formatMessage(this.messages.media_altText_label)} </label>
-                  <Popup trigger={<input id="mediaAltText" ref="mediaAltText" id="UploadMediaModal_input_mediaAltText"
-                                  name="alt" onChange={this.handleChange.bind(this)}
-                                  aria-label={this.context.intl.formatMessage(this.messages.media_altText_aria)}
-                                  aria-required="true" required/>}
-                     content={this.context.intl.formatMessage(this.messages.media_altText_content)} position='top center'/>
                 </div>
+                <Form.Field
+                    id='alt'
+                    required
+                    control={Form.Input}
+                    label={this.context.intl.formatMessage(this.messages.media_altText_label)}
+                    value={this.state.alt}
+                    onChange={this.handleInputChange}
+                />
                 <SWAutoComplete
                     required={true}
                     // error={this.state.formValidationErrors.language}
                     label={this.context.intl.formatMessage(this.messages.media_license_label)}
-                    name='licenseValue'
+                    id='licenseValue'
                     defaultValue='CC0'
                     options={[
                         {name: 'CC0 Public Domain', value: 'CC0'},
