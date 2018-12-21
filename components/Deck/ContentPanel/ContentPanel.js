@@ -48,28 +48,28 @@ class ContentPanel extends React.Component {
                 case 'deck':
                     switch (this.props.ContentStore.mode) {
                         case 'view':
-                            H1heading = "Deck overview for " + this.props.deckSlug;
+                            H1heading = 'Deck overview for ' + this.props.deckSlug;
                             break;
                         case 'edit':
-                            H1heading = "Edit deck properties for " + this.props.deckSlug;
+                            H1heading = 'Edit deck properties for ' + this.props.deckSlug;
                             break;
                         default:
-                            H1heading = "Deck overview for " + this.props.deckSlug;
+                            H1heading = 'Deck overview for ' + this.props.deckSlug;
                     }
                     break;
                 case 'slide':
                     switch (this.props.ContentStore.mode) {
                         case 'view':
-                            H1heading = "Current Slide "  ;
+                            H1heading = 'Current Slide '  ;
                             break;
                         case 'edit':
-                            H1heading = "Edit Slide " ;
+                            H1heading = 'Edit Slide ' ;
                             break;
                         case 'markdownEdit':
-                            H1heading = "Edit Slide with markdown " ;
+                            H1heading = 'Edit Slide with markdown ' ;
                             break;
                         default:
-                            H1heading = "Current Slide " ;
+                            H1heading = 'Current Slide  ;
                     }
                     break;
         }
