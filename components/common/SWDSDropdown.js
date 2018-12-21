@@ -71,6 +71,7 @@ class SWDSDropdown extends React.Component {
         if(selectedItem) this.setState({value: selectedItem.value});
         if(this.props.onChange) this.props.onChange({
             target: {
+                id: this.props.id,
                 name: this.props.name,
                 value: (selectedItem ? selectedItem.value : null)
             }

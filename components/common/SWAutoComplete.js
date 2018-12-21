@@ -94,6 +94,7 @@ class SWAutoComplete extends React.Component {
         // Forward the event to an onChange handler, if one is registered.
         if(this.props.onChange) this.props.onChange({
             target: {
+                id: this.props.id,
                 name: this.props.name,
                 value: (selectedItem ? selectedItem.value : null)
             }
