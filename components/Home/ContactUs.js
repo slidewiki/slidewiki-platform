@@ -220,58 +220,7 @@ class ContactUs extends React.Component {
             });
         }
     }
-    onEmailChange(event,data){
-        if(this.props.UserProfileStore.username.length === 0){
-          //Not logged user, he can edit
-            this.setState({
-                email: data.value
-            });
-        }
-    }
 
-    /* Screen readers doesn't read aloud the options when we use input+datalist. For this reason, we don't require that element to send the form
-    checkType(){
-        let noTypeError = true;
-        //The following  code is needed if we implement the type of report using Dropdown
-        //Begin Dropdown
-        //if (this.typeContact.state.value === '' ){
-        //    noTypeError = false;
-        //    swal({
-        //        title: this.context.intl.formatMessage(this.messages.swal_title),
-        //        text: this.context.intl.formatMessage(this.messages.checkType_text),
-        //        type: 'error',
-        //        confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-        //        confirmButtonClass: 'ui olive button',
-        //        allowEscapeKey: false,
-        //        allowOutsideClick: false,
-        //        buttonsStyling: false
-        //    }).then((accepted) => {
-
-        //        ReactDOM.findDOMNode(this.typeContact).focus();
-        //    });
-        //}
-        //End Dropdown
-        if (this.typeContact2.inputRef.value === '' ){
-            noTypeError = false;
-            swal({
-                title: this.context.intl.formatMessage(this.messages.swal_title),
-                text: this.context.intl.formatMessage(this.messages.checkType_text),
-                type: 'error',
-                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'ui olive button',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                buttonsStyling: false
-            }).then((accepted) => {
-
-                //ReactDOM.findDOMNode(this.typeContact).focus();
-                this.typeContact2.focus();
-            });
-        }
-        return noTypeError;
-
-    }
-    */
     checkEmail(){
         let noEmailError = true;
         let regExp = /\S+@\S+\.\S+/;
