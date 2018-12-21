@@ -1806,6 +1806,7 @@ class CountryDropdown extends React.Component {
                 }))}
                 onChange={this.handleInputChange}
                 required={this.props.required}
+                width={this.props.width}
             />
         );
     }

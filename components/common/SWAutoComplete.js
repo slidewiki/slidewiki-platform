@@ -60,7 +60,9 @@ class SWAutoComplete extends React.Component {
         /** Function to run on the onChange event. */
         onChange: PropTypes.func,
         /** Text for an associated ARIA described-by element. */
-        ariaDescription: PropTypes.string
+        ariaDescription: PropTypes.string,
+        /** The width in columns of the Component. */
+        width: PropTypes.string,
     };
 
     // When new props are set, this update the state and changes the item selected in Downshift.
@@ -104,6 +106,8 @@ class SWAutoComplete extends React.Component {
             field: true,
             required: this.props.required,
             error: this.props.error,
+            [this.props.width]: this.props.width,
+            wide: this.props.width,
         });
 
         // If ariaDescription is set, generate an element to contain an aria-describedBy description.

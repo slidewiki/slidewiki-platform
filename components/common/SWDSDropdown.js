@@ -54,6 +54,8 @@ class SWDSDropdown extends React.Component {
         error: PropTypes.bool,
         /** The pre-set value of the Component. */
         defaultValue: PropTypes.string,
+        /** The width in columns of the Component. */
+        width: PropTypes.string,
         // TODO: Add label
     };
 
@@ -81,6 +83,8 @@ class SWDSDropdown extends React.Component {
             field: true,
             required: this.props.required,
             error: this.props.error,
+            [this.props.width]: this.props.width,
+            wide: this.props.width,
         });
 
         return (
@@ -119,7 +123,7 @@ class SWDSDropdown extends React.Component {
                                         autoComplete: 'nope'
                                     })}
                                 />
-                                <ControllerButton {...getToggleButtonProps()}>
+                                <ControllerButton {...getToggleButtonProps()} {...css({zIndex: 12})}>
                                     <ArrowIcon isOpen={isOpen} />
                                 </ControllerButton>
                             </div>
