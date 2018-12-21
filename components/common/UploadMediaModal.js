@@ -6,11 +6,12 @@ import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} f
 import updateGraphic from '../../actions/media/updateGraphic';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
-import {isEmpty} from '../../common';
+import {getLanguageDisplayName, isEmpty, translationLanguages} from '../../common';
 import cancelUploadMediaFile from '../../actions/media/cancelUploadMediaFile';
 import SlideEditStore from '../../stores/SlideEditStore';
 import MediaStore from '../../stores/MediaStore';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import SWAutoComplete from './SWAutoComplete';
 
 class UploadMediaModal extends React.Component {
 
@@ -36,6 +37,7 @@ class UploadMediaModal extends React.Component {
         this.showLicense = this.showLicense.bind(this);
         this.receiveDroppedFile = this.receiveDroppedFile.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.messages = defineMessages({
             swal_error_title : {
                 id: 'uploadMediaModal.swal_error_title',
@@ -235,6 +237,12 @@ class UploadMediaModal extends React.Component {
         this.onDrop([file]);
     }
 
+    handleInputChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+
     changeLicense(event, data) {
         this.setState({
             licenseValue: data.value
@@ -385,18 +393,18 @@ class UploadMediaModal extends React.Component {
                                   aria-required="true" required/>}
                      content={this.context.intl.formatMessage(this.messages.media_altText_content)} position='top center'/>
                 </div>
-                <div className="required field">
-                  <label htmlFor="mediaLicense">{this.context.intl.formatMessage(this.messages.media_license_label)}</label>
-                  <Dropdown id="mediaLicense" selection
-                    options={[{text: 'CC0 Public Domain', value: 'CC0'},
-                            {text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},
-                            {text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]}
+                <SWAutoComplete
+                    required={true}
+                    // error={this.state.formValidationErrors.language}
+                    label={this.context.intl.formatMessage(this.messages.media_license_label)}
+                    name='licenseValue'
                     defaultValue='CC0'
-                    onChange={this.changeLicense.bind(this)}
-                    ref="mediaLicense"
-                    aria-label={this.context.intl.formatMessage(this.messages.media_license_aria)}
-                    aria-required="true" required/>
-                </div>
+                    options={[
+                        {name: 'CC0 Public Domain', value: 'CC0'},
+                        {name: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},
+                        {name: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]}
+                    onChange={this.handleInputChange}
+                />
                 {licenseBoxes}
                 <div className="required field">
                   <div className="ui checkbox">
