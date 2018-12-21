@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
-import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
+import {Button, Icon, Image, Input, Modal, Divider, TextArea, Form} from 'semantic-ui-react';
 import updateGraphic from '../../actions/media/updateGraphic';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
@@ -10,9 +10,9 @@ import {getLanguageDisplayName, isEmpty, translationLanguages} from '../../commo
 import cancelUploadMediaFile from '../../actions/media/cancelUploadMediaFile';
 import SlideEditStore from '../../stores/SlideEditStore';
 import MediaStore from '../../stores/MediaStore';
-import {FormattedMessage, defineMessages} from 'react-intl';
+import {defineMessages} from 'react-intl';
 import SWAutoComplete from './SWAutoComplete';
-import {Form} from 'semantic-ui-react';
+import uuid from 'uuid/v1';
 
 class UploadMediaModal extends React.Component {
 
@@ -39,6 +39,7 @@ class UploadMediaModal extends React.Component {
         this.receiveDroppedFile = this.receiveDroppedFile.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleLicenceInputChange = this.handleLicenceInputChange.bind(this);
         this.messages = defineMessages({
             swal_error_title : {
                 id: 'uploadMediaModal.swal_error_title',
@@ -243,14 +244,26 @@ class UploadMediaModal extends React.Component {
 
     /**
      * Generic field change handler.
-     * Sets the new value in state, according to the id or name of the calling component.
+     * Sets the new value in state, according to the name of the calling component.
      *
      * @returns {void}
      */
     handleInputChange(event) {
         this.setState({
-            [event.target.id]: event.target.value
+            [event.target.name]: event.target.value
         });
+    }
+
+    /**
+     * Handles changes to the licence dropdown.
+     * Sets/unsets the copyrightHolder, depending on which licence is selected.
+     * Then refers the event to the regular handleInputChange handler.
+     *
+     * @returns {void}
+     */
+    handleLicenceInputChange(event) {
+        this.setState({copyrightHolder: (event.target.value === 'CC0') ? null : this.props.userFullName})
+        this.handleInputChange(event);
     }
 
     submitPressed(e) {
@@ -358,22 +371,30 @@ class UploadMediaModal extends React.Component {
           {dropzone}
           </div>;
         let saveHandler= this.showLicense;
-        let licenseBoxes = '';
         let submitButtonText = this.context.intl.formatMessage(this.messages.submit_button_text1);
         let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = this.context.intl.formatMessage(this.messages.modal_heading2);
-            //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
-            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field">
-            <label htmlFor="copyrightHolder">{this.context.intl.formatMessage(this.messages.copyrightHolder_label)}</label>
-            <Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label={this.context.intl.formatMessage(this.messages.copyrightHolder_aria_label)} aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
+
+            // Renders the copyrightHolder input if a non-public-domain licence is selected.
+            let copyrightHolderInput = (this.state.licenseValue === 'CC0') ? null : <Form.Field
+                id={uuid()}
+                name='copyrightHolder'
+                required
+                control={Form.Input}
+                label={this.context.intl.formatMessage(this.messages.copyrightHolder_label)}
+                value={this.state.copyrightHolder}
+                onChange={this.handleInputChange}
+            />;
+
             content = <div>
               <TextArea className="sr-only" id="UploadMediaModalDescription" value={this.context.intl.formatMessage(this.messages.modal_description2)} />
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
               <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                 <Form.Field
-                    id='title'
+                    id={uuid()}
+                    name='title'
                     required
                     control={Form.Input}
                     label={this.context.intl.formatMessage(this.messages.media_title_label)}
@@ -391,7 +412,8 @@ class UploadMediaModal extends React.Component {
                   </div>
                 </div>
                 <Form.Field
-                    id='alt'
+                    id={uuid()}
+                    name='alt'
                     required
                     control={Form.Input}
                     label={this.context.intl.formatMessage(this.messages.media_altText_label)}
@@ -402,15 +424,16 @@ class UploadMediaModal extends React.Component {
                     required={true}
                     // error={this.state.formValidationErrors.language}
                     label={this.context.intl.formatMessage(this.messages.media_license_label)}
-                    id='licenseValue'
+                    id={uuid()}
+                    name='licenseValue'
                     defaultValue='CC0'
                     options={[
                         {name: 'CC0 Public Domain', value: 'CC0'},
                         {name: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},
                         {name: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]}
-                    onChange={this.handleInputChange}
+                    onChange={this.handleLicenceInputChange}
                 />
-                {licenseBoxes}
+                {copyrightHolderInput}
                 <div className="required field">
                   <div className="ui checkbox">
                     <input id="terms" type="checkbox"
