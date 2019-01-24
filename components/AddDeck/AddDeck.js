@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connectToStores } from 'fluxible-addons-react';
-import { navigateAction } from 'fluxible-router';
-import { Microservices } from '../../configs/microservices';
+import {connectToStores} from 'fluxible-addons-react';
+import { navigateAction} from 'fluxible-router';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ImportStore from '../../stores/ImportStore';
@@ -11,13 +10,11 @@ import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
-import importCanceled from '../../actions/import/importCanceled';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import storeTags from '../../actions/import/storeTags';
-import addActivity from '../../actions/activityfeed/addActivity';
-import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
+import ImportPreviewModal from './ImportPreviewModal';
 import LanguageDropdown from '../common/LanguageDropdown';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
@@ -34,6 +31,10 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
+        
+        this.state = {
+            showPreviewModal: false
+        };
         this.defaultTagNames = [];// used for saving defaultName properties for tags
     }
     componentDidMount() {
@@ -56,12 +57,24 @@ class AddDeck extends React.Component {
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
             this.updateProgressBar();
+        if (this.props.ImportStore.uploadProgress === 0) {
+            $('#progressbar_addDeck_upload').progress('reset');
+            $('#progresslabel_addDeck_upload').text('');
+        }
 
         if (this.props.ImportStore.error !== null)
             this.showError();
     }
-    handleKeyPressUploadModal(event) {
-        if (event.key === 'Enter') {
+    closePreviewModal() {
+        // Reset form
+        // this.initializeProgressBar();
+        this.refs.checkbox_conditions.checked = false;
+        this.refs.checkbox_imageslicense.checked = false;
+        
+        this.setState({showPreviewModal: false});
+    }
+    handleKeyPressUploadModal(event){
+        if(event.key === 'Enter'){
             this.handleUploadModal(event);
         }
     }
@@ -175,12 +188,6 @@ class AddDeck extends React.Component {
             url: '/deck/' + this.props.AddDeckStore.redirectID + '/_/deck/' + this.props.AddDeckStore.redirectID
         });
     }
-    handleImportRedirect() {
-        this.context.executeAction(importFinished, {});  // destroy import components state
-        this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.props.ImportStore.deckId
-        });
-    }
     updateProgressBar() {
         const progress_messages = defineMessages({
             uploading: {
@@ -213,130 +220,32 @@ class AddDeck extends React.Component {
             }
         });
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
-        let noOfSlides = String(this.props.ImportStore.noOfSlides);
-        let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
-        let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? this.context.intl.formatMessage(progress_messages.uploading) :
-            (this.props.ImportStore.uploadProgress === 65) ? this.context.intl.formatMessage(progress_messages.converting) :
-                (this.props.ImportStore.uploadProgress !== 100) ? this.context.intl.formatMessage(progress_messages.importing) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides :
-                    (noOfSlides === totalNoOfSlides) ? this.context.intl.formatMessage(progress_messages.uploaded) :
-                        this.context.intl.formatMessage(progress_messages.imported) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides + this.context.intl.formatMessage(progress_messages.slides);//this should not happen, but user should know in case it does
+        let noOfSlides = this.props.ImportStore.noOfSlides;
+        let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
+        let progressLabel = this.context.intl.formatMessage(progress_messages.uploading);
+        if (noOfSlides > 0) {
+            if (this.props.ImportStore.uploadProgress === 100) {
+                if (noOfSlides === totalNoOfSlides) {
+                    progressLabel = this.context.intl.formatMessage(progress_messages.uploaded);
+                } else {
+                    progressLabel = this.context.intl.formatMessage(progress_messages.imported) + noOfSlides  + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides + this.context.intl.formatMessage(progress_messages.slides);//this should not happen, but user should know in case it does
+                }
+            } else if (noOfSlides === 1) {
+                progressLabel = this.context.intl.formatMessage(progress_messages.converting);
+            } else {
+                progressLabel = this.context.intl.formatMessage(progress_messages.importing) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides;
+            }
+        }
+        
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
 
         if (this.props.ImportStore.uploadProgress === 100) {
             if (this.props.ImportStore.deckId !== null) {
-                // createActivity
-                let activity = {
-                    activity_type: 'add',
-                    user_id: String(this.props.UserProfileStore.userid),
-                    content_id: String(this.props.ImportStore.deckId) + '-1',
-                    content_name: this.refs.input_title.value,
-                    content_owner_id: String(this.props.UserProfileStore.userid),
-                    content_kind: 'deck'
-                };
-                context.executeAction(addActivity, { activity: activity });
-
-                const success_messages = defineMessages({
-                    success_title_text: {
-                        id: 'AddDeck.swal.success_title_text',
-                        defaultMessage: 'Deck created!',
-                    },
-                    success_text: {
-                        id: 'AddDeck.swal.success_text',
-                        defaultMessage: 'The selected file has been imported and a new deck has been created.',
-                    },
-                    preview_text: {
-                        id: 'AddDeck.swal.preview_text',
-                        defaultMessage: 'Here is a preview of your slides. It may take a few seconds for the images to be created. You can use the tab key to move through the images.',
-                    },
-                    success_text_extra: {
-                        id: 'AddDeck.swal.success_text_extra',
-                        defaultMessage: 'This new deck will not be visible to others in your decks page or in search results until published.',
-                    },
-                    success_confirm_text: {
-                        id: 'AddDeck.swal.success_confirm_text',
-                        defaultMessage: 'Complete import',
-                    },
-                    success_reject_text: {
-                        id: 'AddDeck.swal.success_reject_text',
-                        defaultMessage: 'Try again',
-                    },
-                    success_imported_slides_text: {
-                        id: 'AddDeck.swal.success_imported_slides_text',
-                        defaultMessage: 'Imported slides:',
-                    },
-                    success_publish_deck_text: {
-                        id: 'AddDeck.swal.success_publish_deck_text',
-                        defaultMessage: 'Publish your deck for it to show in search results immediately (publishing occurs after a few seconds)',
-                    }
-                });
-
-                let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:100%;"';
-                // let borderStyle = 'border:1px solid black;border-radius:5px;';
-                //let html = this.context.intl.formatMessage(success_messages.success_text) + ' ' + this.context.intl.formatMessage(success_messages.preview_text) + '<br><br>' +
-                let html = '<p style="text-align:left;">' + this.context.intl.formatMessage(success_messages.preview_text) + '</p><br><br>' +
-                    '<div style="height: 260px;overflow: auto;" >' +
-                    '<table><tr>';
-                let slides = this.props.ImportStore.slides;
-                for (let i = 0; i < slides.length; i++) {
-                    let slide = slides[i];
-                    let thumbnailAlt = 'Slide ' + (i + 1) + ': ';
-                    if (slide.title !== undefined)
-                        thumbnailAlt += slide.title;
-                    let thumbnailSrc = Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/' + (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
-                    html += '<td style="padding: 15px;"><div style="width: 250px;" tabIndex="0">' +
-                        'Slide ' + (i + 1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + thumbnailSrc + ' alt="' + thumbnailAlt + '" aria-hidden="true" />' +
-                        '</div></td>'; //THUMBNAIL
+                if (!this.state.showPreviewModal) {
+                    this.setState({
+                        showPreviewModal: true
+                    });
                 }
-                html += '</tr></table></div>';
-                html += '<h3><div class="ui checkbox" style="text-align:left"><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
-
-                swal({
-                    title: this.context.intl.formatMessage(success_messages.success_title_text),
-                    text: this.context.intl.formatMessage(success_messages.success_text) +
-                        '\n' + this.context.intl.formatMessage(success_messages.success_text_extra),
-                    html: html,
-                    type: 'success',
-                    showCloseButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
-                    confirmButtonClass: 'positive ui button',
-                    cancelButtonText: this.context.intl.formatMessage(success_messages.success_reject_text),
-                    cancelButtonClass: 'ui red button',
-                    buttonsStyling: false,
-                    allowOutsideClick: false
-                }).then((accepted) => {
-                    let checkboxPublish = $('#checkbox_publish')[0].checked;
-                    if (checkboxPublish) {
-                        //Publish the deck (set hidden to false)
-                        let deckId = this.props.ImportStore.deckId;
-                        let selector = {
-                            id: deckId
-                        };
-
-                        this.context.executeAction(publishDeck, {
-                            deckId: deckId,
-                            title: this.props.ImportStore.title,
-                            language: this.props.ImportStore.language,
-                            description: this.props.ImportStore.description,
-                            theme: this.props.ImportStore.theme,
-                            license: this.props.ImportStore.license,
-                            selector: selector,
-                            hidden: false,
-                        });
-                    }
-                    this.handleImportRedirect();
-
-                    return true;
-                }, (reason) => {
-                    //Reset form
-                    this.context.executeAction(importCanceled, {});  // destroy import components state
-                    this.context.executeAction(addDeckDestruct, {});
-                    this.initializeProgressBar();
-                    this.refs.checkbox_conditions.checked = false;
-                    this.refs.checkbox_imageslicense.checked = false;
-                }).catch(() => {
-                    return true;
-                });
             } else {
                 const error_messages = defineMessages({
                     error_title_text: {
@@ -675,6 +584,7 @@ class AddDeck extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <ImportPreviewModal isOpen={this.state.showPreviewModal} handleClose={this.closePreviewModal.bind(this)} />
                         <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
                             <div className="bar"></div>
                             <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"></div>

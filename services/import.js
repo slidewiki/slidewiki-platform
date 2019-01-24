@@ -1,18 +1,24 @@
 import {Microservices} from '../configs/microservices';
 import formdata from 'form-data';
-const util = require('util');
+import rp from 'request-promise';
 const log = require('../configs/log').log;
 
 export default {
     name: 'import',
+    read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
+        let args = params.params? params.params : params;
+        rp.get({uri: Microservices.file.uri + '/thumbnail/slide/' + args.slide.id + '/' + (args.theme ? args.theme : 'default'), encoding: null, timeout: 2000}).then((res) => {
+            callback(null, new Buffer(res).toString('base64'));
+        }).catch((err) => {
+            callback(err, '');
+        });        
+    },
     create: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let form = new formdata();
-
-        //let keys = [];
-        //for(let k in params) keys.push(k);
-        // console.log('import service', params.file, params.base64.length);
 
         //create a HTTP POST form request
         form.append('file', params.base64);

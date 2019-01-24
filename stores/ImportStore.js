@@ -129,7 +129,7 @@ class ImportStore extends BaseStore {
         // console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         // this.uploadProgress = 100;
-        this.uploadProgress = 65;
+        // this.uploadProgress = 65;
         this.deckId = headers.deckid;
         this.totalNoOfSlides = parseInt(headers.noofslides);
 
@@ -172,25 +172,49 @@ class ImportStore extends BaseStore {
         if (this.noOfSlides < noOfSlides) {//no of slides has changed
             this.noOfSlides = noOfSlides;
             this.slides = res.slides;
-            if (this.noOfSlides === 1) {//only one slide imported - still converting (progress should stay at 'converting') or one-slide presentation?
-                if (this.totalNoOfSlides === 1) {//one-slide presentation - complete
-                    this.uploadProgress = 100;
+            
+            this.safetyCounter = 0;
+            if (this.noOfSlides < this.totalNoOfSlides) {
+                if (this.noOfSlides > 1) {//creation of slides started
+                    // this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
+                    this.uploadProgress = this.uploadProgress + (100 - this.uploadProgress) * (this.noOfSlides / this.totalNoOfSlides);
                 }
-            } else {//more than one slide has been created ( show progress after 'converting')
-                this.safetyCounter = 0;
-                if (this.noOfSlides < this.totalNoOfSlides) {
-                    this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
-                } else {
-                    this.uploadProgress = 100;
-                }
+            } else {
+                this.uploadProgress = 100;
             }
+            
         } else {
-            if (++this.safetyCounter > 100) {//100 times the call was made, and no change in noOfSlides
+            if (noOfSlides === 1 && this.safetyCounter % 5 === 0) {//still converting - increase progress
+                this.uploadProgress += (65 - this.uploadProgress) / 3;
+            }
+            if (++this.safetyCounter > 200) {//100 times the call was made, and no change in noOfSlides
                 this.uploadProgress = 100;
             }
         }
 
         this.emitChange();
+    }
+    thumbnailSuccess(payload) {
+        let slideIndex = this.slides.findIndex((s) => {return (String(s.id) === String(payload.id));});
+        if (slideIndex !== -1) {
+            if (!this.slides[slideIndex].thumbnail) {
+                this.slides[slideIndex].thumbnail = payload.thumbnail;
+                console.log('!!!!!!!!!!!!!!!!! ', payload.id);
+                this.emitChange();
+            } 
+        }
+    }
+    thumbnailFailed(payload) {
+        let slideIndex = this.slides.findIndex((s) => {return (String(s.id) === String(payload.id));});
+        if (slideIndex !== -1) {
+            this.slides[slideIndex].thumbnail = undefined;//null means there is an ongoing request
+            let currentNoOfFailedAttempts = this.slides[slideIndex].noOfThumbnailAttempts;
+            console.log('Fail !!!!!!!! ', payload.id, currentNoOfFailedAttempts);  
+            this.slides[slideIndex].noOfThumbnailAttempts = (currentNoOfFailedAttempts) ? ++currentNoOfFailedAttempts : 1;
+            if (this.slides[slideIndex].noOfThumbnailAttempts < 10) {
+                this.emitChange();
+            }
+        }
     }
 }
 
@@ -204,7 +228,9 @@ ImportStore.handlers = {
     'UPLOAD_SUCCESS': 'uploadSuccess',
     'UPLOAD_STARTED': 'uploadStarted',
     'UPLOAD_MORE_PROGRESS': 'uploadMoreProgress',
-    'SLIDES_PROGRESS': 'slidesProgress'
+    'SLIDES_PROGRESS': 'slidesProgress',
+    'THUMBNAIL_SUCCESS': 'thumbnailSuccess',
+    'THUMBNAIL_FAILED': 'thumbnailFailed'
 };
 
 export default ImportStore;
