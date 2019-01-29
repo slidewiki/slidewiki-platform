@@ -21,7 +21,7 @@ class FollowingModal extends React.Component {
     render() {
         let deckFollowings = this.props.UserFollowingsStore.deckFollowings;
         let playlistFollowings = this.props.UserFollowingsStore.playlistFollowings;
-        let deckContent = (this.props.UserFollowingsStore.loading) ? '' : (this.props.UserFollowingsStore.deckFollowings.length === 0) ? <div className="ui center aligned basic segment">You are not subscriebd to any decks. </div> : deckFollowings.map( (fol) => {
+        let deckContent = (this.props.UserFollowingsStore.loading) ? '' : (this.props.UserFollowingsStore.deckFollowings.length === 0) ? <div className="ui center aligned basic segment">You are not subscribed to any decks. </div> : deckFollowings.map( (fol) => {
             let slug = fol.title && slugify(fol.title).toLowerCase() || '_';
             return (
                 <div key={fol.id} className="ui vertical segment">

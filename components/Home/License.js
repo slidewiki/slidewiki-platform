@@ -7,7 +7,7 @@ class license extends React.Component {
         return (
             <StaticPage>
                 <div className="ui container" ref="license">
-                    <h1 className="ui header"><FormattedMessage id="licence.header" defaultMessage="Creative Commons Licenses and SlideWiki"/></h1>
+                    <h1 className="ui header" id="main"><FormattedMessage id="licence.header" defaultMessage="Creative Commons Licenses and SlideWiki"/></h1>
                     <p><FormattedMessage id="licence.p1" defaultMessage="SlideWiki is an open platform allowing you to publish educational content under a Creative Commons license. By publishing content under a Creative Commons license, SlideWiki intends to empower educational communities to author, share and reuse educational content in order to improve the availability of educational materials. This page will explain how SlideWiki uses Creative Common licenses."/></p>
                     <h2 className="ui header"><FormattedMessage id="licence.1.header" defaultMessage="Creative Commons Attribution ShareAlike 4.0 CC BY-SA"/></h2>
                     <div className="ui right floated medium image">

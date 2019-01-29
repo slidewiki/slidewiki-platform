@@ -51,6 +51,29 @@ class AttachSubdeckModal extends React.Component{
         this.handleNextButton = this.handleNextButton.bind(this);
         this.handlePreviousButton = this.handlePreviousButton.bind(this);
 
+        this.messages = defineMessages({
+            attachText:{
+                id: 'attachSlidesModal.attachText',
+                defaultMessage: 'Attach Slides'
+            },
+            attach:{
+                id: 'attachSlidesModal.attach',
+                defaultMessage: 'Attach'
+            },
+            next:{
+                id: 'attachSlidesModal.next',
+                defaultMessage: 'Next'
+            },
+            previous:{
+                id: 'attachSlidesModal.previous',
+                defaultMessage: 'Previous'
+            },
+            cancel:{
+                id: 'attachSlidesModal.cancel',
+                defaultMessage: 'Cancel'    
+            }
+
+        });
 
     }
 
@@ -239,9 +262,9 @@ class AttachSubdeckModal extends React.Component{
             }
 
             actionButton = <Button id="nextAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Next Select slides"
-                              data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
+                              data-tooltip={this.context.intl.formatMessage(this.messages.next)} disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
                                <Icon name="arrow right"/>
-                                Next
+                               {this.context.intl.formatMessage(this.messages.next)}
                                <Icon name="arrow right"/>
                             </Button>;
             actionButton2='';
@@ -253,23 +276,23 @@ class AttachSubdeckModal extends React.Component{
             //<TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
 
             segmentPanelContent = <AttachSlides numColumns="3" />;
-            actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
-                            data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
+            actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(this.messages.attach)}
+                            data-tooltip={this.context.intl.formatMessage(this.messages.attach)} disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
                              <Icon name="attach"/>
-                              Attach
+                             {this.context.intl.formatMessage(this.messages.attach)}
                              <Icon name="attach"/>
                           </Button>;
-            actionButton2 =<Button id="previousAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Previos"
-                            data-tooltip="Previous" onClick={this.handlePreviousButton}>
+            actionButton2 =<Button id="previousAttachModal" color="green" icon tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(this.messages.previous)}
+                            data-tooltip={this.context.intl.formatMessage(this.messages.previous)} onClick={this.handlePreviousButton}>
                              <Icon name="arrow left"/>
-                              Previous
+                             {this.context.intl.formatMessage(this.messages.previous)}
                              <Icon name="arrow left"/>
                           </Button>;
 
         }
 
         let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
-                                                     type="button" aria-label="Attach slides"
+                                                     type="button" aria-label={this.context.intl.formatMessage(this.messages.attachText)}
                                                      aria-hidden={this.state.modalOpen}
                                                      basic onClick={this.handleOpen}
                                                      tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
@@ -277,7 +300,7 @@ class AttachSubdeckModal extends React.Component{
                 <Icon className="grey" name="file alternate outline"/>
                 <Icon className="corner black" name="attach"/>
             </Icon.Group>
-        </Button>} content='Attach slides' on='hover'/>;
+        </Button>} content={this.context.intl.formatMessage(this.messages.attachText)} on='hover'/>;
 
 
         return (
@@ -285,13 +308,13 @@ class AttachSubdeckModal extends React.Component{
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 role="dialog"
-                id="attachSubDeckModal"
+                id="attachSlidesModal"
                 aria-labelledby="attachModalHeader"
                 aria-describedby="attachSlidesDescriptionSR"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
-                        id="focus-trap-attachSubdeckModal"
+                        id="focus-trap-attachSlidesModal"
                         focusTrapOptions={{
                             onDeactivate: this.unmountTrap,
                             clickOutsideDeactivates: true,
@@ -301,7 +324,7 @@ class AttachSubdeckModal extends React.Component{
                         className = "header">
 
                 <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
-                     Attach slides
+                    {this.context.intl.formatMessage(this.messages.attachText)}
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
@@ -316,8 +339,8 @@ class AttachSubdeckModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
-                                Cancel
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(this.messages.cancel)} data-tooltip={this.context.intl.formatMessage(this.messages.cancel)} onClick={this.handleClose} >
+                              {this.context.intl.formatMessage(this.messages.cancel)}
                               </Button>
                             </Modal.Actions>
                          </Segment>
@@ -334,7 +357,8 @@ class AttachSubdeckModal extends React.Component{
 
 
 AttachSubdeckModal.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {

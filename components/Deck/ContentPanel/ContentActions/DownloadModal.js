@@ -4,6 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import { Button, Container, Form, Modal, Radio, Icon, Segment, Grid } from 'semantic-ui-react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../../stores/ContentStore';
+import TranslationStore from '../../../../stores/TranslationStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
@@ -47,6 +48,10 @@ class DownloadModal extends React.Component{
             downloadModal_HTML:{
                 id:'downloadModal.downloadModal_HTML',
                 defaultMessage: 'HTML (unzip and open index.html to access off-line presentation)'
+            },
+            downloadModal_button:{
+                id:'downloadModal.downloadModal_button',
+                defaultMessage:'Download'
             }
         });
     }
@@ -92,30 +97,35 @@ class DownloadModal extends React.Component{
             return ''; //no deckId
         }
 
+        let language = '';
+        if (this.props.TranslationStore.currentLang !== undefined && this.props.TranslationStore.currentLang !== '') {
+            language = this.props.TranslationStore.currentLang;
+        }
+
         switch (type) {
             case 'PDF':
                 //show print view instead of pdf export service
-                return makeNodeURL(this.props.ContentStore.selector, 'print', undefined, undefined, undefined);
+                return makeNodeURL(this.props.ContentStore.selector, 'print', undefined, undefined, language);
                 //return Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
                 break;
             case 'ePub':
-                return Microservices.pdf.uri + '/exportEPub/' + splittedId[0];
+                return Microservices.pdf.uri + '/exportEPub/' + splittedId[0] + (language !== '' ? '?language=' + language : '');
                 break;
             case 'HTML':
-                return Microservices.pdf.uri +'/exportOfflineHTML/'+ splittedId[0];
+                return Microservices.pdf.uri +'/exportOfflineHTML/'+ splittedId[0] + (language !== '' ? '?language=' + language : '');
                 break;
             case 'xAPI Launch (Live)':
-                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=false&format=xml';
+                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?format=xml' + (language !== '' ? '&language=' + language : '');
                 break;
             case 'xAPI Launch (Offline)':
-                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=true&format=xml';
+                return Microservices.xapi.uri +'/getTinCanPackage/' + splittedId[0]+ '?offline=true&format=zip' + (language !== '' ? '&language=' + language : '');
                 break;
             case 'SCORMv1.2':
             case 'SCORMv2':
             case 'SCORMv3':
             case 'SCORMv4':
                 let version = type.split('v'); //separates format from version. In second position we have the version
-                return Microservices.pdf.uri + '/exportSCORM/' + splittedId[0]+ '?version='+version[1];
+                return Microservices.pdf.uri + '/exportSCORM/' + splittedId[0]+ '?version='+version[1] + (language !== '' ? '&language=' + language : '');
                 break;
 
 
@@ -134,6 +144,7 @@ class DownloadModal extends React.Component{
         if (userId === '') {
             userId = '0';//Unknown - not logged in
         }
+
         let activity = {
             activity_type: 'download',
             user_id: userId,
@@ -167,12 +178,12 @@ class DownloadModal extends React.Component{
 
               <Modal
                   trigger={ !this.props.textOnly ?
-                        <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
+                        <Button icon aria-hidden="false" className="ui button" type="button" aria-label={this.context.intl.formatMessage(this.messages.downloadModal_button)} data-tooltip={this.context.intl.formatMessage(this.messages.downloadModal_button)} onClick={this.handleOpen} >
                               <Icon name='download' size='large'/>
                         </Button>
                         :
-                        <div className={this.props.className} aria-label="Download" data-tooltip="Download" onClick={this.handleOpen}>
-                            <span><Icon name='download' size='large'/> Download</span>
+                        <div className={this.props.className} aria-label={this.context.intl.formatMessage(this.messages.downloadModal_button)} data-tooltip={this.context.intl.formatMessage(this.messages.downloadModal_button)} onClick={this.handleOpen}>
+                            <span><Icon name='download' size='large'/> {this.context.intl.formatMessage(this.messages.downloadModal_button)}</span>
                         </div>
                   }
 
@@ -390,10 +401,11 @@ DownloadModal.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
-DownloadModal = connectToStores(DownloadModal,[ContentStore,UserProfileStore],(context,props) => {
+DownloadModal = connectToStores(DownloadModal,[ContentStore,UserProfileStore, TranslationStore],(context,props) => {
     return{
         ContentStore : context.getStore(ContentStore).getState(),
-        UserProfileStore : context.getStore(UserProfileStore).getState()
+        UserProfileStore : context.getStore(UserProfileStore).getState(),
+        TranslationStore : context.getStore(TranslationStore).getState()
     };
 });
 

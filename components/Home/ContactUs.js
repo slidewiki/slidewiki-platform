@@ -337,12 +337,12 @@ class ContactUs extends React.Component {
             <Container text>
                 <Divider hidden />
 
-                <Header as="h2">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
+                <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
                 <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
                   <Divider hidden />
                   <Segment attached="bottom" textAlign="left" >
-                    <Header as='h3'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
+                    <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)}>
                       <Form.Field key='1'>
                           <SWAutoComplete

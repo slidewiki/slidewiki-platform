@@ -129,7 +129,7 @@ class SearchResultsPanel extends React.Component {
         if (!this.props.loading) {
             resultsHeader = <div>
                 <Default style={{display: 'inline-block'}}>
-                    <h2 className="ui header" role="main"><FormattedMessage {...this.messages.header} /></h2> 
+                    <h2 className="ui header" role="main" id="main"><FormattedMessage {...this.messages.header} /></h2>
                     {
                         this.context.intl.formatMessage(this.messages.resultsMsg, {
                             resultsNum: results.length,
@@ -193,7 +193,7 @@ class SearchResultsPanel extends React.Component {
                         <Grid>
                             <Grid.Column width={4}>
                                 <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
-                                    <h2 className="ui header"><FormattedMessage {...this.messages.filters} /></h2> 
+                                    <h2 className="ui header" id="navigation"><FormattedMessage {...this.messages.filters} /></h2>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
@@ -255,7 +255,7 @@ class SearchResultsPanel extends React.Component {
                         </Grid>
                         <div className="ui left dimmed sidebar vertical menubar" ref="menubar" >
                             <Segment basic>
-                                <h2 className="ui header">{this.context.intl.formatMessage(this.messages.filters)}</h2>
+                                <h2 className="ui header" id="navigation">{this.context.intl.formatMessage(this.messages.filters)}</h2>
                                 <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
                             </Segment>
                         </div>

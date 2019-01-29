@@ -8,6 +8,7 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 import MediaStore from '../../../../../stores/MediaStore';
 import PaintModalStore from '../../../../../stores/PaintModalStore';
 import saveSlide from '../../../../../actions/slide/saveSlide';
+import saveSlideWithDeckTransition from '../../../../../actions/slide/saveSlideWithDeckTransition';
 import editImageWithSrc from '../../../../../actions/paint/editImageWithSrc';
 import editSVGwithSVG from '../../../../../actions/paint/editSVGwithSVG';
 import handleDroppedFile from '../../../../../actions/media/handleDroppedFile';
@@ -45,42 +46,83 @@ class SlideContentEditor extends React.Component {
         //this.redoContent = '';
         this.scaleRatio = null;
 
-        CKEDITOR.on('instanceReady', (ev) => {
+        if (typeof CKEDITOR === 'undefined') {
+            setTimeout(() => {
+                CKEDITOR.on('instanceReady', (ev) => {
 
-            ev.editor.on('fileUploadRequest', (ev2) => {
-                ev2.cancel();
-            });
+                    ev.editor.on('fileUploadRequest', (ev2) => {
+                        ev2.cancel();
+                    });
 
-            ev.editor.document.on('drop', (ev2) => {
-                if (ev2.data.$.dataTransfer.files) {
-                    console.log('droppped');
-                    if (ev2.data.$.dataTransfer.files.length !== 0) {
-                        let file = ev2.data.$.dataTransfer.files[0];
-                        let params = {};
-                        let url = URL.createObjectURL(file);
-                        file.preview = url;
-                        params.file = file;
+                    ev.editor.document.on('drop', (ev2) => {
+                        if (ev2.data.$.dataTransfer.files) {
+                            console.log('droppped');
+                            if (ev2.data.$.dataTransfer.files.length !== 0) {
+                                let file = ev2.data.$.dataTransfer.files[0];
+                                let params = {};
+                                let url = URL.createObjectURL(file);
+                                file.preview = url;
+                                params.file = file;
 
-                        this.context.executeAction(handleDroppedFile, file);
+                                this.context.executeAction(handleDroppedFile, file);
+                            }
+                        }
+                    });
+
+                    ev.editor.document.on('paste', (ev2) => {
+                        if (ev2.data.$.clipboardData.files) {
+                            console.log('pasted');
+                            if (ev2.data.$.clipboardData.files.length !== 0){
+                                let file = ev2.data.$.clipboardData.files[0];
+                                let params = {};
+                                let url = URL.createObjectURL(file);
+                                file.preview = url;
+                                params.file = file;
+
+                                this.context.executeAction(handleDroppedFile, file);
+                            }
+                        }
+                    });
+                });
+            }, 500);
+        } else {
+            CKEDITOR.on('instanceReady', (ev) => {
+
+                ev.editor.on('fileUploadRequest', (ev2) => {
+                    ev2.cancel();
+                });
+
+                ev.editor.document.on('drop', (ev2) => {
+                    if (ev2.data.$.dataTransfer.files) {
+                        console.log('droppped');
+                        if (ev2.data.$.dataTransfer.files.length !== 0) {
+                            let file = ev2.data.$.dataTransfer.files[0];
+                            let params = {};
+                            let url = URL.createObjectURL(file);
+                            file.preview = url;
+                            params.file = file;
+
+                            this.context.executeAction(handleDroppedFile, file);
+                        }
                     }
-                }
-            });
+                });
 
-            ev.editor.document.on('paste', (ev2) => {
-                if (ev2.data.$.clipboardData.files) {
-                    console.log('pasted');
-                    if (ev2.data.$.clipboardData.files.length !== 0){
-                        let file = ev2.data.$.clipboardData.files[0];
-                        let params = {};
-                        file.preview = URL.createObjectURL(file);
-                        params.file = file;
+                ev.editor.document.on('paste', (ev2) => {
+                    if (ev2.data.$.clipboardData.files) {
+                        console.log('pasted');
+                        if (ev2.data.$.clipboardData.files.length !== 0){
+                            let file = ev2.data.$.clipboardData.files[0];
+                            let params = {};
+                            let url = URL.createObjectURL(file);
+                            file.preview = url;
+                            params.file = file;
 
-                        this.context.executeAction(handleDroppedFile, file);
+                            this.context.executeAction(handleDroppedFile, file);
+                        }
                     }
-                }
+                });
             });
-        });
-
+        }
     }
 
     hasChanges = () => {
@@ -674,6 +716,7 @@ class SlideContentEditor extends React.Component {
             //console.log('destroy CKEDITOR instance');
             CKEDITOR.instances.inlineContent.destroy();
         }
+
         CKEDITOR.inline('inlineContent', {
             customConfig: '/assets/ckeditor_config.js',
             removePlugins: 'floatingspace,resize',
@@ -783,6 +826,47 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
+    loadAnnotationsCkeditor(annotations) {
+        let annotationsConverted = this.convertAnnotationsToJsonLd(annotations);
+        CKEDITOR.instances.inlineContent.plugins.semanticannotations.loadAnnotations(CKEDITOR.instances.inlineContent, annotationsConverted);
+    }
+    convertAnnotationsToJsonLd(annotations) {
+        let returnData = [];
+
+        for (let i=0; i<annotations.length; i++) {
+            let annotation = annotations[i];
+            returnData.push({
+                '@id': annotation.uri,
+                '@type': annotation.type.indexOf(',') > -1 ? annotation.type.split(',') : annotation.type,
+                'Schema:name': annotation.name,
+                'Schema:identifier': annotation.inlineId,
+                '_autoGenerated': annotation.autoGenerated,
+                '@context': { //for context for each annotation
+                    'Schema': 'http://schema.org/',
+                    'Wikidata': 'http://www.wikidata.org/entity/',
+                    'DBpedia': 'http://dbpedia.org/ontology/'
+            	},
+            });
+        }
+
+        return returnData;
+    }
+    convertAnnotationsToDatabaseStructure(annotations) {
+        let returnData = [];
+
+        for (let i=0; i<annotations.length; i++) {
+            let annotation = annotations[i];
+            returnData.push({
+                'uri': annotation['@id'],
+                'type': Array.isArray(annotation['@type']) ? annotation['@type'] : [], //convert to empty array, if it is not an array
+                'name': annotation['Schema:name'],
+                'inlineId': annotation['Schema:identifier'],
+                'autoGenerated': annotation._autoGenerated,
+            });
+        }
+
+        return returnData;
+    }
     handleSaveButton(){
         console.log('SlideContentEditor.handleSaveButton');
         if (this.props.UserProfileStore.username !== '') {
@@ -811,8 +895,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
+                        
+            let annotations = [];
             if (CKEDITOR.instances.inlineContent != null) {
-            //    console.log('destroy previous CKEDITOR instance');
+                // get the annotations before CKEditor is destroyed
+                CKEDITOR.instances.inlineContent.plugins.semanticannotations.getAnnotationsToStore(CKEDITOR.instances.inlineContent);
+                annotations = CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsToStore;
+                annotations = this.convertAnnotationsToDatabaseStructure(annotations);
+                
                 CKEDITOR.instances.inlineContent.destroy();
             }
             if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
@@ -847,6 +937,7 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
             let transition = this.props.SlideEditStore.slideTransition ? this.props.SlideEditStore.slideTransition : 'none';
+            let transitionType = this.props.SlideEditStore.transitionType ? this.props.SlideEditStore.transitionType : 'slide';
 
 
             let ltiWidth =   this.props.SlideEditStore.ltiWidth;
@@ -865,6 +956,7 @@ class SlideContentEditor extends React.Component {
             */
 
             //setTimeout(function() {
+            //if (transitionType === 'slide') {
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
@@ -874,17 +966,32 @@ class SlideContentEditor extends React.Component {
                 dataSources: dataSources,
                 selector: currentSelector,
                 tags: tags,
-
+                transition: transition,
+                annotations: annotations,
                 ltiWidth: ltiWidth,
                 ltiHeight: ltiHeight,
                 ltiURL: ltiURL,
                 ltiKey: ltiKey,
                 ltiResponseURL: ltiResponseURL,
                 ltiResponseHTML: ltiResponseHTML,
-
-                transition: transition,
             });
             //},500);
+            /*} else {
+                let currentSlidePayload = {
+                    id: currentSelector.sid,
+                    deckID: deckID,
+                    title: title,
+                    content: content,
+                    speakernotes: speakernotes,
+                    dataSources: dataSources,
+                    selector: currentSelector,
+                    tags: tags,
+                    transition: transition
+                };
+                this.context.executeAction(saveSlideWithDeckTransition, {
+                    currentSlidePayload: currentSlidePayload
+                });
+            }*/
 
             this.resize();
             //this.forceUpdate();
@@ -1163,6 +1270,7 @@ class SlideContentEditor extends React.Component {
 
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+            this.loadAnnotationsCkeditor(this.props.SlideEditStore.annotations);
 
             this.finishLoading = true;
             //console.log('test');
@@ -1271,7 +1379,7 @@ class SlideContentEditor extends React.Component {
         this.forceUpdate();
     };
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         //MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
@@ -2048,6 +2156,11 @@ class SlideContentEditor extends React.Component {
             }
             CKEDITOR.instances.inlineContent.execCommand('table');
         }
+        if (nextProps.SlideEditStore.annotateClick === 'true' && nextProps.SlideEditStore.annotateClick !== this.props.SlideEditStore.annotateClick)
+        {
+            CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
+            
+        }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
         {
             if($('.pptx2html').length) //if slide is in canvas mode
@@ -2243,6 +2356,17 @@ class SlideContentEditor extends React.Component {
         //do something to change code for questions
         if (nextProps.SlideEditStore.embedQuestionsClick === 'true' && nextProps.SlideEditStore.embedQuestionsClick !== this.props.SlideEditStore.embedQuestionsClick){
             this.handleEmbedQuestionsClick(nextProps.SlideEditStore.embedQuestionsContent);
+        }
+        if (nextProps.SlideEditStore.slideId !== this.props.SlideEditStore.slideId) {
+            // if ckeditor is loaded
+            if (CKEDITOR.instances.inlineContent != null && CKEDITOR.instances.inlineContent.plugins.semanticannotations != null) {
+                this.loadAnnotationsCkeditor(nextProps.SlideEditStore.annotations);
+            } else if(CKEDITOR.instances.inlineContent) {
+                // if ckeditor is not ready yet, create listener to load annotations when ready
+                CKEDITOR.instances.inlineContent.once('instanceReady', (evt) => {
+                    this.loadAnnotationsCkeditor(nextProps.SlideEditStore.annotations);
+                });
+            }
         }
     }
     addBorders() { //not used at the moment
@@ -2658,6 +2782,7 @@ class SlideContentEditor extends React.Component {
             //if none of above yield a theme they will be legacy decks:
             styleName = 'white';
         }
+
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (

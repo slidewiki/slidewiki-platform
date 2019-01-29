@@ -123,7 +123,7 @@ class UserGroups extends React.Component {
                 <div key={group._id} className="ui vertical segment" >
                     <div className="ui two column grid container">
                         <div className="left aligned ten wide column">
-                            <div className="ui header"><h3>{group.name}</h3></div>
+                            <div className="ui header"><h2>{group.name}</h2></div>
                             <div className="meta">
                               {group.members.length+1} {this.context.intl.formatMessage(((group.members.length+1) !== 1) ? this.messages.members : this.messages.member)}
                             </div>
@@ -160,7 +160,7 @@ class UserGroups extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h1 className="ui left floated header" >{this.context.intl.formatMessage(this.messages.groups)}</h1>
+                  <h1 className="ui left floated header" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h1>
                   <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
                       <i className="icon plus"/>
                       <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>

@@ -58,8 +58,8 @@ class LocaleSwitcher extends React.Component {
                 value={locale}
                 key={i}
                 tag='li'
-                text={getLanguageName(locale)}>
-                        <i className={`flag ${flag}`} aria-hidden={true}/>{getLanguageName(locale)}
+                text={getLanguageNativeName(locale)}>
+                        <i className={`flag ${flag}`} aria-hidden={true}/>{getLanguageNativeName(locale)}
             </AriaMenuButton.MenuItem>;
         });
     }
@@ -75,14 +75,14 @@ class LocaleSwitcher extends React.Component {
                         onClick={this.handleLocaleClick.bind(this, locale)}
                         href={`?locale=${locale}`} className="item">
                             {flag ? <i className={`flag ${flag}`} /> : <span><i className='flag icon' /></span>}
-                            {getLanguageName(locale)}
+                            {getLanguageNativeName(locale)}
                     </a>
                 );
             default:
                 return (
                     <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
                       <i className={`flag ${flag || 'icon'}`}/>
-                      {getLanguageName(locale)}
+                      {getLanguageNativeName(locale)}
                     </Dropdown.Item>
                 );
         }
@@ -96,7 +96,7 @@ class LocaleSwitcher extends React.Component {
             case 'sidebarLocaleChangeButton':
                 return(
                     <div>
-                        <span>{getLanguageName(this.state.currentLocale)}</span>
+                        <span>{getLanguageNativeName(this.state.currentLocale)}</span>
                         <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>
                     </div>);
 
@@ -112,10 +112,10 @@ class LocaleSwitcher extends React.Component {
             default:
                 return (
                     <AriaMenuButton.Wrapper onSelection={this.handleLocaleClick.bind(this)}>
-                        <AriaMenuButton.Button aria-label={'Language menu: '+getLanguageName(this.state.currentLocale)}>
+                        <AriaMenuButton.Button aria-label={'Language menu: '+getLanguageNativeName(this.state.currentLocale)}>
                             <Button basic inverted icon labelPosition='right'>
                                 <i className={currentFlag ? `flag ${currentFlag}` : 'icon flag'}/>
-                                {getLanguageName(this.state.currentLocale)}
+                                {getLanguageNativeName(this.state.currentLocale)}
                                 <Icon name='down caret' />
                             </Button>
                         </AriaMenuButton.Button>

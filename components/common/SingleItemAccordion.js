@@ -75,7 +75,7 @@ class SingleItemAccordion extends React.Component {
                     <AccordionItemTitle>
                         { this.props.buttonAs === 'text' ? this.buttonAsText() : this.buttonAsButton()}
                     </AccordionItemTitle>
-                    <AccordionItemBody hideBodyClassName='hidden'>
+                    <AccordionItemBody hideBodyClassName='display-none'>
                         {this.props.revealContent}
                     </AccordionItemBody>
                 </AccordionItem>
