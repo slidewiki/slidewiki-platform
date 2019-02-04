@@ -2,7 +2,7 @@ import React from 'react';
 import {css as emoCSS} from 'emotion';
 import styled from 'react-emotion';
 import matchSorter from 'match-sorter';
-import {translationLanguages, getLanguageDisplayName} from '../common';
+import {translationLanguages, getLanguageDisplayName} from '../../common';
 
 const allItems = translationLanguages.map((s) => ({name: getLanguageDisplayName(s), id: s}));
 

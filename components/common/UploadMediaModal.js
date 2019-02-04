@@ -265,7 +265,7 @@ class UploadMediaModal extends React.Component {
      * @returns {void}
      */
     handleLicenceInputChange(event) {
-        this.setState({copyrightHolder: (event.target.value === 'CC0') ? null : this.props.userFullName})
+        this.setState({copyrightHolder: (event.target.value === 'CC0') ? null : this.props.userFullName});
         this.handleInputChange(event);
     }
 

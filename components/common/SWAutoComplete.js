@@ -12,7 +12,7 @@ import {
     itemToString,
     getItems,
     filterItems
-} from '../../lib/swAutoCompleteShared';
+} from './SWAutocompleteShared';
 import Downshift from 'downshift';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
