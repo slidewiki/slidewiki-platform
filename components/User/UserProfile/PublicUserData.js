@@ -22,7 +22,7 @@ class PublicUserData extends React.Component {
     }
     render() {
         let content1 = <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ false } width={ 150 } centered={ false } size={ 'small' } aria-hidden={ 'true' } />;
-        let content2 = <div><h2>{ this.props.user.displayName }</h2>
+        let content2 = <div><h2><div className="sr-only">User: </div>{ this.props.user.displayName }</h2>
         <div className="ui item">
             <div className="item">
                 <div className="content">

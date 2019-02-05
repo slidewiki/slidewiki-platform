@@ -338,6 +338,14 @@ class LoginModal extends React.Component {
                 id:'userSignIn.headerText',
                 defaultMessage:'Sign In'
             },
+            ariagoogle:{
+                id: 'LoginModal.aria.google',
+                defaultMessage: 'sign in with your Google account'
+            },
+            ariagithub:{
+                id: 'LoginModal.aria.github',
+                defaultMessage: 'sign in with your Github account'
+            }
         });
 
         let inputs =
@@ -385,10 +393,10 @@ class LoginModal extends React.Component {
                     active={this.state.activeTrap}
                     className = "header">
               <div className="header">
-                  <h1 id="siginModal_header" style={headerStyle}>
+                  <h2 id="siginModal_header" style={headerStyle}>
                      {this.context.intl.formatMessage(messages.headerText)}
 
-                  </h1>
+                  </h2>
               </div>
               <div className="content">
                 <div className="ui container">
@@ -422,10 +430,10 @@ class LoginModal extends React.Component {
                       <br/>
                       <div className="container">
 
-                        <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label="sign in with your Google account">
+                        <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagoogle)}>
                           <i className="large google plus icon"/>
                         </button>
-                        <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label="sign in with your Github account">
+                        <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagithub)}>
                           <i className="large github icon"/>
                         </button>
                       </div>

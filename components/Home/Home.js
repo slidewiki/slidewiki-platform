@@ -39,7 +39,7 @@ class Home extends React.Component {
             },
             findSlidesContent: {
                 id: 'home.findSlidesContent',
-                defaultMessage: 'SlideWiki provides open educational resourcs and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
+                defaultMessage: 'SlideWiki provides open educational resources and courses across a wide range of topics and education levels. Slides and presentations can be reused and adapted to suit your needs.'
             },
             createSlides: {
                 id: 'home.createSlides',
@@ -121,13 +121,21 @@ class Home extends React.Component {
                 id: 'home.slideWikiAboutVisit',
                 defaultMessage: 'visit the project website.'
             },
-            myDecks: {
-                id: 'home.myDecks',
-                defaultMessage: 'My Decks.'
+            myDecksLink: {
+                id: 'home.myDecksLink',
+                defaultMessage: 'My Decks'
             },
             seeMoreDecks: {
                 id: 'home.seeMoreDecks',
                 defaultMessage: 'See more decks'
+            },
+            learnMoreSW: {
+                id: 'home.leanrMoreSW',
+                defaultMessage: 'Learn more about SlideWiki'
+            },
+            featuredDeck: {
+                id: 'home.featuredDeck',
+                defaultMessage: 'Featured Deck'
             }
         });
     }
@@ -141,6 +149,12 @@ class Home extends React.Component {
     handleSignUpButton() {
         this.context.executeAction(navigateAction, {
             url: '/signup'
+        });
+    }
+
+    handleMyDecksButton() {
+        this.context.executeAction(navigateAction, {
+            url: '/user/' + this.props.UserProfileStore.username
         });
     }
 
@@ -170,25 +184,33 @@ class Home extends React.Component {
         let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
             <a onClick={this.handleLoginButton.bind(this)} style={signInStyle} >{this.context.intl.formatMessage(this.messages.signIn)}</a> :
             <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
-                {this.context.intl.formatMessage(this.messages.myDecks)}
+                {this.context.intl.formatMessage(this.messages.myDecksLink)}.
             </NavLink>;
+
+        let signUpOrMyDecksElement = this.props.UserProfileStore.username === '' ?
+            <button className='home primary button' onClick={this.handleSignUpButton.bind(this)}>
+                {this.context.intl.formatMessage(this.messages.signUp)}
+            </button>
+            :
+            <button className='home primary button' onClick={this.handleMyDecksButton.bind(this)}>
+                {this.context.intl.formatMessage(this.messages.myDecksLink)}
+            </button>;
+
         return (
             <div ref='home'>
                 {/*<!-- presentation starts -->*/}
-                <div className='sr-only' role='main'>
+                <div className='sr-only' role='main' id="main">
                     <h1>{this.context.intl.formatMessage(this.messages.welcome)}</h1>
                 </div>
                 <section className='banner-container'>
-                    <img src='/assets/images/home/banner.jpg' alt=''/>
+                    <img src='/randomBanner' alt=''/>
                         <div className='banner-content' style={{zIndex: 0}}>
                             <div className='ui container'>
                                 <div className='ui  column  grid'>
                                     <div className='column '>
                                         <SearchBox type='home'/>
                                         <div className='button-blk'>
-                                            <button className='home primary button' onClick={this.handleSignUpButton.bind(this)}>
-                                                {this.context.intl.formatMessage(this.messages.signUp)}
-                                            </button>
+                                            {signUpOrMyDecksElement}
                                             <button className='home secondary  button' onClick={this.scrollToLearnMore.bind(this)}>
                                                 {this.context.intl.formatMessage(this.messages.learnMore)}
                                             </button>
@@ -203,7 +225,7 @@ class Home extends React.Component {
 
                 <section className='content-container'>
                     <div id="learnMore" className='sr-only'>
-                        <h2>Learn more about SlideWiki</h2>
+                        <h2>{this.context.intl.formatMessage(this.messages.learnMoreSW)}</h2>
                     </div>
                     <div className='feature-block'>
                         <div className='wrapper'>
@@ -310,7 +332,7 @@ class Home extends React.Component {
                                 <div className='column'>
                                     <h2>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
                                     <div className="featured-deck">
-                                        <h3>Featured deck</h3>
+                                        <h3>{this.context.intl.formatMessage(this.messages.featuredDeck)}</h3>
                                         <DeckList scope="featured" limit="1" inline="true"/>
                                         <div className="deck-link">
                                             <a href="/featured">{this.context.intl.formatMessage(this.messages.seeMoreDecks)}</a>

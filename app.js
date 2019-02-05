@@ -56,6 +56,8 @@ import LoginModalStore from './stores/LoginModalStore';
 import UserStatsStore from './stores/UserStatsStore';
 import UserGroupsStore from './stores/UserGroupsStore';
 import GroupStatsStore from './stores/GroupStatsStore';
+import DeckStatsStore from './stores/DeckStatsStore';
+
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -114,7 +116,8 @@ const app = new Fluxible({
         LoginModalStore,
         UserStatsStore,
         UserGroupsStore,
-        GroupStatsStore
+        GroupStatsStore,
+        DeckStatsStore,
     ]
 });
 

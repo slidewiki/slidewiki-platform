@@ -100,6 +100,10 @@ class Details extends React.Component {
         this.initialize = this.initialize.bind(this);
     }
 
+    componentDidMount() {
+        this.initialize();
+    }
+
     componentDidUpdate() {
         this.initialize();
         // console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError, this.props.currentUsergroup);
@@ -333,6 +337,21 @@ class Details extends React.Component {
         this.context.executeAction(updateUsergroup, {group: group, offline: true});
     }
 
+    handleClickAdmin(member, shouldBeAdmin = false) {
+        console.log('handleClickAdmin', member, shouldBeAdmin);
+
+        let group = this.getGroup(this.props.currentUsergroup.members);
+        this.hasChanges = true;
+
+        group.members.forEach((gmember) => {
+            if (gmember.userid === member.userid) {
+                gmember.role = shouldBeAdmin ? 'admin' : '';
+            }
+        });
+
+        this.context.executeAction(updateUsergroup, {group: group, offline: true});
+    }
+
     render() {
         // console.log('Details render', this.props.currentUsergroup);
         if (!this.props.currentUsergroup || !this.props.currentUsergroup.creator || !this.props.currentUsergroup.creator.userid)
@@ -363,6 +382,12 @@ class Details extends React.Component {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
+                let handler2 = () => {
+                    this.handleClickAdmin(member, false);
+                };
+                let handler3 = () => {
+                    this.handleClickAdmin(member, true);
+                };
                 let optionalElement = (member.organization || member.country) ?  (
                   <div>
                     {member.organization || this.context.intl.formatMessage(this.messages.unknownOrganization)} ({member.country || this.context.intl.formatMessage(this.messages.unknownCountry)})
@@ -383,17 +408,33 @@ class Details extends React.Component {
                         <div className="one wide column middle aligned">
                           <UserPicture picture={ member.picture } username={ member.username } avatar={ true } width= { 24 } />
                         </div>
-                        <div className="fourteen wide column">
+                        <div className={((this.props.isAdmin || this.props.isCreator) && member.userid !== this.props.userid ? 'thirteen' : 'fourteen') + ' wide column'}>
                           <div className="content">
                               <TextArea className="sr-only" id={'usernameIsALinkHint' + member.userid} value={this.context.intl.formatMessage(this.messages.messageUsericon)} tabIndex ='-1'/>
-                              <a className="header" href={'/user/' + member.username} target="_blank">{member.displayName || member.username}</a>
+                              <a className="header" href={'/user/' + member.username} target="_blank">{member.displayName || member.username}</a>{(member.role === 'admin') ? <b>Admin</b> : ''}
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
-                        {(this.props.isAdmin || this.props.isCreator) ?
+                        {
+                          (this.props.isAdmin || this.props.isCreator) && member.userid !== this.props.userid ?
+                            (member.role === 'admin') ?
+                              <div className="one wide column middle aligned">
+                                <button className="ui basic icon button" data-tooltip="Remove admin role" aria-label="remove admin role" onClick={handler2}>
+                                  <i className="user times middle aligned icon"></i>
+                                </button>
+                              </div>
+                            :
+                              <div className="one wide column middle aligned">
+                                <button className="ui basic icon button" data-tooltip="Add admin role" aria-label="add admin role" onClick={handler3}>
+                                  <i className="user plus middle aligned icon"></i>
+                                </button>
+                              </div>
+                            : ''
+                        }
+                        {(this.props.isAdmin || this.props.isCreator) && member.userid !== this.props.userid ?
                           <div className="one wide column middle aligned">
-                            <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member">
-                              <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                            <button className="ui basic icon button" data-tooltip="Remove group member" aria-label="remove group member" onClick={fct}>
+                              <i className="remove middle aligned icon"></i>
                             </button>
                           </div>
                         : ''}
@@ -446,8 +487,8 @@ class Details extends React.Component {
         return (
           <div>
             <div className="ui segments">
-              <div className="ui secondary segment">
-                  <h3>{(this.props.isAdmin || this.props.isCreator) ? this.context.intl.formatMessage(this.messages.details) : this.context.intl.formatMessage(this.messages.members)}</h3>
+              <div className="ui secondary clearing segment">
+                  <h1 className="ui left floated header" id="main">{(this.props.isAdmin || this.props.isCreator) ? this.context.intl.formatMessage(this.messages.details) : this.context.intl.formatMessage(this.messages.members)}</h1>
               </div>
               <div className="ui segment">
                 <div className="ui container">
@@ -486,7 +527,7 @@ class Details extends React.Component {
                                 </div>
 
                                 <div className="ui header">
-                                    <h3>{this.context.intl.formatMessage(this.messages.members)}</h3>
+                                    <h2>{this.context.intl.formatMessage(this.messages.members)}</h2>
                                 </div>
                               </div>
                             : '' }
@@ -502,12 +543,12 @@ class Details extends React.Component {
             {(this.props.isAdmin || this.props.isCreator) ?
               <div className="ui segments">
                 <div className="ui secondary segment">
-                    <h3>
+                    <h2>
                       <FormattedMessage
                         id='GroupDetails.exchangePicture'
                         defaultMessage='Group picture'
                       />
-                    </h3>
+                    </h2>
                 </div>
                 <div className="ui segment">
                     <ChangePicture group={ this.props.currentUsergroup }/>

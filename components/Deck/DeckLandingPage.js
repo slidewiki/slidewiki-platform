@@ -1,14 +1,16 @@
-import React from 'react';;
+import React from 'react';
+import {Card} from 'semantic-ui-react';;
 import { NavLink } from 'fluxible-router';
 import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
 
 import { connectToStores } from 'fluxible-addons-react';
+import ContentStore from '../../stores/ContentStore';
 import DeckPageStore from '../../stores/DeckPageStore';
-import DeckListStore from '../../stores/DeckListStore';
 import DeckViewStore from '../../stores/DeckViewStore';
 import ContentLikeStore from '../../stores/ContentLikeStore';
 import ContentModulesStore from '../../stores/ContentModulesStore';
 import TranslationStore from '../../stores/TranslationStore';
+import SimilarContentStore from '../../stores/SimilarContentStore';
 
 import CustomDate from './util/CustomDate';
 import {getLanguageDisplayName, getLanguageName, isEmpty} from '../../common';
@@ -17,12 +19,14 @@ import { Microservices } from '../../configs/microservices';
 
 import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
+import openReportModal from '../../actions/report/openReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationsPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
+import slugify from 'slugify';
 
 class DeckLandingPage extends React.Component {
 
@@ -52,8 +56,170 @@ class DeckLandingPage extends React.Component {
         return presLocation;
     }
 
+    getPlaceholder() {
+        return (
+            <Container fluid>
+                <Divider hidden/>
+                <Grid padded='vertically' divided='vertically' stackable>
+                    <Grid.Column only="tablet computer" tablet={1} computer={2}>
+                    </Grid.Column>
+
+                    <Grid.Column mobile={16} tablet={14} computer={12}>
+                        <Grid.Row>
+                            <Segment>
+                                <Grid stackable>
+                                    <Grid.Column width={4}>
+                                        <div className="ui placeholder">
+                                            <div className="rectangular image"></div>
+                                        </div>
+                                    </Grid.Column>
+                                    <Grid.Column width={12}>
+                                        <Grid.Row>
+                                            <div className="ui placeholder">
+                                                <div className="header">
+                                                    <div className="long line"></div>
+                                                    <div className="long line"></div>
+                                                </div>
+                                            </div>
+                                        </Grid.Row>
+                                        <Divider hidden />
+                                        <Grid stackable>
+                                            <Grid.Row columns={2}>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="line"></div>
+                                                        <div className="line"></div>
+                                                        <div className="line"></div>
+                                                    </div>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="line"></div>
+                                                        <div className="line"></div>
+                                                    </div>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                            <Divider hidden />
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="header">
+                                                            <div className="line"></div>
+                                                        </div>
+                                                        <div className="paragraph">
+                                                            <div className="line"></div>
+                                                            <div className="line"></div>
+                                                        </div>
+                                                    </div>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                            <Divider hidden />
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="header">
+                                                            <div className="line"></div>
+                                                        </div>
+                                                        <div className="paragraph">
+                                                            <div className="line"></div>
+                                                        </div>
+                                                    </div>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                    </Grid.Column>
+                                </Grid>
+                            </Segment>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui icon buttons huge attached">
+                                    <Button icon size="huge">
+                                        <Icon name="line graph" />
+                                    </Button>
+                                    <Button icon size="huge">
+                                        <Icon name="warning circle" />
+                                    </Button>
+                                </div>
+
+                                <div className="right inverted menu">
+                                    <div className="ui icon buttons huge attached">
+                                        <Button icon size="huge">
+                                            <Icon name="open folder" />
+                                        </Button>
+                                        <Button icon size="huge">
+                                            <Icon name="play circle" />
+                                        </Button>
+                                        <Button icon size="huge">
+                                            <Icon name="record" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Grid.Row>
+
+                        <Divider hidden />
+
+                        <Grid divided='vertically' stackable>
+                            <Grid.Column only="tablet computer" width={12}>
+                                <Segment attached='top' >
+                                    <div className="ui placeholder">
+                                        <div className="header">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="paragraph">
+                                            <div className="long line"></div>
+                                        </div>
+                                    </div>
+                                </Segment>
+                                <Segment attached>
+                                    <div className="ui placeholder">
+                                        <div className="header">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="paragraph">
+                                            <div className="long line"></div>
+                                        </div>
+                                    </div>
+                                </Segment>
+                                <Segment attached='bottom'>
+                                    <div className="ui placeholder">
+                                        <div className="header">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="paragraph">
+                                            <div className="long line"></div>
+                                        </div>
+                                    </div>
+                                </Segment>
+                            </Grid.Column>
+                            <Grid.Column only="tablet computer" width={4}>
+                                <Segment>
+                                    <div className="ui fluid placeholder">
+                                    </div>
+                                </Segment>
+                                <Segment attached='bottom'>
+                                    <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>
+                                        <CCBYSA size='small' />
+                                    </a>
+                                    This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                </Segment>
+                            </Grid.Column>
+                        </Grid>
+
+                    </Grid.Column>
+
+                    <Grid.Column only="tablet computer" tablet={1} computer={2}>
+                    </Grid.Column>
+
+                </Grid>
+            </Container>
+        );
+    }
+
     render() {
         let deckData = this.props.DeckViewStore.deckData;
+        if (lodash.isEmpty(deckData)) return this.getPlaceholder();
 
         let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children && this.props.DeckViewStore.slidesData.children[0]);
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
@@ -67,13 +233,21 @@ class DeckLandingPage extends React.Component {
         let deckSlug = this.props.DeckPageStore.deckSlug || '_';
         let selector = this.props.DeckPageStore.selector;
         let openDeckUrl = ['', 'deck', selector.id , deckSlug, 'deck', selector.id].join('/');
+        if (this.props.TranslationStore.currentLang) {
+            openDeckUrl += '?language=' + (this.props.TranslationStore.currentLang);
+        }
+
         let presentationUrl = this.getPresentationHref();
+
+        let deckStatsUrl = ['', 'deck', selector.id , deckSlug, 'stats'].join('/');
 
         let deckTags = deckData.tags || [];
         let deckTopics = deckData.topics || [];
 
-        if(!deckData.variants)
-            deckData.variants = [];
+        let deckVariantSlugs = this.props.TranslationStore.nodeVariants.reduce((result, variant) => {
+            result[variant.language] = variant.title ? slugify(variant.title).toLowerCase() : deckSlug;
+            return result;
+        }, {});
 
         let deckLanguages = [this.props.TranslationStore.treeLanguage, ...this.props.TranslationStore.treeTranslations];
 
@@ -99,9 +273,20 @@ class DeckLandingPage extends React.Component {
         };
 
         let interestedInDecks = 'No decks to show';
-        if (this.props.DeckListStore.featured && this.props.DeckListStore.featured.length >= 1) {
-            interestedInDecks =  this.props.DeckListStore.featured.map((deck, i) => {
-                return <Grid.Column key={i} width={5}><NavLink href={`/deck/${deck._id}`}><Image src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}`} bordered /><h4>{deck.title}</h4></NavLink></Grid.Column>;
+        if (this.props.SimilarContentStore.contents && this.props.SimilarContentStore.contents.length >= 1) {
+            interestedInDecks =  this.props.SimilarContentStore.contents.map((deck, i) => {
+                return <Grid.Column key={i} width={5}>
+                    <div className="ui card">
+                        <NavLink href={`/deck/${deck.deckId}`}>
+                                <div className="ui image fluid bordered">
+                                    <img src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlideId}`}  aria-hidden="true" tabIndex="-1" alt=' ' />
+                                </div>
+                                <h4 className="header">
+                                    {deck.title}
+                                </h4>
+                        </NavLink>
+                    </div>
+                </Grid.Column>;
             });
             interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
         }
@@ -109,14 +294,14 @@ class DeckLandingPage extends React.Component {
         return (
             <div>
                 <Container fluid>
-                    <Divider hidden/>
-                    <Grid divided='vertically' stackable>
+
+                    <Grid padded='vertically' divided='vertically' stackable>
                         <Grid.Column only="tablet computer" tablet={1} computer={2}>
                         </Grid.Column>
 
                         <Grid.Column mobile={16} tablet={14} computer={12}>
                             <Grid.Row>
-                                <Segment>
+                                <Segment attached="top">
                                     <Grid stackable>
                                         <Grid.Column width={4}>
                                             <NavLink className="image" aria-hidden tabIndex='-1' href={openDeckUrl}>
@@ -126,8 +311,7 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                         <Grid.Column width={12}>
                                             <div className="row">
-                                                <Header as="h1">
-                                                    <div className="sr-only">Deck title: </div>
+                                                <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
                                                     <div className="sr-only">Deck status: </div>
                                                     {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='pink'>Unlisted</Label>}</Header>
@@ -198,9 +382,15 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                     </Grid>
                                 </Segment>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
+                                    <div className="ui icon buttons huge attached">
+                                        <NavLink href={deckStatsUrl} tabIndex={-1} >
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">
+                                                <Icon name="line graph" />
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                    <ReportModal/>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
@@ -228,25 +418,21 @@ class DeckLandingPage extends React.Component {
                                         { deckLanguages.map((lang, i) =>
                                             <span key={i}>
                                                 {!!i && ',\xa0'}
-                                                <NavLink href={'/deck/' + deckData._id + '-' + deckData.revision + '?language=' + lang}>
+                                                <NavLink href={['', 'deck', selector.id , deckVariantSlugs[lang] || '_'].join('/') + '?language=' + lang}>
                                                     <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
                                                     { getLanguageDisplayName(lang) }
                                                 </NavLink>
                                             </span>
                                         ) }
                                     </Segment>
-                                    <Segment attached='bottom'>
+                                    <Segment attached>
                                         <Header size="small" as="h3">Tags:</Header>
                                         {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
-                                    {
-                                    /* 
                                     <Segment attached='bottom'>
                                         <Header size="small" as="h3">You may also be interested in:</Header>
                                         {interestedInDecks}
                                     </Segment>
-                                    */
-                                    }
                                 </Grid.Column>
                                 <Grid.Column only="tablet computer" width={4}>
                                     <Segment>
@@ -272,14 +458,23 @@ class DeckLandingPage extends React.Component {
     }
 }
 
-DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckPageStore, DeckViewStore, TranslationStore, ContentModulesStore, DeckListStore], (context, props) => {
+DeckLandingPage = connectToStores(DeckLandingPage, [
+    ContentStore,
+    ContentLikeStore,
+    DeckPageStore,
+    DeckViewStore,
+    TranslationStore,
+    ContentModulesStore,
+    SimilarContentStore,
+], (context, props) => {
     return {
+        ContentStore: context.getStore(ContentStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         DeckPageStore: context.getStore(DeckPageStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         TranslationStore: context.getStore(TranslationStore).getState(),
         ContentModulesStore: context.getStore(ContentModulesStore).getState(),
-        DeckListStore : context.getStore(DeckListStore).getState(),
+        SimilarContentStore: context.getStore(SimilarContentStore).getState(),
     };
 });
 

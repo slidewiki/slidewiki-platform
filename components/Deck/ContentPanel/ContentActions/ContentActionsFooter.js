@@ -25,6 +25,7 @@ import AriaMenuButton from 'react-aria-menubutton';
 import TranslationStore from '../../../../stores/TranslationStore';
 import { makeNodeURL } from '../../../common/Util';
 import {Icon} from 'semantic-ui-react';
+import {defineMessages} from 'react-intl';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -34,6 +35,40 @@ class ContentActionsFooter extends React.Component {
         this.visible = true;
         this.state.isMobile = false;
         // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
+        this.messages = defineMessages({
+            followButtonText:{
+                id: 'ContentActionsFooter.followButtonText',
+                defaultMessage:'Subscribe to this deck'
+            },
+            followButtonTextAlternate:{
+                id: 'ContentActionsFooter.followButtonTextAlternate',
+                defaultMessage:'You are subscribed to this deck, click to unsubscribe'
+            },
+            likeButtonText:{
+                id: 'ContentActionsFooter.likeButtonText',
+                defaultMessage:'Like this deck'
+            },
+            likeButtonTextAlternate:{
+                id: 'ContentActionsFooter.likeButtonTextAlternate',
+                defaultMessage:'Dislike this deck'
+            },
+            printText:{
+                id: 'ContentActionsFooter.printText',
+                defaultMessage:'Print'
+            },
+            slideshowText:{
+                id: 'ContentActionsFooter.slideshowText',
+                defaultMessage:'Open slideshow in new tab'
+            },
+            likeText:{
+                id: 'ContentActionsFooter.likeText',
+                defaultMessage:'Like'
+            },
+            subscribeText:{
+                id: 'ContentActionsFooter.subscribeText',
+                defaultMessage:'Subscribe'
+            }
+        });
     }
 
     componentDidMount(){
@@ -134,30 +169,34 @@ class ContentActionsFooter extends React.Component {
     render() {
         let likeButton = 'ui button';
         let followButton = 'ui button';
+        let likeDisabled = '';
+        let followDisabled = '';
         let classNameLikeButton = 'thumbs up alternate large icon';
         let iconFollowButton = <Icon size='large' name='rss' />;
-        let tooltipFollowButton = 'Subscribe to this deck';
-        let tooltipLikeButton = 'Like this deck';
+        let tooltipFollowButton = this.context.intl.formatMessage(this.messages.followButtonText);
+        let tooltipLikeButton = this.context.intl.formatMessage(this.messages.likeButtonText);
         if (this.props.UserProfileStore.userid === '') {
             //undefined user
             likeButton = 'ui disabled button';
             followButton = 'ui disabled button';
+            likeDisabled = 'disabled';
+            followDisabled = 'disabled';
         } else {
             if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
                 //already liked
                 classNameLikeButton = 'thumbs up alternate large blue icon';
-                tooltipLikeButton = 'Dislike this deck';
+                tooltipLikeButton = this.context.intl.formatMessage(this.messages.likeButtonTextAlternate);
             }
 
             if (this.props.UserFollowingsStore.selectedFollowingId !== null) {//IS USER FOLLOWING THIS DECK
                 iconFollowButton = <Icon size='large' name='rss' color='blue' />;
-                tooltipFollowButton = 'You are subscribed to this deck, click to unsubscribe';
+                tooltipFollowButton = this.context.intl.formatMessage(this.messages.followButtonTextAlternate);
             }
         }
 
         let desktopButtons = <div>
           <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
-          <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
+          <button className="ui button" type="button" aria-label={this.context.intl.formatMessage(this.messages.printText)} data-tooltip={this.context.intl.formatMessage(this.messages.printText)} >
               <i className="print large icon"></i>
           </button>
           </a>
@@ -165,18 +204,18 @@ class ContentActionsFooter extends React.Component {
           <ReportModal/>
           <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
                 embedPresentationHref={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)}/>
-          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)} disabled={likeDisabled}>
               <i className={classNameLikeButton}></i>
           </button>
-          <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
+          <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)} disabled={followDisabled}>
               {iconFollowButton}
           </button>
           </div>;
-          
+
         let listStyle = {
             listStyle: 'none'
         };
-        
+
         let mobileButtons = <AriaMenuButton.Wrapper>
             <AriaMenuButton.Button >
              <div style={{'display': 'inline-flex'}}>
@@ -187,8 +226,8 @@ class ContentActionsFooter extends React.Component {
              style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important', 'width': '50%'}} >
                  <AriaMenuButton.MenuItem key= {0} tag='li' style={listStyle}>
                    <a href={makeNodeURL(this.props.ContentStore.selector, 'print', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" className='item'>
-                    <div aria-label="Print" data-tooltip="Print" >
-                        <i className="print large icon"></i> Print
+                    <div aria-label={this.context.intl.formatMessage(this.messages.printText)} data-tooltip={this.context.intl.formatMessage(this.messages.printText)} >
+                        <i className="print large icon"></i> {this.context.intl.formatMessage(this.messages.printText)}
                     </div>
                     </a>
                  </AriaMenuButton.MenuItem>
@@ -203,12 +242,12 @@ class ContentActionsFooter extends React.Component {
                  </AriaMenuButton.MenuItem>
                  <AriaMenuButton.MenuItem key= {4} tag='li' style={listStyle}>
                    <div className='item' aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
-                       <span><i className={classNameLikeButton}></i> Like</span>
+                       <span><i className={classNameLikeButton}></i>{this.context.intl.formatMessage(this.messages.likeText)}</span>
                    </div>
                  </AriaMenuButton.MenuItem>
                  <AriaMenuButton.MenuItem key= {5} tag='li' style={listStyle}>
                    <div className='item' aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)}>
-                       <span>{iconFollowButton} Subscribe</span>
+                       <span>{iconFollowButton}{this.context.intl.formatMessage(this.messages.subscribeText)}</span>
                    </div>
                  </AriaMenuButton.MenuItem>
              </AriaMenuButton.Menu>
@@ -224,8 +263,8 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu" role="menu">
                         <div className="ui icon buttons large right floated">
 
-                            <a href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
-                                <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                            <a id="PresentationNewWindow" href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
+                                <button className="ui button" type="button" aria-label={this.context.intl.formatMessage(this.messages.slideshowText)} data-tooltip={this.context.intl.formatMessage(this.messages.slideshowText)}>
                                     <i className="circle play large icon"></i>
                                 </button>
                             </a>
@@ -241,7 +280,8 @@ class ContentActionsFooter extends React.Component {
 }
 
 ContentActionsFooter.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore, TranslationStore, UserFollowingsStore], (context, props) => {

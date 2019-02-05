@@ -7,6 +7,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Util from '../../common/Util';
+import {getLanguageName} from '../../../common';
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -70,7 +71,7 @@ class ActivityItem extends React.Component {
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'translated '} {nodeRef} {' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
-                        <a href={viewPath}>{node.translation_info.language}</a>
+                        {getLanguageName(node.translation_info.language)}
                         <br/>
                         {DateDiv}
                     </div>
@@ -80,7 +81,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui share alternate icon"></i>);
                 const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 SummaryNode = (
-                    <div className="description">
+                    <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a> {'shared '} {nodeRef} {onPlatform}

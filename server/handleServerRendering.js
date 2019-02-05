@@ -20,6 +20,8 @@ import {loadIntlMessages} from '../actions/loadIntl'; //feeds the store with def
 import { IntlProvider } from 'react-intl';
 import cookie from 'react-cookie';
 
+const path = require('path');
+const fs = require('fs');
 const uuidV4 = require('uuid/v4');
 const log = require('../configs/log').log;
 const env = process.env.NODE_ENV;
@@ -82,6 +84,24 @@ export default function handleServerRendering(req, res, next){
         res: res
     });
 
+    //handle multiple banners
+    if(req.url === '/randomBanner') {
+        const bannerDir = '../assets/images/home/banners/';
+        let file = 'banner1.jpg';
+        fs.readdir(path.resolve(__dirname, bannerDir), (err, files) => {
+            if (err) {
+                //do nothing
+                console.log(err);
+                res.sendFile(path.resolve(__dirname, bannerDir) + '/' + file);
+            }else{
+                let randomIndex = Math.floor(Math.random() * files.length);
+                file = files[randomIndex];
+                res.sendFile(path.resolve(__dirname, bannerDir) + '/' + file);
+            }
+        });
+        return;
+    }
+
     log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
     cookie.plugToRequest(req,res);
     debug('Executing loadIntl action');
@@ -100,26 +120,25 @@ export default function handleServerRendering(req, res, next){
                 reqId: req.reqId
             }, (err) => {
                 if (err) {
-                    if (err.statusCode && err.statusCode === '301') {
-                        //console.log('REDIRECTING to '+ JSON.stringify(err));
+                    if (err.statusCode === 301) {
                         res.redirect(301, err.redirectURL);
-                    }else
-                    if (err.statusCode && err.statusCode === '404') {
+                    } else if (err.statusCode) {
+                        // render page and also set status to the error code
                         let html = renderApp(req, res, context);
                         debug('Sending markup');
                         res.type('html');
                         res.status(err.statusCode);
                         log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                        res.write('<!DOCTYPE html>' + html);
                         res.end();
-                        return;
-                    }else{
+                    } else {
+                        // TODO render page even though there was an error ????
                         let html = renderApp(req, res, context);
                         debug('Sending markup');
                         res.type('html');
                         res.write('<!DOCTYPE html>' + html);
                         log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
                         res.end();
-                        return;
                     }
 
                 } else {

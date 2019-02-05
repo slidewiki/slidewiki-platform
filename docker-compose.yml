@@ -8,6 +8,7 @@ slidewikiplatform:
     - VIRTUAL_HOST=platform.experimental.slidewiki.org
     - LETSENCRYPT_HOST=platform.experimental.slidewiki.org
     - LETSENCRYPT_EMAIL=meissner@informatik.uni-leipzig.de
+    - URL_PLATFORM=https://platform.experimental.slidewiki.org
     - SERVICE_URL_DECK=https://deckservice.experimental.slidewiki.org
     - SERVICE_URL_DISCUSSION=https://discussionservice.experimental.slidewiki.org
     - SERVICE_URL_ACTIVITIES=https://activitiesservice.experimental.slidewiki.org
@@ -22,6 +23,7 @@ slidewikiplatform:
     - SERVICE_URL_SIGNALING=https://signalingservice.experimental.slidewiki.org
     - SERVICE_URL_QUESTION=https://questionservice.experimental.slidewiki.org
     - SERVICE_URL_NLP=https://nlpservice.experimental.slidewiki.org
+    - SERVICE_URL_RECOMMENDER=https://recommenderservice.experimental.slidewiki.org
     - SERVICE_URL_ANALYTICS=https://analyticsservice.experimental.slidewiki.org
     - SERVICE_LEARNINGLOCKER_API_URL=https://api.learninglocker.experimental.slidewiki.org
     - SERVICE_LEARNINGLOCKER_API_AUTH=MWEwNTkwMTg5M2Y4ZjIyZTY4ZThkMzhlYWE0NDZkZjAxZWUyNjdhODo2YjE5MzAxODhmZWM0OTg0ZjE1YzVhODI1Njg2NTY5NDk5YzRmODEz

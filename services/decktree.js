@@ -30,8 +30,7 @@ export default {
             }).then((res) => {
                 callback(null, {translations: res, selector: selector, language: args.language});
             }).catch((err) => {
-                console.log(err);
-                callback(null, {translations: [], selector: selector, language: args.language});
+                callback(err);
             });
         }
 

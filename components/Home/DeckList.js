@@ -32,7 +32,11 @@ class DeckList extends React.Component {
                                 <div className="three wide column">
                                     <div className="ui medium image bordered">
                                         <NavLink href={['/deck', deck._id, deck.slug,].join('/')}>
-                                            <img src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} alt="Featured Image" style={{ maxHeight: '290px', height: 'initial'}} />
+                                            <FormattedMessage id="decklist.featured.alt" defaultMessage="Featured Image.">
+                                                {
+                                                    (alt) => <img alt={alt} src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} style={{ maxHeight: '290px', height: 'initial'}} />
+                                                }
+                                            </FormattedMessage>
                                         </NavLink>
                                     </div>
                                 </div>
@@ -44,19 +48,52 @@ class DeckList extends React.Component {
                                     </div>
                                 </div>
                                 <div className="column right aligned">
-                                    <div className="ui label" >
-                                        <FormattedMessage id="decklist.decklanguage" defaultMessage='Default language' aria-label="Default language">
-                                            {
-                                                (label) => <i className="ui comments outline icon" aria-label={label}></i>
-                                            }
-                                        </FormattedMessage> {deckLanguage}
+                                    <div className="ui labels">
+                                        <div className="ui label">
+                                            <FormattedMessage id="decklist.decklanguage" defaultMessage='Default language' aria-label="Default language">
+                                                {
+                                                    (label) => <i className="comments icon" aria-label={label}></i>
+                                                }
+                                            </FormattedMessage> {deckLanguage}
+                                        </div>
+                                        <div className="ui label">
+                                            <FormattedMessage id="decklist.decknumberofslides" defaultMessage="Number of slides" aria-label="Number of slides">
+                                                {
+                                                    (label) => <i className="block layout icon" aria-label={label}></i>
+                                                }
+                                            </FormattedMessage> {deck.slidesCount}
+                                        </div>
+                                        
                                     </div>
-                                    <div className="ui label"  >
-                                        <FormattedMessage id="decklist.forkcount" defaultMessage='Number of forks'>
-                                            {
-                                                (label) => <i className="fork icon" aria-label={label}></i>
-                                            }
-                                        </FormattedMessage> {deck.forkCount}
+                                    <div className="ui labels">
+                                        <div className="ui label">
+                                            <FormattedMessage id="decklist.forkcount" defaultMessage='Number of forks'>
+                                                {
+                                                    (label) => <i className="fork icon" aria-label={label}></i>
+                                                }
+                                            </FormattedMessage> {deck.forkCount}
+                                        </div>
+                                        <div className="ui label">
+                                            <FormattedMessage id="decklist.likecount" defaultMessage='Number of likes'>
+                                                {
+                                                    (label) => <i className="thumbs up icon" aria-label={label}></i>
+                                                }
+                                            </FormattedMessage> {deck.likesCount}
+                                        </div>
+                                        <div className="ui label">
+                                            <FormattedMessage id="decklist.numberofshares" defaultMessage='Number of shares'>
+                                                {
+                                                    (label) => <i className="share alternate icon" aria-label={label}></i>
+                                                }
+                                            </FormattedMessage> {deck.sharesCount}
+                                        </div>
+                                        <div className="ui label">
+                                            <FormattedMessage id="decklist.numberofdownloads" defaultMessage='Number of downloads'>
+                                                {
+                                                    (label) => <i className="download icon" aria-label={label}></i>
+                                                }
+                                            </FormattedMessage> {deck.downloadsCount}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

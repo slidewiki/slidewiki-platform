@@ -8,7 +8,9 @@ import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
-import {connectToStores} from 'fluxible-addons-react';
+import UserLTIs from './UserLTIs';
+import UserLTIEdit from './UserLTIEdit';
+import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserStatsStore from '../../../stores/UserStatsStore';
 import UserGroupsStore from '../../../stores/UserGroupsStore';
@@ -110,6 +112,15 @@ class UserProfile extends React.Component {
                         return this.displayGroups();
                         break;
                 }});
+            case categories.categories[6]:
+                return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
+                    case categories.ltis[0]:
+                        return this.displayLTIs();
+                        break;
+                    case categories.ltis[1]:
+                        return this.displayLTIedit();
+                        break;
+                }});
             case 'stats':
                 return this.addScaffold(() => this.displayUserStats());
             case categories.categories[6]:
@@ -156,14 +167,14 @@ class UserProfile extends React.Component {
         return (
           <div>
               <div className="ui segments">
-
-                  <div className="ui secondary segment">
-                      <h3>
+                  <h1 className="sr-only" id="main" role="main">Profile Settings</h1>
+                  <div className="ui secondary segment" >
+                      <h2>
                         <FormattedMessage
                           id='UserProfile.exchangePicture'
                           defaultMessage='Exchange picture'
                         />
-                      </h3>
+                      </h2>
                   </div>
                   <div className="ui segment">
                       <ChangePicture user={ this.props.UserProfileStore.user }/>
@@ -171,14 +182,13 @@ class UserProfile extends React.Component {
 
               </div>
               <div className="ui segments">
-
                   <div className="ui secondary segment">
-                      <h3>
+                      <h2>
                         <FormattedMessage
                           id='UserProfile.alterData'
                           defaultMessage='Alter my personal data'
                         />
-                      </h3>
+                      </h2>
                   </div>
                   <div className="ui segment">
                       <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
@@ -192,12 +202,12 @@ class UserProfile extends React.Component {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
-                    <h3>
+                    <h2>
                       <FormattedMessage
                         id='UserProfile.changePassword'
                         defaultMessage='Change password'
                       />
-                    </h3>
+                    </h2>
                   </div>
 
                   <div className="ui segment">
@@ -210,12 +220,12 @@ class UserProfile extends React.Component {
             {changePassword}
             <div className="ui segments">
               <div className="ui red inverted segment">
-                <h3>
+                <h2>
                   <FormattedMessage
                     id='UserProfile.deactivateAccount'
                     defaultMessage='Deactivate Account'
                   />
-                </h3>
+                </h2>
               </div>
 
               <div className="ui segment">
@@ -254,6 +264,15 @@ class UserProfile extends React.Component {
     
     displayPerformancePredictions() {
         return ( <UserPerformancePredictions /> );
+    }
+
+
+    displayLTIs() {
+        return (<UserLTIs error={this.props.UserProfileStore.deleteUserltiError} status={this.props.UserProfileStore.userltsViewStatus} ltis={this.props.UserProfileStore.user.ltis} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+    }
+
+    displayLTIedit() {
+        return (<UserLTIEdit saveUserltiError={this.props.UserProfileStore.saveUserltiError} username={this.props.UserProfileStore.username} currentUserlti={this.props.UserProfileStore.currentUserlti} userid={this.props.UserProfileStore.userid} saveUserltiIsLoading={this.props.UserProfileStore.saveUserltiIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
     render() {

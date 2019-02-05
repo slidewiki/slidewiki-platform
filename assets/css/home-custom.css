@@ -107,6 +107,20 @@ body {
     margin: 0;
 }
 
+header .sw-logo:focus, header .sw-usermenu:focus {
+    box-shadow:inset 0 0 0 2px #0C273E;
+    outline: 0;
+}
+header .ui.search>input.sw-searchbox:focus {
+    box-shadow:0 0 0 2px #0C273E;
+}
+header .ui.button.add-deck:focus, header .ui.button.sign-in:focus {
+    box-shadow:inset 0 0 0 2px #0C273E!important;
+}
+header .sw-usermenu {
+    display: inline-block;
+    border-radius: 3px
+}
 
 
  h1 {
@@ -363,6 +377,11 @@ textarea:focus{
     color: #000;
 }
 
+/* LocaleSwitcher: forces text to black. Necessary because the inverted menu defaults text to white */
+.locale-switcher.ui.menu.vertical .item {
+    color: rgba(0,0,0,.87);
+}
+
 /*--section--*/
 
 .content-inner {
@@ -484,11 +503,12 @@ textarea:focus{
     width: 100%;
     position: relative;
     overflow: hidden;
+    max-height: 800px;
 }
 .banner-container > img {
-    width: 2500px;
+    width: 100%;
     position: relative;
-    margin-left: -1250px;
+    margin-left: -50%;
     left: 50%;
     max-width: none;
 }
@@ -530,9 +550,10 @@ textarea:focus{
     color: #fff;
     font-size: 24px;
     font-weight: 700;
-    line-height: 71px;
+    /*line-height: 71px;*/
     padding: 0 20px;
     min-width: 210px;
+    box-sizing: border-box;
 }
 
 .home.primary.button:hover {
@@ -679,10 +700,6 @@ textarea:focus{
     content: '\f107';
     font-family: Icons;
 }
-i.flag:not(.icon):before {
-    background-image: url(../images/flags.png);
-}
-
 
 .banner-content .ui.primary.button{
     margin-right: 16px;
@@ -1165,4 +1182,13 @@ i.flag:not(.icon):before {
 }
 .banner-container.inner-image img{
     float: left;
+}
+
+/* react-accessible-accordion styles */
+.display-none {
+    display: none;
+}
+
+.accordion__title:hover {
+    cursor: pointer;
 }

@@ -19,6 +19,9 @@ class Presentation extends React.Component{
         this.revealDiv = null;
         this.secret = props.currentRoute.query.secret;
         this.id = props.currentRoute.query.id;
+        this.state = {
+            theme: ''
+        };
     }
 
     componentDidMount(){
@@ -154,6 +157,11 @@ class Presentation extends React.Component{
                 //$('.present > .accessibilityWrapper > .pptx2html div:first-child').focus();
                 //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
                 this.resize();
+                
+                this.setState({
+                    theme: event.currentSlide.getAttribute('data-theme')
+                });
+                
             } );
 
             //$('.present > .pptx2html div:first').focus();
@@ -226,6 +234,10 @@ class Presentation extends React.Component{
         let styleName = 'default';
         if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined')
             styleName = this.props.PresentationStore.theme;
+        
+        // set theme based on slide theme (since sub decks might have an other theme than the main deck)
+        styleName = this.state.theme || styleName;
+            
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')//if none of above yield a theme they will be legacy decks:
             styleName = 'white';
         let style = require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
@@ -233,7 +245,7 @@ class Presentation extends React.Component{
         return(
             //<ResizeAware ref='container' id='container'>
             <div ref='container' id='container'>
-                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv}  data-background-transition="none">
                     <div className={['slides', style.slides].join(' ')}>
       			     	     {slides}
         			      </div>
@@ -249,11 +261,13 @@ class Presentation extends React.Component{
 
         let html = <section />;
         if (slides) {
-            html = slides.map((slide) => {
+            html = slides.map((slide, index) => {
                 let content = slide.content.replace(' src=', ' data-src=') + ((slide.speakernotes) ? '<aside class="notes">' + slide.speakernotes + '</aside>' : '');
                 let bgColor = content.split('background-color: ');
                 let bgImgTemp = content.split('background-image: ');
-                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                let transition = slide.transition ? slide.transition : 'none';
+                let theme = slide.theme;
+                let resultingSlide = <section dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id + '-' + index} data-transition={transition} data-theme={theme} role="region" aria-labelledby={slide.title + ' ' + slide.id} />;
                 //need to check if bg is provided
                 if (bgImgTemp.length > 1) {
                     let backgroundImageExtr = content.split('background-image: url(&quot;'); // url(&quot;
@@ -264,14 +278,14 @@ class Presentation extends React.Component{
                         content = content.split('background-image: url(&quot;')[0] + content.split('&quot;);')[1];
                         if(bgColor.length > 1) content =  content.split('background-color: ')[0] + content.split('background-color: ')[1].split(';').slice(1).join('');
                         // Add resulting slide.
-                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                        resultingSlide = <section data-background-image={backgroundImageExtr} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id + '-' + index} data-transition={transition} data-theme={theme} role="region" aria-labelledby={slide.title + ' ' + slide.id} />;
                     } else {
                         console.log('Problem extracting the background image: ', bgImgTemp[1]);
                     }
                 } else if (bgColor.length > 1) {
                     let backgroundColour = bgColor[1].split(';').length > 1 ? bgColor[1].split(';')[0] : undefined;
                     if (backgroundColour) {
-                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id}/>;
+                        resultingSlide = <section data-background-color={backgroundColour} dangerouslySetInnerHTML={{__html:content}} id={'slide-' + slide.id} key={slide.id + '-' + index} data-transition={transition} data-theme={theme} role="region" aria-labelledby={slide.title + ' ' + slide.id} />;
                     } else {
                         console.log('Problem extracting the background colour: ', bgColor[1]);
                     }

@@ -23,6 +23,7 @@ import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import notFoundError from '../actions/error/notFoundError';
+import serviceUnavailable from '../actions/error/serviceUnavailable';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
@@ -36,6 +37,8 @@ import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 import loadCollection from '../actions/collections/loadCollection';
 import prepareSSO from '../actions/user/prepareSSO';
 import {navigateAction} from 'fluxible-router';
+import loadDeckStats from '../actions/stats/loadDeckStats';
+
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -113,7 +116,17 @@ export default {
             });
         }
     },
-
+    activationSuccessful: {
+        path: '/account-activated',
+        method: 'get',
+        page: 'activationSuccessful',
+        title: 'SlideWiki -- Activation successful',
+        handler: require('../components/Home/Home'),
+        action: (context, payload, done) => {
+            context.dispatch('SHOW_ACTIVATION_MESSAGE');
+            done();
+        }
+    },
     about: {
         path: '/about',
         method: 'get',
@@ -154,15 +167,13 @@ export default {
         }
     },
     help: {
-        path: '/help', // /playlist/26?sort=order
+        path: '/help',
         method: 'get',
         page: 'help',
         title: 'SlideWiki -- Guides and Help',
-        handler: require('../components/Home/GuidesHelp'),
         action: (context, payload, done) => {
-            context.executeAction(navigateAction, {url: '/playlist/26?sort=order'});
-            done();
-        }
+            done({statusCode: '301', redirectURL: '/playlist/26?sort=order'});
+        },
     },
     license: {
         path: '/license',
@@ -371,7 +382,43 @@ export default {
         handler: require('../components/Deck/DeckLandingPage'),
         page: 'decklandingpage',
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadDeck, payload, (err) => {
+                if (err) {
+                    if (err.statusCode === 404) {
+                        return context.executeAction(notFoundError, payload, done);
+                    } else {
+                        return context.executeAction(serviceUnavailable, payload, done);
+                    }
+                }
+                done();
+            });
+        }
+    },
+
+    deckstatspage: {
+        path: '/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?/stats',
+        method: 'get',
+        handler: require('../components/Deck/DeckStatsPage'),
+        page: 'deckstatspage',
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadDeckStats, {deckId: payload.params.id}, callback);
+                }],
+                (err, result) => {
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
+                    done();
+                }
+            );
         }
     },
 
@@ -397,7 +444,17 @@ export default {
                 }
             }
 
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadDeck, payload, (err) => {
+                if (err) {
+                    // check for either 404 or 422. 422 is returned from deck service when the deck/slide combo do not match
+                    if (err.statusCode === 404 || err.statusCode === 422) {
+                        return context.executeAction(notFoundError, payload, done);
+                    } else {
+                        return context.executeAction(serviceUnavailable, payload, done);
+                    }
+                }
+                done();
+            });
         }
     },
 
@@ -416,7 +473,7 @@ export default {
             ];
             urlParts = urlParts.filter((u) => !!u);
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            done({statusCode: 301, redirectURL: urlParts.join('/')});
         },
     },
     legacydeck: {
@@ -445,7 +502,7 @@ export default {
         }
     },
     similarcontent: {
-        path: '/similarcontent/:stype/:sid',
+        path: '/similarcontent/:stype/:sid/:userid?',
         method: 'get',
         page: 'similarcontent',
         handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),
@@ -624,12 +681,18 @@ export default {
                     payload.params.sid = payload.params.slideID;//needs to be reset for loadPresentation
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
-            ]);
+            );
         }
     },
     presentationIE: {
@@ -651,12 +714,18 @@ export default {
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
-            ]);
+            );
         }
     },
     print: {
@@ -682,12 +751,18 @@ export default {
                     // adding language to the params
                     payload.params.language = payload.query.language;
                     context.executeAction(loadPresentation, payload, callback);
-                },
+                }],
                 (err, result) => {
-                    if(err) console.log(err);
+                    if (err) {
+                        if (err.statusCode === 404) {
+                            return context.executeAction(notFoundError, payload, done);
+                        } else {
+                            return context.executeAction(serviceUnavailable, payload, done);
+                        }
+                    }
                     done();
                 }
-            ]);
+            );
         }
     },
     oldSlugPresentation: {
@@ -703,7 +778,7 @@ export default {
             ];
             urlParts = urlParts.filter((u) => !!u);
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            done({statusCode: 301, redirectURL: urlParts.join('/')});
         },
     },
     neo4jguide: {
@@ -728,7 +803,7 @@ export default {
             ];
             urlParts = urlParts.filter((u) => !!u);
 
-            done({statusCode: '301', redirectURL: urlParts.join('/')});
+            done({statusCode: 301, redirectURL: urlParts.join('/')});
         },
     },
     importfile: {
@@ -767,6 +842,19 @@ export default {
             done();
         }
     },
+    ltiLogin: {
+        path: '/ltiLogin',
+        method: 'get',
+        page: 'ltiLogin',
+        title: 'SlideWiki -- Login',
+        handler: require('../components/Login/LTI'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Login'
+            });
+            done();
+        }
+    },    
     deckfamily: {
         path: '/deckfamily/:tag',
         method: 'get',

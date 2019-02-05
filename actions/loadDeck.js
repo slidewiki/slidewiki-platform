@@ -21,18 +21,26 @@ import DeckTreeStore from '../stores/DeckTreeStore';
 import TranslationStore from '../stores/TranslationStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
+import loadQuestionsCount from './questions/loadQuestionsCount';
 import loadLikes from './activityfeed/loadLikes';
 import getFollowing from './following/getFollowing';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
 import loadForks from './permissions/loadForks';
 import loadNodeTranslations from './translation/loadNodeTranslations';
+import loadSimilarContentsSelector from './loadSimilarContentsSelector';
+import loadSimilarContents from './loadSimilarContents';
 
-const log = require('./log/clog');
+import log from './log/clog';
 
 
 export default function loadDeck(context, payload, done) {
     log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
+    context.dispatch('UPDATE_MODE', {mode: 'loading'});
+
+    // resets the deck view store
+    // TODO (what other store to reset ???)
+    context.dispatch('LOAD_DECK_PAGE_START');
 
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
@@ -99,16 +107,6 @@ export default function loadDeck(context, payload, done) {
 
     payload.params.jwt = context.getStore(UserProfileStore).getState().jwt;
 
-    let permissionsPromise;
-    //if user is not logged in, only allow view mode and reset permissions, else load this user's permissions on the selected root deck
-    if (!payload.params.jwt){
-        if (!payload.query.interestedUser) //NOTE should not be changed in the special case: Link from email for deck owner to add new editor
-            payloadCustom.params.mode = 'view';
-        permissionsPromise = context.executeAction(resetPermissions, payloadCustom);
-    } else {
-        permissionsPromise = context.executeAction(loadPermissions, payloadCustom);
-    }
-
     context.dispatch('UPDATE_DECK_PAGE_CONTENT', payloadCustom);
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
@@ -128,6 +126,12 @@ export default function loadDeck(context, payload, done) {
 
     // load translation stuff
     context.executeAction(loadNodeTranslations, payload.params, (err, results) => {
+        if (err) {
+            // log the error and return!!!
+            log.error(context, {filepath: __filename, message: err.message});
+            return done(err);
+        }
+
         //load all required actions in parallel
         async.parallel([
             (callback) => {
@@ -138,6 +142,16 @@ export default function loadDeck(context, payload, done) {
                 }, callback);
             },
             (callback) => {
+                let permissionsPromise;
+                //if user is not logged in, only allow view mode and reset permissions, else load this user's permissions on the selected root deck
+                if (!payload.params.jwt){
+                    if (!payload.query.interestedUser) //NOTE should not be changed in the special case: Link from email for deck owner to add new editor
+                        payloadCustom.params.mode = 'view';
+                    permissionsPromise = context.executeAction(resetPermissions, payloadCustom);
+                } else {
+                    permissionsPromise = context.executeAction(loadPermissions, payloadCustom);
+                }
+
                 permissionsPromise.then(() => {
                     let permissions = context.getStore(PermissionsStore).getState().permissions;
                     //special handling for special case: Link from email for deck owner to add new editor
@@ -146,8 +160,14 @@ export default function loadDeck(context, payload, done) {
                         if (!(payloadCustom.params.stype === 'deck' && payload.query.interestedUser))
                             payloadCustom.params.mode = 'view';
                     }
+                    
+                    let editPermission = (permissions.admin || permissions.edit);
+                    payloadCustom.params.nonExamQuestionsOnly = !editPermission;
+                    context.executeAction(loadQuestionsCount, payloadCustom);
+                    
                     // console.log('now mode is', payloadCustom.params.mode);
                     context.executeAction(loadContent, payloadCustom, callback);
+                    
                 });
             },
             (callback) => {
@@ -199,6 +219,24 @@ export default function loadDeck(context, payload, done) {
                 }
             },
             (callback) => {
+                if(runNonContentActions){
+                    context.executeAction(loadSimilarContentsSelector, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
+                if(runNonContentActions){
+
+                    if (payload.params.jwt){  //if user is logged
+                        payloadCustom.userid = context.getStore(UserProfileStore).getState().userid;
+                    }
+                    context.executeAction(loadSimilarContents, payloadCustom, callback);
+                }else{
+                    callback();
+                }
+            },
+            (callback) => {
                 //if user is logged is and root deck changed load forks of this deck owned by the user
                 if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
                     context.executeAction(loadForks, {
@@ -217,6 +255,7 @@ export default function loadDeck(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
                 return;
             }
+
             if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
                 // console.log('loadDeck isSelectorValid=false, selector ', context.getStore(DeckTreeStore).getState().selector, '\npayload: ', payload);
                 context.executeAction(notFoundError, payload, done);

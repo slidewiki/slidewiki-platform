@@ -36,7 +36,7 @@ export default function revertRevision(context, payload, done) {
             } else {
                 //if reverting root deck
                 if (payload.selector.id === payload.selector.sid) {
-                    newURL = '/deck/' + newSid;
+                    newURL = `/deck/${newSid}/_/deck/${newSid}`;
                 }
                 //update the URL, pass runFetchTree parameter to force deck tree fetching when reverting a subdeck
                 context.executeAction(navigateAction, {
