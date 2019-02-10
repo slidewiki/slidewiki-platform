@@ -226,6 +226,13 @@ class UserLTIEdit extends React.Component {
                     <div className="ui hidden divider"></div>
                     <div className="ui container">
                         <form className="ui form">
+
+                        <div className="field">
+                            <label htmlFor="userltiedit_LTIURL">
+                                URL for LTI Provider: <i>userservice.experimental.slidewiki.org/lti/handle/[deck-id]</i>
+                            </label>
+                        </div>
+
                         <div className="field" data-tooltip="lti key" >
                             <label htmlFor="userltiedit_input_LTIKey">
                                 LTI Key
