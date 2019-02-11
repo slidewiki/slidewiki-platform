@@ -55,13 +55,6 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         });
     }
 
-/*
-
-    componentDidMount() {
-        this.handleOpen();
-    }
-*/
-
     handleOpen(){
         $('#app').attr('aria-hidden', 'true');
         this.setState({
@@ -75,7 +68,6 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         this.setState({
             modalOpen: false,
             activeTrap: false,
-            usersEditing: []
         });
     }
 
@@ -150,7 +142,11 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
             let dateStr = day + '-' + (month < 10 ? '0' + month : month) + '-' + year + '   ' + hour + ':' + minutes;
 
             return <tr key={userEditing.user + userEditing.timestamp} style={tableRowStyle}>
-                    <th>{userEditing.user}</th>
+                    <th>
+                        <a className="user" href={ '/user/' + userEditing.user} target="_blank">
+                            {userEditing.user}
+                        </a>
+                    </th>
                     <th>{dateStr}</th>
                    </tr>;
         });
