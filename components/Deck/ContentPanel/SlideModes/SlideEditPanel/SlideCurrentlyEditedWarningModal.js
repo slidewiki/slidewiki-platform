@@ -140,9 +140,19 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         };
 
         let usersList = this.usersEditing.map((userEditing) => {
+            let date = new Date(userEditing.timestamp);
+            let year = date.getFullYear();
+            let month = date.getMonth();
+            let day = date.getDate();
+            let hour = date.getHours();
+            let minutes = date.getMinutes();
+
+            let dateStr = day + '-' + (month < 10 ? '0' + month : month) + '-' + year + '   ' + hour + ':' + minutes;
+
+            console.log(dateStr);
             return <tr key={userEditing.user + userEditing.timestamp} style={tableRowStyle}>
                     <th>{userEditing.user}</th>
-                    <th>{userEditing.timestamp}</th>
+                    <th>{dateStr}</th>
                    </tr>;
         });
 
