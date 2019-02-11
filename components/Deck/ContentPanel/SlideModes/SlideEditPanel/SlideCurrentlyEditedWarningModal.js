@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import FocusTrap from 'focus-trap-react';
 import { Button, Divider, Dropdown, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import {defineMessages} from 'react-intl';
+import SlideCurrentlyEditedStore from '../../../../../stores/SlideCurrentlyEditedStore';
 
 class SlideCurrentlyEditedWarningModal extends React.Component {
     constructor(props) {
@@ -12,6 +13,8 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
             modalOpen: false,
             activeTrap: false,
         };
+
+        this.usersEditing = [];
 
         //
         this.handleOpen = this.handleOpen.bind(this);
@@ -30,14 +33,34 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
                 defaultMessage: 'This version of this slide is also currently being edited by other users. The changes ' +
                     'you are performing could be overwritten by them. Contact them to avoid troubles with this slide. ' +
                     'The users editing this slide are: '
+            },
+            confirm: {
+                id: 'SCEWModal.confirm',
+                defaultMessage: 'Confirm'
+            },
+            users: {
+                id: 'SCEWModal.users',
+                defaultMessage: 'Users'
+            },
+            editingSince: {
+                id: 'SCEWModal.editingSince',
+                defaultMessage: 'Editing since'
+            },
+            note: {
+                id: 'SCEWModal.note',
+                defaultMessage: 'Note: we recommend you to cancel the edition of this slide to not overwrite the changes ' +
+                    'performed by your colleagues. If they confirm you that they are not editing this slide anymore you can ' +
+                    'continue editing it.'
             }
         });
     }
 
+/*
 
     componentDidMount() {
         this.handleOpen();
     }
+*/
 
     handleOpen(){
         $('#app').attr('aria-hidden', 'true');
@@ -52,6 +75,7 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         this.setState({
             modalOpen: false,
             activeTrap: false,
+            usersEditing: []
         });
     }
 
@@ -70,21 +94,47 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         }
     };
 
+
+    componentWillReceiveProps(nextProps) {
+
+        let usersEditing = nextProps.SlideCurrentlyEditedStore.usersCurrentlyEditing ? nextProps.SlideCurrentlyEditedStore.usersCurrentlyEditing.slice() : [];
+
+        this.usersEditing = usersEditing;
+
+        if ( usersEditing.length > 0 ) {
+            this.handleOpen();
+        }
+
+    };
     render () {
 
         const headerStyle = {
             'textAlign': 'center'
         };
 
-        let triggerStyle = {
-            /*display: none;
-            visibility: hidden;*/
+        const modalContentStyle = {
+            height: '25%'
         };
 
+        const triggerStyle = {
+            display: none;
+            visibility: hidden;
+        };
+
+        let usersList = this.usersEditing.map((userEditing) => {
+            return <tr>
+                    <th>{userEditing.user}</th>
+                    <th>{userEditing.timestamp}</th>
+                   </tr>;
+        });
+
+        usersList.join();
+
         return (
+
             <Modal
                 trigger={
-                    <a style={triggerStyle} id="slideCurrentlyEditedWarningTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}/>
+                    <div style={triggerStyle} id="slideCurrentlyEditedWarningTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}>hola k aseeee</div>
                 }
                 open={this.state.modalOpen}
                 onOpen={this.handleOpen}
@@ -108,17 +158,25 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
                         <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modalTitle)}</h1>
                     </Modal.Header>
                     <Modal.Content>
-                        <div id="slideCurrentlyEditedWarningModalDescription" tabIndex="0">{this.context.intl.formatMessage(this.messages.modalWarning)}</div>
+                        <div id="slideCurrentlyEditedWarningModalDescription" tabIndex="0" style={modalContentStyle}>{this.context.intl.formatMessage(this.messages.modalWarning)}</div>
+                        <br/>
+                        <table>
+                            <tr>
+                                <th>{this.context.intl.formatMessage(this.messages.users)}</th>
+                                <th>{this.context.intl.formatMessage(this.messages.editingSince)}</th>
+                            </tr>
+                            {usersList}
+                        </table>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button type="button" color="blue" onClick={this.handleClose} className="ui button">
                             <i className="remove icon"/>
-                            {this.context.intl.formatMessage(this.messages.cancel)}
+                            {this.context.intl.formatMessage(this.messages.confirm)}
                         </Button>
                     </Modal.Actions>
-
                 </FocusTrap>
             </Modal>
+
         );
     }
 
@@ -129,5 +187,11 @@ SlideCurrentlyEditedWarningModal.contextTypes = {
     intl: PropTypes.object.isRequired,
     getUser: PropTypes.func
 };
+
+SlideCurrentlyEditedWarningModal = connectToStores(SlideCurrentlyEditedWarningModal, [SlideCurrentlyEditedStore], (context, props) => {
+    return {
+        SlideCurrentlyEditedStore: context.getStore(SlideCurrentlyEditedStore).getState()
+    };
+});
 
 export default SlideCurrentlyEditedWarningModal;

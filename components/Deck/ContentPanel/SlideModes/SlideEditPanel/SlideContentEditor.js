@@ -27,6 +27,7 @@ import Util from '../../../../common/Util';
 import {defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 import registerChange from '../../../../../actions/slide/registerChange';
+import SlideCurrentlyEditedWarningModal from './SlideCurrentlyEditedWarningModal';
 
 let ReactDOM = require('react-dom');
 
@@ -2801,6 +2802,7 @@ class SlideContentEditor extends React.Component {
             <div ref='container' id='container'>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
+            <SlideCurrentlyEditedWarningModal/>
             {/*
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
                  <i className="save icon large"></i>

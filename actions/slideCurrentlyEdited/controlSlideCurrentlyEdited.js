@@ -22,6 +22,18 @@ export default function controlSlidesCurrentlyEdited(context, payload, done) {
             slideCurrentlyEdited: sid
         };
 
+        context.service.create('slidesCurrentlyEdited.slide', payload, {timeout: 20 * 1000}, {}, (err2, res2) => {
+            if (err2) {
+                // console.log(err);
+            }
+            let slideCurrentlyEdited = JSON.parse(res2.slideCurrentlyEdited);
+            let params = {
+                eventId: slideCurrentlyEdited.id
+            };
+            context.dispatch('UPDATE_EVENT_ID', params);
+            done();
+        });
+
         let params = {
             slideCurrentlyEditedId: sid,
             usersCurrentlyEditing: []
@@ -38,17 +50,6 @@ export default function controlSlidesCurrentlyEdited(context, payload, done) {
 
         context.dispatch('GET_USERS_EDITING_SLIDE', params);
 
-        context.service.create('slidesCurrentlyEdited.slide', payload, {timeout: 20 * 1000}, {}, (err2, res2) => {
-            if (err2) {
-                // console.log(err);
-            }
-            let slideCurrentlyEdited = JSON.parse(res2.slideCurrentlyEdited);
-            let params = {
-                eventId: slideCurrentlyEdited.id
-            };
-            context.dispatch('UPDATE_EVENT_ID', params);
-            done();
-        });
     });
 
     done();

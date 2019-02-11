@@ -16,7 +16,7 @@ class SlideCurrentlyEditedStore extends BaseStore {
         return {
             eventId: this.eventId,
             slideCurrentlyEditedId: this.slideCurrentlyEditedId,
-            usersCurrentlyEditing: []
+            usersCurrentlyEditing: this.usersCurrentlyEditing
         };
     }
     dehydrate() {
@@ -30,6 +30,7 @@ class SlideCurrentlyEditedStore extends BaseStore {
 
     updateEventId(params) {
         this.eventId = params.eventId;
+        this.emitChange();
     }
 
     getUsersEditingSlide(params) {
