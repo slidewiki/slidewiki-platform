@@ -2660,6 +2660,10 @@ class SlideContentEditor extends React.Component {
             //console.log('destroy CKEDITOR instance');
             CKEDITOR.instances.inlineSpeakerNotes.destroy();
         }
+
+        // Remove edition event on slideCurrentlyEdited in case that the edition is not cancelled or saved.
+        this.context.executeAction(removeCurrentlyEditedSlideEvent, {id: this.props.SlideCurrentlyEditedStore.eventId ?
+                this.props.SlideCurrentlyEditedStore.eventId : null });
     }
 
     emitChange(context){
