@@ -116,13 +116,31 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
             height: '25%'
         };
 
-        const triggerStyle = {
-            display: none,
-            visibility: hidden
+        const focusTrapStyle = {
+            padding: '5%'
+        };
+
+        const contentStyle = {
+            paddingLeft: '10%',
+            paddingRight: '10%'
+        };
+
+        const tableStyle = {
+            width: '100%'
+        };
+
+        const tableRowStyle = {
+            widht: '50%',
+            textAlign: 'center'
+        };
+
+        const actionSectionStyle = {
+            paddingTop: '5%',
+            textAlign: 'center'
         };
 
         let usersList = this.usersEditing.map((userEditing) => {
-            return <tr>
+            return <tr key={userEditing.user + userEditing.timestamp} style={tableRowStyle}>
                     <th>{userEditing.user}</th>
                     <th>{userEditing.timestamp}</th>
                    </tr>;
@@ -134,7 +152,7 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
 
             <Modal
                 trigger={
-                    <div style={triggerStyle} id="slideCurrentlyEditedWarningTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}>hola k aseeee</div>
+                    <div id="slideCurrentlyEditedWarningTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}/>
                 }
                 open={this.state.modalOpen}
                 onOpen={this.handleOpen}
@@ -154,26 +172,32 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
                         initialFocus: '#slideCurrentlyEditedWarningModalDescription'
                     }}
                 >
-                    <Modal.Header className="ui center aligned" id="slideCurrentlyEditedWarningModalHeader">
-                        <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modalTitle)}</h1>
-                    </Modal.Header>
-                    <Modal.Content>
-                        <div id="slideCurrentlyEditedWarningModalDescription" tabIndex="0" style={modalContentStyle}>{this.context.intl.formatMessage(this.messages.modalWarning)}</div>
-                        <br/>
-                        <table>
-                            <tr>
-                                <th>{this.context.intl.formatMessage(this.messages.users)}</th>
-                                <th>{this.context.intl.formatMessage(this.messages.editingSince)}</th>
-                            </tr>
-                            {usersList}
-                        </table>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button type="button" color="blue" onClick={this.handleClose} className="ui button">
-                            <i className="remove icon"/>
-                            {this.context.intl.formatMessage(this.messages.confirm)}
-                        </Button>
-                    </Modal.Actions>
+                    <div style={focusTrapStyle}>
+                        <Modal.Header className="ui center aligned" id="slideCurrentlyEditedWarningModalHeader">
+                            <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modalTitle)}</h1>
+                        </Modal.Header>
+                        <Modal.Content>
+                            <div style={contentStyle}>
+                                <div id="slideCurrentlyEditedWarningModalDescription" tabIndex="0" style={modalContentStyle}>{this.context.intl.formatMessage(this.messages.modalWarning)}</div>
+                                <br/>
+                                <table style={tableStyle}>
+                                    <tr style={tableRowStyle}>
+                                        <th>{this.context.intl.formatMessage(this.messages.users)}</th>
+                                        <th>{this.context.intl.formatMessage(this.messages.editingSince)}</th>
+                                    </tr>
+                                    {usersList}
+                                </table>
+                            </div>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <div style={actionSectionStyle}>
+                                <Button type="button" color="blue" onClick={this.handleClose} className="ui button">
+                                    <i className="remove icon"/>
+                                    {this.context.intl.formatMessage(this.messages.confirm)}
+                                </Button>
+                            </div>
+                        </Modal.Actions>
+                    </div>
                 </FocusTrap>
             </Modal>
 
