@@ -291,7 +291,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="cancel icon "></i>
                             <i className=""></i>
                         </i>
-                        {this.context.intl.formatMessage(this.messages.cancelButtonText)}}
+                        {this.context.intl.formatMessage(this.messages.cancelButtonText)}
                     </button>;
             } else {
                 saveButton ='';

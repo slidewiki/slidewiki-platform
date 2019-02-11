@@ -117,8 +117,8 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         };
 
         const triggerStyle = {
-            display: none;
-            visibility: hidden;
+            display: none,
+            visibility: hidden
         };
 
         let usersList = this.usersEditing.map((userEditing) => {
