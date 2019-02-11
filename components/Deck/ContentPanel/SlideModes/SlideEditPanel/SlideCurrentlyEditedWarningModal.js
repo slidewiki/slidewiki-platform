@@ -5,6 +5,7 @@ import FocusTrap from 'focus-trap-react';
 import { Button, Divider, Dropdown, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import {defineMessages} from 'react-intl';
 import SlideCurrentlyEditedStore from '../../../../../stores/SlideCurrentlyEditedStore';
+import forgetUsersEditing from '../../../../../actions/slideCurrentlyEdited/forgetUsersEditing';
 
 class SlideCurrentlyEditedWarningModal extends React.Component {
     constructor(props) {
@@ -57,10 +58,13 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
 
     handleOpen(){
         $('#app').attr('aria-hidden', 'true');
-        this.setState({
-            modalOpen:true,
-            activeTrap:true
-        });
+
+        if (this.usersEditing.length > 0) {
+            this.setState({
+                modalOpen:true,
+                activeTrap:true
+            });
+        }
     }
 
     handleClose(){
@@ -69,6 +73,9 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
             modalOpen: false,
             activeTrap: false,
         });
+        this.usersEditing = [];
+
+        this.context.executeAction(forgetUsersEditing, {});
     }
 
     unmountTrap() {

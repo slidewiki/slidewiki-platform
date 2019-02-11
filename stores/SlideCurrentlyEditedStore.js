@@ -39,14 +39,18 @@ class SlideCurrentlyEditedStore extends BaseStore {
         this.emitChange();
     }
 
+    deleteUsersList() {
+        this.usersCurrentlyEditing = [];
+    }
+
 }
 
 SlideCurrentlyEditedStore.storeName = 'SlideCurrentlyEditedStore';
 
 SlideCurrentlyEditedStore.handlers =  {
     'UPDATE_EVENT_ID': 'updateEventId',
-    'GET_USERS_EDITING_SLIDE': 'getUsersEditingSlide'
-
+    'GET_USERS_EDITING_SLIDE': 'getUsersEditingSlide',
+    'DELETE_USERS_EDITING_LIST': 'deleteUsersList'
 };
 
 export default SlideCurrentlyEditedStore;
