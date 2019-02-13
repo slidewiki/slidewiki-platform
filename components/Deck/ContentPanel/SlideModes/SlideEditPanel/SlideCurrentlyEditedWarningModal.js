@@ -51,7 +51,7 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
                 id: 'SCEWModal.note',
                 defaultMessage: 'Note: we recommend you to cancel the edition of this slide to not overwrite the changes ' +
                     'performed by your colleagues. If they confirm you that they are not editing this slide anymore you can ' +
-                    'continue editing it.'
+                    ' continue editing it.'
             }
         });
     }
@@ -115,6 +115,12 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
             height: '25%'
         };
 
+        const modalNoteStyle = {
+            paddingLeft: '10%',
+            paddingRight: '10%',
+            paddingTop: '20px'
+        }
+
         const focusTrapStyle = {
             padding: '5%'
         };
@@ -164,7 +170,7 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
 
             <Modal
                 trigger={
-                    <div id="slideCurrentlyEditedWarningTrigger" role="button" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}/>
+                    <div id="slideCurrentlyEditedWarningTrigger" onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOpen')}/>
                 }
                 open={this.state.modalOpen}
                 onOpen={this.handleOpen}
@@ -199,12 +205,13 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
                                     </tr>
                                     {usersList}
                                 </table>
+                                <div tabIndex="0" style={modalNoteStyle}>{this.context.intl.formatMessage(this.messages.note)}</div>
                             </div>
                         </Modal.Content>
                         <Modal.Actions>
                             <div style={actionSectionStyle}>
                                 <Button type="button" color="blue" onClick={this.handleClose} className="ui button">
-                                    <i className="remove icon"/>
+                                    <i className="checkmark icon"/>
                                     {this.context.intl.formatMessage(this.messages.confirm)}
                                 </Button>
                             </div>
