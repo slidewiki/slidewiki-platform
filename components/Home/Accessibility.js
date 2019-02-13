@@ -41,7 +41,13 @@ class Accessibility extends React.Component {
                         <FormattedMessage id="accessibility.1.p5." defaultMessage="However, we cannot guarantee the accessibility of external information linked to or from SlideWiki or the content provided by users on their personal/group decks or slides.  Action has been taken to provide templates and other options to ensure it is possible to make the content added to decks and slides accessible."/>
                     </div>
                     <p>
-                        <FormattedMessage id="accessibility.1.p6" defaultMessage="As we are continuously updating our website, exceptions to the above accessibility standards may sometimes inadvertently be introduced. Please let us know if you have difficulty accessing any of our content."/>
+                        Some screen reader users may encounter problems when navigating through items within slides in the presentation view. This is due to limited compatibility between screen readers and the technologies used to provide all users with keyboard control in a presentation mode.
+                    </p>
+                    <p>
+                        Screen reader users should note the following keyboard shortcuts are available in presentation mode. Left arrow key or spacebar will move to the next slide. When a new slide is loaded, the content will automatically be read aloud. Right arrow key will return to the previous slide.
+                    </p>
+                    <p>
+                        A basic presentation mode is available if the presentation mode URL is changed from /presentation to /presentationIE . This can allow a screen reader user to move around the slide content using the tab key. It is possible to test this experience by loading the  <a href="https://slidewiki.org/presentationIE/123904">Help guide in the basic presentation mode.</a>
                     </p>
                     <h2 className="ui header">
                         <FormattedMessage id="accessibility.2.header" defaultMessage="Technologies used in the SlideWiki Platform"/>
@@ -50,15 +56,18 @@ class Accessibility extends React.Component {
                         <FormattedMessage id="accessibility.2.p1" defaultMessage="The platform relies on the following technologies: HTML5, CSS, react-js and uses WAI-ARIA to support accessibility."/>
                     </p>
                     <p>
-                        <FormattedMessage id="accessibility.2.p2" defaultMessage="It is compatible with a range of browsers: Chrome, Firefox and Edge. However compatibility with Internet Explorer 11 or earlier is limited and we recommend using an alternative browser."/>
+                        <FormattedMessage id="accessibility.2.p2" defaultMessage="It is compatible with a range of browsers: Chrome, Firefox and Edge. However compatibility with Internet Explorer 11 or earlier is limited, due to the technologies used in the Slidewiki application, and we recommend using an alternative browser."/>
                     </p>
-                    <p>
-                        <FormattedMessage id="accessibility.2.p3" defaultMessage="These browsers have been tested with the following assistive technologies: Jaws 18, NVDA 2007, VoiceOver on Mac and iOS and TalkBack on Android screen readers as well as a range of input/output devices that emulate keyboard navigation."/>
+                    {/* <FormattedMessage id="accessibility.2.p3" defaultMessage=" */}
+                       <p>These browsers have been tested with the following assistive technologies: Jaws 18, NVDA 2018, VoiceOver on Mac and iOS and TalkBack on Android screen readers as well as a range of input/output devices that emulate keyboard navigation.
                     </p>
+                    <p>Presentation mode relies on role=application in order to provide shortcut keys. Technical notes about the problems with using this mode with a screen reader are available at <a href="https://slidewiki.atlassian.net/browse/SWIK-2222"> SlideWiki development issue tracker</a>.
+                    </p>
+                        <p>
+                        <FormattedMessage id="accessibility.2.p4" defaultMessage="If you have any problems with the accessibility of the platform, please "/> <a href="/contactus" target="_blank"><FormattedMessage id="accessibility.contact" defaultMessage=" contact us. "/></a></p>
                     <p>
-                        <FormattedMessage id="accessibility.2.p4" defaultMessage="If you have any problems with the accessibility of the platform, please "/><a href="/contactus" target="_blank"><FormattedMessage id="accessibility.contact" defaultMessage=" contact us. "/></a></p>
-                    <p>
-                        <FormattedMessage id="accessibility.date" defaultMessage="Last updated 6th February 2018"/>
+                        {/* <FormattedMessage id="accessibility.date" defaultMessage= */}
+                            Last updated 8th February 2019
                     </p>
                 </div>
             </StaticPage>

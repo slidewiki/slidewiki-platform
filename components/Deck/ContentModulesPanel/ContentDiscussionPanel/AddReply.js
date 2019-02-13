@@ -69,7 +69,7 @@ class AddReply extends React.Component {
                       id='AddReply.form.button_add'
                       defaultMessage='Add Reply' />
               </button>
-              <div className="ui error message"/>
+              <div className="ui error message" role="region" aria-live="polite"/>
           </form>
         );
     }

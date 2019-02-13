@@ -130,7 +130,7 @@ class ChangePassword extends React.Component {
                           defaultMessage='Submit Password'
                         />
                     </button>
-                    <div className="ui error message"/>
+                    <div className="ui error message" role="region" aria-live="polite"/>
                 </form>
             </div>
         );

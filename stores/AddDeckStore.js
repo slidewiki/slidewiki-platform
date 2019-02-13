@@ -41,6 +41,12 @@ class AddDeckStore extends BaseStore {
         this.error = state.error;
     }
 
+    /**
+     * Sets error states on invalid fields.
+     *
+     * @param {object} [wF] Keys are field names, values are boolean of whether the field is valid.
+     * @returns {void}
+     */
     showWrongFields(wF) {
         this.wrongFields.title = wF.title;
         this.wrongFields.language = wF.language;

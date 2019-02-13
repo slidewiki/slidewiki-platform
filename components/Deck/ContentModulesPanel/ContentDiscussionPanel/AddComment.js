@@ -85,7 +85,7 @@ class AddComment extends React.Component {
                       id='AddComment.form.button_cancel'
                       defaultMessage='Cancel' />
               </button>
-              <div className="ui error message"/>
+              <div className="ui error message" role="region" aria-live="polite"/>
           </form>
         );
     }

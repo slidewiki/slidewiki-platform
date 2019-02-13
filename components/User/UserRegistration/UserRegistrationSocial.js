@@ -343,7 +343,7 @@ class UserRegistrationSocial extends React.Component {
                           </label>
                           <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                       </div>
-                      <div className="ui error message"></div>
+                      <div className="ui error message" role="region" aria-live="polite"/>
                       <button type="submit" className="ui blue labeled submit icon button" role="button" tabIndex="0" >
                           <i className="icon add user"/>
                           <FormattedMessage
