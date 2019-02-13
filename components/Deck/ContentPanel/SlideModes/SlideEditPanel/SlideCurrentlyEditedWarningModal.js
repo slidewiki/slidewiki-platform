@@ -116,8 +116,6 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
         };
 
         const modalNoteStyle = {
-            paddingLeft: '10%',
-            paddingRight: '10%',
             paddingTop: '20px'
         }
 
