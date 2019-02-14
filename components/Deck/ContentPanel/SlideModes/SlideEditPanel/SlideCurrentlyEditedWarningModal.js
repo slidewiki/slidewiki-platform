@@ -117,7 +117,7 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
 
         const modalNoteStyle = {
             paddingTop: '20px'
-        }
+        };
 
         const focusTrapStyle = {
             padding: '5%'
