@@ -190,6 +190,8 @@ class SelectInstanceModal extends React.Component {
               error
               header='Unknown email'
               content="The email you entered is not known at the selected instance"
+              role="region"
+              aria-live="polite"
             /></Form.Field>;
         }
         let content = <Form error={!this.props.SSOStore.emailExisting && this.state.instance !== '' ? true : false}>

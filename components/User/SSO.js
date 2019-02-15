@@ -198,7 +198,7 @@ class SSO extends React.Component {
                                         <input type="hidden" id="recaptcha" name="recaptcha"></input>
                                         <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                                     </div>
-                                    <div className="ui error message" ></div>
+                                    <div className="ui error message" role="region" aria-live="polite"/>
                                     <br/>
                                     <button type="submit" className="ui blue labeled submit icon button" >
                                         <i className="icon add user"/> Sign In
