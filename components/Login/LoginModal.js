@@ -98,6 +98,13 @@ class LoginModal extends React.Component {
 
     signin(e) {
         e.preventDefault();
+
+        // Remove any existing validation error messages.
+        // This is necessary because screenreaders will only read the form error messages when there is a change in the message.
+        // For instance, without this, the error message will be read by the screenreader on the first failed login attempt, and will not be read on subsequent attempts.
+        // Removing then re-adding the error message after failure ensures the screenreader always reads it.
+        $('.ui.form.signin > div.ui.error').empty();
+
         const email = this.refs.email1.value;
         let regExp = /\S+@\S+\.\S+/;
         if (email === '' || !regExp.test(email)) {//Check if email is valid
@@ -322,7 +329,9 @@ class LoginModal extends React.Component {
             'disabled': this.state.isLoading,
             'input': true,
             'loading': this.state.isLoading,
-            'field': true
+            'field': true,
+            'fluid': true,
+            'inline': true
         });
 
         const messages = defineMessages({
@@ -350,9 +359,9 @@ class LoginModal extends React.Component {
 
         let inputs =
         <div className="ui one column grid">
-          <div className="ui center aligned column">
+          <div className="ui aligned column">
             <textarea className="sr-only" id="signinModalDescription"
-            defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used thesse services to active your account on SlideWiki"
+            defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used these services to active your account on SlideWiki"
             tabIndex ='-1'/>
             <div className={inputField_classes}>
               <div><label htmlFor="email1" hidden>
@@ -361,7 +370,7 @@ class LoginModal extends React.Component {
                   defaultMessage='E-Mail'
                 />
               </label></div>
-              <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+              <input type="text" id="email1" name="email1" ref="email1"  autoFocus tabIndex="0"  required/><i className="mail icon"/>
             </div>
           </div>
           <br/>
@@ -375,7 +384,7 @@ class LoginModal extends React.Component {
                   />
                 </label>
               </div>
-              <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
+              <input type="password" id="password1" name="password1" ref="password1" tabIndex="0" required/><i className="lock icon"/>
             </div>
           </div>
         </div>;
@@ -425,7 +434,7 @@ class LoginModal extends React.Component {
                             </button>
                         </div>
                         <br/>
-                        <div className="ui error message"/>
+                        <div className="ui error message" role="region" aria-live="polite"/>
                       </form>
                       <br/>
                       <div className="container">
@@ -446,7 +455,7 @@ class LoginModal extends React.Component {
                             />
                           </a>
                           <br/><br/>
-                          <a className="ui teal inverted  button" role="button" tabIndex="0" href="#" onClick={this.handleSignupClick}>
+                          <a className="ui teal inverted button" role="button" tabIndex="0" href="#" onClick={this.handleSignupClick}>
                             <FormattedMessage
                               id='LoginModal.text.dontHaveAnAccount'
                               defaultMessage='Don&apos;t have an account? Sign up here.'

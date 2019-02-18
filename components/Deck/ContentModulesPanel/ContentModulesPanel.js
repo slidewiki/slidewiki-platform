@@ -257,7 +257,7 @@ class ContentModulesPanel extends React.Component {
         };
         
         pointingMenu = (
-            <div className="ui top attached pointing menu" ref="pointerMenu" role="tablist" aria-label={this.context.intl.formatMessage(form_messages.aria_additional)}>
+            <div className="ui top attached pointing menu" ref="pointerMenu"  aria-label={this.context.intl.formatMessage(form_messages.aria_additional)}>
                 {this.getContentModuleOptions(true).map((item) => {
                     let active = this.props.ContentModulesStore.moduleType === item.value;
                     
@@ -313,7 +313,7 @@ class ContentModulesPanel extends React.Component {
                         id='ContentModulesPanel.form.header'
                         defaultMessage='Content Tools' />
                 </h2>
-                <div style={pointingMenuStyle} role="tabpanel">
+                <div style={pointingMenuStyle} >
                     {pointingMenu}
                 </div>
                 <div style={mobileMenuStyle}>

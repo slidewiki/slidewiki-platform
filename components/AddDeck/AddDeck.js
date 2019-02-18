@@ -18,15 +18,16 @@ import storeTags from '../../actions/import/storeTags';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
-import LanguageDropdown from '../common/LanguageDropdown';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
-import { Dropdown } from 'semantic-ui-react';
+import {Message} from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import classNames from 'classnames';
 
 
 import { educationLevels } from '../../lib/isced';
+import SWAutoComplete from '../common/SWAutoComplete';
+import {getLanguageDisplayName, translationLanguages} from '../../common';
 
 //TODO: update link to terms of use;
 
@@ -34,24 +35,17 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.percentage = 0;
+
+        this.state = {
+            language: null,
+            educationLevel: null,
+            formValidationErrors: []
+        };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.defaultTagNames = [];// used for saving defaultName properties for tags
     }
     componentDidMount() {
-        // let that = this;
-        /* deleted by Sole
-        $('.ui.small.modal').modal({
-            onDeny: function(){
-                //console.log('modal cancelled');
-                that.handleCancelSelectFile();
-                $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
-            },
-            onApprove : function(data) {
-                //console.log('modal clicked on upload', data);
-                // that.handleFileSubmit();
-                $('.ui.small.modal').modal('hide');
-            }
-        });
-        */
     }
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
@@ -66,8 +60,6 @@ class AddDeck extends React.Component {
         }
     }
     handleUploadModal(x) {
-        //console.log('handleUploadModal: ', x);
-
         $('.ui.small.modal').modal('show');
     }
     handleKeyPressAddDeck(event) {
@@ -78,16 +70,18 @@ class AddDeck extends React.Component {
     handleAddDeck(x) {
         //console.log('handleAddDeck');
         this.saveTags();
-        
+
         this.context.executeAction(addDeckDeleteError, null);
+
+        // Clear any existing validation errors.
+        this.state.formValidationErrors = [];
 
         //validate input
         const title = this.refs.input_title.value;
-        const language = this.refs.div_languages.getSelected();
+        const language = this.state.language;
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
-        const { value: educationLevel } = this.refs.dropdown_level.getSelectedItem();
-        // const license = this.refs.select_licenses.value;
+        const educationLevel = this.state.educationLevel;
         const license = 'CC BY-SA';//default license
         let tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
         tags.forEach((tag) => {
@@ -99,45 +93,38 @@ class AddDeck extends React.Component {
         });
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
-        //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
-        //check empty or not selected
-        let everythingIsFine = true;
-        let wrongFields = {};
-        if (title === null || title === undefined || title === '') {
-            wrongFields.title = true;
-            everythingIsFine = false;
-        }
-        else {
-            wrongFields.title = false;
-        }
-        if (language === null || language === undefined || language.length < 2) {
-            wrongFields.language = true;
-            everythingIsFine = false;
-        }
-        else {
-            wrongFields.language = false;
-        }
-        if (acceptedConditions === false) {
-            wrongFields.conditions = true;
-            everythingIsFine = false;
-        }
-        else {
-            wrongFields.conditions = false;
-        }
-        if (acceptedImagesLicense === false) {
-            wrongFields.imageslicense = true;
-            everythingIsFine = false;
-        }
-        else {
-            wrongFields.imageslicense = false;
-        }
+        // Validate title
+        if (!title) this.state.formValidationErrors.title = <FormattedMessage
+            id='AddDeck.error.validation.title'
+            defaultMessage='Specify a title.'
+            tagName='li'
+        />;
 
-        //call action to update view
-        this.context.executeAction(addDeckShowWrongFields, wrongFields);
+        // Validate language
+        if (!language || language.length < 2) this.state.formValidationErrors.language = <FormattedMessage
+            id='AddDeck.error.validation.language'
+            defaultMessage='Specify a language.'
+            tagName='li'
+        />;
 
-        //if everything is fine then create the deck
-        if (everythingIsFine) {
+        // Validate T&Cs acceptance
+        if (acceptedConditions === false) this.state.formValidationErrors.conditions = <FormattedMessage
+            id='AddDeck.error.validation.conditions'
+            defaultMessage='You must agree to the SlideWiki terms and conditions.'
+            tagName='li'
+        />;
+
+        // Validate image rights declaration
+        if (acceptedImagesLicense === false)
+            this.state.formValidationErrors.imagesLicence = <FormattedMessage
+                id='AddDeck.error.validation.imagesLicence'
+                defaultMessage='You must agree to the rights declaration.'
+                tagName='li'
+            />;
+
+        // If there are no validation errors, then create the deck
+        if(Object.keys(this.state.formValidationErrors).length === 0) {
             this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
@@ -397,7 +384,6 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set error');
     }
     handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions) {
-        //console.log('handleFileSubmit()');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -443,38 +429,37 @@ class AddDeck extends React.Component {
         this.context.executeAction(storeTags, {tags:tags, topics: topics});
     }
 
+    handleInputChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
-            // setTimeout( () => {
             this.redirectID = this.props.AddDeckStore.redirectID;
             this.handleRedirect();
             this.context.executeAction(addDeckDestruct, {});
-            // }, 1000);
         }
 
 
         let fieldClass_title = classNames({
             'required': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.title
+            'error': this.state.formValidationErrors.title
         });
-        // let fieldClass_license = classNames({
-        //     'required': true,
-        //     'field': true,
-        //     'error': this.props.AddDeckStore.wrongFields.license
-        // });
         let fieldClass_conditions = classNames({
             'required': true,
             'inline': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.conditions
+            'error': this.state.formValidationErrors.conditions
         });
         let fieldClass_imageslicense = classNames({
             'required': true,
             'inline': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.imageslicense
+            'error': this.state.formValidationErrors.imagesLicence
         });
         let btnClasses_submit = classNames({
             'ui': true,
@@ -490,31 +475,18 @@ class AddDeck extends React.Component {
             'button': true
 
         });
-        let fieldClass_language = classNames({
-            'required': true,
-            'field': true,
-            'error': this.props.AddDeckStore.wrongFields.language
-        });
 
+        let formClasses = classNames({
+            'ui': true,
+            'form': true,
+            'upload': true,
+            'error': Object.keys(this.state.formValidationErrors).length === 0 ? '' : ' error'
+        });
 
         let filename = this.props.ImportStore.filename;
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        /*    let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
-        </select>;
-        */
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme" ref="select_themes">
             <option value="default">White - Default</option>
             <option value="beige">Cream</option>
@@ -531,12 +503,6 @@ class AddDeck extends React.Component {
             <option value="odimadrid">ODI Madrid</option>
             <option value="oeg">OEG</option>
         </select>;
-        // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
-        //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-        //   <option value="CC BY" >Creative Commons Attribution</option>
-        //   <option value="CC0" >Creative Commons CC0 Public Domain</option>
-        // </select>;
-
 
         const form_messages = defineMessages({
             hint_title: {
@@ -556,10 +522,6 @@ class AddDeck extends React.Component {
                 defaultMessage: 'Create deck',
             }
         });
-        let hint_title = this.props.AddDeckStore.wrongFields.title ? this.context.intl.formatMessage(form_messages.hint_title) : undefined;
-        let hint_language = this.props.AddDeckStore.wrongFields.language ? this.context.intl.formatMessage(form_messages.hint_language) : undefined;
-        // let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
-        //let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
         if (this.props.ImportStore.deckId !== null &&
@@ -580,8 +542,8 @@ class AddDeck extends React.Component {
                     </h3>
                 </div>
                 <div className="sixteen wide column">
-                    <form className="ui form upload">
-                        <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                    <form className={formClasses}>
+                        <div className={fieldClass_title} ref="div_title" >
                             <label htmlFor="title">
                                 <FormattedMessage
                                     id='AddDeck.form.label_title'
@@ -590,14 +552,22 @@ class AddDeck extends React.Component {
                             <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
                         </div>
                         <div className="two fields">
-                            <div className={fieldClass_language}>
-                                <label htmlFor="language">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_language'
-                                        defaultMessage='Language' />
-                                </label>
-                                <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" aria-required="true" error={this.props.AddDeckStore.wrongFields.language} />
-                            </div>
+                            <SWAutoComplete
+                                ref="div_languages"
+                                required={true}
+                                error={this.state.formValidationErrors.language}
+                                label={<FormattedMessage
+                                    id='AddDeck.form.label_language'
+                                    defaultMessage='Language' />
+                                }
+                                name='language'
+                                defaultValue={this.state.language}
+                                options={translationLanguages.map((s) => ({
+                                    value: s,
+                                    name: getLanguageDisplayName(s),
+                                }))}
+                                onChange={this.handleInputChange}
+                            />
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
                                     <FormattedMessage
@@ -631,13 +601,20 @@ class AddDeck extends React.Component {
                             <div className="sr-only" id="describe_level"><FormattedMessage id='AddDeck.sr.education' defaultMessage='Select education level of deck content'/></div>
                             <div className="sr-only" id="describe_topic"><FormattedMessage id='AddDeck.sr.subject' defaultMessage='Select subject of deck content from autocomplete. Multiple subjects can be selected'/></div>
                             <div className="sr-only" id="describe_tags"><FormattedMessage id='AddDeck.sr.tags' defaultMessage='Add tags or keywords for your deck. Multiple tags can be provided.'/></div>
-                            <div className="field">
-                                <label htmlFor="level_input" id="level-label">
-                                    <FormattedMessage id='DeckProperty.Education.Choose' defaultMessage='Choose Education Level' /></label>
-                                <Dropdown id="level_input" fluid selection ref="dropdown_level" aria-labelledby="level-label" aria-describedby="describe_level"
-                                    options={ [{ value: null, text: '' }, ...Object.entries(educationLevels).map(([value, text]) => ({value, text}) )] }
-                                    defaultValue={null} />
-                            </div>
+                            <SWAutoComplete
+                                ref="dropdown_level"
+                                label={<FormattedMessage
+                                    id='DeckProperty.Education.Choose'
+                                    defaultMessage='Choose Education Level' />
+                                }
+                                name='educationLevel'
+                                value={this.state.educationLevel}
+                                options={Object.entries(educationLevels).map(([value, text]) => ({
+                                    value: value,
+                                    name: text,
+                                }))}
+                                onChange={this.handleInputChange}
+                            />
                             <div className="field">
                                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
                                 <TagInput id="topics_input_field" initialTags={this.props.ImportStore.topics} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
@@ -659,16 +636,7 @@ class AddDeck extends React.Component {
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
-                                    {/*
-                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
-                                        <FormattedMessage
-                                            id='AddDeck.form.button_select'
-                                            defaultMessage='Select file' />
-                                    </div>
-                                    */}
                                     <ImportModal savetags={this.saveTags.bind(this)}/>
-                                    {/*    <Import />*/}
-
                                 </div>
                                 <div className="column" ref="div_filename">
                                     {filename ? this.context.intl.formatMessage(form_messages.selected_message, { filename: filename }) : ''}
@@ -676,8 +644,8 @@ class AddDeck extends React.Component {
                             </div>
                         </div>
                         <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
-                            <div className="bar"></div>
-                            <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"></div>
+                            <div className="bar"/>
+                            <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"/>
                         </div>
                         <div className={fieldClass_conditions} >
                             <div className="ui checkbox" ref="div_conditions" >
@@ -707,13 +675,22 @@ class AddDeck extends React.Component {
                                 </label>
                             </div>
                         </div>
-
+                        <Message
+                            error
+                            header={this.context.intl.formatMessage({
+                                id: 'AddDeck.error.validation',
+                                defaultMessage: 'We found some problems'
+                            })}
+                            list={Object.values(this.state.formValidationErrors)}
+                            role="region"
+                            aria-live="polite"
+                            visible={Object.values(this.state.formValidationErrors).length > 0}
+                        />
                         <div className="ui buttons">
-                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
+                            <div className={btnClasses_submit} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>
