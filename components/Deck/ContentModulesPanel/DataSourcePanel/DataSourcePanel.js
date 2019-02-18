@@ -67,7 +67,7 @@ class DataSourcePanel extends React.Component {
         let editForm = <EditDataSource dataSource={dataSource}/>;
 
         return (
-            <div className="ui bottom attached" ref="dataSourcePanel">
+            <div className="ui bottom attached" ref="dataSourcePanel" role="tabpanel">
                 {(dataSource === undefined) ?
                     newDataSourceButton : ''}
                 {(dataSource === undefined) ?

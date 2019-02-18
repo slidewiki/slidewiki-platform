@@ -67,7 +67,7 @@ class DeckHistoryPanel extends React.Component {
             );
         });
         return (
-        <div ref="deckHistoryPanel" className="ui">
+        <div ref="deckHistoryPanel" className="ui" role="tabpanel">
             {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
             <div><Button positive aria-label={this.context.intl.formatMessage(form_messages.button_aria)} size='small' floated='right'
                          icon='plus'

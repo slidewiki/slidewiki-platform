@@ -121,7 +121,7 @@ class TagsPanel extends React.Component {
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
 
         return (
-            <div className="ui bottom attached" ref="tagsPanel">
+            <div className="ui bottom attached" ref="tagsPanel" role="tabpanel">
                 <div className="ui stackable grid">
                     <div className="row">
                         <div className="eight wide column">

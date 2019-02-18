@@ -24,7 +24,7 @@ class SlideHistoryPanel extends React.Component {
         }) : this.context.intl.formatMessage(form_messages.no_changes);
 
         return (
-        <div ref="slideHistoryPanel" className="ui">
+        <div ref="slideHistoryPanel" className="ui" role="tabpanel">
             <List relaxed>
                 {changes}
             </List>
