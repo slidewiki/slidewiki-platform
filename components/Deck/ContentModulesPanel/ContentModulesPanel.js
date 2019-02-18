@@ -225,6 +225,8 @@ class ContentModulesPanel extends React.Component {
     }
     
     componentDidUpdate() {
+        // Add listeners to the tabs in this component (those already updated)
+        this.tabs = this.addTabListeners();
         this.checkOverflowingChildren();
     }
     
