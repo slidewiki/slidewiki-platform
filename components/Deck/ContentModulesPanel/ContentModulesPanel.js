@@ -54,6 +54,10 @@ class ContentModulesPanel extends React.Component {
         this.keyDownEventListener = this.keyDownEventListener.bind(this);
         this.keyUpEventListener = this.keyUpEventListener.bind(this);
         this.switchTabOnArrowPress = this.switchTabOnArrowPress.bind(this);
+        this.focusEventHandler = this.focusEventHandler.bind(this);
+        this.checkTabFocus = this.checkTabFocus.bind(this);
+        this.activateTab = this.activateTab.bind(this);
+        this.deactivateTabs = this.deactivateTabs.bind(this);
 
         this.tabs = null;
     }
@@ -94,6 +98,9 @@ class ContentModulesPanel extends React.Component {
             tabs[i].index = i;
         }
 
+        // Removing tabindex on first tab to be able to focus it through tab
+        tabs[0].removeAttribute('tabindex');
+
         return tabs;
     }
 
@@ -105,7 +112,7 @@ class ContentModulesPanel extends React.Component {
             case this.keys.end:
                 event.preventDefault();
                 // Activate last tab
-                this.activateTab(this.tabs[this.tabs[length - 1]]);
+                this.activateTab(this.tabs[this.tabs.length - 1]);
                 break;
             case this.keys.home:
                 event.preventDefault();
@@ -142,11 +149,11 @@ class ContentModulesPanel extends React.Component {
             this.tabs[i].addEventListener('focus', this.focusEventHandler);
         }
 
-        if (this.direction[pressed]) {
+        if (this.directions[pressed]) {
             let target = event.target;
             if (target.index !== undefined) {
-                if (this.tabs[target.index + this.direction[pressed]]) {
-                    this.tabs[target.index + this.direction[pressed]].focus();
+                if (this.tabs[target.index + this.directions[pressed]]) {
+                    this.tabs[target.index + this.directions[pressed]].focus();
                 } else if (pressed === this.keys.left || pressed === this.keys.up) {
                     focusLastTab();
                 } else if (pressed === this.keys.right || pressed === this.keys.down) {
@@ -165,12 +172,48 @@ class ContentModulesPanel extends React.Component {
     }
 
     focusEventHandler(event) {
+        let target = event.target;
 
+        setTimeout(this.checkTabFocus, 300, target);
+
+    }
+
+    checkTabFocus(target) {
+        let focused = document.activeElement;
+
+        if (target === focused) this.activateTab(target, false);
     }
 
     // Activates any given tab panel
     activateTab (tab, setFocus) {
+        setFocus = setFocus || true;
 
+        // Deactivate all other tabs
+        this.deactivateTabs();
+
+        // Remove tabindex attribute
+        tab.removeAttribute('tabindex')
+
+        // Set the tab as selected
+        tab.setAttribute('aria-selected', 'true');
+
+        let id = tab.getAttribute('id');
+        $('#' + id).click();
+
+        // Set focus when required.
+        if (setFocus){
+            tab.focus();
+        }
+
+
+    }
+
+    deactivateTabs() {
+        for (let i = 0; i < this.tabs.length; i++) {
+            this.tabs[i].setAttribute('tabindex', '-1');
+            this.tabs[i].setAttribute('aria-selected', 'false');
+            this.tabs[i].removeEventListener('focus', this.focusEventHandler);
+        }
     }
 
     componentDidMount(){
@@ -388,7 +431,7 @@ class ContentModulesPanel extends React.Component {
                     if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
                         return;
                     }
-                    return (<Button tabIndex="0" className={classes} style={compStyle}
+                    return (<Button tabIndex="-1" className={classes} style={compStyle}
                         onClick={this.handleTabClick.bind(this, item.value)} onKeyPress={this.handleKeyPress.bind(this, item.value)} 
                         key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="tab">{item.text}</Button>);
                         
