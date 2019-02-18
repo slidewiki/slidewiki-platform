@@ -23,7 +23,7 @@ import PermissionsStore from '../../../stores/PermissionsStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
-import {  Dropdown } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentModulesPanel extends React.Component {
@@ -33,6 +33,29 @@ class ContentModulesPanel extends React.Component {
         this.state = {
             showMobileMenu: false
         };
+
+        this.keys = {
+            end: 35,
+            home: 36,
+            left: 37,
+            up: 38,
+            right: 39,
+            down: 40
+        };
+
+        this.directions = {
+            37: -1,
+            38: -1,
+            39: 1,
+            40: 1
+        };
+
+        // Binds
+        this.keyDownEventListener = this.keyDownEventListener.bind(this);
+        this.keyUpEventListener = this.keyUpEventListener.bind(this);
+        this.switchTabOnArrowPress = this.switchTabOnArrowPress.bind(this);
+
+        this.tabs = null;
     }
 
     componentWillMount() {
@@ -57,8 +80,103 @@ class ContentModulesPanel extends React.Component {
             }
         }
     }
-    
+
+
+    addTabListeners() {
+
+        let tabs = document.querySelectorAll('[role="tab"]');
+        for (let i = 0; i < tabs.length ; i++) {
+            // tabs[i].addEventListener('click', ...);
+            tabs[i].addEventListener('keydown', this.keyDownEventListener);
+            tabs[i].addEventListener('keyup', this.keyUpEventListener);
+
+            // Build an array with all tabs (<button>s) in it
+            tabs[i].index = i;
+        }
+
+        return tabs;
+    }
+
+    keyDownEventListener(event) {
+
+        let key = event.keyCode;
+
+        switch (key) {
+            case this.keys.end:
+                event.preventDefault();
+                // Activate last tab
+                this.activateTab(this.tabs[this.tabs[length - 1]]);
+                break;
+            case this.keys.home:
+                event.preventDefault();
+                // Activate First tab
+                this.activateTab(this.tabs[0]);
+                break;
+
+            // Up and down are in keydown
+            // because we need to prevent page scroll >:)
+            case this.keys.up:
+            case this.keys.down:
+                this.determineOrientation(event);
+                break;
+        }
+
+    }
+
+    keyUpEventListener(event) {
+
+        let key = event.keyCode;
+
+        switch (key) {
+            case this.keys.left:
+            case this.keys.right:
+                this.switchTabOnArrowPress(event);
+                break;
+        }
+    }
+
+    switchTabOnArrowPress(event) {
+        let pressed = event.keyCode;
+
+        for (let i = 0; i < this.tabs.length; i++) {
+            this.tabs[i].addEventListener('focus', this.focusEventHandler);
+        }
+
+        if (this.direction[pressed]) {
+            let target = event.target;
+            if (target.index !== undefined) {
+                if (this.tabs[target.index + this.direction[pressed]]) {
+                    this.tabs[target.index + this.direction[pressed]].focus();
+                } else if (pressed === this.keys.left || pressed === this.keys.up) {
+                    focusLastTab();
+                } else if (pressed === this.keys.right || pressed === this.keys.down) {
+                    focusFirstTab();
+                }
+            }
+        }
+
+        function focusFirstTab() {
+            this.tabs[0].focus();
+        }
+
+        function focusLastTab() {
+            this.tabs[this.tabs.length - 1].focus();
+        }
+    }
+
+    focusEventHandler(event) {
+
+    }
+
+    // Activates any given tab panel
+    activateTab (tab, setFocus) {
+
+    }
+
     componentDidMount(){
+        // Add listeners to the tabs in this component (those already mounted)
+        this.tabs = this.addTabListeners();
+
         $(this.refs.selectTab).dropdown({selectOnKeydown: false});
         this.checkOverflowingChildren();
     }
@@ -227,10 +345,10 @@ class ContentModulesPanel extends React.Component {
                 activityDIV = <ContentHistoryPanel selector={this.props.ContentModulesStore.selector} />;
                 break;
             case 'discussion':
-                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector}/>;
                 break;
             case 'usage':
-                activityDIV = <ContentUsagePanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentUsagePanel selector={this.props.ContentModulesStore.selector}/>;
                 break;
             //case 'contributors':
             //    activityDIV = <ContributorsPanel selector={this.props.ContentModulesStore.selector} />;
@@ -255,7 +373,7 @@ class ContentModulesPanel extends React.Component {
         let compStyle = {
             outline: 'none'
         };
-        
+
         pointingMenu = (
             <div className="ui top attached pointing menu" ref="pointerMenu"  aria-label={this.context.intl.formatMessage(form_messages.aria_additional)}>
                 {this.getContentModuleOptions(true).map((item) => {
@@ -270,10 +388,9 @@ class ContentModulesPanel extends React.Component {
                     if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
                         return;
                     }
-                    
-                    return (<a tabIndex="0" className={classes} style={compStyle} 
+                    return (<Button tabIndex="0" className={classes} style={compStyle}
                         onClick={this.handleTabClick.bind(this, item.value)} onKeyPress={this.handleKeyPress.bind(this, item.value)} 
-                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="button">{item.text}</a>);
+                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="tab">{item.text}</Button>);
                         
                     {/*
                     <a className="item">
