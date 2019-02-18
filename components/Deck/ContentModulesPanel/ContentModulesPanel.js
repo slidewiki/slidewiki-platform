@@ -192,7 +192,7 @@ class ContentModulesPanel extends React.Component {
         this.deactivateTabs();
 
         // Remove tabindex attribute
-        tab.removeAttribute('tabindex')
+        tab.removeAttribute('tabindex');
 
         // Set the tab as selected
         tab.setAttribute('aria-selected', 'true');
