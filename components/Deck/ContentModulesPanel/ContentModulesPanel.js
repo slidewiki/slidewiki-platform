@@ -59,6 +59,7 @@ class ContentModulesPanel extends React.Component {
         this.activateTab = this.activateTab.bind(this);
         this.deactivateTabs = this.deactivateTabs.bind(this);
 
+
         this.tabs = null;
     }
 
@@ -149,6 +150,14 @@ class ContentModulesPanel extends React.Component {
             this.tabs[i].addEventListener('focus', this.focusEventHandler);
         }
 
+        let focusLastTab = () => {
+            this.tabs[this.tabs.length - 1].focus();
+        };
+
+        let focusFirstTab = () => {
+            this.tabs[0].focus();
+        };
+
         if (this.directions[pressed]) {
             let target = event.target;
             if (target.index !== undefined) {
@@ -160,14 +169,6 @@ class ContentModulesPanel extends React.Component {
                     focusFirstTab();
                 }
             }
-        }
-
-        function focusFirstTab() {
-            this.tabs[0].focus();
-        }
-
-        function focusLastTab() {
-            this.tabs[this.tabs.length - 1].focus();
         }
     }
 
