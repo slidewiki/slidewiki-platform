@@ -91,7 +91,7 @@ class SearchResultsItem extends React.Component {
         }
 
         return (
-            <Grid.Row id={`result_${result.index}`} role="listitem" className="item" tabIndex="0">
+            <Grid.Row id={`result_${result.index}`} role="listitem" className="item">
                 <Grid.Column width={16} className="ui segment">
                     <Grid>
                         <Grid.Row>

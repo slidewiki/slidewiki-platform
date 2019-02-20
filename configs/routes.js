@@ -50,7 +50,7 @@ export default {
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
             async.series([
-                (callback) => {context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: fullTitle});
+                (callback) => {context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Homepage'});
                     callback();
                 },
                 (callback) => {
