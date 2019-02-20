@@ -119,6 +119,11 @@ class DeckLanguageMenu extends React.Component {
         let selectedLanguageName = getLanguageName(selectedLanguage);
         let selectLanguageMessage = this.context.intl.formatMessage(this.messages.selectLanguage);
 
+        let translatebtn = {
+            padding: '16px',
+            fontWeight: 'bold'
+        };
+
         let dropdownTrigger = (
             <div className="text" data-tooltip={selectLanguageMessage}>
                 <i className={selectedLanguageIcon + ' flag'} />{selectedLanguageName}
@@ -126,14 +131,19 @@ class DeckLanguageMenu extends React.Component {
         );
 
         return (
+           
             <Dropdown
+                style={translatebtn}
                 fluid
-                labeled
                 trigger={dropdownTrigger}
                 aria-label={selectLanguageMessage}
                 aria-describedby={selectedLanguageName}
                 disabled={languageOptions.length < 2 && !canEdit}
-                defaultValue={selectedLanguage} options={languageOptions} onChange={this.changeCurrentLanguage.bind(this)} />
+                defaultValue={selectedLanguage} 
+                options={languageOptions} 
+                onChange={this.changeCurrentLanguage.bind(this)} 
+                className={`${this.props.lastAttached ? 'bottom' : ''} attached medium basic button`}
+                />
         );
     }
 
