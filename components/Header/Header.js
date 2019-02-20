@@ -108,7 +108,16 @@ class Header extends React.Component {
                                     text: 'Skip to navigation',
                                 }, */}
                             <a className="item sw-logo" href='/'>
-                                <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>
+                                {/*<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>*/}
+                                <FormattedMessage id="header.logo.alt" defaultMessage='SlideWiki logo. Link to home page'>
+                                    {
+                                    (alt) => <img
+                                            src="/assets/images/slideWiki-logo-linear.png"
+                                            alt={alt}
+                                            style={{width: '200px'}}
+                                        />
+                                    }
+                                </FormattedMessage>
                             </a>
                             <div className="item">
                                 <SearchBox className="item"/>

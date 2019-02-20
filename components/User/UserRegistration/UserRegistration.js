@@ -712,8 +712,8 @@ class UserRegistration extends React.Component {
         }
 
         let content = <div className="ui blue padded center aligned segment">
-            <h2 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_title)}</h2>
-            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h3>
+            <h1 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_title)}</h1>
+            <h2 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h2>
 
             {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
             {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title={this.context.intl.formatMessage(this.messages.SSOtitle)} aria-label={this.context.intl.formatMessage(this.messages.SSOaria)}><i className="big user icon"></i></button> : ''}
@@ -723,7 +723,7 @@ class UserRegistration extends React.Component {
             <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/terms" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
             <div className="ui dividing header" ></div>
 
-            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h3>
+            <h2 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h2>
             <form className="ui form" ref="UserRegistration_form" >
                 <div className="ui inline required field">
                     <label style={signUpLabelStyle} htmlFor="FirstName_label">{this.context.intl.formatMessage(this.messages.form_firstName)}</label>

@@ -199,7 +199,7 @@ class DeckLandingPage extends React.Component {
                                     </div>
                                 </Segment>
                                 <Segment attached='bottom'>
-                                    <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>
+                                    <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                         <CCBYSA size='small' />
                                     </a>
                                     This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
@@ -228,7 +228,8 @@ class DeckLandingPage extends React.Component {
         if (deckThumbURL && firstSlide.theme) {
             deckThumbURL += '/' + firstSlide.theme;
         }
-        let deckThumbAlt = firstSlide && (firstSlide.title ? firstSlide.title + ' | ' + firstSlide.id : firstSlide.id);
+        //let deckThumbAlt = firstSlide && (firstSlide.title ? firstSlide.title + ' | ' + firstSlide.id : firstSlide.id);
+        let deckThumbAlt = `Example of presentation: ${deckData.title}`;
 
         let deckSlug = this.props.DeckPageStore.deckSlug || '_';
         let selector = this.props.DeckPageStore.selector;
@@ -438,7 +439,7 @@ class DeckLandingPage extends React.Component {
                                     <Segment>
                                         <ActivityFeedPanel /></Segment>
                                     <Segment attached='bottom'>
-                                        <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>
+                                        <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                             <CCBYSA size='small' />
                                         </a>
                                         This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
