@@ -118,10 +118,10 @@ class SocialShare extends React.Component {
         } : {};
         
         return(
-            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share" style={dropdownStyle}>
+            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="listbox" aria-label="Share" data-tooltip="Share" style={dropdownStyle}>
                 { !this.props.textOnly ?
                     <div className="text">
-                        <button className="ui button" type="button" role="listbox">
+                        <button className="ui button" type="button" >
                             <i className="share alternate large icon" />
                         </button>
                     </div>
@@ -131,8 +131,8 @@ class SocialShare extends React.Component {
                     </div>
                 }
             
-                <div className="menu" role="menu" style={dropdownMenuStyle}>
-                    <div className="item" data-value="E-mail" data-tooltip="E-mail" onClick={this.handleEmailClick.bind(this)}>
+                <div className="menu" role="listbox" style={dropdownMenuStyle}>
+                    <div className="item" data-value="E-mail" data-tooltip="E-mail" onClick={this.handleEmailClick.bind(this)} role="option">
                         <EmailShareButton
                             url={shareUrl}
                             subject={emailShareSubject}
@@ -144,7 +144,7 @@ class SocialShare extends React.Component {
                                 round />
                         </EmailShareButton>
                     </div>
-                    <div className="item" data-value="Twitter" data-tooltip="Twitter" onClick={this.handleTwitterClick.bind(this)}>
+                    <div className="item" data-value="Twitter" data-tooltip="Twitter" onClick={this.handleTwitterClick.bind(this)} role="option">
                         <TwitterShareButton
                             url={shareUrl}
                             title={shareMessage}
@@ -165,7 +165,7 @@ class SocialShare extends React.Component {
                                 round />
                         </FacebookShareButton>
                     </div>*/}
-                    <div className="item" data-value="GooglePlus" data-tooltip="Google Plus" onClick={this.handleGooglePlusClick.bind(this)}>
+                    <div className="item" data-value="GooglePlus" data-tooltip="Google Plus" onClick={this.handleGooglePlusClick.bind(this)} role="option">
                         <GooglePlusShareButton
                             url={shareUrl}
                             content={shareMessage}
@@ -176,7 +176,7 @@ class SocialShare extends React.Component {
                                 round />
                         </GooglePlusShareButton>
                     </div>
-                    <div className="item" data-value="LinkedIn" data-tooltip="LinkedIn" onClick={this.handleLinkedinClick.bind(this)}>
+                    <div className="item" data-value="LinkedIn" data-tooltip="LinkedIn" onClick={this.handleLinkedinClick.bind(this)} role="option">
                         <LinkedinShareButton
                             url={shareUrl}
                             title={shareMessage + '(' + shareUrl + ')'}

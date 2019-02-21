@@ -24,11 +24,11 @@ class Imprint extends React.Component {
                             <h3><FormattedMessage id="imprint.authority" defaultMessage="Responsible Supervisory Authority"/>:</h3>
                             <p><FormattedMessage id="imprint.authority.text" defaultMessage="Ministry for Science and Culture of Lower Saxony"/></p>
                             <h3><FormattedMessage id="imprint.contact" defaultMessage="Contact"/>:</h3>
-                            <p>Customer service phone:&nbsp;+49 511 762-8989<br/>Central information desk phone: +49 511 762-2268<br/>Fax: +49 511 762-4076<br/>Email: <a>information@tib.eu</a></p>
+                            <p>Customer service phone:&nbsp;+49 511 762-8989<br/>Central information desk phone: +49 511 762-2268<br/>Fax: +49 511 762-4076<br/>Email: <a href="mailto:information@tib.eu">information@tib.eu</a></p>
                             <h2><FormattedMessage id="imprint.VAT" defaultMessage="VAT (sales tax) registration number"/>:</h2>
                             <p>DE 214931803</p>
                             <h2><FormattedMessage id="imprint.editorialOffice" defaultMessage="Editorial Office"/>:</h2>
-                            <p>Dr. Sandra Niemeyer; email: <a>sandra.niemeyer@tib.eu</a></p>
+                            <p>Dr. Sandra Niemeyer; email: <a href="mailto:sandra.niemeyer@tib.eu">sandra.niemeyer@tib.eu</a></p>
                             <h2><FormattedMessage id="imprint.copyright" defaultMessage="Copyright"/>:</h2>
                             <p><FormattedMessage id="imprint.copyright.text" defaultMessage="The layout of this website is protected under copyright, as are the graphics and all other contents contained in the website."/></p>
                             <h2><FormattedMessage id="imprint.content" defaultMessage="Content Available"/>:</h2>

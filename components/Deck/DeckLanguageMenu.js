@@ -130,6 +130,8 @@ class DeckLanguageMenu extends React.Component {
             </div>
         );
 
+        let ariaLabel = `The selected language of the slide is ${selectedLanguageName}`;
+
         return (
            
             <Dropdown
@@ -137,7 +139,7 @@ class DeckLanguageMenu extends React.Component {
                 fluid
                 trigger={dropdownTrigger}
                 aria-label={selectLanguageMessage}
-                aria-describedby={selectedLanguageName}
+                aria-label={ariaLabel}
                 disabled={languageOptions.length < 2 && !canEdit}
                 defaultValue={selectedLanguage} 
                 options={languageOptions} 
