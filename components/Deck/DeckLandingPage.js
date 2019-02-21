@@ -314,8 +314,8 @@ class DeckLandingPage extends React.Component {
                                             <div className="row">
                                                 <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
-                                                    <div className="sr-only">Deck status: </div>
-                                                    {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='pink'>Unlisted</Label>}</Header>
+                                                    <span className="sr-only">Deck status: </span>
+                                                    {(!deckData.hidden) ? <Label as="span" color='green'>Published</Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
                                             </div>
                                             <Divider hidden />
                                             <div className="ui stackable grid container">

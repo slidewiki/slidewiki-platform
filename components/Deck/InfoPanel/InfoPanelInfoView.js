@@ -109,7 +109,7 @@ class InfoPanelInfoView extends React.Component {
 
                 <div className="ui bottom attached segment">
                     <div className={['ui', 'image']}>
-                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
+                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1">
                             <img alt={this.context.intl.formatMessage(this.messages.licenseLogo)} src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                         </a>
                         <p>
