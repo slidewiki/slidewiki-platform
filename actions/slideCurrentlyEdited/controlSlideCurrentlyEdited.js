@@ -8,18 +8,19 @@ export default function controlSlidesCurrentlyEdited(context, payload, done) {
 
     let sid = payload.sid;
 
+    let jwt = payload.jwt = context.getStore(UserProfileStore).jwt;
+
     context.service.read('slidesCurrentlyEdited.slide', payload, {timeout: 20 * 1000}, (err, res) => {
         if(err) {
             // console.log(err);
         }
 
-        let username = user.username ? user.username : null;
         let timestamp = new Date().toString();
 
         let payload = {
-            userId: username,
             timestamp: timestamp,
-            slideCurrentlyEdited: sid
+            slideCurrentlyEdited: sid,
+            jwt: jwt
         };
 
         context.service.create('slidesCurrentlyEdited.slide', payload, {timeout: 20 * 1000}, {}, (err2, res2) => {
@@ -38,6 +39,8 @@ export default function controlSlidesCurrentlyEdited(context, payload, done) {
             slideCurrentlyEditedId: sid,
             usersCurrentlyEditing: []
         };
+
+        let username = user.username ? user.username : null;
 
         // take only different users currently editing the slide.
         res.slidesCurrentlyEdited = res.slidesCurrentlyEdited.filter((elem) => elem.userId !== username);
