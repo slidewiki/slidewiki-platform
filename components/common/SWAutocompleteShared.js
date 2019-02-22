@@ -181,29 +181,6 @@ function filterItems(filter, items) {
         : items;
 }
 
-function getStringItems(filter) {
-    return getItems(filter).map(({name}) => name);
-}
-
-/*function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}*/
-
-/*
-This function is causing problems in browsers that don't support ES6 (e.g. IE)
-
-async function getItemsAsync(filter, {reject}) {
-    await sleep(Math.random() * 2000);
-    if (reject) {
-        // this is just so we can have examples that show what happens
-        // when there's a request failure.
-        throw new Error({error: 'request rejected'});
-    }
-    return getItems(filter);
-}*/
-
 const itemToString = (i) => (i ? i.name : '');
 
 export {
@@ -218,7 +195,5 @@ export {
     css,
     itemToString,
     getItems,
-    getStringItems,
-    //getItemsAsync,
     filterItems
 };
