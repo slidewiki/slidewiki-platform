@@ -43,10 +43,10 @@ export default function controlSlidesCurrentlyEdited(context, payload, done) {
         let username = user.username ? user.username : null;
 
         // take only different users currently editing the slide.
-        res.slidesCurrentlyEdited = res.slidesCurrentlyEdited.filter((elem) => elem.userId !== username);
+        res.slidesCurrentlyEdited = res.slidesCurrentlyEdited.filter((elem) => elem.username !== username);
         res.slidesCurrentlyEdited.forEach((elem) => {
             params.usersCurrentlyEditing.push({
-                user: elem.userId,
+                user: elem.username,
                 timestamp: elem.timestamp
             });
         });

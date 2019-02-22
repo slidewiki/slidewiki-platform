@@ -197,11 +197,13 @@ class SlideCurrentlyEditedWarningModal extends React.Component {
                                 <div id="slideCurrentlyEditedWarningModalDescription" tabIndex="0" style={modalContentStyle}>{this.context.intl.formatMessage(this.messages.modalWarning)}</div>
                                 <br/>
                                 <table style={tableStyle}>
-                                    <tr style={tableRowStyle}>
-                                        <th>{this.context.intl.formatMessage(this.messages.users)}</th>
-                                        <th>{this.context.intl.formatMessage(this.messages.editingSince)}</th>
-                                    </tr>
-                                    {usersList}
+                                    <tbody>
+                                        <tr style={tableRowStyle}>
+                                            <th>{this.context.intl.formatMessage(this.messages.users)}</th>
+                                            <th>{this.context.intl.formatMessage(this.messages.editingSince)}</th>
+                                        </tr>
+                                        {usersList}
+                                    </tbody>
                                 </table>
                                 <div tabIndex="0" style={modalNoteStyle}>{this.context.intl.formatMessage(this.messages.note)}</div>
                             </div>
