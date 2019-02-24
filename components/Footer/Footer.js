@@ -111,7 +111,7 @@ class Footer extends React.Component {
                                             <li><NavLink routeName='terms' href='/terms'>{this.context.intl.formatMessage(messages.terms)}</NavLink></li>
                                             <li><NavLink routeName='license' href='/license'>{this.context.intl.formatMessage(messages.license)}</NavLink></li>
                                             <li><NavLink routeName='imprint' href='/imprint'>{this.context.intl.formatMessage(messages.imprint)}</NavLink></li>
-                                            <li><NavLink routeName='dataprotection' href='/dataprotection'>{this.context.intl.formatMessage(messages.data)}</a></li>
+                                            <li><NavLink routeName='dataprotection' href='/dataprotection'>{this.context.intl.formatMessage(messages.data)}</NavLink></li>
                                         </ul>
                                     </div>
                                 </div>
