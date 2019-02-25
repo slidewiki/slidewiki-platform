@@ -178,7 +178,7 @@ class SWAutoComplete extends React.Component {
                                                 {itemToString(item)}
                                             </Item>
                                         ))
-                                        : null}
+                                        : <span></span>}
                                 </BaseMenu>
                             </div>
                         </div>
