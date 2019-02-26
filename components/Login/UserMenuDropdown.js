@@ -11,6 +11,7 @@ import fetchUser from '../../actions/user/userprofile/fetchUser';
 import AriaMenuButton from 'react-aria-menubutton';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
+import {Microservices} from '../../configs/microservices';
 
 class UserMenuDropdown extends React.Component {
     constructor(props){
@@ -113,7 +114,6 @@ class UserMenuDropdown extends React.Component {
                 style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
                   <AriaMenuButton.MenuItem
                    className='item'
-                   key= {0}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username}
                    text= {this.context.intl.formatMessage(messages.myDecks)}
@@ -124,7 +124,6 @@ class UserMenuDropdown extends React.Component {
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className='item'
-                   key= {5}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/playlists'}
                    text={this.context.intl.formatMessage(messages.myPlaylists)}>
@@ -134,7 +133,6 @@ class UserMenuDropdown extends React.Component {
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className='item'
-                   key= {1}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}
                    text={this.context.intl.formatMessage(messages.myGroups)}>
@@ -144,7 +142,6 @@ class UserMenuDropdown extends React.Component {
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className="item"
-                   key= {2}
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}
                    text={this.context.intl.formatMessage(messages.mySettings)}>
@@ -152,9 +149,19 @@ class UserMenuDropdown extends React.Component {
                    <i className="setting icon" aria-hidden={true} />{<FormattedMessage{...messages.settings} />}
                    </span>
                   </AriaMenuButton.MenuItem>
+                  { Microservices.analytics &&
+                    <AriaMenuButton.MenuItem
+                     className="item"
+                     tag='li'
+                     value={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}
+                     text='Analytics'>
+                     <span style={{color:'black'}}>
+                     <i className="icon chart bar" aria-hidden={true} />Analytics
+                     </span>
+                    </AriaMenuButton.MenuItem>
+                  }
                   <AriaMenuButton.MenuItem
                    className="item"
-                   key= {3}
                    tag='li'
                    value={'/notifications'}
                    text={this.context.intl.formatMessage(messages.myNotifications)}>
@@ -164,7 +171,6 @@ class UserMenuDropdown extends React.Component {
                   </AriaMenuButton.MenuItem>
                   <AriaMenuButton.MenuItem
                    className="item"
-                   key= {4}
                    tag='li'
                    value={'logout'}
                    text={this.context.intl.formatMessage(messages.signout)}>

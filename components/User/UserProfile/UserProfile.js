@@ -14,6 +14,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserStatsStore from '../../../stores/UserStatsStore';
 import UserGroupsStore from '../../../stores/UserGroupsStore';
+import UserPerformancePredictions from './UserAnalytics/UserPerformancePredictions';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
 import {defineMessages, FormattedMessage} from 'react-intl';
@@ -122,6 +123,14 @@ class UserProfile extends React.Component {
                 }});
             case 'stats':
                 return this.addScaffold(() => this.displayUserStats());
+            case categories.categories[6]:
+                return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
+                    case categories.analytics[0]:
+                        return this.displayPerformancePredictions();
+                        break;
+                    default:
+                        return this.notImplemented();
+                }});
             default:
                 return this.displayUserProfile();
         };
@@ -251,6 +260,10 @@ class UserProfile extends React.Component {
 
     displayUserStats(){
         return (<UserStats userStats={this.props.UserStatsStore} />);
+    }
+    
+    displayPerformancePredictions() {
+        return ( <UserPerformancePredictions /> );
     }
 
 
