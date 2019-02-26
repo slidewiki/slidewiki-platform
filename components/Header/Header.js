@@ -82,6 +82,9 @@ class Header extends React.Component {
               <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>
               <FormattedMessage id='header.mynotifications.mobile' defaultMessage='Notifications'/>
               </NavLink>
+              <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}><i className="icon chart bar"/>
+              {/* <FormattedMessage id='header.myanalytics.mobile' defaultMessage='My Analytics'/> */}
+              </NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>
               <FormattedMessage id='header.logout.mobile' defaultMessage='Logout'/>
               </a>
