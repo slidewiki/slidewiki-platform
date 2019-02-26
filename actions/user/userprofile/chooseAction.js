@@ -4,21 +4,27 @@ import fetchUserDecks from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
+import loadUserPerformancePredictions from '../../analytics/loadUserPerformancePredictions';
 import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
-import { shortTitle } from '../../../configs/general';
+import { shortTitle, LTI_ID } from '../../../configs/general';
+import UserProfileStore from '../../../stores/UserProfileStore';
+
 import loadUserStats from '../../stats/loadUserStats';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats'],
+    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats', 'ltis', 'analytics'],
     settings: ['profile', 'account', 'integrations'],
     groups: ['overview'],
+    ltis: ['overview', 'edit'],
     decks: ['shared'],
+    analytics: ['performanceprediction']
 };
 
 export function chooseAction(context, payload, done) {
     log.info(context);
 
     let title = shortTitle + ' | ';
+
     switch(payload.params.category){
         case categories.categories[0]:
             switch(payload.params.item){
@@ -29,12 +35,12 @@ export function chooseAction(context, payload, done) {
                     title += 'Account';
                     break;
                 case categories.settings[2]:
-                    title += 'Authorized Accounts';
+                    title += 'Authorized Accounts & Services';
                     break;
                 default:
                     title = shortTitle;
                     break;
-            };
+            }
             break;
         case categories.categories[1]:
             switch(payload.params.item){
@@ -44,7 +50,7 @@ export function chooseAction(context, payload, done) {
                 default:
                     title = shortTitle;
                     break;
-            };
+            }
             break;
         case categories.categories[2]:
             title += 'Playlists';
@@ -58,14 +64,31 @@ export function chooseAction(context, payload, done) {
                 default:
                     title += 'My Decks';
                     break;
-            };
+            }
             break;
         case categories.categories[5]:
             title += 'User Stats';
             break;
+            /*
+        case categories.categories[6]:
+            switch(payload.params.item){
+                case categories.ltis[0]:
+                    title += 'My Learning Services';
+                    break;
+                case categories.ltis[1]:
+                    title += 'Add Learning Service';
+                    break;
+                default:
+                    title = shortTitle;
+                    break;
+            };
+            break;
+            */
+
+
         default:
             title = shortTitle;
-    };
+    }
     context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     async.series([
@@ -73,6 +96,7 @@ export function chooseAction(context, payload, done) {
             context.executeAction(fetchUser, payload, callback);
         },
         (callback) => {
+
             switch (payload.params.category) {
                 case categories.categories[0]:
                 case categories.categories[1]:
@@ -103,9 +127,22 @@ export function chooseAction(context, payload, done) {
                     context.dispatch('USER_CATEGORY', {category: payload.params.category});
                     context.executeAction(loadUserStats, {}, callback);
                     break;
+                case categories.categories[6]:
+                    if(!categories.settings.includes(payload.params.item) && !categories.ltis.includes(payload.params.item) ){
+                        context.executeAction(notFoundError, {}, callback);
+                        break;
+                    }
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+                    callback();
+                    break;
+                case categories.categories[7]:
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+                    context.executeAction(loadUserPerformancePredictions, {}, callback);
+                    break;
                 default:
                     context.executeAction(notFoundError, {}, callback);
             }
+
         }
     ],
     (err, result) => {

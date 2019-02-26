@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import Util from '../../../../components/common/Util';
 import loadDataSource from '../../../../actions/datasource/loadDataSource';
+import { defineMessages } from 'react-intl';
 
 class DataSourceItem extends React.Component {
     handleEdit(e) {
@@ -133,13 +134,18 @@ class DataSourceItem extends React.Component {
     }
 
     render() {
+        const form_messages = defineMessages({
+            originally: {
+                id: 'DataSourceItem.form.originally',
+                defaultMessage: 'originally from',
+            }
+        });
         const node = this.props.node;
         //append origin of the datasource
-        const selector = this.props.selector;
-        const cheerioSlideName =  (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
-        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioSlideName}</a>)</i> </span> : '';
+        const cheerioRefName = (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
+        const appendOrigin = (node.stype !== undefined) ? <span><i>({this.context.intl.formatMessage(form_messages.originally) + ' ' + node.stype} <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioRefName}</a>)</i> </span> : '';
 
-        const appendEdit = (this.props.editable) ? (
+        const appendEdit = (this.props.editable && node.stype === undefined) ? (
             <a href="#" className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
@@ -194,7 +200,8 @@ class DataSourceItem extends React.Component {
 }
 
 DataSourceItem.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DataSourceItem = connectToStores(DataSourceItem, [DeckTreeStore], (context, props) => {
     return {

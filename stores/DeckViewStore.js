@@ -34,6 +34,16 @@ class DeckViewStore extends BaseStore {
         this.emitChange();
     }
 
+    resetContent() {
+        this.deckData = {};
+        this.slidesData = {};
+        this.creatorData = {};
+        this.ownerData = {};
+        this.originCreatorData = {};
+        this.deckViewPanelHeight = 450;
+        this.emitChange();
+    }
+
     getState() {
         return {
             deckData: this.deckData,
@@ -59,6 +69,7 @@ class DeckViewStore extends BaseStore {
 
 DeckViewStore.storeName = 'DeckViewStore';
 DeckViewStore.handlers = {
+    'LOAD_DECK_PAGE_START': 'resetContent',
     'LOAD_DECK_CONTENT_SUCCESS': 'updateContent',
     'UPDATE_DECK_VIEW_PANEL_HEIGHT': 'updateDeckViewPanelHeight',
     'INCREMENT_DECK_VIEW_COUNTER': 'incrementDeckViewCounter'

@@ -68,6 +68,10 @@ class EmbedModal extends React.Component {
                 id:'embedModal.other',
                 defaultMessage: 'Other'
             },
+            buttonText:{
+                id:'embedModal.buttonText',
+                defaultMessage: 'Embed'
+            }
         });
     }
     
@@ -183,9 +187,9 @@ class EmbedModal extends React.Component {
         return(
             <Modal
                     trigger={
-                        <div className="item" data-value="Embed" role="menuitem" aria-label="Embed" data-tooltip="Embed" tabIndex="0" onClick={this.handleEmbed.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
+                        <div className="item" data-value="Embed" role="menuitem" aria-label={this.context.intl.formatMessage(this.messages.buttonText)} data-tooltip={this.context.intl.formatMessage(this.messages.buttonText)} tabIndex="0" onClick={this.handleEmbed.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
                             <div role="button" className="SocialMediaShareButton Demo__some-network__share-button">
-                                <div style={{width: this.props.size + 'px', height: this.props.size + 'px'}}>
+                                <div style={{width: this.props.size + 'px', height: this.props.size + 'px', fontSize: this.props.fontSize + 'px'}}>
                                     <Icon name="share square" style={{
                                         width: (this.props.size - 2) + 'px',
                                         height: (this.props.size - 2) + 'px',

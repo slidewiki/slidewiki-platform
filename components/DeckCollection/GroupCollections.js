@@ -193,12 +193,11 @@ class GroupCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui header"><h3><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h3></div>
+                                    <div className="ui header"><h2><a href={`/playlist/${col._id}?sort=order`} target='_blank'>{col.title}</a></h2></div>
                                     <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''}  {col.decks.length} {
                                       this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText) } {(col.userGroup) ? '\u00b7' : ''} {
                                         (col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
                                 </div>
-
                                 <div className="right aligned column">
                                     {(this.props.isAdmin || this.props.isCreator) ? (
                                       <div>
@@ -222,7 +221,7 @@ class GroupCollections extends React.Component {
             <div className="ui segments">
                 {loadingDiv}
                 <div className="ui secondary clearing segment">
-                    <h2 className="ui left floated header">{this.context.intl.formatMessage(this.messages.groupCollectionsTitle)}</h2>
+                    <h1 className="ui left floated header" id="main">{this.context.intl.formatMessage(this.messages.groupCollectionsTitle)}</h1>
                     {((this.props.isAdmin || this.props.isCreator) && !this.state.isMobile) &&
                         <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
                           <p><FormattedMessage {...this.messages.collectionCreate} /></p>

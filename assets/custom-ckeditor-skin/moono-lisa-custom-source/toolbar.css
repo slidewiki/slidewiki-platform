@@ -151,6 +151,10 @@ a.cke_button_on
 	border: 1px #bcbcbc solid;
 	padding: 6px 9px;
 }
+a.cke_button_on:focus {
+    box-shadow: 0 0 0 2px #0C273E;
+    z-index: 1;
+}
 
 
 /* Button states. */
@@ -159,9 +163,11 @@ a.cke_button_off:focus,
 a.cke_button_off:active
 {
 	background: #e5e5e5;
-	border: 1px #bcbcbc solid;
+	/*border: 2px #1E78BB solid;*/
 	/* Compensate the border change */
-	padding: 6px 9px;
+	/*padding: 6px 9px;*/
+    box-shadow: 0 0 0 2px #0C273E;
+    z-index: 1;
 }
 
 .cke_hc a.cke_button_on,
@@ -187,8 +193,10 @@ a.cke_button_disabled:active
 }
 
 a.cke_button_disabled:focus {
-	border: 1px #bcbcbc solid;
-	padding: 3px 5px;
+	/*border: 1px #bcbcbc solid;
+	padding: 6px 9px;*/
+    box-shadow: 0 0 0 2px #0C273E;
+    z-index: 1;
 }
 
 .cke_hc a.cke_button_disabled:hover,

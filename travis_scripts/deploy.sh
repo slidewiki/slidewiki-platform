@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir ~/.docker/
 tar xvf deployment_keys.tar && rm -f deployment_keys.tar && sudo chmod 0444 *.pem && mv -f -t ~/.docker/ cert.pem key.pem ca.pem
 export DOCKER_HOST="$DOCKERHOST" && export DOCKER_TLS_VERIFY=1
 

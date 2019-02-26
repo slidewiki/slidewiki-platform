@@ -487,8 +487,8 @@ class Details extends React.Component {
         return (
           <div>
             <div className="ui segments">
-              <div className="ui secondary segment">
-                  <h3>{(this.props.isAdmin || this.props.isCreator) ? this.context.intl.formatMessage(this.messages.details) : this.context.intl.formatMessage(this.messages.members)}</h3>
+              <div className="ui secondary clearing segment">
+                  <h1 className="ui left floated header" id="main">{(this.props.isAdmin || this.props.isCreator) ? this.context.intl.formatMessage(this.messages.details) : this.context.intl.formatMessage(this.messages.members)}</h1>
               </div>
               <div className="ui segment">
                 <div className="ui container">
@@ -527,7 +527,7 @@ class Details extends React.Component {
                                 </div>
 
                                 <div className="ui header">
-                                    <h3>{this.context.intl.formatMessage(this.messages.members)}</h3>
+                                    <h2>{this.context.intl.formatMessage(this.messages.members)}</h2>
                                 </div>
                               </div>
                             : '' }
@@ -543,12 +543,12 @@ class Details extends React.Component {
             {(this.props.isAdmin || this.props.isCreator) ?
               <div className="ui segments">
                 <div className="ui secondary segment">
-                    <h3>
+                    <h2>
                       <FormattedMessage
                         id='GroupDetails.exchangePicture'
                         defaultMessage='Group picture'
                       />
-                    </h3>
+                    </h2>
                 </div>
                 <div className="ui segment">
                     <ChangePicture group={ this.props.currentUsergroup }/>

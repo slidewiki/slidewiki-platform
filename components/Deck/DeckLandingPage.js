@@ -4,6 +4,7 @@ import { NavLink } from 'fluxible-router';
 import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
 
 import { connectToStores } from 'fluxible-addons-react';
+import ContentStore from '../../stores/ContentStore';
 import DeckPageStore from '../../stores/DeckPageStore';
 import DeckViewStore from '../../stores/DeckViewStore';
 import ContentLikeStore from '../../stores/ContentLikeStore';
@@ -18,6 +19,7 @@ import { Microservices } from '../../configs/microservices';
 
 import CCBYSA from '../common/CC-BY-SA';
 import ReportModal from '../Report/ReportModal';
+import openReportModal from '../../actions/report/openReportModal';
 import TagList from './ContentModulesPanel/TagsPanel/TagList';
 import PresentationsPanel from './InfoPanel/PresentationsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
@@ -54,8 +56,170 @@ class DeckLandingPage extends React.Component {
         return presLocation;
     }
 
+    getPlaceholder() {
+        return (
+            <Container fluid>
+                <Divider hidden/>
+                <Grid padded='vertically' divided='vertically' stackable>
+                    <Grid.Column only="tablet computer" tablet={1} computer={2}>
+                    </Grid.Column>
+
+                    <Grid.Column mobile={16} tablet={14} computer={12}>
+                        <Grid.Row>
+                            <Segment>
+                                <Grid stackable>
+                                    <Grid.Column width={4}>
+                                        <div className="ui placeholder">
+                                            <div className="rectangular image"></div>
+                                        </div>
+                                    </Grid.Column>
+                                    <Grid.Column width={12}>
+                                        <Grid.Row>
+                                            <div className="ui placeholder">
+                                                <div className="header">
+                                                    <div className="long line"></div>
+                                                    <div className="long line"></div>
+                                                </div>
+                                            </div>
+                                        </Grid.Row>
+                                        <Divider hidden />
+                                        <Grid stackable>
+                                            <Grid.Row columns={2}>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="line"></div>
+                                                        <div className="line"></div>
+                                                        <div className="line"></div>
+                                                    </div>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="line"></div>
+                                                        <div className="line"></div>
+                                                    </div>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                            <Divider hidden />
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="header">
+                                                            <div className="line"></div>
+                                                        </div>
+                                                        <div className="paragraph">
+                                                            <div className="line"></div>
+                                                            <div className="line"></div>
+                                                        </div>
+                                                    </div>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                            <Divider hidden />
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    <div className="ui placeholder">
+                                                        <div className="header">
+                                                            <div className="line"></div>
+                                                        </div>
+                                                        <div className="paragraph">
+                                                            <div className="line"></div>
+                                                        </div>
+                                                    </div>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                    </Grid.Column>
+                                </Grid>
+                            </Segment>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <div className="ui bottom attached tabular menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui icon buttons huge attached">
+                                    <Button icon size="huge">
+                                        <Icon name="line graph" />
+                                    </Button>
+                                    <Button icon size="huge">
+                                        <Icon name="warning circle" />
+                                    </Button>
+                                </div>
+
+                                <div className="right inverted menu">
+                                    <div className="ui icon buttons huge attached">
+                                        <Button icon size="huge">
+                                            <Icon name="open folder" />
+                                        </Button>
+                                        <Button icon size="huge">
+                                            <Icon name="play circle" />
+                                        </Button>
+                                        <Button icon size="huge">
+                                            <Icon name="record" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Grid.Row>
+
+                        <Divider hidden />
+
+                        <Grid divided='vertically' stackable>
+                            <Grid.Column only="tablet computer" width={12}>
+                                <Segment attached='top' >
+                                    <div className="ui placeholder">
+                                        <div className="header">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="paragraph">
+                                            <div className="long line"></div>
+                                        </div>
+                                    </div>
+                                </Segment>
+                                <Segment attached>
+                                    <div className="ui placeholder">
+                                        <div className="header">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="paragraph">
+                                            <div className="long line"></div>
+                                        </div>
+                                    </div>
+                                </Segment>
+                                <Segment attached='bottom'>
+                                    <div className="ui placeholder">
+                                        <div className="header">
+                                            <div className="line"></div>
+                                        </div>
+                                        <div className="paragraph">
+                                            <div className="long line"></div>
+                                        </div>
+                                    </div>
+                                </Segment>
+                            </Grid.Column>
+                            <Grid.Column only="tablet computer" width={4}>
+                                <Segment>
+                                    <div className="ui fluid placeholder">
+                                    </div>
+                                </Segment>
+                                <Segment attached='bottom'>
+                                    <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>
+                                        <CCBYSA size='small' />
+                                    </a>
+                                    This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                </Segment>
+                            </Grid.Column>
+                        </Grid>
+
+                    </Grid.Column>
+
+                    <Grid.Column only="tablet computer" tablet={1} computer={2}>
+                    </Grid.Column>
+
+                </Grid>
+            </Container>
+        );
+    }
+
     render() {
         let deckData = this.props.DeckViewStore.deckData;
+        if (lodash.isEmpty(deckData)) return this.getPlaceholder();
 
         let firstSlide = (this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children && this.props.DeckViewStore.slidesData.children[0]);
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
@@ -156,8 +320,7 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                         <Grid.Column width={12}>
                                             <div className="row">
-                                                <Header as="h1">
-                                                    <div className="sr-only">Deck title: </div>
+                                                <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
                                                     <div className="sr-only">Deck status: </div>
                                                     {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='pink'>Unlisted</Label>}</Header>
@@ -228,7 +391,7 @@ class DeckLandingPage extends React.Component {
                                         </Grid.Column>
                                     </Grid>
                                 </Segment>
-                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}}>
+                                <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
                                     <div className="ui icon buttons huge attached">
                                         <NavLink href={deckStatsUrl} tabIndex={-1} >
                                             <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">
@@ -236,6 +399,7 @@ class DeckLandingPage extends React.Component {
                                             </Button>
                                         </NavLink>
                                     </div>
+                                    <ReportModal/>
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
@@ -303,8 +467,17 @@ class DeckLandingPage extends React.Component {
     }
 }
 
-DeckLandingPage = connectToStores(DeckLandingPage, [ContentLikeStore, DeckPageStore, DeckViewStore, TranslationStore, ContentModulesStore, SimilarContentStore], (context, props) => {
+DeckLandingPage = connectToStores(DeckLandingPage, [
+    ContentStore,
+    ContentLikeStore,
+    DeckPageStore,
+    DeckViewStore,
+    TranslationStore,
+    ContentModulesStore,
+    SimilarContentStore,
+], (context, props) => {
     return {
+        ContentStore: context.getStore(ContentStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         DeckPageStore: context.getStore(DeckPageStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),

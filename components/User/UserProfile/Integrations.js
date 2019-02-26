@@ -10,6 +10,11 @@ import updateProviderAction from '../../../actions/user/userprofile/updateProvid
 import common from '../../../common';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {Microservices} from '../../../configs/microservices';
+import { NavLink } from 'fluxible-router';
+
+import UserProfileStore from '../../../stores/UserProfileStore';
+
+
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
@@ -17,7 +22,6 @@ const NAME = 'sociallogin_data';
 class Integrations extends React.Component {
     constructor(props){
         super(props);
-
         this.provider = '';
     }
 
@@ -262,11 +266,11 @@ class Integrations extends React.Component {
         const messages = defineMessages({
             text_providerEnabled: {
                 id: 'Integration.text_providerEnabled',
-                defaultMessage: 'This provider is enabled and you may use it.',
+                defaultMessage: 'This provider is enabled.',
             },
             text_providerDisabled: {
                 id: 'Integration.text_providerDisabled',
-                defaultMessage: 'This provider is currently disabled. To enable it, click on the button next to it.',
+                defaultMessage: 'This provider is currently disabled.',
             }
         });
         let facebook = false, google = false, github = false;
@@ -284,7 +288,6 @@ class Integrations extends React.Component {
                         break;
                 }
             });
-        // console.log('Integrations render()', this.props.providers);
 
         let facebook_icon_classes = classNames({
             'big': true,
@@ -351,24 +354,26 @@ class Integrations extends React.Component {
               <div className="ui segments">
 
                   <div className="ui secondary segment">
-                      <h3>
+                      <h1 className="large header" role="main" id="main">
                         <FormattedMessage
                           id='Integration.hint'
-                          defaultMessage='Hint'
+                          defaultMessage='Authorized Accounts and Services'
                         />
-                      </h3>
+                      </h1>
                   </div>
                   <div className="ui segment">
                     <p>
                       <FormattedMessage
                         id='Integration.hintText'
-                        defaultMessage='SlideWiki provides the possibility to sign in with multiple providers (new features will be added soon). In order to use a specific provider you have to enable the provider separately. Enabling a provider will open a new window for you to sign in. Please sign in and don&apos;t close the opened window, as it will close automatically.'
+                        defaultMessage='SlideWiki provides the possibility to sign in with multiple providers. In order to use a specific provider you have to enable the provider separately. Enabling a provider will open a new window for you to sign in. Please sign in. The window will close automatically once authorized.'
                       />
                     </p>
                   </div>
 
               </div>
               <div className="ui segments">
+
+
 
                   <div className="ui secondary segment">
                       <h3>
@@ -382,7 +387,7 @@ class Integrations extends React.Component {
                       <div className="ui three column vertically divided grid">
                         <div className="row">
                           <div className="one wide column">
-                            <i className={google_icon_classes} ></i>
+                            <i className={google_icon_classes} aria-label="Google"></i>
                           </div>
                           <div className="ten wide column">
                             <div className="ui large label">
@@ -392,9 +397,9 @@ class Integrations extends React.Component {
                           <div className="two wide column">
                             {
                               (google) ? (
-                                <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} ><FormattedMessage id='Integration.disableGoogle' defaultMessage='Disable'/></button>
+                                <button className={google_disable_classes} name="google" aria-label="Disable google" onClick={this.handleDisable.bind(this)} ><FormattedMessage id='Integration.disableGoogle' defaultMessage='Disable'/></button>
                               ) : (
-                                <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} ><FormattedMessage id='Integration.enableGoogle' defaultMessage='Enable'/></button>
+                                <button className={google_enable_classes} name="google" aria-label="Enable google" onClick={this.handleEnable.bind(this)} ><FormattedMessage id='Integration.enableGoogle' defaultMessage='Enable'/></button>
                               )
                             }
                           </div>
@@ -404,7 +409,7 @@ class Integrations extends React.Component {
                       <div className="ui three column vertically divided grid">
                         <div className="row">
                           <div className="one wide column">
-                            <i className={github_icon_classes} ></i>
+                            <i className={github_icon_classes} aria-label="github" ></i>
                           </div>
                           <div className="ten wide column">
                             <div className="ui large label">
@@ -414,9 +419,9 @@ class Integrations extends React.Component {
                           <div className="two wide column">
                             {
                               (github) ? (
-                                <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} ><FormattedMessage id='Integration.disableGithub' defaultMessage='Disable'/></button>
+                                <button className={github_disable_classes} name="github" aria-label="disabled github" onClick={this.handleDisable.bind(this)} ><FormattedMessage id='Integration.disableGithub' defaultMessage='Disable'/></button>
                               ) : (
-                                <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} ><FormattedMessage id='Integration.enableGithub' defaultMessage='Enable'/></button>
+                                <button className={github_enable_classes} name="github" aria-label="enable github" onClick={this.handleEnable.bind(this)} ><FormattedMessage id='Integration.enableGithub' defaultMessage='Enable'/></button>
                               )
                             }
                           </div>
@@ -425,7 +430,37 @@ class Integrations extends React.Component {
                       {(this.props.providerAction) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='Integration.loading' defaultMessage='loading'/></div></div> : ''}
                   </div>
 
+
               </div>
+
+
+              <div className="ui segments">
+                <div className="ui secondary segment">
+                  <h3>
+                    <FormattedMessage
+                      id='Integration.ltis'
+                      defaultMessage='Learning Services (LTIs)'
+                    />
+                  </h3>
+                </div>
+                <div className="ui segment">
+
+                    <p>
+                    <i className="icon big graduation cap"/>
+                      <NavLink className="item" href={'/user/'+this.props.UserProfileStore.username+'/ltis/overview'} activeStyle={this.styles}>
+                        <FormattedMessage
+                          id='Integration.myLTIs'
+                          defaultMessage=' My Learning Services'
+                        />
+                      </NavLink>
+                    </p>
+
+                </div>
+              </div>
+
+
+
+
           </div>
         );
     }
@@ -435,5 +470,11 @@ Integrations.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
+
+Integrations = connectToStores(Integrations, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 
 export default Integrations;

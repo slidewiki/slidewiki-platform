@@ -3,6 +3,7 @@ import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import SlideAnnotationView from './SlideAnnotationView';
 const ReactDOM = require('react-dom');
 
 class SlideContentView extends React.Component {
@@ -138,21 +139,24 @@ class SlideContentView extends React.Component {
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
                                  dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
+                            
+                            <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations} 
+                                inlineContentRef={this.refs.inlineContent}>
+                            </SlideAnnotationView>
                         </section>
                     </div>
                     <br />
                 </div>
             </div>
-            <div className="ui horizontal segments">
-                {this.props.hideSpeakerNotes ?  null
-                  :
-                  <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
-                      {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                      <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+            {this.props.hideSpeakerNotes ? null :
+                <div className="ui horizontal segments">
+                      <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
+                          <b>Speaker notes:</b>
+                          <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+                          </div>
                       </div>
-                  </div>
-                }
-            </div>
+                </div>
+            }
         </div>
         );
     }

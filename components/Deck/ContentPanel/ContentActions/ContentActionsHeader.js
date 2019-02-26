@@ -22,6 +22,7 @@ import {defineMessages} from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
 import {getLanguageName, getLanguageNativeName} from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
+import SlideTranslationsModal from '../Translation/SlideTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 import DeckViewStore from '../../../../stores/DeckViewStore';
@@ -81,6 +82,22 @@ class ContentActionsHeader extends React.Component {
             loading:{
                 id: 'ContentActionsHeader.loading',
                 defaultMessage:'Loading'
+            },
+            saveButtonText:{
+                id: 'ContentActionsHeader.save',
+                defaultMessage:'Save'
+            },
+            cancelButtonText:{
+                id: 'ContentActionsHeader.cancel',
+                defaultMessage:'Cancel'
+            },
+            markdownButtonText:{
+                id: 'ContentActionsHeader.markdown',
+                defaultMessage: 'Markdown'
+            },
+            mobileMessageText:{
+                id: 'ContentActionsHeader.mobile',
+                defaultMessage:'Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.'
             },
         });
 
@@ -286,11 +303,13 @@ class ContentActionsHeader extends React.Component {
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled,
             'icon': smallButtons,
         });
+        const duplicateItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled) ? 'disabled' : '' ;
         const deleteItemClass = classNames({
             'ui basic button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled,
             'icon': smallButtons,
         });
+        const deleteItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled) ? 'disabled' : '' ;
         const red = {
             backgroundColor: 'red'
         };
@@ -321,7 +340,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
-                        Save
+                        {this.context.intl.formatMessage(this.messages.saveButtonText)}
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
@@ -329,7 +348,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="cancel icon "></i>
                             <i className=""></i>
                         </i>
-                        Cancel
+                        {this.context.intl.formatMessage(this.messages.cancelButtonText)}
                     </button>;
             } else {
                 saveButton ='';
@@ -354,8 +373,9 @@ class ContentActionsHeader extends React.Component {
         } else{ //No buttons
             if(this.props.UserProfileStore.username !== '') /* Edit button only visible if logged user*/
             {
+                const editDisabled = (this.props.ContentStore.mode === 'loading');
                 editButton =
-                    <button className={editClass} onClick={this.handleEditButton.bind(this,selector)}
+                    <button className={editClass} disabled={editDisabled} onClick={this.handleEditButton.bind(this,selector)}
                         type="button"
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
@@ -379,8 +399,7 @@ class ContentActionsHeader extends React.Component {
                                 <i className="large violet edit icon"></i>
                                 <i className=""></i>
                             </i>
-                            Markdown
-
+                            {this.context.intl.formatMessage(this.messages.markdownButtonText)}}
                         </button>;
                 }
 
@@ -409,7 +428,7 @@ class ContentActionsHeader extends React.Component {
         </button>
         */
         let mobileMessage = <div className="ui top attached warning message">
-          <p>Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.</p>
+          <p>{this.context.intl.formatMessage(this.messages.mobileMessageText)}</p>
         </div>;
 
         return (
@@ -425,6 +444,7 @@ class ContentActionsHeader extends React.Component {
                         </div>
                     </div>
                     <DeckTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
+                    <SlideTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
                     <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
                         {mobileMessage}
                     </div>
@@ -458,7 +478,8 @@ class ContentActionsHeader extends React.Component {
                             type="button" key="duplicateItem"
                             aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
+                            disabled={duplicateItemDisabled}>
                             <i className="large icons">
                                 <i className="grey copy outline horizontally flipped icon"></i>
                             </i>
@@ -468,7 +489,8 @@ class ContentActionsHeader extends React.Component {
                             type="button" key="deleteItem"
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
                             data-tooltip={this.context.intl.formatMessage((contentDetails.selector.stype==='deck') ? this.messages.deleteDeckAriaText : this.messages.deleteAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
+                            disabled={deleteItemDisabled}>
                             <i className="large icons">
                                 <i className="red trash alternate icon"></i>
                             </i>

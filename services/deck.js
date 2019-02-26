@@ -228,6 +228,8 @@ export default {
                     return userPromisesMap[user] = userPromisesMap[user] || rp.get({
                         uri: Microservices.user.uri + '/user/' + user.toString(),
                         json: true,
+                    }).catch((err) => {
+                        // ignore this for now, return nothing
                     });
                 });
                 return Promise.all(userPromises);
@@ -255,8 +257,8 @@ export default {
                 callback(null, {
                     deckData,
                     slidesData,
-                    creatorData: usersData[0],
-                    ownerData: usersData[1],
+                    creatorData: usersData[0] || {},
+                    ownerData: usersData[1] || {},
                     originCreatorData: usersData[2] || {},
                 });
             }).catch((err) => {

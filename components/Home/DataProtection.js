@@ -8,51 +8,102 @@ class DataProtection extends React.Component {
                 <div className="ui row">
                     <div className="twelve wide centered column">
                         <div className="ui content">
-                            <h2 className="ui header"><FormattedMessage id="dataProtection.header" defaultMessage="Statement of Data Protection Conditions"/></h2>
-                            <p><FormattedMessage id="dataProtection.p1" defaultMessage="The Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V. (Fraunhofer-Gesellschaft) takes the protection of your personal data very seriously. When we process the personal data that is collected during your visits to our Web site, we always observe the rules laid down in the applicable data protection laws. Your data will not be disclosed publicly by us, nor transferred to any third parties without your consent."/></p>
-                            <p><FormattedMessage id="dataProtection.p2" defaultMessage="In the following sections, we explain what types of data we record when you visit our Web site, and precisely how they are used:"/></p>
-                            <h3><FormattedMessage id="dataProtection.1.header" defaultMessage="1. Recording and processing of data in connection with access over the Internet"/></h3>
-                            <p><FormattedMessage id="dataProtection.1.p1" defaultMessage="When you visit our Web site, our Web server makes a temporary record of each access and stores it in a log file. The following data are recorded, and stored until an automatic deletion date:"/></p>
-                            <ol>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.ipAddress" defaultMessage="IP address of the requesting processor"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.dateTime" defaultMessage="Date and time of access"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.nameAndUrl" defaultMessage="Name and URL of the downloaded file"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.volume" defaultMessage="Volume of data transmitted"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.indication" defaultMessage="Indication whether download was successful"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.data" defaultMessage="Data identifying the browser software and operating system"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.site" defaultMessage="Web site from which our site was accessed"/></li>
-                              <li><FormattedMessage id="dataProtection.1.p1.ol.ispName" defaultMessage="Name of your Internet service provider"/></li>
-                            </ol>
-                            <p><FormattedMessage id="dataProtection.1.p2" defaultMessage="The purpose of recording these data is to allow use of the Web site (connection setup), for system security, for technical administration of the network infrastructure and in order to optimize our Internet service. The IP address is only evaluated in the event of fraudulent access to the network infrastructure of the Fraunhofer-Gesellschaft."/></p>
-                            <p><FormattedMessage id="dataProtection.1.p3" defaultMessage="Apart from the special cases cited above, we do not process personal data without first obtaining your explicit consent to do so. Pseudonymous user profiles can be created as stated under web analysis (see below)."/></p>
-                            <h3><FormattedMessage id="dataProtection.2.header" defaultMessage="2. Orders"/></h3>
-                            <p><FormattedMessage id="dataProtection.2.p1" defaultMessage="If you order information material or other goods via our website, we will use the address data provided only for the purpose of processing your order."/></p>
-                            <h3><FormattedMessage id="dataProtection.3.header" defaultMessage="3. Use and transfer of personal data"/></h3>
-                            <p><FormattedMessage id="dataProtection.3.p1" defaultMessage="All use of your personal data is confined to the purposes stated above, and is only undertaken to the extent necessary for these purposes. Your data is not disclosed to third parties. Personal data will not be transferred to government bodies or public authorities except in order to comply with mandatory national legislation or if the transfer of such data should be necessary in order to take legal action in cases of fraudulent access to our network infrastructure. Personal data will not be transferred for any other purpose."/></p>
-                            <h3><FormattedMessage id="dataProtection.4.header" defaultMessage="4. Consent to use data in other contexts"/></h3>
-                            <p><FormattedMessage id="dataProtection.4.p1" defaultMessage="The use of certain services on our website, such as newsletters or discussion forums, may require prior registration and involves a more substantial processing of personal data, such as longer-term storage of e-mail addresses, user IDs and passwords. We use such data only insofar as it has been sent to us by you in person and you have given us your express prior consent for this use. For example, we request your consent separately in the following cases:"/></p>
-                            <h4><FormattedMessage id="dataProtection.4.1.header" defaultMessage="4.1 Newsletters and press distribution"/></h4>
-                            <p><FormattedMessage id="dataProtection.4.1.p1" defaultMessage="In order to register for a newsletter service provided by the Fraunhofer-Gesellschaft, we need at least your e-mail address so that we know where to send the newsletter. All other information you supply is on a voluntary basis, and will be only if you give your consent, for example to contact you directly or clear up questions concerning your e-mail address. If you request delivery by post, we need your postal address. If you ask to be included on a press distribution list, we need to know which publication you work for, to allow us to check whether specific publications are actually receiving our press material."/></p>
-                            <p><FormattedMessage id="dataProtection.4.1.p2" defaultMessage="As a general rule, we employ the double opt-in method for the registration. In other words, after you have registered for the service and informed us of your e-mail address, you will receive an e-mail in return from us, containing a link that you must use to confirm your registration. Your registration and confirmation will be recorded. The newsletter will not be sent until this has been done. This procedure is used to ensure that only you yourself can register with the newsletter service under the specified e-mail address. You must confirm your registration as soon as possible after receiving our e-mail, otherwise your registration and e-mail address will be erased from our database. Until we receive your confirmation, our newsletter service will refuse to accept any other registration requests using this e-mail address."/></p>
-                            <p><FormattedMessage id="dataProtection.4.1.p3" defaultMessage="You can cancel subscriptions to our newsletters at any time. To do so, either send us an e-mail or follow the link at the end of the newsletter."/></p>
-                            <h4><FormattedMessage id="dataProtection.4.2.header" defaultMessage="4.2 Visitors’ books and forums"/></h4>
-                            <p><FormattedMessage id="dataProtection.4.2.p1" defaultMessage="If you wish to sign up for an Internet forum run by the Fraunhofer-Gesellschaft, we need at least a user ID, a password, and your e-mail address. For your own protection, the registration procedure for this type of service, like that for the newsletters, involves you confirming your request using the link contained in the e-mail we send you and you giving your consent to the use of further personal data where this is necessary to use the forum."/></p>
-                            <p><FormattedMessage id="dataProtection.4.2.p2" defaultMessage="You can cancel your registration for this type of service at any time, by sending us an e-mail via the Web page offering the service."/></p>
-                            <p><FormattedMessage id="dataProtection.4.2.p3" defaultMessage="As a general rule, the content of visitors’ books and forums is not subject to any form of monitoring by the Fraunhofer-Gesellschaft. Nevertheless, we reserve the right to delete posted contributions and to prohibit users from further use of the service at our own discretion, especially in cases where posted content contravenes the law or is deemed incompatible with the objectives of the Fraunhofer-Gesellschaft."/></p>
-                            <h3><FormattedMessage id="dataProtection.5.header" defaultMessage="5. Cookies"/></h3>
-                            <p><FormattedMessage id="dataProtection.5.p1" defaultMessage="We don’t normally use cookies on our Web site, but in certain exceptional cases we may use cookies which place technical session-control data in your browser’s memory. These data are automatically erased at the latest when you close your browser. If, exceptionally, one of our applications requires the storage of personal data in a cookie, for instance a user ID, we will point out you to it."/></p>
-                            <p><FormattedMessage id="dataProtection.5.p2" defaultMessage="Of course, it is perfectly possible to consult our Web site without the use of cookies. Please note, however, that most browsers are programmed to accept cookies in their default configuration. You can prevent this by changing the appropriate setting in the browser options. If you set the browser to refuse all cookies, this may restrict your use of certain functions on our Web site."/></p>
-                            <h3><FormattedMessage id="dataProtection.6.header" defaultMessage="6. Security"/></h3>
-                            <p><FormattedMessage id="dataProtection.6.p1" defaultMessage="The Fraunhofer-Gesellschaft implements technical and organizational security measures to safeguard stored personal data against inadvertent or deliberate manipulation, loss or destruction and against access by unauthorized persons. Our security measures are continuously improved in line with technological progress."/></p>
-                            <h3><FormattedMessage id="dataProtection.7.header" defaultMessage="7. Links to Web sites operated by other providers"/></h3>
-                            <p><FormattedMessage id="dataProtection.7.p1" defaultMessage="Our Web pages may contain links to other providers’ Web pages. We would like to point out that this statement of data protection conditions applies exclusively to the Web pages managed by the Fraunhofer-Gesellschaft. We have no way of influencing the practices of other providers with respect to data protection, nor do we carry out any checks to ensure that they conform with the relevant legislation."/></p>
-                            <h3><FormattedMessage id="dataProtection.8.header" defaultMessage="8. Right to information and contact data"/></h3>
-                            <p><FormattedMessage id="dataProtection.8.p1" defaultMessage="You have a legal right to inspect any stored data concerning your person, and also the right to demand their correction or deletion, and to withdraw your consent for their further use."/></p>
-                            <p><FormattedMessage id="dataProtection.8.p2" defaultMessage="In some cases, if you are a registered user of certain services provided by the Fraunhofer-Gesellschaft, we offer you the possibility of inspecting these data online, and even of deleting or modifying the data yourself, via a user account."/></p>
-                            <p><FormattedMessage id="dataProtection.8.p3" defaultMessage="If you wish to obtain information on your personal data, or want us to correct or erase such data, or if you have any other questions concerning the use of personal data held by us, please contact:"/></p>
-                            <p><FormattedMessage id="dataProtection.8.email" defaultMessage="data-protection(at)zv.fraunhofer.de"/></p>
-                            <h3><FormattedMessage id="dataProtection.9.header" defaultMessage="9. Acceptance, validity and modification of data protection conditions"/></h3>
-                            <p><FormattedMessage id="dataProtection.9.p1" defaultMessage="By using our Web site, you implicitly agree to accept the use of your personal data as specified above. This present statement of data protection conditions came into effect on October 1st, 2013. As our Web site evolves, and new technologies come into use, it may become necessary to amend the statement of data protection conditions. The Fraunhofer-Gesellschaft reserves the right to modify its data protection conditions at any time, with effect as of a future date. We recommend that you re-read the latest version from time to time."/></p>
+                            <h1 className="ui header" id="main"><FormattedMessage id="dataProtection.header" defaultMessage="Statement of Data Protection Conditions"/></h1>
+                            <p>When you use this website, we process your personal data as data controllers and save them for the duration required to fulfill­ the defined purposes and legal obligations. The sections below provide further details about the data this involves, how they will be processed and which rights you have in this regard.</p>
+                            <p></p>
+                            <p>Personal data, as defined by Article 4 (1) General Data Protection Regulation (GDPR) include all information related to an identified or identifiable natural person.</p>
+                            <h2>1. Name and Contact Information of Controller and Corporate Data Protection Officer</h2>
+                            <p>This data protection information applies to data processing on our website slidewiki.org by the controller:</p>
+                            <p>Technische Informationsbibliothek (TIB)<br />Welfengarten 1 B<br />30167 Hannover<br />Deutschland<br /></p>
+                            <p>(hereinafter referred to as “TIB”)</p>
+                            <p>Tel.: 0511 762-8989<br />E-Mail: <a href="mailto:information@tib.eu">information@tib.eu</a><br />Website: <a href="https://www.tib.eu">https://www.tib.eu</a></p>
+                            <p>The corporate data protection officer at TIB can be reached at the following address</p>
+                            <p>Elke Brehm<br />Technische Informationsbibliothek (TIB)<br />Welfengarten 1 B<br />30167 Hannover<br />Deutschland</p>
+                            <p>Tel.: 0511 762-8138<br />E-Mail: <a href="mailto:datenschutz@tib.eu">datenschutz@tib.eu</a></p>
+                            <p>Please feel free to contact the data protection officer directly at any time with your questions concerning your data protection rights and/or your rights as data subject.</p>
+                            <h2>2. Personal Data Processing and Purposes of Data Processing</h2>
+                            <p>a) When visiting the website</p>
+                            <p>You may access our website without having to disclose any details of your identity. The browser installed on your terminal device automatically transmits information to the server of our website (e.g. browser type and version, date and time of access) to enable connection with the website, including the IP address of your requesting terminal device. This information is temporarily stored in a so-called log file and deleted after 14 days.</p>
+                            <p>Your IP address is processed for technical and administrative purposes regarding connection set-up and stability, to guarantee the security and functioning of our website and to be able to track any illegal attacks on the website, if required.</p>
+                            <p>The legal basis for processing the IP address is Art. 6 (1) lit. f GDPR. Our legitimate interest ensues from said security interest and the necessity of the unobstructed availability of our website.</p>
+                            <p>We cannot draw any direct conclusions about your identity from processing the IP address and other information in the log file.</p>
+                            <p>Moreover, we use cookies when you visit our website. Further details can be found further below in this data protection information.</p>
+                            <p>b) When creating a user account</p>
+                            <p>You can contribute content to SlideWiki after you have created a password-protected user account on our website.</p>
+                            <p>Setting up the user account requires the following information:</p>
+                            <ul>
+                                <li>User name</li>
+                                <li>First and last name</li>
+                                <li>Valid email address</li>
+                            </ul>
+                            <p>These data are processed in order to identify you as a user and create your user account.</p>
+                            <p>To set up the user account, you must also enter a password you choose yourself. To access your user account, you will need to enter your email address and this password. In your user account, you can view the data saved in your user profile and change it at any time.</p>
+                            <p>In addition, you may voluntarily provide the following information:</p>
+                            <ul>
+                                <li>Country you currently reside in</li>
+                                <li>Interests</li>
+                                <li>Description of yourself</li>
+                                <li>Birth Date</li>
+                                <li>Organisation you are affiliated with</li>
+                                <li>Languages you speak</li>
+                            </ul>
+                            <p>This information is voluntary and is not required to set up the user account. The information is displayed on your public user profile page to give other users more information about your person.</p>
+                            <p>We process data at your request and for the purposes described by Article 6 (1) lit. b GDPR for the setup and usage of your user account and to meet the precontractual conditions. We will also use your email address for notification functions, if these are activated as well as for sending an account activation email and password reset emails.</p>
+                            <p>After your user account is deleted, your data will be deleted to prevent further use except if we are required pursuant to Article 6 (1) lit. c GDPR to observe a longer storage period due to retention and documentation obligations pursuant to tax and commercial law (in particular Se. 147 AO or if you have consented to longer storage pursuant to Article 6 (1) lit. a GDPR.</p>
+                            <p>c) when creating or editing content of SlideWiki</p>
+                            <p>Registered users can create and edit content on SlideWiki. When you work on content in SlideWiki, certain aspects of your activity are registered by the system, saved to the database and processed to implement the collaborative functionalities of SlideWiki.</p>
+                            <p>The following aspects of your activity on SlideWiki are recorded when you are logged in:</p>
+                            <ul>
+                                <li>Translate Slide</li>
+                                <li>Share Slide or Deck</li>
+                                <li>Add Slide to a Deck</li>
+                                <li>Edit Deck information or Slide</li>
+                                <li>View a Deck or Slide</li>
+                                <li>Move a Slide in a Deck or between Decks</li>
+                                <li>Post comment</li>
+                                <li>Reply to a comment</li>
+                                <li>Use a Deck or Slide in another Deck</li>
+                                <li>Attach a Deck or Slide from another Deck</li>
+                                <li>Like a Deck</li>
+                                <li>Download a Deck (as HTML presentation or other format)</li>
+                                <li>Submit answers to a self-test Deck exam</li>
+                                <li>Fork a Deck</li>
+                                <li>Delete a Slide or Deck</li>
+                                <li>Join User Group</li>
+                                <li>Leave User Group</li>
+                            </ul>
+                            <p>SlideWiki processes this information in order to be able to provide the collaborative Opencourseware experience for its users. For example for displaying the activity stream for a Deck or Slide, so that other users can see what happened on a resource and who was working on that resource.  Those are concepts that belong to the core concept of SlideWiki as an open and collaborative system. SlideWiki is a platform for the creation of publicly available educational material and thus authors activity must be transparent.</p>
+                            <h2>3. Transfer of Data</h2>
+                            <p>We will not forward data collected through slidewiki.org to any third-party processor. We will only transfer data to the respective authorities if we are legally obligated to do so.</p>
+                            <h2>4. Cookies</h2>
+                            <p>This website uses cookies. Cookies are small files that your browser automatically generates and stores on your device (laptop, tablet, smartphone, etc.) when you visit our site. Cookies do not harm your device nor do they contain viruses, Trojans or other malware.</p>
+                            <p>Cookies store information associated with the specific device used. That does not mean that we can directly identify you.</p>
+                            <p>We use cookies for the purpose of making the use of our offers more convenient and pleasant for you. For example, we use so-called session cookies to allow session controls or to save data entries in forms or shopping carts during the session. At the latest, session cookies are deleted when you close your browser.</p>
+                            <p>We also use temporary cookies to optimize user-friendliness; these cookies are stored on your device for 14 days. When you visit our site again to use our services, these cookies will automatically detect that you have visited in the past and will reapply your previous entries and settings (such as preferred language) so that you do not have to enter them again.</p>
+                            <p>The data processed by the cookies are necessary for the above-mentioned purposes to protect our legitimate interests and those of third parties pursuant to Art. 6 (1) lit. f GDPR.</p>
+                            <p>Most browsers automatically accept cookies. However, you can configure your browser to not save any cookies on your computer or to display a notice before new cookies are saved. Completely disabling cookies may mean that you cannot fully use all functions of our website.</p>
+                            <h2>5. Rights of the Data Subject</h2>
+                            <p>You have the following rights: </p>
+                            <ul>
+                                <li>pursuant to Art. 7(3) GDPR, to withdraw your consent at any time. This means that we may not continue the data processing based on this consent in the future;</li>
+                                <li>pursuant to Art. 15 GDPR, to obtain access to your personal data processed by us. In particular, you may request information about the purposes of the processing, the categories of personal data concerned, the categories of recipients to whom the personal data have been or will be disclosed, and the envisaged period for which the data will be stored. Moreover, you have the right to request rectification, erasure, or restriction of processing, to object to processing, the right to lodge a complaint, and to obtain information about the source of your data if they were not collected by us, as well as about the existence of automated decision-making, including profiling, and, if applicable, meaningful information about the logic involved;</li>
+                                <li>pursuant to Art. 16 GDPR, to obtain the rectification of inaccurate data or the completion of your personal data without undue delay;</li>
+                                <li>pursuant to Art. 17 GDPR, to obtain the erasure of personal data saved by us unless processing is necessary to exercise the right of freedom of expression and information, to comply with a legal obligation, for reasons of public interest, or to establish, exercise or defend legal claims;</li>
+                                <li>pursuant to Art. 18 GDPR, to obtain restriction of processing of your personal data if you contest the accuracy of the data, the processing is unlawful but you oppose the erasure of the personal data, or if we no longer need the personal data while you still require it for establishing, exercising or defending legal claims, or if you have filed an objection to the processing pursuant to Art. 21 GDPR;</li>
+                                <li>pursuant to Art. 20 GDPR, to receive your personal data that you have provided to us, in a structured, commonly used and machine-readable format or to transmit those data to another controller and</li>
+                                <li>pursuant to Art. 77 GDPR, the right to lodge a complaint with a supervisory authority. Generally, you may contact the supervisory authority of your habitual residence, place of work or the registered offices of our organization.</li>
+                            </ul>
+                            <p><b>Information on your right to object pursuant to Art. 21 GDPR</b></p>
+                            <p>You have the right to object, on grounds relating to your particular situation, at any time to processing of your personal data pursuant to Art. 6 (1) lit. e GDPR (data processing carried out in the public interest) and Art. 6 (1) lit. f GDPR (data processing for purposes of legitimate interests).</p>
+                            <p>If you file an objection, we will no longer process your personal data unless we can demonstrate compelling legitimate grounds for processing which override your interests, rights and freedoms, or unless the processing serves the establishment, exercise or defense of legal claims.</p>
+                            <p>If your objection is directed against the processing of data for the purpose of direct marketing, we will stop the processing immediately. In this case, citing a special situation is not necessary. This includes profiling to the extent that it is related to such direct marketing.</p>
+                            <p>If you would like to assert your right to object, please send an email to</p>
+                            <p><a href="datenschutz@tib.eu">datenschutz@tib.eu</a></p>
+                            <h2>6. Data Security</h2>
+                            <p>All your personal data are transmitted in encrypted format, using the widely used and secure TLS (Transport Layer Security) standard. TLS is a secure and proven standard that is also used, for instance, in online banking. You will recognize a secure TLS connection by the additional s after http (i.e., https://..) in the address bar of your browser or by the lock icon in the lower part of your browser.</p>
+                            <p>In all other regards, we use suitable technical and organizational security measures to protect your data against accidental or intentional manipulations, partial or complete loss, destruction, or the unauthorized access of third parties. We continuously improve our security measures in accordance with the state of the art.</p>
+                            <h2>7. Timeliness and Amendments to this Data Protection Information</h2>
+                            <p>The further development of our website and the products and services offered or changed due to statutory or regulatory requirements, respectively, may make it necessary to amend this data protection information. You may access and print out the latest data protection information at any time from our website.</p>
                         </div>
                     </div>
                 </div>

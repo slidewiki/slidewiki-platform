@@ -7,29 +7,27 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {publicRecaptchaKey} from '../../configs/general';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
-import {FormattedMessage, defineMessages} from 'react-intl';
+import {defineMessages} from 'react-intl';
 import sendContactForm from '../../actions/home/sendContactForm';
+import {getLanguageDisplayName, translationLanguages} from '../../common';
+import SWAutoComplete from '../common/SWAutoComplete';
 
-const REPORT_TYPE ={
-    NONE: 0,
-    SUGGESTION : 1,
-    SUPPORT: 2,
-    ACCOUNT: 3,
-    OTHER: 4,
-
-
-};
 class ContactUs extends React.Component {
+
+
+
     constructor(props){
         super(props);
         this.state ={
-            type : REPORT_TYPE.NONE,
+            type : null,
             firstName:this.props.UserProfileStore.user.fname,
             lastName:this.props.UserProfileStore.user.lname,
             email: this.props.UserProfileStore.user.email,
-
-
+            formValidationErrors: {},
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
+
         this.messages = defineMessages({
             swal_title:{
                 id: 'contactUs.swal_title',
@@ -160,7 +158,39 @@ class ContactUs extends React.Component {
             lastName:nextProps.UserProfileStore.user.lname,
             email: nextProps.UserProfileStore.user.email
         });
+    }
 
+    /**
+     * Returns a list of options for the Report Type dropdown menu
+     *
+     * @returns {array}
+     */
+    getReportTypes() {
+        return [
+            {
+                enum: 1,
+                id: 'contactUs.typeOption_suggestion',
+                defaultMessage: 'Suggestion'
+            },{
+                enum: 2,
+                id: 'contactUs.typeOption_support',
+                defaultMessage: 'Support Issue'
+            },{
+                enum: 3,
+                id: 'contactUs.typeOption_account',
+                defaultMessage: 'Account Issue'
+            },{
+                enum: 4,
+                id: 'contactUs.typeOption_other',
+                defaultMessage: 'Other'
+            },
+        ];
+    }
+
+    handleInputChange(event) {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
     }
 
     onRecaptchaChange(response) {
@@ -190,79 +220,7 @@ class ContactUs extends React.Component {
             });
         }
     }
-    onEmailChange(event,data){
-        if(this.props.UserProfileStore.username.length === 0){
-          //Not logged user, he can edit
-            this.setState({
-                email: data.value
-            });
-        }
-    }
-    onTypeChange(event,data){
-        //updte the type selected: needed to set aria-selected property in each option
-        if(this.context.intl.formatMessage(this.messages.typeOption_suggestion)===this.typeContact2.inputRef.value){
-            this.setState({
-                type : REPORT_TYPE.SUGGESTION
-            });
 
-        } else if(this.context.intl.formatMessage(this.messages.typeOption_support)===this.typeContact2.inputRef.value){
-            this.setState({
-                type : REPORT_TYPE.SUPPORT
-            });
-        } else if(this.context.intl.formatMessage(this.messages.typeOption_account)===this.typeContact2.inputRef.value){
-            this.setState({
-                type : REPORT_TYPE.ACCOUNT
-            });
-        } else if(this.context.intl.formatMessage(this.messages.typeOption_other)===this.typeContact2.inputRef.value){
-            this.setState({
-                type : REPORT_TYPE.OTHER
-            });
-        }
-
-    }
-    /* Screen readers doesn't read aloud the options when we use input+datalist. For this reason, we don't require that element to send the form
-    checkType(){
-        let noTypeError = true;
-        //The following  code is needed if we implement the type of report using Dropdown
-        //Begin Dropdown
-        //if (this.typeContact.state.value === '' ){
-        //    noTypeError = false;
-        //    swal({
-        //        title: this.context.intl.formatMessage(this.messages.swal_title),
-        //        text: this.context.intl.formatMessage(this.messages.checkType_text),
-        //        type: 'error',
-        //        confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-        //        confirmButtonClass: 'ui olive button',
-        //        allowEscapeKey: false,
-        //        allowOutsideClick: false,
-        //        buttonsStyling: false
-        //    }).then((accepted) => {
-
-        //        ReactDOM.findDOMNode(this.typeContact).focus();
-        //    });
-        //}
-        //End Dropdown
-        if (this.typeContact2.inputRef.value === '' ){
-            noTypeError = false;
-            swal({
-                title: this.context.intl.formatMessage(this.messages.swal_title),
-                text: this.context.intl.formatMessage(this.messages.checkType_text),
-                type: 'error',
-                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'ui olive button',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                buttonsStyling: false
-            }).then((accepted) => {
-
-                //ReactDOM.findDOMNode(this.typeContact).focus();
-                this.typeContact2.focus();
-            });
-        }
-        return noTypeError;
-
-    }
-    */
     checkEmail(){
         let noEmailError = true;
         let regExp = /\S+@\S+\.\S+/;
@@ -358,78 +316,45 @@ class ContactUs extends React.Component {
           //all data is ok. Send info
             let payload = {
                 subject : this.summaryContact.inputRef.value,
-                text : 'First Name: '+this.state.firstName +'\n'+
-                       'Last Name: '+this.state.lastName +'\n'+
-                       'email: '+this.state.email+'\n'+
-                       //'Feedback type: '+this.typeContact.state.value+'\n'+
-                       'Feedback type: '+this.typeContact2.inputRef.value+'\n'+
-                       'Summary: '+this.summaryContact.inputRef.value+'\n'+
-                       'Description: '+this.descriptionContact.ref.value,
+                text : `First Name: ${this.state.firstName}\n`+
+                    `Last Name: ${this.state.lastName}\n`+
+                    `email: ${this.state.email}\n`+
+                    `Feedback type: ${this.state.type} - ${this.getReportTypes().find((i) => i.enum === this.state.type).defaultMessage}\n`+
+                    `Summary: ${this.summaryContact.inputRef.value}\n`+
+                    `Description: ${this.descriptionContact.ref.value}`,
                 swal_messages : this.getSwalMessages()
             };
-          
+
             this.context.executeAction(sendContactForm,payload);
         }
     }
 
     render() {
-      /* only needed if we use dropdown
-        const typeOptions = [
-          {value:'Suggestion' , text:this.context.intl.formatMessage(this.messages.typeOption_suggestion)},
-          {value:'Support' , text:this.context.intl.formatMessage(this.messages.typeOption_support)},
-          {value:'Account' , text:this.context.intl.formatMessage(this.messages.typeOption_account)},
-          {value:'Other' , text:this.context.intl.formatMessage(this.messages.typeOption_other)},
-
-        ];
-        */
-        const labelStyle = {
-            width:20+'px'
-        };
 
         const recaptchaStyle = {display: 'inline-block'};
-
-        //Short way. It creates symple labels. If they don't like ribbons, we can change to this:
-        //     <Form.Input id='NameContact' label='Name:' placeholder='Your name' />
-        /*
-
-          */
 
         return (
             <Container text>
                 <Divider hidden />
 
-                <Header as="h2">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
+                <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
                 <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
                   <Divider hidden />
                   <Segment attached="bottom" textAlign="left" >
-                    <Header as='h3'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
+                    <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)}>
-                    {/* code needed if we decide use the componet Dropdown for the type
-                      <Form.Field>
-                      <label htmlFor="typeContact">
-                       {this.context.intl.formatMessage(this.messages.form_type_label)}
-                      </label>
-                      <Dropdown selection openOnFocus id='typeContact' name='typeContact'
-                       ref={(type) => {this.typeContact = type;}}
-                       placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} options={typeOptions}
-                       tabIndex="0" aria-required="true" />
-                      </Form.Field>
-
-                    */}
                       <Form.Field key='1'>
-                        <label htmlFor='typeContact2'> {this.context.intl.formatMessage(this.messages.form_type_label)}*</label>
-                        <Input list='typeOptions' id='typeContact2' name="typeContact2"
-                          ref={(input) => {this.typeContact2 = input;}}
-                          placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)}
-                          onChange ={this.onTypeChange.bind(this)}
-                        />
-                        <datalist id='typeOptions' role='listbox'>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUGGESTION}/>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_support)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUPPORT}/>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_account)} role='option' aria-selected={this.state.type === REPORT_TYPE.ACCOUNT}/>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_other)} role='option' aria-selected={this.state.type === REPORT_TYPE.OTHER}/>
-                        </datalist>
+                          <SWAutoComplete
+                              required
+                              label={this.context.intl.formatMessage(this.messages.form_type_label)}
+                              id='type'
+                              options={this.getReportTypes().map((type) => ({
+                                  value: type.enum,
+                                  name: this.context.intl.formatMessage(type),
+                              }))}
+                              onChange={this.handleInputChange}
+                          />
                       </Form.Field>
 
                       <Form.Field key='2'>
@@ -449,13 +374,17 @@ class ContactUs extends React.Component {
                          onChange ={this.onLastNameChange.bind(this)}/>
                       </Form.Field>
 
-                      <Form.Field key='4'>
-                         <label htmlFor='emailContact'>{this.context.intl.formatMessage(this.messages.form_email_label)}*</label>
-                         <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
-                         placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
-                         aria-required="true" value={this.state.email}
-                         onChange ={this.onEmailChange.bind(this)}/>
-                      </Form.Field>
+                        <Form.Field
+                            id='email'
+                            control={Form.Input}
+                            label={this.context.intl.formatMessage(this.messages.form_email_label)}
+                            required
+                            aria-required={true}
+                            value={this.state.email}
+                            onChange={this.handleInputChange}
+                            type='email'
+                            error={Boolean(this.state.formValidationErrors.email)}
+                        />
 
                       <Form.Field key='5'>
                         <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>

@@ -24,6 +24,7 @@ import Cookie from 'js-cookie';
 import locale from 'locale';
 import handleServerRendering from './server/handleServerRendering'; //moved here the rendering part
 import setLocale from './server/setLocale'; //sets the locale from browser or cookies
+import robots from 'express-robots-txt' ;
 
 
 const env = process.env.NODE_ENV;
@@ -42,6 +43,7 @@ if(env === 'production'){
 }
 
 const server = express();
+server.use(robots(__dirname + '/robots.txt'));
 server.use(cookieParser());
 server.use(bodyParser.json({limit: '50mb'}));
 server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -96,6 +98,8 @@ fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/usergroup'));
+fetchrPlugin.registerService(require('./services/userlti'));
+fetchrPlugin.registerService(require('./services/lticonsumer'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 fetchrPlugin.registerService(require('./services/logservice'));
@@ -106,6 +110,7 @@ fetchrPlugin.registerService(require('./services/media'));
 fetchrPlugin.registerService(require('./services/userreview'));
 fetchrPlugin.registerService(require('./services/nlp'));
 fetchrPlugin.registerService(require('./services/deckgroups'));
+fetchrPlugin.registerService(require('./services/analytics'));
 fetchrPlugin.registerService(require('./services/recommendations'));
 fetchrPlugin.registerService(require('./services/following'));
 fetchrPlugin.registerService(require('./services/tags'));

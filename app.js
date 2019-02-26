@@ -49,6 +49,7 @@ import UserReviewStore from './stores/UserReviewStore';
 import EditRightsStore from './stores/EditRightsStore';
 import DeckCollectionStore from './stores/DeckCollectionStore';
 import SSOStore from './stores/SSOStore';
+import UserPerformancePredictionsStore from './stores/UserPerformancePredictionsStore';
 import UserRecommendationsStore from './stores/UserRecommendationsStore';
 import UserFollowingsStore from './stores/UserFollowingsStore';
 import LoginModalStore from './stores/LoginModalStore';
@@ -109,6 +110,7 @@ const app = new Fluxible({
         EditRightsStore,
         DeckCollectionStore,
         SSOStore,
+        UserPerformancePredictionsStore,
         UserRecommendationsStore,
         UserFollowingsStore,
         LoginModalStore,

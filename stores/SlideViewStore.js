@@ -11,6 +11,17 @@ class SlideViewStore extends BaseStore {
         this.speakernotes = '';
         this.tags = [];
         this.scaleRatio = null;
+        this.annotations = [];
+    }
+
+    resetContent() {
+        this.id = '';
+        this.slideId = '';
+        this.title = '';
+        this.content = '';
+        this.speakernotes = '';
+        this.tags = [];
+        this.emitChange();
     }
 
     updateContent(payload) {
@@ -20,6 +31,7 @@ class SlideViewStore extends BaseStore {
         this.content = payload.slide.content;
         this.speakernotes = payload.slide.speakernotes;
         this.tags = payload.slide.tags || [];
+        this.annotations = payload.slide.annotations || [];
         this.emitChange();
     }
 
@@ -31,7 +43,8 @@ class SlideViewStore extends BaseStore {
             content: this.content,
             tags: this.tags,
             speakernotes: this.speakernotes,
-            scaleRatio: this.scaleRatio
+            scaleRatio: this.scaleRatio,
+            annotations: this.annotations
         };
     }
 
@@ -46,6 +59,7 @@ class SlideViewStore extends BaseStore {
         this.content = state.content;
         this.tags = state.tags;
         this.speakernotes = state.speakernotes;
+        this.annotations = state.annotations;
     }
 
     zoomContent(payload) {
@@ -74,6 +88,7 @@ class SlideViewStore extends BaseStore {
 
 SlideViewStore.storeName = 'SlideViewStore';
 SlideViewStore.handlers = {
+    'LOAD_DECK_PAGE_START': 'resetContent',
     'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent',
     'ZOOM': 'zoomContent'
 };
