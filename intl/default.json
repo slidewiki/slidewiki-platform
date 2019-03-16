@@ -1396,6 +1396,8 @@
   "SSOSignIn.errormessage.isSPAM": "Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.",
   "SSOSignIn.errormessage.credentialsNotFound": "The credentials are unknown. Please retry with another input.",
   "SSOSignIn.errormessage.deactivatedOrUnactivated": "Your user account either have to be activated via the activation link in your email or is deactivated in general.",
+  "CategoryBox.analytics": "Analytics",
+  "CategoryBox.PerformancePrediction": "Performance Prediction",
   "CategoryBox.personalSettings": "Personal settings",
   "CategoryBox.profile": "Profile",
   "CategoryBox.account": "Accounts",

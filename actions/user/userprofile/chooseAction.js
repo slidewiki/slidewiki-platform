@@ -4,6 +4,7 @@ import fetchUserDecks from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
 const log = require('../../log/clog');
 import loadUserCollections from '../../collections/loadUserCollections';
+import loadUserPerformancePredictions from '../../analytics/loadUserPerformancePredictions';
 import loadUserRecommendations from '../../recommendations/loadUserRecommendations';
 import { shortTitle, LTI_ID } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -11,11 +12,12 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import loadUserStats from '../../stats/loadUserStats';
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
-    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats', 'ltis'],
+    categories: ['settings', 'groups', 'playlists', 'decks', 'recommendations', 'stats', 'ltis', 'analytics'],
     settings: ['profile', 'account', 'integrations'],
     groups: ['overview'],
     ltis: ['overview', 'edit'],
     decks: ['shared'],
+    analytics: ['performanceprediction']
 };
 
 export function chooseAction(context, payload, done) {
@@ -38,7 +40,7 @@ export function chooseAction(context, payload, done) {
                 default:
                     title = shortTitle;
                     break;
-            };
+            }
             break;
         case categories.categories[1]:
             switch(payload.params.item){
@@ -48,7 +50,7 @@ export function chooseAction(context, payload, done) {
                 default:
                     title = shortTitle;
                     break;
-            };
+            }
             break;
         case categories.categories[2]:
             title += 'Playlists';
@@ -62,7 +64,7 @@ export function chooseAction(context, payload, done) {
                 default:
                     title += 'My Decks';
                     break;
-            };
+            }
             break;
         case categories.categories[5]:
             title += 'User Stats';
@@ -86,7 +88,7 @@ export function chooseAction(context, payload, done) {
 
         default:
             title = shortTitle;
-    };
+    }
     context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: title});
 
     async.series([
@@ -132,6 +134,10 @@ export function chooseAction(context, payload, done) {
                     }
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     callback();
+                    break;
+                case categories.categories[7]:
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+                    context.executeAction(loadUserPerformancePredictions, {}, callback);
                     break;
                 default:
                     context.executeAction(notFoundError, {}, callback);
