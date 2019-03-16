@@ -282,7 +282,7 @@ class Home extends React.Component {
                             <div className='ui column '>
                                 <div className='row'>
                                     <div className='column'>
-                                        <h3 className='ui header large'>{this.context.intl.formatMessage(this.messages.decks)}</h3>
+                                        <h2 className='ui header large'>{this.context.intl.formatMessage(this.messages.decks)}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -330,7 +330,7 @@ class Home extends React.Component {
                         <div className='ui container'>
                             <div className='ui one column grid'>
                                 <div className='column'>
-                                    <h2>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
+                                    <h2 className='ui header large'>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
                                     <div className="featured-deck">
                                         <h3>{this.context.intl.formatMessage(this.messages.featuredDeck)}</h3>
                                         <DeckList scope="featured" limit="1" inline="true"/>

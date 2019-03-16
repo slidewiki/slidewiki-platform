@@ -674,11 +674,6 @@ a:hover {
   color: rgba(0, 0, 0, 0.87);
 }
 
-::-moz-selection {
-  background-color: #CCE2FF;
-  color: rgba(0, 0, 0, 0.87);
-}
-
 ::selection {
   background-color: #CCE2FF;
   color: rgba(0, 0, 0, 0.87);
@@ -688,12 +683,6 @@ a:hover {
 
 textarea::-webkit-selection,
 input::-webkit-selection {
-  background-color: rgba(100, 100, 100, 0.4);
-  color: rgba(0, 0, 0, 0.87);
-}
-
-textarea::-moz-selection,
-input::-moz-selection {
   background-color: rgba(100, 100, 100, 0.4);
   color: rgba(0, 0, 0, 0.87);
 }
@@ -5157,8 +5146,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.negative.button:focus,
 .ui.red.buttons .button:focus,
 .ui.red.button:focus {
-  -webkit-box-shadow: 0 0 0 2px #f16767 inset !important;
-  box-shadow: 0 0 0 2px #f16767 inset !important;
+  -webkit-box-shadow: 0 0 0 2px #000000 inset !important;
+  box-shadow: 0 0 0 2px #000000 inset !important;
 }
 
 /*******************************
@@ -14205,15 +14194,15 @@ img.ui.bordered.image {
 /* browsers require these rules separate */
 
 .ui.input > input::-webkit-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 .ui.input > input::-moz-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 .ui.input > input:-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 /*******************************
@@ -14298,17 +14287,17 @@ img.ui.bordered.image {
 
 .ui.input.focus > input::-webkit-input-placeholder,
 .ui.input > input:focus::-webkit-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 .ui.input.focus > input::-moz-placeholder,
 .ui.input > input:focus::-moz-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 .ui.input.focus > input:-ms-input-placeholder,
 .ui.input > input:focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 /*--------------------
@@ -16502,7 +16491,7 @@ ol.ui.list ol li,
 .ui.list .list > .disabled.item,
 .ui.list > .disabled.item {
   pointer-events: none;
-  color: rgba(40, 40, 40, 0.3) !important;
+  color: rgba(40, 40, 40, 0.65) !important;
 }
 
 .ui.inverted.list .list > .disabled.item,
@@ -18812,7 +18801,7 @@ ol.ui.horizontal.list li:before,
 
 .ui.disabled.segment {
   opacity: 0.45;
-  color: rgba(40, 40, 40, 0.3);
+  color: rgba(40, 40, 40, 0.65);
 }
 
 /*--------------
@@ -19710,7 +19699,7 @@ ol.ui.horizontal.list li:before,
 .ui.steps .disabled.step,
 .ui.steps .disabled.step .title,
 .ui.steps .disabled.step .description {
-  color: rgba(40, 40, 40, 0.3);
+  color: rgba(40, 40, 40, 0.65);
 }
 
 .ui.steps .disabled.step:after {
@@ -20411,27 +20400,27 @@ ol.ui.horizontal.list li:before,
 /* browsers require these rules separate */
 
 .ui.form ::-webkit-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 .ui.form :-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 .ui.form ::-moz-placeholder {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 .ui.form :focus::-webkit-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 .ui.form :focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 .ui.form :focus::-moz-placeholder {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 /* Error Placeholder */
@@ -24069,7 +24058,7 @@ ol.ui.horizontal.list li:before,
 .ui.menu .item.disabled:hover {
   cursor: default !important;
   background-color: transparent !important;
-  color: rgba(40, 40, 40, 0.3) !important;
+  color: rgba(40, 40, 40, 0.65) !important;
 }
 
 /*******************************
@@ -26863,7 +26852,7 @@ Floated Menu / Item
 .ui.table tr.disabled:hover,
 .ui.table tr:hover td.disabled {
   pointer-events: none;
-  color: rgba(40, 40, 40, 0.3);
+  color: rgba(40, 40, 40, 0.65);
 }
 
 /*******************************
@@ -27485,7 +27474,7 @@ Floated Menu / Item
 
 .ui.sortable.table th.disabled:hover {
   cursor: auto;
-  color: rgba(40, 40, 40, 0.3);
+  color: rgba(40, 40, 40, 0.65);
 }
 
 .ui.sortable.table thead th:hover {
@@ -29539,7 +29528,7 @@ a.ui.card:hover,
   font-weight: normal;
   font-size: 1em;
   font-style: normal;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 /*--------------
@@ -29596,7 +29585,7 @@ a.ui.card:hover,
   font-style: normal;
   margin: 0em 0em 0em 0.5em;
   padding: 0em;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 /*--------------
@@ -29991,7 +29980,7 @@ a.ui.card:hover,
 /* Meta */
 
 .ui.items > .item .meta > a:not(.ui) {
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .ui.items > .item .meta > a:not(.ui):hover {
@@ -32728,7 +32717,7 @@ select.ui.dropdown {
 }
 
 .ui.active.search.dropdown input.search:focus + .text {
-  color: rgba(115, 115, 115, 0.87) !important;
+  color: rgba(38, 38, 38, 0.87) !important;
 }
 
 /* Search Menu */
@@ -32996,12 +32985,12 @@ select.ui.dropdown {
 
 .ui.dropdown:not(.button) > .default.text,
 .ui.default.dropdown:not(.button) > .text {
-  color: rgba(191, 191, 191, 0.87);
+  color: rgba(89, 89, 89, 0.87);
 }
 
 .ui.dropdown:not(.button) > input:focus ~ .default.text,
 .ui.default.dropdown:not(.button) > input:focus ~ .text {
-  color: rgba(115, 115, 115, 0.87);
+  color: rgba(38, 38, 38, 0.87);
 }
 
 /*--------------------

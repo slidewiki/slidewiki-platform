@@ -18,9 +18,9 @@ class About extends React.Component {
                         <FormattedMessage id="about.p3" defaultMessage="With SlideWiki we aim to make open educational content dramatically more accessible, interactive and engaging.    All the content published on SlideWiki is made available under the Creative Common CC-BY-SA 4.0 licence which means that you can share, repurpose and reuse content for your own purposes. This means that you can revise, adapt and re-mix any slides and decks on SlideWiki. If you like a deck, simply Fork it to create your own copy; if you are looking for new content you can attached slides or embed decks created by others. All changes to slides within SlideWiki are tracked, making it easy to see who has created the materials and aid collaboration with co-authors."/>
                     </p>
 
-                    <h3>
+                    <h2>
                         <FormattedMessage id="about.functionality" defaultMessage="With SlideWiki you can:"/>
-                    </h3>
+                    </h2>
                     <ul>
                         <li><FormattedMessage id="about.functionality.import" defaultMessage="Import existing slide decks from PowerPoint and OpenOffice formats."/></li>
                         <li><FormattedMessage id="about.functionality.wysiwig" defaultMessage="Use the online, collaborative WYSIWYG slide authoring tools."/></li>
@@ -32,9 +32,9 @@ class About extends React.Component {
                         <li><FormattedMessage id="about.functionality.accessible" defaultMessage="Create inclusive slides and decks that will accessible to assistive technology users."/>
                         </li>
                     </ul>
-                    <h3>
+                    <h2>
                         <FormattedMessage id="about.future" defaultMessage="Features coming soon:"/>
-                    </h3>
+                    </h2>
                     <ul>
                         <li><FormattedMessage id="about.functionality.frills" defaultMessage="Multilingual decks / semi-automatic translation / synchronization of content between translated versions."/></li>
                         <li><FormattedMessage id="about.functionality.eLearning" defaultMessage="E-Learning with self-assessment questionnaires."/></li>
