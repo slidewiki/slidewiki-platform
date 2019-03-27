@@ -119,8 +119,8 @@ class HeaderSearchBox extends React.Component {
             return (
                 <div className='ui fluid category search'>
                     <div id='home_search_box_div' className='ui fluid icon input'>
-                        <label htmlFor="searchHomeString" hidden/>
-                        <input className='prompt' placeholder='Search for decks or people' ref='searchHomeString' type='text' value={this.state.searchHomeString} onChange={this.onChangeHome.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
+                        <label htmlFor="searchHomeString" hidden>Search for decks or people</label>
+                        <input className='prompt' placeholder='Search for decks or people' ref='searchHomeString' id="searchHomeString" type='text' value={this.state.searchHomeString} onChange={this.onChangeHome.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
                         <i className='search link icon' onClick={this.handleRedirect.bind(this)}/>
                         <div className='results home' style={{position: 'absolute', backgroundColor: 'white', borderRadius:'0.2px'}}/>
                     </div>

@@ -292,7 +292,7 @@ class UserRegistrationSocial extends React.Component {
         }
         return (
           <div>
-            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal"
+            <div className="ui socialregistration modal" id='socialregistrationModal' style={modalStyle} ref="SocialRegistration_Modal"
               role='dialog'
               aria-labelledby='socialsignupsmodal_header'
 			        aria-describedby='socialsignupsmodal_content'

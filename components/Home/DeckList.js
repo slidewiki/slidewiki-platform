@@ -31,10 +31,10 @@ class DeckList extends React.Component {
                             <div className="ui three column stackable grid">
                                 <div className="three wide column">
                                     <div className="ui medium image bordered">
-                                        <NavLink href={['/deck', deck._id, deck.slug,].join('/')}>
-                                            <FormattedMessage id="decklist.featured.alt" defaultMessage="Featured Image.">
+                                        <NavLink href={['/deck', deck._id, deck.slug,].join('/')} tabIndex="-1">
+                                            <FormattedMessage id="decklist.featuredExample.alt" defaultMessage="Example of presentation:">
                                                 {
-                                                    (alt) => <img alt={alt} src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} style={{ maxHeight: '290px', height: 'initial'}} />
+                                                    (alt) => <img alt={alt + ' ' + deck.title} src={`${Microservices.file.uri}/thumbnail/slide/${deck.firstSlide}${theme}`} style={{ maxHeight: '290px', height: 'initial'}} />
                                                 }
                                             </FormattedMessage>
                                         </NavLink>
@@ -42,7 +42,7 @@ class DeckList extends React.Component {
                                 </div>
                                 <div className="column">
                                     <div className="item">
-                                        <h2 className="ui header"><NavLink href={['/deck', deck._id, deck.slug,].join('/')}>{deck.title}</NavLink></h2>
+                                        <h4 className="ui header"><NavLink href={['/deck', deck._id, deck.slug,].join('/')}>{deck.title}</NavLink></h4>
                                         <div className="meta"><FormattedMessage id='decklist.meta.creator' defaultMessage='Creator' />: <NavLink href={'/user/' + deck.username}>{deck.username}</NavLink></div>
                                         <div className="meta"><FormattedMessage id='decklist.meta.date' defaultMessage='Last Modified' />: {deckDate}</div>
                                     </div>

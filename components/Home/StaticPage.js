@@ -91,11 +91,11 @@ class StaticPage extends React.Component {
 					{this.props.children} 
 				</div>
 			</div>
-			<div className='four wide column'>
+			<aside className='four wide column'>
 			    <div className='feature-content blue-block-terms'>
 			        <div className='feature-left'>
-			            <div className="ui header blue medium">{this.context.intl.formatMessage(this.messages.findSlides)}</div>
-                        <div className="ui header blue small">{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</div>
+			            <h3 className="ui header blue medium">{this.context.intl.formatMessage(this.messages.findSlides)}</h3>
+                        <h4 className="ui header blue small">{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
 			            <div className='text-div'>
 			                <div className='text'>
                                 <p><img src='/assets/images/home/search.jpg' className="ui tiny left floated  image" alt=''/> {this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
@@ -106,8 +106,8 @@ class StaticPage extends React.Component {
 			    </div>
 			    <div className='feature-content green-block-terms'>
 			        <div className='feature-left'>
-                        <div className="ui header teal medium">{this.context.intl.formatMessage(this.messages.createSlides)}</div>
-			            <div className="ui header teal small">{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</div>
+                        <h3 className="ui header teal medium">{this.context.intl.formatMessage(this.messages.createSlides)}</h3>
+			            <h4 className="ui header teal small">{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
 			            <div className='text-div'>
 			                <div className='text'>
                                 <p> <img src='/assets/images/home/add.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
@@ -118,8 +118,8 @@ class StaticPage extends React.Component {
 			    </div>
 			    <div className='feature-content red-block-terms'>
 			        <div className='feature-left'>
-                        <div className="ui header pink medium">{this.context.intl.formatMessage(this.messages.sharingSlides)}</div>
-			            <div className="ui header small pink">{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</div>
+                        <h3 className="ui header pink medium">{this.context.intl.formatMessage(this.messages.sharingSlides)}</h3>
+			            <h4 className="ui header small pink">{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
 			            <div className='text-div'>
 			                <div className='text'>
                                 <p><img src='/assets/images/home/share.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
@@ -128,7 +128,7 @@ class StaticPage extends React.Component {
 			            </div>
 			        </div>
 			    </div>
-			</div>
+			</aside>
 			</div>
 			<div className='row'>
 			<div className='signin-blk wrapper'>

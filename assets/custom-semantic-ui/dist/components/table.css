@@ -386,7 +386,7 @@
 .ui.table tr.disabled:hover,
 .ui.table tr:hover td.disabled {
   pointer-events: none;
-  color: rgba(40, 40, 40, 0.3);
+  color: rgba(40, 40, 40, 0.65);
 }
 
 
@@ -921,7 +921,7 @@
 /* Hover */
 .ui.sortable.table th.disabled:hover {
   cursor: auto;
-  color: rgba(40, 40, 40, 0.3);
+  color: rgba(40, 40, 40, 0.65);
 }
 .ui.sortable.table thead th:hover {
   background: rgba(0, 0, 0, 0.05);

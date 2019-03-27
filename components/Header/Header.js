@@ -82,6 +82,9 @@ class Header extends React.Component {
               <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>
               <FormattedMessage id='header.mynotifications.mobile' defaultMessage='Notifications'/>
               </NavLink>
+              <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}><i className="icon chart bar"/>
+              {/* <FormattedMessage id='header.myanalytics.mobile' defaultMessage='My Analytics'/> */}
+              </NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>
               <FormattedMessage id='header.logout.mobile' defaultMessage='Logout'/>
               </a>
@@ -108,7 +111,16 @@ class Header extends React.Component {
                                     text: 'Skip to navigation',
                                 }, */}
                             <a className="item sw-logo" href='/'>
-                                <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>
+                                {/*<img src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki logo. Link to home page" style={{width: '200px'}}/>*/}
+                                <FormattedMessage id="header.logo.alt" defaultMessage='SlideWiki logo. Link to home page'>
+                                    {
+                                    (alt) => <img
+                                            src="/assets/images/slideWiki-logo-linear.png"
+                                            alt={alt}
+                                            style={{width: '200px'}}
+                                        />
+                                    }
+                                </FormattedMessage>
                             </a>
                             <div className="item">
                                 <SearchBox className="item"/>
