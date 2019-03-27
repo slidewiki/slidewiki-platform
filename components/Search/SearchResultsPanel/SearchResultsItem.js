@@ -51,7 +51,11 @@ class SearchResultsItem extends React.Component {
             otherVersionsHeader: {
                 id: 'SearchResultsItem.otherVersionsHeader',
                 defaultMessage: 'Other matching versions'
-            }
+            },
+            thumbnailAlt: {
+                id: 'SearchResultsItem.thumbnailAlt',
+                defaultMessage: 'Example of presentation: {title}'
+            },
 
         });
     }
@@ -87,13 +91,13 @@ class SearchResultsItem extends React.Component {
         }
 
         return (
-            <Grid.Row id={`result_${result.index}`} role="listitem" className="item" tabIndex="0">
+            <Grid.Row id={`result_${result.index}`} role="listitem" className="item">
                 <Grid.Column width={16} className="ui segment">
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={3}>
                                 <NavLink href={result.link}>
-                                    <Image bordered src={`${Microservices.file.uri}/thumbnail/slide/${result.firstSlide}${(result.theme) ? '/' + result.theme : ''}`} alt={result.title} size="small" aria-hidden="true" />
+                                    <Image bordered src={`${Microservices.file.uri}/thumbnail/slide/${result.firstSlide}${(result.theme) ? '/' + result.theme : ''}`} alt={this.context.intl.formatMessage(this.messages.thumbnailAlt, { title: result.title })} size="small" aria-hidden="true" />
                                 </NavLink>
                             </Grid.Column>
                             <Grid.Column width={8}>

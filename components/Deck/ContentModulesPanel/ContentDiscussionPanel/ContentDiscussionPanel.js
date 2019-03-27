@@ -33,7 +33,7 @@ class ContentDiscussionPanel extends React.Component {
             </button>);
 
         return (
-            <div className="ui comments" style={{maxWidth: 'none'}}>
+            <div className="ui comments" style={{maxWidth: 'none'}} role="tabpanel">
                 { (String(this.props.UserProfileStore.userid) !== '') ? addComment : ''}
                 <h3 className="ui dividing header">
                     <FormattedMessage

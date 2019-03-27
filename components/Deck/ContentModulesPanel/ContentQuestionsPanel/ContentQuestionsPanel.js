@@ -248,7 +248,7 @@ class ContentQuestionsPanel extends React.Component {
         );
 
         return (
-            <div ref="contentQuestionsPanel" className="ui bottom attached">
+            <div ref="contentQuestionsPanel" className="ui bottom attached" role="tabpanel">
                 { this.props.ContentQuestionsStore.showAddBox ? questionAdd : this.props.ContentQuestionsStore.question ? questionEdit : this.props.ContentQuestionsStore.showExamList ? examQuestionsList : content }
             </div>
         );

@@ -23,7 +23,7 @@ import PermissionsStore from '../../../stores/PermissionsStore';
 import { isLocalStorageOn } from '../../../common.js';
 import loadCollectionsTab from '../../../actions/collections/loadCollectionsTab';
 import CollectionsPanel from './CollectionsPanel/CollectionsPanel';
-import {  Dropdown } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentModulesPanel extends React.Component {
@@ -33,6 +33,34 @@ class ContentModulesPanel extends React.Component {
         this.state = {
             showMobileMenu: false
         };
+
+        this.keys = {
+            end: 35,
+            home: 36,
+            left: 37,
+            up: 38,
+            right: 39,
+            down: 40
+        };
+
+        this.directions = {
+            37: -1,
+            38: -1,
+            39: 1,
+            40: 1
+        };
+
+        // Binds
+        this.keyDownEventListener = this.keyDownEventListener.bind(this);
+        this.keyUpEventListener = this.keyUpEventListener.bind(this);
+        this.switchTabOnArrowPress = this.switchTabOnArrowPress.bind(this);
+        this.focusEventHandler = this.focusEventHandler.bind(this);
+        this.checkTabFocus = this.checkTabFocus.bind(this);
+        this.activateTab = this.activateTab.bind(this);
+        this.deactivateTabs = this.deactivateTabs.bind(this);
+
+
+        this.tabs = null;
     }
 
     componentWillMount() {
@@ -57,13 +85,149 @@ class ContentModulesPanel extends React.Component {
             }
         }
     }
-    
+
+
+    addTabListeners() {
+
+        let tabs = document.querySelectorAll('[role="tab"]');
+        for (let i = 0; i < tabs.length ; i++) {
+            // tabs[i].addEventListener('click', ...);
+            tabs[i].addEventListener('keydown', this.keyDownEventListener);
+            tabs[i].addEventListener('keyup', this.keyUpEventListener);
+
+            // Build an array with all tabs (<button>s) in it
+            tabs[i].index = i;
+        }
+
+        // Removing tabindex on first tab to be able to focus it through tab
+        tabs[0].removeAttribute('tabindex');
+
+        return tabs;
+    }
+
+    keyDownEventListener(event) {
+
+        let key = event.keyCode;
+
+        switch (key) {
+            case this.keys.end:
+                event.preventDefault();
+                // Activate last tab
+                this.activateTab(this.tabs[this.tabs.length - 1]);
+                break;
+            case this.keys.home:
+                event.preventDefault();
+                // Activate First tab
+                this.activateTab(this.tabs[0]);
+                break;
+
+            // Up and down are in keydown
+            // because we need to prevent page scroll >:)
+            case this.keys.up:
+            case this.keys.down:
+                this.determineOrientation(event);
+                break;
+        }
+
+    }
+
+    keyUpEventListener(event) {
+
+        let key = event.keyCode;
+
+        switch (key) {
+            case this.keys.left:
+            case this.keys.right:
+                this.switchTabOnArrowPress(event);
+                break;
+        }
+    }
+
+    switchTabOnArrowPress(event) {
+        let pressed = event.keyCode;
+
+        for (let i = 0; i < this.tabs.length; i++) {
+            this.tabs[i].addEventListener('focus', this.focusEventHandler);
+        }
+
+        let focusLastTab = () => {
+            this.tabs[this.tabs.length - 1].focus();
+        };
+
+        let focusFirstTab = () => {
+            this.tabs[0].focus();
+        };
+
+        if (this.directions[pressed]) {
+            let target = event.target;
+            if (target.index !== undefined) {
+                if (this.tabs[target.index + this.directions[pressed]]) {
+                    this.tabs[target.index + this.directions[pressed]].focus();
+                } else if (pressed === this.keys.left || pressed === this.keys.up) {
+                    focusLastTab();
+                } else if (pressed === this.keys.right || pressed === this.keys.down) {
+                    focusFirstTab();
+                }
+            }
+        }
+    }
+
+    focusEventHandler(event) {
+        let target = event.target;
+
+        setTimeout(this.checkTabFocus, 300, target);
+
+    }
+
+    checkTabFocus(target) {
+        let focused = document.activeElement;
+
+        if (target === focused) this.activateTab(target, false);
+    }
+
+    // Activates any given tab panel
+    activateTab (tab, setFocus) {
+        setFocus = setFocus || true;
+
+        // Deactivate all other tabs
+        this.deactivateTabs();
+
+        // Remove tabindex attribute
+        tab.removeAttribute('tabindex');
+
+        // Set the tab as selected
+        tab.setAttribute('aria-selected', 'true');
+
+        let id = tab.getAttribute('id');
+        $('#' + id).click();
+
+        // Set focus when required.
+        if (setFocus){
+            tab.focus();
+        }
+
+
+    }
+
+    deactivateTabs() {
+        for (let i = 0; i < this.tabs.length; i++) {
+            this.tabs[i].setAttribute('tabindex', '-1');
+            this.tabs[i].setAttribute('aria-selected', 'false');
+            this.tabs[i].removeEventListener('focus', this.focusEventHandler);
+        }
+    }
+
     componentDidMount(){
+        // Add listeners to the tabs in this component (those already mounted)
+        this.tabs = this.addTabListeners();
+
         $(this.refs.selectTab).dropdown({selectOnKeydown: false});
         this.checkOverflowingChildren();
     }
     
     componentDidUpdate() {
+        // Add listeners to the tabs in this component (those already updated)
+        this.tabs = this.addTabListeners();
         this.checkOverflowingChildren();
     }
     
@@ -227,10 +391,10 @@ class ContentModulesPanel extends React.Component {
                 activityDIV = <ContentHistoryPanel selector={this.props.ContentModulesStore.selector} />;
                 break;
             case 'discussion':
-                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector}/>;
                 break;
             case 'usage':
-                activityDIV = <ContentUsagePanel selector={this.props.ContentModulesStore.selector} />;
+                activityDIV = <ContentUsagePanel selector={this.props.ContentModulesStore.selector}/>;
                 break;
             //case 'contributors':
             //    activityDIV = <ContributorsPanel selector={this.props.ContentModulesStore.selector} />;
@@ -255,7 +419,7 @@ class ContentModulesPanel extends React.Component {
         let compStyle = {
             outline: 'none'
         };
-        
+
         pointingMenu = (
             <div className="ui top attached pointing menu" ref="pointerMenu"  aria-label={this.context.intl.formatMessage(form_messages.aria_additional)}>
                 {this.getContentModuleOptions(true).map((item) => {
@@ -270,10 +434,9 @@ class ContentModulesPanel extends React.Component {
                     if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
                         return;
                     }
-                    
-                    return (<a tabIndex="0" className={classes} style={compStyle} 
+                    return (<Button tabIndex="-1" className={classes} style={compStyle}
                         onClick={this.handleTabClick.bind(this, item.value)} onKeyPress={this.handleKeyPress.bind(this, item.value)} 
-                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="button">{item.text}</a>);
+                        key={item.value} aria-controls={`${item.value}_panel`} id={`${item.value}_label`} role="tab">{item.text}</Button>);
                         
                     {/*
                     <a className="item">

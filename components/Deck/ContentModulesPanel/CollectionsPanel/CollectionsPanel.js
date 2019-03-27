@@ -141,7 +141,7 @@ class CollectionsPanel extends React.Component {
         });
 
         return (
-            <div className="ui bottom attached" ref="tagsPanel">
+            <div className="ui bottom attached" ref="tagsPanel" role="tabpanel">
                             <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.header)}</h3>
 
                     <div className="ui stackable grid">

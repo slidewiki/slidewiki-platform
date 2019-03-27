@@ -7,7 +7,7 @@ class ContentUsagePanel extends React.Component {
 
     render() {
         return (
-            <div ref="contentUsagePanel" className="ui">
+            <div ref="contentUsagePanel" className="ui" role="tabpanel">
                 <ContentUsageList usage={this.props.ContentUsageStore.usage} selector={this.props.ContentUsageStore.selector} />
             </div>
         );

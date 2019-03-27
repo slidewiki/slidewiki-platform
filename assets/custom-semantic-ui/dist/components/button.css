@@ -3855,8 +3855,8 @@
 .ui.negative.button:focus,
 .ui.red.buttons .button:focus,
 .ui.red.button:focus {
-  -webkit-box-shadow: 0 0 0 2px #f16767 inset !important;
-          box-shadow: 0 0 0 2px #f16767 inset !important;
+  -webkit-box-shadow: 0 0 0 2px #000000 inset !important;
+          box-shadow: 0 0 0 2px #000000 inset !important;
 }
 
 
