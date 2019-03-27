@@ -748,6 +748,7 @@ textarea:focus{
     -moz-border-radius: 5px;
     border-radius: 5px;
     position: relative;
+    margin-top: 40px;
 }
 
 .featured-img {

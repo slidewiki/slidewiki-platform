@@ -150,6 +150,11 @@ class Presentation extends React.Component{
                 //console.log($('.present > .accessibilityWrapper > .pptx2html div:first').html());
             	// event.currentSlide, event.indexh, event.indexv
                 this.resize();
+
+                //some dirty hacks to improve accessibility for screen readers
+                $('#main-application').removeAttr('role');
+                $('#aria-status-div').removeAttr('aria-live');
+                $('.slide-number-a').attr('aria-current', 'page');
             } );
 
             Reveal.addEventListener( 'slidechanged', ( event ) => {
@@ -245,7 +250,7 @@ class Presentation extends React.Component{
         return(
             //<ResizeAware ref='container' id='container'>
             <div ref='container' id='container'>
-                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv}  data-background-transition="none">
+                <div id="main-application" className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv}  data-background-transition="none">
                     <div className={['slides', style.slides].join(' ')}>
       			     	     {slides}
         			      </div>

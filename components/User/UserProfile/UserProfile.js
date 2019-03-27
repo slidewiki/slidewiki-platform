@@ -123,13 +123,11 @@ class UserProfile extends React.Component {
                 }});
             case 'stats':
                 return this.addScaffold(() => this.displayUserStats());
-            case categories.categories[6]:
+            case categories.categories[7]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.analytics[0]:
                         return this.displayPerformancePredictions();
                         break;
-                    default:
-                        return this.notImplemented();
                 }});
             default:
                 return this.displayUserProfile();

@@ -39,7 +39,7 @@ class UserPicture extends React.Component {
         let width = this.props.width;
         if (this.props.picture === '' || !this.props.picture) {
             let styles = {width: width, height: width};
-            picture = <div className={ classes } style={ styles } height={ width }><Identicons id={ this.props.username } width={ width } size={ 5 }/></div>;
+            picture = <div className={ classes } style={ styles }><Identicons id={ this.props.username } width={ width } size={ 5 }/></div>;
         } else if (this.props.picture.includes('gravatar')) {
             if (this.props.private)
                 picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true"/></div>;

@@ -363,28 +363,31 @@ class LoginModal extends React.Component {
             <textarea className="sr-only" id="signinModalDescription"
             defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used these services to active your account on SlideWiki"
             tabIndex ='-1'/>
+
             <div className={inputField_classes}>
-              <div><label htmlFor="email1" hidden>
-                <FormattedMessage
-                  id='LoginModal.label.email'
-                  defaultMessage='E-Mail'
-                />
-              </label></div>
-              <input type="text" id="email1" name="email1" ref="email1"  autoFocus tabIndex="0"  required/><i className="mail icon"/>
+              <div className="sr-only">
+                <label htmlFor="email1">
+                    <FormattedMessage
+                    id='LoginModal.label.email'
+                    defaultMessage='E-Mail'
+                    />
+                </label>
+              </div>
+              <input type="text" id="email1" name="email1" ref="email1"  autoFocus tabIndex="0" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} required/><i className="mail icon"/>
             </div>
           </div>
           <br/>
           <div className="ui center aligned column">
             <div className={inputField_classes}>
-              <div>
-                <label htmlFor="password1" hidden>
+              <div className="sr-only">
+                <label htmlFor="password1">
                   <FormattedMessage
                     id='LoginModal.label.password'
                     defaultMessage='Password'
                   />
                 </label>
               </div>
-              <input type="password" id="password1" name="password1" ref="password1" tabIndex="0" required/><i className="lock icon"/>
+              <input type="password" id="password1" name="password1" ref="password1" tabIndex="0" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} required/><i className="lock icon"/>
             </div>
           </div>
         </div>;
