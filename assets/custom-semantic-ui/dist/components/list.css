@@ -319,7 +319,7 @@ ol.ui.list ol li,
 .ui.list .list > .disabled.item,
 .ui.list > .disabled.item {
   pointer-events: none;
-  color: rgba(40, 40, 40, 0.3) !important;
+  color: rgba(40, 40, 40, 0.65) !important;
 }
 .ui.inverted.list .list > .disabled.item,
 .ui.inverted.list > .disabled.item {

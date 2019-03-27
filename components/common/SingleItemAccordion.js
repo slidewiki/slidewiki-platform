@@ -59,6 +59,7 @@ class SingleItemAccordion extends React.Component {
     buttonAsButton = () => {
         const { accordion_is_open } = this.state;
         return (<Button
+            tabIndex="0"
             basic
             active={accordion_is_open}
             labelPosition='right'
@@ -69,10 +70,12 @@ class SingleItemAccordion extends React.Component {
     };
 
     render() {
+        let tabIndex = this.props.buttonAs === 'text' ? 0 : -1;
+
         return (
             <Accordion onChange={this.handleAccordionChange} accordion={false}>
                 <AccordionItem>
-                    <AccordionItemTitle>
+                    <AccordionItemTitle tabIndex={tabIndex}>
                         { this.props.buttonAs === 'text' ? this.buttonAsText() : this.buttonAsButton()}
                     </AccordionItemTitle>
                     <AccordionItemBody hideBodyClassName='display-none'>

@@ -19,6 +19,22 @@ class InfoPanelInfoView extends React.Component {
     constructor(props){
         super(props);
         this.messages = defineMessages({
+            licenseLogo:{
+                id: 'InfoPanelInfoView.licenseLogo.alt',
+                defaultMessage:'Creative Commons License logo'
+            },
+            licenseDescription: {
+                id: 'InfoPanelInfoView.licenseDescription',
+                defaultMessage: 'This work is licensed under a'
+            },
+            srTitle: {
+                id: 'InfoPanelInfoView.srTitle',
+                defaultMessage: 'Additional content information'
+            },
+            updateAvailable: {
+                id: 'InfoPanelInfoView.updateAvailable',
+                defaultMessage: 'Updated version available'
+            }
         });
 
         this.zoomIn = this.zoomIn.bind(this);
@@ -69,12 +85,12 @@ class InfoPanelInfoView extends React.Component {
                             </button>
                         </div>
                 }
-                <h3 className="sr-only" id="infopanel-title">Additional content information</h3>
+                <h3 className="sr-only" id="infopanel-title">{this.context.intl.formatMessage(this.messages.srTitle)}</h3>
                 { deckId && this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
                         <NavLink href={['/deck', deckId, 'deck', deckId].join('/')}>
                             <i className='warning sign icon'></i>
-                            Updated version available
+                            {this.context.intl.formatMessage(this.messages.updateAvailable)}
                         </NavLink>
                     </div>
                 }
@@ -93,11 +109,11 @@ class InfoPanelInfoView extends React.Component {
 
                 <div className="ui bottom attached segment">
                     <div className={['ui', 'image']}>
-                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
-                            <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1">
+                            <img alt={this.context.intl.formatMessage(this.messages.licenseLogo)} src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                         </a>
                         <p>
-                            This work is licensed under a <a rel="license"  target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/" >Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                            {this.context.intl.formatMessage(this.messages.licenseDescription)} <a rel="license"  target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/" >Creative Commons Attribution-ShareAlike 4.0 International License</a>
                         </p>
                     </div>
                 </div>
