@@ -8,6 +8,7 @@ import serviceUnavailable from '../error/serviceUnavailable';
 export default function deleteTreeNode(context, payload, done) {
     log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
+
     if (userid != null && userid !== '') {
         //enrich with jwt
         payload.jwt = context.getStore(UserProfileStore).jwt;
@@ -51,7 +52,7 @@ export default function deleteTreeNode(context, payload, done) {
                 if (!isEmpty(contentRootId)) {
                     activity.content_root_id = contentRootId;
                 }
-                
+
                 context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);

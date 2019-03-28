@@ -25,6 +25,7 @@ import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import SlideTranslationsModal from '../Translation/SlideTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
+import DeckViewStore from '../../../../stores/DeckViewStore';
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -65,6 +66,10 @@ class ContentActionsHeader extends React.Component {
             deleteAriaText:{
                 id: 'ContentActionsHeader.deleteAriaText',
                 defaultMessage:'Delete slide'
+            },
+            deleteDeckAriaText:{
+                id: 'ContentActionsHeader.deleteDeckAriaText',
+                defaultMessage:'Delete deck'
             },
             language:{
                 id: 'ContentActionsHeader.language',
@@ -121,6 +126,58 @@ class ContentActionsHeader extends React.Component {
 
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+    }
+
+    // TODO Remove this unused code once it is decided we don't ever need to provide this option
+    handleDeleteNodeWithCheck(selector) {
+        // plain remove for slides
+        if (selector.stype !== 'deck') {
+            return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+        }
+
+        // plain remove for decks with subdecks
+        if (this.props.DeckViewStore.deckData.contentItems.find((i) => i.kind === 'deck')) {
+            return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+        }
+
+        // plain remove for shared subdecks
+        if (this.props.DeckViewStore.deckData.usage.length > 0) {
+            // TODO make this test more strict: check for actual ids in usage matching current deck parent
+            const otherParents = this.props.DeckViewStore.deckData.usage;
+            if (otherParents.length > 1) {
+                return this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+            }
+        }
+
+        swal({
+            title: 'Remove subdeck',
+            html: 'You have the option to simply remove this subdeck and keep it in "My Decks" or delete this subdeck completely.',
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Remove',
+            confirmButtonClass: 'ui button',
+            cancelButtonText: 'Delete',
+            cancelButtonClass: 'negative ui button',
+            allowEscapeKey: true,
+            allowOutsideClick: true,
+            buttonsStyling: false
+        })
+            .then((result) => {
+                // confirm btn
+                // remove deck as node from the parent deck
+                selector.confirmed = true;
+                selector.purge = false;
+                this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+            }, (action) => {
+                if (action === 'cancel') {
+                    selector.confirmed = true;
+                    selector.purge = true;
+                    this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     }
 
     handleSaveButtonClick(){
@@ -431,7 +488,7 @@ class ContentActionsHeader extends React.Component {
                         <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
                             type="button" key="deleteItem"
                             aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
+                            data-tooltip={this.context.intl.formatMessage((contentDetails.selector.stype==='deck') ? this.messages.deleteDeckAriaText : this.messages.deleteAriaText)}
                             tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
                             disabled={deleteItemDisabled}>
                             <i className="large icons">
@@ -472,13 +529,14 @@ ContentActionsHeader.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore, DeckViewStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
         ContentStore: context.getStore(ContentStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        DeckViewStore: context.getStore(DeckViewStore).getState()
     };
 });
 export default ContentActionsHeader;

@@ -53,7 +53,7 @@ export default {
             }).then((res) => {
                 callback(null, {node: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(null, {node: {}, selector: args.selector});
             });
         }
@@ -70,7 +70,7 @@ export default {
             }).then((res) => {
                 callback(null, {node: res, selector: selector, language: args.language});
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(null, {node: {}, selector: selector, language: args.language});
             });
         }
@@ -106,7 +106,7 @@ export default {
                 }
                 callback(null, res);
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(err, params);
             });
         } else if (resource === 'decktree.move'){
@@ -122,7 +122,7 @@ export default {
             }).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(err);
             });
         } else if (resource === 'decktree.translation'){
@@ -138,7 +138,7 @@ export default {
             }).then((res) => {
                 callback(null, res);
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(err);
             });
         }
@@ -155,13 +155,14 @@ export default {
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 headers: {'----jwt----': args.jwt},
                 body: JSON.stringify({
-                    selector: selector
+                    selector: selector,
+                    purge: args.purge ? true : false
                 })
             };
             rp(options).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(null, params);
             });
         }
@@ -179,7 +180,7 @@ export default {
             rp(options).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
-                console.log(err);
+                console.log(err.message);
                 callback(null, params);
             });
         }
