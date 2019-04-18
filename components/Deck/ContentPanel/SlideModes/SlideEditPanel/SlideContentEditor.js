@@ -2024,14 +2024,32 @@ class SlideContentEditor extends React.Component {
                                 $('#' + this.idContext.toString()).remove();
                                 this.idContext = null;
                             }
-                            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: ' + idContextTop + '; left: ' + idContextLeft + ';  z-index: '+(this.getHighestZIndex() + 10)+';" alt="'+nextProps.MediaStore.file.text+'" filename="'+nextProps.MediaStore.filename+'" svg-source="' + nextProps.MediaStore.file.url + '">' + nextProps.MediaStore.file.svg + '</div>');
+
+                            let svg = $('<div />');
+                            svg.attr('id', uniqueID);
+                            svg.attr('style', 'position: absolute; top: ' + idContextTop + '; left: ' + idContextLeft + ';  z-index: '+(this.getHighestZIndex() + 10)+';');
+                            svg.attr('alt', nextProps.MediaStore.file.text);
+                            svg.attr('filename', nextProps.MediaStore.filename);
+                            svg.attr('svg-source', nextProps.MediaStore.file.url);
+                            svg.html(nextProps.MediaStore.file.svg);
+                            $('.pptx2html').append(svg);
                         } else {
                             console.log(nextProps.MediaStore.file);
                             // The following trick using date is to force refresh of the img, otherwise the browser will use the cached one.
                             let d = new Date();
                             let time = d.getTime();
                             if (nextProps.MediaStore.file.url){
-                                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%"><img src="' + nextProps.MediaStore.file.url + '?' + time.toString() + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                                let div = $('<div />');
+                                div.attr('id', uniqueID);
+                                div.attr('style', 'position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%');
+                                
+                                let image = $('<img />');
+                                image.attr('src', nextProps.MediaStore.file.url + '?' + time.toString());
+                                image.attr('alt', nextProps.MediaStore.file.text);
+                            
+                                div.html(image);
+
+                                $('.pptx2html').append(div);
                             }
                         }
                         this.refreshCKeditor();
@@ -2050,7 +2068,15 @@ class SlideContentEditor extends React.Component {
                 else  //if slide is in non-canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    $('#inlineContent').append('<img id="'+uniqueID+'" src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'">');
+                    
+                    let image = $('<img />');
+                    image.attr('id', uniqueID);
+                    image.attr('src', nextProps.MediaStore.file.url);
+                    image.attr('alt', nextProps.MediaStore.file.text);
+                    image.attr('width', '100%');
+                    image.attr('height', '100%');
+                    $('#inlineContent').append(image);
+                    
                     //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
                     //this.uniqueIDAllElements();
                     this.refreshCKeditor();
