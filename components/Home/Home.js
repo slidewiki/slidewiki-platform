@@ -177,12 +177,17 @@ class Home extends React.Component {
         window.scroll(pos);
         $('#learnMore').focus();
     }
-
+    
+    handleSignInKeyPress = (event) => {
+        if(event.key === 'Enter'){
+            this.handleLoginButton();
+        }
+    }
 
     render() {
         let signInStyle = {cursor: 'pointer'};
         let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
-            <a onClick={this.handleLoginButton.bind(this)} style={signInStyle} role="button" tabIndex="0">{this.context.intl.formatMessage(this.messages.signIn)}</a> :
+            <a onClick={this.handleLoginButton.bind(this)} onKeyPress={this.handleSignInKeyPress} style={signInStyle} role="button" tabIndex="0">{this.context.intl.formatMessage(this.messages.signIn)}</a> :
             <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
                 {this.context.intl.formatMessage(this.messages.myDecksLink)}.
             </NavLink>;
