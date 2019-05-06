@@ -534,13 +534,12 @@ class AddDeck extends React.Component {
 
         return (
             <div className="ui vertically padded grid container">
-                <div className="sixteen wide column">
-                    <h3>
-                        <FormattedMessage
-                            id='AddDeck.form.heading'
-                            defaultMessage='Add a deck to SlideWiki' />
-                    </h3>
-                </div>
+                <h1 className="ui header" style={{marginTop: '1em'}}>
+                    <FormattedMessage
+                        id='AddDeck.form.heading'
+                        defaultMessage='Add a deck to SlideWiki' />
+                </h1>
+                
                 <div className="sixteen wide column">
                     <form className={formClasses}>
                         <div className={fieldClass_title} ref="div_title" >
