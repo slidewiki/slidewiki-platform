@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
+import { NavLink, navigateAction } from 'fluxible-router';
 import classNames from 'classnames/bind';
-import {connectToStores} from 'fluxible-addons-react';
+import { connectToStores } from 'fluxible-addons-react';
 import Util from '../../../common/Util';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
+import SlideEditStore from '../../../../stores/SlideEditStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
 import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal';
@@ -18,81 +19,81 @@ import cancelClick from '../../../../actions/slide/cancelClick';
 import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
 import zoom from '../../../../actions/slide/zoom';
-import {defineMessages} from 'react-intl';
+import { defineMessages } from 'react-intl';
 import TranslationStore from '../../../../stores/TranslationStore';
-import {getLanguageName, getLanguageNativeName} from '../../../../common';
+import { getLanguageName, getLanguageNativeName } from '../../../../common';
 import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import SlideTranslationsModal from '../Translation/SlideTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
 
 class ContentActionsHeader extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.messages = defineMessages({
-            viewButtonText:{
+            viewButtonText: {
                 id: 'ContentActionsHeader.viewButtonText',
-                defaultMessage:'View'
+                defaultMessage: 'View'
             },
-            viewButtonAriaText:{
+            viewButtonAriaText: {
                 id: 'ContentActionsHeader.viewButtonAriaText',
-                defaultMessage:'View Mode'
+                defaultMessage: 'View Mode'
             },
-            editButtonText:{
+            editButtonText: {
                 id: 'ContentActionsHeader.editButtonText',
-                defaultMessage:'Edit'
+                defaultMessage: 'Edit'
             },
-            editButtonTextTranslation:{
+            editButtonTextTranslation: {
                 id: 'ContentActionsHeader.editButtonTextTranslation',
-                defaultMessage:'Edit node translation'
+                defaultMessage: 'Edit node translation'
             },
-            editButtonAriaText:{
+            editButtonAriaText: {
                 id: 'ContentActionsHeader.editButtonAriaText',
-                defaultMessage:'Edit Mode'
+                defaultMessage: 'Edit Mode'
             },
-            addSlideButtonAriaText:{
+            addSlideButtonAriaText: {
                 id: 'ContentActionsHeader.addSlideButtonAriaText',
-                defaultMessage:'Add Slide'
+                defaultMessage: 'Add Slide'
             },
-            addDeckButtonAriaText:{
+            addDeckButtonAriaText: {
                 id: 'ContentActionsHeader.addDeckButtonAriaText',
-                defaultMessage:'Add sub-deck'
+                defaultMessage: 'Add sub-deck'
             },
-            duplicateAriaText:{
+            duplicateAriaText: {
                 id: 'ContentActionsHeader.duplicateAriaText',
-                defaultMessage:'Duplicate slide'
+                defaultMessage: 'Duplicate slide'
             },
-            deleteAriaText:{
+            deleteAriaText: {
                 id: 'ContentActionsHeader.deleteAriaText',
-                defaultMessage:'Delete slide'
+                defaultMessage: 'Delete slide'
             },
-            language:{
+            language: {
                 id: 'ContentActionsHeader.language',
-                defaultMessage:'Language'
+                defaultMessage: 'Language'
             },
-            translation:{
+            translation: {
                 id: 'ContentActionsHeader.translation',
-                defaultMessage:'Translation'
+                defaultMessage: 'Translation'
             },
-            loading:{
+            loading: {
                 id: 'ContentActionsHeader.loading',
-                defaultMessage:'Loading'
+                defaultMessage: 'Loading'
             },
-            saveButtonText:{
+            saveButtonText: {
                 id: 'ContentActionsHeader.save',
-                defaultMessage:'Save'
+                defaultMessage: 'Save'
             },
-            cancelButtonText:{
+            cancelButtonText: {
                 id: 'ContentActionsHeader.cancel',
-                defaultMessage:'Cancel'
+                defaultMessage: 'Cancel'
             },
-            markdownButtonText:{
+            markdownButtonText: {
                 id: 'ContentActionsHeader.markdown',
                 defaultMessage: 'Markdown'
             },
-            mobileMessageText:{
+            mobileMessageText: {
                 id: 'ContentActionsHeader.mobile',
-                defaultMessage:'Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.'
+                defaultMessage: 'Small screen detected. You are viewing the mobile version of SlideWiki. If you wish to edit slides you will need to use a larger device.'
             },
         });
 
@@ -105,7 +106,7 @@ class ContentActionsHeader extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({windowInnerWidth: window.innerWidth});
+        this.setState({ windowInnerWidth: window.innerWidth });
     }
 
 
@@ -115,26 +116,32 @@ class ContentActionsHeader extends React.Component {
             Object.assign(nodeSpec, { [nodeSpec.type]: { language: this.props.TranslationStore.currentLang } });
         }
         const contentDetails = this.props.ContentStore;
+        let mode = contentDetails.mode;
+
+        if (nodeSpec.type === 'slide' && this.props.DeckTreeStore.allowMarkdown) { // when a new slide is created and the markdown setting is enabled: go to the markdown editor
+            mode = 'markdownEdit';
+        }
+
         //added mode to the navigate action
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec, mode: contentDetails.mode});
+        this.context.executeAction(addTreeNodeAndNavigate, { selector: selector, nodeSpec: nodeSpec, mode: mode });
     }
 
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
     }
 
-    handleSaveButtonClick(){
+    handleSaveButtonClick() {
         this.context.executeAction(saveClick, {});
     }
-    handleUndoButtonClick (){
+    handleUndoButtonClick() {
         //this.context.executeAction(undoClick, {});
         //console.log('undo');
     }
-    handleRedoButtonClick(){
+    handleRedoButtonClick() {
         //this.context.executeAction(redoClick, {});
         //console.log('redo');
     }
-    handleCancelButtonClick(selector){
+    handleCancelButtonClick(selector) {
         this.context.executeAction(cancelClick, {
             selector: selector
         });
@@ -158,7 +165,7 @@ class ContentActionsHeader extends React.Component {
         return (selectedLanguage !== language);
     }
 
-    addNodeTranslation(selector, options={}) {
+    addNodeTranslation(selector, options = {}) {
         if (selector.stype === 'slide') {
             this.context.executeAction(addSlideTranslation, {
                 selector,
@@ -174,19 +181,22 @@ class ContentActionsHeader extends React.Component {
     }
 
     handleEditButton(selector) {
+        const showMarkdownEditor = this.props.SlideEditStore.markdown && this.props.SlideEditStore.markdown.trim() !== '' ? true : false;
+
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
-            this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+            this.context.executeAction(showNoPermissionsModal, { selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions });
         } else if (this.isTranslationMissing()) {
-            this.addNodeTranslation(selector);
+            this.addNodeTranslation(selector, { markdown: showMarkdownEditor });
         } else {
-            let nodeURL = Util.makeNodeURL(selector, selector.page, 'edit');
+            const editor = selector.stype === 'slide' && showMarkdownEditor ? 'markdownEdit' : 'edit'; // check if markdown editor should be used (only on slide level, not on deck level)
+            let nodeURL = Util.makeNodeURL(selector, selector.page, editor);
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
         }
     }
 
-    handleMarkdownEditButton(selector) {
+    /*handleMarkdownEditButton(selector) {
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else if (this.isTranslationMissing()) {
@@ -197,7 +207,7 @@ class ContentActionsHeader extends React.Component {
                 url: nodeURL
             });
         }
-    }
+    }*/
 
     zoomIn() {
         this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'in' });
@@ -211,15 +221,30 @@ class ContentActionsHeader extends React.Component {
         this.context.executeAction(zoom, { mode: this.props.ContentStore.mode, direction: 'out' });
     }
 
+    switchEditor = (selector, type) => {
+        if (this.props.SlideEditStore.hasChanges) {
+            // eslint-disable-next-line no-alert
+            let confirmLeave = confirm('You have unsaved changes. If you do not save the slide, it will not be updated. Are you sure you want to exit this page?');
+            if (!confirmLeave) {
+                return;
+            }
+        }
+
+        let nodeURL = Util.makeNodeURL(selector, selector.page, type);
+        this.context.executeAction(navigateAction, {
+            url: nodeURL
+        });
+    }
+
     render() {
         const contentDetails = this.props.ContentStore;
         const smallButtons = this.state.windowInnerWidth != null && this.state.windowInnerWidth < 950;
 
         const buttonsAreDisabled = this.props.PermissionsStore.permissions.readOnly
             || !this.props.PermissionsStore.permissions.edit
-            || contentDetails.mode ==='edit'
-            || contentDetails.mode ==='markdownEdit'
-        ;
+            || contentDetails.mode === 'edit'
+            || contentDetails.mode === 'markdownEdit'
+            ;
         const buttonsAreHidden = this.props.UserProfileStore.username === '' || buttonsAreDisabled;
 
         //config buttons based on the selected item
@@ -229,7 +254,7 @@ class ContentActionsHeader extends React.Component {
         });
         const viewClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.mode ==='view'
+            'disabled': contentDetails.mode === 'view'
         });
         const addSlideClass = classNames({
             'ui basic button': true,
@@ -243,42 +268,42 @@ class ContentActionsHeader extends React.Component {
         });
         const duplicateItemClass = classNames({
             'ui basic button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled,
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype === 'deck' || buttonsAreDisabled,
             'icon': smallButtons,
         });
-        const duplicateItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || buttonsAreDisabled) ? 'disabled' : '' ;
+        const duplicateItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype === 'deck' || buttonsAreDisabled) ? 'disabled' : '';
         const deleteItemClass = classNames({
             'ui basic button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled,
             'icon': smallButtons,
         });
-        const deleteItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled) ? 'disabled' : '' ;
+        const deleteItemDisabled = (contentDetails.selector.id === contentDetails.selector.sid || buttonsAreDisabled) ? 'disabled' : '';
         const red = {
             backgroundColor: 'red'
         };
 
         let selectorImm = this.props.DeckTreeStore.selector;
-        let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+        let selector = { id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath') };
 
         let buttonStyle = {
-            classNames : classNames({
-                'ui basic button':true,
+            classNames: classNames({
+                'ui basic button': true,
                 'disabled': buttonsAreDisabled,
                 'icon': smallButtons,
             }),
-            iconSize : 'large',
-            noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'  || contentDetails.mode ==='markdownEdit'
-        } ;
-        let editButton, markdownEditButton, saveButton, cancelButton, undoButton, redoButton;
+            iconSize: 'large',
+            noTabIndex: this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit'
+        };
+        let editButton, /*markdownEditButton,*/ saveButton, cancelButton, undoButton, redoButton;
 
-        if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== ''){
+        if ((contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit') && this.props.UserProfileStore.username !== '') {
             //edit mode & logged UserProfileStore
             editButton = '';
-            markdownEditButton = '';
+            //markdownEditButton = '';
             //ref="" --> we can't use string refs as they are legacy. ref={(refName)=>{this.refName=refName}}
-            if(contentDetails.selector.stype === 'slide'){
+            if (contentDetails.selector.stype === 'slide') {
                 saveButton =
-                    <button tabIndex="0"  className="ui button primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
+                    <button tabIndex="0" className="ui button primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
                         <i className="large icons">
                             <i className="save icon "></i>
                             <i className=""></i>
@@ -286,7 +311,7 @@ class ContentActionsHeader extends React.Component {
                         {this.context.intl.formatMessage(this.messages.saveButtonText)}
                     </button>;
                 cancelButton =
-                    <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
+                    <button tabIndex="0" className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
                         <i className="large icons">
                             <i className="cancel icon "></i>
                             <i className=""></i>
@@ -294,13 +319,13 @@ class ContentActionsHeader extends React.Component {
                         {this.context.intl.formatMessage(this.messages.cancelButtonText)}
                     </button>;
             } else {
-                saveButton ='';
-                cancelButton ='';
+                saveButton = '';
+                cancelButton = '';
             }
 
             /*It were not displayed in master...but the code is prepared for it*/
-            undoButton ='';
-            redoButton ='';
+            undoButton = '';
+            redoButton = '';
 
             /* discomment when we want to see them
             undoButton =
@@ -313,16 +338,15 @@ class ContentActionsHeader extends React.Component {
                     </button>;
             */
 
-        } else{ //No buttons
-            if(this.props.UserProfileStore.username !== '') /* Edit button only visible if logged user*/
-            {
+        } else { //No buttons
+            if (this.props.UserProfileStore.username !== '') /* Edit button only visible if logged user*/ {
                 const editDisabled = (this.props.ContentStore.mode === 'loading');
                 editButton =
-                    <button className={editClass} disabled={editDisabled} onClick={this.handleEditButton.bind(this,selector)}
+                    <button className={editClass} disabled={editDisabled} onClick={this.handleEditButton.bind(this, selector)}
                         type="button"
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
-                        tabIndex = {contentDetails.mode ==='edit'?-1:0}
-                        >
+                        tabIndex={contentDetails.mode === 'edit' ? -1 : 0}
+                    >
                         <i className="icons">
                             <i className="large blue edit icon"></i>
                             <i className=""></i>
@@ -331,7 +355,7 @@ class ContentActionsHeader extends React.Component {
 
                     </button>;
 
-                if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
+                /*if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
                     markdownEditButton =
                         <button className={editClass} onClick={this.handleMarkdownEditButton.bind(this,selector)}
                             type="button"
@@ -344,13 +368,13 @@ class ContentActionsHeader extends React.Component {
                             </i>
                             {this.context.intl.formatMessage(this.messages.markdownButtonText)}
                         </button>;
-                }
+                }*/
 
             }
-            saveButton ='';
-            cancelButton ='';
-            undoButton ='';
-            redoButton ='';
+            saveButton = '';
+            cancelButton = '';
+            undoButton = '';
+            redoButton = '';
 
 
         }
@@ -371,96 +395,115 @@ class ContentActionsHeader extends React.Component {
         </button>
         */
         let mobileMessage = <div className="ui top attached warning message">
-          <p>{this.context.intl.formatMessage(this.messages.mobileMessageText)}</p>
+            <p>{this.context.intl.formatMessage(this.messages.mobileMessageText)}</p>
         </div>;
 
         return (
-                <div className="ui two column grid">
-                    <div className="column computer tablet only">
-                        <div className={leftButtonsClass}>
-                            {editButton}
-                            {markdownEditButton}
-                            {saveButton}
-                            {cancelButton}
-                            {undoButton}
-                            {redoButton}
-                        </div>
+            <div className="ui two column grid">
+                <div className="column computer tablet only">
+                    <div className={leftButtonsClass}>
+                        {editButton}
+                        {/*markdownEditButton*/}
+                        {saveButton}
+                        {cancelButton}
+                        {undoButton}
+                        {redoButton}
                     </div>
-                    <DeckTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
-                    <SlideTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
-                    <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
-                        {mobileMessage}
-                    </div>
-                    <div className="column computer tablet only">
+                </div>
+                <DeckTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
+                <SlideTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
+                <div className="sixteen wide column mobile only" style={{ marginTop: '-3rem' }}>
+                    {mobileMessage}
+                </div>
+                <div className="column computer tablet only">
                     <div className="ui right floated basic top attached buttons" >
-                    { buttonsAreHidden ? '' : [
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
-                            type="button" key="addSlide"
-                            aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="large icons">
-                                <i className=" file text icon"></i>
-                                <i className="inverted corner plus icon"></i>
-                            </i>
+                        {buttonsAreHidden ? '' : [
+                            <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, { type: 'slide', id: '0' })}
+                                type="button" key="addSlide"
+                                aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
+                                tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit' ? -1 : 0}>
+                                <i className="large icons">
+                                    <i className=" file text icon"></i>
+                                    <i className="inverted corner plus icon"></i>
+                                </i>
 
-                        </button>,
-                        <AttachSlides buttonStyle={buttonStyle} selector={selector} key="attachSlides" />,
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
-                            type="button" key="addDeck"
-                            aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
-                            <i className="large icons">
-                                <i className="yellow folder icon"></i>
-                                <i className="inverted corner plus icon"></i>
-                            </i>
-                        </button>,
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} key="attachSubdeck" />,
-                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
-                            type="button" key="duplicateItem"
-                            aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
-                            disabled={duplicateItemDisabled}>
-                            <i className="large icons">
-                                <i className="grey copy outline horizontally flipped icon"></i>
-                            </i>
+                            </button>,
+                            <AttachSlides buttonStyle={buttonStyle} selector={selector} key="attachSlides" />,
+                            <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, { type: 'deck', id: '0' })}
+                                type="button" key="addDeck"
+                                aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
+                                tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit' ? -1 : 0}>
+                                <i className="large icons">
+                                    <i className="yellow folder icon"></i>
+                                    <i className="inverted corner plus icon"></i>
+                                </i>
+                            </button>,
+                            <AttachSubdeck buttonStyle={buttonStyle} selector={selector} key="attachSubdeck" />,
+                            <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, { type: selector.stype, id: selector.sid })}
+                                type="button" key="duplicateItem"
+                                aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
+                                tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype === 'deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit' ? -1 : 0}
+                                disabled={duplicateItemDisabled}>
+                                <i className="large icons">
+                                    <i className="grey copy outline horizontally flipped icon"></i>
+                                </i>
 
-                        </button>,
-                        <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
-                            type="button" key="deleteItem"
-                            aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}
-                            disabled={deleteItemDisabled}>
-                            <i className="large icons">
-                                <i className="red trash alternate icon"></i>
-                            </i>
-                        </button>,
-                    ] }
-                            {
-                                this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
-                                    <button className="ui icon button" onClick={this.zoomOut}
-                                            key="zoomOut"
-                                            type="button" aria-label="Zoom out" data-tooltip="Zoom out">
-                                        <i className="large zoom out icon"></i>
+                            </button>,
+                            <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
+                                type="button" key="deleteItem"
+                                aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
+                                tabIndex={contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode === 'edit' || contentDetails.mode === 'markdownEdit' ? -1 : 0}
+                                disabled={deleteItemDisabled}>
+                                <i className="large icons">
+                                    <i className="red trash alternate icon"></i>
+                                </i>
+                            </button>,
+                        ]}
+                        {
+                            this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
+                                <button className="ui icon button" onClick={() => this.switchEditor(selector, 'markdownEdit')}
+                                    key="switchToMarkdown"
+                                    type="button" aria-label="Switch to the Markdown slide editor" data-tooltip="Switch to the Markdown slide editor">
+                                    <i className="sync icon"></i> Switch to Markdown
                                     </button>,
-                                    <button className="ui button" onClick={this.resetZoom}
-                                            key="zoomReset"
-                                            type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
-                                        <i className="large stacked icons">
-                                            <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
-                                            <i className="search icon"></i>
-                                        </i>
-                                    </button>,
-                                    <button className="ui icon button" onClick={this.zoomIn}
-                                            key="zoomIn"
-                                            type="button" aria-label="Zoom in" data-tooltip="Zoom in">
-                                        <i className="large zoom in icon"></i>
-                                    </button>
-                                ] : null
-                            }
+                                <button className="ui icon button" onClick={this.zoomOut}
+                                    key="zoomOut"
+                                    type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                    <i className="large zoom out icon"></i>
+                                </button>,
+                                <button className="ui button" onClick={this.resetZoom}
+                                    key="zoomReset"
+                                    type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                    <i className="large stacked icons">
+                                        <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
+                                        <i className="search icon"></i>
+                                    </i>
+                                </button>,
+                                <button className="ui icon button" onClick={this.zoomIn}
+                                    key="zoomIn"
+                                    type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                    <i className="large zoom in icon"></i>
+                                </button>
+                            ] : null
+                        }
+                        {
+                            this.props.ContentStore.mode === 'markdownEdit' && this.props.ContentStore.selector.stype === 'slide' ? [
+                                <button 
+                                    className="ui icon button" 
+                                    style={{paddingTop: 14, paddingBottom: 14}}
+                                    onClick={() => this.switchEditor(selector, 'edit')}
+                                    key="switchToRegularEditor"
+                                    type="button" 
+                                    aria-label="Switch to the visual slide editor"
+                                >
+                                    <i className="sync icon"></i> Switch to regular editor
+                                </button>
+                            ] : null
+                        }
                     </div>
                 </div>
             </div>
@@ -472,13 +515,14 @@ ContentActionsHeader.contextTypes = {
     intl: PropTypes.object.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, TranslationStore, SlideEditStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
         ContentStore: context.getStore(ContentStore).getState(),
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        SlideEditStore: context.getStore(SlideEditStore).getState()
     };
 });
 export default ContentActionsHeader;
