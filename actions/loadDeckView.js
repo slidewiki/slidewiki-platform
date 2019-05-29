@@ -29,7 +29,17 @@ export default function loadDeckView(context, payload, done) {
                 description: res.deckData.description
             });
         }
-        let pageTitle = shortTitle + ' | ' + res.slidesData.title;
+
+        let pageTitle = res.slidesData.title;
+
+        if (payload.page && payload.page === 'decklandingpage') {
+            pageTitle = shortTitle + ' | Presentation information | ' + pageTitle;
+        } else if (payload.page && payload.page === 'deck') {
+            pageTitle = shortTitle + ' | Presentation overview | ' + pageTitle;
+        } else {
+            pageTitle = shortTitle + ' | ' + pageTitle;
+        }
+
         let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
 
         context.dispatch('UPDATE_PAGE_TITLE', {
