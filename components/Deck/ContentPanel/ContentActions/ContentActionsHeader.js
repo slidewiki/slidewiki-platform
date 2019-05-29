@@ -342,7 +342,7 @@ class ContentActionsHeader extends React.Component {
                                 <i className="large violet edit icon"></i>
                                 <i className=""></i>
                             </i>
-                            {this.context.intl.formatMessage(this.messages.markdownButtonText)}}
+                            {this.context.intl.formatMessage(this.messages.markdownButtonText)}
                         </button>;
                 }
 
