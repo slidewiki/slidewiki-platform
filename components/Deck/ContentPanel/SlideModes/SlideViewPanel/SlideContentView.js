@@ -128,7 +128,7 @@ class SlideContentView extends React.Component {
         //to handle non-canvas display of slides
         let slideHTMLContent = this.props.content;
         if (slideHTMLContent.indexOf('class="pptx2html"') === -1 && slideHTMLContent.indexOf('class=\'pptx2html\'') === -1) {
-            slideHTMLContent = '<div class="pptx2html" style="width: 960px; position: relative; ">' + slideHTMLContent + '</div>';
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height:720px; position: relative; ">' + slideHTMLContent + '</div>';
         }
         return (
         <div ref='container' id='container'>
