@@ -467,6 +467,7 @@ class ContentActionsHeader extends React.Component {
                             this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
                                 <button className="ui icon button" onClick={() => this.switchEditor(selector, 'markdownEdit')}
                                     key="switchToMarkdown"
+                                    style={{fontWeight: 'bold'}}
                                     type="button" aria-label="Switch to the Markdown slide editor" data-tooltip="Switch to the Markdown slide editor">
                                     <i className="sync icon"></i> Switch to Markdown
                                     </button>,
@@ -494,7 +495,7 @@ class ContentActionsHeader extends React.Component {
                             this.props.ContentStore.mode === 'markdownEdit' && this.props.ContentStore.selector.stype === 'slide' ? [
                                 <button 
                                     className="ui icon button" 
-                                    style={{paddingTop: 14, paddingBottom: 14}}
+                                    style={{paddingTop: 14, paddingBottom: 14, fontWeight: 'bold'}}
                                     onClick={() => this.switchEditor(selector, 'edit')}
                                     key="switchToRegularEditor"
                                     type="button" 

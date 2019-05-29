@@ -91,16 +91,33 @@ class MarkdownEditor extends React.Component {
         }
     }
     render() {
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        let deckTheme = selector && selector.theme;
+        
+        if (!deckTheme) {
+            // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
+            let treeNode = this.props.DeckTreeStore.flatTree
+                .find((node) => node.get('id') === this.props.SlideViewStore.slideId && node.get('type') === 'slide');
+
+            if (treeNode) {
+                deckTheme = treeNode.get('theme');
+            } else {
+                // pick theme from deck root as a last resort
+                deckTheme = this.props.DeckTreeStore.theme;
+            }
+        }
+        deckTheme = deckTheme ? deckTheme : ''; // no theme has been found, used empty string for the default theme
+        
         return (
             <div ref='markdownEditor' id='markdownEditor' style={{minHeight: '500px'}}>
                 <div className="ui stackable equal width left aligned padded grid">
                   <div className="row">
                     <div className="column form field ui">
-                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
+                        <textarea style={{height:'100%', maxHeight: 'initial'}} onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
                     </div>
-                    <div className="column">
+                    <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0}}>
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
-                        speakernotes='' hideSpeakerNotes={true} theme=''/>
+                        speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true}/>
                     </div>
                   </div>
                 </div>
