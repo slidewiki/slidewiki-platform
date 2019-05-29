@@ -73,10 +73,16 @@ class StaticPage extends React.Component {
 
         this.closeSidebar({target: '<a className="item"></a>'});
     }
+
+    handleSignInKeyPress = (event) => {
+        if(event.key === 'Enter'){
+            this.handleLoginButton();
+        }
+    }
 	
     render() {
         let signInOrMyDecksElement = this.props.UserProfileStore.username === '' ?
-            <a onClick={this.handleLoginButton.bind(this)}>{this.context.intl.formatMessage(this.messages.signIn)}</a>:
+            <a onClick={this.handleLoginButton.bind(this)} onKeyPress={this.handleSignInKeyPress} role="button" tabIndex="0">{this.context.intl.formatMessage(this.messages.signIn)}</a>:
             <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}>
                 {this.context.intl.formatMessage(this.messages.myDecks)}
             </NavLink>;	
