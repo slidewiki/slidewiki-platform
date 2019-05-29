@@ -115,7 +115,7 @@ class MarkdownEditor extends React.Component {
                     <div className="column form field ui">
                         <textarea style={{height:'100%', maxHeight: 'initial'}} onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
                     </div>
-                    <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0}}>
+                    <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0, margin: '0 20px'}}>
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
                         speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true}/>
                     </div>
