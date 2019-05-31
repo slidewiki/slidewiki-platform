@@ -12,6 +12,8 @@ import showdown from 'showdown';
 import turndown from 'turndown';
 import Util from '../../../../common/Util';
 import saveSlide from '../../../../../actions/slide/saveSlide';
+import { Button, Icon, Dropdown} from 'semantic-ui-react';
+
 
 let converter = new showdown.Converter();
 converter.setOption('tables', true);
@@ -31,18 +33,29 @@ class MarkdownEditor extends React.Component {
         super(props);
         let htmlContent = this.props.content;
         let markdownContent = this.props.markdown.trim();
+
         //if no markdown is provided, we can try to make an estimate
         if(htmlContent && (!markdownContent || markdownContent==='')){
             markdownContent = t_converter.turndown(htmlContent);
         }
-        this.state = {markdownContent: markdownContent, htmlContent: htmlContent, title: this.props.title};
+
+        this.state = {
+            markdownContent: markdownContent, 
+            htmlContent: htmlContent, 
+            title: this.props.title
+        };
     }
     handleChange(event) {
-        if(event.target.value.trim()){
-            let html = converter.makeHtml(event.target.value);
+        let value = this.state.markdownContent;
+        if (event) {
+            value = event.target.value;
+        }
+
+        if(value.trim()){
+            let html = converter.makeHtml(value);
             //add especial classes for Neo4j Cypher language
             html = html.replace(/<pre>(.*?)<code class="cypher language-cypher">/g, '<pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">');
-            this.setState({markdownContent: event.target.value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
+            this.setState({markdownContent: value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
         }
     }
     componentDidMount(){
@@ -63,6 +76,7 @@ class MarkdownEditor extends React.Component {
             let deckID = currentSelector.id;
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
+
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
@@ -90,6 +104,26 @@ class MarkdownEditor extends React.Component {
             });
         }
     }
+    // TODO: ensure this is tested in other browsers then Chrome (probably some changes are needed for IE)
+    wrapText = (openTag, closeTag = '') => {
+        let textArea = this.refs.markdownTextarea;
+        let len = textArea.value.length;
+        let start = textArea.selectionStart;
+        let end = textArea.selectionEnd;
+        let selectedText = textArea.value.substring(start, end);
+        let replacement = openTag + selectedText + closeTag;
+        let value = textArea.value.substring(0, start) + replacement + textArea.value.substring(end, len);
+
+        this.setState({
+            markdownContent: value
+        }, () => {
+            // set selection when state has changed
+            textArea.focus();
+            textArea.setSelectionRange(start + openTag.length, end + openTag.length);
+            this.handleChange();
+        });
+    }
+    
     render() {
         const selector = this.props.selector || this.props.DeckTreeStore.selector;
         let deckTheme = selector && selector.theme;
@@ -113,7 +147,41 @@ class MarkdownEditor extends React.Component {
                 <div className="ui stackable equal width left aligned padded grid">
                   <div className="row">
                     <div className="column form field ui">
-                        <textarea style={{height:'100%', maxHeight: 'initial'}} onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
+                        <Button.Group>
+                            <Dropdown button icon="heading" className="icon small" aria-label="Insert heading">
+                                <Dropdown.Menu>
+                                    <Dropdown.Item text='Heading 1' onClick={(e) => this.wrapText('# ')}/>
+                                    <Dropdown.Item text='Heading 2' onClick={(e) => this.wrapText('## ')}/>
+                                    <Dropdown.Item text='Heading 3' onClick={(e) => this.wrapText('### ')}/>
+                                    <Dropdown.Item text='Heading 4' onClick={(e) => this.wrapText('#### ')}/>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Button onClick={(e) => this.wrapText('**', '**')} icon size="small" aria-label="Make selected text bold"><Icon name="bold" /></Button>
+                            <Button onClick={(e) => this.wrapText('*', '*')} icon size="small" aria-label="Make selected text italic"><Icon name="italic" /></Button>
+                            <Button onClick={(e) => this.wrapText('__', '__')} icon size="small" aria-label="Make selected text underlined"><Icon name="underline" /></Button>
+                        </Button.Group>
+                        {' '}
+                        <Button.Group>
+                            <Button onClick={(e) => this.wrapText('* ')} icon size="small" aria-label="Make an unordered list"><Icon name="list" /></Button>
+                            <Button onClick={(e) => this.wrapText('1. ')} icon size="small" aria-label="Make an ordered list"><Icon name="list ol" /></Button>
+                        </Button.Group>
+                        {' '}
+                        <Button.Group>
+                            <Button onClick={(e) => this.wrapText('[', '](url)')} icon size="small" aria-label="Insert a link"><Icon name="linkify" /></Button>
+                            <Button onClick={(e) => this.wrapText('![', '](https://example.com/img.png)')} icon size="small" aria-label="Insert an image"><Icon name="file image" /></Button>
+                            <Button onClick={(e) => this.wrapText('> ',)} icon size="small" aria-label="Insert a quote block"><Icon name="quote left" /></Button>
+                            <Button onClick={(e) => this.wrapText('`', '`')} icon size="small" aria-label="Insert a code block"><Icon name="code" /></Button>
+                        </Button.Group>
+                    </div>
+                </div>
+                <div className="row" style={{marginTop:-25}}>
+                    <div className="column form field ui">
+                        <textarea 
+                            style={{fontFamily: 'Courier New', fontWeight:'bold', height:'100%', maxHeight: 'initial'}}
+                            ref="markdownTextarea" 
+                            onChange={this.handleChange.bind(this)} 
+                            value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}
+                        />
                     </div>
                     <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0, margin: '0 20px'}}>
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
