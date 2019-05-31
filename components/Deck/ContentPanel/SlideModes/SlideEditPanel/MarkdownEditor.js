@@ -13,6 +13,7 @@ import turndown from 'turndown';
 import Util from '../../../../common/Util';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import { Button, Icon, Dropdown} from 'semantic-ui-react';
+import registerChange from '../../../../../actions/slide/registerChange';
 
 
 let converter = new showdown.Converter();
@@ -50,6 +51,7 @@ class MarkdownEditor extends React.Component {
         if (event) {
             value = event.target.value;
         }
+        this.setChanges(true);
 
         if(value.trim()){
             let html = converter.makeHtml(value);
@@ -123,6 +125,10 @@ class MarkdownEditor extends React.Component {
             this.handleChange();
         });
     }
+
+    setChanges = (value) => {
+        this.context.executeAction(registerChange, { hasChanges: value });
+    };
     
     render() {
         const selector = this.props.selector || this.props.DeckTreeStore.selector;
@@ -152,8 +158,7 @@ class MarkdownEditor extends React.Component {
                                 <Dropdown.Menu>
                                     <Dropdown.Item text='Heading 1' onClick={(e) => this.wrapText('# ')}/>
                                     <Dropdown.Item text='Heading 2' onClick={(e) => this.wrapText('## ')}/>
-                                    <Dropdown.Item text='Heading 3' onClick={(e) => this.wrapText('### ')}/>
-                                    <Dropdown.Item text='Heading 4' onClick={(e) => this.wrapText('#### ')}/>
+                                    <Dropdown.Item text='Heading 3' onClick={(e) => this.wrapText('##### ')}/>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Button onClick={(e) => this.wrapText('**', '**')} icon size="small" aria-label="Make selected text bold"><Icon name="bold" /></Button>
