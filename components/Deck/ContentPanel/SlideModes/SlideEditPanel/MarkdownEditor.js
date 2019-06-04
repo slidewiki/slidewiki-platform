@@ -14,6 +14,7 @@ import Util from '../../../../common/Util';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import { Button, Icon, Dropdown} from 'semantic-ui-react';
 import registerChange from '../../../../../actions/slide/registerChange';
+import ReactDOMServer from 'react-dom/server';
 
 
 let converter = new showdown.Converter();
@@ -129,6 +130,63 @@ class MarkdownEditor extends React.Component {
     setChanges = (value) => {
         this.context.executeAction(registerChange, { hasChanges: value });
     };
+
+    openCheatSheet = () => {
+        let dialogContent = <div style={{textAlign:'left', marginTop: 20}}>
+            <div className="ui grid">
+                <hr style={{width:'100%'}} />
+                <div className="eight wide column">
+                    <h4>Headings</h4>
+                    <ul>
+                        <li><strong>#</strong> Large heading</li>
+                        <li><strong>###</strong> Middle heading</li>
+                        <li><strong>#####</strong> Small heading</li>
+                    </ul>
+
+                    <h4>Lists</h4>
+                    <ul>
+                        <li>Unordered: <br /><ul><li><strong>* Item</strong></li><li><strong>* Item</strong></li></ul></li>
+                        <li>Ordered: <br /><ul><li><strong>1. Item</strong></li><li><strong>2. Item</strong></li></ul></li>
+                    </ul>
+                </div>
+                <div className="eight wide column">
+                    <h4>Text formatting</h4>
+                    <ul>
+                        <li><strong>**Strong**</strong></li>
+                        <li><strong>*Italic*</strong></li>
+                        <li><strong>__Underline__</strong></li>
+                        <li><strong>~~Strikethrough~~</strong></li>
+                    </ul>
+
+                    <h4>Miscellaneous</h4>
+                    <ul>
+                        <li>Link: <strong>[Link text](www.example.com)</strong></li>
+                        <li>Image: <strong>*[Alt description](www.example.com/img.png)</strong></li>
+                        <li>Quote: <strong>&gt; Text</strong></li>
+                        <li>Code block: <strong>&#96;Code&#96;</strong></li>
+                        <li>Horizontal line: <strong>---</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>;
+
+        swal({
+            title: 'Markdown cheat sheet',
+            html: ReactDOMServer.renderToStaticMarkup(dialogContent), //swal doesn't support jsx, so use React function to convert to HTML
+            //type: 'question',
+            confirmButtonText: 'Close',
+            confirmButtonClass: 'grey ui button',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            buttonsStyling: false,
+            showCloseButton: true,
+            showCancelButton: false,
+            width: 900,
+        })
+        .then(() => {
+            //nothing
+        });
+    }
     
     render() {
         const selector = this.props.selector || this.props.DeckTreeStore.selector;
@@ -151,7 +209,7 @@ class MarkdownEditor extends React.Component {
         return (
             <div ref='markdownEditor' id='markdownEditor' style={{minHeight: '500px'}}>
                 <div className="ui stackable equal width left aligned padded grid">
-                  <div className="row">
+                  <div className="row" style={{paddingBottom:5}}>
                     <div className="column form field ui">
                         <Button.Group>
                             <Dropdown button icon="heading" className="icon small" aria-label="Insert heading">
@@ -177,9 +235,13 @@ class MarkdownEditor extends React.Component {
                             <Button onClick={(e) => this.wrapText('> ',)} icon size="small" aria-label="Insert a quote block"><Icon name="quote left" /></Button>
                             <Button onClick={(e) => this.wrapText('`', '`')} icon size="small" aria-label="Insert a code block"><Icon name="code" /></Button>
                         </Button.Group>
+                        {' '}
+                        <Button.Group>
+                            <Button onClick={this.openCheatSheet} icon size="small" aria-label="Open the help guide"><Icon name="question circle" /></Button>
+                        </Button.Group>
                     </div>
                 </div>
-                <div className="row" style={{marginTop:-25}}>
+                <div className="row" style={{paddingTop:0}}>
                     <div className="column form field ui">
                         <textarea 
                             style={{fontFamily: 'Courier New', fontWeight:'bold', height:'100%', maxHeight: 'initial'}}
