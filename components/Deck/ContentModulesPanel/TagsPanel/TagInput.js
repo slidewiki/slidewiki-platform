@@ -37,7 +37,6 @@ class TagInput extends React.Component {
                 name: 'defaultName',
                 value: 'tagName'
             },
-            minCharacters: 1,
             allowAdditions: this.props.allowAdditions,
             hideAdditions: false,
             apiSettings:{
@@ -57,6 +56,12 @@ class TagInput extends React.Component {
 
                         callback(response);
                     });
+                }
+            },
+            onNoResults: () => {
+                // replace the text: 'no results found' is no search terms is entered yet
+                if ($(this.rootElement).find('input').val() === '') {
+                    $(this.rootElement).find('.menu .message').text('Start typing to find results');
                 }
             }
         });
