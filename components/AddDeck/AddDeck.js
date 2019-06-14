@@ -98,21 +98,21 @@ class AddDeck extends React.Component {
         if (!title) this.state.formValidationErrors.title = <FormattedMessage
             id='AddDeck.error.validation.title'
             defaultMessage='Specify a title.'
-            tagName='li'
+            tagName='span'
         />;
 
         // Validate language
         if (!language || language.length < 2) this.state.formValidationErrors.language = <FormattedMessage
             id='AddDeck.error.validation.language'
             defaultMessage='Specify a language.'
-            tagName='li'
+            tagName='span'
         />;
 
         // Validate T&Cs acceptance
         if (acceptedConditions === false) this.state.formValidationErrors.conditions = <FormattedMessage
             id='AddDeck.error.validation.conditions'
             defaultMessage='You must agree to the SlideWiki terms and conditions.'
-            tagName='li'
+            tagName='span'
         />;
 
         // Validate image rights declaration
@@ -120,7 +120,7 @@ class AddDeck extends React.Component {
             this.state.formValidationErrors.imagesLicence = <FormattedMessage
                 id='AddDeck.error.validation.imagesLicence'
                 defaultMessage='You must agree to the rights declaration.'
-                tagName='li'
+                tagName='span'
             />;
 
         // If there are no validation errors, then create the deck
@@ -357,6 +357,7 @@ class AddDeck extends React.Component {
         }
     }
     initializeProgressBar() {
+        $('#progressbar_addDeck_upload').show();
         $('#progressbar_addDeck_upload').progress('set active');
         $('#progressbar_addDeck_upload').progress('reset');
 
@@ -534,28 +535,30 @@ class AddDeck extends React.Component {
 
         return (
             <div className="ui vertically padded grid container">
-                <div className="sixteen wide column">
-                    <h3>
-                        <FormattedMessage
-                            id='AddDeck.form.heading'
-                            defaultMessage='Add a deck to SlideWiki' />
-                    </h3>
-                </div>
+                <h1 className="ui header" style={{marginTop: '1em'}}>
+                    <FormattedMessage
+                        id='AddDeck.form.heading'
+                        defaultMessage='Add a deck to SlideWiki' />
+                </h1>
+                
                 <div className="sixteen wide column">
                     <form className={formClasses}>
-                        <div className={fieldClass_title} ref="div_title" >
+                        <div className={fieldClass_title} ref="div_title">
                             <label htmlFor="title">
                                 <FormattedMessage
                                     id='AddDeck.form.label_title'
                                     defaultMessage='Title' />
                             </label>
-                            <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                            <input type="text" id="title" aria-required="true" ref="input_title" aria-invalid={this.state.formValidationErrors.title ? true : false} />
+                            {this.state.formValidationErrors.title ? 
+                                <span htmlFor="title" aria-labelledby="title" className="input-error">{this.state.formValidationErrors.title}</span> 
+                            : ''}
                         </div>
                         <div className="two fields">
                             <SWAutoComplete
                                 ref="div_languages"
                                 required={true}
-                                error={this.state.formValidationErrors.language}
+                                error={this.state.formValidationErrors.language ? true : false}
                                 label={<FormattedMessage
                                     id='AddDeck.form.label_language'
                                     defaultMessage='Language' />
@@ -567,6 +570,7 @@ class AddDeck extends React.Component {
                                     name: getLanguageDisplayName(s),
                                 }))}
                                 onChange={this.handleInputChange}
+                                errorMessage={this.state.formValidationErrors.language}
                             />
                             <div className="field" ref="div_themes" >
                                 <label htmlFor="themes">
@@ -633,23 +637,19 @@ class AddDeck extends React.Component {
                                     defaultMessage='You can upload existing slides to your new deck in the following file formats: PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files) and RevealJS slideshows (*.zip files).' />
                             </p>
                         </div>
-                        <div className="ui grid">
+                        <div className="ui field">
                             <div className="two column row">
-                                <div className="column">
+                                <span className="column">
                                     <ImportModal savetags={this.saveTags.bind(this)}/>
-                                </div>
-                                <div className="column" ref="div_filename">
+                                </span>
+                                <span ref="div_filename">
                                     {filename ? this.context.intl.formatMessage(form_messages.selected_message, { filename: filename }) : ''}
-                                </div>
+                                </span>
                             </div>
-                        </div>
-                        <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
-                            <div className="bar"/>
-                            <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"/>
                         </div>
                         <div className={fieldClass_conditions} >
                             <div className="ui checkbox" ref="div_conditions" >
-                                <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
+                                <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" aria-invalid={this.state.formValidationErrors.conditions ? true : false} />
                                 <label htmlFor="terms">
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
@@ -664,28 +664,27 @@ class AddDeck extends React.Component {
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
                                 </label>
                             </div>
+                            {this.state.formValidationErrors.conditions ? 
+                                <span htmlFor="title" aria-labelledby="terms" className="input-error">{this.state.formValidationErrors.conditions}</span> 
+                            : ''}
                         </div>
                         <div className={fieldClass_imageslicense} >
                             <div className="ui checkbox" ref="div_imageslicense" >
-                                <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
+                                <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" aria-invalid={this.state.formValidationErrors.imagesLicence ? true : false} />
                                 <label htmlFor="termsimages">
                                     <FormattedMessage
                                         id='AddDeck.form.label_termsimages'
                                         defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
                                 </label>
                             </div>
+                            {this.state.formValidationErrors.imagesLicence ? 
+                                <span htmlFor="title" aria-labelledby="termsimages" className="input-error">{this.state.formValidationErrors.imagesLicence}</span> 
+                            : ''}
                         </div>
-                        <Message
-                            error
-                            header={this.context.intl.formatMessage({
-                                id: 'AddDeck.error.validation',
-                                defaultMessage: 'We found some problems'
-                            })}
-                            list={Object.values(this.state.formValidationErrors)}
-                            role="region"
-                            aria-live="polite"
-                            visible={Object.values(this.state.formValidationErrors).length > 0}
-                        />
+                        <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" style={{display:'none'}}>
+                            <div className="bar"/>
+                            <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"/>
+                        </div>
                         <div className="ui buttons">
                             <div className={btnClasses_submit} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
                                 {this.context.intl.formatMessage(form_messages.button_create)}

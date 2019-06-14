@@ -45,10 +45,10 @@ class SWAutoComplete extends React.Component {
         options: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.string,
             value: PropTypes.string,
-            icon: PropTypes.instanceOf([Icon, Flag]),
+            icon: PropTypes.element, //instanceOf([Icon, Flag])
         })).isRequired,
         /** Label to be rendered with the component. */
-        label: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(FormattedMessage)]),
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
         /** A placeholder that should be rendered in the <input>. */
         placeholder: PropTypes.string,
         /** Whether the element is in an error state. */
@@ -63,6 +63,8 @@ class SWAutoComplete extends React.Component {
         ariaDescription: PropTypes.string,
         /** The width in columns of the Component. */
         width: PropTypes.string,
+        /** Error message */
+        errorMessage: PropTypes.element,
     };
 
     // When new props are set, this update the state and changes the item selected in Downshift.
@@ -137,6 +139,7 @@ class SWAutoComplete extends React.Component {
                           selectedItem,
                           inputValue,
                           highlightedIndex,
+                          id,
                       }) => (
                         <div>
                             <Label {...getLabelProps()}>{this.props.label}</Label>
@@ -148,6 +151,8 @@ class SWAutoComplete extends React.Component {
                                         autoComplete: 'nope'
                                     })}
                                     aria-describedby={(describedBy ? describedBy.props.id : null)}
+                                    aria-required={this.props.required}
+                                    aria-invalid={this.props.error}
                                 />
                                 {selectedItem ? (
                                     <ControllerButton
@@ -181,6 +186,10 @@ class SWAutoComplete extends React.Component {
                                         : <span></span>}
                                 </BaseMenu>
                             </div>
+                            {this.props.errorMessage ? 
+                                <span aria-labelledby={id + '-input'} className="input-error">
+                                    {this.props.errorMessage}
+                                </span> : ''}
                         </div>
                     )}
                 </Downshift>

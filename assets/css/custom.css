@@ -322,3 +322,10 @@ div#embedModal .fields>label {
         content: '*';
         color: #c42424;
     }
+
+.ui.form .input-error {
+  font-size:90%;
+  color:#991c1c;
+  margin-top:3px;
+  display:block;
+}
