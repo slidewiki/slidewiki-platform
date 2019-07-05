@@ -1322,6 +1322,7 @@
   "SearchPanel.filters.tags.title": "Tags",
   "SearchPanel.filters.tags.placeholder": "Select Tags",
   "SearchPanel.button.submit": "Submit",
+  "search.advanceoptions": "Advanced Options",
   "DeckFilter.Tag.Topic": "Subject",
   "DeckFilter.Education": "Education Level",
   "Facets.languagesFacet": "Languages",
