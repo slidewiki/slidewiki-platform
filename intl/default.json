@@ -1287,6 +1287,7 @@
   "reportModal.send_swal_error_button": "Close",
   "HeaderSearchBox.placeholder": "Search",
   "searchbox.placeholder": "Search for decks or people",
+  "headerSearchbox.placeholder": "Search...",
   "KeywordsInputWithFilter.allContentOption": "All Content",
   "KeywordsInputWithFilter.titleOption": "Title",
   "KeywordsInputWithFilter.descriptionOption": "Description",

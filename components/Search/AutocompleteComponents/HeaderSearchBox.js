@@ -119,6 +119,10 @@ class HeaderSearchBox extends React.Component {
             searchbox:{
                 id: 'searchbox.placeholder',
                 defaultMessage: 'Search for decks or people'
+            },
+            headerSearchbox:{
+                id: 'headerSearchbox.placeholder',
+                defaultMessage: 'Search...'
             }
         });
         if (this.props.type === 'home') {
@@ -144,7 +148,7 @@ class HeaderSearchBox extends React.Component {
             return (
                 <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}} aria-label={this.context.intl.formatMessage(this.messages.placeholder)} >
                     <label htmlFor="searchString" hidden><FormattedMessage {...this.messages.placeholder} /></label>
-                    <input type="text" placeholder="Search..." ref="searchString" id="searchString" value={this.state.searchString} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt sw-searchbox" />
+                    <input type="text" placeholder={this.context.intl.formatMessage(messages.headerSearchbox)} ref="searchString" id="searchString" value={this.state.searchString} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt sw-searchbox" />
                     <i className="search link icon" onClick={this.handleRedirect.bind(this)}/>
                     <div className="results"/>
                 </div>
