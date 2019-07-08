@@ -121,7 +121,7 @@ class Footer extends React.Component {
                                     <div className='footer-right'>
                                     <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.funding)}</h3>
                                     <p>{this.context.intl.formatMessage(messages.fundingtext)}</p>
-                                    <p>{this.context.intl.formatMessage(messages.copyright)}<br/> Build GIT_COMMIT&#64;GIT_BRANCH</p>
+                                    <p>{this.context.intl.formatMessage(messages.copyright)}<br/>Version GIT_VERSION - Build GIT_COMMIT&#64;GIT_BRANCH</p>
                                    {/*
                                     <div className='social-link'>
                                         <ul>
