@@ -329,6 +329,8 @@
   "uploadMediaModal.cancel_button": "Cancel",
   "uploadMediaModal.background_aria": "Use as background image?",
   "uploadMediaModal.background_message1": "Use as background image?",
+  "activity.feed.title": "Activity Feed",
+  "activity.feed.not_exist.text": "There are currently no activities for this",
   "CollectionsList.partOfPlaylists": "This deck is part of the following playlists",
   "CollectionsListItem.removeTooltip": "Remove",
   "CollectionsListItem.removeAria": "Remove current deck from collection",

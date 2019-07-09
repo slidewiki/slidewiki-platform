@@ -5,6 +5,8 @@ import ReactList from 'react-list';
 import loadMoreActivities from '../../../actions/activityfeed/loadMoreActivities';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import {connectToStores} from 'fluxible-addons-react';
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 
 class ActivityList extends React.Component {
     renderItem(index, key) {
@@ -41,7 +43,13 @@ class ActivityList extends React.Component {
             <div ref="activityList">
                 {(this.props.ActivityFeedStore.activities.length === 0)
                 ?
-                <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
+                <div>
+                <FormattedMessage
+                    id='activity.feed.not_exist.text'
+                    defaultMessage='There are currently no activities for this '
+                />
+                {this.props.ActivityFeedStore.selector.stype}.
+                </div>
                 :
                 <ReactList ref="infiniteList" className="ui list"
                     itemRenderer={this.renderItem.bind(this)}
