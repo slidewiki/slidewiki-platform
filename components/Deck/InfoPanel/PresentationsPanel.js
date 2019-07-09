@@ -13,6 +13,8 @@ import { makeNodeURL } from '../../common/Util';
 import { isLocalStorageOn } from '../../../common.js';
 import { Microservices } from '../../../configs/microservices';
 
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 class PresentationsPanel extends React.Component {
 
     openChooseASessionModal(e){
@@ -159,20 +161,33 @@ class PresentationsPanel extends React.Component {
         else
             toReturn = <div ref="presentationPanel">
                 <div className="ui basic segment" style={panelDIVStyles}>
-                    <h4 className="ui  header">Live Sessions</h4>
+                    <h4 className="ui  header">
+                        <FormattedMessage
+                            id='liveSessions.title'
+                            defaultMessage='Live Sessions'
+                        />
+                    </h4>
                     <Grid columns={2}>
                       <Grid.Column width={4}>
                         <Popup trigger={<Button icon onClick={this.openChooseASessionModal.bind(this)} aria-label="Create a live session"><Icon name="record" size="large"/></Button>} content='Create a live session (beta)' />
                       </Grid.Column>
                       <Grid.Column width={12}>
-                        Create a live session for this deck and invite participants
+                        <FormattedMessage
+                            id='liveSessions.creation.text'
+                            defaultMessage='Create a live session for this deck and invite participants'
+                        />
                       </Grid.Column>
                     </Grid>
                     <Divider />
                     <div ref="presentationList">
                         {(this.props.ActivityFeedStore.presentations.length < 1)
                             ?
-                            <div>There are currently no live sessions for this deck</div>
+                            <div>
+                                <FormattedMessage
+                                    id='liveSessions.not_exist.text'
+                                    defaultMessage='There are currently no live sessions for this deck'
+                                />                            
+                            </div>
                             :
                             <ReactList ref="infiniteList" className="ui list"
                                 itemRenderer={this.renderItem.bind(this)}
