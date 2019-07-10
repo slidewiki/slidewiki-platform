@@ -814,7 +814,7 @@ class PaintModal extends React.Component {
                 this.handleOpen();
             }
         }
-    }
+    };
 
     render() {
         this.context.getUser().username;
