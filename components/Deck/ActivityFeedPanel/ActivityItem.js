@@ -8,6 +8,7 @@ import cheerio from 'cheerio';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Util from '../../common/Util';
 import {getLanguageName} from '../../../common';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -57,7 +58,15 @@ class ActivityItem extends React.Component {
         };
         const cheerioContentName = (node.content_name) ? cheerio.load(node.content_name).text() : '';
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
-        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span>{'this ' + node.content_kind}</span>) : (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
+        let nodeRef = '';
+
+        if (node.content_kind === 'deck') {
+            nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span><FormattedMessage id='activity.feed.item.thisdeck' defaultMessage='this deck'/></span>) : (<span><FormattedMessage id='activity.feed.item.deck' defaultMessage='deck'/> <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
+        } else if (node.content_kind === 'slide') {
+            nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span><FormattedMessage id='activity.feed.item.thisslide' defaultMessage='this slide'/></span>) : (<span><FormattedMessage id='activity.feed.item.slide' defaultMessage='slide'/> <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
+        } else {
+            nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span>{'this ' + node.content_kind}</span>) : (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
+        }
 
         if (node.user_id === '0'|| node.user_id === 'undefined') {
             node.user_id = undefined;
@@ -69,7 +78,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'translated '} {nodeRef} {' to '}
+                        </a> <FormattedMessage id='activity.feed.item.translated' defaultMessage='translated'/> {nodeRef} <FormattedMessage id='activity.feed.item.to' defaultMessage='to'/>
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
                         {getLanguageName(node.translation_info.language)}
                         <br/>
@@ -84,7 +93,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'shared '} {nodeRef} {onPlatform}
+                        </a> <FormattedMessage id='activity.feed.item.shared' defaultMessage='shared'/> {nodeRef} {onPlatform}
                         <br/>
                         {DateDiv}
                     </div>
@@ -96,7 +105,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'created '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.created' defaultMessage='created'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -108,7 +117,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'edited '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.edited' defaultMessage='edited'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -120,7 +129,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'moved '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.moved' defaultMessage='moved'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -132,7 +141,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'commented on '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.commented' defaultMessage='commented on'/> {nodeRef}
                         <br/>
                         <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
                         <br/>
@@ -147,7 +156,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
                         </a>
-                        <span> replied to a comment </span>{'on ' } {nodeRef}
+                        <span> <FormattedMessage id='activity.feed.item.reply' defaultMessage='replied to a comment on'/>  </span> {nodeRef}
                         <br/>
                         <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
                         <br/>
@@ -162,8 +171,8 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'used '} {nodeRef}
-                        {' in deck '}<a href={'/deck/' + node.use_info.target_id}>{title}</a>
+                        </a> <FormattedMessage id='activity.feed.item.used' defaultMessage='used'/> {nodeRef}
+                        <FormattedMessage id='activity.feed.item.indeck' defaultMessage='in deck'/> <a href={'/deck/' + node.use_info.target_id}>{title}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -175,7 +184,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'attached '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.attached' defaultMessage='attached'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -187,7 +196,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'rated '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.rated' defaultMessage='rated'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -199,7 +208,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ?node.author.displayName ||  node.author.username : 'unknown'}
-                        </a> {'liked '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.liked' defaultMessage='liked'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -211,7 +220,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'downloaded '} {nodeRef}
+                        </a> <FormattedMessage id='activity.feed.item.downloaded' defaultMessage='downloaded'/> {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -224,7 +233,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> {'forked '}{nodeRef}{forkRef}
+                        </a> <FormattedMessage id='activity.feed.item.forked' defaultMessage='forked'/> {nodeRef}{forkRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -238,9 +247,9 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.displayName || node.author.username : 'unknown'}
-                        </a> <span>{'deleted ' + node.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}</span>
+                        </a> <span> <FormattedMessage id='activity.feed.item.deleted' defaultMessage='deleted'/> {node.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}</span>
                         <br/>
-                        <span>{'from '} {nodeRef}</span>
+                        <span><FormattedMessage id='activity.feed.item.from' defaultMessage='from'/> {nodeRef}</span>
                         <br/>
                         {DateDiv}
                     </div>
