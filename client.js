@@ -47,7 +47,7 @@ function renderApp(locale, messages) {
         const mountNode = document.getElementById('app');
 
         const Root = app.getComponent();
-        ReactDOM.render(
+        ReactDOM.hydrate(
             <IntlProvider locale={locale} messages={messages}>
                 <Root context={ context.getComponentContext() } />
             </IntlProvider>,

@@ -40,9 +40,9 @@ let webpackConfig = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: [
-                    {
+                    /*{
                         loader: 'react-hot-loader'
-                    },
+                    },*/
                     {
                         loader: 'babel-loader'
 

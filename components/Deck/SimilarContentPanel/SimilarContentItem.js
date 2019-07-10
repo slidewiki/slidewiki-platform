@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import slugify from 'slugify';
 import {Microservices} from '../../../configs/microservices';
@@ -81,6 +82,6 @@ class SimilarContentItem extends React.Component {
     }
 }
 SimilarContentItem.contextTypes = {
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 export default SimilarContentItem;
