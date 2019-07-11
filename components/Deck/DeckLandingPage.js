@@ -27,6 +27,7 @@ import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
 import slugify from 'slugify';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class DeckLandingPage extends React.Component {
 
@@ -202,7 +203,7 @@ class DeckLandingPage extends React.Component {
                                     <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                         <CCBYSA size='small' />
                                     </a>
-                                    This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                    <FormattedMessage id='deck.landingpage.license_text' defaultMessage='This work is licensed under'/> <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
                                 </Segment>
                             </Grid.Column>
                         </Grid>
@@ -415,7 +416,7 @@ class DeckLandingPage extends React.Component {
                             <Grid divided='vertically' stackable>
                                 <Grid.Column only="tablet computer" width={12}>
                                     <Segment attached='top' >
-                                        <Header size="small" as="h3">Available in the following languages:</Header>
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.available_languages.text' defaultMessage='Available in the following languages'/>:</Header>
                                         { deckLanguages.map((lang, i) =>
                                             <span key={i}>
                                                 {!!i && ',\xa0'}
@@ -442,7 +443,7 @@ class DeckLandingPage extends React.Component {
                                         <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                             <CCBYSA size='small' />
                                         </a>
-                                        This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                        <FormattedMessage id='deck.landingpage.license_text' defaultMessage='This work is licensed under'/> <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
                                     </Segment>
                                 </Grid.Column>
                             </Grid>

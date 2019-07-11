@@ -700,6 +700,8 @@
   "SlideTranslationsModal.translate": "Translate slide",
   "SlideTranslationsModal.originLanguage": "Original Language:",
   "SlideTranslationsModal.switchSR": "Start a new slide translation",
+  "deck.landingpage.license_text": "This work is licensed under",
+  "deck.available_languages.text": "Available in the following languages",
   "InfoPanelInfoView.selectLanguage": "Select language",
   "Stats.deckUserStatsTitle": "User Activity",
   "InfoPanelInfoView.licenseLogo.alt": "Creative Commons License logo",
