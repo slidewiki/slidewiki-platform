@@ -428,11 +428,11 @@ class DeckLandingPage extends React.Component {
                                         ) }
                                     </Segment>
                                     <Segment attached>
-                                        <Header size="small" as="h3">Tags:</Header>
-                                        {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.tags.text' defaultMessage='Tags'/>:</Header>
+                                        {(deckTags.length === 0) ? <div><FormattedMessage id='deck.tags.not_available' defaultMessage='There are no tags assigned to this deck.'/></div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
                                     <Segment attached='bottom'>
-                                        <Header size="small" as="h3">You may also be interested in:</Header>
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.other_interesting.text' defaultMessage='You may also be interested in'/>:</Header>
                                         {interestedInDecks}
                                     </Segment>
                                 </Grid.Column>
