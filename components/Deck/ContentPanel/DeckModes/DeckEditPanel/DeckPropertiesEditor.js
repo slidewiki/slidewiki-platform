@@ -535,7 +535,7 @@ class DeckPropertiesEditor extends React.Component {
         </div>;
 
         return (
-            <div className="ui container">
+            <div className="ui container segment">
                 <div className="ui grid">
                     <div className="sixteen wide column">
                         <form className="ui form">

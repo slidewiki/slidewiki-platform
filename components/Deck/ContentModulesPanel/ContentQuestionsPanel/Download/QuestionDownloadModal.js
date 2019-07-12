@@ -129,13 +129,22 @@ class QuestionDownloadModal extends React.Component{
                 defaultMessage: 'Cancel',
             }
         });
-        let downloadBtn = <Button id="embedQuestions" color="green" icon tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(form_messages.download_aria)} data-tooltip={this.context.intl.formatMessage(form_messages.download_tooltip)} disabled={this.state.downloadQuestions.length===0} onClick={this.handleDownloadButton}>
-            <Icon name="download"/>
-                <FormattedMessage
-                    id='QuestionDownloadModal.form.download_text'
-                    defaultMessage='Download' />
-            <Icon name="download"/>
-        </Button>; //download button to actually download questions
+
+        let downloadBtn = <Button 
+            id="embedQuestions" 
+            size="small" 
+            color="green" 
+            tabIndex="0" 
+            type="button" 
+            aria-label={this.context.intl.formatMessage(form_messages.download_aria)} 
+            data-tooltip={this.context.intl.formatMessage(form_messages.download_tooltip)} 
+            disabled={this.state.downloadQuestions.length===0} 
+            onClick={this.handleDownloadButton}
+        >
+            <FormattedMessage
+                id='QuestionDownloadModal.form.download_text'
+                defaultMessage='Download' />
+        </Button>; 
         
         let modalDescription =  <TextArea className="sr-only" id="downloadQuestionsDescription" value={this.context.intl.formatMessage(form_messages.modal_description)} tabIndex ='-1'/>;
 
@@ -143,9 +152,8 @@ class QuestionDownloadModal extends React.Component{
         let actionButton = downloadBtn;
         let actionButton2='';
 
-        let downloadModalBtn = <a  className="ui right floated compact button primary" id="handleDownloadQuestionsModal" role="button" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleDownloadQuestionsClick')} tabIndex='0'>
-        <i className="small download icon"/>
-        <FormattedMessage id='questionpanel.handleDownloadQuestionsClick' defaultMessage='Download questions' />
+        let downloadModalBtn = <a  className="ui right floated small button primary" id="handleDownloadQuestionsModal" role="button" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleDownloadQuestionsClick')} tabIndex='0'>
+            <FormattedMessage id='questionpanel.handleDownloadQuestionsClick' defaultMessage='Download questions' />
         </a>;
 
         return (
@@ -184,7 +192,7 @@ class QuestionDownloadModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button id="cancelDownloadModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip={this.context.intl.formatMessage(form_messages.button_cancel)} onClick={this.handleClose} >
+                              <Button id="cancelDownloadModal" size="small" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip={this.context.intl.formatMessage(form_messages.button_cancel)} onClick={this.handleClose} >
                                   {this.context.intl.formatMessage(form_messages.button_cancel)}
                               </Button>
                             </Modal.Actions>

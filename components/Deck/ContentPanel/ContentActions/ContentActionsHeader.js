@@ -441,22 +441,37 @@ class ContentActionsHeader extends React.Component {
                     ] }
                             {
                                 this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
-                                    <button className="ui icon button" onClick={this.zoomOut}
-                                            key="zoomOut"
-                                            type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                    <button 
+                                        className="ui icon button" 
+                                        onClick={this.zoomOut}
+                                        key="zoomOut"
+                                        type="button" 
+                                        aria-label="Zoom out" 
+                                        data-tooltip="Zoom out"
+                                    >
                                         <i className="large zoom out icon"></i>
                                     </button>,
-                                    <button className="ui button" onClick={this.resetZoom}
-                                            key="zoomReset"
-                                            type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                    <button 
+                                        className="ui button" 
+                                        onClick={this.resetZoom}
+                                        key="zoomReset"
+                                        type="button" 
+                                        aria-label="Reset zoom" 
+                                        data-tooltip="Reset zoom"
+                                    >
                                         <i className="large stacked icons">
                                             <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
                                             <i className="search icon"></i>
                                         </i>
                                     </button>,
-                                    <button className="ui icon button" onClick={this.zoomIn}
-                                            key="zoomIn"
-                                            type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                    <button 
+                                        className="ui icon button" 
+                                        onClick={this.zoomIn}
+                                        key="zoomIn"
+                                        type="button" 
+                                        aria-label="Zoom in" 
+                                        data-tooltip="Zoom in"
+                                    >
                                         <i className="large zoom in icon"></i>
                                     </button>
                                 ] : null

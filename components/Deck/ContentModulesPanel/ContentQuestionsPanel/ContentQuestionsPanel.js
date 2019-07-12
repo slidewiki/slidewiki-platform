@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {navigateAction} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
+import { navigateAction } from 'fluxible-router';
+import { connectToStores } from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
@@ -19,7 +19,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 
 class ContentQuestionsPanel extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             pageNo: props.ContentModulesStore.selector.pageNum
@@ -64,15 +64,15 @@ class ContentQuestionsPanel extends React.Component {
     handleAddButtonClick() {
         this.context.executeAction(invertAddQuestionBoxFlag, {});
     }
-    
+
     handleExamListButtonClick() {
         this.context.executeAction(invertExamListFlag, {});
     }
-    
+
     resetExamAnswers() {
         this.context.executeAction(resetExamAnswers, {});
     }
-    
+
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const selector = this.props.ContentQuestionsStore.selector;
@@ -82,21 +82,19 @@ class ContentQuestionsPanel extends React.Component {
 
         // Button bar differs for Slide and Folder
         let buttonBar = '';
-        switch(selector.stype) {
+        switch (selector.stype) {
             case 'slide':
                 buttonBar = '';
                 break;
             case 'deck':
                 buttonBar = (userId !== '' && questions.length > 0) ? (
-                    <div className='ui buttons'>
-                        <a href={'/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid} target="_blank" tabIndex="-1">
-                            <button className='ui button blue' onClick={this.resetExamAnswers.bind(this)}>
-                                <i className='clipboard outline icon' />
-                                <FormattedMessage
-                                    id='ContentQuestionsPanel.form.button_exam'
-                                    defaultMessage='Exam mode' />
-                            </button>
+                    <div>
+                        <a className="ui button blue small right floated" onClick={this.resetExamAnswers.bind(this)} href={'/exam/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid} target="_blank" tabIndex="-1">
+                            <FormattedMessage
+                                id='ContentQuestionsPanel.form.button_exam'
+                                defaultMessage='Exam mode' />
                         </a>
+                        <div className="ui section divider clearing hidden"></div>
                     </div>
                 ) : '';
                 break;
@@ -112,8 +110,7 @@ class ContentQuestionsPanel extends React.Component {
         });
 
         let examQuestionsButton = (questions.length > 0 && this.props.ContentModulesStore.selector.stype === 'deck') ?
-            <button className="ui right floated compact button primary" onClick={this.handleExamListButtonClick.bind(this)}>
-                <i className="small check icon" />
+            <button className="ui right floated small button primary" onClick={this.handleExamListButtonClick.bind(this)}>
                 <FormattedMessage
                     id='ContentQuestionsPanel.form.button_select'
                     defaultMessage='Select exam questions' />
@@ -121,21 +118,20 @@ class ContentQuestionsPanel extends React.Component {
 
 
         let addQuestionButton =
-            <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
-                <i className="small plus icon"/>
+            <button className="ui right floated small button primary" onClick={this.handleAddButtonClick.bind(this)}>
                 <FormattedMessage
                     id='ContentQuestionsPanel.form.button_add'
                     defaultMessage='Add question' />
             </button>
-        ;
+            ;
 
-        let downloadQuestionsButton = (questions.length > 0) ? <QuestionDownloadModal />: '';
+        let downloadQuestionsButton = (questions.length > 0) ? <QuestionDownloadModal /> : '';
 
         let editButtons = (editPermission) ? <div>
-                {addQuestionButton}
-                {examQuestionsButton}
-                {downloadQuestionsButton}
-            </div>
+            {addQuestionButton}
+            {examQuestionsButton}
+            {downloadQuestionsButton}
+        </div>
             : '';
 
 
@@ -157,29 +153,24 @@ class ContentQuestionsPanel extends React.Component {
             }
             return null;
         };     */
-       
+
         let questionsHeader = (
-            <div className="ui segment attached">
-                <div className="ui bottom attached">
-                    <div>
-                        <div className="ui vertical segment">
-                            <div className="ui stackable grid"> 
-                                <div className="four wide column">
-                                    <h3 className="ui header">
-                                    
-                                        <FormattedMessage
-                                            id='ContentQuestionsPanel.form.questions_header'
-                                            defaultMessage='Questions' />
-                                    </h3>
-                                </div>
-                                <div className="twelve wide column right aligned">
-                                    {editButtons}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div>
+
+                <h3 className="ui header left floated">
+                    <FormattedMessage
+                        id='ContentQuestionsPanel.form.questions_header'
+                        defaultMessage='Questions' />
+                </h3>
+
+                <div className="twelve wide column right aligned">
+                    {editButtons}
                 </div>
-            </div>
+
+                <div className="ui section divider clearing"></div>
+
+                {buttonBar}
+            </div >
         );
 
         // class PaginationItem extends React.Component {
@@ -228,10 +219,10 @@ class ContentQuestionsPanel extends React.Component {
         //         </a>
         //     </div>
         // );
-        let questionsList = (<ContentQuestionsList items={visibleQuestions} selector={selector} editPermission={editPermission}/>);
+        let questionsList = (<ContentQuestionsList items={visibleQuestions} selector={selector} editPermission={editPermission} />);
         let examQuestionsList = (<ExamQuestionsList items={questions} selector={selector} />);
         let questionAdd = (<ContentQuestionAdd selector={this.props.selector} userId={userId} />);
-        let questionEdit = (<ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId}/>);
+        let questionEdit = (<ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId} />);
         const form_messages = defineMessages({
             no_questions: {
                 id: 'ContentQuestionsPanel.form.no_questions',
@@ -240,7 +231,7 @@ class ContentQuestionsPanel extends React.Component {
         });
         let content = (
             <div>
-                {buttonBar}
+                
                 {questionsHeader}
                 {visibleQuestions.length === 0 ? this.context.intl.formatMessage(form_messages.no_questions) + ' ' + selector.stype + '.' : questionsList}
                 {/* {pagination} */}
@@ -249,7 +240,7 @@ class ContentQuestionsPanel extends React.Component {
 
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
-                { this.props.ContentQuestionsStore.showAddBox ? questionAdd : this.props.ContentQuestionsStore.question ? questionEdit : this.props.ContentQuestionsStore.showExamList ? examQuestionsList : content }
+                {this.props.ContentQuestionsStore.showAddBox ? questionAdd : this.props.ContentQuestionsStore.question ? questionEdit : this.props.ContentQuestionsStore.showExamList ? examQuestionsList : content}
             </div>
         );
     }

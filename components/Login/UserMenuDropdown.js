@@ -10,8 +10,44 @@ import UserNotificationsStore from '../../stores/UserNotificationsStore';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 import AriaMenuButton from 'react-aria-menubutton';
 import {FormattedMessage, defineMessages} from 'react-intl';
-
 import {Microservices} from '../../configs/microservices';
+import styled from 'styled-components';
+
+const ButtonStyled = styled(AriaMenuButton.Button)`
+    cursor: pointer;
+    transition: 0.2s background;
+    background:#1e78bb;
+    margin:-3px 0;
+
+    &:hover {
+        background:#18659f;
+    }
+`;
+
+const NotificationLabel = styled.div`
+    border-radius:50px;
+    width:25px;
+    height:25px;
+    margin-top:4px!important;
+`;
+
+const NotificationLabelInline = styled.div`
+    margin: -3px 2px!important;
+`;
+
+const InnerButton = styled.div`
+    display:inline-flex;
+    margin:3px 5px;
+`;
+
+const MenuItemStyled = styled(AriaMenuButton.MenuItem)`
+    cursor: pointer;
+    transition: 0.2s background;
+
+    &:hover {
+        background: #f4f4f4!important;
+    }
+`;
 
 class UserMenuDropdown extends React.Component {
     constructor(props){
@@ -43,9 +79,6 @@ class UserMenuDropdown extends React.Component {
             this.context.executeAction(navigateAction, {url: value});
 
     }
-
-
-
 
     render() {
         const messages = defineMessages({
@@ -96,23 +129,24 @@ class UserMenuDropdown extends React.Component {
         });
 
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
-        const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
-        const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" style={{'marginTop':'0.5em'}}/>) : '';
-
+        const notificationCount = this.props.UserNotificationsStore.newNotificationsCount;
+        const alarmClassName = (notificationCount > 0) ? 'alarm red icon' : 'alarm outline icon';
+        
         return(
             <AriaMenuButton.Wrapper
               onSelection={this.onHandleSelection}>
-               <AriaMenuButton.Button aria-label='User menu' className="sw-usermenu">
-                <div style={{'display': 'inline-flex'}} >
+               <ButtonStyled aria-label='User menu' className="sw-usermenu">
+                <InnerButton>
                  <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
-                  {alarmIcon}
+                  <NotificationLabel className="ui label pink circular">{notificationCount}</NotificationLabel>
                   <i className="ui caret down icon" style={{'marginTop':'0.5em'}}></i>
-                 </div>
+                  
+                 </InnerButton>
 
-               </AriaMenuButton.Button>
+               </ButtonStyled>
                <AriaMenuButton.Menu className='ui menu vertical'
                 style={{'position':'absolute', 'zIndex':'3', 'right':'0px', 'display': 'flex !important'}} >
-                  <AriaMenuButton.MenuItem
+                  <MenuItemStyled
                    className='item'
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username}
@@ -121,8 +155,8 @@ class UserMenuDropdown extends React.Component {
                    <span style={{color:'black'}}>
                    <i className="user icon link"  aria-hidden={true} />{<FormattedMessage{...messages.decks} />}
                    </span>
-                  </AriaMenuButton.MenuItem>
-                  <AriaMenuButton.MenuItem
+                  </MenuItemStyled>
+                  <MenuItemStyled
                    className='item'
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/playlists'}
@@ -130,8 +164,8 @@ class UserMenuDropdown extends React.Component {
                    <span style={{color:'black'}}>
                    <i className="grid layout icon"  aria-hidden={true} />{<FormattedMessage{...messages.playlists} />}
                    </span>
-                  </AriaMenuButton.MenuItem>
-                  <AriaMenuButton.MenuItem
+                  </MenuItemStyled>
+                  <MenuItemStyled
                    className='item'
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}
@@ -139,8 +173,8 @@ class UserMenuDropdown extends React.Component {
                    <span style={{color:'black'}}>
                    <i className="icon users" aria-hidden={true} />{<FormattedMessage{...messages.groups} />} 
                    </span>
-                  </AriaMenuButton.MenuItem>
-                  <AriaMenuButton.MenuItem
+                  </MenuItemStyled>
+                  <MenuItemStyled
                    className="item"
                    tag='li'
                    value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}
@@ -148,9 +182,9 @@ class UserMenuDropdown extends React.Component {
                     <span style={{color:'black'}}>
                    <i className="setting icon" aria-hidden={true} />{<FormattedMessage{...messages.settings} />}
                    </span>
-                  </AriaMenuButton.MenuItem>
+                  </MenuItemStyled>
                   { Microservices.analytics &&
-                    <AriaMenuButton.MenuItem
+                    <MenuItemStyled
                      className="item"
                      tag='li'
                      value={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}
@@ -158,18 +192,18 @@ class UserMenuDropdown extends React.Component {
                      <span style={{color:'black'}}>
                      <i className="icon chart bar" aria-hidden={true} />Analytics
                      </span>
-                    </AriaMenuButton.MenuItem>
+                    </MenuItemStyled>
                   }
-                  <AriaMenuButton.MenuItem
+                  <MenuItemStyled
                    className="item"
                    tag='li'
                    value={'/notifications'}
                    text={this.context.intl.formatMessage(messages.myNotifications)}>
                    <span style={{color:'black'}}>
-                   <i className={alarmClassName} aria-hidden={true} />{<FormattedMessage{...messages.notifications}/>}
+                   <i className={alarmClassName} aria-hidden={true} />{<FormattedMessage{...messages.notifications}/>} <NotificationLabelInline className="ui label pink circular">{notificationCount}</NotificationLabelInline>
                    </span>
-                  </AriaMenuButton.MenuItem>
-                  <AriaMenuButton.MenuItem
+                  </MenuItemStyled>
+                  <MenuItemStyled
                    className="item"
                    tag='li'
                    value={'logout'}
@@ -177,7 +211,7 @@ class UserMenuDropdown extends React.Component {
                    <span style={{color:'black'}}>
                     <i className="sign out icon" aria-hidden={true} />{<FormattedMessage{...messages.signout}/>}
                     </span>
-                  </AriaMenuButton.MenuItem>
+                  </MenuItemStyled>
                 </AriaMenuButton.Menu>
             </AriaMenuButton.Wrapper>
         );

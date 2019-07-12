@@ -88,6 +88,9 @@
   -webkit-box-shadow: 0 0 0 2px #5E9ACF inset;
           box-shadow: 0 0 0 2px #5E9ACF inset;
 }
+.ui.menu.pointing .item {
+  font-weight: 600;
+}
 
 
 /*******************************

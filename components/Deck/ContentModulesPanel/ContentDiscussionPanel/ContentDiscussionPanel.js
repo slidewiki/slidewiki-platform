@@ -25,8 +25,7 @@ class ContentDiscussionPanel extends React.Component {
         let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
             (<AddComment selector={selector} />)
             :
-            (<button tabIndex="0" className="ui blue labeled icon button" onClick={this.handleInvertCommentBox.bind(this)}>
-                <i className="icon plus"></i> 
+            (<button tabIndex="0" className="ui blue button small right floated" onClick={this.handleInvertCommentBox.bind(this)}>
                 <FormattedMessage
                     id='ContentDiscussionPanel.form.button_add'
                     defaultMessage='Add comment' />
@@ -34,12 +33,16 @@ class ContentDiscussionPanel extends React.Component {
 
         return (
             <div className="ui comments" style={{maxWidth: 'none'}}>
-                { (String(this.props.UserProfileStore.userid) !== '') ? addComment : ''}
-                <h3 className="ui dividing header">
+                <h3 className="ui header floated left">
                     <FormattedMessage
                         id='ContentDiscussionPanel.form.comments'
                         defaultMessage='Comments' />
                 </h3>
+
+                { (String(this.props.UserProfileStore.userid) !== '') ? addComment : ''}
+
+                <div className="ui section divider clearing"></div>
+
                 {(this.props.ContentDiscussionStore.discussion.length === 0) ?
                     <div>{this.context.intl.formatMessage(form_messages.no_comments) + ' ' + selector.stype}.</div>
                     :

@@ -29,8 +29,7 @@ class DataSourcePanel extends React.Component {
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
         let newDataSourceButton = (editPermission) ?
-            <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
-                <i className="icon plus"></i>
+            <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue button right floated small">
                 <FormattedMessage
                     id='DataSourcePanel.form.button_add'
                     defaultMessage='Add source' />
@@ -38,7 +37,7 @@ class DataSourcePanel extends React.Component {
             : '';
 
         let sourcesHeader = (
-            <h3 className="ui dividing header">
+            <h3 className="ui header left floated">
                 <FormattedMessage
                     id='DataSourcePanel.form.header'
                     defaultMessage='Sources' />
@@ -68,12 +67,14 @@ class DataSourcePanel extends React.Component {
 
         return (
             <div className="ui bottom attached" ref="dataSourcePanel">
-                {(dataSource === undefined) ?
-                    newDataSourceButton : ''}
-                {(dataSource === undefined) ?
-                    sourcesHeader : ''}
-                {(dataSource === undefined) ?
-                    sourcesList : editForm}
+                {dataSource === undefined ? 
+                    <div>
+                        {sourcesHeader}
+                        {newDataSourceButton}
+                        <div className="ui section divider clearing"></div>
+                        {sourcesList}
+                    </div> 
+                    : editForm}
             </div>
         );
     }

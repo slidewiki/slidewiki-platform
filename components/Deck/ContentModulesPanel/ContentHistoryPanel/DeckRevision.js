@@ -105,7 +105,7 @@ class DeckRevision extends React.Component {
         const datechange = new Date(revision.lastUpdate);
         return (
             <List.Item>
-                <List.Content tabIndex='0'>
+                <List.Content>
                     <List.Header><Icon color='grey' name='save' size='large' className='outline'
                                        aria-label={this.context.intl.formatMessage(form_messages.icon_aria_saved)}/>
                         <span>{formatDate(revision.lastUpdate) + ', ' + this.context.intl.formatMessage(form_messages.date_on) + ' ' + datechange.toLocaleDateString('en-GB') + ' ' + this.context.intl.formatMessage(form_messages.date_at) + ' ' + datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} {this.context.intl.formatMessage(form_messages.by)} <a

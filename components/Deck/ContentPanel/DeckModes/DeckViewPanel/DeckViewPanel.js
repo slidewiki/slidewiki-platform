@@ -141,7 +141,7 @@ class DeckViewPanel extends React.Component {
         </div> : '';
 
         return (
-            <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
+            <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached segments" style={heightStyle}>
                     <div className="ui segment" style={heightStyle}>
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
                                 <div className="ui text loader">Loading</div></div> : ''}
@@ -252,11 +252,11 @@ class DeckViewPanel extends React.Component {
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1} aria-hidden="true"/>
                                             </a>
-                                            <div className="content" tabIndex="-1">
+                                            {/*<div className="content" tabIndex="-1">
                                                 <a href={slideURL}
                                                    className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
                                                 <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
-                                            </div>
+                                            </div>*/}
                                         </div>
                                     );
                                 }

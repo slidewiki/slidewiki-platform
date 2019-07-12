@@ -25,7 +25,7 @@ class CollectionsPanel extends React.Component {
     componentDidMount() {
         this.initDropbox();
     }
-    initDropbox(){
+    initDropbox() {
         let addCollection = this.addCollection.bind(this);
         $('#playlistsDropdown').dropdown({
             action: (text, value, element) => {
@@ -42,11 +42,11 @@ class CollectionsPanel extends React.Component {
                 defaultMessage: 'Playlists'
             },
             createCollection: {
-                id: 'CollectionsPanel.createCollection', 
+                id: 'CollectionsPanel.createCollection',
                 defaultMessage: 'Add to new playlist'
             },
             ariaCreateCollection: {
-                id: 'CollectionsPanel.ariaCreateCollection', 
+                id: 'CollectionsPanel.ariaCreateCollection',
                 defaultMessage: 'Add to new playlist'
             },
             errorTitle: {
@@ -54,27 +54,27 @@ class CollectionsPanel extends React.Component {
                 defaultMessage: 'Error'
             },
             removeDeckError: {
-                id: 'CollectionsPanel.error.removeDeck', 
+                id: 'CollectionsPanel.error.removeDeck',
                 defaultMessage: 'An error occured while removing playlist from deck...'
-            }, 
+            },
             addDeckError: {
-                id: 'CollectionsPanel.error.adDeck', 
-                defaultMessage: 'An error occured while adding playlist to the deck...'                
+                id: 'CollectionsPanel.error.adDeck',
+                defaultMessage: 'An error occured while adding playlist to the deck...'
             },
             addToPlaylist: {
-                id: 'CollectionsPanel.addToPlaylist', 
-                defaultMessage: 'Add deck to playlist'                
+                id: 'CollectionsPanel.addToPlaylist',
+                defaultMessage: 'Add deck to playlist'
             },
 
         });
     }
-    showNewCollectionModal(event){
+    showNewCollectionModal(event) {
         event.preventDefault();
         this.setState({
             showNewCollectionModal: true
         });
     }
-    showErrorPopup(text){
+    showErrorPopup(text) {
         let title = this.context.intl.formatMessage(this.messages.errorTitle);
         swal({
             title: title,
@@ -86,9 +86,9 @@ class CollectionsPanel extends React.Component {
             allowEscapeKey: false,
             showConfirmButton: false
         })
-        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
+            .then(() => {/* Confirmed */ }, (reason) => {/* Canceled */ });
     }
-    addCollection(collectionId){
+    addCollection(collectionId) {
         let deckId = this.props.DeckCollectionStore.selector.sid;
         let collectionDetails = {};
 
@@ -112,7 +112,7 @@ class CollectionsPanel extends React.Component {
         if (this.props.DeckCollectionStore.removeDeckFromCollectionError) {
             this.showErrorPopup(this.context.intl.formatMessage(this.messages.removeDeckError));
         } else if (this.props.DeckCollectionStore.addDeckToCollectionError) {
-            this.showErrorPopup(this.context.intl.formatMessage(this.messages.addDeckError));  
+            this.showErrorPopup(this.context.intl.formatMessage(this.messages.addDeckError));
         }
 
         const userId = this.props.UserProfileStore.userid;
@@ -127,29 +127,30 @@ class CollectionsPanel extends React.Component {
         if (this.props.DeckCollectionStore.collections !== undefined) {
             this.userCollections = this.props.DeckCollectionStore.collections.documents;
         }
-       
-        let userCollectionIds = this.userCollections.map( (col) => col._id);
+
+        let userCollectionIds = this.userCollections.map((col) => col._id);
 
         // find collection dropdown options
-        let deckCollectionIds = deckCollections.map( (col) => col._id);
-        let collectionDropdownOptions = this.userCollections.filter( (collection) => {
+        let deckCollectionIds = deckCollections.map((col) => col._id);
+        let collectionDropdownOptions = this.userCollections.filter((collection) => {
 
             // exclude collections that are already selected
             return !deckCollectionIds.includes(collection._id);
-        }).map( (collection) => {
+        }).map((collection) => {
             return <div key={collection._id} className="item" data-value={collection._id}>{collection.title}</div>;
         });
 
         return (
             <div className="ui bottom attached" ref="tagsPanel">
-                            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.header)}</h3>
+                <h3 className="ui header left floated">{this.context.intl.formatMessage(this.messages.header)}</h3>
+                <div className="ui section divider clearing"></div>
 
-                    <div className="ui stackable grid">
+                <div className="ui stackable grid">
 
-                    {   (userId) &&
+                    {(userId) &&
                         <div className="row">
                             <div className="sixteen wide column">
-                                <h4 className="ui header">{this.context.intl.formatMessage(this.messages.addToPlaylist)}</h4>
+                                <strong>{this.context.intl.formatMessage(this.messages.addToPlaylist)}</strong>
                             </div>
                             <Divider hidden />
                             <div className="eleven wide column">
@@ -163,8 +164,8 @@ class CollectionsPanel extends React.Component {
                                 </div>
                             </div>
                             <div className="five wide column">
-                                <button className="ui small blue labeled icon right floated button" aria-label={this.context.intl.formatMessage(this.messages.ariaCreateCollection)} onClick={this.showNewCollectionModal.bind(this)}>
-                                    <i className="icon plus"></i>{this.context.intl.formatMessage(this.messages.createCollection)}
+                                <button className="ui small blue right floated button" aria-label={this.context.intl.formatMessage(this.messages.ariaCreateCollection)} onClick={this.showNewCollectionModal.bind(this)}>
+                                    {this.context.intl.formatMessage(this.messages.createCollection)}
                                 </button>
                             </div>
                         </div>
@@ -175,14 +176,14 @@ class CollectionsPanel extends React.Component {
                         </div>
                     </div>
                 </div>
-                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={groups} loggedInUser={userId} deckId={selector.sid} />
+                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({ showNewCollectionModal: false })} userGroups={groups} loggedInUser={userId} deckId={selector.sid} />
             </div>
         );
     }
 }
 
 CollectionsPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired, 
+    executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 

@@ -72,7 +72,7 @@ class SlideViewPanel extends React.Component {
             position: 'relative'
         };
         return (
-            <div className="ui bottom attached segment">
+            <div className="ui bottom attached segments">
                 {this.slideContentView || <div style={loadStyle} className="ui active dimmer"><div className="ui text loader">Loading</div></div>}
             </div>
         );

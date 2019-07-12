@@ -228,7 +228,7 @@ class DeckEditPanel extends React.Component {
         </div>;
 
         return (
-            <div ref="deckEditPanel" className="ui bottom attached segment">
+            <div ref="deckEditPanel" className="ui bottom attached segments">
                 <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps}
                   selector={this.props.selector}
                   userid={this.props.UserProfileStore.userid}

@@ -83,7 +83,9 @@ class Application extends React.Component {
               <div className="slidewiki-page">
                   {cookieBanner}
                   {header}
+                  <div style={{paddingTop: 80}}>
                   {content}
+                  </div>
                   {footer}
               </div>
         );

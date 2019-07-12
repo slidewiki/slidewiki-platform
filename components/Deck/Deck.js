@@ -230,7 +230,7 @@ class Deck extends React.Component {
 
         }
         return (
-            <div className="ui fluid container" ref="deck">
+            <div className="ui container" ref="deck">
                 <div className="ui padded stackable grid ">
                 {/*}<div className="row">
                     <div className={navigationPanelClass}>

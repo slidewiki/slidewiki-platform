@@ -99,7 +99,7 @@
 
 
 body {
-    background:#ffffff;
+    /*background:#ffffff;*/
     font-size: 16px;
     line-height: 1.5rem;
     color: #212121;
@@ -951,6 +951,7 @@ textarea:focus{
     width: 100%;
     background: #1e78bb;
     padding: 60px 0 0 0;
+    margin-top:50px;
 }
 
 .footer-left {

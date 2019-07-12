@@ -31,8 +31,7 @@ class ContentQuestionAnswersList extends React.Component {
 
     render() {
         const editButton = (
-            <button className="ui compact button primary" onClick={this.handleEditButtonClick}>
-                <i className="edit icon" />
+            <button className="ui compact button primary small" onClick={this.handleEditButtonClick}>
                 <FormattedMessage
                     id='ContentQuestionAnswersList.form.button_edit'
                     defaultMessage='Edit question' />
@@ -90,8 +89,7 @@ class ContentQuestionAnswersList extends React.Component {
                     </ul>
                 </div>
                 <div className="column">
-                  <button className="ui compact button primary" onClick={this.handleButtonClick}>
-                    <i className=" help circle icon" />
+                  <button className="ui compact button primary small" onClick={this.handleButtonClick}>
                     {showButtonLabel}
                   </button>
                   {showEditButton()}

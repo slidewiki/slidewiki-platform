@@ -190,8 +190,12 @@ class TreeNode extends React.Component {
             if(!this.props.showThumbnails) {
                 divToInsert =
                     <div>
-                        <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassTextMode} aria-hidden="true"> </i>
-                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{content}</NavLink>
+                        <div style={{width:'12%', float: 'left'}}>
+                            <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassTextMode} aria-hidden="true"> </i>
+                        </div>
+                        <div style={{width:'88%', float: 'left'}}>
+                            <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{content}</NavLink>
+                        </div>
                     </div>;
             } else {
                 divToInsert =

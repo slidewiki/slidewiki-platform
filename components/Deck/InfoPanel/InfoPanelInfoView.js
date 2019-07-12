@@ -64,28 +64,45 @@ class InfoPanelInfoView extends React.Component {
         }
 
         return (
-            <div className="ui container" ref="infoPanel" role="complementary" aria-labelledby="infopanel-title">
+            <div className="ui container segments" ref="infoPanel" role="complementary" aria-labelledby="infopanel-title">
                 {
                     showZoomControls &&
                         <div className="ui top attached basic buttons menu" role="menu">
-                            <button className="ui icon button" role="menuitem" onClick={this.zoomOut}
-                                    aria-label="Zoom out" data-tooltip="Zoom out">
+                            <button 
+                                className="ui icon button" 
+                                role="menuitem" 
+                                onClick={this.zoomOut}
+                                aria-label="Zoom out" 
+                                data-tooltip="Zoom out"
+                                style={{width:'33%'}}
+                            >
                                 <i className="large zoom out icon"></i>
                             </button>
-                            <button className="ui icon button" role="menuitem" onClick={this.resetZoom}
-                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
+                            <button 
+                                className="ui icon button" 
+                                role="menuitem" 
+                                onClick={this.resetZoom}
+                                aria-label="Reset zoom" 
+                                data-tooltip="Reset zoom"
+                                style={{width:'33%'}}
+                            >
                                 <i className="large stacked icons">
                                     <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
                                     <i className="search icon"></i>
                                 </i>
                             </button>
-                            <button className="ui icon button" role="menuitem" onClick={this.zoomIn}
-                                    aria-label="Zoom in" data-tooltip="Zoom in">
+                            <button 
+                                className="ui icon button" 
+                                role="menuitem" 
+                                onClick={this.zoomIn}
+                                aria-label="Zoom in" 
+                                data-tooltip="Zoom in"
+                                style={{width:'33%'}}
+                            >
                                 <i className="large zoom in icon"></i>
                             </button>
                         </div>
                 }
-                <h3 className="sr-only" id="infopanel-title">{this.context.intl.formatMessage(this.messages.srTitle)}</h3>
                 { deckId && this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui attached segment">
                         <NavLink href={['/deck', deckId, 'deck', deckId].join('/')}>
@@ -94,17 +111,17 @@ class InfoPanelInfoView extends React.Component {
                         </NavLink>
                     </div>
                 }
-                <div className="ui attached segment">
-
+                <div className={showZoomControls ? 'ui attached segment' : 'ui top attached compact segment'}>
                     <ContributorsPanel />
                 </div>
+                <h3 className="sr-only" id="infopanel-title">{this.context.intl.formatMessage(this.messages.srTitle)}</h3>
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
-                  <div className="ui attached segment">
-                      <PresentationsPanel />
-                  </div>
+                <div className="ui attached segment">
+                    <PresentationsPanel />
+                </div>
                 ) : ''}
 
                 <div className="ui bottom attached segment">

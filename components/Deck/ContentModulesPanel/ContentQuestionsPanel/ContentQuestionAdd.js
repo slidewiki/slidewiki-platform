@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import addQuestion from '../../../../actions/questions/addQuestion';
 import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { Radio } from 'semantic-ui-react';
 
 class ContentQuestionAdd extends React.Component {
 
@@ -143,8 +144,10 @@ class ContentQuestionAdd extends React.Component {
         this.setState({title: e.target.value});
     }
 
-    updateQuestionDifficulty(e) {
-        this.setState({difficulty: e.target.value});
+    updateQuestionDifficulty(e, { value }) {
+        e.preventDefault();
+        this.setState({difficulty: parseInt(value)});
+        console.log(value);
     }
     
     updateIsExamQuestion(e) {
@@ -153,12 +156,10 @@ class ContentQuestionAdd extends React.Component {
 
     render() {
         //const numAnswers = this.props.question.answers.length;
-        const answerChoiceWidth = {
-            width: '680px',
-        };
         return (
             <div className="ui bottom attached">
                 <div className="ui padded segment">
+                    <h3 className="ui dividing header">Add question</h3>
                     <form className="ui form" ref="questionadd_form">
                         <div className="two fields inline">
                             <div className="required field">
@@ -170,93 +171,112 @@ class ContentQuestionAdd extends React.Component {
                                 <textarea rows="3"  name="question" id="question" aria-required="true" defaultValue={this.state.title} onChange={this.updateQuestionTitle} />
                             </div>
                             <div className="ui grouped fields">
-                                <fieldset>
-                                    <legend>
-                                        <FormattedMessage
-                                            id='ContentQuestionAdd.form.difficulty'
-                                            defaultMessage='Difficulty' />
-                                    </legend>
-                                    <div className="inline fields">
-                                        <div className="field">
-                                            <div className="ui radio checkbox">
-                                                <input type="radio" checked={this.state.difficulty === 1} id="easy" name="difficulty" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="easy">
-                                                    <FormattedMessage
-                                                        id='ContentQuestionAdd.form.difficulty_easy'
-                                                        defaultMessage='Easy' />
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="field">
-                                            <div className="ui radio checkbox">
-                                                <input type="radio" id="moderate" name="difficulty" defaultValue={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="moderate">
-                                                    <FormattedMessage
-                                                        id='ContentQuestionAdd.form.difficulty_moderate'
-                                                        defaultMessage='Moderate' />
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="field">
-                                            <div className="ui radio checkbox">
-                                                <input type="radio" id="hard" name="difficulty" defaultValue={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="hard">
-                                                    <FormattedMessage
-                                                        id='ContentQuestionAdd.form.difficulty_hard'
-                                                        defaultMessage='Hard' />
-                                                </label>
-                                            </div>
-                                        </div>
+                                <label>
+                                    <FormattedMessage
+                                        id='ContentQuestionAdd.form.difficulty'
+                                        defaultMessage='Difficulty' />
+                                </label>
+                                <div className="inline fields">
+                                    <div className="field">
+                                        <Radio
+                                            label="Easy"
+                                            name='questionDifficulty'
+                                            value={1}
+                                            checked={this.state.difficulty === 1}
+                                            onChange={this.updateQuestionDifficulty}
+                                        />
                                     </div>
-                                </fieldset>
+                                    <div className="field">
+                                        <Radio
+                                            label="Moderate"
+                                            name='questionDifficulty'
+                                            value={2}
+                                            checked={this.state.difficulty === 2}
+                                            onChange={this.updateQuestionDifficulty}
+                                        />
+                                    </div>
+                                    <div className="field">
+                                        <Radio
+                                            label="Hard"
+                                            name='questionDifficulty'
+                                            value={3}
+                                            checked={this.state.difficulty === 3}
+                                            onChange={this.updateQuestionDifficulty}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <h4 className="ui dividing header">
+                            <FormattedMessage
+                                id='ContentQuestionAdd.form.answer_choices'
+                                defaultMessage='Answers' />
+                        </h4>
                         <div className="ui grouped fields">
-                            <fieldset>
-                                <legend>
-                                    <FormattedMessage
-                                        id='ContentQuestionAdd.form.answer_choices'
-                                        defaultMessage='Answer Choices' />
-                                </legend>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" onChange={this.updateCorrect1}/>
-                                        <label htmlFor="answer1"></label>
-                                    </div>
-                                    <input style={answerChoiceWidth} type="text" name="response1" id="response1" onChange={this.updateAnswer1}/>
-                                    <label htmlFor="response1"></label>
-                                </div>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" onChange={this.updateCorrect2}/>
-                                        <label htmlFor="answer2"></label>
-                                    </div>
-                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" onChange={this.updateAnswer2}/>
-                                    <label htmlFor="response2"></label>
-                                </div>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" onChange={this.updateCorrect3}/>
-                                        <label htmlFor="answer3"></label>
-                                    </div>
-                                    <input type="text" style={answerChoiceWidth} name="response3" id="response3" onChange={this.updateAnswer3}/>
-                                    <label htmlFor="response3"></label>
-                                </div>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" onChange={this.updateCorrect4}/>
-                                        <label htmlFor="answer4"></label>
-                                    </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" onChange={this.updateAnswer4}/>
-                                    <label htmlFor="response4"></label>
-                                </div>
-                            </fieldset>
+                            <table className="ui celled very basic very compact table">
+                            <thead>
+                                <tr>
+                                    <th width="75">Correct</th>
+                                    <th>Answer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="center aligned">
+                                        <div className="ui checkbox">
+                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" onChange={this.updateCorrect1}/>
+                                            <label htmlFor="answer1"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" className="ui input fluid" name="response1" id="response1" onChange={this.updateAnswer1}/>
+                                        <label htmlFor="response1"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="center aligned">
+                                        <div className="ui checkbox">
+                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" onChange={this.updateCorrect2}/>
+                                            <label htmlFor="answer2"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" className="ui input fluid" name="response2" id="response2" onChange={this.updateAnswer2}/>
+                                        <label htmlFor="response2"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="center aligned">
+                                        <div className="ui checkbox">
+                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" onChange={this.updateCorrect3}/>
+                                            <label htmlFor="answer3"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" className="ui input fluid" name="response3" id="response3" onChange={this.updateAnswer3}/>
+                                        <label htmlFor="response3"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="center aligned">
+                                        <div className="ui checkbox">
+                                            <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" onChange={this.updateCorrect4}/>
+                                            <label htmlFor="answer4"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" className="ui input fluid" name="response4" id="response4" onChange={this.updateAnswer4}/>
+                                        <label htmlFor="response4"></label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
                         </div>
                         <div className="field">
                             <label htmlFor="explanation">
                                 <FormattedMessage
                                     id='ContentQuestionAdd.form.explanation'
-                                    defaultMessage='Explanation (optional)' />
+                                    defaultMessage='Explanation' />
                             </label>
                             <textarea rows="2" id="explanation" onChange={this.updateExplanation}></textarea>
                         </div>
@@ -273,14 +293,12 @@ class ContentQuestionAdd extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div >
-                                    <button type="submit" className="ui blue labeled submit icon button" >
-                                        <i className="icon check" />
+                                    <button type="submit" className="ui blue submit button small">
                                         <FormattedMessage
                                             id='ContentQuestionAdd.form.button_save'
                                             defaultMessage='Save' />
                                     </button>
-                                    <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
-                                        <i className="icon close" />
+                                    <button type="button" className="ui secondary close button small" onClick={this.cancelButtonClick}>
                                         <FormattedMessage
                                             id='ContentQuestionAdd.form.button_cancel'
                                             defaultMessage='Cancel' />

@@ -56,14 +56,12 @@ class ExamQuestionsList extends React.Component {
                 </div>
                 <Divider />
                 <div >
-                    <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick.bind(this)}>
-                        <i className="icon check" />
+                    <button type="submit" className="ui blue submit button small" onClick={this.saveButtonClick.bind(this)}>
                         <FormattedMessage
                             id='ExamQuestionsList.form.button_save'
                             defaultMessage='Save' />
                     </button>
-                    <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
-                        <i className="icon close" />
+                    <button type="button" className="ui secondary close button small" onClick={this.cancelButtonClick.bind(this)}>
                         <FormattedMessage
                             id='ExamQuestionsList.form.button_cancel'
                             defaultMessage='Cancel' />

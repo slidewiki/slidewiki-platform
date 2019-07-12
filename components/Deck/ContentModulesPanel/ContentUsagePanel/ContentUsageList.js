@@ -18,6 +18,11 @@ class ContentUsageList extends React.Component {
 
         return (
             <div ref="contentUsageList">
+                <h3 className="ui header floated left">
+                    Usage
+                </h3>
+
+                <div className="ui section divider clearing"></div>
                 {
                     list.length ? 
                     <div className="ui relaxed divided list">

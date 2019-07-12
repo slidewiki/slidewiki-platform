@@ -68,11 +68,21 @@ class DeckHistoryPanel extends React.Component {
         });
         return (
         <div ref="deckHistoryPanel" className="ui">
+            <h3 className="ui header floated left">
+                History
+            </h3>
             {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
-            <div><Button positive aria-label={this.context.intl.formatMessage(form_messages.button_aria)} size='small' floated='right'
-                         icon='plus'
-                         content={this.context.intl.formatMessage(form_messages.button_content)} onClick={this.handleCreateRevisionClick.bind(this)}/>
-                <Divider hidden clearing/></div> : ''}
+            <div>
+                <Button 
+                    primary 
+                    aria-label={this.context.intl.formatMessage(form_messages.button_aria)} 
+                    size='small' 
+                    floated='right'
+                    content={this.context.intl.formatMessage(form_messages.button_content)} 
+                    onClick={this.handleCreateRevisionClick.bind(this)}
+                />
+                <div className="ui section divider clearing" />
+            </div> : ''}
             <List relaxed verticalAlign='middle'>
                 {deckRevisions}
             </List>

@@ -201,7 +201,7 @@ class TreePanel extends React.Component {
             'checked': this.state.showThumbnails
         });
         return (
-            <div className="ui container" ref="treePanel" role="navigation">
+            <div className="ui container segments" ref="treePanel" role="navigation">
                 <NavigationPanel />
 
                     <div className="ui attached icon buttons menu">

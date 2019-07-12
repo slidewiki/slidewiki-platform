@@ -31,7 +31,8 @@ class ContentModulesPanel extends React.Component {
         super(props);
         
         this.state = {
-            showMobileMenu: false
+            showMobileMenu: false,
+            isLoading: false,
         };
     }
 
@@ -63,8 +64,14 @@ class ContentModulesPanel extends React.Component {
         this.checkOverflowingChildren();
     }
     
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         this.checkOverflowingChildren();
+        
+        if (this.props.ContentModulesStore.moduleType !== prevProps.ContentModulesStore.moduleType) {
+            this.setState({
+                isLoading: false,
+            });
+        }
     }
     
     checkOverflowingChildren() {
@@ -78,6 +85,12 @@ class ContentModulesPanel extends React.Component {
     }
 
     handleTabClick(type, e) {
+        if (type !== this.props.ContentModulesStore.moduleType) {
+            this.setState({
+                isLoading: true,
+            });
+        }
+
         switch (type) {
             case 'questions':
                 let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
@@ -92,6 +105,7 @@ class ContentModulesPanel extends React.Component {
                 this.context.executeAction(loadTags, {params: this.props.ContentModulesStore.selector});
                 break;
             case 'history':
+                
                 this.context.executeAction(loadContentHistory, {params: this.props.ContentModulesStore.selector});
                 break;
             case 'usage':
@@ -159,21 +173,21 @@ class ContentModulesPanel extends React.Component {
         return [
             {
                 text: <span>{this.context.intl.formatMessage(options_messages.label_sources)} {showLabels ? 
-                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.datasource}</span> : 
+                        <span className={labelClasses} style={{marginBottom:'-3px'}}>{this.props.ContentModulesStore.moduleCount.datasource}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.datasource})</span>}
                     </span>,
                 value: 'datasource'
             },
             {
                 text: <span>{this.context.intl.formatMessage(options_messages.label_tags)} {showLabels ? 
-                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.tags}</span> : 
+                        <span className={labelClasses} style={{marginBottom:'-3px'}}>{this.props.ContentModulesStore.moduleCount.tags}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.tags})</span>}
                     </span>,
                 value: 'tags'
             },
             { // TODO add correct moduleCount
                 text: <span>{this.context.intl.formatMessage(options_messages.label_comments)} {showLabels ? 
-                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.comments}</span> : 
+                        <span className={labelClasses} style={{marginBottom:'-3px'}}>{this.props.ContentModulesStore.moduleCount.comments}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.comments})</span>}
                     </span>,
                 value: 'discussion'
@@ -192,14 +206,14 @@ class ContentModulesPanel extends React.Component {
             },*/
             {
                 text: <span>{this.context.intl.formatMessage(options_messages.label_questions)} {showLabels ? 
-                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.questions}</span> : 
+                        <span className={labelClasses} style={{marginBottom:'-3px'}}>{this.props.ContentModulesStore.moduleCount.questions}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.questions})</span>}
                     </span>,
                 value: 'questions'
             },
             {
                 text: <span>{this.context.intl.formatMessage(options_messages.label_playlists)} {showLabels ? 
-                        <span className={labelClasses}>{this.props.ContentModulesStore.moduleCount.playlists}</span> : 
+                        <span className={labelClasses} style={{marginBottom:'-3px'}}>{this.props.ContentModulesStore.moduleCount.playlists}</span> : 
                         <span> ({this.props.ContentModulesStore.moduleCount.playlists})</span>}
                     </span>,
                 value: 'playlists'
@@ -305,9 +319,14 @@ class ContentModulesPanel extends React.Component {
             'segment': true,
             'attached': !this.state.showMobileMenu
         });
+
+        let activityLoadingClass = classNames({
+            'ui segment basic': true,
+            'loading': this.state.isLoading,
+        });
         
         return (
-            <div ref="contentModulesPanel" >
+            <div ref="contentModulesPanel" className="ui container segments">
                 <h2 className="sr-only">
                     <FormattedMessage
                         id='ContentModulesPanel.form.header'
@@ -320,7 +339,9 @@ class ContentModulesPanel extends React.Component {
                     {mobileMenu}
                 </div>
                 <div className={activityDIVClasses}>
-                    {activityDIV}
+                    <div className={activityLoadingClass} style={{padding:0}}>
+                        {activityDIV}
+                    </div>
                 </div>
             </div>
         );

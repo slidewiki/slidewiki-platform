@@ -55,38 +55,39 @@ class AddComment extends React.Component {
             }
         });
         return (
-          <form className="ui form comment">
-              <div className="ui seven wide required field">
-                  <label htmlFor="title">
-                      <FormattedMessage
-                          id='AddComment.form.label_comment_title'
-                          defaultMessage='Comment title' />
-                  </label>
-                  <input type="text" ref="title" id="title" name="title" placeholder={this.context.intl.formatMessage(form_messages.comment_title_placeholder)} aria-required="true" autoFocus required />
-              </div>
-              <div className="ui field">
-                  <label htmlFor="text">
-                      <FormattedMessage
-                          id='AddComment.form.label_comment_text'
-                          defaultMessage='Comment text' />
-                  </label>
-                  <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder={this.context.intl.formatMessage(form_messages.comment_text_placeholder)} ></textarea>
-              </div>
+            <div>
+                <div className="ui section divider clearing"></div>
+                <form className="ui form segment">
+                    <div className="ui required field">
+                        <label htmlFor="title">
+                            <FormattedMessage
+                                id='AddComment.form.label_comment_title'
+                                defaultMessage='Comment title' />
+                        </label>
+                        <input type="text" ref="title" id="title" name="title" className="ui fluid input" placeholder={this.context.intl.formatMessage(form_messages.comment_title_placeholder)} aria-required="true" autoFocus required />
+                    </div>
+                    <div className="ui field">
+                        <label htmlFor="text">
+                            <FormattedMessage
+                                id='AddComment.form.label_comment_text'
+                                defaultMessage='Comment text' />
+                        </label>
+                        <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder={this.context.intl.formatMessage(form_messages.comment_text_placeholder)} ></textarea>
+                    </div>
 
-              <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
-                  <i className="icon check"></i> 
-                  <FormattedMessage
-                      id='AddComment.form.button_submit'
-                      defaultMessage='Submit' />
-              </button>
-              <button tabIndex="0" type="button" className="ui secondary labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
-                  <i className="icon close"></i>
-                  <FormattedMessage
-                      id='AddComment.form.button_cancel'
-                      defaultMessage='Cancel' />
-              </button>
-              <div className="ui error message" role="region" aria-live="polite"/>
-          </form>
+                    <button tabIndex="0" type="submit" className="ui blue submit button small" >
+                        <FormattedMessage
+                            id='AddComment.form.button_submit'
+                            defaultMessage='Submit' />
+                    </button>
+                    <button tabIndex="0" type="button" className="ui secondary close button small" onClick={this.handleInvertCommentBox.bind(this)}>
+                        <FormattedMessage
+                            id='AddComment.form.button_cancel'
+                            defaultMessage='Cancel' />
+                    </button>
+                    <div className="ui error message" role="region" aria-live="polite"/>
+                </form>
+            </div>
         );
     }
 }

@@ -153,8 +153,7 @@ class EditDataSource extends React.Component {
         let header = this.context.intl.formatMessage(form_messages.header_edit);
         let dataSource = this.props.dataSource;
         let deleteButton = (
-            <button tabIndex="0" type="button" onClick={this.handleDeleteClick.bind(this)} className="ui red labeled icon button">
-                <i className="icon minus circle"></i>
+            <button tabIndex="0" type="button" onClick={this.handleDeleteClick.bind(this)} className="ui red button small right floated">
                 <FormattedMessage
                     id='EditDataSource.form.button_delete'
                     defaultMessage='Delete' />
@@ -194,7 +193,7 @@ class EditDataSource extends React.Component {
         </select>;
 
         return (
-            <div className="ui blue segment" >
+            <div className="ui segment">
                 <h3 className="ui dividing header">{header}</h3>
                 <form className="ui form edit">
                     <div className="ui seven wide required field" ref="div_types" >
@@ -243,14 +242,12 @@ class EditDataSource extends React.Component {
                     </div>
 
                     <div className="ui hidden divider"></div>
-                    <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
-                        <i className="icon check"></i>
+                    <button tabIndex="0" type="submit" className="ui blue submit button small">
                             <FormattedMessage
                                 id='EditDataSource.form.button_submit'
                                 defaultMessage='Submit' />
                     </button>
-                    <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui secondary labeled icon button">
-                        <i className="icon close"></i>
+                    <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui secondary button small">
                             <FormattedMessage
                                 id='EditDataSource.form.button_cancel'
                                 defaultMessage='Cancel' />

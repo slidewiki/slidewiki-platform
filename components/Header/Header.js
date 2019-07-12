@@ -12,8 +12,22 @@ import userSignOut from '../../actions/user/userSignOut';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import updateTrap from '../../actions/loginModal/updateTrap';
+import styled from 'styled-components';
 
 let MediaQuery = require ('react-responsive');
+
+const MenuStyled = styled.div`
+    border-radius: 0!important;
+    z-index: 10;
+    position: fixed;
+    width: 100%;
+    box-shadow: 0 1px 3px 0 rgba(37,32,31,.3)!important;
+`;
+
+const HeaderStyled = styled.header`
+    outline: 0;  
+`;
+
 class Header extends React.Component {
 
     componentDidMount() {
@@ -95,10 +109,10 @@ class Header extends React.Component {
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
 
         return (
-            <header tabIndex="-1" id="tabindex-start" style={{outline:'none'}}>
+            <HeaderStyled tabIndex="-1" id="tabindex-start">
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
-                    <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
-                        <div className="ui fluid container">
+                    <MenuStyled className="ui inverted blue menu" ref="header">
+                        <div className="ui container">
                             <AUskipLink ariaLabel="skip links navigation" tabIndex="0" links={[
                                 {
                                     link: '#main',
@@ -136,7 +150,7 @@ class Header extends React.Component {
                                 <div className="item">{loginButton}<LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/></div>
                             </div>
                         </div>
-                    </div>
+                    </MenuStyled>
                 </MediaQuery>
                 <MediaQuery maxWidth={1049} values={{width: 1600}}>
                     <AUskipLink ariaLabel="skip links navigation" tabindex="0" links={[
@@ -150,11 +164,11 @@ class Header extends React.Component {
                         },
                     ]}
                     />
-                    <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
+                    <MenuStyled className="ui inverted blue menu" style={{marginBottom: '0.1rem'}} ref="header">
                         <button className="ui icon button item" aria-label="user management menu" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
                           &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt=" " style={{width: '9rem', paddingTop: '0.5rem'}}/>
                         </button>
-                    </div>
+                    </MenuStyled>
                     <div className="ui inverted left dimmed sidebar vertical menu menubar" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                         <NavLink className="item" href='/'>
                             <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
@@ -176,7 +190,7 @@ class Header extends React.Component {
                         <LocaleSwitcher mode="sidebarLocalesMenu"/>
                     </div>
                 </MediaQuery>
-            </header>
+            </HeaderStyled>
         );
     }
 }
