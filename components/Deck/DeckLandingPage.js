@@ -315,21 +315,21 @@ class DeckLandingPage extends React.Component {
                                             <div className="row">
                                                 <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
-                                                    <span className="sr-only">Deck status: </span>
-                                                    {(!deckData.hidden) ? <Label as="span" color='green'>Published</Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
+                                                    <span className="sr-only"><FormattedMessage id='deck.deckStatus.text' defaultMessage='Deck status'/>: </span>
+                                                    {(!deckData.hidden) ? <Label as="span" color='green'><FormattedMessage id='deck.deckStatus.status' defaultMessage='Published'/></Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
                                             </div>
                                             <Divider hidden />
                                             <div className="ui stackable grid container">
                                                 <div className="two column row">
                                                     <div className="column" style={ColPadding}>
                                                         <div className="item">
-                                                            <div className="meta"><strong>Creator:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
+                                                            <div className="meta"><strong><FormattedMessage id='deck.creator' defaultMessage='Creator'/>:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
                                                             {originInfo}
-                                                            <div className="meta"><strong>Last Modified:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
+                                                            <div className="meta"><strong><FormattedMessage id='deck.lastModified' defaultMessage='Last Modified'/>:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
                                                         </div>
                                                     </div>
                                                     <div className="column">
-                                                        <h2 className="sr-only">"Deck metadata"</h2>
+                                                        <h2 className="sr-only"><FormattedMessage id='deck.deckMetadata' defaultMessage='Deck metadata'/></h2>
                                                         <div className="row">
                                                             <div className="ui medium labels" >
                                                                 <div className="ui label" >
@@ -361,7 +361,7 @@ class DeckLandingPage extends React.Component {
                                                 </div>
                                                 <div className="row" >
                                                     <div className="item">
-                                                        <div className="meta"><strong>Description:</strong>
+                                                        <div className="meta"><strong><FormattedMessage id='deck.description' defaultMessage='Description'/>:</strong>
                                                             <div className="description" >{deckData.description}</div>
                                                         </div>
                                                     </div>
@@ -369,7 +369,7 @@ class DeckLandingPage extends React.Component {
                                                 <div className="row" >
                                                     { deckTopics.length > 0 &&
                                                     <div className="item">
-                                                        <div className="meta"><strong>Subject:&nbsp;</strong></div>
+                                                        <div className="meta"><strong><FormattedMessage id='deck.subject' defaultMessage='Subject'/>:&nbsp;</strong></div>
                                                         <div className="description">{ deckTopics.map((t, i) =>
                                                             <span key={i}>
                                                               { !!i && ',\xa0' }
