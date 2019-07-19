@@ -3,15 +3,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
-import {connectToStores} from 'fluxible-addons-react';
-import {navigateAction} from 'fluxible-router';
-import {TextArea, Checkbox, Message} from 'semantic-ui-react';
-import {FormattedMessage, defineMessages} from 'react-intl';
-
+import { connectToStores } from 'fluxible-addons-react';
+import { navigateAction } from 'fluxible-router';
+import { TextArea, Checkbox, Message, Dropdown } from 'semantic-ui-react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
-import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
+import { updateAuthorizedUsers, updateAuthorizedGroups } from '../../../../../actions/updateDeckAuthorizations';
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import GroupDetailsModal from './GroupDetailsModal';
 import { timeSince } from '../../../../../common';
@@ -20,11 +19,11 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
-import {showGroupDetailsModal} from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
-
-import {educationLevels} from '../../../../../lib/isced';
+import { showGroupDetailsModal } from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
+import { educationLevels } from '../../../../../lib/isced';
 import TagInput from '../../../ContentModulesPanel/TagsPanel/TagInput';
 import SWAutoComplete from '../../../../common/SWAutoComplete';
+import suggestUsers from '../../../../../actions/search/suggestUsers';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -51,6 +50,8 @@ class DeckPropertiesEditor extends React.Component {
             educationLevel: props.deckProps.educationLevel,
             tags: props.deckProps.tags || [],
             topics: props.deckProps.topics || [],
+            userResults: [],
+            userSearchQuery: '',
         };
     }
 
@@ -111,7 +112,7 @@ class DeckPropertiesEditor extends React.Component {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown({
                 action: (someText, dataValue, source) => {
-                // console.log('group dropdown select', dataValue);
+                    // console.log('group dropdown select', dataValue);
 
                     $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('hide');
@@ -137,12 +138,13 @@ class DeckPropertiesEditor extends React.Component {
                 }
             });
 
-        $(ReactDOM.findDOMNode(this.refs.AddUser))
+        /*$(ReactDOM.findDOMNode(this.refs.AddUser))
             .dropdown({
                 apiSettings: {
                     url: Microservices.user.uri + '/information/username/search/{query}',
                     cache: false
                 },
+                forceSelection: false,
                 saveRemoteData: false,
                 action: (name, value, source) => {
                     let data = JSON.parse(decodeURIComponent(value));
@@ -174,7 +176,7 @@ class DeckPropertiesEditor extends React.Component {
 
                     return true;
                 }
-            });
+            });*/
     }
 
     handleCancel(event) {
@@ -202,7 +204,7 @@ class DeckPropertiesEditor extends React.Component {
         // as topics are never new, and we don't change the other tags, tagName is all we need
         newTags = newTags.map((t) => ({ tagName: t.tagName }));
 
-        this.setState({formValidationErrors: validationErrors});
+        this.setState({ formValidationErrors: validationErrors });
 
         // If there are no validation errors, save the new attributes.
         if (Object.keys(validationErrors).length === 0) {
@@ -238,8 +240,14 @@ class DeckPropertiesEditor extends React.Component {
         this.setState(stateChange);
     }
 
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value
+        });
+    }
+
     onChangeMarkdown(event) {
-        this.setState({allowMarkdown: !this.state.allowMarkdown});
+        this.setState({ allowMarkdown: !this.state.allowMarkdown });
     }
 
     handleChangeCheckbox(fieldName, event, data) {
@@ -277,9 +285,9 @@ class DeckPropertiesEditor extends React.Component {
     handleClickShowGroupDetails(groupid, event) {
         event.preventDefault();
         // console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
-        $('#app').attr('aria-hidden','true');
+        $('#app').attr('aria-hidden', 'true');
         //call service
-        this.context.executeAction(loadUsergroup, {groupid: groupid});
+        this.context.executeAction(loadUsergroup, { groupid: groupid });
     }
 
     getListOfAuthorized() {
@@ -290,13 +298,13 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
-                let optionalElement = (user.organization || user.country) ?  (
+                let optionalElement = (user.organization || user.country) ? (
                     <div>
                         {user.organization || 'Unknown organization'} ({user.country || 'unknown country'})
-                        <br/>
+                        <br />
                     </div>
                 ) : '';
-                let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
+                let optionalText = (user.joined) ? ('Access granted ' + timeSince((new Date(user.joined))) + ' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
                 // console.log('new authorized user:', user);
                 // console.log('New key for authorized user:', key, user);
@@ -305,11 +313,11 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="item" key={key} >
                             <div className="ui grid">
                                 <div className="one wide column">
-                                    <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
+                                    <UserPicture picture={user.picture} username={user.username} avatar={true} width={24} />
                                 </div>
                                 <div className="ten wide column">
                                     <div className="content">
-                                        <TextArea className="sr-only" id={'usernameIsALinkHint' + key} value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                                        <TextArea className="sr-only" id={'usernameIsALinkHint' + key} value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex='-1' />
                                         <a className="header" href={'/user/' + user.username} target="_blank">{user.displayName || user.username}</a>
                                         <div className="description">
                                             {optionalElement}{optionalText}
@@ -341,7 +349,7 @@ class DeckPropertiesEditor extends React.Component {
                 let fct2 = (event) => {
                     this.handleClickShowGroupDetails(group.id, event);
                 };
-                let optionalText = (group.joined) ? ('Access granted '+timeSince((new Date(group.joined)))+' ago') : '';
+                let optionalText = (group.joined) ? ('Access granted ' + timeSince((new Date(group.joined))) + ' ago') : '';
                 temp_list.push(
                     (
                         <div className="item" key={'group_' + group.id + group.name} >
@@ -380,6 +388,64 @@ class DeckPropertiesEditor extends React.Component {
         return list_authorized;
     }
 
+    handleSearchChange = (e, data) => {
+        this.setState({
+            userSearchQuery: data.searchQuery,
+        });
+
+        context.executeAction(suggestUsers, {
+            query: encodeURIComponent(data.searchQuery),
+        }).then((response) => {
+            let userResults = [];
+
+            for (let user of response.results) {
+                userResults.push({
+                    text: user.name,
+                    value: user.value,
+                    key: user.name,
+                });
+            }
+
+            this.setState({
+                userResults
+            });
+        });
+    }
+
+    handleUserLabelClick = (e, dropdown) => {
+        let data = JSON.parse(decodeURIComponent(dropdown.value));
+        let users = this.props.DeckEditStore.authorizedUsers;
+
+        if (users === undefined || users === null) {
+            users = [];
+        }
+
+        if (users.findIndex((member) => {
+            return member.id === parseInt(data.userid);
+        }) === -1 && parseInt(data.userid) !== this.props.userid) {
+            users.push({
+                username: data.username,
+                id: parseInt(data.userid),
+                joined: data.joined || (new Date()).toISOString(),
+                picture: data.picture,
+                country: data.country,
+                organization: data.organization,
+                displayName: data.displayName
+            });
+        }
+
+        this.clearUserDropdown();
+
+        this.context.executeAction(updateAuthorizedUsers, users);
+    }
+
+    clearUserDropdown = () => {
+        this.setState({
+            userResults: [],
+            userSearchQuery: '',
+        });
+    }
+
     render() {
         //CSS
         let titleFieldClass = classNames({
@@ -392,7 +458,7 @@ class DeckPropertiesEditor extends React.Component {
         });
 
         //content elements
-        let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
+        /*let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
                                value={this.state.theme}
                                onChange={this.handleChange.bind(this, 'theme')}>
                 <option value="default">White - Default</option>
@@ -409,9 +475,28 @@ class DeckPropertiesEditor extends React.Component {
                 <option value="openuniversity">Open University</option>
                 <option value="odimadrid">ODI Madrid</option>
                 <option value="oeg">OEG</option>
-            </select>;
+            </select>;*/
+
+        let themeOptions = [
+            { key: 'default', text: 'White - Default', value: 'default' },
+            { key: 'beige', text: 'Cream', value: 'beige' },
+            { key: 'black', text: 'Black', value: 'black' },
+            { key: 'league', text: 'Dark Grey', value: 'league' },
+            { key: 'sky', text: 'Pale Blue', value: 'sky' },
+            { key: 'solarized', text: 'Beige', value: 'solarized' },
+            { key: 'moon', text: 'Dark Slate Blue', value: 'moon' },
+            { key: 'night', text: 'High Contrast 1', value: 'night' },
+            { key: 'blood', text: 'High Contrast 2', value: 'blood' },
+            { key: 'serif', text: 'Serif', value: 'serif' },
+            { key: 'simple', text: 'Simple', value: 'simple' },
+            { key: 'openuniversity', text: 'Open University', value: 'openuniversity' },
+            { key: 'odimadrid', text: 'ODI Madrid', value: 'odimadrid' },
+            { key: 'oeg', text: 'OEG', value: 'oeg' },
+
+        ];
+
         let licenseOptions = <a className="ui label">
-                <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
+            <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
             </a>;
 
         // TODO remove this once language codes have been fixed in code and database
@@ -436,19 +521,19 @@ class DeckPropertiesEditor extends React.Component {
                     name: group.name
                 };
                 groupsArray.push((
-                    <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length+1} member{((group.members.length+1) !== 1) ? 's': ''})</div>
+                    <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length + 1} member{((group.members.length + 1) !== 1) ? 's' : ''})</div>
                 ));
             });
         }
         let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
-                                ref="AddGroups">
-                <input type="hidden" name="groups" />
-                <i className="dropdown icon"></i>
-                <div className="default text">Select Groups</div>
-                <div className="menu">
-                    {groupsArray}
-                </div>
-            </div>;
+            ref="AddGroups">
+            <input type="hidden" name="groups" />
+            <i className="dropdown icon"></i>
+            <div className="default text">Select Groups</div>
+            <div className="menu">
+                {groupsArray}
+            </div>
+        </div>;
 
         let buttons = (
             <div>
@@ -473,16 +558,16 @@ class DeckPropertiesEditor extends React.Component {
                 </label>
                 <input type="text" name="deck-title" value={this.state.title}
                     onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                    aria-required="true" id="title_input"/>
+                    aria-required="true" id="title_input" />
 
             </div>
         </div>;
         let markdownField = <div className="field">
-                <div className="ui checkbox">
-                    <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
-                    <label>Allow Markdown editing of slides</label>
-                </div>
-         </div>;
+            <div className="ui checkbox">
+                <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)} />
+                <label>Allow Markdown editing of slides</label>
+            </div>
+        </div>;
 
         let titleAndPublished = <div className="fields">
             <div className="sixteen wide field">{titleField}</div>
@@ -497,13 +582,22 @@ class DeckPropertiesEditor extends React.Component {
             <label htmlFor="description_input" id="deck-description">Description</label>
             <textarea rows="4" aria-labelledby="deck-description" id="description_input"
                 value={this.state.description}
-                onChange={this.handleChange.bind(this, 'description')}/>
+                onChange={this.handleChange.bind(this, 'description')} />
         </div>;
 
         let themeAndLicence = <div className="two fields">
             <div className="field">
                 <label htmlFor="theme" id="theme">Choose deck theme</label>
-                {themeOptions}
+                <Dropdown
+                    id="theme"
+                    fluid
+                    selection
+                    aria-labelledby="theme"
+                    options={themeOptions}
+                    onChange={this.handleDropdownChange}
+                    value={this.state.theme}
+                    openOnFocus={false}
+                />
             </div>
             <div className="field">
                 <label htmlFor="license" id="license_label">License</label>
@@ -514,7 +608,7 @@ class DeckPropertiesEditor extends React.Component {
         let levelAndTopics = <div className="two fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
             <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete. Multiple subjects can be selected"</div>
-            <SWAutoComplete fluid selection
+            {/*<SWAutoComplete fluid selection
                 label={<FormattedMessage
                     id="DeckProperty.Education"
                     defaultMessage="Education Level"
@@ -526,7 +620,25 @@ class DeckPropertiesEditor extends React.Component {
                 defaultValue={this.state.educationLevel}
                 onChange={this.handleChange.bind(this, 'educationLevel')}
                 ariaDescription='Select education level of deck content'
-            />
+            />*/}
+            <div className="field">
+                <label id="educational-level">
+                    <FormattedMessage id="DeckProperty.Education" defaultMessage="Education Level" />
+                </label>
+                <Dropdown
+                    id="educationLevel"
+                    fluid
+                    selection
+                    aria-labelledby="educational-level"
+                    options={Object.entries(educationLevels).map(([value, text]) => ({
+                        value: value,
+                        text: text,
+                    }))}
+                    onChange={this.handleDropdownChange}
+                    value={this.state.educationLevel}
+                    openOnFocus={false}
+                />
+            </div>
             <div className="field">
                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckProperty.Tag.Topic" defaultMessage="Subject" /></label>
                 <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
@@ -552,15 +664,33 @@ class DeckPropertiesEditor extends React.Component {
                                             {groupsOptions}
                                         </div>
                                         <div className={groupsFieldClass}>
-                                            <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
-                                            <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
-                                            </select>
+                                            <label htmlFor="deck_edit_dropdown_usernames_remote" id="edit-rights">Add users for edit rights</label>
+                                            {/*<select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">*/}
+                                            <Dropdown
+                                                search
+                                                fluid
+                                                selection
+                                                aria-labelledby="edit-rights"
+                                                options={this.state.userResults}
+                                                onChange={this.handleDropdownChange}
+                                                onSearchChange={this.handleSearchChange}
+                                                onChange={this.handleUserLabelClick}
+                                                selectOnNavigation={false}
+                                                value="test"
+                                                placeholder="test"
+                                                selectOnBlur={false}
+                                                searchQuery={this.state.userSearchQuery}
+                                                onBlur={this.clearUserDropdown}
+                                                noResultsMessage={this.state.userSearchQuery ? 'No results found' : 'Start typing to find users'}
+                                            />
+                                            {/*</select>*/}
                                         </div>
                                     </div>
                                     <div className="field">
-                                        <div className="ui tiny header">
-                                            Authorized:
-                                        </div>
+                                        {listOfAuthorized.length > 0 &&
+                                            <div className="ui tiny header">
+                                                Authorized:
+                                        </div>}
                                         <div className="ui very relaxed  list">
                                             {listOfAuthorized}
                                         </div>

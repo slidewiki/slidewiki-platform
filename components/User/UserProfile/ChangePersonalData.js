@@ -9,7 +9,7 @@ import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
 import { LTI_ID } from '../../../configs/general';
-import {Flag, Form, Icon, Message} from 'semantic-ui-react';
+import { Flag, Form, Icon, Message, Dropdown } from 'semantic-ui-react';
 import SWDSDropdown from '../../common/SWDSDropdown';
 
 
@@ -82,11 +82,17 @@ class ChangePersonalData extends React.Component {
         });
     }
 
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value
+        });
+    }
+
     getLocaleOptions() {
         return locales.map((locale) => {
             let options = {
                 key: locale,
-                name: getLanguageName(locale),
+                text: getLanguageName(locale),
                 icon: <Flag name={flagForLocale(locale)} />,
                 value: locale,
             };
@@ -165,7 +171,7 @@ class ChangePersonalData extends React.Component {
                     type='email'
                     error={Boolean(this.state.formValidationErrors.email)}
                 />
-                <SWDSDropdown
+                {/*<SWDSDropdown
                     fluid
                     selection
                     options={languageOptions}
@@ -179,7 +185,22 @@ class ChangePersonalData extends React.Component {
                     id='language'
                     onChange={this.handleInputChange}
                     error={Boolean(this.state.formValidationErrors.language)}
-                />
+                />*/}
+                <Form.Field width={8}>
+                    <label id="ui-language-label">
+                        <FormattedMessage id='ChangePersonalData.uilanguage' defaultMessage='User Interface Language' />
+                    </label>
+                    <Dropdown
+                        id="language"
+                        fluid
+                        selection
+                        options={languageOptions}
+                        aria-labelledby="ui-language-label"
+                        onChange={this.handleDropdownChange}
+                        defaultValue={this.state.language}
+                        openOnFocus={false}
+                    />
+                </Form.Field>
             </Form.Group>
             <Form.Group>
                 <CountryDropdown
@@ -188,6 +209,7 @@ class ChangePersonalData extends React.Component {
                     required={false}
                     value={this.state.country}
                     width='eight'
+                    onChange={this.handleDropdownChange}
                 />
                 <Form.Field
                     id='organization'

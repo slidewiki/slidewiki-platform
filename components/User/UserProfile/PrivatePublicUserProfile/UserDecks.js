@@ -3,7 +3,7 @@ import React from 'react';
 import DecksGrid from '../DecksGrid';
 import { navigateAction } from 'fluxible-router';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Dropdown } from 'semantic-ui-react';
 import fetchUserDecks from '../../../../actions/user/userprofile/fetchUserDecks';
 import { fetchNextUserDecks } from '../../../../actions/user/userprofile/fetchNextUserDecks';
 
@@ -13,12 +13,14 @@ class UserDecks extends React.Component {
         this.messages = this.getIntlMessages();
     }
     componentDidMount() {
-        $(this.refs.sortDropdown).dropdown({ onChange: this.dropdownSelect.bind(this) });
+        //$(this.refs.sortDropdown).dropdown({ onChange: this.dropdownSelect.bind(this), showOnFocus: false, selectOnKeydown: false, });
     }
 
     componentDidUpdate() { }
 
-    dropdownSelect(value) {
+    dropdownSelect(e, dropdown) {
+        let value = dropdown.value;
+
         this.context.executeAction(fetchUserDecks, {
             deckListType: this.props.deckListType,
             params: {
@@ -102,6 +104,12 @@ class UserDecks extends React.Component {
         }
         let header = this.context.intl.formatMessage(headerMessage);
 
+        let options = [
+            { key: 'lastUpdate', text: 'Last updated', value: 'lastUpdate' },
+            { key: 'timestamp', text: 'Creation date', value: 'timestamp' },
+            { key: 'title', text: 'Title', value: 'title' },
+        ];
+
         return (
             <div className="ui segments">
                 {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='user.userProfile.userDecks.loading' defaultMessage='Loading' /></div></div> : ''}
@@ -110,15 +118,29 @@ class UserDecks extends React.Component {
 
                     <div style={{ float: 'right' }}>
 
-                        <div className="ui pointing labeled icon dropdown button" ref="sortDropdown">
+                        {/*<div className="ui pointing labeled icon dropdown button" ref="sortDropdown" aria-haspopup="true" aria-label="Sort decks" aria-expanded="false">
                             <i className="icon exchange" />
                             <div className="text">{this.getSelectedSort(sortBy)}</div>
-                            <div className="menu">
-                                <div className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
-                                <div className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
-                                <div className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
+                            <div className="menu" role="menu">
+                                <div role="menuitem" className={(sortBy === 'lastUpdate') ? 'item active selected' : 'item'} data-value='lastUpdate'>{this.context.intl.formatMessage(this.messages.sortLastUpdated)}</div>
+                                <div role="menuitem" className={(sortBy === 'timestamp') ? 'item active selected' : 'item'} data-value='timestamp'>{this.context.intl.formatMessage(this.messages.sortCreationDate)}</div>
+                                <div role="menuitem" className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                             </div>
-                        </div>
+                        </div>*/}
+                        <Dropdown
+                            button
+                            labeled
+                            pointing
+                            icon="exchange"
+                            options={options}
+                            defaultValue="lastUpdate"
+                            onChange={this.dropdownSelect.bind(this)}
+                            //openOnFocus={false}
+                            selectOnNavigation={false}
+                            className="icon"
+                            direction="right"
+                            selectOnBlur={false}
+                        />
 
                     </div>
                 </div>

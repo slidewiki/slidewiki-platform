@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import SWAutoComplete from './SWAutoComplete';
+import { Form, Dropdown } from 'semantic-ui-react';
 
 /**
  * Renders an accessible dropdown menu list of countries.
@@ -62,10 +63,10 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'AI',
             name: 'Anguilla'
-        }, {
+        }, /*{
             key: 'AG',
             name: 'Antigua_and_Barbuda'
-        }, {
+        },*/ {
             key: 'AR',
             name: 'Argentina'
         }, {
@@ -290,10 +291,10 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'GI',
             name: 'Gibraltar'
-        }, {
+        }, /*{
             key: 'GB',
             name: 'Great_Britain'
-        }, {
+        },*/ {
             key: 'GR',
             name: 'Greece'
         }, {
@@ -452,10 +453,10 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'MU',
             name: 'Mauritius'
-        }, {
+        }, /*{
             key: 'ME',
             name: 'Mayotte'
-        }, {
+        },*/ {
             key: 'MX',
             name: 'Mexico'
         }, {
@@ -569,10 +570,10 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'ME',
             name: 'Republic_of_Montenegro'
-        }, {
+        }, /*{
             key: 'RS',
             name: 'Republic_of_Serbia'
-        }, {
+        },*/ {
             key: 'RE',
             name: 'Reunion'
         }, {
@@ -614,10 +615,10 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'SO',
             name: 'Samoa'
-        }, {
+        }, /*{
             key: 'AS',
             name: 'Samoa_American'
-        }, {
+        },*/ {
             key: 'SM',
             name: 'San_Marino'
         }, {
@@ -1786,15 +1787,14 @@ class CountryDropdown extends React.Component {
      *
      * @returns {void}
      */
-    handleInputChange(event) {
+    handleInputChange(e, dropdown) {
+        console.log(dropdown.value);
         this.setState({
-            value: event.target.value
+            value: dropdown.value
         });
     }
 
-    render() {
-        return (
-            <SWAutoComplete
+    /*  <SWAutoComplete
                 label={<FormattedMessage
                     id='ChangePersonalData.country'
                     defaultMessage='Country' />
@@ -1807,7 +1807,30 @@ class CountryDropdown extends React.Component {
                 onChange={this.handleInputChange}
                 required={this.props.required}
                 width={this.props.width}
-            />
+            />*/
+
+    render() {
+        let countries = this.countriesToRender.map((country) => ({
+            value: country.key,
+            text: this.context.intl.formatMessage(this.messages[country.name])
+        }));
+
+        return (
+            <Form.Field width={this.props.width}>
+                <label id="ui-country-label">
+                    <FormattedMessage id='ChangePersonalData.country' defaultMessage='Country' />
+                </label>
+                <Dropdown
+                    search
+                    fluid
+                    selection
+                    id={this.props.id}
+                    options={countries}
+                    aria-labelledby="ui-country-label"
+                    onChange={this.props.onChange}
+                    defaultValue={this.state.value}
+                />
+            </Form.Field>
         );
     }
 }
