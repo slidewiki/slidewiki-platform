@@ -25,7 +25,7 @@ function loadIntlPolyfill(locale) {
 // this is the list of supported ui locales
 // it should include all the files under /intl/*.json
 const localeLoaders = {
-    ca: () => require('react-intl-loader?locale=ca!../intl/ca.json'),
+    /*ca: () => require('react-intl-loader?locale=ca!../intl/ca.json'),
     cy: () => require('react-intl-loader?locale=cy!../intl/cy.json'),
     de: () => require('react-intl-loader?locale=de!../intl/de.json'),
     el: () => require('react-intl-loader?locale=el!../intl/el.json'),
@@ -38,18 +38,11 @@ const localeLoaders = {
     nl: () => require('react-intl-loader?locale=nl!../intl/nl.json'),
     pt: () => require('react-intl-loader?locale=pt!../intl/pt.json'),
     ru: () => require('react-intl-loader?locale=ru!../intl/ru.json'),
-    sr: () => require('react-intl-loader?locale=sr!../intl/sr.json'),
+    sr: () => require('react-intl-loader?locale=sr!../intl/sr.json'),*/
 };
 
-function loadLocaleData(locale) {
-    return new Promise((resolve) => {
-        let loader = localeLoaders[locale];
-        if (!loader) {
-            // use the english locale for unknown ones
-            loader = localeLoaders.en;
-        }
-        loader()(resolve);
-    });
+async function loadLocaleData(locale) {
+    return await import('../intl/en.json');
 }
 
 // this list helps with setting a flag for each language
@@ -90,7 +83,7 @@ export default {
     // locales: Object.keys(localeLoaders),
     locales: enabledLocales,
 
-    loadLocale: function(locale) {
+    loadLocale: async function(locale) {
         return loadIntlPolyfill(locale).then(() => {
             return loadLocaleData(locale);
         });

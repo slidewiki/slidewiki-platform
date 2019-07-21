@@ -3,6 +3,7 @@
   "env": {
     "production": {
       "plugins": [
+          "react-hot-loader/babel",
           "add-module-exports",
           "dynamic-import-webpack",
           "transform-object-rest-spread",
@@ -14,6 +15,7 @@
   },
     "development": {
         "plugins": [
+          "react-hot-loader/babel",
           "add-module-exports",
           "dynamic-import-webpack",
           "transform-object-rest-spread",
