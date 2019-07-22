@@ -72,7 +72,6 @@ let webpackConfig = {
         setImmediate: false
     },
     plugins: [
-        //"react-hot-loader/babel",
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),

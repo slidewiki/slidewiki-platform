@@ -7,6 +7,7 @@ let ReactIntlPlugin = require('react-intl-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 let webpackConfig = {
+    mode: 'production',
     name: 'main',
     resolve: {
         extensions: ['.js'],
@@ -26,6 +27,14 @@ let webpackConfig = {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
         filename: '[name].js'
+    },
+    optimization: {
+        splitChunks: {
+            name: 'vendor',
+            minChunks: Infinity,
+            filename: '[name].bundle.js',
+            chunks: 'all'
+        }
     },
     module: {
         rules: [
@@ -90,11 +99,6 @@ let webpackConfig = {
                     warnings: false
                 }
             }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: Infinity,
-            filename: '[name].bundle.js'
         }),
         // Write out stats file to build directory.
         new StatsWriterPlugin({

@@ -96,7 +96,7 @@
     "express": "^4.15.0",
     "express-robots-txt": "^0.4.0",
     "express-state": "^1.4.0",
-    "extract-text-webpack-plugin": "^2.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fabric": "2.2.3",
     "file-loader": "^0.11.2",
     "filereader": "^0.10.3",
