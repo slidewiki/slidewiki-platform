@@ -61,26 +61,24 @@ function renderApp(locale, messages) {
 
 // Load the Intl polyfill and required locale data
 const locale = document.documentElement.getAttribute('lang');
-let publicmessage = null;
+
 loadLocale(locale).then((messages) => {
     console.log(messages);
     renderApp(locale, messages);
-    publicmessage = messages;
+
+    if (module.hot) {
+        module.hot.accept('./app', () => {
+            const RootContainer = require('./app');
+            const Root = RootContainer.getComponent();
+            ReactDOM.render(
+                <IntlProvider locale={locale} messages={messages}>
+                    <Root context={window.context.getComponentContext()} />
+                </IntlProvider>,
+                document.getElementById('app')
+            );
+        });
+    }
 }).catch((err) => {
     console.error(err);
 });
 
-if (module.hot) {
-    module.hot.accept();
-    //console.log('tewst');
-    /*module.hot.accept('./app', () => {
-        console.log('reredner');
-        //const RootContainer = require('./containers/Root').default;
-        const Root = app.getComponent();
-        ReactDOM.render(
-            <IntlProvider locale={locale} messages={publicmessage}>
-            <Root context={window.context.getComponentContext()} /></IntlProvider>,
-            document.getElementById('app')
-        );
-    });*/
-}

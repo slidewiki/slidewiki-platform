@@ -16,7 +16,7 @@ let webpackConfig = {
     entry: {
         main: [
             //todo: solve the issue with same-origin policy when loading fonts
-            //'react-hot-loader/patch',
+            'react-hot-loader/patch',
             'webpack-dev-server/client?http://' + host + ':' + mainPort,
             'webpack/hot/only-dev-server',
             './client.js'
