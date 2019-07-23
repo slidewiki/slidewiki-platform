@@ -315,21 +315,21 @@ class DeckLandingPage extends React.Component {
                                             <div className="row">
                                                 <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
-                                                    <span className="sr-only"><FormattedMessage id='deck.deckStatus.text' defaultMessage='Deck status'/>: </span>
-                                                    {(!deckData.hidden) ? <Label as="span" color='green'><FormattedMessage id='deck.deckStatus.status' defaultMessage='Published'/></Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
+                                                    <span className="sr-only"><FormattedMessage id='deck.landing.deckStatus.text' defaultMessage='Deck status'/>: </span>
+                                                    {(!deckData.hidden) ? <Label as="span" color='green'><FormattedMessage id='deck.landing.deckStatus.published' defaultMessage='Published'/></Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
                                             </div>
                                             <Divider hidden />
                                             <div className="ui stackable grid container">
                                                 <div className="two column row">
                                                     <div className="column" style={ColPadding}>
                                                         <div className="item">
-                                                            <div className="meta"><strong><FormattedMessage id='deck.creator' defaultMessage='Creator'/>:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
+                                                            <div className="meta"><strong><FormattedMessage id='deck.landing.creator' defaultMessage='Creator'/>:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
                                                             {originInfo}
-                                                            <div className="meta"><strong><FormattedMessage id='deck.lastModified' defaultMessage='Last Modified'/>:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
+                                                            <div className="meta"><strong><FormattedMessage id='deck.landing.lastModified' defaultMessage='Last Modified'/>:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
                                                         </div>
                                                     </div>
                                                     <div className="column">
-                                                        <h2 className="sr-only"><FormattedMessage id='deck.deckMetadata' defaultMessage='Deck metadata'/></h2>
+                                                        <h2 className="sr-only"><FormattedMessage id='deck.landing.deckMetadata' defaultMessage='Deck metadata'/></h2>
                                                         <div className="row">
                                                             <div className="ui medium labels" >
                                                                 <div className="ui label" >
@@ -361,7 +361,7 @@ class DeckLandingPage extends React.Component {
                                                 </div>
                                                 <div className="row" >
                                                     <div className="item">
-                                                        <div className="meta"><strong><FormattedMessage id='deck.description' defaultMessage='Description'/>:</strong>
+                                                        <div className="meta"><strong><FormattedMessage id='deck.landing.description' defaultMessage='Description'/>:</strong>
                                                             <div className="description" >{deckData.description}</div>
                                                         </div>
                                                     </div>
@@ -369,7 +369,7 @@ class DeckLandingPage extends React.Component {
                                                 <div className="row" >
                                                     { deckTopics.length > 0 &&
                                                     <div className="item">
-                                                        <div className="meta"><strong><FormattedMessage id='deck.subject' defaultMessage='Subject'/>:&nbsp;</strong></div>
+                                                        <div className="meta"><strong><FormattedMessage id='deck.landing.subject' defaultMessage='Subject'/>:&nbsp;</strong></div>
                                                         <div className="description">{ deckTopics.map((t, i) =>
                                                             <span key={i}>
                                                               { !!i && ',\xa0' }
@@ -416,7 +416,7 @@ class DeckLandingPage extends React.Component {
                             <Grid divided='vertically' stackable>
                                 <Grid.Column only="tablet computer" width={12}>
                                     <Segment attached='top' >
-                                        <Header size="small" as="h3"><FormattedMessage id='deck.available_languages.text' defaultMessage='Available in the following languages'/>:</Header>
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.landing.available_languages.text' defaultMessage='Available in the following languages'/>:</Header>
                                         { deckLanguages.map((lang, i) =>
                                             <span key={i}>
                                                 {!!i && ',\xa0'}
@@ -428,8 +428,8 @@ class DeckLandingPage extends React.Component {
                                         ) }
                                     </Segment>
                                     <Segment attached>
-                                        <Header size="small" as="h3"><FormattedMessage id='deck.tags.text' defaultMessage='Tags'/>:</Header>
-                                        {(deckTags.length === 0) ? <div><FormattedMessage id='deck.tags.not_available' defaultMessage='There are no tags assigned to this deck.'/></div> : <TagList items={deckTags} editable={false}/>}
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.landing.tags.text' defaultMessage='Tags'/>:</Header>
+                                        {(deckTags.length === 0) ? <div><FormattedMessage id='deck.landing.tags.not_available' defaultMessage='There are no tags assigned to this deck.'/></div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
                                     <Segment attached='bottom'>
                                         <Header size="small" as="h3"><FormattedMessage id='deck.other_interesting.text' defaultMessage='You may also be interested in'/>:</Header>
@@ -443,7 +443,7 @@ class DeckLandingPage extends React.Component {
                                         <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                             <CCBYSA size='small' />
                                         </a>
-                                        <FormattedMessage id='deck.landingpage.license_text' defaultMessage='This work is licensed under'/> <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                        <FormattedMessage id='deck.landing.landingpage.license_text' defaultMessage='This work is licensed under'/> <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
                                     </Segment>
                                 </Grid.Column>
                             </Grid>

@@ -318,7 +318,7 @@ class DeckPropertiesEditor extends React.Component {
                                 </div>
                                 <div className="four wide column middle aligned">
                                     <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
-                                        Remove
+                                        <FormattedMessage id='deck.propertiesEditor.removeButton.text' defaultMessage='Remove'/>
                                     </button>
                                 </div>
                             </div>
@@ -359,10 +359,10 @@ class DeckPropertiesEditor extends React.Component {
                                 </div>
                                 <div className="four wide column middle aligned">
                                     <button className="ui tiny compact borderless black basic button" onClick={fct}>
-                                        Remove
+                                        <FormattedMessage id='deck.propertiesEditor.removeButton.text' defaultMessage='Remove'/>
                                     </button>
                                     <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
-                                        Show details
+                                        <FormattedMessage id='deck.propertiesEditor.showDetails' defaultMessage='Show details'/>
                                     </button>
                                 </div>
                             </div>
@@ -411,7 +411,7 @@ class DeckPropertiesEditor extends React.Component {
                 <option value="oeg">OEG</option>
             </select>;
         let licenseOptions = <a className="ui label">
-                <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
+                <i className="copyright large icon"></i><FormattedMessage id='deck.propertiesEditor.license.part1' defaultMessage='All decks are published under a'/> <b>Creative Commons Attribution-ShareAlike</b> <FormattedMessage id='deck.propertiesEditor.license.part2' defaultMessage='License'/>
             </a>;
 
         // TODO remove this once language codes have been fixed in code and database
@@ -444,7 +444,7 @@ class DeckPropertiesEditor extends React.Component {
                                 ref="AddGroups">
                 <input type="hidden" name="groups" />
                 <i className="dropdown icon"></i>
-                <div className="default text">Select Groups</div>
+                <div className="default text"><FormattedMessage id='deck.propertiesEditor.selectGroup' defaultMessage='Select Groups'/></div>
                 <div className="menu">
                     {groupsArray}
                 </div>
@@ -453,11 +453,11 @@ class DeckPropertiesEditor extends React.Component {
         let buttons = (
             <div>
                 <button className='ui primary button'
-                    onClick={this.handleSave.bind(this)}>Save
+                    onClick={this.handleSave.bind(this)}><FormattedMessage id='deck.propertiesEditor.save' defaultMessage='Save'/>
                 </button>
                 <button className="ui secondary button"
                     onClick={this.handleCancel.bind(this)}>
-                    Cancel
+                    <FormattedMessage id='deck.propertiesEditor.cancel' defaultMessage='Cancel'/>
                 </button>
             </div>
         );
@@ -480,14 +480,14 @@ class DeckPropertiesEditor extends React.Component {
         let markdownField = <div className="field">
                 <div className="ui checkbox">
                     <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
-                    <label>Allow Markdown editing of slides</label>
+                    <label><FormattedMessage id='deck.propertiesEditor.allow.text' defaultMessage='Allow Markdown editing of slides'/></label>
                 </div>
          </div>;
 
         let titleAndPublished = <div className="fields">
             <div className="sixteen wide field">{titleField}</div>
             <div className="two wide field">
-                <label id="published_label">Published</label>
+                <label id="published_label"><FormattedMessage id='deck.propertiesEditor.publishCheckbox' defaultMessage='Published'/></label>
                 <Checkbox toggle name='deck-published' aria-required aria-labelledby='published_label'
                     checked={this.state.published} onChange={this.handleChangeCheckbox.bind(this, 'published')} />
             </div>
@@ -502,18 +502,18 @@ class DeckPropertiesEditor extends React.Component {
 
         let themeAndLicence = <div className="two fields">
             <div className="field">
-                <label htmlFor="theme" id="theme">Choose deck theme</label>
+                <label htmlFor="theme" id="theme"><FormattedMessage id='deck.propertiesEditor.chooseDeckTheme' defaultMessage='Choose deck theme'/></label>
                 {themeOptions}
             </div>
             <div className="field">
-                <label htmlFor="license" id="license_label">License</label>
+                <label htmlFor="license" id="license_label"><FormattedMessage id='deck.propertiesEditor.license' defaultMessage='License'/></label>
                 {licenseOptions}
             </div>
         </div>;
 
         let levelAndTopics = <div className="two fields">
-            <div className="sr-only" id="describe_level">Select education level of deck content</div>
-            <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete. Multiple subjects can be selected"</div>
+            <div className="sr-only" id="describe_level"><FormattedMessage id='deck.propertiesEditor.selectLevel.text' defaultMessage='Select education level of deck content'/></div>
+            <div className="sr-only" id="describe_topic"><FormattedMessage id='deck.propertiesEditor.selectSubject.text' defaultMessage='Select subject of deck content from autocomplete. Multiple subjects can be selected'/></div>
             <SWAutoComplete fluid selection
                 label={<FormattedMessage
                     id="DeckProperty.Education"
@@ -548,18 +548,18 @@ class DeckPropertiesEditor extends React.Component {
                                 <div>
                                     <div className="two fields">
                                         <div className={groupsFieldClass}>
-                                            <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
+                                            <label htmlFor="deck_edit_dropdown_groups"><FormattedMessage id='deck.propertiesEditor.addGroups' defaultMessage='Add groups for edit rights'/></label>
                                             {groupsOptions}
                                         </div>
                                         <div className={groupsFieldClass}>
-                                            <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
+                                            <label htmlFor="deck_edit_dropdown_usernames_remote"><FormattedMessage id='deck.propertiesEditor.addUsers' defaultMessage='Add users for edit rights'/></label>
                                             <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
                                             </select>
                                         </div>
                                     </div>
                                     <div className="field">
                                         <div className="ui tiny header">
-                                            Authorized:
+                                            <FormattedMessage id='deck.propertiesEditor.authorized' defaultMessage='Authorized'/>:
                                         </div>
                                         <div className="ui very relaxed  list">
                                             {listOfAuthorized}
