@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ReactList from 'react-list';
 import { NavLink } from 'fluxible-router';
@@ -152,10 +153,16 @@ class PresentationsPanel extends React.Component {
             maxHeight: 280,
             overflowY: 'auto'
         };
+        const messages = defineMessages({
+            tooltipLivePresentation: {
+                id: 'deck.presentationPanel.tooltip.live',
+                defaultMessage: 'Start Live Presentation'
+            }
+        });
 
         let toReturn;
         if(this.props.deckPage)
-            toReturn = <Button icon size="huge" aria-label="Start Live Presentation" data-tooltip="Start Live Presentation" role="button" onClick={this.openChooseASessionModal.bind(this)}>
+            toReturn = <Button icon size="huge" aria-label="Start Live Presentation" data-tooltip={this.context.intl.formatMessage(messages.tooltipLivePresentation)} role="button" onClick={this.openChooseASessionModal.bind(this)}>
                 <Icon name="record" />
             </Button>;
         else
@@ -205,6 +212,10 @@ class PresentationsPanel extends React.Component {
         );
     }
 }
+
+PresentationsPanel.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 PresentationsPanel = connectToStores(PresentationsPanel, [ActivityFeedStore, ContentStore], (context, props) => {
     return {

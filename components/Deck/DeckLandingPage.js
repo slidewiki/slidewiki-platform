@@ -2,6 +2,7 @@ import React from 'react';
 import {Card} from 'semantic-ui-react';;
 import { NavLink } from 'fluxible-router';
 import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 import { connectToStores } from 'fluxible-addons-react';
 import ContentStore from '../../stores/ContentStore';
@@ -292,7 +293,20 @@ class DeckLandingPage extends React.Component {
             });
             interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
         }
-
+        const messages = defineMessages({
+            tooltipStats: {
+                id: 'deck.landing.tooltip.stats',
+                defaultMessage: 'Deck Stats'
+            },
+            tooltipOpen: {
+                id: 'deck.landing.tooltip.open',
+                defaultMessage: 'Open Deck'
+            },
+            tooltipSlideshow: {
+                id: 'deck.landing.tooltip.slideshow',
+                defaultMessage: 'Open Slideshow'
+            },
+        });
         return (
             <div>
                 <Container fluid>
@@ -387,7 +401,7 @@ class DeckLandingPage extends React.Component {
                                 <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
                                     <div className="ui icon buttons huge attached">
                                         <NavLink href={deckStatsUrl} tabIndex={-1} >
-                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip={this.context.intl.formatMessage(messages.tooltipStats)} role="button">
                                                 <Icon name="line graph" />
                                             </Button>
                                         </NavLink>
@@ -396,12 +410,12 @@ class DeckLandingPage extends React.Component {
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip="Open Deck" role="button">
+                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip={this.context.intl.formatMessage(messages.tooltipOpen)} role="button">
                                                     <Icon name="open folder" />
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip="Open Slideshow" role="button" >
+                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)} role="button" >
                                                     <Icon name="play circle" />
                                                 </Button>
                                             </a>
@@ -459,6 +473,10 @@ class DeckLandingPage extends React.Component {
         );
     }
 }
+
+DeckLandingPage.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 DeckLandingPage = connectToStores(DeckLandingPage, [
     ContentStore,
