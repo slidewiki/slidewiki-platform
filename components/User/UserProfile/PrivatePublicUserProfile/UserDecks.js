@@ -127,7 +127,9 @@ class UserDecks extends React.Component {
                                 <div role="menuitem" className={(sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'>{this.context.intl.formatMessage(this.messages.sortTitle)}</div>
                             </div>
                         </div>*/}
+                        <div className="sr-only" id="deck-sorting-label">Sort decks</div>
                         <Dropdown
+                            aria-labelledby="deck-sorting-label"
                             id="deck-sorting"
                             button
                             labeled

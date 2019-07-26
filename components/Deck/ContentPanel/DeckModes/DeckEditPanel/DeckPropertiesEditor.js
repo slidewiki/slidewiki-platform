@@ -667,6 +667,7 @@ class DeckPropertiesEditor extends React.Component {
                                             <label htmlFor="deck_edit_dropdown_usernames_remote" id="edit-rights">Add users for edit rights</label>
                                             {/*<select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">*/}
                                             <Dropdown
+                                                id="editRights"
                                                 search
                                                 fluid
                                                 selection
@@ -676,12 +677,12 @@ class DeckPropertiesEditor extends React.Component {
                                                 onSearchChange={this.handleSearchChange}
                                                 onChange={this.handleUserLabelClick}
                                                 selectOnNavigation={false}
-                                                value="test"
-                                                placeholder="test"
+                                                value=" "
                                                 selectOnBlur={false}
                                                 searchQuery={this.state.userSearchQuery}
                                                 onBlur={this.clearUserDropdown}
                                                 noResultsMessage={this.state.userSearchQuery ? 'No results found' : 'Start typing to find users'}
+                                                openOnFocus={false}
                                             />
                                             {/*</select>*/}
                                         </div>
