@@ -166,31 +166,42 @@ class EditDataSource extends React.Component {
             deleteButton = '';
         }
         let dataSourceTypeOptions = <select className="ui search dropdown" defaultValue={dataSource.type} aria-labelledby="type" id="type" ref="select_types">
-            <option value="webpage" >
-                <FormattedMessage
-                    id='EditDataSource.form.type_webpage'
-                    defaultMessage='Web page' />
-            </option>
-            <option value="webdocument" >
-                <FormattedMessage
-                    id='EditDataSource.form.type_webdocument'
-                    defaultMessage='Web document' />
-            </option>
-            <option value="publication" >
-                <FormattedMessage
-                    id='EditDataSource.form.type_publication'
-                    defaultMessage='Publication' />
-            </option>
-            <option value="person" >
-                <FormattedMessage
-                    id='EditDataSource.form.type_person'
-                    defaultMessage='Person' />
-            </option>
-            <option value="plaintext" >
-                <FormattedMessage
-                    id='EditDataSource.form.type_text'
-                    defaultMessage='Plain text' />
-            </option>
+            
+            <FormattedMessage
+                id='EditDataSource.form.type_webpage'
+                defaultMessage='Web page'>
+                {
+                    (msg) =>  <option value="webpage">{msg}</option>
+                }
+            </FormattedMessage>
+            <FormattedMessage
+                id='EditDataSource.form.type_webdocument'
+                defaultMessage='Web document'>
+                {
+                    (msg) =>  <option value="webdocument">{msg}</option>
+                }
+            </FormattedMessage>
+            <FormattedMessage
+                id='EditDataSource.form.type_publication'
+                defaultMessage='Publication'>
+                {
+                    (msg) =>  <option value="publication">{msg}</option>
+                }
+            </FormattedMessage>
+            <FormattedMessage
+                id='EditDataSource.form.type_person'
+                defaultMessage='Person'>
+                {
+                    (msg) =>  <option value="person">{msg}</option>
+                }
+            </FormattedMessage>
+            <FormattedMessage
+                id='EditDataSource.form.type_text'
+                defaultMessage='Plain text'>
+                {
+                    (msg) =>  <option value="plaintext">{msg}</option>
+                }
+            </FormattedMessage>
         </select>;
 
         return (

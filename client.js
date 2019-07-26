@@ -63,7 +63,6 @@ function renderApp(locale, messages) {
 const locale = document.documentElement.getAttribute('lang');
 
 loadLocale(locale).then((messages) => {
-    console.log(messages);
     renderApp(locale, messages);
 
     if (module.hot) {
