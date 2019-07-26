@@ -1817,7 +1817,7 @@ class CountryDropdown extends React.Component {
 
         return (
             <Form.Field width={this.props.width}>
-                <label id="ui-country-label">
+                <label id={this.props.id + '-label'}>
                     <FormattedMessage id='ChangePersonalData.country' defaultMessage='Country' />
                 </label>
                 <Dropdown
@@ -1826,9 +1826,10 @@ class CountryDropdown extends React.Component {
                     selection
                     id={this.props.id}
                     options={countries}
-                    aria-labelledby="ui-country-label"
+                    aria-labelledby={this.props.id + '-label'}
                     onChange={this.props.onChange}
                     defaultValue={this.state.value}
+                    openOnFocus={false}
                 />
             </Form.Field>
         );

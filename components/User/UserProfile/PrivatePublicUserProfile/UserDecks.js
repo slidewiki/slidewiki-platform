@@ -128,6 +128,7 @@ class UserDecks extends React.Component {
                             </div>
                         </div>*/}
                         <Dropdown
+                            id="deck-sorting"
                             button
                             labeled
                             pointing
@@ -135,7 +136,7 @@ class UserDecks extends React.Component {
                             options={options}
                             defaultValue="lastUpdate"
                             onChange={this.dropdownSelect.bind(this)}
-                            //openOnFocus={false}
+                            openOnFocus={false}
                             selectOnNavigation={false}
                             className="icon"
                             direction="right"
