@@ -233,10 +233,10 @@ class DeckViewPanel extends React.Component {
                                     }, 'deck', '', this.props.deckSlug);
                                     return (
                                         <div key={index} className="ui card">
-                                            <NavLink href={slideURL} className="ui image"
+                                            <a href={slideURL} className="ui image"
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1}/>
-                                            </NavLink>
+                                            </a>
                                         </div>
                                     );
                                 }
@@ -248,10 +248,10 @@ class DeckViewPanel extends React.Component {
                                     }, 'deck', '', this.props.deckSlug);
                                     return (
                                         <div key={index} className="ui card">
-                                            <NavLink href={slideURL} className="ui image"
+                                            <a href={slideURL} className="ui image"
                                                tabIndex="-1">
                                                 <img key={index} src={thumbnailURL} alt={thumbnailAlt} tabIndex={-1} aria-hidden="true"/>
-                                            </NavLink>
+                                            </a>
                                             <div className="content" tabIndex="-1">
                                                 <a href={slideURL}
                                                    className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
