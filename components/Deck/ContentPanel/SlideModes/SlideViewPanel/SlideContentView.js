@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import SlideAnnotationView from './SlideAnnotationView';
 const ReactDOM = require('react-dom');
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class SlideContentView extends React.Component {
     constructor(props) {
@@ -151,7 +152,7 @@ class SlideContentView extends React.Component {
             {this.props.hideSpeakerNotes ? null :
                 <div className="ui horizontal segments">
                       <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
-                          <b>Speaker notes:</b>
+                          <b><FormattedMessage id='deck.view.speakerNote' defaultMessage='Speaker notes'/>:</b>
                           <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
                           </div>
                       </div>

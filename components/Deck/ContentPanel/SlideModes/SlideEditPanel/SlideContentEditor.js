@@ -22,9 +22,9 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import Util from '../../../../common/Util';
-import {defineMessages} from 'react-intl';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 import registerChange from '../../../../../actions/slide/registerChange';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
 
@@ -2859,7 +2859,7 @@ class SlideContentEditor extends React.Component {
                     <div className="ui horizontal segments">
                             <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
                                     style={compSpeakerStyle}>
-                                <b>Speaker notes:</b><br />
+                                <b><FormattedMessage id='deck.edit.speakerNote' defaultMessage='Speaker notes'/>:</b><br />
                                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
                                         ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
                                         dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">

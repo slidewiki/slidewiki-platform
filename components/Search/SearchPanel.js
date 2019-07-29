@@ -479,6 +479,13 @@ class SearchPanel extends React.Component {
             </div>
         </div></div>;
 
+        const messages = defineMessages({
+            advancedOptions:{
+                id: 'search.advanceoptions',
+                defaultMessage: 'Advanced Options'
+            }
+        });
+
         return (
             <div className="ui container">
                 <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
@@ -493,7 +500,7 @@ class SearchPanel extends React.Component {
                             <Grid.Row>
                                 <Grid.Column>
                                     <SingleItemAccordion
-                                        buttonContent='Advanced Options'
+                                        buttonContent={this.context.intl.formatMessage(messages.advancedOptions)}
                                         buttonAs='button'
                                         revealContent={ options }
                                     />
