@@ -58,15 +58,16 @@ class ActivityItem extends React.Component {
         };
         const cheerioContentName = (node.content_name) ? cheerio.load(node.content_name).text() : '';
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
-        let nodeRef = '';
 
-        if (node.content_kind === 'deck') {
-            nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span><FormattedMessage id='activity.feed.item.thisdeck' defaultMessage='this deck'/></span>) : (<span><FormattedMessage id='activity.feed.item.deck' defaultMessage='deck'/> <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
-        } else if (node.content_kind === 'slide') {
-            nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span><FormattedMessage id='activity.feed.item.thisslide' defaultMessage='this slide'/></span>) : (<span><FormattedMessage id='activity.feed.item.slide' defaultMessage='slide'/> <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
-        } else {
-            nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span>{'this ' + node.content_kind}</span>) : (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
-        }
+        let contentType = node.content_kind;
+
+        if (contentType === 'deck') {
+            contentType = <FormattedMessage id='activity.feed.item.deck' defaultMessage='deck'/>;
+        } else if (contentType === 'slide') {
+            contentType = <FormattedMessage id='activity.feed.item.slide' defaultMessage='slide'/>;
+        } 
+
+        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span><FormattedMessage id='activity.feed.item.this' defaultMessage='this'/> {contentType}</span>) : (<span>{contentType} <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
 
         if (node.user_id === '0'|| node.user_id === 'undefined') {
             node.user_id = undefined;

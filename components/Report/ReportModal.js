@@ -346,7 +346,7 @@ class ReportModal extends React.Component {
                                         <div style={{width:'50%'}} className={fieldClass_reason} style={{display:'block'}} data-tooltip={this.context.intl.formatMessage(this.messages.reason_tooltip)} ref="reasonDropdown">
 
                                             <input type="hidden" id="reason" name="reason" ref="reason"/>
-                                                <i className="dropdown icon"/>f
+                                                <i className="dropdown icon"/>
                                                 <div className="default text">{this.context.intl.formatMessage(this.messages.reason_option_reason)}</div>
                                                 <div className="menu" role="menu">
                                                     <div className="item" data-value="copyright" role="menuitem">{this.context.intl.formatMessage(this.messages.reason_option_copy)}</div>
