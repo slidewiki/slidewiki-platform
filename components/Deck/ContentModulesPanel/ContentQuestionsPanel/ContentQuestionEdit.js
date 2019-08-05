@@ -11,18 +11,14 @@ class ContentQuestionEdit extends React.Component {
     constructor(props) {
         super(props);
         const numAnswers = this.props.question.answers.length;
+        const initAnswers = this.props.question.answers.map((item) => item.answer);
+        const initCorrects = this.props.question.answers.map((item) => item.correct);
         this.state = {
             qid: this.props.question.id,
             title: this.props.question.title,
             difficulty: this.props.question.difficulty,
-            answer1: this.props.question.answers[0].answer,
-            answer2: numAnswers > 1 ? this.props.question.answers[1].answer: '',
-            answer3: numAnswers > 2 ? this.props.question.answers[2].answer: '',
-            answer4: numAnswers > 3 ? this.props.question.answers[3].answer: '',
-            correct1: this.props.question.answers[0].correct,
-            correct2: numAnswers > 1 ? this.props.question.answers[1].correct: false,
-            correct3: numAnswers > 2 ? this.props.question.answers[2].correct: false,
-            correct4: numAnswers > 3 ? this.props.question.answers[3].correct: false,
+            answers: initAnswers,
+            corrects: initCorrects,
             explanation: this.props.question.explanation,
             userId: this.props.userId,
             relatedObjectId: this.props.question.relatedObjectId,
@@ -32,15 +28,12 @@ class ContentQuestionEdit extends React.Component {
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
         /* update answers */
-        this.updateAnswer1 = this.updateAnswer1.bind(this);
-        this.updateAnswer2 = this.updateAnswer2.bind(this);
-        this.updateAnswer3 = this.updateAnswer3.bind(this);
-        this.updateAnswer4 = this.updateAnswer4.bind(this);
+        this.updateAnswer = this.updateAnswer.bind(this);
         /* update correct answer choice */
-        this.updateCorrect1 = this.updateCorrect1.bind(this);
-        this.updateCorrect2 = this.updateCorrect2.bind(this);
-        this.updateCorrect3 = this.updateCorrect3.bind(this);
-        this.updateCorrect4 = this.updateCorrect4.bind(this);
+        this.updateCorrect = this.updateCorrect.bind(this);
+
+        this.addAnswerClick = this.addAnswerClick.bind(this);
+        this.removeAnswerClick = this.removeAnswerClick.bind(this);
 
         this.updateExplanation = this.updateExplanation.bind(this);
         this.updateIsExamQuestion = this.updateIsExamQuestion.bind(this);
@@ -83,10 +76,11 @@ class ContentQuestionEdit extends React.Component {
 
         // Custom form validation rule
         $.fn.form.settings.rules.atleastoneanswer = (() => {
-            return (this.state.answer1 !== '' && this.state.correct1) ||
-                (this.state.answer2 !== '' && this.state.correct2) ||
-                (this.state.answer3 !== '' && this.state.correct3) ||
-                (this.state.answer4 !== '' && this.state.correct4);
+            let ruleState = (this.state.answers[0] !== '' && this.state.corrects[0]);
+            for(let i = 1; i < this.state.answers.length; i++) {
+                ruleState = ruleState || (this.state.answers[i] !== '' && this.state.corrects[i]);
+            } 
+            return ruleState;
         });
         $(ReactDOM.findDOMNode(this.refs.questionedit_form)).form(questionValidation);
         // $('.ui.form')
@@ -126,39 +120,56 @@ class ContentQuestionEdit extends React.Component {
         }, (reason) => {/*do nothing*/}).catch(swal.noop);
     }
 
+    getItemId(id, type) {
+        let result = 0;
+        if(type === 'response') {
+            result = id.replace('response', '');
+        } else if (type === 'answer') {
+            result = id.replace('answer', '');
+        } else if (type === 'remove') {
+            result = id.replace('remove', '');
+        }
+
+        return parseInt(result, 10) - 1;
+    }
+
+    addAnswerClick() {
+        this.setState((prevState) => ({
+            answers: [...prevState.answers, '']
+        }));
+        this.setState((prevState) => ({
+            corrects: [...prevState.corrects, false]
+        }));
+    }
+
+    removeAnswerClick(e) {
+        let indexShouldBeRemoved = this.getItemId(e.currentTarget.id, 'remove');
+        const tmp_array_answers = [...this.state.answers];
+        tmp_array_answers.splice(indexShouldBeRemoved, 1);
+
+        const tmp_array_corrects = [...this.state.corrects];
+        tmp_array_corrects.splice(indexShouldBeRemoved, 1);
+        
+        this.setState({
+            answers: tmp_array_answers,
+            corrects: tmp_array_corrects
+        });
+    }
+
     /* Update answer choice text */
-    updateAnswer1(e) {
-        this.setState({answer1: e.target.value});
-    }
-
-    updateAnswer2(e) {
-        this.setState({answer2: e.target.value});
-    }
-
-    updateAnswer3(e) {
-        this.setState({answer3: e.target.value});
-    }
-
-    updateAnswer4(e) {
-        //console.log(e.target.value);
-        this.setState({answer4: e.target.value});
+    updateAnswer(e) {
+        const tmp_array = [...this.state.answers];
+        let indexShouldBeChanged = this.getItemId(e.target.id, 'response');
+        tmp_array[indexShouldBeChanged] = e.target.value;
+        this.setState({answers:tmp_array});
     }
 
     /* Update correct choice among available answer choices */
-    updateCorrect1(e) {
-        this.setState({correct1: e.target.checked});
-    }
-
-    updateCorrect2(e) {
-        this.setState({correct2: e.target.checked});
-    }
-
-    updateCorrect3(e) {
-        this.setState({correct3: e.target.checked});
-    }
-
-    updateCorrect4(e) {
-        this.setState({correct4: e.target.checked});
+    updateCorrect(e) {
+        const tmp_array = [...this.state.corrects];
+        let indexShouldBeChanged = this.getItemId(e.target.id, 'answer');
+        tmp_array[indexShouldBeChanged] = e.target.checked;
+        this.setState({corrects:tmp_array});
     }
 
     updateExplanation(e) {
@@ -182,6 +193,19 @@ class ContentQuestionEdit extends React.Component {
         const answerChoiceWidth = {
             width: '680px',
         };
+
+        let answers = this.state.answers.map((item, index) =>
+        <div className="inline field">
+            <div className="ui checkbox">
+                <input  type="checkbox" name={'example' + (index+1)} checked={this.state.corrects[index]?'checked':''} id={'answer' + (index+1)} tabIndex="0" className="hidden" onChange={this.updateCorrect}/>
+                <label htmlFor={'answer' + (index+1)}></label>
+            </div>
+            <i id={'remove' + (index+1)} onClick={this.removeAnswerClick} className="ui delete icon" />
+            <input style={answerChoiceWidth} type="text" value={item} name={'response' + (index+1)} id={'response' + (index+1)} onChange={this.updateAnswer}/>
+            <label htmlFor={'response' + (index+1)}></label>
+        </div>
+        );
+
         return (
             <div className="ui bottom attached">
                 <div className="ui padded segment">
@@ -253,38 +277,13 @@ class ContentQuestionEdit extends React.Component {
                                         id='ContentQuestionEdit.form.answer_choices'
                                         defaultMessage='Answer Choices' />
                                 </legend>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" defaultChecked={this.state.correct1} onChange={this.updateCorrect1}/>
-                                        <label htmlFor="answer1"></label>
-                                    </div>
-                                    <input style={answerChoiceWidth} type="text" name="response1" id="response1" defaultValue={this.state.answer1}  onChange={this.updateAnswer1}/>
-                                    <label htmlFor="response1"></label>
-                                </div>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked={this.state.correct2} onChange={this.updateCorrect2}/>
-                                        <label htmlFor="answer2"></label>
-                                    </div>
-                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" defaultValue={this.state.answer2}  onChange={this.updateAnswer2}/>
-                                    <label htmlFor="response2"></label>
-                                </div>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked={this.state.correct3} onChange={this.updateCorrect3}/>
-                                        <label htmlFor="answer3"></label>
-                                    </div>
-                                    <input type="text" style={answerChoiceWidth} name="response3" id="response3" defaultValue={this.state.answer3} onChange={this.updateAnswer3}/>
-                                    <label htmlFor="response3"></label>
-                                </div>
-                                <div className="inline field">
-                                    <div className="ui checkbox">
-                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked={this.state.correct4} onChange={this.updateCorrect4}/>
-                                        <label htmlFor="answer4"></label>
-                                    </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={this.state.answer4} onChange={this.updateAnswer4}/>
-                                    <label htmlFor="response4"></label>
-                                </div>
+                                {answers}
+                                <button type="button" className="ui right floated compact button primary" onClick={this.addAnswerClick} >
+                                        <i className="small plus icon" />
+                                        <FormattedMessage
+                                            id='ContentQuestionAdd.form.button_add_answer'
+                                            defaultMessage='Add Answer' />
+                                </button>
                             </fieldset>
                         </div>
                         <div className="field">
