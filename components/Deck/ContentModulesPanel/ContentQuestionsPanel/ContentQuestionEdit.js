@@ -109,12 +109,12 @@ class ContentQuestionEdit extends React.Component {
             }
         });
         swal({
-            title: context.intl.formatMessage(swal_messages.text),
+            title: this.context.intl.formatMessage(swal_messages.text),
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: context.intl.formatMessage(swal_messages.confirmButtonText),
+            confirmButtonText: this.context.intl.formatMessage(swal_messages.confirmButtonText),
         }).then((accepted) => {
             this.context.executeAction(deleteQuestion, {questionId: this.state.qid});
         }, (reason) => {/*do nothing*/}).catch(swal.noop);
