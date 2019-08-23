@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ReactList from 'react-list';
 import { NavLink } from 'fluxible-router';
@@ -12,6 +13,8 @@ import { isEmpty } from '../../../common';
 import { makeNodeURL } from '../../common/Util';
 import { isLocalStorageOn } from '../../../common.js';
 import { Microservices } from '../../../configs/microservices';
+
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class PresentationsPanel extends React.Component {
 
@@ -150,29 +153,48 @@ class PresentationsPanel extends React.Component {
             maxHeight: 280,
             overflowY: 'auto'
         };
+        const messages = defineMessages({
+            tooltipLivePresentation: {
+                id: 'deck.presentationPanel.tooltip.live',
+                defaultMessage: 'Start Live Presentation'
+            }
+        });
 
         let toReturn;
         if(this.props.deckPage)
-            toReturn = <Button icon size="huge" aria-label="Start Live Presentation" data-tooltip="Start Live Presentation" role="button" onClick={this.openChooseASessionModal.bind(this)}>
+            toReturn = <Button icon size="huge" aria-label="Start Live Presentation" data-tooltip={this.context.intl.formatMessage(messages.tooltipLivePresentation)} role="button" onClick={this.openChooseASessionModal.bind(this)}>
                 <Icon name="record" />
             </Button>;
         else
             toReturn = <div ref="presentationPanel">
                 <div className="ui basic segment" style={panelDIVStyles}>
-                    <h4 className="ui  header">Live Sessions</h4>
+                    <h4 className="ui  header">
+                        <FormattedMessage
+                            id='liveSessions.title'
+                            defaultMessage='Live Sessions'
+                        />
+                    </h4>
                     <Grid columns={2}>
                       <Grid.Column width={4}>
                         <Popup trigger={<Button icon onClick={this.openChooseASessionModal.bind(this)} aria-label="Create a live session"><Icon name="record" size="large"/></Button>} content='Create a live session (beta)' />
                       </Grid.Column>
                       <Grid.Column width={12}>
-                        Create a live session for this deck and invite participants
+                        <FormattedMessage
+                            id='liveSessions.creation.text'
+                            defaultMessage='Create a live session for this deck and invite participants'
+                        />
                       </Grid.Column>
                     </Grid>
                     <Divider />
                     <div ref="presentationList">
                         {(this.props.ActivityFeedStore.presentations.length < 1)
                             ?
-                            <div>There are currently no live sessions for this deck</div>
+                            <div>
+                                <FormattedMessage
+                                    id='liveSessions.not_exist.text'
+                                    defaultMessage='There are currently no live sessions for this deck'
+                                />                            
+                            </div>
                             :
                             <ReactList ref="infiniteList" className="ui list"
                                 itemRenderer={this.renderItem.bind(this)}
@@ -190,6 +212,10 @@ class PresentationsPanel extends React.Component {
         );
     }
 }
+
+PresentationsPanel.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 PresentationsPanel = connectToStores(PresentationsPanel, [ActivityFeedStore, ContentStore], (context, props) => {
     return {

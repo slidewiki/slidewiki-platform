@@ -20,6 +20,8 @@ import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import TranslationStore from '../../../stores/TranslationStore';
 import updateTrap from '../../../actions/loginModal/updateTrap';
 import { makeNodeURL } from '../../common/Util';
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 
 class TreePanel extends React.Component {
 
@@ -235,7 +237,7 @@ class TreePanel extends React.Component {
                     <div className="ui bottom attached segment">
                         <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
                             <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" checked={this.state.showThumbnails ? 'checked' : ''}/>
-                            <label htmlFor="ShowThumbnails">Show Thumbnails</label>
+                            <label htmlFor="ShowThumbnails"><FormattedMessage id='deck.showThumbnails' defaultMessage='Show Thumbnails'/></label>
                         </div>
                     </div>
 

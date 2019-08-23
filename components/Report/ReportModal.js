@@ -253,6 +253,13 @@ class ReportModal extends React.Component {
 
     render() {
 
+        const messages = defineMessages({
+            tooltipReport: {
+                id: 'reportModal.tooltip',
+                defaultMessage: 'Report'
+            }
+        });
+
         let fieldClass_reason = classNames({
             'ui': true,
             'selection': true,
@@ -291,13 +298,13 @@ class ReportModal extends React.Component {
 
         let trigger;
         if(this.props.deckpage)
-            trigger = <Button basic fluid icon labelPosition='left' color='grey' aria-hidden="false" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen}><Icon name='exclamation circle' color='black'/>Report Issue</Button>;
+            trigger = <Button basic fluid icon labelPosition='left' color='grey' aria-hidden="false" aria-label="Report" data-tooltip={this.context.intl.formatMessage(messages.tooltipReport)} onClick={this.handleOpen}><Icon name='exclamation circle' color='black'/>Report Issue</Button>;
         else if (!this.props.textOnly)
-            trigger = <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+            trigger = <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip={this.context.intl.formatMessage(messages.tooltipReport)} onClick={this.handleOpen} >
                   <Icon name="warning circle" size='large' />
             </Button>;
         else
-            trigger = <div className={this.props.className} aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+            trigger = <div className={this.props.className} aria-label="Report" data-tooltip={this.context.intl.formatMessage(messages.tooltipReport)} onClick={this.handleOpen} >
                   <span><Icon name="warning circle" size='large' /> Report</span>
             </div>;
 
