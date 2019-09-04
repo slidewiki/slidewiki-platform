@@ -35,7 +35,7 @@ class DecksGrid extends React.Component {
                 {[...Array(size).keys()].map((i) => <DeckCard userid={this.props.UserProfileStore.user.id} key={i} cardContent={content[i]} newTab={this.props.newTab} />)}
             </div>);
         } else {
-            return <h3><FormattedMessage id='user.populardecks.notavailable' defaultMessage='No decks available' /></h3>;
+            return <h2><FormattedMessage id='user.populardecks.notavailable' defaultMessage='No decks available' /></h2>;
         }
     }
 }
