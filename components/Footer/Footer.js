@@ -80,13 +80,19 @@ class Footer extends React.Component {
                 id: 'footer.funding.text',
                 defaultMessage: 'The SlideWiki project has received funding from the European Union\\u0027s Horizon 2020 research and innovation programme under grant agreement No 688095'
             },
-            copyright: {
-                id: 'footer.copyright',
-                defaultMessage: 'Copyright \\u00A9 2018 All Rights Reserved'
+            copyrightText: {
+                id: 'footer.copyrightText',
+                defaultMessage: 'Copyright'
+            },
+            copyrightRights: {
+                id: 'footer.copyrightRights',
+                defaultMessage: 'All Rights Reserved'
             },
         });
 
         let rowClasses = {paddingTop: '0px', paddingBottom: '0px'};
+        let currentYear = new Date().getFullYear();
+
         return (
             <footer className='footer-container' role="contentinfo">
                 <div className='ui container'>
@@ -121,7 +127,12 @@ class Footer extends React.Component {
                                     <div className='footer-right'>
                                     <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.funding)}</h3>
                                     <p>{this.context.intl.formatMessage(messages.fundingtext)}</p>
-                                    <p>{this.context.intl.formatMessage(messages.copyright)}<br/> Build GIT_COMMIT&#64;GIT_BRANCH</p>
+                                    <p>
+                                        {this.context.intl.formatMessage(messages.copyrightText)}{' '}
+                                        &copy; 2016-{currentYear} {' - '}
+                                        {this.context.intl.formatMessage(messages.copyrightRights)}
+                                        <br/>Version GIT_VERSION - Build GIT_COMMIT&#64;GIT_BRANCH
+                                    </p>
                                    {/*
                                     <div className='social-link'>
                                         <ul>

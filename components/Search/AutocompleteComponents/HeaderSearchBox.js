@@ -21,8 +21,12 @@ class HeaderSearchBox extends React.Component {
         return defineMessages({
             placeholder: {
                 id: 'HeaderSearchBox.placeholder',
-                defaultMessage: 'Search'
-            }
+                defaultMessage: 'Search...'
+            },
+            searchbox:{
+                id: 'HeaderSearchBox.searchbox',
+                defaultMessage: 'Search for decks or people'
+            },
         });
     }
     initAutoComplete(){
@@ -115,22 +119,20 @@ class HeaderSearchBox extends React.Component {
         this.handleRedirect();
     }
     render() {
-        const messages = defineMessages({
-            searchbox:{
-                id: 'searchbox.placeholder',
-                defaultMessage: 'Search for decks or people'
-            },
-            headerSearchbox:{
-                id: 'headerSearchbox.placeholder',
-                defaultMessage: 'Search...'
-            }
-        });
         if (this.props.type === 'home') {
             return (
                 <div className='ui fluid category search'>
-                    <div id='home_search_box_div' className='ui fluid icon input'>
-                        <label htmlFor="searchHomeString" hidden>Search for decks or people</label>
-                        <input className='prompt' placeholder={this.context.intl.formatMessage(messages.searchbox)} ref='searchHomeString' id="searchHomeString" type='text' value={this.state.searchHomeString} onChange={this.onChangeHome.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}/>
+                    <div id='home_search_box_div' className='ui fluid icon input' role="search">
+                        <input 
+                            className='prompt' 
+                            placeholder={this.context.intl.formatMessage(this.messages.searchbox)} 
+                            aria-label={this.context.intl.formatMessage(this.messages.searchbox)}
+                            ref='searchHomeString' 
+                            type='text' 
+                            value={this.state.searchHomeString} 
+                            onChange={this.onChangeHome.bind(this)} 
+                            onKeyPress={this.handleKeyPress.bind(this)}
+                        />
                         <i className='search link icon' onClick={this.handleRedirect.bind(this)}/>
                         <div className='results home' style={{position: 'absolute', backgroundColor: 'white', borderRadius:'0.2px'}}/>
                     </div>
@@ -146,11 +148,21 @@ class HeaderSearchBox extends React.Component {
             });
             // "ui small icon input
             return (
-                <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}} aria-label={this.context.intl.formatMessage(this.messages.placeholder)} >
-                    <label htmlFor="searchString" hidden><FormattedMessage {...this.messages.placeholder} /></label>
-                    <input type="text" placeholder={this.context.intl.formatMessage(messages.headerSearchbox)} ref="searchString" id="searchString" value={this.state.searchString} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt sw-searchbox" />
+                <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}}>
+                    <input 
+                        type="text" 
+                        placeholder={this.context.intl.formatMessage(this.messages.placeholder)} 
+                        aria-label={this.context.intl.formatMessage(this.messages.placeholder)} 
+                        ref="searchString" 
+                        value={this.state.searchString} 
+                        onChange={this.onChange.bind(this)} 
+                        onKeyPress={this.handleKeyPress.bind(this)} 
+                        className="prompt sw-searchbox"
+                    />
+
                     <i className="search link icon" onClick={this.handleRedirect.bind(this)}/>
-                    <div className="results"/>
+
+                    <div className="results" />
                 </div>
             );
         }
