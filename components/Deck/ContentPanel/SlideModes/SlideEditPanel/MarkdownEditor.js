@@ -12,6 +12,10 @@ import showdown from 'showdown';
 import turndown from 'turndown';
 import Util from '../../../../common/Util';
 import saveSlide from '../../../../../actions/slide/saveSlide';
+import { Button, Icon, Dropdown} from 'semantic-ui-react';
+import registerChange from '../../../../../actions/slide/registerChange';
+import ReactDOMServer from 'react-dom/server';
+
 
 let converter = new showdown.Converter();
 converter.setOption('tables', true);
@@ -31,18 +35,30 @@ class MarkdownEditor extends React.Component {
         super(props);
         let htmlContent = this.props.content;
         let markdownContent = this.props.markdown.trim();
+
         //if no markdown is provided, we can try to make an estimate
         if(htmlContent && (!markdownContent || markdownContent==='')){
             markdownContent = t_converter.turndown(htmlContent);
         }
-        this.state = {markdownContent: markdownContent, htmlContent: htmlContent, title: this.props.title};
+
+        this.state = {
+            markdownContent: markdownContent, 
+            htmlContent: htmlContent, 
+            title: this.props.title
+        };
     }
     handleChange(event) {
-        if(event.target.value.trim()){
-            let html = converter.makeHtml(event.target.value);
+        let value = this.state.markdownContent;
+        if (event) {
+            value = event.target.value;
+        }
+        this.setChanges(true);
+
+        if(value.trim()){
+            let html = converter.makeHtml(value);
             //add especial classes for Neo4j Cypher language
             html = html.replace(/<pre>(.*?)<code class="cypher language-cypher">/g, '<pre mode="cypher" class="highlight pre-scrollable code runnable standalone-example ng-binding"><code class="cypher language-cypher">');
-            this.setState({markdownContent: event.target.value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
+            this.setState({markdownContent: value, htmlContent: html, title: (this.props.title === this.state.title ? this.state.title : this.props.title)});
         }
     }
     componentDidMount(){
@@ -63,6 +79,7 @@ class MarkdownEditor extends React.Component {
             let deckID = currentSelector.id;
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
+
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
@@ -78,6 +95,19 @@ class MarkdownEditor extends React.Component {
         return false;
     }
     componentWillReceiveProps(nextProps) {
+        if (nextProps.content !== this.props.content) {
+            let htmlContent = nextProps.content;
+            let markdownContent = nextProps.markdown.trim();
+            
+            if(nextProps.content && (!markdownContent || markdownContent==='')){
+                markdownContent = t_converter.turndown(htmlContent);
+            }
+
+            this.setState({
+                htmlContent: htmlContent,
+                markdownContent: markdownContent,
+            });
+        }
         if (nextProps.SlideEditStore.saveSlideClick === 'true')
         {
             this.handleSaveButton();
@@ -90,17 +120,152 @@ class MarkdownEditor extends React.Component {
             });
         }
     }
+    // TODO: ensure this is tested in other browsers then Chrome (probably some changes are needed for IE)
+    wrapText = (openTag, closeTag = '') => {
+        let textArea = this.refs.markdownTextarea;
+        let len = textArea.value.length;
+        let start = textArea.selectionStart;
+        let end = textArea.selectionEnd;
+        let selectedText = textArea.value.substring(start, end);
+        let replacement = openTag + selectedText + closeTag;
+        let value = textArea.value.substring(0, start) + replacement + textArea.value.substring(end, len);
+
+        this.setState({
+            markdownContent: value
+        }, () => {
+            // set selection when state has changed
+            textArea.focus();
+            textArea.setSelectionRange(start + openTag.length, end + openTag.length);
+            this.handleChange();
+        });
+    }
+
+    setChanges = (value) => {
+        this.context.executeAction(registerChange, { hasChanges: value });
+    };
+
+    openCheatSheet = () => {
+        let dialogContent = <div style={{textAlign:'left', marginTop: 20}}>
+            <div className="ui grid">
+                <hr style={{width:'100%'}} />
+                <div className="eight wide column">
+                    <h4>Headings</h4>
+                    <ul>
+                        <li><strong>#</strong> Large heading</li>
+                        <li><strong>###</strong> Middle heading</li>
+                        <li><strong>#####</strong> Small heading</li>
+                    </ul>
+
+                    <h4>Lists</h4>
+                    <ul>
+                        <li>Unordered: <br /><ul><li><strong>* Item</strong></li><li><strong>* Item</strong></li></ul></li>
+                        <li>Ordered: <br /><ul><li><strong>1. Item</strong></li><li><strong>2. Item</strong></li></ul></li>
+                    </ul>
+                </div>
+                <div className="eight wide column">
+                    <h4>Text formatting</h4>
+                    <ul>
+                        <li><strong>**Strong**</strong></li>
+                        <li><strong>*Italic*</strong></li>
+                        <li><strong>__Underline__</strong></li>
+                        <li><strong>~~Strikethrough~~</strong></li>
+                    </ul>
+
+                    <h4>Miscellaneous</h4>
+                    <ul>
+                        <li>Link: <strong>[Link text](www.example.com)</strong></li>
+                        <li>Image: <strong>*[Alt description](www.example.com/img.png)</strong></li>
+                        <li>Quote: <strong>&gt; Text</strong></li>
+                        <li>Code block: <strong>&#96;Code&#96;</strong></li>
+                        <li>Horizontal line: <strong>---</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>;
+
+        swal({
+            title: 'Markdown cheat sheet',
+            html: ReactDOMServer.renderToStaticMarkup(dialogContent), //swal doesn't support jsx, so use React function to convert to HTML
+            //type: 'question',
+            confirmButtonText: 'Close',
+            confirmButtonClass: 'grey ui button',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            buttonsStyling: false,
+            showCloseButton: true,
+            showCancelButton: false,
+            width: 900,
+        })
+        .then(() => {
+            //nothing
+        });
+    }
+    
     render() {
+        const selector = this.props.selector || this.props.DeckTreeStore.selector;
+        let deckTheme = selector && selector.theme;
+        
+        if (!deckTheme) {
+            // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
+            let treeNode = this.props.DeckTreeStore.flatTree
+                .find((node) => node.get('id') === this.props.SlideViewStore.slideId && node.get('type') === 'slide');
+
+            if (treeNode) {
+                deckTheme = treeNode.get('theme');
+            } else {
+                // pick theme from deck root as a last resort
+                deckTheme = this.props.DeckTreeStore.theme;
+            }
+        }
+        deckTheme = deckTheme ? deckTheme : ''; // no theme has been found, used empty string for the default theme
+        
         return (
             <div ref='markdownEditor' id='markdownEditor' style={{minHeight: '500px'}}>
                 <div className="ui stackable equal width left aligned padded grid">
-                  <div className="row">
+                  <div className="row" style={{paddingBottom:5}}>
                     <div className="column form field ui">
-                        <textarea rows="36" onChange={this.handleChange.bind(this)} value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}></textarea>
+                        <Button.Group>
+                            <Dropdown button icon="heading" className="icon small" aria-label="Insert heading">
+                                <Dropdown.Menu>
+                                    <Dropdown.Item text='Heading 1' onClick={(e) => this.wrapText('# ')}/>
+                                    <Dropdown.Item text='Heading 2' onClick={(e) => this.wrapText('## ')}/>
+                                    <Dropdown.Item text='Heading 3' onClick={(e) => this.wrapText('##### ')}/>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Button onClick={(e) => this.wrapText('**', '**')} icon size="small" aria-label="Make selected text bold"><Icon name="bold" /></Button>
+                            <Button onClick={(e) => this.wrapText('*', '*')} icon size="small" aria-label="Make selected text italic"><Icon name="italic" /></Button>
+                            <Button onClick={(e) => this.wrapText('__', '__')} icon size="small" aria-label="Make selected text underlined"><Icon name="underline" /></Button>
+                        </Button.Group>
+                        {' '}
+                        <Button.Group>
+                            <Button onClick={(e) => this.wrapText('* ')} icon size="small" aria-label="Make an unordered list"><Icon name="list" /></Button>
+                            <Button onClick={(e) => this.wrapText('1. ')} icon size="small" aria-label="Make an ordered list"><Icon name="list ol" /></Button>
+                        </Button.Group>
+                        {' '}
+                        <Button.Group>
+                            <Button onClick={(e) => this.wrapText('[', '](url)')} icon size="small" aria-label="Insert a link"><Icon name="linkify" /></Button>
+                            <Button onClick={(e) => this.wrapText('![', '](https://example.com/img.png)')} icon size="small" aria-label="Insert an image"><Icon name="file image" /></Button>
+                            <Button onClick={(e) => this.wrapText('> ',)} icon size="small" aria-label="Insert a quote block"><Icon name="quote left" /></Button>
+                            <Button onClick={(e) => this.wrapText('`', '`')} icon size="small" aria-label="Insert a code block"><Icon name="code" /></Button>
+                        </Button.Group>
+                        {' '}
+                        <Button.Group>
+                            <Button onClick={this.openCheatSheet} icon size="small" aria-label="Open the help guide"><Icon name="question circle" /></Button>
+                        </Button.Group>
                     </div>
-                    <div className="column">
+                </div>
+                <div className="row" style={{paddingTop:0}}>
+                    <div className="column form field ui">
+                        <textarea 
+                            style={{fontFamily: 'Courier New', fontWeight:'bold', height:'100%', maxHeight: 'initial'}}
+                            ref="markdownTextarea" 
+                            onChange={this.handleChange.bind(this)} 
+                            value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}
+                        />
+                    </div>
+                    <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0, margin: '0 20px'}}>
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
-                        speakernotes='' hideSpeakerNotes={true} theme=''/>
+                        speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true}/>
                     </div>
                   </div>
                 </div>

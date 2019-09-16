@@ -620,7 +620,7 @@
   "deck.propertiesEditor.selectGroup": "Select Groups",
   "deck.propertiesEditor.save": "Save",
   "deck.propertiesEditor.cancel": "Cancel",
-  "deck.propertiesEditor.allow.text": "Allow Markdown editing of slides",
+  "deck.propertiesEditor.allow.text": "Use Markdown by default for new slides",
   "deck.propertiesEditor.publishCheckbox": "Published",
   "deck.propertiesEditor.chooseDeckTheme": "Choose deck theme",
   "deck.propertiesEditor.license": "License",

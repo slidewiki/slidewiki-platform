@@ -60,7 +60,10 @@ class SlideContentView extends React.Component {
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale(' + this.scaleRatio + ', ' + this.scaleRatio + ')',
                 'transform-origin': 'top left'});
-            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+            if (!this.props.hideBorder) {
+                $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+            }
+            
 
             const pptxheight = $('.pptx2html').outerHeight();
             const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
@@ -129,7 +132,7 @@ class SlideContentView extends React.Component {
         //to handle non-canvas display of slides
         let slideHTMLContent = this.props.content;
         if (slideHTMLContent.indexOf('class="pptx2html"') === -1 && slideHTMLContent.indexOf('class=\'pptx2html\'') === -1) {
-            slideHTMLContent = '<div class="pptx2html" style="width: 960px; position: relative; ">' + slideHTMLContent + '</div>';
+            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height:720px; position: relative; flex-direction: column; padding-left: 66px; flex-wrap: nowrap; align-items: stretch; display: flex; justify-content: center; line-height: 1.1">' + slideHTMLContent + '</div>';
         }
         return (
         <div ref='container' id='container'>

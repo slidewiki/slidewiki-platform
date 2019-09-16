@@ -480,7 +480,7 @@ class DeckPropertiesEditor extends React.Component {
         let markdownField = <div className="field">
                 <div className="ui checkbox">
                     <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
-                    <label><FormattedMessage id='deck.propertiesEditor.allow.text' defaultMessage='Allow Markdown editing of slides'/></label>
+                    <label><FormattedMessage id='deck.propertiesEditor.allow.text' defaultMessage='Use Markdown by default for new slides'/></label>
                 </div>
          </div>;
 
