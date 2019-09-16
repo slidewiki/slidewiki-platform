@@ -480,7 +480,7 @@ class DeckPropertiesEditor extends React.Component {
         let markdownField = <div className="field">
                 <div className="ui checkbox">
                     <input type="checkbox" checked={this.state.allowMarkdown} onChange={this.onChangeMarkdown.bind(this)}/>
-                    <label>Use the Markdown editor by default for new slides</label>
+                    <label>Use Markdown by default for new slides</label>
                 </div>
          </div>;
 
