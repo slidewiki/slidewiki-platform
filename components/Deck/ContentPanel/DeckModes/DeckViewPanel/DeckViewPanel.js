@@ -20,6 +20,7 @@ import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
 import MobileDetect from 'mobile-detect/mobile-detect';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 import {getEducationLevel} from '../../../../../lib/isced.js';
 
@@ -144,23 +145,23 @@ class DeckViewPanel extends React.Component {
             <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
                     <div className="ui segment" style={heightStyle}>
                             {(deckTitle === undefined) ? <div className="ui active dimmer">
-                                <div className="ui text loader">Loading</div></div> : ''}
+                                <div className="ui text loader"><FormattedMessage id='deck.view.loading' defaultMessage='Loading'/></div></div> : ''}
                             <h2 className="ui header">{deckTitle}
-                                <span className={`ui label ${deckData.hidden ? 'pink' : 'green'}`} >{deckData.hidden ? 'Unlisted' : 'Published'}</span>
+                                <span className={`ui label ${deckData.hidden ? 'pink' : 'green'}`} >{deckData.hidden ? <FormattedMessage id='deck.view.deckStatus.unlisted' defaultMessage='Unlisted'/> : <FormattedMessage id='deck.view.deckStatus.published' defaultMessage='Published'/>}</span>
                             </h2>
                         <div className="ui stackable grid container">
                             <div className="two column row">
                                 <div className="column">
                                     <div className="item">
-                                        <div className="meta"><strong>Creator:&nbsp;</strong>
+                                        <div className="meta"><strong><FormattedMessage id='deck.view.creator' defaultMessage='Creator'/>:&nbsp;</strong>
                                             <NavLink href={creatorProfileURL}>{deckCreatorDisplayName}</NavLink>
                                         </div>
                                         {originInfo}
-                                        <div className="meta"><strong>Last Modified:&nbsp;</strong>{lastUpdate}</div>
+                                        <div className="meta"><strong><FormattedMessage id='deck.view.lastModified' defaultMessage='Last Modified'/>:&nbsp;</strong>{lastUpdate}</div>
                                     </div>
                                 </div>
                                 <div className="column">
-                                    <div className="sr-only">"Deck metadata"</div>
+                                    <div className="sr-only"><FormattedMessage id='deck.view.deckMetadata' defaultMessage='Deck metadata'/></div>
                                     <div className="row">
                                                <div className="ui medium labels" >
                                                 <div className="ui label" >
@@ -193,7 +194,7 @@ class DeckViewPanel extends React.Component {
                             <div className="row" >
                                 { deckDescription &&
                                     <div className="item">
-                                        <div className="meta"><strong>Description:</strong>
+                                        <div className="meta"><strong><FormattedMessage id='deck.view.description' defaultMessage='Description'/>:</strong>
                                             <div className="description" >{deckDescription}</div>
                                         </div>
                                     </div>
@@ -202,7 +203,7 @@ class DeckViewPanel extends React.Component {
                             <div className="row" >
                                 { deckTopics.length > 0 &&
                                     <div className="item">
-                                        <div className="meta"><strong>Subject:&nbsp;</strong>
+                                        <div className="meta"><strong><FormattedMessage id='deck.view.subject' defaultMessage='Subject'/>:&nbsp;</strong>
                                             <div className="description">
                                             { deckTopics.map((t, i) => 
                                                 <span key={i}>
@@ -255,7 +256,7 @@ class DeckViewPanel extends React.Component {
                                             <div className="content" tabIndex="-1">
                                                 <a href={slideURL}
                                                    className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
-                                                <div className="description" id={'slide-no-'+index}>Slide {index + 1} of {totalSlides}</div>
+                                                <div className="description" id={'slide-no-'+index}><FormattedMessage id='deck.view.slide' defaultMessage='Slide'/> {index + 1} <FormattedMessage id='deck.of' defaultMessage='of'/> {totalSlides}</div>
                                             </div>
                                         </div>
                                     );

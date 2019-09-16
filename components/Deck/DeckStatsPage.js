@@ -9,6 +9,7 @@ import DeckStatsStore from '../../stores/DeckStatsStore';
 
 import { Microservices } from '../../configs/microservices';
 import CustomDate from './util/CustomDate';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 import DeckStats from './DeckStats';
 
@@ -49,7 +50,7 @@ class DeckStatsPage extends React.Component {
             <div>
                 <NavLink href={viewDeckUrl} tabIndex={-1} >
                     <Button aria-label="Return to Deck Info" data-tooltip="Return to Deck Info" role="button">
-                        <Icon name="arrow alternate circle left" />Return to Deck Info
+                        <Icon name="arrow alternate circle left" /><FormattedMessage id='deck.stats.returnButton' defaultMessage='Return to Deck Info'/>
                     </Button>
                 </NavLink>
 
@@ -60,20 +61,20 @@ class DeckStatsPage extends React.Component {
                     </NavLink>
 
                     <Header as="h1">
-                        <div className="sr-only">Deck title: </div>
+                        <div className="sr-only"><FormattedMessage id='deck.stats.deckTitle' defaultMessage='Deck title'/>: </div>
                         <NavLink href={viewDeckUrl}>{deckData.title}</NavLink>
-                        <div className="sr-only">Deck status: </div>
-                        {(!deckData.hidden) ? <Label color='green'>Published</Label> : <Label color='pink'>Unlisted</Label>}
+                        <div className="sr-only"><FormattedMessage id='deck.stats.text' defaultMessage='Deck status'/>: </div>
+                        {(!deckData.hidden) ? <Label color='green'><FormattedMessage id='deck.stats.deckStatus.published' defaultMessage='Published'/></Label> : <Label color='pink'>Unlisted</Label>}
                     </Header>
 
                     <div className="item">
-                        <div className="meta"><strong>Creator:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
+                        <div className="meta"><strong><FormattedMessage id='deck.stats.creator' defaultMessage='Creator'/>:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
                         {originInfo}
-                        <div className="meta"><strong>Last Modified:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
+                        <div className="meta"><strong><FormattedMessage id='deck.stats.lastModified' defaultMessage='Last Modified'/>:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
                     </div>
 
                     { deckData.description && <div className="item">
-                        <div className="meta"><strong>Description:</strong>
+                        <div className="meta"><strong><FormattedMessage id='deck.stats.description' defaultMessage='Description'/>:</strong>
                             <div className="description" >{deckData.description}</div>
                         </div>
                     </div> }
