@@ -95,6 +95,19 @@ class MarkdownEditor extends React.Component {
         return false;
     }
     componentWillReceiveProps(nextProps) {
+        if (nextProps.content !== this.props.content) {
+            let htmlContent = nextProps.content;
+            let markdownContent = nextProps.markdown.trim();
+            
+            if(nextProps.content && (!markdownContent || markdownContent==='')){
+                markdownContent = t_converter.turndown(htmlContent);
+            }
+
+            this.setState({
+                htmlContent: htmlContent,
+                markdownContent: markdownContent,
+            });
+        }
         if (nextProps.SlideEditStore.saveSlideClick === 'true')
         {
             this.handleSaveButton();
