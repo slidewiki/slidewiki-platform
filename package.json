@@ -126,7 +126,7 @@
     "locale": "^0.1.0",
     "lodash": "^4.17.11",
     "match-sorter": "^2.3.0",
-    "mathjax": "^2.7.0",
+    "mathjax": "^2.7.5",
     "md5": "^2.2.1",
     "mobile-detect": "^1.4.1",
     "moment": "^2.22.2",

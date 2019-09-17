@@ -59,6 +59,10 @@ class DefaultHTMLLayout extends React.Component {
             </head>
             <body>
                 <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
+                {/* styled-components server-side rendering (prevents a flickering on page load),
+                    placed here instead of head since react requires to use a wrapping element when using dangerouslySetInnerHTML */
+                    this.props.style ? <div dangerouslySetInnerHTML={{__html: this.props.style}} /> : <div />
+                }
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>
                 <script src="/es5-shim/es5-sham.min.js"></script>

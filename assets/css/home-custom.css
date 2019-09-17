@@ -504,6 +504,7 @@ textarea:focus{
     position: relative;
     overflow: hidden;
     max-height: 800px;
+    margin-top: -20px;
 }
 .banner-container > img {
     width: 100%;

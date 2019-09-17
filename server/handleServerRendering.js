@@ -19,6 +19,7 @@ import { navigateAction } from 'fluxible-router';
 import {loadIntlMessages} from '../actions/loadIntl'; //feeds the store with default messages
 import { IntlProvider } from 'react-intl';
 import cookie from 'react-cookie';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
 const path = require('path');
 const fs = require('fs');
@@ -33,13 +34,18 @@ let renderApp = function(req, res, context){
     const Root = app.getComponent();
 
     const messages = require('../intl/'+req.locale +'.json');
+    const sheet = new ServerStyleSheet();
 
     // Render the Root to string
     const content = ReactDOM.renderToString(
-      <IntlProvider locale={ req.locale } messages = {messages}>
-        <Root context={ context.getComponentContext() } />
-      </IntlProvider>
+        <StyleSheetManager sheet={sheet.instance}>
+            <IntlProvider locale={ req.locale } messages = {messages}>
+                <Root context={ context.getComponentContext() } />
+            </IntlProvider>
+        </StyleSheetManager>
     );
+
+    const styleTags = sheet.getStyleTags();
 
     debug('Rendering Application component into html');
 
@@ -70,7 +76,8 @@ let renderApp = function(req, res, context){
         context: context.getComponentContext(),
         state: exposed,
         markup: content,
-        lang: req.locale
+        lang: req.locale,
+        style: styleTags,
     });
     const html = ReactDOM.renderToStaticMarkup(htmlElement);
     return html;
