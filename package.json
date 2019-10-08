@@ -48,7 +48,6 @@
   },
   "napa": {
     "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git",
-    "reveal.js-menu": "https://github.com/slidewiki/reveal.js-menu",
     "ckeditor-sharedspace-plugin": "https://github.com/ckeditor/ckeditor-dev/tree/major/plugins/sharedspace.git"
   },
   "napa-config": {
