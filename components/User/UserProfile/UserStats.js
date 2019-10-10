@@ -155,43 +155,45 @@ class UserStats extends React.Component {
                   {this.props.userStats.userEngagement &&
                   <Grid.Row centered columns={1}>
                       <Grid.Column>
-                          <Message attached><h2>{this.context.intl.formatMessage(this.messages.userEngagementTitle)}</h2></Message>
-                          <Segment aria-describedby='userEngagementTable' attached textAlign='center' padded='very'
-                                   loading={this.props.userStats.userEngagementLoading} aria-label='Data table for user engagement overview' tabIndex='0' aria-hidden='true'>
-                              <ResponsiveContainer height={300}>
-                                  <RadarChart outerRadius={100} data={radarData}>
-                                      <PolarGrid />
-                                      <PolarAngleAxis dataKey="type" />
-                                      <Radar dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
-                                      <Tooltip content={(props) => {
-                                          let desc;
-                                          switch(props.label) {
-                                              case(activeEngagementTitle):
-                                                  desc = activeEngagementDesc;
-                                                  break;
-                                              case(passiveEngagementTitle):
-                                                  desc = passiveEngagementDesc;
-                                                  break;
-                                              case(socialEngagementTitle):
-                                                  desc = socialEngagementDesc;
-                                                  break;
-                                          }
-                                          return <Label>{desc}</Label>;
-                                      }}/>
-                                  </RadarChart>
-                              </ResponsiveContainer>
-                          </Segment>
-                          <Table id='userEngagementTable' className="sr-only">
-                              <Table.Header>
-                                  <Table.Row>
-                                      <Table.HeaderCell>User Engagement Type</Table.HeaderCell>
-                                      <Table.HeaderCell>Value</Table.HeaderCell>
-                                  </Table.Row>
-                              </Table.Header>
-                              <Table.Body>
-                                  {userEngagementRows}
-                              </Table.Body>
-                          </Table>
+                          <Segment.Group>
+                            <Segment secondary><Header medium>{this.context.intl.formatMessage(this.messages.userEngagementTitle)}</Header></Segment>
+                            <Segment aria-describedby='userEngagementTable' attached textAlign='center' padded='very'
+                                    loading={this.props.userStats.userEngagementLoading} aria-label='Data table for user engagement overview' tabIndex='0' aria-hidden='true'>
+                                <ResponsiveContainer height={300}>
+                                    <RadarChart outerRadius={100} data={radarData}>
+                                        <PolarGrid />
+                                        <PolarAngleAxis dataKey="type" />
+                                        <Radar dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
+                                        <Tooltip content={(props) => {
+                                            let desc;
+                                            switch(props.label) {
+                                                case(activeEngagementTitle):
+                                                    desc = activeEngagementDesc;
+                                                    break;
+                                                case(passiveEngagementTitle):
+                                                    desc = passiveEngagementDesc;
+                                                    break;
+                                                case(socialEngagementTitle):
+                                                    desc = socialEngagementDesc;
+                                                    break;
+                                            }
+                                            return <Label>{desc}</Label>;
+                                        }}/>
+                                    </RadarChart>
+                                </ResponsiveContainer>
+                            </Segment>
+                            <Table id='userEngagementTable' className="sr-only">
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell>User Engagement Type</Table.HeaderCell>
+                                        <Table.HeaderCell>Value</Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>
+                                    {userEngagementRows}
+                                </Table.Body>
+                            </Table>
+                          </Segment.Group>
                       </Grid.Column>
                   </Grid.Row>}
               </Grid>

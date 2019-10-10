@@ -237,7 +237,7 @@ class Home extends React.Component {
                             <div className='ui three column stackable grid'>
                                 <div className='row'>
                                     <div className='column'>
-                                        <div className='feature-content blue-block'>
+                                        <div className='feature-content blue-block ui segment'>
                                             <div className='feature-left'>
                                                 <h3 className='ui header blue large'>{this.context.intl.formatMessage(this.messages.findSlides)}</h3>
                                                 <h4 className='ui header blue medium'>{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
@@ -247,7 +247,7 @@ class Home extends React.Component {
                                         </div>
                                     </div>
                                     <div className='column'>
-                                        <div className='feature-content green-block'>
+                                        <div className='feature-content green-block ui segment'>
                                             <div className='feature-left'>
                                                 <h3 className='ui header teal large'>{this.context.intl.formatMessage(this.messages.createSlides)}</h3>
                                                 <h4 className='ui header teal medium'>{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
@@ -257,7 +257,7 @@ class Home extends React.Component {
                                         </div>
                                     </div>
                                     <div className='column'>
-                                        <div className='feature-content red-block'>
+                                        <div className='feature-content red-block ui segment'>
                                             <div className='feature-left'>
                                                 <h3 className='ui header large pink'>{this.context.intl.formatMessage(this.messages.sharingSlides)}</h3>
                                                 <h4 className='ui header medium pink'>{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
@@ -267,16 +267,6 @@ class Home extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='signin-outer'>
-                        <div className='wrapper'>
-                            <div className='signin-blk'>
-                                <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
-                                    {signInOrMyDecksElement}
-                                </span>
-                                <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
                             </div>
                         </div>
                     </div>
@@ -327,6 +317,17 @@ class Home extends React.Component {
                         </div>
                     </div>
 
+                    <div className='signin-outer'>
+                        <div className='wrapper'>
+                            <div className='signin-blk ui segment'>
+                                <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
+                                    {signInOrMyDecksElement}
+                                </span>
+                                <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
+                            </div>
+                        </div>
+                    </div>
+
                     {/*<!-- category End -->*/}
 
                     {/*<!-- presentation Start -->*/}
@@ -336,13 +337,13 @@ class Home extends React.Component {
                             <div className='ui one column grid'>
                                 <div className='column'>
                                     <h2 className='ui header large'>{this.context.intl.formatMessage(this.messages.slideWikiEnjoy)}</h2>
-                                    <div className="featured-deck">
+                                    
                                         <h3>{this.context.intl.formatMessage(this.messages.featuredDeck)}</h3>
                                         <DeckList scope="featured" limit="1" inline="true"/>
-                                        <div className="deck-link">
+                                        {/*<div className="deck-link">
                                             <a href="/featured">{this.context.intl.formatMessage(this.messages.seeMoreDecks)}</a>
-                                        </div>
-                                    </div>
+                                        </div>*/}
+                                    
                                     <div className='column'>
                                         <div className='about-block'>
                                             {/* <h3>{this.context.intl.formatMessage(this.messages.slideWikiAbout)}</h3> */}

@@ -167,7 +167,7 @@ class UserProfile extends React.Component {
               <div className="ui segments">
                   <h1 className="sr-only" id="main" role="main">Profile Settings</h1>
                   <div className="ui secondary segment" >
-                      <h2>
+                      <h2 className="ui medium header">
                         <FormattedMessage
                           id='UserProfile.exchangePicture'
                           defaultMessage='Exchange picture'
@@ -181,7 +181,7 @@ class UserProfile extends React.Component {
               </div>
               <div className="ui segments">
                   <div className="ui secondary segment">
-                      <h2>
+                      <h2 className="ui medium header">
                         <FormattedMessage
                           id='UserProfile.alterData'
                           defaultMessage='Alter my personal data'
@@ -200,7 +200,7 @@ class UserProfile extends React.Component {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
-                    <h2>
+                    <h2 className="ui medium header">
                       <FormattedMessage
                         id='UserProfile.changePassword'
                         defaultMessage='Change password'

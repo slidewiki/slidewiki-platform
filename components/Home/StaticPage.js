@@ -92,43 +92,43 @@ class StaticPage extends React.Component {
 
 			<div className='ui grid centered stackable container'>
 			<div className='row'>
-			<div className='eleven wide column'>
+			<div className='ui eleven wide column segment'>
 			    <div className='ui content'>
 					{this.props.children} 
 				</div>
 			</div>
 			<aside className='four wide column'>
-			    <div className='feature-content blue-block-terms'>
+			    <div className='feature-content blue-block-terms ui segment'>
 			        <div className='feature-left'>
 			            <h3 className="ui header blue medium">{this.context.intl.formatMessage(this.messages.findSlides)}</h3>
                         <h4 className="ui header blue small">{this.context.intl.formatMessage(this.messages.findSlidesSubtitle)}</h4>
 			            <div className='text-div'>
 			                <div className='text'>
-                                <p><img src='/assets/images/home/search.jpg' className="ui tiny left floated  image" alt=''/> {this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
+                                <p><img src='/assets/images/home/search.jpg' className="ui left floated image" alt=''/> {this.context.intl.formatMessage(this.messages.findSlidesContent)}</p>
                             </div> 
 			               
 			            </div>
 			        </div>
 			    </div>
-			    <div className='feature-content green-block-terms'>
+			    <div className='feature-content green-block-terms ui segment'>
 			        <div className='feature-left'>
                         <h3 className="ui header teal medium">{this.context.intl.formatMessage(this.messages.createSlides)}</h3>
 			            <h4 className="ui header teal small">{this.context.intl.formatMessage(this.messages.createSlidesSubtitle)}</h4>
 			            <div className='text-div'>
 			                <div className='text'>
-                                <p> <img src='/assets/images/home/add.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
+                                <p> <img src='/assets/images/home/add.jpg' className="ui floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.createSlidesContent)}</p>
                             </div> 
 			               
 			            </div>
 			        </div>
 			    </div>
-			    <div className='feature-content red-block-terms'>
+			    <div className='feature-content red-block-terms ui segment'>
 			        <div className='feature-left'>
                         <h3 className="ui header pink medium">{this.context.intl.formatMessage(this.messages.sharingSlides)}</h3>
 			            <h4 className="ui header small pink">{this.context.intl.formatMessage(this.messages.sharingSlidesSubtitle)}</h4>
 			            <div className='text-div'>
 			                <div className='text'>
-                                <p><img src='/assets/images/home/share.jpg' className="ui tiny floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
+                                <p><img src='/assets/images/home/share.jpg' className="ui floated left image" alt=''/> {this.context.intl.formatMessage(this.messages.sharingSlidesContent)}</p>
                             </div>
 			                
 			            </div>
@@ -137,7 +137,7 @@ class StaticPage extends React.Component {
 			</aside>
 			</div>
 			<div className='row'>
-			<div className='signin-blk wrapper'>
+			<div className='signin-blk wrapper ui segment'>
 			    <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
 			    <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
 			</div>

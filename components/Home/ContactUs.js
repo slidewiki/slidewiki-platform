@@ -337,83 +337,84 @@ class ContactUs extends React.Component {
             <Container text>
                 <Divider hidden />
 
-                <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
-                <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
+                <Segment>
+                    <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
+                    <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
-                  <Divider hidden />
-                  <Segment attached="bottom" textAlign="left" >
-                    <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
-                    <Form onSubmit={this.onSubmitHandler.bind(this)}>
-                      <Form.Field key='1'>
-                          <SWAutoComplete
-                              required
-                              label={this.context.intl.formatMessage(this.messages.form_type_label)}
-                              id='type'
-                              options={this.getReportTypes().map((type) => ({
-                                  value: type.enum,
-                                  name: this.context.intl.formatMessage(type),
-                              }))}
-                              onChange={this.handleInputChange}
-                          />
-                      </Form.Field>
+                    <Divider hidden />
+                    <Segment attached="bottom" textAlign="left" >
+                        <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
+                        <Form onSubmit={this.onSubmitHandler.bind(this)}>
+                        <Form.Field key='1'>
+                            <SWAutoComplete
+                                required
+                                label={this.context.intl.formatMessage(this.messages.form_type_label)}
+                                id='type'
+                                options={this.getReportTypes().map((type) => ({
+                                    value: type.enum,
+                                    name: this.context.intl.formatMessage(type),
+                                }))}
+                                onChange={this.handleInputChange}
+                            />
+                        </Form.Field>
 
-                      <Form.Field key='2'>
-                       <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
-                       <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
-                         placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
-                         value={this.state.firstName}
-                         onChange ={this.onFirstNameChange.bind(this)}
-                       />
-                      </Form.Field>
-
-                      <Form.Field key='3'>
-                         <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
-                         <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
-                         placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
-                         value={this.state.lastName}
-                         onChange ={this.onLastNameChange.bind(this)}/>
-                      </Form.Field>
-
-                        <Form.Field
-                            id='email'
-                            control={Form.Input}
-                            label={this.context.intl.formatMessage(this.messages.form_email_label)}
-                            required
-                            aria-required={true}
-                            value={this.state.email}
-                            onChange={this.handleInputChange}
-                            type='email'
-                            error={Boolean(this.state.formValidationErrors.email)}
+                        <Form.Field key='2'>
+                        <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
+                        <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
+                            placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
+                            value={this.state.firstName}
+                            onChange ={this.onFirstNameChange.bind(this)}
                         />
+                        </Form.Field>
 
-                      <Form.Field key='5'>
-                        <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>
-                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
-                        placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
-                        aria-required="true"  />
-                      </Form.Field>
+                        <Form.Field key='3'>
+                            <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
+                            <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
+                            placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
+                            value={this.state.lastName}
+                            onChange ={this.onLastNameChange.bind(this)}/>
+                        </Form.Field>
 
-                      <Form.Field key='6'>
-                        <label  htmlFor="descriptionContact"> {this.context.intl.formatMessage(this.messages.form_description_label)} </label>
-                         <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
-                          autoHeight
-                          placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
-                      </Form.Field>
+                            <Form.Field
+                                id='email'
+                                control={Form.Input}
+                                label={this.context.intl.formatMessage(this.messages.form_email_label)}
+                                required
+                                aria-required={true}
+                                value={this.state.email}
+                                onChange={this.handleInputChange}
+                                type='email'
+                                error={Boolean(this.state.formValidationErrors.email)}
+                            />
 
-                      <Form.Field key='7'>
-                        <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
-                        <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
-                         style={recaptchaStyle} sitekey={publicRecaptchaKey}
-                         onChange={this.onRecaptchaChange.bind(this)}
-                         aria-required="true" tabIndex="0"/>
-                      </Form.Field>
+                        <Form.Field key='5'>
+                            <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>
+                            <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
+                            placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
+                            aria-required="true"  />
+                        </Form.Field>
 
-                      <Form.Button color='blue' key='8'>
-                        {this.context.intl.formatMessage(this.messages.form_button)}
-                      </Form.Button>
-                   </Form>
-                   </Segment>
+                        <Form.Field key='6'>
+                            <label  htmlFor="descriptionContact"> {this.context.intl.formatMessage(this.messages.form_description_label)} </label>
+                            <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
+                            autoHeight
+                            placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
+                        </Form.Field>
 
+                        <Form.Field key='7'>
+                            <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
+                            <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
+                            style={recaptchaStyle} sitekey={publicRecaptchaKey}
+                            onChange={this.onRecaptchaChange.bind(this)}
+                            aria-required="true" tabIndex="0"/>
+                        </Form.Field>
+
+                        <Form.Button color='blue' key='8'>
+                            {this.context.intl.formatMessage(this.messages.form_button)}
+                        </Form.Button>
+                    </Form>
+                    </Segment>
+                    </Segment>
             </Container>
 
         );

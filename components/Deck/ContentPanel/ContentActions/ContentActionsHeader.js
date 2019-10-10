@@ -25,6 +25,7 @@ import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import SlideTranslationsModal from '../Translation/SlideTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
+import {Button} from 'semantic-ui-react';
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -394,8 +395,8 @@ class ContentActionsHeader extends React.Component {
                     <div className="column computer tablet only">
                     <div className="ui right floated basic top attached buttons" >
                     { buttonsAreHidden ? '' : [
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
-                            type="button" key="addSlide"
+                        <Button  onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
+                            key="addSlide"
                             aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
@@ -404,7 +405,7 @@ class ContentActionsHeader extends React.Component {
                                 <i className="inverted corner plus icon"></i>
                             </i>
 
-                        </button>,
+                        </Button>,
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} key="attachSlides" />,
                         <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
                             type="button" key="addDeck"

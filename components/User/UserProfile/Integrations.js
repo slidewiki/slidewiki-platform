@@ -354,12 +354,12 @@ class Integrations extends React.Component {
               <div className="ui segments">
 
                   <div className="ui secondary segment">
-                      <h1 className="large header" role="main" id="main">
+                      <h2  className="ui medium header" role="main" id="main">
                         <FormattedMessage
                           id='Integration.hint'
                           defaultMessage='Authorized Accounts and Services'
                         />
-                      </h1>
+                      </h2>
                   </div>
                   <div className="ui segment">
                     <p>
@@ -376,7 +376,7 @@ class Integrations extends React.Component {
 
 
                   <div className="ui secondary segment">
-                      <h3>
+                      <h3 className="ui medium header">
                         <FormattedMessage
                           id='Integration.loginProvider'
                           defaultMessage='Login Provider'
@@ -436,7 +436,7 @@ class Integrations extends React.Component {
 
               <div className="ui segments">
                 <div className="ui secondary segment">
-                  <h3>
+                  <h3 className="ui medium header">
                     <FormattedMessage
                       id='Integration.ltis'
                       defaultMessage='Learning Services (LTIs)'

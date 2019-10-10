@@ -16,15 +16,18 @@ class CategoryBox extends React.Component {
         let analyticsDiv = ((Microservices.analytics) ? (
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h3>
-                  <FormattedMessage
-                    id='CategoryBox.analytics'
-                    defaultMessage='Analytics'
-                  />
+                <h2>
+                  <span className="ui tiny header">
+                    <FormattedMessage
+                      id='CategoryBox.analytics'
+                      defaultMessage='Analytics'
+                    />
+                  </span>
                   <span className="ui top right attached icon label">
                     <i className="warning yellow sign icon"/>Beta
                   </span>
-                </h3>
+                </h2>
+                
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
                 <p>
@@ -44,12 +47,12 @@ class CategoryBox extends React.Component {
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h2 id="navigation">
+                <h1 id="navigation" className="ui medium header">
                   <FormattedMessage
                     id='CategoryBox.personalSettings'
                     defaultMessage='Personal settings'
                   />
-                </h2>
+                </h1>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                 <p>
@@ -91,7 +94,7 @@ class CategoryBox extends React.Component {
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h2>
+                <h2 className="ui medium header">
                   <FormattedMessage
                     id='CategoryBox.groups'
                     defaultMessage='Groups'

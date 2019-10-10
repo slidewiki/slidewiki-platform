@@ -26,7 +26,7 @@ class UserRecommendations extends React.Component {
             <div className="ui segments">
                 {(this.props.UserRecommendationsStore.loading) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='user.userRecommendations.loading' defaultMessage='Loading' /></div></div> : ''}
                 <div className="ui secondary clearing segment">
-                    <h1 className="ui left floated header" id="main"><FormattedMessage id='user.userRecommendations.recommendedDecks' defaultMessage="Recommended Decks" /></h1>
+                    <h1 className="ui left floated header medium" id="main"><FormattedMessage id='user.userRecommendations.recommendedDecks' defaultMessage="Recommended Decks" /></h1>
                     <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                         <FormattedMessage id="user.userRecommendations.changeOrder" defaultMessage='change order'>
                             {

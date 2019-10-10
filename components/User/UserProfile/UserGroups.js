@@ -120,7 +120,7 @@ class UserGroups extends React.Component {
         // console.log('render userGroups:', this.props.userid, this.props.groups);
         this.props.groups.forEach((group) => {
             items.push( (
-                <div key={group._id} className="ui vertical segment" >
+                <div key={group._id} className="ui segment" >
                     <div className="ui two column grid container">
                         <div className="left aligned ten wide column">
                             <div className="ui header"><h2>{group.name}</h2></div>
@@ -149,7 +149,7 @@ class UserGroups extends React.Component {
 
         if (this.props.groups === undefined || this.props.groups === null || this.props.groups.length < 1) {
             items = [(
-                <div key="dummy" className="ui vertical segment" >
+                <div key="dummy" className="ui segment" >
                   <div className="ui two column stackable grid container">
                     <h4>{this.context.intl.formatMessage(this.messages.notAGroupmember)}</h4>
                   </div>
@@ -160,7 +160,7 @@ class UserGroups extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h1 className="ui left floated header" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h1>
+                  <h1 className="ui left floated header medium" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h1>
                   <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
                       <i className="icon plus"/>
                       <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>

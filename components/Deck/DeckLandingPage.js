@@ -61,10 +61,10 @@ class DeckLandingPage extends React.Component {
             <Container fluid>
                 <Divider hidden/>
                 <Grid padded='vertically' divided='vertically' stackable>
-                    <Grid.Column only="tablet computer" tablet={1} computer={2}>
+                    <Grid.Column only="tablet computer" tablet={1} computer={3}>
                     </Grid.Column>
 
-                    <Grid.Column mobile={16} tablet={14} computer={12}>
+                    <Grid.Column mobile={16} tablet={14} computer={10}>
                         <Grid.Row>
                             <Segment>
                                 <Grid stackable>
@@ -297,11 +297,11 @@ class DeckLandingPage extends React.Component {
                 <Container fluid>
 
                     <Grid padded='vertically' divided='vertically' stackable>
-                        <Grid.Column only="tablet computer" tablet={1} computer={2}>
+                        <Grid.Column only="tablet computer" tablet={1} computer={3}>
                         </Grid.Column>
 
-                        <Grid.Column mobile={16} tablet={14} computer={12}>
-                            <Grid.Row>
+                        <Grid.Column mobile={16} tablet={14} computer={10}>
+                            <Segment.Group>
                                 <Segment attached="top">
                                     <Grid stackable>
                                         <Grid.Column width={4}>
@@ -408,37 +408,39 @@ class DeckLandingPage extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            </Grid.Row>
+                            </Segment.Group>
 
                             <Divider hidden />
 
                             <Grid divided='vertically' stackable>
                                 <Grid.Column only="tablet computer" width={12}>
-                                    <Segment attached='top' >
-                                        <Header size="small" as="h3">Available in the following languages:</Header>
-                                        { deckLanguages.map((lang, i) =>
-                                            <span key={i}>
-                                                {!!i && ',\xa0'}
-                                                <NavLink href={['', 'deck', selector.id , deckVariantSlugs[lang] || '_'].join('/') + '?language=' + lang}>
-                                                    <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
-                                                    { getLanguageDisplayName(lang) }
-                                                </NavLink>
-                                            </span>
-                                        ) }
-                                    </Segment>
-                                    <Segment attached>
-                                        <Header size="small" as="h3">Tags:</Header>
-                                        {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
-                                    </Segment>
-                                    <Segment attached='bottom'>
-                                        <Header size="small" as="h3">You may also be interested in:</Header>
-                                        {interestedInDecks}
-                                    </Segment>
+                                    <Segment.Group>
+                                        <Segment attached='top' >
+                                            <Header size="small" as="h3">Available in the following languages:</Header>
+                                            { deckLanguages.map((lang, i) =>
+                                                <span key={i}>
+                                                    {!!i && ',\xa0'}
+                                                    <NavLink href={['', 'deck', selector.id , deckVariantSlugs[lang] || '_'].join('/') + '?language=' + lang}>
+                                                        <i className={ (flagForLocale(lang) || 'icon') + ' flag' }/>
+                                                        { getLanguageDisplayName(lang) }
+                                                    </NavLink>
+                                                </span>
+                                            ) }
+                                        </Segment>
+                                        <Segment attached>
+                                            <Header size="small" as="h3">Tags:</Header>
+                                            {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
+                                        </Segment>
+                                        <Segment attached='bottom'>
+                                            <Header size="small" as="h3">You may also be interested in:</Header>
+                                            {interestedInDecks}
+                                        </Segment>
+                                    </Segment.Group>
                                 </Grid.Column>
                                 <Grid.Column only="tablet computer" width={4}>
                                     <Segment>
                                         <ActivityFeedPanel /></Segment>
-                                    <Segment attached='bottom'>
+                                    <Segment>
                                         <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                             <CCBYSA size='small' />
                                         </a>
