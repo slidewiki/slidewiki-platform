@@ -94,34 +94,53 @@ class AddDeck extends React.Component {
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
 
+        let focusRef = null;
+        
         // Validate title
-        if (!title) this.state.formValidationErrors.title = <FormattedMessage
-            id='AddDeck.error.validation.title'
-            defaultMessage='Specify a title.'
-            tagName='span'
-        />;
+        if (!title) {
+            this.state.formValidationErrors.title = <FormattedMessage
+                id='AddDeck.error.validation.title'
+                defaultMessage='Specify a title.'
+                tagName='span'
+            />;
+            
+            focusRef = !focusRef ? 'input_title' : focusRef;
+        }
 
         // Validate language
-        if (!language || language.length < 2) this.state.formValidationErrors.language = <FormattedMessage
-            id='AddDeck.error.validation.language'
-            defaultMessage='Specify a language.'
-            tagName='span'
-        />;
+        if (!language || language.length < 2) {
+            this.state.formValidationErrors.language = <FormattedMessage
+                id='AddDeck.error.validation.language'
+                defaultMessage='Specify a language.'
+                tagName='span'
+            />;
+        }
 
         // Validate T&Cs acceptance
-        if (acceptedConditions === false) this.state.formValidationErrors.conditions = <FormattedMessage
-            id='AddDeck.error.validation.conditions'
-            defaultMessage='You must agree to the SlideWiki terms and conditions.'
-            tagName='span'
-        />;
+        if (acceptedConditions === false) {
+            this.state.formValidationErrors.conditions = <FormattedMessage
+                id='AddDeck.error.validation.conditions'
+                defaultMessage='You must agree to the SlideWiki terms and conditions.'
+                tagName='span'
+            />;
+
+            focusRef = !focusRef ? 'checkbox_conditions' : focusRef;
+        }
 
         // Validate image rights declaration
-        if (acceptedImagesLicense === false)
+        if (acceptedImagesLicense === false) {
             this.state.formValidationErrors.imagesLicence = <FormattedMessage
                 id='AddDeck.error.validation.imagesLicence'
                 defaultMessage='You must agree to the rights declaration.'
                 tagName='span'
             />;
+
+            focusRef = !focusRef ? 'checkbox_imageslicense' : focusRef;
+        }
+
+        if (focusRef && this.refs[focusRef]) {
+            this.refs[focusRef].focus();
+        }
 
         // If there are no validation errors, then create the deck
         if(Object.keys(this.state.formValidationErrors).length === 0) {
