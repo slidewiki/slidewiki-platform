@@ -23,7 +23,8 @@ const headerStyle = {
     'textAlign': 'center'
 };
 const modalStyle = {
-    top: '15%'
+    top: '15%',
+    maxWidth: 425
 };
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
@@ -112,6 +113,8 @@ class LoginModal extends React.Component {
                 id: 'LoginModal.error.noValidEmailAddress',
                 defaultMessage: 'Please use a valid email address',
             }) ]);
+            
+            this.refs.email1.focus();
         } else {
             this.setState({ isLoading: true });
 
@@ -325,13 +328,10 @@ class LoginModal extends React.Component {
 
         let inputField_classes = classNames({
             'ui': true,
-            'icon': true,
             'disabled': this.state.isLoading,
-            'input': true,
             'loading': this.state.isLoading,
             'field': true,
-            'fluid': true,
-            'inline': true
+            'fluid': true
         });
 
         const messages = defineMessages({
@@ -358,36 +358,36 @@ class LoginModal extends React.Component {
         });
 
         let inputs =
-        <div className="ui one column grid">
-          <div className="ui aligned column">
+        <div>
+          <div>
             <textarea className="sr-only" id="signinModalDescription"
             defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used these services to active your account on SlideWiki"
             tabIndex ='-1'/>
 
-            <div className={inputField_classes}>
-              <div className="sr-only">
+            <div className={inputField_classes} style={{textAlign: 'left'}}>
+              
                 <label htmlFor="email1">
                     <FormattedMessage
                     id='LoginModal.label.email'
                     defaultMessage='E-Mail'
                     />
                 </label>
-              </div>
-              <input type="text" id="email1" name="email1" ref="email1"  autoFocus tabIndex="0" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} required/><i className="mail icon"/>
+              
+              <input type="text" id="email1" name="email1" ref="email1" autoFocus tabIndex="0" aria-required/>
             </div>
           </div>
           <br/>
           <div className="ui center aligned column">
-            <div className={inputField_classes}>
-              <div className="sr-only">
+            <div className={inputField_classes} style={{textAlign: 'left'}}>
+              
                 <label htmlFor="password1">
                   <FormattedMessage
                     id='LoginModal.label.password'
                     defaultMessage='Password'
                   />
                 </label>
-              </div>
-              <input type="password" id="password1" name="password1" ref="password1" tabIndex="0" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} required/><i className="lock icon"/>
+              
+              <input type="password" id="password1" name="password1" ref="password1" tabIndex="0" aria-required/>
             </div>
           </div>
         </div>;
@@ -414,30 +414,17 @@ class LoginModal extends React.Component {
                 <div className="ui container">
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
-                        <div className="ui one column centered grid">
-                          <MediaQuery minDeviceWidth={769} values={{deviceWidth: 1600}}>
-                            <div className="ui five wide column">
-                              {inputs}
-                            </div>
-                          </MediaQuery>
-                          <MediaQuery maxDeviceWidth={768}>
-                            <div className="ui twelve wide centered column">
-                              {inputs}
-                            </div>
-                          </MediaQuery>
-                        </div>
-
-                        <br/>
-                        <div className="ui center aligned">
-                            <button type="submit" className="ui blue large labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
-                              <FormattedMessage
-                                id='LoginModal.button.signIn'
-                                defaultMessage='Sign In'
-                              />
-                            </button>
-                        </div>
-                        <br/>
                         <div className="ui error message" role="region" aria-live="polite"/>
+                            {inputs}
+                            <br/>
+                            <div className="ui center aligned">
+                                <button type="submit" className="ui blue large labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
+                                <FormattedMessage
+                                    id='LoginModal.button.signIn'
+                                    defaultMessage='Sign In'
+                                />
+                                </button>
+                            </div>
                       </form>
                       <br/>
                       <div className="container">
