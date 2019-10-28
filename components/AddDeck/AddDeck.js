@@ -544,14 +544,14 @@ class AddDeck extends React.Component {
                 <div className="sixteen wide column">
                     <form className={formClasses}>
                         <div className={fieldClass_title} ref="div_title">
-                            <label htmlFor="title">
+                            <label htmlFor="title" id="titleLabel">
                                 <FormattedMessage
                                     id='AddDeck.form.label_title'
                                     defaultMessage='Title' />
                             </label>
-                            <input type="text" id="title" aria-required="true" ref="input_title" aria-invalid={this.state.formValidationErrors.title ? true : false} />
+                            <input type="text" id="title" aria-required="true" ref="input_title" aria-labelledby={`titleLabel ${this.state.formValidationErrors.title ? 'titleError' : ''}`} aria-invalid={this.state.formValidationErrors.title ? true : false} />
                             {this.state.formValidationErrors.title ? 
-                                <span htmlFor="title" aria-labelledby="title" className="input-error">{this.state.formValidationErrors.title}</span> 
+                                <span id="titleError" className="input-error">{this.state.formValidationErrors.title}</span> 
                             : ''}
                         </div>
                         <div className="two fields">
@@ -587,7 +587,7 @@ class AddDeck extends React.Component {
                                     id='AddDeck.form.label_description'
                                     defaultMessage='Description' />
                             </label>
-                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
+                            <textarea rows="4" id="deck-description" aria-labelledby="deck-description-label" ref="textarea_description" />
                         </div>
                         <div className="ui message" id="metadata">
                             <p>
@@ -649,8 +649,16 @@ class AddDeck extends React.Component {
                         </div>
                         <div className={fieldClass_conditions} >
                             <div className="ui checkbox" ref="div_conditions" >
-                                <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" aria-invalid={this.state.formValidationErrors.conditions ? true : false} />
-                                <label htmlFor="terms">
+                                <input 
+                                    type="checkbox" 
+                                    tabIndex="0" 
+                                    id="terms" 
+                                    aria-required="true" 
+                                    ref="checkbox_conditions" 
+                                    aria-invalid={this.state.formValidationErrors.conditions ? true : false} 
+                                    aria-labelledby={`termsLabel ${this.state.formValidationErrors.conditions ? 'termsError' : ''}`} 
+                                />
+                                <label htmlFor="terms" id="termsLabel">
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
                                         defaultMessage='I agree to the SlideWiki ' />{' '}
@@ -665,20 +673,28 @@ class AddDeck extends React.Component {
                                 </label>
                             </div>
                             {this.state.formValidationErrors.conditions ? 
-                                <span htmlFor="title" aria-labelledby="terms" className="input-error">{this.state.formValidationErrors.conditions}</span> 
+                                <span id="termsError" className="input-error">{this.state.formValidationErrors.conditions}</span> 
                             : ''}
                         </div>
                         <div className={fieldClass_imageslicense} >
                             <div className="ui checkbox" ref="div_imageslicense" >
-                                <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" aria-invalid={this.state.formValidationErrors.imagesLicence ? true : false} />
-                                <label htmlFor="termsimages">
+                                <input 
+                                    type="checkbox" 
+                                    tabIndex="0" 
+                                    id="termsimages" 
+                                    aria-labelledby={`termsimagesLabel ${this.state.formValidationErrors.imagesLicence ? 'termsimagesError' : ''}`} 
+                                    aria-required="true" 
+                                    ref="checkbox_imageslicense" 
+                                    aria-invalid={this.state.formValidationErrors.imagesLicence ? true : false} 
+                                />
+                                <label htmlFor="termsimages" id="termsimagesLabel">
                                     <FormattedMessage
                                         id='AddDeck.form.label_termsimages'
                                         defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
                                 </label>
                             </div>
                             {this.state.formValidationErrors.imagesLicence ? 
-                                <span htmlFor="title" aria-labelledby="termsimages" className="input-error">{this.state.formValidationErrors.imagesLicence}</span> 
+                                <span htmlFor="title" id="termsimagesError" className="input-error">{this.state.formValidationErrors.imagesLicence}</span> 
                             : ''}
                         </div>
                         <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" style={{display:'none'}}>

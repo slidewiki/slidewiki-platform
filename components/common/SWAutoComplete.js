@@ -153,6 +153,7 @@ class SWAutoComplete extends React.Component {
                                     aria-describedby={(describedBy ? describedBy.props.id : null)}
                                     aria-required={this.props.required}
                                     aria-invalid={this.props.error}
+                                    aria-labelledby={`${id}-label ${this.props.errorMessage ? id + '-error' : ''}`}
                                 />
                                 {selectedItem ? (
                                     <ControllerButton
@@ -187,7 +188,7 @@ class SWAutoComplete extends React.Component {
                                 </BaseMenu>
                             </div>
                             {this.props.errorMessage ? 
-                                <span aria-labelledby={id + '-input'} className="input-error">
+                                <span id={id + '-error'} className="input-error">
                                     {this.props.errorMessage}
                                 </span> : ''}
                         </div>
