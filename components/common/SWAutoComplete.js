@@ -150,10 +150,10 @@ class SWAutoComplete extends React.Component {
                                         placeholder: this.props.placeholder,
                                         autoComplete: 'nope'
                                     })}
-                                    aria-describedby={(describedBy ? describedBy.props.id : null)}
+                                    aria-describedby={this.props.errorMessage ? id + '-error' : ''}
+                                    //aria-describedby={(describedBy ? describedBy.props.id : null)}
                                     aria-required={this.props.required}
                                     aria-invalid={this.props.error}
-                                    aria-labelledby={`${id}-label ${this.props.errorMessage ? id + '-error' : ''}`}
                                 />
                                 {selectedItem ? (
                                     <ControllerButton

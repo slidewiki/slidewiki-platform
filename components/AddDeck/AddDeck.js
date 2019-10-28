@@ -544,12 +544,20 @@ class AddDeck extends React.Component {
                 <div className="sixteen wide column">
                     <form className={formClasses}>
                         <div className={fieldClass_title} ref="div_title">
-                            <label htmlFor="title" id="titleLabel">
+                            <label htmlFor="title">
                                 <FormattedMessage
                                     id='AddDeck.form.label_title'
                                     defaultMessage='Title' />
                             </label>
-                            <input type="text" id="title" aria-required="true" ref="input_title" aria-labelledby={`titleLabel ${this.state.formValidationErrors.title ? 'titleError' : ''}`} aria-invalid={this.state.formValidationErrors.title ? true : false} />
+                            <input 
+                                type="text" 
+                                id="title" 
+                                aria-required="true" 
+                                ref="input_title" 
+                                aria-describedby={this.state.formValidationErrors.title ? 'titleError' : null} 
+                                aria-invalid={this.state.formValidationErrors.title ? true : false} 
+                            />
+
                             {this.state.formValidationErrors.title ? 
                                 <span id="titleError" className="input-error">{this.state.formValidationErrors.title}</span> 
                             : ''}
@@ -656,9 +664,9 @@ class AddDeck extends React.Component {
                                     aria-required="true" 
                                     ref="checkbox_conditions" 
                                     aria-invalid={this.state.formValidationErrors.conditions ? true : false} 
-                                    aria-labelledby={`termsLabel ${this.state.formValidationErrors.conditions ? 'termsError' : ''}`} 
+                                    aria-describedby={this.state.formValidationErrors.conditions ? 'termsError' : ''}
                                 />
-                                <label htmlFor="terms" id="termsLabel">
+                                <label htmlFor="terms">
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
                                         defaultMessage='I agree to the SlideWiki ' />{' '}
@@ -682,12 +690,12 @@ class AddDeck extends React.Component {
                                     type="checkbox" 
                                     tabIndex="0" 
                                     id="termsimages" 
-                                    aria-labelledby={`termsimagesLabel ${this.state.formValidationErrors.imagesLicence ? 'termsimagesError' : ''}`} 
+                                    aria-describedby={this.state.formValidationErrors.imagesLicence ? 'termsimagesError' : ''}
                                     aria-required="true" 
                                     ref="checkbox_imageslicense" 
                                     aria-invalid={this.state.formValidationErrors.imagesLicence ? true : false} 
                                 />
-                                <label htmlFor="termsimages" id="termsimagesLabel">
+                                <label htmlFor="termsimages">
                                     <FormattedMessage
                                         id='AddDeck.form.label_termsimages'
                                         defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
