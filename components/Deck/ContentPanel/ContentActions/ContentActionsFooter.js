@@ -75,6 +75,11 @@ class ContentActionsFooter extends React.Component {
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
         this.setState({isMobile: (mobile.phone() !== null) ? true : false});
+        document.addEventListener("keydown", this.handleKeyDown);        
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown)
     }
 
     handleExpandClick(){
@@ -163,6 +168,12 @@ class ContentActionsFooter extends React.Component {
                 userId: this.props.UserProfileStore.userid,
                 followed_type: 'deck'
             });
+        }
+    }
+
+    handleKeyDown = (e) => {
+        if (e.altKey && e.key === "s") {         
+            window.open(makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang), "_blank")
         }
     }
 
