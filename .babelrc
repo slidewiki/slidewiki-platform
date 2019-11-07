@@ -1,31 +1,49 @@
 {
-  "presets": ["es2015", "react"],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
   "env": {
     "production": {
       "plugins": [
-          "react-hot-loader/babel",
-          "add-module-exports",
-          "dynamic-import-webpack",
-          "transform-object-rest-spread",
-          "transform-class-properties",
-          "syntax-decorators",
-          "transform-react-constant-elements",
-          "transform-react-inline-elements"
-      ]
-  },
-    "development": {
-        "plugins": [
-          "react-hot-loader/babel",
-          "add-module-exports",
-          "dynamic-import-webpack",
-          "transform-object-rest-spread",
-          "transform-class-properties",
-          "transform-react-constant-elements",
-          "syntax-decorators",
-          ["react-intl", {
-              "messagesDir": "./build/messages/"
-              }],
+        "react-hot-loader/babel",
+        "add-module-exports",
+        "dynamic-import-webpack",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-modules-commonjs",
+        [
+          "@babel/plugin-syntax-decorators",
+          {
+            "legacy": true
+          }
         ],
+        "@babel/plugin-transform-react-constant-elements",
+        "@babel/plugin-transform-react-inline-elements"
+      ]
+    },
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel",
+        "add-module-exports",
+        "dynamic-import-webpack",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "@babel/plugin-transform-modules-commonjs",
+        [
+          "@babel/plugin-syntax-decorators",
+          {
+            "legacy": true
+          }
+        ],
+        [
+          "react-intl",
+          {
+            "messagesDir": "./build/messages/"
+          }
+        ]
+      ]
     }
   }
 }

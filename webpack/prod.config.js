@@ -3,6 +3,8 @@ let path = require('path');
 let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 let Visualizer = require('webpack-visualizer-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 let ReactIntlPlugin = require('react-intl-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
@@ -20,7 +22,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react-intl', 'react', 'react-dom', 'semantic-ui-react', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
+            'react-intl', 'react', 'react-dom', 'semantic-ui-react', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
         ]
     },
     output: {
@@ -40,7 +42,7 @@ let webpackConfig = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules(?!(\/|\\)identicons)/ ,
+                exclude: /node_modules/,
                 loader: 'babel-loader'
             },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
@@ -48,7 +50,16 @@ let webpackConfig = {
             {
                 test: /\.css$/,
                 exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-                loader: ExtractTextPlugin.extract({
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '/public/css/'
+                        },
+                    }, 
+                    'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]'
+                ]
+                /*loader: MiniCssExtractPlugin.extract({
                     fallback: 'style-loader',
                     use: [
                         'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]'
@@ -56,7 +67,7 @@ let webpackConfig = {
                     // use: 'css-loader',
                     // options: {importLoaders: 1, modules: true},
                     publicPath: '/public/css/'
-                })
+                })*/
             },
             // { test: /\.css$/,
             //     use: [
@@ -78,7 +89,7 @@ let webpackConfig = {
         //collect all messages into one json
         //new ReactIntlPlugin(),
         // css files from the extract-text-plugin loader
-        new ExtractTextPlugin({
+        new MiniCssExtractPlugin({
             filename: '../css/vendor.bundle.css',
             disable: false,
             allChunks: true
