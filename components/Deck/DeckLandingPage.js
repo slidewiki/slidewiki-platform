@@ -2,6 +2,7 @@ import React from 'react';
 import {Card} from 'semantic-ui-react';;
 import { NavLink } from 'fluxible-router';
 import { Grid, Divider, Button, Header, Image, Icon, Item, Label, Menu, Segment, Container } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 import { connectToStores } from 'fluxible-addons-react';
 import ContentStore from '../../stores/ContentStore';
@@ -27,6 +28,7 @@ import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
 import slugify from 'slugify';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class DeckLandingPage extends React.Component {
 
@@ -202,7 +204,7 @@ class DeckLandingPage extends React.Component {
                                     <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                         <CCBYSA size='small' />
                                     </a>
-                                    This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                    <FormattedMessage id='deck.landingpage.license_text' defaultMessage='This work is licensed under'/> <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
                                 </Segment>
                             </Grid.Column>
                         </Grid>
@@ -291,7 +293,20 @@ class DeckLandingPage extends React.Component {
             });
             interestedInDecks = <Grid stackable> {interestedInDecks} </Grid>;
         }
-
+        const messages = defineMessages({
+            tooltipStats: {
+                id: 'deck.landing.tooltip.stats',
+                defaultMessage: 'Deck Stats'
+            },
+            tooltipOpen: {
+                id: 'deck.landing.tooltip.open',
+                defaultMessage: 'Open Deck'
+            },
+            tooltipSlideshow: {
+                id: 'deck.landing.tooltip.slideshow',
+                defaultMessage: 'Open Slideshow'
+            },
+        });
         return (
             <div>
                 <Container fluid>
@@ -314,21 +329,21 @@ class DeckLandingPage extends React.Component {
                                             <div className="row">
                                                 <Header as="h1" id="main">
                                                     <NavLink href={openDeckUrl}>{deckData.title}</NavLink>
-                                                    <span className="sr-only">Deck status: </span>
-                                                    {(!deckData.hidden) ? <Label as="span" color='green'>Published</Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
+                                                    <span className="sr-only"><FormattedMessage id='deck.landing.deckStatus.text' defaultMessage='Deck status'/>: </span>
+                                                    {(!deckData.hidden) ? <Label as="span" color='green'><FormattedMessage id='deck.landing.deckStatus.published' defaultMessage='Published'/></Label> : <Label as="span" color='pink'>Unlisted</Label>}</Header>
                                             </div>
                                             <Divider hidden />
                                             <div className="ui stackable grid container">
                                                 <div className="two column row">
                                                     <div className="column" style={ColPadding}>
                                                         <div className="item">
-                                                            <div className="meta"><strong>Creator:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
+                                                            <div className="meta"><strong><FormattedMessage id='deck.landing.creator' defaultMessage='Creator'/>:</strong> <NavLink href={'/user/' + creator.username}>{creator.displayName || creator.username}</NavLink></div>
                                                             {originInfo}
-                                                            <div className="meta"><strong>Last Modified:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
+                                                            <div className="meta"><strong><FormattedMessage id='deck.landing.lastModified' defaultMessage='Last Modified'/>:&nbsp;</strong>{CustomDate.format(deckData.lastUpdate, 'Do MMMM YYYY')}</div>
                                                         </div>
                                                     </div>
                                                     <div className="column">
-                                                        <h2 className="sr-only">"Deck metadata"</h2>
+                                                        <h2 className="sr-only"><FormattedMessage id='deck.landing.deckMetadata' defaultMessage='Deck metadata'/></h2>
                                                         <div className="row">
                                                             <div className="ui medium labels" >
                                                                 <div className="ui label" >
@@ -360,7 +375,7 @@ class DeckLandingPage extends React.Component {
                                                 </div>
                                                 <div className="row" >
                                                     <div className="item">
-                                                        <div className="meta"><strong>Description:</strong>
+                                                        <div className="meta"><strong><FormattedMessage id='deck.landing.description' defaultMessage='Description'/>:</strong>
                                                             <div className="description" >{deckData.description}</div>
                                                         </div>
                                                     </div>
@@ -368,7 +383,7 @@ class DeckLandingPage extends React.Component {
                                                 <div className="row" >
                                                     { deckTopics.length > 0 &&
                                                     <div className="item">
-                                                        <div className="meta"><strong>Subject:&nbsp;</strong></div>
+                                                        <div className="meta"><strong><FormattedMessage id='deck.landing.subject' defaultMessage='Subject'/>:&nbsp;</strong></div>
                                                         <div className="description">{ deckTopics.map((t, i) =>
                                                             <span key={i}>
                                                               { !!i && ',\xa0' }
@@ -386,7 +401,7 @@ class DeckLandingPage extends React.Component {
                                 <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
                                     <div className="ui icon buttons huge attached">
                                         <NavLink href={deckStatsUrl} tabIndex={-1} >
-                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip="Deck Stats" role="button">
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip={this.context.intl.formatMessage(messages.tooltipStats)} role="button">
                                                 <Icon name="line graph" />
                                             </Button>
                                         </NavLink>
@@ -395,12 +410,12 @@ class DeckLandingPage extends React.Component {
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip="Open Deck" role="button">
+                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip={this.context.intl.formatMessage(messages.tooltipOpen)} role="button">
                                                     <Icon name="open folder" />
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip="Open Slideshow" role="button" >
+                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)} role="button" >
                                                     <Icon name="play circle" />
                                                 </Button>
                                             </a>
@@ -415,7 +430,7 @@ class DeckLandingPage extends React.Component {
                             <Grid divided='vertically' stackable>
                                 <Grid.Column only="tablet computer" width={12}>
                                     <Segment attached='top' >
-                                        <Header size="small" as="h3">Available in the following languages:</Header>
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.landing.available_languages.text' defaultMessage='Available in the following languages'/>:</Header>
                                         { deckLanguages.map((lang, i) =>
                                             <span key={i}>
                                                 {!!i && ',\xa0'}
@@ -427,11 +442,11 @@ class DeckLandingPage extends React.Component {
                                         ) }
                                     </Segment>
                                     <Segment attached>
-                                        <Header size="small" as="h3">Tags:</Header>
-                                        {(deckTags.length === 0) ? <div>There are no tags assigned to this deck.</div> : <TagList items={deckTags} editable={false}/>}
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.landing.tags.text' defaultMessage='Tags'/>:</Header>
+                                        {(deckTags.length === 0) ? <div><FormattedMessage id='deck.landing.tags.not_available' defaultMessage='There are no tags assigned to this deck.'/></div> : <TagList items={deckTags} editable={false}/>}
                                     </Segment>
                                     <Segment attached='bottom'>
-                                        <Header size="small" as="h3">You may also be interested in:</Header>
+                                        <Header size="small" as="h3"><FormattedMessage id='deck.other_interesting.text' defaultMessage='You may also be interested in'/>:</Header>
                                         {interestedInDecks}
                                     </Segment>
                                 </Grid.Column>
@@ -442,7 +457,7 @@ class DeckLandingPage extends React.Component {
                                         <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' role="img" aria-label="Creative Commons License logo">
                                             <CCBYSA size='small' />
                                         </a>
-                                        This work is licensed under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                                        <FormattedMessage id='deck.landing.landingpage.license_text' defaultMessage='This work is licensed under'/> <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank'>Creative Commons Attribution-ShareAlike 4.0 International License</a>
                                     </Segment>
                                 </Grid.Column>
                             </Grid>
@@ -458,6 +473,10 @@ class DeckLandingPage extends React.Component {
         );
     }
 }
+
+DeckLandingPage.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 DeckLandingPage = connectToStores(DeckLandingPage, [
     ContentStore,

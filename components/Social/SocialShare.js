@@ -6,6 +6,7 @@ import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckVi
 import EmbedModal from '../Deck/ContentPanel/ContentActions/EmbedModal';
 import {Button, Container, Form, Modal, Icon, Segment, Grid, TextArea, Input, Label} from 'semantic-ui-react';
 import { isEmpty } from '../../common.js';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class SocialShare extends React.Component {
 
@@ -117,8 +118,15 @@ class SocialShare extends React.Component {
             right: 'auto'
         } : {};
         
+        const messages = defineMessages({
+            tooltipSocial: {
+                id: 'socialShare.tooltip',
+                defaultMessage: 'Share'
+            }
+        });
+        
         return(
-            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="listbox" aria-label="Share" data-tooltip="Share" style={dropdownStyle}>
+            <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="listbox" aria-label="Share" data-tooltip={this.context.intl.formatMessage(messages.tooltipSocial)} style={dropdownStyle}>
                 { !this.props.textOnly ?
                     <div className="text">
                         <button className="ui button" type="button" >
@@ -126,7 +134,7 @@ class SocialShare extends React.Component {
                         </button>
                     </div>
                     :
-                    <div className={this.props.className} aria-label="Share" data-tooltip="Share">
+                    <div className={this.props.className} aria-label="Share" data-tooltip={this.context.intl.formatMessage(messages.tooltipSocial)}>
                         <span><Icon name='share' size='large'/> Share</span>
                     </div>
                 }
@@ -198,7 +206,8 @@ class SocialShare extends React.Component {
 }
 
 SocialShare.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 export default SocialShare;

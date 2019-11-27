@@ -8,6 +8,7 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import registerChange from '../../../../actions/slide/registerChange';
 import ContentStore from '../../../../stores/ContentStore';
 import SlideEditStore from '../../../../stores/SlideEditStore';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class SlideControl extends React.Component {
     constructor(props) {
@@ -15,9 +16,14 @@ class SlideControl extends React.Component {
     }
     componentDidMount() {
         this.updateProgressbar();
+        document.addEventListener('keydown', this.handleKeyDown);
     }
     componentDidUpdate(){
         this.updateProgressbar();
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     confirmLeaving = () => {
@@ -107,20 +113,55 @@ class SlideControl extends React.Component {
         $(progressbar).progress({percent: percentage});
         //$(progressbar).show();
     }
+
+    handleKeyDown = (e) => {
+        let selector = this.props.DeckTreeStore.selector;
+        let flatTree = this.props.DeckTreeStore.flatTree;
+        let mode = this.props.mode;
+
+        if (e.altKey && e.keyCode === 78) { //n  
+            this.handleNextClick(selector, flatTree, mode);
+        } else if (e.altKey && e.keyCode === 80) { //p  
+            this.handlePreviousClick(selector, flatTree, mode);
+        }
+    }
+
     render() {
         //hide focused outline
         let compStyle = {
             outline: 'none'
         };
+        const messages = defineMessages({
+            tooltipSlideControlFirst: {
+                id: 'slideControl.tooltip.first',
+                defaultMessage: 'First slide'
+            },
+            tooltipSlideControlPrevious: {
+                id: 'slideControl.tooltip.previous',
+                defaultMessage: 'Previous slide'
+            },
+            tooltipSlideControlNumber: {
+                id: 'slideControl.tooltip.number',
+                defaultMessage: 'Slide number'
+            },
+            tooltipSlideControlNext: {
+                id: 'slideControl.tooltip.next',
+                defaultMessage: 'Next slide'
+            },
+            tooltipSlideControlLast: {
+                id: 'slideControl.tooltip.last',
+                defaultMessage: 'Last slide'
+            }
+        });
         let slideProgressNumbers = SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree) + '/' + SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree);
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl" style={compStyle}>
                 <div className="ui icon buttons large">
-                    <button className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} type="button" aria-label="First slide" data-tooltip="First slide"><i className="large icon fast backward"></i></button>
-                    <button className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} type="button" aria-label="Previous slide" data-tooltip="Previous slide "><i className="large step backward icon"></i></button>
-                    {!this.props.isMobile ? <button className="ui grey large button" type="button" aria-label="Slide number" data-tooltip="Slide number">{slideProgressNumbers}</button>: ''}
-                    <button className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Next slide" data-tooltip="Next slide"><i className="large icon step forward"></i></button>
-                    <button className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Last slide" data-tooltip="Last slide"><i className="large icon fast forward"></i></button>
+                    <button className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} type="button" aria-label="First slide" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideControlFirst)}><i className="large icon fast backward"></i></button>
+                    <button className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} type="button" aria-label="Previous slide" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideControlPrevious)}><i className="large step backward icon"></i></button>
+                    {!this.props.isMobile ? <button className="ui grey large button" type="button" aria-label="Slide number" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideControlNumber)}>{slideProgressNumbers}</button>: ''}
+                    <button className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Next slide" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideControlNext)}><i className="large icon step forward"></i></button>
+                    <button className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Last slide" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideControlLast)}><i className="large icon fast forward"></i></button>
                 </div>
             </HotKeys>
         );
@@ -128,7 +169,8 @@ class SlideControl extends React.Component {
 }
 
 SlideControl.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 SlideControl = connectToStores(SlideControl, [DeckTreeStore, ContentStore, SlideEditStore], (context, props) => {
     return {

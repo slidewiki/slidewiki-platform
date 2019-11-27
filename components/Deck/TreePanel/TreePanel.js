@@ -21,6 +21,8 @@ import TranslationStore from '../../../stores/TranslationStore';
 import updateTrap from '../../../actions/loginModal/updateTrap';
 import { makeNodeURL } from '../../common/Util';
 import { Checkbox } from 'semantic-ui-react';
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 
 class TreePanel extends React.Component {
 
@@ -30,6 +32,25 @@ class TreePanel extends React.Component {
             isForkModalOpen: false,
             showThumbnails: false
         };
+
+        this.messages = defineMessages({
+            treePanelHeading:{
+                id: 'TreePanel.header',
+                defaultMessage: 'List of all slides in this deck'
+            },
+            tooltipNewTab: {
+                id: 'TreePanel.newTab',
+                defaultMessage: 'Open slideshow in new tab'
+            },
+            tooltipForkDeck: {
+                id: 'TreePanel.forkDeck',
+                defaultMessage: 'Fork deck (create a copy)'
+            },
+            showThumbnails: {
+                id: 'TreePanel.showThumbnails',
+                defaultMessage: 'Show Thumbnails',
+            }
+        });
     }
 
     componentDidMount() {
@@ -202,10 +223,26 @@ class TreePanel extends React.Component {
                 <NavigationPanel />
 
                     <div className="ui attached icon buttons menu">
-                        <div className={classes_playbtn} aria-label="Open slideshow in new tab" tabIndex="0" role="button" data-tooltip="Open slideshow in new tab" onClick={this.handlePresentationClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePresentation')}>
+                        <div 
+                            className={classes_playbtn} 
+                            aria-label={this.context.intl.formatMessage(this.messages.tooltipNewTab)}
+                            tabIndex="0" 
+                            role="button" 
+                            data-tooltip={this.context.intl.formatMessage(this.messages.tooltipNewTab)}
+                            onClick={this.handlePresentationClick.bind(this)} 
+                            onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePresentation')}
+                        >
                             <i className="circle play large icon"></i>
                         </div>
-                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck (create a copy)" onClick={this.handleFork.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')} >
+                        <div 
+                            className={classes_forksbtn} 
+                            aria-label={this.context.intl.formatMessage(this.messages.tooltipForkDeck)}
+                            tabIndex="0" 
+                            role="button" 
+                            data-tooltip={this.context.intl.formatMessage(this.messages.tooltipForkDeck)}
+                            onClick={this.handleFork.bind(this)} 
+                            onKeyPress={(evt) => this.handleKeyPress(evt, 'handleFork')}
+                        >
                             <i className="large blue fork icon"></i>
                         </div>
                     </div>
@@ -215,6 +252,10 @@ class TreePanel extends React.Component {
                             'wordBreak': 'break-all',
                             'wordWrap': 'break-word'
                         }}> {decktreeError} </div> : ''}
+
+                        <h1 className="sr-only">
+                            {this.context.intl.formatMessage(this.messages.treePanelHeading)}
+                        </h1>
 
                         <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} focusedSelector={this.props.DeckTreeStore.focusedSelector} nextSelector={nextSelector}
                             prevSelector={prevSelector} page={this.props.page}
@@ -232,7 +273,7 @@ class TreePanel extends React.Component {
                     <div className="ui bottom attached segment">
                         <Checkbox 
                             toggle 
-                            label='Show Thumbnails'
+                            label={this.context.intl.formatMessage(this.messages.showThumbnails)}
                             onChange={this.toggleShowThumbnails.bind(this)} 
                             checked={this.state.showThumbnails}
                         />
@@ -246,7 +287,8 @@ class TreePanel extends React.Component {
 }
 
 TreePanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore, TranslationStore], (context, props) => {
     return {

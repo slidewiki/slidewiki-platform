@@ -6,6 +6,8 @@ import loadActivities from '../../../actions/activityfeed/loadActivities';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
 import {isLocalStorageOn} from '../../../common.js';
+import {FormattedMessage, defineMessages} from 'react-intl';
+
 
 class ActivityFeedPanel extends React.Component {
     componentWillMount() {
@@ -34,7 +36,11 @@ class ActivityFeedPanel extends React.Component {
 
         return (
             <div ref="activityFeedPanel">
-                <h4 className="ui header" >Activity Feed
+                <h4 className="ui header" >
+                    <FormattedMessage
+                        id='activity.feed.title'
+                        defaultMessage='Activity Feed'
+                    />
                 </h4>
                 <div className="ui basic segment" style={panelDIVStyles}>
                     {activityDIV}
