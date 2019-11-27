@@ -213,7 +213,7 @@
     "react-test-renderer": "15.6.2",
     "shelljs": "^0.7.8",
     "sloc": "0.2.0",
-    "webpack-dev-server": "^2.4.1",
+    "webpack-dev-server": "^3.9.0",
     "webpack-vendor-chunk-plugin": "1.0.0"
   },
   "pancake": {
