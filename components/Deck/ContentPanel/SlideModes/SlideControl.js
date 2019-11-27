@@ -16,14 +16,14 @@ class SlideControl extends React.Component {
     }
     componentDidMount() {
         this.updateProgressbar();
-        document.addEventListener("keydown", this.handleKeyDown);
+        document.addEventListener('keydown', this.handleKeyDown);
     }
     componentDidUpdate(){
         this.updateProgressbar();
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleKeyDown)
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     confirmLeaving = () => {
@@ -118,10 +118,11 @@ class SlideControl extends React.Component {
         let selector = this.props.DeckTreeStore.selector;
         let flatTree = this.props.DeckTreeStore.flatTree;
         let mode = this.props.mode;
-        if (e.altKey && e.key === "n") {         
-            this.handleNextClick(selector, flatTree, mode)
-        } else if (e.altKey && e.key === "p") {         
-            this.handlePreviousClick(selector, flatTree, mode)
+
+        if (e.altKey && e.keyCode === 78) { //n  
+            this.handleNextClick(selector, flatTree, mode);
+        } else if (e.altKey && e.keyCode === 80) { //p  
+            this.handlePreviousClick(selector, flatTree, mode);
         }
     }
 

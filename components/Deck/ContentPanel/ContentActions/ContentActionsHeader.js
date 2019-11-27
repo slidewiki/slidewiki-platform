@@ -107,11 +107,11 @@ class ContentActionsHeader extends React.Component {
 
     componentDidMount() {
         this.setState({ windowInnerWidth: window.innerWidth });
-        document.addEventListener("keydown", this.handleKeyDown);
+        document.addEventListener('keydown', this.handleKeyDown);
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleKeyDown)
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     handleAddNode(selector, nodeSpec) {
@@ -203,8 +203,8 @@ class ContentActionsHeader extends React.Component {
     handleKeyDown = (e) => {
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = { id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath') };        
-        if (e.altKey && e.key === "w") {         
-            this.handleEditButton(selector)
+        if (e.altKey && e.keyCode === 87) { //w    
+            this.handleEditButton(selector);
         }
     }
 
