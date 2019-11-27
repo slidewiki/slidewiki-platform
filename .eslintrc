@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extend": "eslint:recommended",
+  //"extend": "eslint:recommended",
   "plugins": [
     "react"
   ],
