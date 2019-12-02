@@ -19,7 +19,6 @@ let MediaQuery = require ('react-responsive');
 const MenuStyled = styled.div`
     border-radius: 0!important;
     z-index: 10;
-    position: fixed;
     width: 100%;
     box-shadow: 0 1px 3px 0 rgba(37,32,31,.3)!important;
 `;

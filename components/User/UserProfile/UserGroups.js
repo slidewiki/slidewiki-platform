@@ -4,6 +4,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/usergroups/updateUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import UserPicture from '../../common/UserPicture';
+import {Segment, Header, Button} from 'semantic-ui-react';
 
 class UserGroups extends React.Component {
     constructor(props){
@@ -158,19 +159,23 @@ class UserGroups extends React.Component {
         }
 
         return (
-            <div className="ui segments">
-                <div className="ui secondary clearing segment" >
-                  <h1 className="ui left floated header medium" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h1>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
-                      <i className="icon plus"/>
-                      <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>
-                  </button>
-              </div>
+            <Segment.Group>
+                <Segment secondary clearing>
+                    <Header as="h2" size="medium" floated="left" id="main">{this.context.intl.formatMessage(this.messages.groups)}</Header>
+                    <Button 
+                        icon="plus" 
+                        floated="right" 
+                        size='medium' 
+                        onClick={this.handleClickNewGroup.bind(this)}
+                    >
+                        {this.context.intl.formatMessage(this.messages.createGroup)}
+                    </Button>
+                </Segment>
 
               {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">{this.context.intl.formatMessage(this.messages.loading)}</div></div> : ''}
 
               {items}
-            </div>
+            </Segment.Group>
         );
     }
 }

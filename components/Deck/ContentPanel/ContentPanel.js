@@ -8,6 +8,7 @@ import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 import NoPermissionsModal from './NoPermissionsModal';
+import {Button, Menu} from 'semantic-ui-react';
 
 class ContentPanel extends React.Component {
 
@@ -79,9 +80,9 @@ class ContentPanel extends React.Component {
         return (
             <div ref="contentPanel">
                 <h1 className="sr-only"> {H1heading}</h1>
-                <div className="ui top attached">
-                    <ContentActionsHeader/>
-                </div>
+                
+                <ContentActionsHeader/>
+                
                 <div className="ui top attached">
                     {targetComponent}
                 </div>

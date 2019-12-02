@@ -1,6 +1,6 @@
 import React from 'react';
 import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
-import {Dropdown, Grid, Message, Segment, Table} from 'semantic-ui-react';
+import {Dropdown, Grid, Message, Segment, Table, Header} from 'semantic-ui-react';
 import moment from 'moment';
 import {defineMessages} from 'react-intl';
 import PropTypes from 'prop-types';
@@ -34,11 +34,11 @@ class ActivityTimeline extends React.Component {
         });
 
         return (
-          <div>
-              <Message attached>
-                  <h2>{this.context.intl.formatMessage(this.messages.activityTimelineTitle)}</h2>
-              </Message>
-              <Segment attached padded loading={this.props.loading}>
+          <Segment.Group>
+              <Segment secondary>
+                  <Header as='h2' size="medium">{this.context.intl.formatMessage(this.messages.activityTimelineTitle)}</Header>
+              </Segment>
+              <Segment padded loading={this.props.loading} >
                   <span>
                       <StatsFilters activityType={this.props.activityType}
                                     datePeriod={this.props.datePeriod}
@@ -79,7 +79,7 @@ class ActivityTimeline extends React.Component {
                       </Grid>
                   </span>
               </Segment>
-          </div>
+          </Segment.Group>
         );
     }
 }

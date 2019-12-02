@@ -76,7 +76,9 @@ class InfoPanelInfoView extends React.Component {
                                 data-tooltip="Zoom out"
                                 style={{width:'33%'}}
                             >
-                                <i className="large zoom out icon"></i>
+                                <i className="large stacked icons">
+                                    <i className="zoom out icon"></i>
+                                </i>
                             </button>
                             <button 
                                 className="ui icon button" 
@@ -99,7 +101,9 @@ class InfoPanelInfoView extends React.Component {
                                 data-tooltip="Zoom in"
                                 style={{width:'33%'}}
                             >
-                                <i className="large zoom in icon"></i>
+                                <i className="large stacked icons">
+                                    <i className="zoom in icon"></i>
+                                </i>
                             </button>
                         </div>
                 }

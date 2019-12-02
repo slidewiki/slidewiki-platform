@@ -25,7 +25,7 @@ import DeckTranslationsModal from '../Translation/DeckTranslationsModal';
 import SlideTranslationsModal from '../Translation/SlideTranslationsModal';
 import addDeckTranslation from '../../../../actions/translation/addDeckTranslation';
 import addSlideTranslation from '../../../../actions/translation/addSlideTranslation';
-import {Button} from 'semantic-ui-react';
+import {Button, Icon} from 'semantic-ui-react';
 
 class ContentActionsHeader extends React.Component {
     constructor(props){
@@ -280,7 +280,7 @@ class ContentActionsHeader extends React.Component {
             if(contentDetails.selector.stype === 'slide'){
                 saveButton =
                     <button tabIndex="0"  className="ui button primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
-                        <i className="large icons">
+                        <i className="icons">
                             <i className="save icon "></i>
                             <i className=""></i>
                         </i>
@@ -288,7 +288,7 @@ class ContentActionsHeader extends React.Component {
                     </button>;
                 cancelButton =
                     <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
-                        <i className="large icons">
+                        <i className="icons">
                             <i className="cancel icon "></i>
                             <i className=""></i>
                         </i>
@@ -319,18 +319,19 @@ class ContentActionsHeader extends React.Component {
             {
                 const editDisabled = (this.props.ContentStore.mode === 'loading');
                 editButton =
-                    <button className={editClass} disabled={editDisabled} onClick={this.handleEditButton.bind(this,selector)}
-                        type="button"
+                    <Button 
+                        disabled={editDisabled} 
+                        onClick={this.handleEditButton.bind(this,selector)}
+                        style={{display: 'flex', alignItems: 'center'}}
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
-                        >
-                        <i className="icons">
-                            <i className="large blue edit icon"></i>
-                            <i className=""></i>
-                        </i>
-                        {this.context.intl.formatMessage(this.messages.editButtonText)}
-
-                    </button>;
+                        color="blue"
+                    >
+                        <Icon.Group>
+                            <Icon name={contentDetails.selector.stype === 'slide' ? 'edit' : 'settings'} />
+                        </Icon.Group>
+                        {contentDetails.selector.stype === 'slide' ? 'Edit slide' : 'Deck settings'}
+                    </Button>;
 
                 if(contentDetails.selector.stype === 'slide' && this.props.DeckTreeStore.allowMarkdown){
                     markdownEditButton =
@@ -356,10 +357,10 @@ class ContentActionsHeader extends React.Component {
 
         }
 
-        const leftButtonsClass = classNames({
-            'ui left floated top attached buttons': true,
-            'basic': editButton !== ''
-        });
+        /*const leftButtonsClass = classNames({
+            'ui left floated top buttons': true,
+            //'basic': editButton !== ''
+        });*/
 
         /*
         <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
@@ -376,9 +377,9 @@ class ContentActionsHeader extends React.Component {
         </div>;
 
         return (
-                <div className="ui two column grid">
-                    <div className="column computer tablet only">
-                        <div className={leftButtonsClass}>
+                <div className="ui segment two column grid middle aligned" style={{marginTop: 0}}> 
+                    <div className="column computer tablet only" style={{padding: 0, paddingLeft: 5}}>
+                        <div className="ui left floated top buttons small">
                             {editButton}
                             {markdownEditButton}
                             {saveButton}
@@ -392,11 +393,12 @@ class ContentActionsHeader extends React.Component {
                     <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
                         {mobileMessage}
                     </div>
-                    <div className="column computer tablet only">
-                    <div className="ui right floated basic top attached buttons" >
+                    <div className="column computer tablet only" style={{padding: 0}}>
+                    <div className="ui right floated top buttons" >
                     { buttonsAreHidden ? '' : [
                         <Button  onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
                             key="addSlide"
+                            basic
                             aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit' || contentDetails.mode ==='markdownEdit' ?-1:0}>
@@ -443,17 +445,19 @@ class ContentActionsHeader extends React.Component {
                             {
                                 this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
                                     <button 
-                                        className="ui icon button" 
+                                        className="ui icon button basic" 
                                         onClick={this.zoomOut}
                                         key="zoomOut"
                                         type="button" 
                                         aria-label="Zoom out" 
                                         data-tooltip="Zoom out"
                                     >
-                                        <i className="large zoom out icon"></i>
+                                        <i className="large stacked icons">
+                                            <i className="zoom out icon"></i>
+                                        </i>
                                     </button>,
                                     <button 
-                                        className="ui button" 
+                                        className="ui button basic" 
                                         onClick={this.resetZoom}
                                         key="zoomReset"
                                         type="button" 
@@ -466,14 +470,16 @@ class ContentActionsHeader extends React.Component {
                                         </i>
                                     </button>,
                                     <button 
-                                        className="ui icon button" 
+                                        className="ui icon button basic" 
                                         onClick={this.zoomIn}
                                         key="zoomIn"
                                         type="button" 
                                         aria-label="Zoom in" 
                                         data-tooltip="Zoom in"
                                     >
-                                        <i className="large zoom in icon"></i>
+                                        <i className="large stacked icons">
+                                            <i className="zoom in icon"></i>
+                                        </i>
                                     </button>
                                 ] : null
                             }
