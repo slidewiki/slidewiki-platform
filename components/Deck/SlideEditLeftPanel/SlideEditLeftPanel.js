@@ -17,6 +17,7 @@ import addLTI from '../../../actions/slide/addLTI';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import AttachQuestions from '../ContentPanel/AttachQuestions/AttachQuestionsModal';
+import AttachOer from '../ContentPanel/AttachOer/AttachOerModal';
 import classNames from 'classnames/bind';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import DeckPageStore from '../../../stores/DeckPageStore';
@@ -946,6 +947,7 @@ class SlideEditLeftPanel extends React.Component {
             <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
                 <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Add video' />
             </a>
+            <AttachOer currentDeck={currentDeck} buttonStyle={buttonStyle} selector={selectorDeck} />
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Add other' />
             </a>

@@ -1998,6 +1998,18 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').css('background-size', '');
             $('.pptx2html').attr('aria-hidden','');
         }
+        if (nextProps.SlideEditStore.oerContent !== '' && nextProps.SlideEditStore.oerContent !== this.props.SlideEditStore.oerContent)
+        {
+            let uniqueID = this.getuniqueID();
+            let div = $('<div />');
+            div.attr('id', uniqueID);
+            div.attr('style', 'position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%');
+            div.html(nextProps.SlideEditStore.oerContent);
+            $('.pptx2html').append(div);
+
+            this.resizeDrag();
+            this.setChanges(true);
+        }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
                 //TODO code which inserts the file into the slide

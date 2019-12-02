@@ -51,6 +51,7 @@ class SlideEditStore extends BaseStore {
         /* Whether there are unsaved changes in editor. */
         this.hasChanges = false;
         this.refreshEditor = 'false';
+        this.oerContent = '';
     }
     updateContent(payload) {
         this.id = payload.slide.id;
@@ -248,6 +249,12 @@ class SlideEditStore extends BaseStore {
         this.refreshEditor = 'false';
         this.emitChange();
     }
+    handleInsertOerContent(payload) {
+        this.oerContent = payload.oerContent;
+        this.emitChange();
+        this.oerContent = '';
+        this.emitChange();
+    }
     getState() {
         return {
             id: this.id,
@@ -296,7 +303,8 @@ class SlideEditStore extends BaseStore {
             contentEditorFocus: this.contentEditorFocus,
             annotations: this.annotations,
             hasChanges: this.hasChanges,
-            refreshEditor: this.refreshEditor
+            refreshEditor: this.refreshEditor,
+            oerContent: this.oerContent,
         };
     }
 
@@ -352,6 +360,7 @@ class SlideEditStore extends BaseStore {
         this.annotations = state.annotations;
         this.hasChanges = state.hasChanges;
         this.refreshEditor = state.refreshEditor;
+        this.oerContent = state.oerContent;
     }
 
     zoomContent(payload) {
@@ -412,6 +421,7 @@ SlideEditStore.handlers = {
     'ZOOM': 'zoomContent',
     'CONTENT_EDITOR_FOCUS': 'handleContentEditorFocus',
     'REGISTER_CHANGE': 'registerChange',
+    'INSERT_OER_CONTENT': 'handleInsertOerContent',
     'UPDATE_SLIDE_CONTENT_AFTER_TRANSLATION': 'updateSlideContentAfterTranslation',
 };
 
