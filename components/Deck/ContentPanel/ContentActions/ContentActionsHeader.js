@@ -322,7 +322,7 @@ class ContentActionsHeader extends React.Component {
                     <Button 
                         disabled={editDisabled} 
                         onClick={this.handleEditButton.bind(this,selector)}
-                        style={{display: 'flex', alignItems: 'center'}}
+                        style={{display: 'flex', alignItems: 'center', margin: 5}}
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex = {contentDetails.mode ==='edit'?-1:0}
                         color="blue"
@@ -372,7 +372,7 @@ class ContentActionsHeader extends React.Component {
           <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
         </button>
         */
-        let mobileMessage = <div className="ui top attached warning message">
+        let mobileMessage = <div className="ui top warning message">
           <p>{this.context.intl.formatMessage(this.messages.mobileMessageText)}</p>
         </div>;
 
@@ -390,7 +390,7 @@ class ContentActionsHeader extends React.Component {
                     </div>
                     <DeckTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
                     <SlideTranslationsModal username={this.props.UserProfileStore.username} editPermissions={this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit} />
-                    <div className="sixteen wide column mobile only" style={{marginTop: '-3rem'}}>
+                    <div className="sixteen wide column mobile only">
                         {mobileMessage}
                     </div>
                     <div className="column computer tablet only" style={{padding: 0}}>

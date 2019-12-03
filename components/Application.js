@@ -68,7 +68,7 @@ class Application extends React.Component {
         let header = null , footer = null, content = null;
         const noHF_pages = ['presentation', 'neo4jguide', 'webrtc', 'print', 'presentationIE'];//NOTE add the route name to the following array if you don't want header and footer rendered on the page
         if(!noHF_pages.includes(this.props.currentRoute.name)){
-            header = <Header />; footer = <Footer />;
+            header = <Header routeName={this.props.currentRoute.name} />; footer = <Footer />;
             //does not show banner on the above pages
             if (!this.state.user_cookies) {
                 cookieBanner = <FormattedMessage id="header.cookieBanner" defaultMessage='This website uses cookies.'>

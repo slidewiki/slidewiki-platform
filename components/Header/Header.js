@@ -13,6 +13,7 @@ import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import updateTrap from '../../actions/loginModal/updateTrap';
 import styled from 'styled-components';
+import classNames from 'classnames';
 
 let MediaQuery = require ('react-responsive');
 
@@ -107,11 +108,16 @@ class Header extends React.Component {
         } else
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
 
+        const containerClass = classNames({
+            'ui container': true,
+            'fluid': this.props.routeName === 'home'
+        });
+
         return (
             <HeaderStyled tabIndex="-1" id="tabindex-start">
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
                     <MenuStyled className="ui inverted blue menu" ref="header">
-                        <div className="ui container">
+                        <div className={containerClass}>
                             <AUskipLink ariaLabel="skip links navigation" tabIndex="0" links={[
                                 {
                                     link: '#main',
@@ -163,7 +169,7 @@ class Header extends React.Component {
                         },
                     ]}
                     />
-                    <MenuStyled className="ui inverted blue menu" style={{marginBottom: '0.1rem'}} ref="header">
+                    <MenuStyled className="ui inverted blue menu" style={{marginBottom: '0.1rem', marginTop: 0}} ref="header">
                         <button className="ui icon button item" aria-label="user management menu" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
                           &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt=" " style={{width: '9rem', paddingTop: '0.5rem'}}/>
                         </button>
@@ -198,6 +204,10 @@ class Header extends React.Component {
 Header.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     getUser: PropTypes.func
+};
+
+Header.propTypes = {
+    routeName: PropTypes.string.isRequired,
 };
 
 Header = connectToStores(Header, [UserProfileStore], (context, props) => {
