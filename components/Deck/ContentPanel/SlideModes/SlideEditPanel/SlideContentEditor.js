@@ -25,6 +25,8 @@ import Util from '../../../../common/Util';
 import changeSlideSizeText from '../../../../../actions/slide/changeSlideSizeText';
 import registerChange from '../../../../../actions/slide/registerChange';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import ReactDOMServer from 'react-dom/server';
+
 
 let ReactDOM = require('react-dom');
 
@@ -2004,7 +2006,7 @@ class SlideContentEditor extends React.Component {
             let div = $('<div />');
             div.attr('id', uniqueID);
             div.attr('style', 'position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%');
-            div.html(nextProps.SlideEditStore.oerContent);
+            div.html(ReactDOMServer.renderToStaticMarkup(nextProps.SlideEditStore.oerContent));
             $('.pptx2html').append(div);
 
             this.resizeDrag();

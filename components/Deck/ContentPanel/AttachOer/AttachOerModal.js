@@ -14,41 +14,49 @@ class AttachOerModal extends React.Component {
             modalOpen: false,
             activeTrap: false
         };
-
-        this.handleOpen = this.handleOpen.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.unmountTrap = this.unmountTrap.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {}
-
-    componentWillUnmount() {}
-
-    handleOpen() {
+    // Opening the modal
+    handleOpen = () => {
+        // App is hidden for screen readers when the modal is open
         $('#app').attr('aria-hidden', 'true');
+
+        // Open the actual modal
         this.setState({
             modalOpen: true,
             activeTrap: true
         });
     }
 
-    handleClose() {
-        //console.log('handleClose');
+    // Close the modal
+    handleClose = () => {
         $('#app').attr('aria-hidden', 'false');
+
         this.setState({
             modalOpen: false,
             activeTrap: false,
-            selectedQuestions: [],
-            //showQuestions:true,
-            selectedDeckId: -1
         });
     }
 
     // Needed for accessibility (keep the focus inside the modal)
-    unmountTrap() {
+    unmountTrap = () => {
         if (this.state.activeTrap) {
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden', 'false');
+        }
+    }
+
+    // Ensure that button also works with keyboard (for accessibility)
+    handleKeyPress = (event, param) => {
+        // On enter on button, open the modal
+        if(event.key === 'Enter'){
+            switch(param) {
+                case 'handleAddOer':
+                    this.handleOpen();
+                    break;
+                default: 
+                    break;
+            }
         }
     }
 
@@ -57,32 +65,35 @@ class AttachOerModal extends React.Component {
     handleOerClick = (resourceId) => {
         console.log('Selected resource', resourceId);
         this.handleClose();
+        // Add the OER content in the slide 
         this.context.executeAction(insertOerContent, {
+            // Only use JSX as oerContent payload!
             oerContent:
-                '<a href="http://google.com" target="_blank">Test oer link</a>'
+                <a href="http://tib.eu" target="_blank" rel="noopener noreferrer">Test oer link</a>
         });
     };
 
     render() {
-        let attachQuestionsBtn = (
+        // The button that is being added in the slideEditLeftPanel
+        let attachButton = (
             <a
-                className="item"
-                id="handleAddQuestionsModal"
-                role="button"
+                className='item'
+                id='handleAddQuestionsModal'
+                role='button'
                 aria-hidden={this.state.modalOpen}
                 onClick={this.handleOpen}
                 onKeyPress={(evt) =>
-                    this.handleKeyPress(evt, 'handleAddQuestionsClick')
+                    this.handleKeyPress(evt, 'handleAddOer')
                 }
                 tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}
             >
-                <i className="content icon" /> Add OER
+                <i className='content icon' /> Add OER
             </a>
         );
 
         return (
             <FocusTrap
-                id="focus-trap-attach-oer"
+                id='focus-trap-attach-oer'
                 focusTrapOptions={{
                     onDeactivate: this.unmountTrap,
                     clickOutsideDeactivates: true,
@@ -91,17 +102,17 @@ class AttachOerModal extends React.Component {
                 active={this.state.activeTrap}
             >
                 <Modal
-                    trigger={attachQuestionsBtn}
+                    trigger={attachButton}
                     open={this.state.modalOpen}
                     onClose={this.handleClose}
-                    role="dialog"
-                    id="attachOerModal"
-                    aria-labelledby="attachOerHeader"
+                    role='dialog'
+                    id='attachOerModal'
+                    aria-labelledby='attachOerHeader'
                     aria-hidden={!this.state.modalOpen}
-                    tabIndex="0"
-                    //size="large"
+                    tabIndex='0'
+                    //size="large" // Enable the change the size of the modal
                 >
-                    <Modal.Header as="h1" id="attachOerHeader">
+                    <Modal.Header as='h1' id='attachOerHeader'>
                         Select Open Educational Resources
                     </Modal.Header>
 
@@ -109,14 +120,14 @@ class AttachOerModal extends React.Component {
                         <Card.Group>
                             <Card onClick={() => this.handleOerClick(1)}>
                                 <Image
-                                    src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                                    src='https://react.semantic-ui.com/images/avatar/large/matthew.png'
                                     wrapped
                                     ui={false}
                                 />
                                 <Card.Content>
                                     <Card.Header>OER file</Card.Header>
                                     <Card.Meta>
-                                        <span className="date">
+                                        <span className='date'>
                                             Create on July 12, 2019
                                         </span>
                                     </Card.Meta>
@@ -125,16 +136,16 @@ class AttachOerModal extends React.Component {
                                     </Card.Description>
                                 </Card.Content>
                             </Card>
-                            <Card onClick={() => this.handleOerClick(1)}>
+                            <Card onClick={() => this.handleOerClick(2)}>
                                 <Image
-                                    src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                                    src='https://react.semantic-ui.com/images/avatar/large/matthew.png'
                                     wrapped
                                     ui={false}
                                 />
                                 <Card.Content>
                                     <Card.Header>OER file</Card.Header>
                                     <Card.Meta>
-                                        <span className="date">
+                                        <span className='date'>
                                             Create on July 12, 2019
                                         </span>
                                     </Card.Meta>
@@ -143,16 +154,16 @@ class AttachOerModal extends React.Component {
                                     </Card.Description>
                                 </Card.Content>
                             </Card>
-                            <Card onClick={() => this.handleOerClick(1)}>
+                            <Card onClick={() => this.handleOerClick(3)}>
                                 <Image
-                                    src="https://react.semantic-ui.com/images/avatar/large/matthew.png"
+                                    src='https://react.semantic-ui.com/images/avatar/large/matthew.png'
                                     wrapped
                                     ui={false}
                                 />
                                 <Card.Content>
                                     <Card.Header>OER file</Card.Header>
                                     <Card.Meta>
-                                        <span className="date">
+                                        <span className='date'>
                                             Create on July 12, 2019
                                         </span>
                                     </Card.Meta>
@@ -166,12 +177,12 @@ class AttachOerModal extends React.Component {
 
                     <Modal.Actions>
                         <Button
-                            id="cancelAttachOer"
-                            color="red"
-                            tabIndex="0"
-                            type="button"
-                            aria-label="Cancel"
-                            data-tooltip="Cancel"
+                            id='cancelAttachOer'
+                            color='red'
+                            tabIndex='0'
+                            type='button'
+                            aria-label='Cancel'
+                            data-tooltip='Cancel'
                             onClick={this.handleClose}
                         >
                             Cancel
@@ -186,16 +197,5 @@ class AttachOerModal extends React.Component {
 AttachOerModal.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
-
-AttachOerModal = connectToStores(
-    AttachOerModal,
-    [UserProfileStore, DeckTreeStore],
-    (context, props) => {
-        return {
-            UserProfileStore: context.getStore(UserProfileStore).getState(),
-            DeckTreeStore: context.getStore(DeckTreeStore).getState()
-        };
-    }
-);
 
 export default AttachOerModal;
