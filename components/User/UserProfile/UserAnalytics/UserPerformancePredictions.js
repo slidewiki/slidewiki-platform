@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import UserPerformancePredictionItem from './UserPerformancePredictionItem';
 import { connectToStores } from 'fluxible-addons-react';
@@ -57,7 +58,7 @@ class UserPerformancePredictions extends React.Component {
 }
 
 UserPerformancePredictions.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserPerformancePredictions = connectToStores(UserPerformancePredictions, [UserPerformancePredictionsStore, UserProfileStore], (context, props) => {

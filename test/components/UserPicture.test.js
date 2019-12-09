@@ -1,8 +1,8 @@
 import React from 'react';
 import {expect} from 'chai';
 import {shallow} from 'enzyme';
-
 import UserPicture from '../../components/common/UserPicture';
+import Identicon from 'react-identicons';
 
 describe('(Component) UserPicture', () => {
 
@@ -15,7 +15,7 @@ describe('(Component) UserPicture', () => {
     it('renders a <div> with <Identicon> if picture prop IS NOT passed', () => {
         const wrapper = shallow(<UserPicture/>);
 
-        expect(wrapper.find('Identicons')).to.have.length(1);
+        expect(wrapper.find(Identicon)).to.have.length(1);
         expect(wrapper.find('img')).to.have.length(0);
     });
 
@@ -25,9 +25,8 @@ describe('(Component) UserPicture', () => {
         };
 
         const wrapper = shallow(<UserPicture {...props}/>);
-
         expect(wrapper.find('img')).to.have.length(1);
-        expect(wrapper.find('Identicons')).to.have.length(0);
+        expect(wrapper.find(Identicon)).to.have.length(0);
     });
 
     it('wraps the picture inside an <a> if link prop IS passed', () => {

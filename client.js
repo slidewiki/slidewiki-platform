@@ -18,7 +18,7 @@ window.React = ReactDOM; // For chrome dev tool support
 window.fluxibleDebug = debug;
 
 //removing hash, for redirects
-function removeHash () {
+function removeHash() {
     let scrollV, scrollH, loc = window.location;
     if ('replaceState' in history)
         history.replaceState('', document.title, loc.pathname + loc.search);
@@ -47,9 +47,9 @@ function renderApp(locale, messages) {
         const mountNode = document.getElementById('app');
 
         const Root = app.getComponent();
-        ReactDOM.render(
+        ReactDOM.hydrate(
             <IntlProvider locale={locale} messages={messages}>
-                <Root context={ context.getComponentContext() } />
+                <Root context={context.getComponentContext()} />
             </IntlProvider>,
             mountNode,
             () => {
@@ -64,6 +64,20 @@ const locale = document.documentElement.getAttribute('lang');
 
 loadLocale(locale).then((messages) => {
     renderApp(locale, messages);
+
+    if (module.hot) {
+        module.hot.accept('./app', () => {
+            const RootContainer = require('./app');
+            const Root = RootContainer.getComponent();
+            ReactDOM.render(
+                <IntlProvider locale={locale} messages={messages}>
+                    <Root context={window.context.getComponentContext()} />
+                </IntlProvider>,
+                document.getElementById('app')
+            );
+        });
+    }
 }).catch((err) => {
     console.error(err);
 });
+

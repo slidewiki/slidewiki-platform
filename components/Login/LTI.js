@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {handleRoute} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
@@ -49,7 +50,7 @@ class LTI extends React.Component {
 
 
 LTI.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 LTI = handleRoute(LTI);
 export default LTI;
