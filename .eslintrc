@@ -1,15 +1,17 @@
 {
   "parser": "babel-eslint",
-  //"extend": "eslint:recommended",
+  //"extends": "eslint:recommended",
   "plugins": [
     "react"
   ],
-  "ecmaFeatures": {
-        "blockBindings": true,
-        "arrowFunctions": true,
-        "defaultParams": true,
-        "forOf": true
+  "parserOptions": {
+    "ecmaFeatures": {
+      "blockBindings": true,
+      "arrowFunctions": true,
+      "defaultParams": true,
+      "forOf": true
     },
+  },
   "env": {
     "node": true,
     "es6": true
@@ -19,7 +21,7 @@
     "arrow-spacing": [2, { "before": true, "after": true }],
     "arrow-parens": [2, "always"],
     "eqeqeq": [2, "smart"],
-    "indent": [2, 4, {"SwitchCase": 1}],
+    //"indent": [2, 4, {"SwitchCase": 1}],
     "quotes": [2, "single"],
     "linebreak-style": [2, "unix"],
     "prefer-arrow-callback": 2,

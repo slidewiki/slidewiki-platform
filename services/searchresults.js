@@ -234,9 +234,9 @@ function getRequestOptions(params) {
 
         // extra options for enabling results expansion, spellcheck and faceting
         let query = Object.assign({}, params.query);
-        query.expand = (params.query.hasOwnProperty('expand')) ? params.query.expand : true; 
-        query.spellcheck = (params.query.hasOwnProperty('spellcheck')) ? params.query.spellcheck : true;
-        query.facets = (params.query.hasOwnProperty('facets')) ? params.query.facets : true;
+        query.expand = Object.prototype.hasOwnProperty.call(params.query, 'expand') ? params.query.expand : true; 
+        query.spellcheck = Object.prototype.hasOwnProperty.call(params.query, 'spellcheck') ? params.query.spellcheck : true;
+        query.facets = Object.prototype.hasOwnProperty.call(params.query, 'facets') ? params.query.facets : true;
         query.kind = 'deck';
         query.pageSize = params.query.pageSize || 20;
 

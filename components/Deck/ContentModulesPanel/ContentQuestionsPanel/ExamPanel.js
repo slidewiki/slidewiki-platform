@@ -83,7 +83,7 @@ class ExamPanel extends React.Component {
     }
 }
 ExamPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
+    executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 ExamPanel = connectToStores(ExamPanel, [ContentQuestionsStore, DeckTreeStore, DeckViewStore], (context, props) => {

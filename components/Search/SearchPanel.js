@@ -164,8 +164,8 @@ class SearchPanel extends React.Component {
     componentWillReceiveProps(nextProps){
         if (this.props.SearchResultsStore.fetch) {
             // need to replace state here
-            this.state = null;
-            this.forceUpdate();
+            //this.state = null;
+            //this.forceUpdate();
             this.setState(nextProps.SearchResultsStore.queryparams);
         }
     }
