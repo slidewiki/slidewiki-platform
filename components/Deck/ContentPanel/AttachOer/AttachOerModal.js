@@ -1,23 +1,34 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
-import { Button, Modal, Card, Image } from 'semantic-ui-react';
+import { Button, Modal, Card, Image, Input, Step, Accordion, Icon, Item  } from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import FocusTrap from 'focus-trap-react';
 import insertOerContent from '../../../../actions/slide/insertOerContent';
+import axios from 'axios';
+import {Microservices} from '../../../../configs/microservices.js'
+
 
 class AttachOerModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             modalOpen: false,
-            activeTrap: false
+            activeTrap: false,
+            results: [],
+            items: [],
+            temp: true,
+            activeIndex: 0,
+            value: ''
         };
+        
     }
+
 
     // Opening the modal
     handleOpen = () => {
+
         // App is hidden for screen readers when the modal is open
         $('#app').attr('aria-hidden', 'true');
 
@@ -59,21 +70,79 @@ class AttachOerModal extends React.Component {
             }
         }
     }
+    
+    searchOrtPortal = () => {
+    	
+	let self = this;
+
+	axios.get(Microservices.oerPortal.uri + '?text=' +this.state.value)
+	 .then(function (response) {
+	   
+//	   self.setState({
+//		   items: response
+//           });
+//	  
+		const items = [...response.data.rec_materials];
+
+		self.setState({
+			results: items
+		});
+	 })
+	.catch(function (error) {
+	   console.log(error);
+	});
+	
+	
+
+	console.log('test');
+
+    }
 
     // This functions handles the clicked OER resource, the resource
     // id can be passed to find out what resources has been selected
-    handleOerClick = (resourceId) => {
-        console.log('Selected resource', resourceId);
+    handleOerClick = (url, title) => {
+    	
+//    	$("#div1").remove();
+    	
+        console.log('Selected url', url);
         this.handleClose();
         // Add the OER content in the slide 
         this.context.executeAction(insertOerContent, {
             // Only use JSX as oerContent payload!
             oerContent:
-                <a href="http://tib.eu" target="_blank" rel="noopener noreferrer">Test oer link</a>
+                <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
         });
     };
+    
+    handleSearch = () => {
+    	
+    	
+    	const items = [...this.state.items.data.rec_materials];
+
+    	this.setState({
+    		results: items
+    	});
+    }
+    
+    handleInputChange = (e, data) => {
+    	
+    	this.setState({
+    		value: data.value
+    	});
+    }
+    
+    
+    handleClick = (e, titleProps) => {
+        let index  = titleProps
+        const activeIndex  = this.state.activeIndex
+        const newIndex = activeIndex === 0 ? -1 : 0
+
+        this.setState({ activeIndex: newIndex })
+      }
 
     render() {
+    	const  activeIndex  = this.state.activeIndex
+    	
         // The button that is being added in the slideEditLeftPanel
         let attachButton = (
             <a
@@ -91,7 +160,11 @@ class AttachOerModal extends React.Component {
             </a>
         );
 
+        
+       
         return (
+        		
+		
             <FocusTrap
                 id='focus-trap-attach-oer'
                 focusTrapOptions={{
@@ -117,64 +190,79 @@ class AttachOerModal extends React.Component {
                     </Modal.Header>
 
                     <Modal.Content>
-                        <Card.Group>
-                            <Card onClick={() => this.handleOerClick(1)}>
-                                <Image
-                                    src='https://react.semantic-ui.com/images/avatar/large/matthew.png'
-                                    wrapped
-                                    ui={false}
-                                />
-                                <Card.Content>
-                                    <Card.Header>OER file</Card.Header>
-                                    <Card.Meta>
-                                        <span className='date'>
-                                            Create on July 12, 2019
-                                        </span>
-                                    </Card.Meta>
-                                    <Card.Description>
-                                        A PDF file that contains some content
-                                    </Card.Description>
-                                </Card.Content>
-                            </Card>
-                            <Card onClick={() => this.handleOerClick(2)}>
-                                <Image
-                                    src='https://react.semantic-ui.com/images/avatar/large/matthew.png'
-                                    wrapped
-                                    ui={false}
-                                />
-                                <Card.Content>
-                                    <Card.Header>OER file</Card.Header>
-                                    <Card.Meta>
-                                        <span className='date'>
-                                            Create on July 12, 2019
-                                        </span>
-                                    </Card.Meta>
-                                    <Card.Description>
-                                        A PDF file that contains some content
-                                    </Card.Description>
-                                </Card.Content>
-                            </Card>
-                            <Card onClick={() => this.handleOerClick(3)}>
-                                <Image
-                                    src='https://react.semantic-ui.com/images/avatar/large/matthew.png'
-                                    wrapped
-                                    ui={false}
-                                />
-                                <Card.Content>
-                                    <Card.Header>OER file</Card.Header>
-                                    <Card.Meta>
-                                        <span className='date'>
-                                            Create on July 12, 2019
-                                        </span>
-                                    </Card.Meta>
-                                    <Card.Description>
-                                        A PDF file that contains some content
-                                    </Card.Description>
-                                </Card.Content>
-                            </Card>
-                        </Card.Group>
-                    </Modal.Content>
+                    	<Input value={this.state.value} icon='search' placeholder='Search...' onChange={this.handleInputChange} />   <Button basic color='blue' onClick={this.searchOrtPortal}>Search</Button>
+                    	
+                    	<Item.Group>
+                        <Item>
+                          
+                        
+                        <Image src='/assets/images/logo.png' size='small' />
+                          <Item.Content>
+                            <Item.Header href='https://edu-sharing.com/Demo/'>Ein Portal für Lehrende an niedersächsischen Hochschulen</Item.Header>
+                            <Item.Meta>Description</Item.Meta>
+                            <Item.Description>
+                            Offene Bildungsmaterialien – "Open Educational Resources" (OER) – stehen unter einer offenen Lizenz
+                            </Item.Description>
+                            <Item.Extra>Additional Details</Item.Extra>
+                          </Item.Content>
+                        </Item>
 
+                      </Item.Group>
+                    	 
+                    	<Card.Group>
+                        
+                    	{this.state.results.map((result) => 
+                            <Card>
+                                <Image
+                                    src='http://oer01.develop.service.tib.eu/edu-sharing/preview?nodeId=918560f5-e51c-4037-ab50-300fdc681b0c&storeProtocol=workspace&storeId=SpacesStore&dontcache=1571937712960'
+                                    wrapped
+                                    ui={false}
+                                />
+                                <Card.Content>
+                                    <Card.Header>OER file</Card.Header>
+                                    <Card.Meta>
+                                        <span className='date'>
+                                           
+
+                                        </span>
+                                    </Card.Meta>
+                                    <Card.Description>
+                                    <Accordion styled>
+                                    <Accordion.Title
+                                      active={activeIndex === 0}
+                                      index={0}
+                                      onClick={this.handleClick}
+                                    >
+                                      <Icon name='dropdown' />
+                                      {result.title}
+                                    </Accordion.Title>
+                                    <Accordion.Content active={activeIndex === -1}>
+                                      <p>
+                                      {result.description}
+                                      </p>
+                                    </Accordion.Content>
+                                  </Accordion>
+                                        
+                                    </Card.Description>
+                                        
+                                        
+                                        
+                                </Card.Content>
+                                <Card.Content extra>
+                                <div className='ui two buttons' onClick={() => this.handleOerClick(result.url, result.title)}>
+                                  <Button basic color='green'>
+                                    Add Material
+                                  </Button>
+                                </div>
+                              </Card.Content>
+                            </Card>
+                    	)}
+                    </Card.Group>
+         
+                </Modal.Content>
+                   
+               			 
+               		   
                     <Modal.Actions>
                         <Button
                             id='cancelAttachOer'
@@ -192,6 +280,7 @@ class AttachOerModal extends React.Component {
             </FocusTrap>
         );
     }
+    
 }
 
 AttachOerModal.contextTypes = {

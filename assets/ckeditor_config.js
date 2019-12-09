@@ -11,7 +11,7 @@
     // to add a line in the toolbar
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
-CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+//CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 //CKEDITOR.plugins.addExternal('sharedspace', '/ckeditor-plugins/sharedspace/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
 CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
@@ -49,7 +49,7 @@ CKEDITOR.editorConfig = function( config ) {
         //{ name: 'basicstyles', items: [ ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor'] },
         { name: 'colors', items: [ ] },
-        { name: 'styles', items: [ 'Styles', 'lineheight' ] },
+        { name: 'styles', items: [ 'Styles' ] },
         { name: 'links', items: [ 'Link', 'Unlink' ] },
         { name: 'styles', items: [ 'Format'] },
     //'/',
@@ -183,7 +183,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'link,' +
 		'list,' +
 		'liststyle,' +
-        'lineheight,' +
+        //'lineheight,' +
         'sharedspace,' +
 		//'magicline,' +
 		'maximize,' +
