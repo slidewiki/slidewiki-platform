@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
-import { Button, Modal, Card, Image, Input, Step, Accordion, Icon, Item  } from 'semantic-ui-react';
+import { Button, Modal, Card, Image, Input, Step, Accordion, Icon, Item, Form  } from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import FocusTrap from 'focus-trap-react';
@@ -64,6 +64,7 @@ class AttachOerModal extends React.Component {
             switch(param) {
                 case 'handleAddOer':
                     this.handleOpen();
+                    this.searchOrtPortal();
                     break;
                 default: 
                     break;
@@ -77,11 +78,7 @@ class AttachOerModal extends React.Component {
 
 	axios.get(Microservices.oerPortal.uri + '?text=' +this.state.value)
 	 .then(function (response) {
-	   
-//	   self.setState({
-//		   items: response
-//           });
-//	  
+
 		const items = [...response.data.rec_materials];
 
 		self.setState({
@@ -116,7 +113,6 @@ class AttachOerModal extends React.Component {
     
     handleSearch = () => {
     	
-    	
     	const items = [...this.state.items.data.rec_materials];
 
     	this.setState({
@@ -139,8 +135,20 @@ class AttachOerModal extends React.Component {
 
         this.setState({ activeIndex: newIndex })
       }
-
+    
+    
+    console = () => {}
+    	
     render() {
+    	
+    	const style = {
+      	      color: "white",
+      	      backgroundColor: "DodgerBlue",
+      	      padding: "20px",
+      	      fontFamily: "Arial",
+      	      textAlign: "center"
+      	    };
+    	
     	const  activeIndex  = this.state.activeIndex
     	
         // The button that is being added in the slideEditLeftPanel
@@ -164,7 +172,6 @@ class AttachOerModal extends React.Component {
        
         return (
         		
-		
             <FocusTrap
                 id='focus-trap-attach-oer'
                 focusTrapOptions={{
@@ -185,41 +192,69 @@ class AttachOerModal extends React.Component {
                     tabIndex='0'
                     //size="large" // Enable the change the size of the modal
                 >
-                    <Modal.Header as='h1' id='attachOerHeader'>
+                    <Modal.Header  style={style} id='attachOerHeader'>
                         Select Open Educational Resources
                     </Modal.Header>
-
+                        
                     <Modal.Content>
-                    	<Input value={this.state.value} icon='search' placeholder='Search...' onChange={this.handleInputChange} />   <Button basic color='blue' onClick={this.searchOrtPortal}>Search</Button>
-                    	
                     	<Item.Group>
                         <Item>
-                          
-                        
-                        <Image src='/assets/images/logo.png' size='small' />
+                        <Image src='/assets/images/logo.png' height='30px' width='80px' alt="tuvieja" />
                           <Item.Content>
-                            <Item.Header href='https://edu-sharing.com/Demo/'>Ein Portal für Lehrende an niedersächsischen Hochschulen</Item.Header>
-                            <Item.Meta>Description</Item.Meta>
+                            <Item.Header target="_blank" href='https://edu-sharing.com/Demo/'>Ein Portal für Lehrende an niedersächsischen Hochschulen</Item.Header>
+                            <Item.Meta></Item.Meta>
                             <Item.Description>
                             Offene Bildungsmaterialien – "Open Educational Resources" (OER) – stehen unter einer offenen Lizenz
                             </Item.Description>
-                            <Item.Extra>Additional Details</Item.Extra>
+                            <Item.Extra></Item.Extra>
                           </Item.Content>
                         </Item>
-
+                        
+                        <Form>
+                        <Form.Group widths='2'>
+                          <Form.Input value={this.state.value} icon='search' placeholder='Search...' onChange={this.handleInputChange} />   <Button basic  onClick={this.searchOrtPortal}>Search</Button>
+                        </Form.Group>
+                        
+                      </Form>
+       
                       </Item.Group>
                     	 
                     	<Card.Group>
-                        
+                    	 
                     	{this.state.results.map((result) => 
-                            <Card>
-                                <Image
-                                    src='http://oer01.develop.service.tib.eu/edu-sharing/preview?nodeId=918560f5-e51c-4037-ab50-300fdc681b0c&storeProtocol=workspace&storeId=SpacesStore&dontcache=1571937712960'
-                                    wrapped
-                                    ui={false}
-                                />
+                            <Card onClick={() => this.console}>
+
+                            {(() => {
+                                switch (result.type) {
+                                    case 'text':
+                                        return <Image
+                                        src='/assets/images/pdf.png'
+                                            wrapped
+                                            ui={false}
+                                        />
+                                    case 'video':
+                                    	return <Image
+                                        src='/assets/images/video.png'
+                                            wrapped
+                                            ui={false}
+                                        />
+                                    case 'html':
+                                	return <Image
+                                    src='/assets/images/bild.png'
+                                        wrapped
+                                        ui={false}
+                                    />
+                                    default:
+                                    	return <Image
+                                        src='/assets/images/bild.png'
+                                            wrapped
+                                            ui={false}
+                                        />
+                                }
+                            	})()}
+                            
                                 <Card.Content>
-                                    <Card.Header>OER file</Card.Header>
+                                    <Card.Header></Card.Header>
                                     <Card.Meta>
                                         <span className='date'>
                                            
@@ -260,9 +295,7 @@ class AttachOerModal extends React.Component {
                     </Card.Group>
          
                 </Modal.Content>
-                   
-               			 
-               		   
+
                     <Modal.Actions>
                         <Button
                             id='cancelAttachOer'
