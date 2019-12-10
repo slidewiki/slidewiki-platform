@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-      - name: NPM Update
-        run: npm update --dev
+      - name: NPM Install
+        run: npm install
       - name: NPM Lint
         run: npm run lint
       - name: NPM Test
