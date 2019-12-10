@@ -10,12 +10,13 @@ jobs:
     name: Build and deploy to test system
     runs-on: ubuntu-latest
     steps:
-    - name: NPM Update
-      run: npm update --dev
-    - name: NPM Lint
-      run: npm run lint
-    - name: NPM Test
-      run: npm run test
-    - name: NPM Build
-      run: npm run build:nostart
+      - uses: actions/checkout@v1
+      - name: NPM Update
+        run: npm update --dev
+      - name: NPM Lint
+        run: npm run lint
+      - name: NPM Test
+        run: npm run test
+      - name: NPM Build
+        run: npm run build:nostart
     
