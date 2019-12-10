@@ -1,17 +1,21 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches: 
+      - master
 
 jobs:
   build:
-
+    name: Build and deploy to test system
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    - name: NPM Update
+      run: npm update --dev
+    - name: NPM Lint
+      run: npm run lint
+    - name: NPM Test
+      run: npm run test
+    - name: NPM Build
+      run: npm run build:nostart
+    
