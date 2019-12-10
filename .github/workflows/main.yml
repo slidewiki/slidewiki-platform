@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node
+      - uses: actions/setup-node@v1
       - name: NPM Update
         run: npm update --dev
       - name: NPM Lint
