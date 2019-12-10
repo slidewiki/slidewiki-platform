@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: copy microservice config
+        run: cp configs/microservice.sample.js configs/microservices.js
       - uses: actions/setup-node@v1
       - name: NPM Install
         run: npm install
