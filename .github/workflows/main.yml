@@ -21,8 +21,8 @@ jobs:
           npm run lint
           npm run test
       - name: Build Docker image
-        run: docker build -t docker.pkg.github.com/slidewiki/slidewiki/platform:latest-dev .
+        run: docker build -t slidewiki/platform:latest-dev .
       - name: Push Docker image
         run: |
-          docker login docker.pkg.github.com -u bwulff -p ${{ secrets.GITHUB_TOKEN }}
-          docker push docker.pkg.github.com/slidewiki/slidewiki/platform:latest-dev
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker push slidewiki/platform:latest-dev
