@@ -24,7 +24,7 @@ jobs:
         run: docker build -t docker.pkg.github.com/slidewiki/slidewiki/platform:latest-dev .
       - name: Push Docker image
         run: |
-          docker login docker.pkg.github.com --username bwulff --password "${GITHUB_PACKAGE_REGISTRY_TOKEN}"
+          docker login docker.pkg.github.com -u bwulff -p "${GITHUB_PACKAGE_REGISTRY_TOKEN}"
           docker push docker.pkg.github.com/slidewiki/slidewiki/platform:latest-dev
         env:
           GITHUB_PACKAGE_REGISTRY_TOKEN: ${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}
