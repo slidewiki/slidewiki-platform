@@ -87,11 +87,7 @@ class AttachOerModal extends React.Component {
 	 })
 	.catch(function (error) {
 	   console.log(error);
-	});
-	
-	
-
-	console.log('test');
+		});
 
     }
 
@@ -100,8 +96,7 @@ class AttachOerModal extends React.Component {
     handleOerClick = (url, title) => {
     	
 //    	$("#div1").remove();
-    	
-        console.log('Selected url', url);
+
         this.handleClose();
         // Add the OER content in the slide 
         this.context.executeAction(insertOerContent, {
@@ -135,7 +130,11 @@ class AttachOerModal extends React.Component {
 
         this.setState({ activeIndex: newIndex })
       }
+
     
+    openLink = (url) => {
+        window.open(url, "_blank"); 
+    };
     
     console = () => {}
     	
@@ -240,13 +239,19 @@ class AttachOerModal extends React.Component {
                                         />
                                     case 'html':
                                 	return <Image
-                                    src='/assets/images/bild.png'
+                                    src='/assets/images/html.png'
+                                        wrapped
+                                        ui={false}
+                                    />
+                                    case 'audio':
+                                	return <Image
+                                    src='/assets/images/audio.png'
                                         wrapped
                                         ui={false}
                                     />
                                     default:
                                     	return <Image
-                                        src='/assets/images/bild.png'
+                                        src='/assets/images/html.png'
                                             wrapped
                                             ui={false}
                                         />
@@ -279,14 +284,15 @@ class AttachOerModal extends React.Component {
                                   </Accordion>
                                         
                                     </Card.Description>
-                                        
-                                        
-                                        
+    
                                 </Card.Content>
                                 <Card.Content extra>
-                                <div className='ui two buttons' onClick={() => this.handleOerClick(result.url, result.title)}>
-                                  <Button basic color='green'>
-                                    Add Material
+                                <div className='ui two buttons' >
+                                  <Button basic color='green' onClick={() => this.handleOerClick(result.url, result.title)}>
+                                    Add material
+                                  </Button>
+                                    <Button basic color='blue' onClick={() => this.openLink(result.url)}>
+                                    Show element
                                   </Button>
                                 </div>
                               </Card.Content>
