@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
-import { Button, Modal, Card, Image, Input, Step, Accordion, Icon, Item, Form  } from 'semantic-ui-react';
+import { Button, Modal, Card, Image, Input, Step, Accordion, Icon, Item, Form, Container, Header, Divider, Link} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import FocusTrap from 'focus-trap-react';
@@ -102,7 +102,18 @@ class AttachOerModal extends React.Component {
         this.context.executeAction(insertOerContent, {
             // Only use JSX as oerContent payload!
             oerContent:
-                <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
+            	
+            <Container fluid>
+
+              <iframe autostart="0"  rel="noopener noreferrer" width="361" height="200" scrolling="yes" src={url} frameborder="0" allowfullscreen></iframe>
+              <b></b>
+              <Divider />
+              <h6><a href={url} target="_blank" rel="noopener noreferrer">{title}</a></h6>
+              <h6 style={{color: '#FE9A2E'}}>Lizenz: CC0 BY-NC</h6>
+
+            </Container>
+         
+                
         });
     };
     
@@ -147,6 +158,7 @@ class AttachOerModal extends React.Component {
       	      fontFamily: "Arial",
       	      textAlign: "center"
       	    };
+
     	
     	const  activeIndex  = this.state.activeIndex
     	
