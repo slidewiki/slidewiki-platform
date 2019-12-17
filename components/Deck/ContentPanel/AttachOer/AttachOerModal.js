@@ -19,7 +19,7 @@ class AttachOerModal extends React.Component {
             results: [],
             items: [],
             temp: true,
-            activeIndex: 0,
+            activeIndex: -1,
             value: ''
         };
         
@@ -135,11 +135,11 @@ class AttachOerModal extends React.Component {
     
     
     handleClick = (e, titleProps) => {
-        let index  = titleProps
+    	const index  = titleProps
         const activeIndex  = this.state.activeIndex
-        const newIndex = activeIndex === 0 ? -1 : 0
+        const newIndex = activeIndex === index.index ? -1 : index
 
-        this.setState({ activeIndex: newIndex })
+        this.setState({ activeIndex: newIndex.index })
       }
 
     
@@ -232,7 +232,7 @@ class AttachOerModal extends React.Component {
                     	 
                     	<Card.Group>
                     	 
-                    	{this.state.results.map((result) => 
+                    	{this.state.results.map((result, index) => 
                             <Card onClick={() => this.console}>
 
                             {(() => {
@@ -281,14 +281,15 @@ class AttachOerModal extends React.Component {
                                     <Card.Description>
                                     <Accordion styled>
                                     <Accordion.Title
-                                      active={activeIndex === 0}
-                                      index={0}
+                                    	active={activeIndex === index}
+                                    
+                                      index={index}
                                       onClick={this.handleClick}
                                     >
                                       <Icon name='dropdown' />
                                       {result.title}
                                     </Accordion.Title>
-                                    <Accordion.Content active={activeIndex === -1}>
+                                    <Accordion.Content active={activeIndex === index}>
                                       <p>
                                       {result.description}
                                       </p>
