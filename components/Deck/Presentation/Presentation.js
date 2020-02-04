@@ -26,6 +26,27 @@ class Presentation extends React.Component{
 
     componentDidMount(){
         if(process.env.BROWSER){
+
+            window.addEventListener('beforeunload', (event) => {
+                if(window.localStorage)
+                    window.localStorage.setItem('lastHash', JSON.stringify({'hash': window.location.hash, 'time': new Date().getTime(), 'deckID': this.props.PresentationStore.selector.id}) );//safe current slide for page refresh
+            });
+
+            let lastRevealHash = undefined;
+            if(window.localStorage) {
+                lastRevealHash = window.localStorage.getItem('lastHash');
+                lastRevealHash = (lastRevealHash) ? JSON.parse(lastRevealHash) : undefined;
+                if(lastRevealHash) {
+                    if(lastRevealHash.deckID !== this.props.PresentationStore.selector.id){ //check that it is still the same deck, cause 15 secs is rather long
+                        lastRevealHash = undefined;
+                    } else {
+                        let timePassed = (new Date().getTime()) - lastRevealHash.time;
+                        lastRevealHash = (timePassed > 0 && timePassed <= 15*1000) ? lastRevealHash.hash : undefined;//not older than 15 secs ... just for reload of the page
+                    }
+                }
+                window.localStorage.removeItem('lastHash');
+            }
+
             //$('[style*="absolute"]').children().attr('tabindex', 0);
 
             //remove existing tabindices
@@ -65,7 +86,10 @@ class Presentation extends React.Component{
                 pptxheight = '100%';
             }
 
-            window.location.hash = '#slide-' + this.startingSlide;
+            if(lastRevealHash === undefined)
+                window.location.hash = '#slide-' + this.startingSlide;
+            else
+                window.location.hash = lastRevealHash;
 
             let multiplexFileToLoad = (this.secret) ? '/custom_modules/reveal.js/plugin/multiplex/master.js' : '/custom_modules/reveal.js/plugin/multiplex/client.js' ;
             multiplexFileToLoad = (this.id) ? multiplexFileToLoad : '' ;
