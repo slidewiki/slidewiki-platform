@@ -20,7 +20,7 @@ import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 
-import {Message} from 'semantic-ui-react';
+import {Message, Form, Input, Checkbox} from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import classNames from 'classnames';
 
@@ -39,7 +39,10 @@ class AddDeck extends React.Component {
         this.state = {
             language: null,
             educationLevel: null,
-            formValidationErrors: []
+            formValidationErrors: [],
+            inputTitle: '',
+            inputImageslicense: false,
+            inputConditions: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -77,7 +80,7 @@ class AddDeck extends React.Component {
         this.state.formValidationErrors = [];
 
         //validate input
-        const title = this.refs.input_title.value;
+        const title = this.state.inputTitle;
         const language = this.state.language;
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
@@ -91,8 +94,8 @@ class AddDeck extends React.Component {
                 delete tag.tagName;
             }
         });
-        const acceptedConditions = this.refs.checkbox_conditions.checked;
-        const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
+        const acceptedConditions = this.state.inputConditions;
+        const acceptedImagesLicense = this.state.inputImageslicense; 
 
         // Validate title
         if (!title) this.state.formValidationErrors.title = <FormattedMessage
@@ -216,7 +219,7 @@ class AddDeck extends React.Component {
                     activity_type: 'add',
                     user_id: String(this.props.UserProfileStore.userid),
                     content_id: String(this.props.ImportStore.deckId) + '-1',
-                    content_name: this.refs.input_title.value,
+                    content_name: this.state.inputTitle,
                     content_owner_id: String(this.props.UserProfileStore.userid),
                     content_kind: 'deck'
                 };
@@ -319,8 +322,11 @@ class AddDeck extends React.Component {
                     this.context.executeAction(importCanceled, {});  // destroy import components state
                     this.context.executeAction(addDeckDestruct, {});
                     this.initializeProgressBar();
-                    this.refs.checkbox_conditions.checked = false;
-                    this.refs.checkbox_imageslicense.checked = false;
+
+                    this.setState({
+                        inputImageslicense: false,
+                        inputConditions: false
+                    }); 
                 }).catch(() => {
                     return true;
                 });
@@ -435,6 +441,12 @@ class AddDeck extends React.Component {
             [event.target.name]: event.target.value
         });
     }
+    
+    handleCheckboxChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.checked
+        });
+    }
 
     render() {
         //redirect to new deck if created
@@ -444,24 +456,6 @@ class AddDeck extends React.Component {
             this.context.executeAction(addDeckDestruct, {});
         }
 
-
-        let fieldClass_title = classNames({
-            'required': true,
-            'field': true,
-            'error': this.state.formValidationErrors.title
-        });
-        let fieldClass_conditions = classNames({
-            'required': true,
-            'inline': true,
-            'field': true,
-            'error': this.state.formValidationErrors.conditions
-        });
-        let fieldClass_imageslicense = classNames({
-            'required': true,
-            'inline': true,
-            'field': true,
-            'error': this.state.formValidationErrors.imagesLicence
-        });
         let btnClasses_submit = classNames({
             'ui': true,
             'primary': true,
@@ -521,7 +515,11 @@ class AddDeck extends React.Component {
             button_create: {
                 id: 'AddDeck.form.button_create',
                 defaultMessage: 'Create deck',
-            }
+            },
+            label_title: {
+                id: 'AddDeck.form.label_title',
+                defaultMessage: 'Title',
+            },
         });
 
         //check number of slides in order to update progressbar
@@ -543,17 +541,18 @@ class AddDeck extends React.Component {
                 
                 <div className="sixteen wide column">
                     <form className={formClasses}>
-                        <div className={fieldClass_title} ref="div_title">
-                            <label htmlFor="title">
-                                <FormattedMessage
-                                    id='AddDeck.form.label_title'
-                                    defaultMessage='Title' />
-                            </label>
-                            <input type="text" id="title" aria-required="true" ref="input_title" aria-invalid={this.state.formValidationErrors.title ? true : false} />
-                            {this.state.formValidationErrors.title ? 
-                                <span htmlFor="title" aria-labelledby="title" className="input-error">{this.state.formValidationErrors.title}</span> 
-                            : ''}
-                        </div>
+                        <Form.Field
+                            id="form-input-title"
+                            name="inputTitle"
+                            control={Input}
+                            label={this.context.intl.formatMessage(form_messages.label_title)}
+                            required
+                            value={this.state.inputTitle}
+                            onChange={this.handleInputChange}
+                            error={this.state.formValidationErrors.title ? {
+                                content: this.state.formValidationErrors.title,
+                            } : undefined}
+                        />
                         <div className="two fields">
                             <SWAutoComplete
                                 ref="div_languages"
@@ -647,40 +646,45 @@ class AddDeck extends React.Component {
                                 </span>
                             </div>
                         </div>
-                        <div className={fieldClass_conditions} >
-                            <div className="ui checkbox" ref="div_conditions" >
-                                <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" aria-invalid={this.state.formValidationErrors.conditions ? true : false} />
-                                <label htmlFor="terms">
+                        <Form.Field
+                            id="form-input-conditions"
+                            name="inputConditions"
+                            control={Checkbox}
+                            label={<label htmlFor="form-input-conditions">
+                                <FormattedMessage
+                                    id='AddDeck.form.label_terms1'
+                                    defaultMessage='I agree to the SlideWiki ' />{' '}
+                                <a className="item" href="/terms" target="_blank">
                                     <FormattedMessage
-                                        id='AddDeck.form.label_terms1'
-                                        defaultMessage='I agree to the SlideWiki ' />{' '}
-                                    <a className="item" href="/terms" target="_blank">
-                                        <FormattedMessage
-                                            id='AddDeck.form.label_terms2'
-                                            defaultMessage='terms and conditions' />
-                                    </a>{' '}
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_terms3'
-                                        defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
-                                </label>
-                            </div>
-                            {this.state.formValidationErrors.conditions ? 
-                                <span htmlFor="title" aria-labelledby="terms" className="input-error">{this.state.formValidationErrors.conditions}</span> 
-                            : ''}
-                        </div>
-                        <div className={fieldClass_imageslicense} >
-                            <div className="ui checkbox" ref="div_imageslicense" >
-                                <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" aria-invalid={this.state.formValidationErrors.imagesLicence ? true : false} />
-                                <label htmlFor="termsimages">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_termsimages'
-                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
-                                </label>
-                            </div>
-                            {this.state.formValidationErrors.imagesLicence ? 
-                                <span htmlFor="title" aria-labelledby="termsimages" className="input-error">{this.state.formValidationErrors.imagesLicence}</span> 
-                            : ''}
-                        </div>
+                                        id='AddDeck.form.label_terms2'
+                                        defaultMessage='terms and conditions' />
+                                </a>{' '}
+                                <FormattedMessage
+                                    id='AddDeck.form.label_terms3'
+                                    defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
+                            </label>}
+                            required
+                            checked={this.state.inputConditions}
+                            onChange={this.handleCheckboxChange}
+                            error={this.state.formValidationErrors.conditions ? {
+                                content: this.state.formValidationErrors.conditions,
+                                pointing: 'left'
+                            } : undefined}
+                        />
+                        <Form.Field
+                            id="form-input-imageslicense"
+                            name="inputImageslicense"
+                            control={Checkbox}
+                            label={'I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.'}
+                            required
+                            checked={this.state.inputImageslicense}
+                            onChange={this.handleCheckboxChange}
+                            error={this.state.formValidationErrors.imagesLicence ? {
+                                content: this.state.formValidationErrors.imagesLicence,
+                                pointing: 'left'
+                            } : undefined}
+                        />
+
                         <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" style={{display:'none'}}>
                             <div className="bar"/>
                             <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"/>
