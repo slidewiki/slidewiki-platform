@@ -93,7 +93,7 @@ class TagInput extends React.Component {
                     return t.name === tag.tagName;
                 });
 
-                // if it is from recommended tags and has a link, 
+                // if it is from recommended tags and has a link,
                 // we also add the link
                 if(recommendedTag && recommendedTag.link){
                     tag.uri = recommendedTag.link;
@@ -130,13 +130,13 @@ class TagInput extends React.Component {
             'dropdown': true
         });
 
-        // selection options are concatenated pre-selected tags and recommended tags 
+        // selection options are concatenated pre-selected tags and recommended tags
         let initialOptions = this.props.initialTags.map( (t) => {
             return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName || t.tagName}</div>;
         });
 
         return (
-            <div ref={(i) => (this.rootElement = i)} className={classes}>
+            <div aria-labelledby="topics_label" ref={(i) => (this.rootElement = i)} className={classes}>
               <i className="dropdown icon"></i>
               <div className="default text">{this.props.placeholder}</div>
               <div ref={(i) => (this.menuElement = i)} className="menu">
@@ -148,7 +148,7 @@ class TagInput extends React.Component {
 }
 
 TagInput.contextTypes = {
-    executeAction: PropTypes.func.isRequired, 
+    executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 export default TagInput;

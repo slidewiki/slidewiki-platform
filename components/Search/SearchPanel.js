@@ -181,7 +181,7 @@ class SearchPanel extends React.Component {
     onSelect(searchstring){
         this.setState({
             keywords: searchstring
-        }, 
+        },
         this.handleRedirect);
     }
     handleKeyPress(event){
@@ -193,9 +193,9 @@ class SearchPanel extends React.Component {
     }
     getAdvancedFilters() {
         let advancedFilters = {
-            language: null, 
-            user: null, 
-            tag: null, 
+            language: null,
+            user: null,
+            tag: null,
             educationLevel: null,
             topics: null,
             facet_exclude: [],
@@ -218,7 +218,7 @@ class SearchPanel extends React.Component {
         }
         let tags = this.tagDropdown.getSelected();
         if(tags){
-            advancedFilters.tag = tags.split(',');    
+            advancedFilters.tag = tags.split(',');
             advancedFilters.facet_exclude.push('tag');
             this.tagDropdown.clear();
         }
@@ -294,7 +294,7 @@ class SearchPanel extends React.Component {
         return newState;
     }
     handleRedirect(params, source){
-        
+
         if (source === 'facets') {
             this.handleSearch(params);
         } else {
@@ -313,10 +313,10 @@ class SearchPanel extends React.Component {
             // new keywords
             } else {
                 this.setState({
-                    ...this.state, 
-                    language: filters.language || [], 
-                    tag: filters.tag || [], 
-                    user: filters.user || [], 
+                    ...this.state,
+                    language: filters.language || [],
+                    tag: filters.tag || [],
+                    user: filters.user || [],
                     educationLevel: filters.educationLevel || [],
                     topics: filters.topics || [],
                     facet_exclude: filters.facet_exclude || [],
@@ -325,7 +325,7 @@ class SearchPanel extends React.Component {
                 });
             }
         }
-        
+
         return false;
     }
     handleSearch(params){
@@ -405,7 +405,7 @@ class SearchPanel extends React.Component {
         }
 
         this.setState({
-            ...this.state, 
+            ...this.state,
             [facetField]: facetFieldValue,
             facet_exclude: facetExclude,
         }, () => {
@@ -444,10 +444,10 @@ class SearchPanel extends React.Component {
         let options = <div><div className="three fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
             <div className="sr-only" id="describe_topic">Select subject of deck content from autocomplete</div>
-            
+
             <div className="field">
-                <label htmlFor="language"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
-                <select id='languageDropdown' name='language' multiple='' className='ui fluid search dropdown' ref='language'>
+                <label htmlFor="language" id="language_label"><FormattedMessage {...this.messages.languageFilterTitle} /></label>
+                <select id='languageDropdown' name='language' aria-labelledby="language_label" multiple='' className='ui fluid search dropdown' ref='language'>
                   <option value=' '>{this.context.intl.formatMessage(this.messages.languageFilterPlaceholder)}</option>
                   {translationLanguages.reduce((arr, curr) => { //<div className="menu">
                       arr.push(<option value={curr} key={curr}>{getLanguageNativeName(curr)}</option>);
@@ -457,7 +457,7 @@ class SearchPanel extends React.Component {
             </div>
             <div className="field">
                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckFilter.Tag.Topic" defaultMessage="Subject" /></label>
-                <TagInput id="topics_input_field" aria-labelledby="topics_label" aria-describedby="describe_topic"
+                <TagInput id="topics_input_field" aria-describedby="describe_topic"
                     ref={(e) => (this.topicsDropdown = e)} tagFilter={{ tagType: 'topic' }} initialTags={[]} placeholder="Select Subject" />
             </div>
             <div className="field">
@@ -469,7 +469,7 @@ class SearchPanel extends React.Component {
         </div>
         <div className="two fields">
             <div className="field">
-                <label htmlFor="users_input_field"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
+                <label htmlFor="users_input_field" id="user_label"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
                 <UsersInput ref={ (e) => { this.userDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
             </div>
 
@@ -514,7 +514,7 @@ class SearchPanel extends React.Component {
                     (!isEmpty(this.props.SearchResultsStore.spellcheck)) &&
                         <SpellcheckPanel spellcheckData={this.props.SearchResultsStore.spellcheck} handleRedirect={this.handleRedirect.bind(this)} />
                 }
-                { 
+                {
                     (!isEmpty(this.props.SearchResultsStore.queryparams)) &&
                         <SearchResultsPanel
                             results={this.props.SearchResultsStore.docs}
@@ -529,7 +529,7 @@ class SearchPanel extends React.Component {
                             loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
                             handleFacetClick={this.handleFacetClick.bind(this)}
                             selectedFacets={{
-                                languages: this.state.language || [], 
+                                languages: this.state.language || [],
                                 tags: this.state.tag || [],
                                 users: this.state.user || [],
                                 educationLevel: this.state.educationLevel || [],
