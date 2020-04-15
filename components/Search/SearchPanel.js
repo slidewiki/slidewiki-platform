@@ -457,7 +457,7 @@ class SearchPanel extends React.Component {
             </div>
             <div className="field">
                 <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckFilter.Tag.Topic" defaultMessage="Subject" /></label>
-                <TagInput id="topics_input_field" aria-describedby="describe_topic"
+                <TagInput id="topics_input_field" aria-describedby="describe_topic" ariaLabelledby="topics_label"
                     ref={(e) => (this.topicsDropdown = e)} tagFilter={{ tagType: 'topic' }} initialTags={[]} placeholder="Select Subject" />
             </div>
             <div className="field">
@@ -470,12 +470,12 @@ class SearchPanel extends React.Component {
         <div className="two fields">
             <div className="field">
                 <label htmlFor="users_input_field" id="user_label"><FormattedMessage {...this.messages.usersFilterTitle} /></label>
-                <UsersInput ref={ (e) => { this.userDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
+                <UsersInput ref={ (e) => { this.userDropdown = e; }} ariaLabelledby="user_label" placeholder={this.context.intl.formatMessage(this.messages.usersFilterPlaceholder)} />
             </div>
 
             <div className="field">
-                <label htmlFor="tags_input_field"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
-                <TagsInput ref={ (e) => { this.tagDropdown = e; }} placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
+                <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
+                <TagsInput ref={ (e) => { this.tagDropdown = e; }} ariaLabelledby="tags_label" placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
             </div>
         </div></div>;
 

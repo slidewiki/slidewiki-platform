@@ -136,7 +136,7 @@ class TagInput extends React.Component {
         });
 
         return (
-            <div aria-labelledby="topics_label" ref={(i) => (this.rootElement = i)} className={classes}>
+            <div aria-labelledby={this.props.ariaLabelledby} ref={(i) => (this.rootElement = i)} className={classes}>
               <i className="dropdown icon"></i>
               <div className="default text">{this.props.placeholder}</div>
               <div ref={(i) => (this.menuElement = i)} className="menu">

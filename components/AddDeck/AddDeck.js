@@ -410,7 +410,7 @@ class AddDeck extends React.Component {
             console.error('Submission not possible - no file or not pptx/odp/zip');
         }
     }
-    
+
     saveTags() {
         let tags = this.tagInput.getSelected();
         tags.forEach((tag) => {
@@ -540,7 +540,7 @@ class AddDeck extends React.Component {
                         id='AddDeck.form.heading'
                         defaultMessage='Add a deck to SlideWiki' />
                 </h1>
-                
+
                 <div className="sixteen wide column">
                     <form className={formClasses}>
                         <div className={fieldClass_title} ref="div_title">
@@ -550,8 +550,8 @@ class AddDeck extends React.Component {
                                     defaultMessage='Title' />
                             </label>
                             <input type="text" id="title" aria-required="true" ref="input_title" aria-invalid={this.state.formValidationErrors.title ? true : false} />
-                            {this.state.formValidationErrors.title ? 
-                                <span htmlFor="title" aria-labelledby="title" className="input-error">{this.state.formValidationErrors.title}</span> 
+                            {this.state.formValidationErrors.title ?
+                                <span htmlFor="title" aria-labelledby="title" className="input-error">{this.state.formValidationErrors.title}</span>
                             : ''}
                         </div>
                         <div className="two fields">
@@ -573,7 +573,7 @@ class AddDeck extends React.Component {
                                 errorMessage={this.state.formValidationErrors.language}
                             />
                             <div className="field" ref="div_themes" >
-                                <label htmlFor="themes">
+                                <label htmlFor="themes" id="theme">
                                     <FormattedMessage
                                         id='AddDeck.form.label_themes'
                                         defaultMessage='Choose deck theme' />
@@ -627,7 +627,7 @@ class AddDeck extends React.Component {
 
                         <div className="field">
                             <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={this.props.ImportStore.tags} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
+                            <TagInput id="tags_input_field" initialTags={this.props.ImportStore.tags} ref={(i) => (this.tagInput = i)} allowAdditions={true} ariaLabelledby="tags_label" aria-describedby="describe_tags" />
                         </div>
 
                         <div className="ui message" id="uploadDesc">
@@ -664,8 +664,8 @@ class AddDeck extends React.Component {
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
                                 </label>
                             </div>
-                            {this.state.formValidationErrors.conditions ? 
-                                <span htmlFor="title" aria-labelledby="terms" className="input-error">{this.state.formValidationErrors.conditions}</span> 
+                            {this.state.formValidationErrors.conditions ?
+                                <span htmlFor="title" aria-labelledby="terms" className="input-error">{this.state.formValidationErrors.conditions}</span>
                             : ''}
                         </div>
                         <div className={fieldClass_imageslicense} >
@@ -677,8 +677,8 @@ class AddDeck extends React.Component {
                                         defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
                                 </label>
                             </div>
-                            {this.state.formValidationErrors.imagesLicence ? 
-                                <span htmlFor="title" aria-labelledby="termsimages" className="input-error">{this.state.formValidationErrors.imagesLicence}</span> 
+                            {this.state.formValidationErrors.imagesLicence ?
+                                <span htmlFor="title" aria-labelledby="termsimages" className="input-error">{this.state.formValidationErrors.imagesLicence}</span>
                             : ''}
                         </div>
                         <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" style={{display:'none'}}>

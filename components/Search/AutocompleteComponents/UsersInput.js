@@ -61,7 +61,7 @@ class UsersInput extends React.Component {
 
         });
         return (
-            <div aria-labelledby="user_label" className={classes} id='users_input_div'>
+            <div aria-labelledby={this.props.ariaLabelledby} className={classes} id='users_input_div'>
               <input type="hidden" name="users_input" ref='users_input' id='users_input'></input>
               <div className="menu" ref="dropdown_menu"></div>
               <div className="default text" id='users_input_field'>{this.props.placeholder}</div>
