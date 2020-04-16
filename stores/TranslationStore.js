@@ -41,25 +41,34 @@ class TranslationStore extends BaseStore {
 
     deckGotLoaded(data) {
         // console.log('TranslationStore deckGotLoaded deckdata', data.deckData);
-        this.nodeLanguage = data.deckData.language.substring(0, 2);
+        if (data.deckData.language) {
+            this.nodeLanguage = data.deckData.language.substring(0, 2);
 
-        this.emitChange();
+            this.emitChange();
+        }
+        
         // this.logState('deckGotLoaded');
     }
 
     deckPropsGotLoaded(data) {
         // console.log('TranslationStore deckPropsGotLoaded deckdata', data.deckProps);
-        this.nodeLanguage = data.deckProps.language.substring(0, 2);
+        if (data.deckProps.language) {
+            this.nodeLanguage = data.deckProps.language.substring(0, 2);
 
-        this.emitChange();
+            this.emitChange();
+        }
+        
         // this.logState('deckPropsGotLoaded');
     }
 
     slideLoaded(data) {
         // console.log('TranslationStore slideLoaded slide', data.slide);
-        this.nodeLanguage = data.slide.language.substring(0, 2) ;
+        if (data.slide.language) {
+            this.nodeLanguage = data.slide.language.substring(0, 2) ;
 
-        this.emitChange();
+            this.emitChange();
+        }
+        
         // this.logState('slideLoaded');
     }
 
@@ -75,12 +84,12 @@ class TranslationStore extends BaseStore {
 
         // set primary language
         let primaryVariant = payload.translations.find((v) => v.original);
-        if (primaryVariant) {
+        if (primaryVariant && primaryVariant.language) {
             this.originLanguage = primaryVariant.language.substring(0, 2);
         }
 
         // update translations
-        this.translations = payload.translations.filter((v) => !v.original).map((cur) => cur.language.substring(0, 2));
+        this.translations = payload.translations.filter((v) => !v.original && v.language !== null).map((cur) => cur.language.substring(0, 2));
         this.nodeVariants = payload.translations;
 
         this.emitChange();
