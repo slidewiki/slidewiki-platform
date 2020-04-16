@@ -49,14 +49,10 @@ class CheckDescriptiveNames extends React.Component {
     };
 
     runValidation = () => {
-        console.log(this.props);
-        console.log(deckTitle);
-
         const deckTitle = this.props.DeckViewStore.deckData.title;
         let errors = [];
 
         if (!this.validateTitle(deckTitle)) {
-            console.log('wrong title');
             errors.push({
                 title: 'Deck title: ' + deckTitle,
                 description: 'Deck title is not descriptive, change the name',

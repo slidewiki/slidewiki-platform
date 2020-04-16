@@ -14,6 +14,8 @@ import CheckHierarchicalDesign from './CheckHierarchicalDesign';
 import CheckMultipleLanguages from './CheckMultipleLanguages';
 import CheckQuestions from './CheckQuestions';
 import CheckQuestionDistractors from './CheckQuestionDistractors';
+import CheckMetadataQuality from './CheckMetadataQuality';
+import CheckMetadataAdherenceQuality from './CheckMetadataAdherenceQuality';
 
 class QualityPanel extends React.Component {
     state = { activeIndex: -1 };
@@ -43,17 +45,19 @@ class QualityPanel extends React.Component {
                 <Accordion fluid styled>
                     <CheckDescriptiveNames activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='0' />
                     <CheckHierarchicalDesign activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='1' />
+                    <CheckMetadataQuality activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='2' />
+                    <CheckMetadataAdherenceQuality activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='3' />
                 </Accordion>
 
                 <Header as='h4'>Learning content</Header>
                 <Accordion fluid styled>
-                    <CheckMultipleLanguages activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='2' />
+                    <CheckMultipleLanguages activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='4' />
                 </Accordion>
 
                 <Header as='h4'>Self assessment</Header>
                 <Accordion fluid styled>
-                    <CheckQuestions activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='3' />
-                    <CheckQuestionDistractors activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='4' />
+                    <CheckQuestions activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='5' />
+                    <CheckQuestionDistractors activeIndex={this.state.activeIndex} handleClick={this.handleClick} index='6' />
                 </Accordion>
             </div>
         );

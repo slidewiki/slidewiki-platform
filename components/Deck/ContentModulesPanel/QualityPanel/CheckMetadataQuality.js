@@ -4,30 +4,24 @@ import { connectToStores } from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { Accordion, Icon, Label, Message, List } from 'semantic-ui-react';
+import TranslationStore from '../../../../stores/TranslationStore';
 
-class CheckHierarchicalDesign extends React.Component {
+class CheckMetadataQuality extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            title: null,
-            description: null,
-            subjects: null,
-            level: null,
-            language: null,
-            accessibilities: null,
-            timeRequired: null,
-
-            titleImportance: 0.17,
-            descriptionImportance: 0.17,
-            subjectsImportance: 0.145,
-            levelImportance: 0.165,
-            languageImportance: 0.155,
-            timeRequiredImportance: 0.098,
-            accessibilitiesImportance: 0.099,
-
-            error: false,
+            errors: [],
+            score: 0,
         };
+
+        this.titleImportance = 0.17;
+        this.descriptionImportance = 0.17;
+        this.subjectsImportance = 0.145;
+        this.levelImportance = 0.165;
+        this.languageImportance = 0.155;
+        this.timeRequiredImportance = 0.098;
+        this.accessibilitiesImportance = 0.099;
     }
 
     componentDidMount() {
@@ -41,70 +35,58 @@ class CheckHierarchicalDesign extends React.Component {
     }
 
     runValidation = () => {
+        let { deckData } = this.props.DeckViewStore;
+        const translations = this.props.TranslationStore.treeTranslations;
+        const multipleLanguages = translations && translations.length > 0;
+        let errors = [];
 
-        const availabilityScore = this.calculateAvailabilityScore(this.state.title,this.state.description,this.state.subjects,
-            this.state.level, this.state.language, this.state.accessibilities, this.state.timeRequired);
-        const adherenceScore = this.calculateAdherenceScore(this.state.title,this.state.description,this.state.subjects,
-            this.state.level, this.state.language, this.state.accessibilities, this.state.timeRequired);
-
-
-        const contentItems = this.props.DeckViewStore.deckData.contentItems;
-        let foundDeck = false;
-
-        if (contentItems && contentItems.length > 0) {
-            for (const item of contentItems) {
-                if (item.kind === 'deck') {
-                    foundDeck = true;
-                    break;
-                }
-            }
+        if (!deckData.title) {
+            errors.push('Deck does not have a title');
         }
 
+        if (!deckData.description) {
+            errors.push('Deck does not have a description');
+        }
+
+        if (!deckData.topics || deckData.topics.length === 0) {
+            errors.push('No subjects are specified for this deck');
+        }
+
+        if (!deckData.educationLevel) {
+            errors.push('The educational level of the deck is not specified');
+        }
+
+        if (!multipleLanguages) {
+            errors.push('The deck is only available in one language');
+        }
+
+        let score = this.calculateAvailabilityScore({
+            title: deckData.title,
+            description: deckData.description,
+            subjects: deckData.subjects,
+            level: deckData.educationLevel,
+            language: multipleLanguages
+        });
+
+
         this.setState({
-            error: !foundDeck,
+            errors,
+            score
         });
     };
 
-    calculateAvailabilityScore = (title, description, subjects, level, language, accessibilities, timeRequired) => {
-        score = 0;
+    calculateAvailabilityScore = ({title, description, subjects, level, language, accessibilities, timeRequired}) => {
+        let score = 0;
 
-        score += title !== null ? this.state.titleImportance : 0;
-        score += description !== null ? this.state.descriptionImportance : 0;
-        score += subjects !== null ? this.state.subjectsImportance : 0;
-        score += level !== null ? this.state.levelImportance : 0;
-        score += language !== null ? this.state.languageImportance : 0;
-        score += accessibilities !== null ? this.state.accessibilitiesImportance : 0;
-        score += timeRequired !== null ? this.state.timeRequiredImportance : 0;
+        score += title ? this.titleImportance : 0;
+        score += description ? this.descriptionImportance : 0;
+        score += subjects ? this.subjectsImportance : 0;
+        score += level ? this.levelImportance : 0;
+        score += language ? this.languageImportance : 0;
+        score += accessibilities !== null ? this.accessibilitiesImportance : 0;
+        score += timeRequired !== null ? this.timeRequiredImportance : 0;
 
-        return score;
-    }
-
-    calculateAdherenceScore = (title, description, subjects, level, language, accessibilities, timeRequired) => {
-        score = 0;
-
-        score += this.calculateAdherenceScoreForField('title', title, this.state.titleImportance);
-        score += this.calculateAdherenceScoreForField('description', description, this.state.descriptionImportance);
-        score += this.calculateAdherenceScoreForField('subjects', subjects, this.state.subjectsImportance);
-        score += this.calculateAdherenceScoreForField('level', level, this.state.levelImportance);
-        score += this.calculateAdherenceScoreForField('language', language, this.state.languageImportance);
-        score += this.calculateAdherenceScoreForField('accessibilities', accessibilities, this.state.accessibilitiesImportance);
-        score += this.calculateAdherenceScoreForField('timeRequired', timeRequired, this.state.timeRequiredImportance);
-
-        return score;
-    }
-
-    calculateAdherenceScoreForField = (field, fieldValue, fieldImportance) => {
-        switch(field) {
-            case 'title':
-                return fieldValue !== null ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(' ').length-5.5/2.5)) : 0;
-            case 'description':
-                return fieldValue !== null ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(' ').length-54.5/40)) : 0;
-            case 'subjects':
-                return fieldValue !== null ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(',').length-4.5/3.5)) : 0;
-            default:
-                return fieldValue !== null ? fieldImportance : 0;
-        }
-        return title;
+        return Math.round(score * 100);
     }
 
     render() {
@@ -112,15 +94,21 @@ class CheckHierarchicalDesign extends React.Component {
             <>
                 <Accordion.Title active={this.props.activeIndex === this.props.index} index={this.props.index} onClick={this.props.handleClick}>
                     <Icon name='dropdown' />
-                    Hierarchical design{' '}
-                    <Label color={this.state.error ? 'red' : 'green'} horizontal>
-                        {this.state.error ? '1 issue' : 'All good'}
+                    Availability of Standardized Metadata{' '}
+                    <Label color={this.state.errors.length > 0 ? 'red' : 'green'} horizontal>
+                        {this.state.errors.length > 0 ? this.state.errors.length + ' issues' : 'All good'}
+                    </Label>
+                    {' '}
+                    <Label color={'grey'} horizontal>
+                        {this.state.score}%
                     </Label>
                 </Accordion.Title>
                 <Accordion.Content active={this.props.activeIndex === this.props.index}>
-                    <Message color='blue'>It is good practice to use subdecks to create a hierarchy in the slide structure</Message>
+                    <Message color='blue'>The availability of metadata helps users to find decks and to understand the contents. The measured quality is {this.state.score}% out of 100%</Message>
                     <List divided relaxed>
-                        {this.state.error && <Message color='red'>No subdecks found, add a subdeck to improve the slide structure</Message>}
+                        {this.state.errors.map((error, index) => (
+                            <Message color='red' key={index}>{error}</Message>
+                        ))}
                     </List>
                 </Accordion.Content>
             </>
@@ -128,14 +116,15 @@ class CheckHierarchicalDesign extends React.Component {
     }
 }
 
-CheckHierarchicalDesign.contextTypes = {
+CheckMetadataQuality.contextTypes = {
     intl: PropTypes.object.isRequired,
 };
 
-CheckHierarchicalDesign = connectToStores(CheckHierarchicalDesign, [DeckViewStore], (context, props) => {
+CheckMetadataQuality = connectToStores(CheckMetadataQuality, [DeckViewStore, TranslationStore], (context, props) => {
     return {
         DeckViewStore: context.getStore(DeckViewStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState(),
     };
 });
 
-export default CheckHierarchicalDesign;
+export default CheckMetadataQuality;
