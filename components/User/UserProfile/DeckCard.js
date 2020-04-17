@@ -114,7 +114,7 @@ class DeckCard extends React.Component {
 
 DeckCard.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 
 export default DeckCard;

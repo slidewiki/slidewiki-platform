@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import {formatDate} from '../../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
@@ -135,7 +136,7 @@ class UserPerformancePredictionItem extends React.Component {
 }
 
 UserPerformancePredictionItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 export default UserPerformancePredictionItem;

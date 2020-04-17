@@ -20,6 +20,7 @@ import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import TranslationStore from '../../../stores/TranslationStore';
 import updateTrap from '../../../actions/loginModal/updateTrap';
 import { makeNodeURL } from '../../common/Util';
+import { Checkbox } from 'semantic-ui-react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 
 
@@ -44,14 +45,18 @@ class TreePanel extends React.Component {
             tooltipForkDeck: {
                 id: 'TreePanel.forkDeck',
                 defaultMessage: 'Fork deck (create a copy)'
+            },
+            showThumbnails: {
+                id: 'TreePanel.showThumbnails',
+                defaultMessage: 'Show Thumbnails',
             }
         });
     }
 
     componentDidMount() {
-        $('#showThumbnails').checkbox();
-        if(window.sessionStorage){
+        if (window.sessionStorage) {
             let showThumbnails = window.sessionStorage.getItem('DeckTree.ShowThumbnails');
+            
             if (showThumbnails) {
                 this.setState({showThumbnails: (showThumbnails === 'true')});
             } else {
@@ -61,8 +66,10 @@ class TreePanel extends React.Component {
     }
 
     toggleShowThumbnails() {
-        if(window.sessionStorage)
+        if(window.sessionStorage) {
             window.sessionStorage.setItem('DeckTree.ShowThumbnails', !this.state.showThumbnails);
+        }
+
         this.setState({showThumbnails: !this.state.showThumbnails});
     }
 
@@ -211,12 +218,6 @@ class TreePanel extends React.Component {
         // console.log('TreePanel render decktree infos (decktree, selector)', deckTree, '!!!\n!!!', selector);
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
 
-        let ShowThumbnailsCheckBoxClasses = classNames({
-            'ui': true,
-            'toggle': true,
-            'checkbox': true,
-            'checked': this.state.showThumbnails
-        });
         return (
             <div className="ui container" ref="treePanel" role="navigation">
                 <NavigationPanel />
@@ -270,10 +271,12 @@ class TreePanel extends React.Component {
                             showThumbnails={this.state.showThumbnails}/>
                     </div>
                     <div className="ui bottom attached segment">
-                        <div className={ShowThumbnailsCheckBoxClasses} onChange={this.toggleShowThumbnails.bind(this)}>
-                            <input type="checkbox" name="ShowThumbnails" id="ShowThumbnails" checked={this.state.showThumbnails ? 'checked' : ''}/>
-                            <label htmlFor="ShowThumbnails"><FormattedMessage id='deck.showThumbnails' defaultMessage='Show Thumbnails'/></label>
-                        </div>
+                        <Checkbox 
+                            toggle 
+                            label={this.context.intl.formatMessage(this.messages.showThumbnails)}
+                            onChange={this.toggleShowThumbnails.bind(this)} 
+                            checked={this.state.showThumbnails}
+                        />
                     </div>
 
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />

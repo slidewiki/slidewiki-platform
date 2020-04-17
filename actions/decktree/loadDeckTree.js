@@ -28,7 +28,7 @@ export default function loadDeckTree(context, payload, done) {
     let runFetchTree = 1;
 
     //runFetchTree flag may be passed through the navigate action to force deck tree fetch
-    if (!payload.navigate.runFetchTree && currentSelector.id === payload.params.id) {
+    if (payload.navigate && !payload.navigate.runFetchTree && currentSelector.id === payload.params.id) {
         runFetchTree = 0;
     }
     // console.log('loadDeckTree runFetchTree', runFetchTree);

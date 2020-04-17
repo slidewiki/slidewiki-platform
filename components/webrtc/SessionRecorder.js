@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { isEmpty } from '../../common';
 import { Button, Icon } from 'semantic-ui-react';
@@ -229,8 +230,8 @@ class SessionRecorder extends React.Component {
 }
 
 SessionRecorder.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 export default SessionRecorder;

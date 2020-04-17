@@ -113,7 +113,7 @@ class ExamList extends React.Component {
     }
 }
 ExamList.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
+    executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 ExamList = connectToStores(ExamList, [UserProfileStore, DeckTreeStore, ContentQuestionsStore], (context, props) => {
