@@ -63,7 +63,7 @@ class CheckMetadataQuality extends React.Component {
         let score = this.calculateAvailabilityScore({
             title: deckData.title,
             description: deckData.description,
-            subjects: deckData.subjects,
+            subjects: deckData.topics ? deckData.topics.length : '',
             level: deckData.educationLevel,
             language: multipleLanguages
         });

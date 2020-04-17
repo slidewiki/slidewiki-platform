@@ -40,10 +40,10 @@ class CheckMetadataAdherenceQuality extends React.Component {
         const multipleLanguages = translations && translations.length > 0;
 
         let score = this.calculateAdherenceScore({
-            title: deckData.title,
-            description: deckData.description,
-            subjects: deckData.topics.join(','),
-            level: deckData.educationLevel,
+            title: deckData.title ? deckData.title : '',
+            description: deckData.description ? deckData.description : '',
+            subjects: deckData.topics ? deckData.topics.join(',') : '',
+            level: deckData.educationLevel ? deckData.educationLevel : '',
             language: multipleLanguages,
             accessibilities: '',
             timeRequired: ''

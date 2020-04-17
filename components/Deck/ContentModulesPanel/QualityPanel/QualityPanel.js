@@ -34,11 +34,7 @@ class QualityPanel extends React.Component {
         return (
             <div className='ui bottom attached' ref='qualityPanel'>
                 <Header as='h3' dividing>
-                    Quality summary
-                </Header>
-
-                <Header as='h3' dividing>
-                    Issues
+                    Quality Issues
                 </Header>
 
                 <Header as='h4'>Content structure</Header>
