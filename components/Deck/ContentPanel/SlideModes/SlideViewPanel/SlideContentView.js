@@ -64,7 +64,7 @@ class SlideContentView extends React.Component {
             if (!this.props.hideBorder) {
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             }
-            
+
 
             const pptxheight = $('.pptx2html').outerHeight();
             const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
@@ -153,8 +153,8 @@ class SlideContentView extends React.Component {
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
                                  dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
-                            
-                            <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations} 
+
+                            <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations}
                                 inlineContentRef={this.refs.inlineContent}>
                             </SlideAnnotationView>
                         </section>
@@ -165,7 +165,7 @@ class SlideContentView extends React.Component {
             {this.props.hideSpeakerNotes ? null :
                 <div className="ui horizontal segments">
                       <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
-                          <b><FormattedMessage id='deck.view.speakerNote' defaultMessage='Speaker notes'/>:</b>
+                          <strong><FormattedMessage id='deck.view.speakerNote' defaultMessage='Speaker notes'/>:</strong>
                           <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
                           </div>
                       </div>
