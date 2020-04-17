@@ -30,6 +30,7 @@ converter.setOption('underline', 'true');
 converter.setOption('strikethrough', 'true');
 converter.setOption('literalMidWordUnderscores', 'true');
 converter.setOption('simplifiedAutoLink', 'true');
+converter.setOption('simpleLineBreaks', 'true');
 let t_converter = new turndown();
 
 class MarkdownEditor extends React.Component {

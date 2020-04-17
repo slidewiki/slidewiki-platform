@@ -3,6 +3,7 @@ import React from 'react';
 import {findDOMNode} from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
 import SlideAnnotationView from './SlideAnnotationView';
 const ReactDOM = require('react-dom');
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -63,7 +64,7 @@ class SlideContentView extends React.Component {
             if (!this.props.hideBorder) {
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             }
-            
+
 
             const pptxheight = $('.pptx2html').outerHeight();
             const scrollbarHeight = this.refs.inlineContent.offsetHeight - this.refs.inlineContent.clientHeight;
@@ -131,8 +132,17 @@ class SlideContentView extends React.Component {
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //to handle non-canvas display of slides
         let slideHTMLContent = this.props.content;
+
         if (slideHTMLContent.indexOf('class="pptx2html"') === -1 && slideHTMLContent.indexOf('class=\'pptx2html\'') === -1) {
-            slideHTMLContent = '<div class="pptx2html" style="width: 960px; height:720px; position: relative; flex-direction: column; padding-left: 66px; flex-wrap: nowrap; align-items: stretch; display: flex; justify-content: center; line-height: 1.1">' + slideHTMLContent + '</div>';
+            // for markdown slides, vertically align the content 
+            const markdown = this.props.SlideEditStore.markdown;
+            
+            if (markdown && markdown.length !== 0 && markdown.trim()) {
+                slideHTMLContent = '<div class="pptx2html" style="width: 960px; height:720px; position: relative; flex-direction: column; padding-left: 66px; flex-wrap: nowrap; align-items: stretch; display: flex; justify-content: center; line-height: 1.1">' + slideHTMLContent + '</div>';
+            } else {
+                // for legacy slides without a pptx2html element 
+                slideHTMLContent = '<div class="pptx2html" style="width: 960px; height:720px; position: relative; flex-direction: column; padding-left: 66px; flex-wrap: nowrap; align-items: stretch; display: flex; line-height: 1.1; overflow: auto">' + slideHTMLContent + '</div>';
+            }
         }
         return (
         <div ref='container' id='container'>
@@ -143,8 +153,8 @@ class SlideContentView extends React.Component {
                             <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
                                  dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
-                            
-                            <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations} 
+
+                            <SlideAnnotationView slideId={this.props.SlideViewStore.slideId} annotations={this.props.SlideViewStore.annotations}
                                 inlineContentRef={this.refs.inlineContent}>
                             </SlideAnnotationView>
                         </section>
@@ -155,7 +165,7 @@ class SlideContentView extends React.Component {
             {this.props.hideSpeakerNotes ? null :
                 <div className="ui horizontal segments">
                       <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
-                          <b><FormattedMessage id='deck.view.speakerNote' defaultMessage='Speaker notes'/>:</b>
+                          <strong><FormattedMessage id='deck.view.speakerNote' defaultMessage='Speaker notes'/>:</strong>
                           <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
                           </div>
                       </div>
@@ -170,9 +180,10 @@ SlideContentView.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-SlideContentView = connectToStores(SlideContentView, [SlideViewStore], (context, props) => {
+SlideContentView = connectToStores(SlideContentView, [SlideViewStore, SlideEditStore], (context, props) => {
     return {
         SlideViewStore: context.getStore(SlideViewStore).getState(),
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
     };
 });
 
