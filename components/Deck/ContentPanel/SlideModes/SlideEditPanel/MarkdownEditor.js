@@ -265,7 +265,7 @@ class MarkdownEditor extends React.Component {
                     </div>
                     <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0, margin: '0 20px'}}>
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
-                        speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true}/>
+                        speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true} markdownEditorView={true} />
                     </div>
                   </div>
                 </div>
