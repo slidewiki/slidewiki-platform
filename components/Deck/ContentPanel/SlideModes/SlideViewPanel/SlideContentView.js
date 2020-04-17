@@ -137,7 +137,7 @@ class SlideContentView extends React.Component {
             // for markdown slides, vertically align the content 
             const markdown = this.props.SlideEditStore.markdown;
             
-            if (markdown && markdown.length !== 0 && markdown.trim()) {
+            if (this.props.markdownEditorView || (markdown && markdown.length !== 0 && markdown.trim())) {
                 slideHTMLContent = '<div class="pptx2html" style="width: 960px; height:720px; position: relative; flex-direction: column; padding-left: 66px; flex-wrap: nowrap; align-items: stretch; display: flex; justify-content: center; line-height: 1.1">' + slideHTMLContent + '</div>';
             } else {
                 // for legacy slides without a pptx2html element 
