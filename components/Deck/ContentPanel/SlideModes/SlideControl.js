@@ -16,9 +16,14 @@ class SlideControl extends React.Component {
     }
     componentDidMount() {
         this.updateProgressbar();
+        document.addEventListener('keydown', this.handleKeyDown);
     }
     componentDidUpdate(){
         this.updateProgressbar();
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     confirmLeaving = () => {
@@ -108,6 +113,19 @@ class SlideControl extends React.Component {
         $(progressbar).progress({percent: percentage});
         //$(progressbar).show();
     }
+
+    handleKeyDown = (e) => {
+        let selector = this.props.DeckTreeStore.selector;
+        let flatTree = this.props.DeckTreeStore.flatTree;
+        let mode = this.props.mode;
+
+        if (e.altKey && e.keyCode === 78) { //n  
+            this.handleNextClick(selector, flatTree, mode);
+        } else if (e.altKey && e.keyCode === 80) { //p  
+            this.handlePreviousClick(selector, flatTree, mode);
+        }
+    }
+
     render() {
         //hide focused outline
         let compStyle = {

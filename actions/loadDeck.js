@@ -30,6 +30,7 @@ import loadForks from './permissions/loadForks';
 import loadNodeTranslations from './translation/loadNodeTranslations';
 import loadSimilarContentsSelector from './loadSimilarContentsSelector';
 import loadSimilarContents from './loadSimilarContents';
+import { cloneDeep } from 'lodash';
 
 import log from './log/clog';
 
@@ -37,6 +38,8 @@ import log from './log/clog';
 export default function loadDeck(context, payload, done) {
     log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
     context.dispatch('UPDATE_MODE', {mode: 'loading'});
+
+    payload = cloneDeep(payload); //payload is customized, updating the variable by reference breaks navigation in newer versions of fluxible-router, so clone it
 
     // resets the deck view store
     // TODO (what other store to reset ???)
