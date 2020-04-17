@@ -71,13 +71,13 @@ class CheckMetadataAdherenceQuality extends React.Component {
     calculateAdherenceScoreForField = (field, fieldValue, fieldImportance) => {
         switch(field) {
             case 'title':
-                return fieldValue !== null ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(' ').length-5.5)/2.5) : 0;
+                return (fieldValue != 0 && fieldValue !== undefined) ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(' ').length-5.5)/2.5) : 0;
             case 'description':
-                return fieldValue !== null ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(' ').length-54.5)/40) : 0;
+                return (fieldValue != 0 && fieldValue !== undefined) ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(' ').length-54.5)/40) : 0;
             case 'subjects':
-                return fieldValue !== null ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(',').length-4.5)/3.5) : 0;
+                return (fieldValue != 0 && fieldValue !== undefined) ? fieldImportance * 1/Math.ceil(Math.abs(fieldValue.split(',').length-4.5)/3.5) : 0;
             default:
-                return fieldValue !== null ? fieldImportance : 0;
+                return (fieldValue != 0 && fieldValue !== undefined) ? fieldImportance : 0;
         }
     }
 
