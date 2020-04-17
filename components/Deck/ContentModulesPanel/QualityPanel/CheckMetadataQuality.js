@@ -78,13 +78,13 @@ class CheckMetadataQuality extends React.Component {
     calculateAvailabilityScore = ({title, description, subjects, level, language, accessibilities, timeRequired}) => {
         let score = 0;
 
-        score += (title != 0 && title !== undefined) ? this.titleImportance : 0;
-        score += (description != 0 && description !== undefined) ? this.descriptionImportance : 0;
-        score += (subjects != 0 && subjects !== undefined) ? this.subjectsImportance : 0;
-        score += (level != 0 && level !== undefined) ? this.levelImportance : 0;
-        score += (language != 0 && language !== undefined) ? this.languageImportance : 0;
-        score += (accessibilities != 0 && accessibilities !== undefined) ? this.accessibilitiesImportance : 0;
-        score += (timeRequired != 0 && timeRequired !== undefined) ? this.timeRequiredImportance : 0;
+        score += (title !== 0 && title !== undefined) ? this.titleImportance : 0;
+        score += (description !== 0 && description !== undefined) ? this.descriptionImportance : 0;
+        score += (subjects !== 0 && subjects !== undefined) ? this.subjectsImportance : 0;
+        score += (level !== 0 && level !== undefined) ? this.levelImportance : 0;
+        score += (language !== 0 && language !== undefined) ? this.languageImportance : 0;
+        score += (accessibilities !== 0 && accessibilities !== undefined) ? this.accessibilitiesImportance : 0;
+        score += (timeRequired !== 0 && timeRequired !== undefined) ? this.timeRequiredImportance : 0;
 
         return Math.round(score * 100);
     }
