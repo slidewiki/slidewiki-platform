@@ -130,13 +130,14 @@ class SearchResultsPanel extends React.Component {
             resultsHeader = <div>
                 <Default style={{display: 'inline-block'}}>
                     <h2 className="ui header" role="main" id="main"><FormattedMessage {...this.messages.header} /></h2>
-                    {
-                        this.context.intl.formatMessage(this.messages.resultsMsg, {
-                            resultsNum: results.length,
-                            totalResults: this.props.numFound
-                        })
-                    }
-                    
+                    <p>
+                        {
+                            this.context.intl.formatMessage(this.messages.resultsMsg, {
+                                resultsNum: results.length,
+                                totalResults: this.props.numFound
+                            })
+                        }
+                    </p>
                 </Default>
                 <Mobile>
                     <Button onClick={this.toggleSidebar.bind(this)}>
