@@ -163,7 +163,7 @@ class UserProfile extends React.Component {
 
     displayUserSettings() {
         return (
-          <div>
+          <main>
               <div className="ui segments">
                   <h1 className="sr-only" id="main" role="main">Profile Settings</h1>
                   <div className="ui secondary segment" >
@@ -193,7 +193,7 @@ class UserProfile extends React.Component {
                   </div>
 
               </div>
-          </div>);
+          </main>);
     }
 
     displayAccounts() {

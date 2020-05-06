@@ -534,7 +534,7 @@ class AddDeck extends React.Component {
         }
 
         return (
-            <div className="ui vertically padded grid container">
+            <main className="ui vertically padded grid container">
                 <h1 className="ui header" style={{marginTop: '1em'}}>
                     <FormattedMessage
                         id='AddDeck.form.heading'
@@ -692,7 +692,7 @@ class AddDeck extends React.Component {
                         </div>
                     </form>
                 </div>
-            </div>
+            </main>
         );
     }
 }

@@ -490,7 +490,7 @@ class SearchPanel extends React.Component {
             <div className="ui container">
                 <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
                 <form className="ui form success">
-                    <div className="field">
+                    <div className="field" role="search">
                         <Grid>
                             <Grid.Row>
                                 <Grid.Column>

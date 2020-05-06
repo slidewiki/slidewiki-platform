@@ -6,7 +6,7 @@ class Accessibility extends React.Component {
     render() {
         return (
             <StaticPage>
-                <div className="ui container" ref="accessibility">
+                <main className="ui container" ref="accessibility">
                     <h1 className="ui header" id="main"><FormattedMessage id="accessibility.header" defaultMessage="Accessibility Statement "/></h1>
                     <p><FormattedMessage id="accessibility.p1" defaultMessage="SlideWiki aims to make its website as accessible and usable as possible."/></p>
                     <h2 className="ui header"><FormattedMessage id="accessibility.1.header" defaultMessage="What does this mean?"/></h2>
@@ -69,7 +69,7 @@ class Accessibility extends React.Component {
                         {/* <FormattedMessage id="accessibility.date" defaultMessage= */}
                             Last updated 8th February 2019
                     </p>
-                </div>
+                </main>
             </StaticPage>
         );
     }

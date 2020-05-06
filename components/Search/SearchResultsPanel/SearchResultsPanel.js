@@ -196,67 +196,75 @@ class SearchResultsPanel extends React.Component {
                                     <h2 className="ui header" id="navigation"><FormattedMessage {...this.messages.filters} /></h2>
                                 </Grid.Row>
                                 <Grid.Row>
-                                    <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
+                                    <nav aria-label="Search filter options menu">
+                                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
+                                    </nav>
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12}>
-                                <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
-                                    { 
-                                        (this.props.numFound === 0)
-                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
-                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                <main>
+                                    <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                        { 
+                                            (this.props.numFound === 0)
+                                                ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                        <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                    </div>
+                                                : resultsHeader
+                                        }
+                                    </Grid.Row>
+                                    <Grid.Row>
+                                        { 
+                                            // if we are come from facets, then load only search results panel
+                                            (this.props.loading && this.props.fromFacets) ? (
+                                                loadingDiv
+                                            ) : (
+                                                <div ref="resultsDiv">
+                                                    <SearchResultsList items={results} />
+                                                    { loadMoreDiv }
                                                 </div>
-                                            : resultsHeader
-                                    }
-                                </Grid.Row>
-                                <Grid.Row>
-                                    { 
-                                        // if we are come from facets, then load only search results panel
-                                        (this.props.loading && this.props.fromFacets) ? (
-                                            loadingDiv
-                                        ) : (
-                                            <div ref="resultsDiv">
-                                                <SearchResultsList items={results} />
-                                                { loadMoreDiv }
-                                            </div>
-                                        )
-                                    }
-                                </Grid.Row>
+                                            )
+                                        }
+                                    </Grid.Row>
+                                </main>
                             </Grid.Column>
                         </Grid>
                     </Default>
                     <Mobile>
                         <Grid>
-                            <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
-                                <Grid.Column width={16}>
-                                    { 
-                                        (this.props.numFound === 0)
-                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
-                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                            <main>
+                                <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                    <Grid.Column width={16}>
+                                        { 
+                                            (this.props.numFound === 0)
+                                                ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                        <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                    </div>
+                                                : resultsHeader
+                                        }
+                                    </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row>
+                                    <Grid.Column width={16}>
+                                        { 
+                                            (this.props.loading && this.props.fromFacets) ? (
+                                                loadingDiv
+                                            ) : (
+                                                <div ref="resultsDiv">
+                                                    <MobileResultsList items={results} />
+                                                    { loadMoreDiv }
                                                 </div>
-                                            : resultsHeader
-                                    }
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={16}>
-                                    { 
-                                        (this.props.loading && this.props.fromFacets) ? (
-                                            loadingDiv
-                                        ) : (
-                                            <div ref="resultsDiv">
-                                                <MobileResultsList items={results} />
-                                                { loadMoreDiv }
-                                            </div>
-                                        )
-                                    }
-                                </Grid.Column>
-                            </Grid.Row>  
+                                            )
+                                        }
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </main>  
                         </Grid>
                         <div className="ui left dimmed sidebar vertical menubar" ref="menubar" >
                             <Segment basic>
                                 <h2 className="ui header" id="navigation">{this.context.intl.formatMessage(this.messages.filters)}</h2>
-                                <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
+                                <nav aria-label="Search filter options menu">
+                                    <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
+                                </nav>
                             </Segment>
                         </div>
                     </Mobile>
