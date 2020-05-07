@@ -12,9 +12,11 @@ import showdown from 'showdown';
 import turndown from 'turndown';
 import Util from '../../../../common/Util';
 import saveSlide from '../../../../../actions/slide/saveSlide';
-import { Button, Icon, Dropdown} from 'semantic-ui-react';
+import { Button, Icon, Dropdown, Dimmer, Loader } from 'semantic-ui-react';
 import registerChange from '../../../../../actions/slide/registerChange';
 import ReactDOMServer from 'react-dom/server';
+import uploadMediaFiles from '../../../../../actions/media/uploadMediaFiles';
+import MediaStore from '../../../../../stores/MediaStore';
 
 
 let converter = new showdown.Converter();
@@ -28,6 +30,7 @@ converter.setOption('underline', 'true');
 converter.setOption('strikethrough', 'true');
 converter.setOption('literalMidWordUnderscores', 'true');
 converter.setOption('simplifiedAutoLink', 'true');
+converter.setOption('simpleLineBreaks', 'true');
 let t_converter = new turndown();
 
 class MarkdownEditor extends React.Component {
@@ -44,7 +47,8 @@ class MarkdownEditor extends React.Component {
         this.state = {
             markdownContent: markdownContent, 
             htmlContent: htmlContent, 
-            title: this.props.title
+            title: this.props.title,
+            loading: false,
         };
     }
     handleChange(event) {
@@ -117,6 +121,13 @@ class MarkdownEditor extends React.Component {
             const nodeURL = Util.makeNodeURL(nextProps.SlideEditStore.selector, nextProps.SlideEditStore.selector.page, 'view');
             this.context.executeAction(navigateAction, {
                 url: nodeURL
+            });
+        }
+        if (nextProps.MediaStore.file.thumbnailUrl && nextProps.MediaStore.file.thumbnailUrl !== this.props.MediaStore.file.thumbnailUrl) {
+            this.wrapText(`![Image description](${nextProps.MediaStore.file.thumbnailUrl} =150x*)`);
+
+            this.setState({
+                loading: false
             });
         }
     }
@@ -200,6 +211,74 @@ class MarkdownEditor extends React.Component {
             //nothing
         });
     }
+
+    handleOnDrop = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let dt = e.dataTransfer;
+        let files = dt.files;
+
+        if (files.length !== 1) {
+            return;
+        }
+
+        this.setState({
+            loading: true
+        });
+
+        let file = files[0];
+        let fileType = file.type;
+        let reader = new FileReader();
+
+        reader.onloadend = (evt) => {
+            if (evt.target.readyState === FileReader.DONE) {
+                let payload = {
+                    type: file.type,
+                    license: '',
+                    copyrightHolder: '',
+                    title: file.name,
+                    text: '',
+                    filesize: file.size,
+                    filename: file.name,
+                    checkbox_backgroundImage: false,
+                    bytes: null
+                };
+
+                if (fileType === 'image/svg+xml') {
+                    payload.bytes = atob(reader.result.split('base64,')[1]);
+                    payload.svg = payload.bytes;
+                } else {
+                    payload.bytes = reader.result;
+                }
+
+                this.context.executeAction(uploadMediaFiles, payload);
+            }
+        };
+
+        reader.onerror = (err) => {
+            swal({
+                title: this.context.intl.formatMessage('Error'),
+                text: this.context.intl.formatMessage('Error'),
+                type: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+            .then(() => {
+                return true;
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    handleOnDragOver = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+    }
     
     render() {
         const selector = this.props.selector || this.props.DeckTreeStore.selector;
@@ -256,16 +335,22 @@ class MarkdownEditor extends React.Component {
                 </div>
                 <div className="row" style={{paddingTop:0}}>
                     <div className="column form field ui">
+                        <Dimmer active={this.state.loading} inverted>
+                            <Loader>Uploading image</Loader>
+                        </Dimmer>
+
                         <textarea 
                             style={{fontFamily: 'Courier New', fontWeight:'bold', height:'100%', maxHeight: 'initial'}}
                             ref="markdownTextarea" 
                             onChange={this.handleChange.bind(this)} 
                             value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}
+                            onDrop={this.handleOnDrop} 
+                            onDragOver={this.handleOnDragOver} 
                         />
                     </div>
                     <div className="column" style={{boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0px 12px', padding:0, margin: '0 20px'}}>
                         <SlideContentView content={this.props.title === this.state.title ? this.state.htmlContent: this.props.content}
-                        speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true}/>
+                        speakernotes='' hideSpeakerNotes={true} theme={deckTheme} hideBorder={true} markdownEditorView={true} />
                     </div>
                   </div>
                 </div>
@@ -279,14 +364,15 @@ MarkdownEditor.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-MarkdownEditor = connectToStores(MarkdownEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {
+MarkdownEditor = connectToStores(MarkdownEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
     };
 });
 export default MarkdownEditor;
