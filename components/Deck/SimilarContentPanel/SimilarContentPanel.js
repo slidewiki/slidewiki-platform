@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import SimilarContentStore from '../../../stores/SimilarContentStore';
@@ -82,7 +83,7 @@ class SimilarContentPanel extends React.Component {
 }
 
 SimilarContentPanel.contextTypes = {
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 SimilarContentPanel = connectToStores(SimilarContentPanel, [SimilarContentStore], (context, props) => {
     return {

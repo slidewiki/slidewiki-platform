@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build master and deploy to test system
+    runs-on: ubuntu-latest
+    steps:
+    - name: NPM Update
+      run: npm update --dev
+    - name: NPM Lint
+      run: npm lint
+    - name: NPM Test
+      run: npm test
+    - name: NPM Build
+      run: npm run build:nostar
+      

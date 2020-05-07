@@ -1,6 +1,6 @@
-require('babel-register')();
+require('@babel/register')();
 // setup file
 let enzyme = require('enzyme');
-let Adapter = require('enzyme-adapter-react-15');
+let Adapter = require('enzyme-adapter-react-16');
 
 enzyme.configure({ adapter: new Adapter() });

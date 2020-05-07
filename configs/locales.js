@@ -2,6 +2,18 @@
 // and some code supporting loading intl libraries and assets
 import debug from 'debug';
 import isIntlLocaleSupported from 'intl-locales-supported';
+import { addLocaleData } from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import fr from 'react-intl/locale-data/fr';
+import es from 'react-intl/locale-data/es';
+import ru from 'react-intl/locale-data/ru';
+import de from 'react-intl/locale-data/de';
+import ca from 'react-intl/locale-data/ca';
+import gd from 'react-intl/locale-data/gd';
+import nl from 'react-intl/locale-data/nl';
+import el from 'react-intl/locale-data/el';
+import it from 'react-intl/locale-data/it';
+import cy from 'react-intl/locale-data/cy';
 
 // Returns a promise which is resolved when Intl has been polyfilled
 function loadIntlPolyfill(locale) {
@@ -25,31 +37,25 @@ function loadIntlPolyfill(locale) {
 // this is the list of supported ui locales
 // it should include all the files under /intl/*.json
 const localeLoaders = {
-    ca: () => require('react-intl-loader?locale=ca!../intl/ca.json'),
-    cy: () => require('react-intl-loader?locale=cy!../intl/cy.json'),
-    de: () => require('react-intl-loader?locale=de!../intl/de.json'),
-    el: () => require('react-intl-loader?locale=el!../intl/el.json'),
-    en: () => require('react-intl-loader?locale=en!../intl/en.json'),
-    es: () => require('react-intl-loader?locale=es!../intl/es.json'),
-    fr: () => require('react-intl-loader?locale=fr!../intl/fr.json'),
-    fy: () => require('react-intl-loader?locale=fy!../intl/fy.json'),
-    gd: () => require('react-intl-loader?locale=gd!../intl/gd.json'),
-    it: () => require('react-intl-loader?locale=it!../intl/it.json'),
-    nl: () => require('react-intl-loader?locale=nl!../intl/nl.json'),
-    pt: () => require('react-intl-loader?locale=pt!../intl/pt.json'),
-    ru: () => require('react-intl-loader?locale=ru!../intl/ru.json'),
-    sr: () => require('react-intl-loader?locale=sr!../intl/sr.json'),
+    ca: async () => await import('../intl/ca.json'),
+    cy: async () => await import('../intl/cy.json'),
+    de: async () => await import('../intl/de.json'),
+    el: async () => await import('../intl/el.json'),
+    en: async () => await import('../intl/en.json'),
+    es: async () => await import('../intl/es.json'),
+    fr: async () => await import('../intl/fr.json'),
+    fy: async () => await import('../intl/fy.json'),
+    gd: async () => await import('../intl/gd.json'),
+    it: async () => await import('../intl/it.json'),
+    nl: async () => await import('../intl/nl.json'),
+    pt: async () => await import('../intl/pt.json'),
+    ru: async () => await import('../intl/ru.json'),
+    sr: async () => await import('../intl/sr.json'),
 };
 
-function loadLocaleData(locale) {
-    return new Promise((resolve) => {
-        let loader = localeLoaders[locale];
-        if (!loader) {
-            // use the english locale for unknown ones
-            loader = localeLoaders.en;
-        }
-        loader()(resolve);
-    });
+function loadLocaleData(locale) {    
+    addLocaleData([...en, ...fr, ...es, ...ru, ...de, ...ca, ...gd, ...nl, ...el, ...it, ...cy]);
+    return localeLoaders[locale]();
 }
 
 // this list helps with setting a flag for each language

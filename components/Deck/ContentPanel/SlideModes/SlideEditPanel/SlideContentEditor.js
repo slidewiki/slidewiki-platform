@@ -895,14 +895,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
-                        
+
             let annotations = [];
             if (CKEDITOR.instances.inlineContent != null) {
                 // get the annotations before CKEditor is destroyed
                 CKEDITOR.instances.inlineContent.plugins.semanticannotations.getAnnotationsToStore(CKEDITOR.instances.inlineContent);
                 annotations = CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsToStore;
                 annotations = this.convertAnnotationsToDatabaseStructure(annotations);
-                
+
                 CKEDITOR.instances.inlineContent.destroy();
             }
             if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
@@ -2043,11 +2043,11 @@ class SlideContentEditor extends React.Component {
                                 let div = $('<div />');
                                 div.attr('id', uniqueID);
                                 div.attr('style', 'position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%');
-                                
+
                                 let image = $('<img />');
                                 image.attr('src', nextProps.MediaStore.file.url + '?' + time.toString());
                                 image.attr('alt', nextProps.MediaStore.file.text);
-                            
+
                                 div.html(image);
 
                                 $('.pptx2html').append(div);
@@ -2069,7 +2069,7 @@ class SlideContentEditor extends React.Component {
                 else  //if slide is in non-canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    
+
                     let image = $('<img />');
                     image.attr('id', uniqueID);
                     image.attr('src', nextProps.MediaStore.file.url);
@@ -2077,7 +2077,7 @@ class SlideContentEditor extends React.Component {
                     image.attr('width', '100%');
                     image.attr('height', '100%');
                     $('#inlineContent').append(image);
-                    
+
                     //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
                     //this.uniqueIDAllElements();
                     this.refreshCKeditor();
@@ -2186,7 +2186,7 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.annotateClick === 'true' && nextProps.SlideEditStore.annotateClick !== this.props.SlideEditStore.annotateClick)
         {
             CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
-            
+
         }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
         {
@@ -2860,7 +2860,7 @@ class SlideContentEditor extends React.Component {
                     <div className="ui horizontal segments">
                             <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
                                     style={compSpeakerStyle}>
-                                <b><FormattedMessage id='deck.edit.speakerNote' defaultMessage='Speaker notes'/>:</b><br />
+                                <strong><FormattedMessage id='deck.edit.speakerNote' defaultMessage='Speaker notes'/>:</strong><br />
                                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
                                         ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
                                         dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
