@@ -33,7 +33,8 @@ class ContentModulesPanel extends React.Component {
         super(props);
         
         this.state = {
-            showMobileMenu: false
+            showMobileMenu: false,
+            isLoading: false
         };
     }
 
@@ -65,8 +66,15 @@ class ContentModulesPanel extends React.Component {
         this.checkOverflowingChildren();
     }
     
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         this.checkOverflowingChildren();
+
+        // when the moduleType changes, the module is done loading. So disable to loading indicator
+        if (this.props.ContentModulesStore.moduleType !== prevProps.ContentModulesStore.moduleType) {
+            this.setState({
+                isLoading: false,
+            });
+        }
     }
     
     checkOverflowingChildren() {
@@ -80,6 +88,12 @@ class ContentModulesPanel extends React.Component {
     }
 
     handleTabClick(type, e) {
+        if (type !== this.props.ContentModulesStore.moduleType) {
+            this.setState({
+                isLoading: true,
+            });
+        }
+
         switch (type) {
             case 'questions':
                 let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
@@ -318,6 +332,11 @@ class ContentModulesPanel extends React.Component {
             'attached': !this.state.showMobileMenu
         });
         
+        let activityLoadingClass = classNames({
+            'ui segment basic': true,
+            'loading': this.state.isLoading,
+        });
+
         return (
             <div ref="contentModulesPanel" >
                 <h2 className="sr-only">
@@ -332,7 +351,9 @@ class ContentModulesPanel extends React.Component {
                     {mobileMenu}
                 </div>
                 <div className={activityDIVClasses}>
-                    {activityDIV}
+                    <div className={activityLoadingClass} style={{padding:0}}>
+                        {activityDIV}
+                    </div>
                 </div>
             </div>
         );
