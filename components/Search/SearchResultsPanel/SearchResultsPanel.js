@@ -201,7 +201,7 @@ class SearchResultsPanel extends React.Component {
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12}>
-                                <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                <Grid.Row style={{paddingBottom: 0 + 'px'}}>
                                     { 
                                         (this.props.numFound === 0)
                                             ?   <div key="noResultsDiv" className="ui basic segment center aligned">
@@ -228,7 +228,7 @@ class SearchResultsPanel extends React.Component {
                     </Default>
                     <Mobile>
                         <Grid>
-                            <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                            <Grid.Row style={{paddingBottom: 0 + 'px'}}>
                                 <Grid.Column width={16}>
                                     { 
                                         (this.props.numFound === 0)
