@@ -118,7 +118,7 @@ class PrivatePublicUserProfile extends React.Component {
 
 PrivatePublicUserProfile.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 
 export default PrivatePublicUserProfile;
