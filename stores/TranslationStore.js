@@ -89,7 +89,7 @@ class TranslationStore extends BaseStore {
         }
 
         // update translations
-        this.translations = payload.translations.filter((v) => !v.original && v.language !== null).map((cur) => cur.language.substring(0, 2));
+        this.translations = payload.translations.filter((v) => !v.original && v.language).map((cur) => cur.language.substring(0, 2));
         this.nodeVariants = payload.translations;
 
         this.emitChange();
@@ -98,7 +98,7 @@ class TranslationStore extends BaseStore {
 
     deckTreeGotLoaded(data) {
         this.treeLanguage = data.deckTree.variants.find((v) => v.original).language;
-        this.treeTranslations = data.deckTree.variants.filter((v) => !v.original && v.language !== null).map((cur) => cur.language.substring(0, 2));
+        this.treeTranslations = data.deckTree.variants.filter((v) => !v.original && v.language).map((cur) => cur.language.substring(0, 2));
 
         this.emitChange();
         // this.logState('deckTreeGotLoaded');
