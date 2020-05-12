@@ -29,13 +29,13 @@ class ContentChangeItem extends React.Component {
             }
         });
         swal({
-            text: context.intl.formatMessage(swal_messages.text),
+            text: this.context.intl.formatMessage(swal_messages.text),
             type: 'question',
             showCloseButton: true,
             showCancelButton: true,
-            confirmButtonText: context.intl.formatMessage(swal_messages.confirmButtonText),
+            confirmButtonText: this.context.intl.formatMessage(swal_messages.confirmButtonText),
             confirmButtonClass: 'ui olive button',
-            cancelButtonText: context.intl.formatMessage(swal_messages.cancelButtonText),
+            cancelButtonText: this.context.intl.formatMessage(swal_messages.cancelButtonText),
             cancelButtonClass: 'ui red button',
             buttonsStyling: false
         }).then((accepted) => {
