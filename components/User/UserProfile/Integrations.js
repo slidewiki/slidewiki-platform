@@ -11,7 +11,7 @@ import common from '../../../common';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {Microservices} from '../../../configs/microservices';
 import { NavLink } from 'fluxible-router';
-
+import { Header } from 'semantic-ui-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 
@@ -354,12 +354,12 @@ class Integrations extends React.Component {
               <div className="ui segments">
 
                   <div className="ui secondary segment">
-                      <h1 className="large header" role="main" id="main">
+                    <Header as="h2" size="medium">
                         <FormattedMessage
                           id='Integration.hint'
                           defaultMessage='Authorized Accounts and Services'
                         />
-                      </h1>
+                      </Header>
                   </div>
                   <div className="ui segment">
                     <p>
@@ -376,12 +376,12 @@ class Integrations extends React.Component {
 
 
                   <div className="ui secondary segment">
-                      <h3>
+                    <Header as="h2" size="medium">
                         <FormattedMessage
                           id='Integration.loginProvider'
                           defaultMessage='Login Provider'
                         />
-                      </h3>
+                      </Header>
                   </div>
                   <div className="ui segment">
                       <div className="ui three column vertically divided grid">
@@ -436,12 +436,12 @@ class Integrations extends React.Component {
 
               <div className="ui segments">
                 <div className="ui secondary segment">
-                  <h3>
+                <Header as="h2" size="medium">
                     <FormattedMessage
                       id='Integration.ltis'
                       defaultMessage='Learning Services (LTIs)'
                     />
-                  </h3>
+                  </Header>
                 </div>
                 <div className="ui segment">
 
