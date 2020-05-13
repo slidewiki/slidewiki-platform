@@ -4,6 +4,7 @@ import { NavLink } from 'fluxible-router';
 import {Microservices} from '../../../configs/microservices';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { LTI_ID } from '../../../configs/general';
+import { Header } from 'semantic-ui-react';
 
 class CategoryBox extends React.Component {
     constructor(props){
@@ -16,15 +17,12 @@ class CategoryBox extends React.Component {
         let analyticsDiv = ((Microservices.analytics) ? (
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h3>
+                <Header as="h2" size="medium">
                   <FormattedMessage
                     id='CategoryBox.analytics'
                     defaultMessage='Analytics'
                   />
-                  <span className="ui top right attached icon label">
-                    <i className="warning yellow sign icon"/>Beta
-                  </span>
-                </h3>
+                </Header>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/analytics/performanceprediction'} activeStyle={this.styles}>
                 <p>
@@ -44,12 +42,12 @@ class CategoryBox extends React.Component {
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h2 id="navigation">
+                <Header as="h1" id="navigation" size="medium">
                   <FormattedMessage
                     id='CategoryBox.personalSettings'
                     defaultMessage='Personal settings'
                   />
-                </h2>
+                </Header>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                 <p>
@@ -91,12 +89,12 @@ class CategoryBox extends React.Component {
 
             <div className="ui vertical fluid menu">
               <div className="item" style={ this.headerStyle }>
-                <h2>
+                <Header as="h2" size="medium">
                   <FormattedMessage
                     id='CategoryBox.groups'
                     defaultMessage='Groups'
                   />
-                </h2>
+                </Header>
               </div>
               <NavLink className="item" href={'/user/' + this.props.username + '/groups/overview'} activeStyle={this.styles}>
                 <p>
