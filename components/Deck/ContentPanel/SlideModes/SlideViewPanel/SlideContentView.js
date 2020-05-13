@@ -150,7 +150,7 @@ class SlideContentView extends React.Component {
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' tabIndex="0"
+                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent'
                                  dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
 
