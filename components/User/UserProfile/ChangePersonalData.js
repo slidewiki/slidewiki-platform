@@ -140,15 +140,15 @@ class ChangePersonalData extends React.Component {
 
             </Form.Group>
             <Form.Group>
+                {/* A bug in semantic UI also sets the label to disabled, so provide a control manually to set 'disabled' only to the input */}
                 <Form.Field
                     id='uname'
-                    control={Form.Input}
+                    control={(input) => <input type="text" value={input.value} disabled id={input.id} />}
                     label={this.context.intl.formatMessage({
                         id:'ChangePersonalData.displayName',
                         defaultMessage:'Display name'})}
                     value={this.state.uname}
                     width={8}
-                    onChange={this.handleInputChange}
                 />
             </Form.Group>
             <Form.Group>
