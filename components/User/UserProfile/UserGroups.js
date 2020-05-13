@@ -4,6 +4,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/usergroups/updateUsergroup';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import UserPicture from '../../common/UserPicture';
+import { Header } from 'semantic-ui-react';
 
 class UserGroups extends React.Component {
     constructor(props){
@@ -123,7 +124,7 @@ class UserGroups extends React.Component {
                 <div key={group._id} className="ui vertical segment" >
                     <div className="ui two column grid container">
                         <div className="left aligned ten wide column">
-                            <div className="ui header"><h2>{group.name}</h2></div>
+                            <Header as="h3" size="medium">{group.name}</Header>
                             <div className="meta">
                               {group.members.length+1} {this.context.intl.formatMessage(((group.members.length+1) !== 1) ? this.messages.members : this.messages.member)}
                             </div>
@@ -151,7 +152,7 @@ class UserGroups extends React.Component {
             items = [(
                 <div key="dummy" className="ui vertical segment" >
                   <div className="ui two column stackable grid container">
-                    <h4>{this.context.intl.formatMessage(this.messages.notAGroupmember)}</h4>
+                    <h3>{this.context.intl.formatMessage(this.messages.notAGroupmember)}</h3>
                   </div>
                 </div>
             )];
@@ -160,7 +161,7 @@ class UserGroups extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h1 className="ui left floated header" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h1>
+                  <h2 className="ui left floated header medium" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h2>
                   <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
                       <i className="icon plus"/>
                       <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>
