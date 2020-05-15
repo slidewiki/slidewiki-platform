@@ -14,7 +14,8 @@ import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../stores/ContentStore';
 import {Button, Popup, Icon} from 'semantic-ui-react';
 import {Microservices} from '../../../configs/microservices';
-
+import PropTypes from 'prop-types';
+import { defineMessages } from 'react-intl';
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
 
@@ -36,6 +37,21 @@ class TreeNode extends React.Component {
     constructor(props) {
         super(props);
         this.state = {mouseover: 0};
+
+        this.messages = defineMessages({
+            treeNodeDeckType:{
+                id: 'TreeNode.deckType',
+                defaultMessage: 'deck'
+            },
+            treeNodeSlideType: {
+                id: 'TreeNode.slideType',
+                defaultMessage: 'slide'
+            },
+            treeNodeOf: {
+                id: 'TreeNode.of',
+                defaultMessage: 'of'
+            }
+        });
     }
 
     //do not re-render in case of same props wihtout selector and if mode has not changed
@@ -187,17 +203,21 @@ class TreeNode extends React.Component {
             divToInsert = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
         } else {
+            const type = this.props.item.get('type') === 'slide' ? this.context.intl.formatMessage(this.messages.treeNodeSlideType) : this.context.intl.formatMessage(this.messages.treeNodeDeckType);
+            const listLength = this.props.parentNode.get('children').size;
+            const ariaLabel = `${type} - ${this.props.item.get('title')} - ${nodeIndex + 1} ${this.context.intl.formatMessage(this.messages.treeNodeOf)} ${listLength}`;
+            
             if(!this.props.showThumbnails) {
                 divToInsert =
                     <div>
                         <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassTextMode} aria-hidden="true"> </i>
-                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{content}</NavLink>
+                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} aria-label={ariaLabel}>{content}</NavLink>
                     </div>;
             } else {
                 divToInsert =
                     <div onFocus={this.handleFocus} onBlur={this.handleBlur}>
                         {(this.props.item.get('type') === 'deck') && this.props.showThumbnails ? <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClassImageMode} aria-hidden="true"> </i> : ''}
-                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }}>{content}</NavLink>
+                        <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} aria-label={ariaLabel}>{content}</NavLink>
                         {(this.props.item.get('type') === 'deck'  && this.props.showThumbnails) ? <div className="ui fitted divider"/> : ''}
                     </div>;
             }
@@ -222,6 +242,10 @@ class TreeNode extends React.Component {
         );
     }
 }
+
+TreeNode.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 TreeNode = connectToStores(TreeNode,[ContentStore], (context, props) => {
     return {

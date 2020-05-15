@@ -14,7 +14,7 @@ class TagsInput extends React.Component {
                 name: 'defaultName',
                 value: 'tagName'
             },
-            minCharacters: 1,
+            //minCharacters: 1,
             allowAdditions: true,
             apiSettings:{
                 responseAsync: (settings, callback) => {
