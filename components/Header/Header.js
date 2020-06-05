@@ -160,7 +160,7 @@ class Header extends React.Component {
                             <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
                         </NavLink>
                         <NavLink className="item" routeName="addDeck">
-                            <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
+                            <i className="plus icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                         </NavLink>
                         <a href='#' className="item" onClick={this.toggleLanguageBar.bind(this)}>
                             <i className="caret right icon"/>
