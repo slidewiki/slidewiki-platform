@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
-import { Container, Divider,Header,Segment,Form,Label,Dropdown,Input,TextArea} from 'semantic-ui-react';
+import { Container, Divider,Header,Segment,Form,Dropdown,Input,TextArea} from 'semantic-ui-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {publicRecaptchaKey} from '../../configs/general';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 import {defineMessages} from 'react-intl';
 import sendContactForm from '../../actions/home/sendContactForm';
-import {getLanguageDisplayName, translationLanguages} from '../../common';
-import SWAutoComplete from '../common/SWAutoComplete';
 
 class ContactUs extends React.Component {
     constructor(props){
@@ -204,6 +201,12 @@ class ContactUs extends React.Component {
         });
     }
 
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value
+        });
+    }
+
     onRecaptchaChange(response) {
         this.setState({
             'grecaptcharesponse': response
@@ -329,22 +332,22 @@ class ContactUs extends React.Component {
                   <Segment attached="bottom" textAlign="left" >
                     <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)} noValidate>
-                      <Form.Field key='1'>
-                          <SWAutoComplete
-                              required
-                              label={this.context.intl.formatMessage(this.messages.form_type_label)}
-                              id='type'
-                              options={this.getReportTypes().map((type) => ({
-                                  value: type.enum,
-                                  name: this.context.intl.formatMessage(type),
-                              }))}
-                              onChange={this.handleInputChange}
-                          />
-                          {this.state.formValidationErrors.type && 
-                                <div className="ui pointing above prompt label" role="alert" aria-atomic="true">
-                                    {this.state.formValidationErrors.type}
-                                </div>}
-                      </Form.Field>
+                        <Form.Field
+                            id='type'
+                            control={Dropdown}
+                            label={this.context.intl.formatMessage(this.messages.form_type_label)}
+                            required
+                            selection
+                            value={this.state.type}
+                            options={this.getReportTypes().map((type) => ({
+                                value: type.enum,
+                                text: this.context.intl.formatMessage(type),
+                            }))}
+                            onChange={this.handleDropdownChange}
+                            error={this.state.formValidationErrors.type ? {
+                                content: this.state.formValidationErrors.type,
+                            } : undefined}
+                        />
 
                         <Form.Field
                             id="form-input-firstName"
