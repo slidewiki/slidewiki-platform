@@ -7,7 +7,6 @@ import { connectToStores } from 'fluxible-addons-react';
 import { navigateAction } from 'fluxible-router';
 import { TextArea, Checkbox, Message, Form, Dropdown, Input } from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
-
 import Util from '../../../../common/Util';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
@@ -20,11 +19,8 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
-import { showGroupDetailsModal } from '../../../../../actions/deckedit/functionsForGroupDetailsModal';
-
 import { educationLevels } from '../../../../../lib/isced';
 import TagInput from '../../../ContentModulesPanel/TagsPanel/TagInput';
-import SWAutoComplete from '../../../../common/SWAutoComplete';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
