@@ -38,7 +38,7 @@ class Accessibility extends React.Component {
                         <li><FormattedMessage id="accessibility.1.l4" defaultMessage="Use of ARIA landmarks to aid navigation and skip content."/></li>
                     </ul>
                     <div className="ui warning message">
-                        <FormattedMessage id="accessibility.1.p5." defaultMessage="However, we cannot guarantee the accessibility of external information linked to or from SlideWiki or the content provided by users on their personal/group decks or slides.  Action has been taken to provide templates and other options to ensure it is possible to make the content added to decks and slides accessible."/>
+                        <p><FormattedMessage id="accessibility.1.p5." defaultMessage="However, we cannot guarantee the accessibility of external information linked to or from SlideWiki or the content provided by users on their personal/group decks or slides.  Action has been taken to provide templates and other options to ensure it is possible to make the content added to decks and slides accessible."/></p>
                     </div>
                     <p>
                         Some screen reader users may encounter problems when navigating through items within slides in the presentation view. This is due to limited compatibility between screen readers and the technologies used to provide all users with keyboard control in a presentation mode.

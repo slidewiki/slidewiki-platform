@@ -273,9 +273,11 @@ class Home extends React.Component {
                     <div className='signin-outer'>
                         <div className='wrapper'>
                             <div className='signin-blk'>
-                                <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
-                                    {signInOrMyDecksElement}
-                                </span>
+                                <p>
+                                    <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
+                                        {signInOrMyDecksElement}
+                                    </span>
+                                </p>
                                 <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
                             </div>
                         </div>

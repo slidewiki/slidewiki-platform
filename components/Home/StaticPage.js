@@ -138,7 +138,7 @@ class StaticPage extends React.Component {
 			</div>
 			<div className='row'>
 			<div className='signin-blk wrapper'>
-			    <span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span>
+			    <p><span>{this.context.intl.formatMessage(this.messages.getStarted)}{'  '}{signInOrMyDecksElement}</span></p>
 			    <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
 			</div>
 			</div>
