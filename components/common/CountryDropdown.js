@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import SWAutoComplete from './SWAutoComplete';
+import {Form, Dropdown} from 'semantic-ui-react';
 
 /**
  * Renders an accessible dropdown menu list of countries.
@@ -10,11 +11,6 @@ class CountryDropdown extends React.Component {
     constructor(props){
         super(props);
         this.messages = this.getIntlMessages();
-        this.state = {
-            value: props.value
-        };
-
-        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     static propTypes = {
@@ -24,15 +20,6 @@ class CountryDropdown extends React.Component {
         /** The initial value of the input. */
         value: PropTypes.string,
     };
-
-    /**
-     * Returns the currently selected item in the dropdown.
-     *
-     * @returns {string}
-     */
-    getSelected() {
-        return this.state.value;
-    }
 
     /**
      * The list of country names and associated values to be shown in the dropdown.
@@ -1780,33 +1767,24 @@ class CountryDropdown extends React.Component {
         });
     }
 
-    /**
-     * Handles the value change event for this component.
-     * Sets the internal value of the input.
-     *
-     * @returns {void}
-     */
-    handleInputChange(event) {
-        this.setState({
-            value: event.target.value
-        });
-    }
-
     render() {
         return (
-            <SWAutoComplete
-                label={<FormattedMessage
-                    id='ChangePersonalData.country'
-                    defaultMessage='Country' />
+            <Form.Field
+                control={Dropdown}
+                label={this.context.intl.formatMessage({
+                    id:'ChangePersonalData.country',
+                    defaultMessage:'Country'})
                 }
-                defaultValue={this.state.value}
+                selection
+                required={this.props.required}
+                id={this.props.id}
+                width={this.props.width}
+                value={this.props.value}
+                onChange={this.props.onChange}
                 options={this.countriesToRender.map((country) => ({
                     value: country.key,
-                    name: this.context.intl.formatMessage(this.messages[country.name])
+                    text: this.context.intl.formatMessage(this.messages[country.name])
                 }))}
-                onChange={this.handleInputChange}
-                required={this.props.required}
-                width={this.props.width}
             />
         );
     }

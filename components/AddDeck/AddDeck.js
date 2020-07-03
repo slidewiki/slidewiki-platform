@@ -708,6 +708,7 @@ class AddDeck extends React.Component {
                         <Form.Field
                             id='description'
                             control={TextArea}
+                            name='description'
                             label={this.context.intl.formatMessage(form_messages.label_description)}
                             value={this.state.description}
                             onChange={this.handleInputChange}
