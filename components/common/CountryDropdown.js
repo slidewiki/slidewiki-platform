@@ -1776,6 +1776,7 @@ class CountryDropdown extends React.Component {
                     defaultMessage:'Country'})
                 }
                 selection
+                search
                 required={this.props.required}
                 id={this.props.id}
                 width={this.props.width}
