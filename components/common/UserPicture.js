@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Identicon from 'react-identicons';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import {defineMessages} from 'react-intl';
 
 /**
  * Properties:
@@ -36,21 +38,31 @@ class UserPicture extends React.Component {
             'image': true,
         });
         let picture = '';
+        let messages = defineMessages({
+            userPictureAlt : {
+                id: 'userPicture.alt',
+                defaultMessage:'User profile image'
+        }})
+
         let width = this.props.width;
         if (this.props.picture === '' || !this.props.picture) {
             let styles = {width: width, height: width};
             picture = <div className={ classes } style={ styles }><Identicon string={this.props.username} size={width} count={5} /></div>;
         } else if (this.props.picture.includes('gravatar')) {
             if (this.props.private)
-                picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true"/></div>;
+                picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={ this.props.picture } className={ classes } alt={this.context.intl.formatMessage(messages.userPictureAlt)} /></div>;
             else
-                picture = <img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true" />;
+                picture = <img src={ this.props.picture } className={ classes } alt={this.context.intl.formatMessage(messages.userPictureAlt)} />;
         } else
-            picture = <img src={ this.props.picture } className={ classes } alt=' ' aria-hidden="true" />;
+            picture = <img src={ this.props.picture } className={ classes } alt={this.context.intl.formatMessage(messages.userPictureAlt)} />;
         return (
         <div > { this.props.link ? <a href={ '/user/' + this.props.username }>picture</a> : picture}</div>
         );
     }
 }
+
+UserPicture.contextTypes = {
+    intl: PropTypes.object.isRequired
+};
 
 export default UserPicture;
