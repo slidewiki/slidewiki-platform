@@ -44,7 +44,7 @@ class CountryDropdown extends React.Component {
             key: 'AD',
             name: 'Andorra'
         }, {
-            key: 'AG',
+            key: 'AO',
             name: 'Angola'
         }, {
             key: 'AI',
@@ -440,7 +440,7 @@ class CountryDropdown extends React.Component {
             key: 'MU',
             name: 'Mauritius'
         }, {
-            key: 'ME',
+            key: 'YT',
             name: 'Mayotte'
         }, {
             key: 'MX',
@@ -557,9 +557,6 @@ class CountryDropdown extends React.Component {
             key: 'ME',
             name: 'Republic_of_Montenegro'
         }, {
-            key: 'RS',
-            name: 'Republic_of_Serbia'
-        }, {
             key: 'RE',
             name: 'Reunion'
         }, {
@@ -601,9 +598,6 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'SO',
             name: 'Samoa'
-        }, {
-            key: 'AS',
-            name: 'Samoa_American'
         }, {
             key: 'SM',
             name: 'San_Marino'
@@ -718,9 +712,6 @@ class CountryDropdown extends React.Component {
         }, {
             key: 'AE',
             name: 'United_Arab_Emirates'
-        }, {
-            key: 'GB',
-            name: 'United_Kingdom'
         }, {
             key: 'US',
             name: 'United_States_of_America'
