@@ -107,15 +107,19 @@ body {
     margin: 0;
 }
 
-header .sw-logo:focus, header .sw-usermenu:focus {
-    box-shadow:inset 0 0 0 2px #0C273E;
+header .sw-logo:focus {
+    box-shadow: inset 0 0 0 2px #000;
+    outline: 0;
+}
+header .sw-usermenu:focus {
+    box-shadow: 0 0 0 2px #000;
     outline: 0;
 }
 header .ui.search>input.sw-searchbox:focus {
-    box-shadow:0 0 0 2px #0C273E;
+    box-shadow:0 0 0 2px #000;
 }
 header .ui.button.add-deck:focus, header .ui.button.sign-in:focus {
-    box-shadow:inset 0 0 0 2px #0C273E!important;
+    box-shadow: 0 0 0 2px #000!important;
 }
 header .sw-usermenu {
     display: inline-block;
@@ -207,26 +211,22 @@ textarea:focus{
 ::-webkit-input-placeholder {
     color: #767676 !important;
     font-family: 'Lato', sans-serif;
-    font-weight:600;
 }
 
 :-moz-placeholder {
     color: #767676 !important;
     font-family: 'Lato', sans-serif;
-    font-weight:600;
 }
 
 ::-moz-placeholder {
     color: #767676 !important;
     font-family: 'Lato', sans-serif;
-    font-weight:600;
     opacity: 1;
 }
 
 :-ms-input-placeholder {
     color: #767676 !important;
     font-family: 'Lato', sans-serif;
-    font-weight:600;
 }
 
 
@@ -1195,4 +1195,7 @@ textarea:focus{
 
 .accordion__title:hover {
     cursor: pointer;
+}
+*:focus {
+    outline-color: #306CA1;
 }

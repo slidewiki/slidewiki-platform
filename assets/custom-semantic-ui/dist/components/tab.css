@@ -85,8 +85,9 @@
 *******************************/
 
 .ui.menu.pointing .item:focus {
-  -webkit-box-shadow: 0 0 0 2px #5E9ACF inset;
-          box-shadow: 0 0 0 2px #5E9ACF inset;
+  -webkit-box-shadow: 0 0 0 2px #306CA1;
+          box-shadow: 0 0 0 2px #306CA1;
+  z-index: 1;
 }
 
 
