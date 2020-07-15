@@ -139,7 +139,7 @@ class Header extends React.Component {
                     </div>
                 </MediaQuery>
                 <MediaQuery maxWidth={1049} values={{width: 1600}}>
-                    <AUskipLink ariaLabel="skip links navigation" tabindex="0" links={[
+                    <AUskipLink ariaLabel="skip links navigation" tabIndex="0" links={[
                         {
                             link: '#navigation',
                             text: 'Skip to navigation',

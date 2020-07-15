@@ -14,16 +14,34 @@ import showMoreTags from '../../../../actions/tags/showMoreTags';
 import showLessTags from '../../../../actions/tags/showLessTags';
 import loadRecommendedTags from '../../../../actions/tags/loadRecommendedTags';
 import { defineMessages } from 'react-intl';
+import { Form } from 'semantic-ui-react';
 
 class TagsPanel extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            editMode: false
+            editMode: false,
+            tags: [],
+            tagsOptions: []
         };
         this.messages = this.getIntlMessages();
     }
+    componentDidMount() {
+        this.getStateFromProps();
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.TagsStore.tags !== prevProps.TagsStore.tags) {
+            this.getStateFromProps();
+        }
+    }
+    getStateFromProps = () => {
+        this.setState({
+            tags: this.props.TagsStore.tags ? this.props.TagsStore.tags.map((tag) => tag.tagName) : [],
+            tagsOptions: this.props.TagsStore.tags
+        });
+    }
+    
     getIntlMessages(){
         return defineMessages({
             header:{
@@ -58,6 +76,10 @@ class TagsPanel extends React.Component {
                 id: 'TagsPanel.TagInput.placeholder',
                 defaultMessage: 'Insert new tags'
             },
+            tagLabel: {
+                id: 'TagsPanel.TagInput.Choose',
+                defaultMessage: 'Choose Tags'
+            }
         });
     }
     onShowEditForm(e) {
@@ -79,11 +101,27 @@ class TagsPanel extends React.Component {
         e.preventDefault();
 
         // we need to add the existing topics tags in this list, otherwise we'll lose them
-        let tagsToSave = this.tags_input.getSelected();
-        tagsToSave.push(...this.props.TagsStore.topics.map((t) => ({ tagName: t.tagName })));
+        let tags = this.state.tags;
+
+        tags = tags.map((tag) => {
+            const isExistingTag = tag.startsWith('existing:');
+            const label = isExistingTag ? tag.replace(/^(existing\:)/, '') : tag;
+
+            if (isExistingTag) {
+                return {
+                    tagName: label
+                };
+            }
+            
+            return {
+                defaultName: label
+            };
+        });
+
+        //tagsToSave.push(...this.props.TagsStore.topics.map((t) => ({ tagName: t.tagName })));
 
         this.context.executeAction(saveTags, {
-            tags: tagsToSave,
+            tags,
             selector: this.props.selector
         });
         this.setState({editMode: false});
@@ -96,10 +134,17 @@ class TagsPanel extends React.Component {
         // call function of child component
         this.tags_input.addRecommendedTag(value);
     }
+
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value
+        });
+    }
+
     render() {
 
         const tags = this.props.TagsStore.tags;
-
+        
         const arrayOfTagsIsLarge = tags.length > 10;
         const showAllTags = this.props.TagsStore.showAllTags;
         const displayTags = (arrayOfTagsIsLarge && !showAllTags) ? tags.slice(0, 9) : tags;
@@ -116,7 +161,21 @@ class TagsPanel extends React.Component {
                 {expandLink}
             </div>;
 
-        let tagEditPanel = <TagInput initialTags={tags} recommendedTags={this.props.TagsStore.recommendedTags} ref={(instance) => (this.tags_input = instance)} placeholder={this.context.intl.formatMessage(this.messages.tagInputPlaceholder)} allowAdditions={true}/> ;
+        let tagEditPanel = <Form>
+            <Form.Group widths='equal'>
+                <TagInput 
+                    id="tags"
+                    initialOptions={this.state.tagsOptions} 
+                    recommendedTags={this.props.TagsStore.recommendedTags}
+                    tagFilter={{}}
+                    value={this.state.tags}
+                    onChange={this.handleDropdownChange}
+                    label={this.context.intl.formatMessage(this.messages.tagLabel)}
+                    allowAdditions={true}
+                    placeholder={this.context.intl.formatMessage(this.messages.tagInputPlaceholder)}
+                />
+            </Form.Group>
+        </Form>;
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
 
