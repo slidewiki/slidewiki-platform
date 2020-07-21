@@ -720,11 +720,9 @@ class AddDeck extends React.Component {
                                 <FormattedMessage
                                     id='AddDeck.form.metadata'
                                     values={{
-                                        link_help: (
-                                            <a href='/help' target='_blank'>
-                                                <FormattedMessage id='add.help' defaultMessage='Help decks' />
-                                            </a>
-                                        ),
+                                        link_help: <a href="/help" target="_blank" style={{color:'rgba(30,90,187,1)'}}>
+                                            <FormattedMessage id="add.help" defaultMessage="Help decks"/>
+                                        </a>
                                     }}
                                     defaultMessage='Please select from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.'
                                 />
