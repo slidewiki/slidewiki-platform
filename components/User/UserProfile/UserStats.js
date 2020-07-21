@@ -6,7 +6,6 @@ import {TagCloud} from 'react-tagcloud';
 import {defineMessages} from 'react-intl';
 import ActivityTimeline from '../../../components/Stats/ActivityTimeline';
 import {PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip} from 'recharts';
-
 import PropTypes from 'prop-types';
 
 class UserStats extends React.Component {
@@ -134,7 +133,7 @@ class UserStats extends React.Component {
                   {this.props.userStats.statsByTag && this.props.userStats.statsByTag.length > 0 &&
                   <Grid.Row centered columns={1}>
                       <Grid.Column>
-                          <Message attached><h2>{this.context.intl.formatMessage(this.messages.tagCloudTitle)}</h2></Message>
+                          <Message attached><Header as="h2" size="medium">{this.context.intl.formatMessage(this.messages.tagCloudTitle)}</Header></Message>
                           <Segment aria-describedby='userStatsByTagTable' attached textAlign='center' padded='very'
                                    loading={this.props.userStats.statsByTagLoading} aria-label='Data table for popular tags' tabIndex='0' aria-hidden='true'>
                               <TagCloud minSize={14} maxSize={38} tags={this.props.userStats.statsByTag} colorOptions={{luminosity: 'dark'}} renderer={customTagRenderer} />
@@ -155,7 +154,7 @@ class UserStats extends React.Component {
                   {this.props.userStats.userEngagement &&
                   <Grid.Row centered columns={1}>
                       <Grid.Column>
-                          <Message attached><h2>{this.context.intl.formatMessage(this.messages.userEngagementTitle)}</h2></Message>
+                          <Message attached><Header as="h2" size="medium">{this.context.intl.formatMessage(this.messages.userEngagementTitle)}</Header></Message>
                           <Segment aria-describedby='userEngagementTable' attached textAlign='center' padded='very'
                                    loading={this.props.userStats.userEngagementLoading} aria-label='Data table for user engagement overview' tabIndex='0' aria-hidden='true'>
                               <ResponsiveContainer height={300}>

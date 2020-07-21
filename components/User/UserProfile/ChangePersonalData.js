@@ -9,9 +9,7 @@ import { writeCookie } from '../../../common';
 import IntlStore from '../../../stores/IntlStore';
 import { locales, flagForLocale }from '../../../configs/locales';
 import { LTI_ID } from '../../../configs/general';
-import {Flag, Form, Icon, Message} from 'semantic-ui-react';
-import SWDSDropdown from '../../common/SWDSDropdown';
-
+import {Flag, Form, Icon, Message,Dropdown} from 'semantic-ui-react';
 
 class ChangePersonalData extends React.Component {
 
@@ -39,22 +37,18 @@ class ChangePersonalData extends React.Component {
         if(!this.state.fname) formValidationErrors.fname = <FormattedMessage
             id='ChangePersonalData.error.validation.fname'
             defaultMessage='Enter your first name.'
-            tagName='li'
         />;
         if(!this.state.lname) formValidationErrors.lname = <FormattedMessage
             id='ChangePersonalData.error.validation.lname'
             defaultMessage='Enter your last name.'
-            tagName='li'
         />;
         if(!this.state.email) formValidationErrors.email = <FormattedMessage
             id='ChangePersonalData.error.validation.email'
             defaultMessage='Enter a valid email address.'
-            tagName='li'
         />;
         if(!this.state.language) formValidationErrors.language = <FormattedMessage
             id='ChangePersonalData.error.validation.language'
             defaultMessage='Specify a language for SlideWiki.'
-            tagName='li'
         />;
 
         // Update state with the validation errors, to show them on the form.
@@ -82,11 +76,17 @@ class ChangePersonalData extends React.Component {
         });
     }
 
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value,
+        });
+    };
+
     getLocaleOptions() {
         return locales.map((locale) => {
             let options = {
                 key: locale,
-                name: getLanguageName(locale),
+                text: getLanguageName(locale),
                 icon: <Flag name={flagForLocale(locale)} />,
                 value: locale,
             };
@@ -124,7 +124,13 @@ class ChangePersonalData extends React.Component {
                     required
                     value={this.state.fname}
                     onChange={this.handleInputChange}
-                    error={Boolean(this.state.formValidationErrors.fname)}
+                    error={
+                        this.state.formValidationErrors.fname
+                            ? {
+                                  content: this.state.formValidationErrors.fname,
+                              }
+                            : undefined
+                    }
                 />
                 <Form.Field
                     id='lname'
@@ -135,20 +141,26 @@ class ChangePersonalData extends React.Component {
                     required
                     value={this.state.lname}
                     onChange={this.handleInputChange}
-                    error={Boolean(this.state.formValidationErrors.lname)}
+                    error={
+                        this.state.formValidationErrors.lname
+                            ? {
+                                  content: this.state.formValidationErrors.lname,
+                              }
+                            : undefined
+                    }
                 />
 
             </Form.Group>
             <Form.Group>
+                {/* A bug in semantic UI also sets the label to disabled, so provide a control manually to set 'disabled' only to the input */}
                 <Form.Field
                     id='uname'
-                    control={Form.Input}
+                    control={(input) => <input type="text" value={input.value} disabled id={input.id} />}
                     label={this.context.intl.formatMessage({
                         id:'ChangePersonalData.displayName',
                         defaultMessage:'Display name'})}
                     value={this.state.uname}
                     width={8}
-                    onChange={this.handleInputChange}
                 />
             </Form.Group>
             <Form.Group>
@@ -163,31 +175,43 @@ class ChangePersonalData extends React.Component {
                     width={8}
                     onChange={this.handleInputChange}
                     type='email'
-                    error={Boolean(this.state.formValidationErrors.email)}
+                    error={
+                        this.state.formValidationErrors.email
+                            ? {
+                                  content: this.state.formValidationErrors.email,
+                              }
+                            : undefined
+                    }
                 />
-                <SWDSDropdown
-                    fluid
-                    selection
-                    options={languageOptions}
-                    defaultValue={this.state.language}
-                    required={true}
-                    label={<FormattedMessage
-                        id='ChangePersonalData.uilanguage'
-                        defaultMessage='User Interface Language'
-                    />}
-                    width='eight'
+                <Form.Field
                     id='language'
-                    onChange={this.handleInputChange}
-                    error={Boolean(this.state.formValidationErrors.language)}
+                    control={Dropdown}
+                    label={this.context.intl.formatMessage({
+                        id:'ChangePersonalData.uilanguage',
+                        defaultMessage:'User Interface Language'})
+                    }
+                    selection
+                    required
+                    width={8}
+                    value={this.state.language}
+                    onChange={this.handleDropdownChange}
+                    options={languageOptions}
+                    error={
+                        this.state.formValidationErrors.language
+                            ? {
+                                  content: this.state.formValidationErrors.language,
+                              }
+                            : undefined
+                    }
                 />
             </Form.Group>
             <Form.Group>
                 <CountryDropdown
-                    ref="country"
                     id="country"
                     required={false}
                     value={this.state.country}
-                    width='eight'
+                    onChange={this.handleDropdownChange}
+                    width={8}
                 />
                 <Form.Field
                     id='organization'
@@ -218,17 +242,6 @@ class ChangePersonalData extends React.Component {
                     })}
                 />
             </Form.Group>
-            <Message
-                error
-                header={this.context.intl.formatMessage({
-                    id: 'ChangePersonalData.error.validation',
-                    defaultMessage: 'We found some problems'
-                })}
-                list={Object.values(formValidationErrors)}
-                role="region"
-                aria-live="polite"
-                visible={Object.keys(formValidationErrors).length > 0}
-            />
             <Form.Button type='submit' primary icon labelPosition='left' onClick={this.handleChangeUserdata}>
                 <Icon name='checkmark'/>
                 <FormattedMessage

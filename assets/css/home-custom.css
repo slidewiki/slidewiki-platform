@@ -528,10 +528,13 @@ textarea:focus{
 .banner-content .ui.input > input {
     color: #1e78bb;
     border-radius: 5px;
-    border: none;
+    border-width: 3px;
     line-height: 1.5rem;
     font-weight: 600;
     font-size: 30px;
+}
+.banner-content .ui.input > input:focus {
+    border-color: #000;
 }
 .banner-content i.icon:before {
     color: #1e78bb;

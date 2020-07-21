@@ -130,13 +130,14 @@ class SearchResultsPanel extends React.Component {
             resultsHeader = <div>
                 <Default style={{display: 'inline-block'}}>
                     <h2 className="ui header" role="main" id="main"><FormattedMessage {...this.messages.header} /></h2>
-                    {
-                        this.context.intl.formatMessage(this.messages.resultsMsg, {
-                            resultsNum: results.length,
-                            totalResults: this.props.numFound
-                        })
-                    }
-                    
+                    <p>
+                        {
+                            this.context.intl.formatMessage(this.messages.resultsMsg, {
+                                resultsNum: results.length,
+                                totalResults: this.props.numFound
+                            })
+                        }
+                    </p>
                 </Default>
                 <Mobile>
                     <Button onClick={this.toggleSidebar.bind(this)}>
@@ -196,14 +197,12 @@ class SearchResultsPanel extends React.Component {
                                     <h2 className="ui header" id="navigation"><FormattedMessage {...this.messages.filters} /></h2>
                                 </Grid.Row>
                                 <Grid.Row>
-                                    <nav aria-label="Search filter options menu">
-                                        <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
-                                    </nav>
+                                    <Facets data={this.props.facets} handleFacetClick={this.props.handleFacetClick} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading} request={this.props.request}/>
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12}>
                                 <main>
-                                    <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                    <Grid.Row style={{paddingBottom: 0 + 'px'}}>
                                         { 
                                             (this.props.numFound === 0)
                                                 ?   <div key="noResultsDiv" className="ui basic segment center aligned">
@@ -232,7 +231,7 @@ class SearchResultsPanel extends React.Component {
                     <Mobile>
                         <Grid>
                             <main>
-                                <Grid.Row style={{paddingBottom: 0 + 'px', height: 4 + 'em'}}>
+                                <Grid.Row style={{paddingBottom: 0 + 'px'}}>
                                     <Grid.Column width={16}>
                                         { 
                                             (this.props.numFound === 0)
@@ -256,15 +255,13 @@ class SearchResultsPanel extends React.Component {
                                             )
                                         }
                                     </Grid.Column>
-                                </Grid.Row>
-                            </main>  
+                                </Grid.Row>  
+                            </main>
                         </Grid>
                         <div className="ui left dimmed sidebar vertical menubar" ref="menubar" >
                             <Segment basic>
                                 <h2 className="ui header" id="navigation">{this.context.intl.formatMessage(this.messages.filters)}</h2>
-                                <nav aria-label="Search filter options menu">
-                                    <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
-                                </nav>
+                                <Facets data={this.props.facets} handleFacetClick={this.handleFacetClickSidebar.bind(this)} selectedFacets={this.props.selectedFacets} clearFacets={this.props.clearFacets} loading={this.props.loading}/>
                             </Segment>
                         </div>
                     </Mobile>

@@ -20,6 +20,7 @@ import Integrations from './Integrations';
 import {defineMessages, FormattedMessage} from 'react-intl';
 import {categories} from '../../../actions/user/userprofile/chooseAction';
 import UserStats from './UserStats';
+import { Header } from 'semantic-ui-react';
 
 let MediaQuery = require ('react-responsive');
 
@@ -165,14 +166,13 @@ class UserProfile extends React.Component {
         return (
           <main>
               <div className="ui segments">
-                  <h1 className="sr-only" id="main" role="main">Profile Settings</h1>
                   <div className="ui secondary segment" >
-                      <h2>
+                    <Header as="h2" size="medium">
                         <FormattedMessage
                           id='UserProfile.exchangePicture'
                           defaultMessage='Exchange picture'
                         />
-                      </h2>
+                      </Header>
                   </div>
                   <div className="ui segment">
                       <ChangePicture user={ this.props.UserProfileStore.user }/>
@@ -181,12 +181,12 @@ class UserProfile extends React.Component {
               </div>
               <div className="ui segments">
                   <div className="ui secondary segment">
-                      <h2>
+                    <Header as="h2" size="medium">
                         <FormattedMessage
                           id='UserProfile.alterData'
                           defaultMessage='Alter my personal data'
                         />
-                      </h2>
+                      </Header>
                   </div>
                   <div className="ui segment">
                       <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
@@ -200,12 +200,12 @@ class UserProfile extends React.Component {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
-                    <h2>
+                    <Header as="h2" size="medium">
                       <FormattedMessage
                         id='UserProfile.changePassword'
                         defaultMessage='Change password'
                       />
-                    </h2>
+                    </Header>
                   </div>
 
                   <div className="ui segment">
@@ -218,12 +218,12 @@ class UserProfile extends React.Component {
             {changePassword}
             <div className="ui segments">
               <div className="ui red inverted segment">
-                <h2>
+                <Header as="h2" size="medium">
                   <FormattedMessage
                     id='UserProfile.deactivateAccount'
                     defaultMessage='Deactivate Account'
                   />
-                </h2>
+                </Header>
               </div>
 
               <div className="ui segment">

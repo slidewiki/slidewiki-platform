@@ -180,7 +180,7 @@ class ContentQuestionEdit extends React.Component {
     render() {
         // const numAnswers = this.props.question.answers.length;
         const answerChoiceWidth = {
-            width: '680px',
+            width: '100%',
         };
         return (
             <div className="ui bottom attached">
