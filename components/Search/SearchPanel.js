@@ -150,6 +150,14 @@ class SearchPanel extends React.Component {
                 id: 'SearchPanel.button.submit',
                 defaultMessage: 'Submit'
             },
+            subject: {
+                id: 'SearchPanel.subject',
+                defaultMessage: 'Subject'
+            },
+            selectSubject: {
+                id: 'SearchPanel.select.subject',
+                defaultMessage: 'Select Subject'
+            }
         });
     }
     initDropdown(){
@@ -230,11 +238,15 @@ class SearchPanel extends React.Component {
             this.educationLevelsDropdown.setValue(null);
         }
 
-        let topics = this.topicsDropdown.getSelected();
+        let topics = this.state.topics;
         if (!_.isEmpty(topics)) {
-            advancedFilters.topics = map(topics, 'tagName');
+            topics = topics.map((tag) => {
+                const isExistingTag = tag.startsWith('existing:');
+                const label = isExistingTag ? tag.replace(/^(existing\:)/, '') : tag;
+                return label;
+            });
+            advancedFilters.topics = topics;
             advancedFilters.facet_exclude.push('topics');
-            this.topicsDropdown.clear();
         }
 
         return advancedFilters;
@@ -440,6 +452,11 @@ class SearchPanel extends React.Component {
             this.handleRedirect(null, 'facets');
         });
     }
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value,
+        });
+    };
     render() {
         let options = <div><div className="three fields">
             <div className="sr-only" id="describe_level">Select education level of deck content</div>
@@ -455,11 +472,14 @@ class SearchPanel extends React.Component {
                   }, [])}
                 </select>
             </div>
-            <div className="field">
-                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id="DeckFilter.Tag.Topic" defaultMessage="Subject" /></label>
-                <TagInput id="topics_input_field" aria-describedby="describe_topic" ariaLabelledby="topics_label"
-                    ref={(e) => (this.topicsDropdown = e)} tagFilter={{ tagType: 'topic' }} initialTags={[]} placeholder="Select Subject" />
-            </div>
+            <TagInput
+                id='topics'
+                tagFilter={{ tagType: 'topic' }}
+                value={Array.isArray(this.state.topics) ? this.state.topics : []}
+                onChange={this.handleDropdownChange}
+                placeholder={this.context.intl.formatMessage(this.messages.selectSubject)}
+                label={this.context.intl.formatMessage(this.messages.subject)}
+            />
             <div className="field">
                 <label htmlFor="level_input" id="level_label"><FormattedMessage id="DeckFilter.Education" defaultMessage="Education Level" /></label>
                 <Dropdown id="level_input" ref={ (e) => { this.educationLevelsDropdown = e; }} fluid selection aria-labelledby="level_label" aria-describedby="describe_level"

@@ -10,6 +10,7 @@ import loadContentUsage from '../../../actions/loadContentUsage';
 import loadContentQuestions from '../../../actions/loadContentQuestions';
 import loadDataSources from '../../../actions/datasource/loadDataSources';
 import loadTags from '../../../actions/tags/loadTags';
+import loadDeckQuality from '../../../actions/deckQuality/loadDeckQuality';
 //import loadContributors from '../../../actions/loadContributors';
 import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
 import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
@@ -17,6 +18,7 @@ import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPa
 import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import TagsPanel from './TagsPanel/TagsPanel';
+import QualityPanel from './QualityPanel/QualityPanel';
 //import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
 import PermissionsStore from '../../../stores/PermissionsStore';
@@ -31,7 +33,8 @@ class ContentModulesPanel extends React.Component {
         super(props);
         
         this.state = {
-            showMobileMenu: false
+            showMobileMenu: false,
+            isLoading: false
         };
     }
 
@@ -63,8 +66,15 @@ class ContentModulesPanel extends React.Component {
         this.checkOverflowingChildren();
     }
     
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         this.checkOverflowingChildren();
+
+        // when the moduleType changes, the module is done loading. So disable to loading indicator
+        if (this.props.ContentModulesStore.moduleType !== prevProps.ContentModulesStore.moduleType) {
+            this.setState({
+                isLoading: false,
+            });
+        }
     }
     
     checkOverflowingChildren() {
@@ -78,6 +88,12 @@ class ContentModulesPanel extends React.Component {
     }
 
     handleTabClick(type, e) {
+        if (type !== this.props.ContentModulesStore.moduleType) {
+            this.setState({
+                isLoading: true,
+            });
+        }
+
         switch (type) {
             case 'questions':
                 let editPermission = (this.props.PermissionsStore && this.props.PermissionsStore.permissions && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit));
@@ -102,6 +118,9 @@ class ContentModulesPanel extends React.Component {
                 break;
             case 'playlists': 
                 this.context.executeAction(loadCollectionsTab, {params: this.props.ContentModulesStore.selector});
+                break;
+            case 'quality':
+                this.context.executeAction(loadDeckQuality, {params: this.props.ContentModulesStore.selector});
                 break;
             //case 'contributors':
             //    this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
@@ -203,7 +222,11 @@ class ContentModulesPanel extends React.Component {
                         <span> ({this.props.ContentModulesStore.moduleCount.playlists})</span>}
                     </span>,
                 value: 'playlists'
-            }
+            },
+            {
+                text: 'Quality',
+                value: 'quality'
+            },
         ];
     }
     
@@ -247,6 +270,9 @@ class ContentModulesPanel extends React.Component {
             case 'playlists': 
                 activityDIV = <CollectionsPanel selector={this.props.ContentModulesStore.selector} id="playlist_panel" aria-labelledby="playlist_label"/>;
                 break;
+            case 'quality': 
+                activityDIV = <QualityPanel selector={this.props.ContentModulesStore.selector} id="quality_panel" aria-labelledby="quality_label"/>;
+                break;
             default:
                 activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} id="comments_panel" aria-labelledby="comments_label"/>;
         }
@@ -267,7 +293,7 @@ class ContentModulesPanel extends React.Component {
                     });
                     
                     //hide tags and playlists for slide view
-                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions')) {
+                    if (this.props.ContentModulesStore.selector.stype !== 'deck' && (item.value === 'tags' || item.value === 'playlists' || item.value === 'questions' || item.value === 'quality')) {
                         return;
                     }
                     
@@ -306,6 +332,11 @@ class ContentModulesPanel extends React.Component {
             'attached': !this.state.showMobileMenu
         });
         
+        let activityLoadingClass = classNames({
+            'ui segment basic': true,
+            'loading': this.state.isLoading,
+        });
+
         return (
             <div ref="contentModulesPanel" >
                 <h2 className="sr-only">
@@ -320,7 +351,9 @@ class ContentModulesPanel extends React.Component {
                     {mobileMenu}
                 </div>
                 <div className={activityDIVClasses}>
-                    {activityDIV}
+                    <div className={activityLoadingClass} style={{padding:0}}>
+                        {activityDIV}
+                    </div>
                 </div>
             </div>
         );

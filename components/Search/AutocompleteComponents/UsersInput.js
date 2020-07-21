@@ -15,7 +15,7 @@ class UsersInput extends React.Component {
                 name: 'displayName',
                 value: 'userId',
             },
-            minCharacters: 1,
+            //minCharacters: 1,
             allowAdditions: false,
             apiSettings:{
                 responseAsync: function(settings, callback) {
