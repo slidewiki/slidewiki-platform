@@ -83,7 +83,7 @@ class Header extends React.Component {
               <FormattedMessage id='header.mynotifications.mobile' defaultMessage='Notifications'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/analytics/performanceprediction'}><i className="icon chart bar"/>
-              {/* <FormattedMessage id='header.myanalytics.mobile' defaultMessage='My Analytics'/> */}
+              <FormattedMessage id='header.myanalytics.mobile' defaultMessage='Analytics'/>
               </NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>
               <FormattedMessage id='header.logout.mobile' defaultMessage='Logout'/>
@@ -139,7 +139,7 @@ class Header extends React.Component {
                     </div>
                 </MediaQuery>
                 <MediaQuery maxWidth={1049} values={{width: 1600}}>
-                    <AUskipLink ariaLabel="skip links navigation" tabindex="0" links={[
+                    <AUskipLink ariaLabel="skip links navigation" tabIndex="0" links={[
                         {
                             link: '#navigation',
                             text: 'Skip to navigation',
@@ -160,7 +160,7 @@ class Header extends React.Component {
                             <i className="home icon"/><FormattedMessage id='header.menu.homepage' defaultMessage='Homepage'/>
                         </NavLink>
                         <NavLink className="item" routeName="addDeck">
-                            <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
+                            <i className="plus icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                         </NavLink>
                         <a href='#' className="item" onClick={this.toggleLanguageBar.bind(this)}>
                             <i className="caret right icon"/>

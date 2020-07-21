@@ -58,7 +58,7 @@ class ContentActionsFooter extends React.Component {
             },
             slideshowText:{
                 id: 'ContentActionsFooter.slideshowText',
-                defaultMessage:'Open slideshow in new tab'
+                defaultMessage:'Open Slideshow'
             },
             likeText:{
                 id: 'ContentActionsFooter.likeText',

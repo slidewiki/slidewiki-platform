@@ -201,58 +201,62 @@ class SearchResultsPanel extends React.Component {
                                 </Grid.Row>
                             </Grid.Column>
                             <Grid.Column width={12}>
-                                <Grid.Row style={{paddingBottom: 0 + 'px'}}>
-                                    { 
-                                        (this.props.numFound === 0)
-                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
-                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                <main>
+                                    <Grid.Row style={{paddingBottom: 0 + 'px'}}>
+                                        { 
+                                            (this.props.numFound === 0)
+                                                ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                        <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                    </div>
+                                                : resultsHeader
+                                        }
+                                    </Grid.Row>
+                                    <Grid.Row>
+                                        { 
+                                            // if we are come from facets, then load only search results panel
+                                            (this.props.loading && this.props.fromFacets) ? (
+                                                loadingDiv
+                                            ) : (
+                                                <div ref="resultsDiv">
+                                                    <SearchResultsList items={results} />
+                                                    { loadMoreDiv }
                                                 </div>
-                                            : resultsHeader
-                                    }
-                                </Grid.Row>
-                                <Grid.Row>
-                                    { 
-                                        // if we are come from facets, then load only search results panel
-                                        (this.props.loading && this.props.fromFacets) ? (
-                                            loadingDiv
-                                        ) : (
-                                            <div ref="resultsDiv">
-                                                <SearchResultsList items={results} />
-                                                { loadMoreDiv }
-                                            </div>
-                                        )
-                                    }
-                                </Grid.Row>
+                                            )
+                                        }
+                                    </Grid.Row>
+                                </main>
                             </Grid.Column>
                         </Grid>
                     </Default>
                     <Mobile>
                         <Grid>
-                            <Grid.Row style={{paddingBottom: 0 + 'px'}}>
-                                <Grid.Column width={16}>
-                                    { 
-                                        (this.props.numFound === 0)
-                                            ?   <div key="noResultsDiv" className="ui basic segment center aligned">
-                                                    <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                            <main>
+                                <Grid.Row style={{paddingBottom: 0 + 'px'}}>
+                                    <Grid.Column width={16}>
+                                        { 
+                                            (this.props.numFound === 0)
+                                                ?   <div key="noResultsDiv" className="ui basic segment center aligned">
+                                                        <h3><FormattedMessage {...this.messages.noResults} /></h3>
+                                                    </div>
+                                                : resultsHeader
+                                        }
+                                    </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row>
+                                    <Grid.Column width={16}>
+                                        { 
+                                            (this.props.loading && this.props.fromFacets) ? (
+                                                loadingDiv
+                                            ) : (
+                                                <div ref="resultsDiv">
+                                                    <MobileResultsList items={results} />
+                                                    { loadMoreDiv }
                                                 </div>
-                                            : resultsHeader
-                                    }
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={16}>
-                                    { 
-                                        (this.props.loading && this.props.fromFacets) ? (
-                                            loadingDiv
-                                        ) : (
-                                            <div ref="resultsDiv">
-                                                <MobileResultsList items={results} />
-                                                { loadMoreDiv }
-                                            </div>
-                                        )
-                                    }
-                                </Grid.Column>
-                            </Grid.Row>  
+                                            )
+                                        }
+                                    </Grid.Column>
+                                </Grid.Row>  
+                            </main>
                         </Grid>
                         <div className="ui left dimmed sidebar vertical menubar" ref="menubar" >
                             <Segment basic>
