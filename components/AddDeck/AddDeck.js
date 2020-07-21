@@ -6,7 +6,6 @@ import { Microservices } from '../../configs/microservices';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ImportStore from '../../stores/ImportStore';
-import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
@@ -14,22 +13,15 @@ import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importCanceled from '../../actions/import/importCanceled';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
-import storeTags from '../../actions/import/storeTags';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
 import ImportModal from '../Import/ImportModal';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
-
-import {Message} from 'semantic-ui-react';
+import { Form, Input, Checkbox, Dropdown, TextArea } from 'semantic-ui-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import classNames from 'classnames';
-
-
 import { educationLevels } from '../../lib/isced';
-import SWAutoComplete from '../common/SWAutoComplete';
-import {getLanguageDisplayName, translationLanguages} from '../../common';
-
-//TODO: update link to terms of use;
+import { getLanguageDisplayName, translationLanguages } from '../../common';
 
 class AddDeck extends React.Component {
     constructor(props) {
@@ -39,20 +31,24 @@ class AddDeck extends React.Component {
         this.state = {
             language: null,
             educationLevel: null,
-            formValidationErrors: []
+            formValidationErrors: [],
+            inputTitle: '',
+            inputImageslicense: false,
+            inputConditions: false,
+            theme: 'default',
+            description: '',
+            topics: [],
+            tags: [],
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.defaultTagNames = [];// used for saving defaultName properties for tags
-    }
-    componentDidMount() {
+        this.defaultTagNames = []; // used for saving defaultName properties for tags
     }
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
             this.updateProgressBar();
 
-        if (this.props.ImportStore.error !== null)
-            this.showError();
+        if (this.props.ImportStore.error !== null) this.showError();
     }
     handleKeyPressUploadModal(event) {
         if (event.key === 'Enter') {
@@ -68,70 +64,87 @@ class AddDeck extends React.Component {
         }
     }
     handleAddDeck(x) {
-        //console.log('handleAddDeck');
-        this.saveTags();
-
         this.context.executeAction(addDeckDeleteError, null);
 
         // Clear any existing validation errors.
         this.state.formValidationErrors = [];
 
         //validate input
-        const title = this.refs.input_title.value;
+        const title = this.state.inputTitle;
         const language = this.state.language;
-        const description = this.refs.textarea_description.value;
-        const theme = this.refs.select_themes.value;
+        const description = this.state.description;
+        const theme = this.state.theme;
         const educationLevel = this.state.educationLevel;
-        const license = 'CC BY-SA';//default license
-        let tags = [...this.tagInput.getSelected(), ...this.topicInput.getSelected()];
-        tags.forEach((tag) => {
+        const license = 'CC BY-SA'; //default license
+        let tags = [...this.state.tags, ...this.state.topics];
+        tags = tags.map((tag) => {
+            const isExistingTag = tag.startsWith('existing:');
+            const label = isExistingTag ? tag.replace(/^(existing\:)/, '') : tag;
+
+            if (isExistingTag) {
+                return {
+                    tagName: label,
+                };
+            }
+
+            return {
+                defaultName: label,
+            };
+        });
+        /*tags.forEach((tag) => {
             // check whether we have earlier assigned defaultName to tagName (in saveTags function) for this tag and restore the original state
             if (this.defaultTagNames.includes(tag.tagName)) {
                 tag.defaultName = tag.tagName;
                 delete tag.tagName;
             }
-        });
-        const acceptedConditions = this.refs.checkbox_conditions.checked;
-        const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
+        });*/
+
+        const acceptedConditions = this.state.inputConditions;
+        const acceptedImagesLicense = this.state.inputImageslicense;
 
         // Validate title
-        if (!title) this.state.formValidationErrors.title = <FormattedMessage
-            id='AddDeck.error.validation.title'
-            defaultMessage='Specify a title.'
-            tagName='span'
-        />;
+        if (!title)
+            this.state.formValidationErrors.title = (
+                <FormattedMessage id='AddDeck.error.validation.title' defaultMessage='Specify a title.' tagName='span' />
+            );
 
         // Validate language
-        if (!language || language.length < 2) this.state.formValidationErrors.language = <FormattedMessage
-            id='AddDeck.error.validation.language'
-            defaultMessage='Specify a language.'
-            tagName='span'
-        />;
+        if (!language || language.length < 2)
+            this.state.formValidationErrors.language = (
+                <FormattedMessage id='AddDeck.error.validation.language' defaultMessage='Specify a language.' tagName='span' />
+            );
 
         // Validate T&Cs acceptance
-        if (acceptedConditions === false) this.state.formValidationErrors.conditions = <FormattedMessage
-            id='AddDeck.error.validation.conditions'
-            defaultMessage='You must agree to the SlideWiki terms and conditions.'
-            tagName='span'
-        />;
+        if (acceptedConditions === false)
+            this.state.formValidationErrors.conditions = (
+                <FormattedMessage
+                    id='AddDeck.error.validation.conditions'
+                    defaultMessage='You must agree to the SlideWiki terms and conditions.'
+                    tagName='span'
+                />
+            );
 
         // Validate image rights declaration
         if (acceptedImagesLicense === false)
-            this.state.formValidationErrors.imagesLicence = <FormattedMessage
-                id='AddDeck.error.validation.imagesLicence'
-                defaultMessage='You must agree to the rights declaration.'
-                tagName='span'
-            />;
+            this.state.formValidationErrors.imagesLicence = (
+                <FormattedMessage
+                    id='AddDeck.error.validation.imagesLicence'
+                    defaultMessage='You must agree to the rights declaration.'
+                    tagName='span'
+                />
+            );
 
         // If there are no validation errors, then create the deck
-        if(Object.keys(this.state.formValidationErrors).length === 0) {
+        if (Object.keys(this.state.formValidationErrors).length === 0) {
             this.correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
     correctMetadata(title, language, description, theme, educationLevel, license, tags, acceptedConditions, acceptedImagesLicense) {
-        if (this.props.ImportStore.filename !== '') {//import deck
+        if (this.props.ImportStore.filename !== '') {
+            //import deck
             this.handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions);
-        } else {//create empty deck
+        } else {
+            //create empty deck
             this.context.executeAction(addDeckSaveDeck, {
                 title: title,
                 language: language,
@@ -141,7 +154,7 @@ class AddDeck extends React.Component {
                 license: license,
                 tags: tags,
                 deckId: this.props.ImportStore.deckId,
-                selector: { id: this.props.ImportStore.deckId }
+                selector: { id: this.props.ImportStore.deckId },
             });
         }
     }
@@ -150,22 +163,22 @@ class AddDeck extends React.Component {
         //TODO: check if there already inputs which should be stored?
 
         this.context.executeAction(addDeckDeleteError, null);
-        this.context.executeAction(importFinished, {});  // destroy import components state
+        this.context.executeAction(importFinished, {}); // destroy import components state
         this.context.executeAction(navigateAction, {
-            url: '/'
+            url: '/',
         });
     }
     handleRedirect() {
         //console.log('AddDeck: handleRedirect()');
-        this.context.executeAction(importFinished, {});  // destroy import components state
+        this.context.executeAction(importFinished, {}); // destroy import components state
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.props.AddDeckStore.redirectID + '/_/deck/' + this.props.AddDeckStore.redirectID
+            url: '/deck/' + this.props.AddDeckStore.redirectID + '/_/deck/' + this.props.AddDeckStore.redirectID,
         });
     }
     handleImportRedirect() {
-        this.context.executeAction(importFinished, {});  // destroy import components state
+        this.context.executeAction(importFinished, {}); // destroy import components state
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.props.ImportStore.deckId
+            url: '/deck/' + this.props.ImportStore.deckId,
         });
     }
     updateProgressBar() {
@@ -197,16 +210,28 @@ class AddDeck extends React.Component {
             slides: {
                 id: 'AddDeck.progress.slides',
                 defaultMessage: ' slides',
-            }
+            },
         });
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
-        let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? this.context.intl.formatMessage(progress_messages.uploading) :
-            (this.props.ImportStore.uploadProgress === 65) ? this.context.intl.formatMessage(progress_messages.converting) :
-                (this.props.ImportStore.uploadProgress !== 100) ? this.context.intl.formatMessage(progress_messages.importing) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides :
-                    (noOfSlides === totalNoOfSlides) ? this.context.intl.formatMessage(progress_messages.uploaded) :
-                        this.context.intl.formatMessage(progress_messages.imported) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides + this.context.intl.formatMessage(progress_messages.slides);//this should not happen, but user should know in case it does
+        let progressLabel =
+            totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65
+                ? this.context.intl.formatMessage(progress_messages.uploading)
+                : this.props.ImportStore.uploadProgress === 65
+                ? this.context.intl.formatMessage(progress_messages.converting)
+                : this.props.ImportStore.uploadProgress !== 100
+                ? this.context.intl.formatMessage(progress_messages.importing) +
+                  noOfSlides +
+                  this.context.intl.formatMessage(progress_messages.of) +
+                  totalNoOfSlides
+                : noOfSlides === totalNoOfSlides
+                ? this.context.intl.formatMessage(progress_messages.uploaded)
+                : this.context.intl.formatMessage(progress_messages.imported) +
+                  noOfSlides +
+                  this.context.intl.formatMessage(progress_messages.of) +
+                  totalNoOfSlides +
+                  this.context.intl.formatMessage(progress_messages.slides); //this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
 
         if (this.props.ImportStore.uploadProgress === 100) {
@@ -216,9 +241,9 @@ class AddDeck extends React.Component {
                     activity_type: 'add',
                     user_id: String(this.props.UserProfileStore.userid),
                     content_id: String(this.props.ImportStore.deckId) + '-1',
-                    content_name: this.refs.input_title.value,
+                    content_name: this.state.inputTitle,
                     content_owner_id: String(this.props.UserProfileStore.userid),
-                    content_kind: 'deck'
+                    content_kind: 'deck',
                 };
                 context.executeAction(addActivity, { activity: activity });
 
@@ -233,7 +258,8 @@ class AddDeck extends React.Component {
                     },
                     preview_text: {
                         id: 'AddDeck.swal.preview_text',
-                        defaultMessage: 'Here is a preview of your slides. It may take a few seconds for the images to be created. You can use the tab key to move through the images.',
+                        defaultMessage:
+                            'Here is a preview of your slides. It may take a few seconds for the images to be created. You can use the tab key to move through the images.',
                     },
                     success_text_extra: {
                         id: 'AddDeck.swal.success_text_extra',
@@ -254,33 +280,56 @@ class AddDeck extends React.Component {
                     success_publish_deck_text: {
                         id: 'AddDeck.swal.success_publish_deck_text',
                         defaultMessage: 'Publish your deck for it to show in search results immediately (publishing occurs after a few seconds)',
-                    }
+                    },
                 });
 
                 let imgStyle = '"border:1px solid black;border-radius:5px;margin-left:auto;margin-right:auto;display:block;width:100%;"';
                 // let borderStyle = 'border:1px solid black;border-radius:5px;';
                 //let html = this.context.intl.formatMessage(success_messages.success_text) + ' ' + this.context.intl.formatMessage(success_messages.preview_text) + '<br><br>' +
-                let html = '<p style="text-align:left;">' + this.context.intl.formatMessage(success_messages.preview_text) + '</p><br><br>' +
+                let html =
+                    '<p style="text-align:left;">' +
+                    this.context.intl.formatMessage(success_messages.preview_text) +
+                    '</p><br><br>' +
                     '<div style="height: 260px;overflow: auto;" >' +
                     '<table><tr>';
                 let slides = this.props.ImportStore.slides;
                 for (let i = 0; i < slides.length; i++) {
                     let slide = slides[i];
                     let thumbnailAlt = 'Slide ' + (i + 1) + ': ';
-                    if (slide.title !== undefined)
-                        thumbnailAlt += slide.title;
-                    let thumbnailSrc = Microservices.file.uri + '/thumbnail/slide/' + slide.id + '/' + (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
-                    html += '<td style="padding: 15px;"><div style="width: 250px;" tabIndex="0">' +
-                        'Slide ' + (i + 1) + '<img title="Title: ' + slide.title + '" style=' + imgStyle + ' src=' + thumbnailSrc + ' alt="' + thumbnailAlt + '" aria-hidden="true" />' +
+                    if (slide.title !== undefined) thumbnailAlt += slide.title;
+                    let thumbnailSrc =
+                        Microservices.file.uri +
+                        '/thumbnail/slide/' +
+                        slide.id +
+                        '/' +
+                        (this.props.ImportStore.theme ? this.props.ImportStore.theme : 'default');
+                    html +=
+                        '<td style="padding: 15px;"><div style="width: 250px;" tabIndex="0">' +
+                        'Slide ' +
+                        (i + 1) +
+                        '<img title="Title: ' +
+                        slide.title +
+                        '" style=' +
+                        imgStyle +
+                        ' src=' +
+                        thumbnailSrc +
+                        ' alt="' +
+                        thumbnailAlt +
+                        '" aria-hidden="true" />' +
                         '</div></td>'; //THUMBNAIL
                 }
                 html += '</tr></table></div>';
-                html += '<h3><div class="ui checkbox" style="text-align:left"><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' + this.context.intl.formatMessage(success_messages.success_publish_deck_text) + '</label></div></h3>';
+                html +=
+                    '<h3><div class="ui checkbox" style="text-align:left"><input type="checkbox" tabIndex="0" id="checkbox_publish" ref="checkbox_publish" ><label for="checkbox_publish"> ' +
+                    this.context.intl.formatMessage(success_messages.success_publish_deck_text) +
+                    '</label></div></h3>';
 
                 swal({
                     title: this.context.intl.formatMessage(success_messages.success_title_text),
-                    text: this.context.intl.formatMessage(success_messages.success_text) +
-                        '\n' + this.context.intl.formatMessage(success_messages.success_text_extra),
+                    text:
+                        this.context.intl.formatMessage(success_messages.success_text) +
+                        '\n' +
+                        this.context.intl.formatMessage(success_messages.success_text_extra),
                     html: html,
                     type: 'success',
                     showCloseButton: true,
@@ -290,40 +339,48 @@ class AddDeck extends React.Component {
                     cancelButtonText: this.context.intl.formatMessage(success_messages.success_reject_text),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
-                    allowOutsideClick: false
-                }).then((accepted) => {
-                    let checkboxPublish = $('#checkbox_publish')[0].checked;
-                    if (checkboxPublish) {
-                        //Publish the deck (set hidden to false)
-                        let deckId = this.props.ImportStore.deckId;
-                        let selector = {
-                            id: deckId
-                        };
+                    allowOutsideClick: false,
+                })
+                    .then(
+                        (accepted) => {
+                            let checkboxPublish = $('#checkbox_publish')[0].checked;
+                            if (checkboxPublish) {
+                                //Publish the deck (set hidden to false)
+                                let deckId = this.props.ImportStore.deckId;
+                                let selector = {
+                                    id: deckId,
+                                };
 
-                        this.context.executeAction(publishDeck, {
-                            deckId: deckId,
-                            title: this.props.ImportStore.title,
-                            language: this.props.ImportStore.language,
-                            description: this.props.ImportStore.description,
-                            theme: this.props.ImportStore.theme,
-                            license: this.props.ImportStore.license,
-                            selector: selector,
-                            hidden: false,
-                        });
-                    }
-                    this.handleImportRedirect();
+                                this.context.executeAction(publishDeck, {
+                                    deckId: deckId,
+                                    title: this.props.ImportStore.title,
+                                    language: this.props.ImportStore.language,
+                                    description: this.props.ImportStore.description,
+                                    theme: this.props.ImportStore.theme,
+                                    license: this.props.ImportStore.license,
+                                    selector: selector,
+                                    hidden: false,
+                                });
+                            }
+                            this.handleImportRedirect();
 
-                    return true;
-                }, (reason) => {
-                    //Reset form
-                    this.context.executeAction(importCanceled, {});  // destroy import components state
-                    this.context.executeAction(addDeckDestruct, {});
-                    this.initializeProgressBar();
-                    this.refs.checkbox_conditions.checked = false;
-                    this.refs.checkbox_imageslicense.checked = false;
-                }).catch(() => {
-                    return true;
-                });
+                            return true;
+                        },
+                        (reason) => {
+                            //Reset form
+                            this.context.executeAction(importCanceled, {}); // destroy import components state
+                            this.context.executeAction(addDeckDestruct, {});
+                            this.initializeProgressBar();
+
+                            this.setState({
+                                inputImageslicense: false,
+                                inputConditions: false,
+                            });
+                        }
+                    )
+                    .catch(() => {
+                        return true;
+                    });
             } else {
                 const error_messages = defineMessages({
                     error_title_text: {
@@ -337,7 +394,7 @@ class AddDeck extends React.Component {
                     error_confirm_text: {
                         id: 'AddDeck.swal.error_confirm_text',
                         defaultMessage: 'Close',
-                    }
+                    },
                 });
                 swal({
                     title: this.context.intl.formatMessage(error_messages.error_title_text),
@@ -345,7 +402,7 @@ class AddDeck extends React.Component {
                     type: 'error',
                     confirmButtonText: this.context.intl.formatMessage(error_messages.error_confirm_text),
                     confirmButtonClass: 'negative ui button',
-                    buttonsStyling: false
+                    buttonsStyling: false,
                 })
                     .then(() => {
                         return true;
@@ -369,15 +426,15 @@ class AddDeck extends React.Component {
             failed: {
                 id: 'AddDeck.progress.failed',
                 defaultMessage: 'Upload failed!',
-            }
+            },
         });
         $('#progressbar_addDeck_upload').progress({
             text: {
                 // active  : 'Uploading: {percent}%',
                 // active  : 'Importing: {percent}%',
                 success: this.context.intl.formatMessage(progress_messages.uploaded),
-                error: this.context.intl.formatMessage(progress_messages.failed)
-            }
+                error: this.context.intl.formatMessage(progress_messages.failed),
+            },
         });
     }
     showError() {
@@ -385,11 +442,9 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set error');
     }
     handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions) {
-
         this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
-
             //call action
             const payload = {
                 title: title,
@@ -401,17 +456,16 @@ class AddDeck extends React.Component {
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
                 jwt: this.props.UserProfileStore.jwt,
-                base64: this.props.ImportStore.base64
+                base64: this.props.ImportStore.base64,
             };
             this.initializeProgressBar();
             this.context.executeAction(uploadFile, payload);
-        }
-        else {
+        } else {
             console.error('Submission not possible - no file or not pptx/odp/zip');
         }
     }
-    
-    saveTags() {
+
+    /*saveTags() {
         let tags = this.tagInput.getSelected();
         tags.forEach((tag) => {
             if (!tag.tagName && tag.defaultName) {
@@ -428,13 +482,25 @@ class AddDeck extends React.Component {
         });
         //save tags in the store so that they can be restored during the initialization of TagInput component
         this.context.executeAction(storeTags, {tags:tags, topics: topics});
-    }
+    }*/
 
     handleInputChange(event) {
         this.setState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         });
     }
+
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value,
+        });
+    };
+
+    handleCheckboxChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.checked,
+        });
+    };
 
     render() {
         //redirect to new deck if created
@@ -444,66 +510,82 @@ class AddDeck extends React.Component {
             this.context.executeAction(addDeckDestruct, {});
         }
 
-
-        let fieldClass_title = classNames({
-            'required': true,
-            'field': true,
-            'error': this.state.formValidationErrors.title
-        });
-        let fieldClass_conditions = classNames({
-            'required': true,
-            'inline': true,
-            'field': true,
-            'error': this.state.formValidationErrors.conditions
-        });
-        let fieldClass_imageslicense = classNames({
-            'required': true,
-            'inline': true,
-            'field': true,
-            'error': this.state.formValidationErrors.imagesLicence
-        });
         let btnClasses_submit = classNames({
-            'ui': true,
-            'primary': true,
-            'disabled': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
-            'loading': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
-            'button': true
-        });
-        let btnClasses_upload = classNames({
-            'ui': true,
-            'primary': true,
-            'disabled': (this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100) || this.props.ImportStore.isUploaded,
-            'button': true
-
+            ui: true,
+            primary: true,
+            disabled: this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
+            loading: this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
+            button: true,
         });
 
         let formClasses = classNames({
-            'ui': true,
-            'form': true,
-            'upload': true,
-            'error': Object.keys(this.state.formValidationErrors).length === 0 ? '' : ' error'
+            ui: true,
+            form: true,
+            upload: true,
+            error: Object.keys(this.state.formValidationErrors).length === 0 ? '' : ' error',
         });
 
         let filename = this.props.ImportStore.filename;
-        if (filename.length > 40)
-            filename = filename.substr(0, 40) + ' ...';
+        if (filename.length > 40) filename = filename.substr(0, 40) + ' ...';
 
-        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme" ref="select_themes">
-            <option value="default">White - Default</option>
-            <option value="beige">Cream</option>
-            <option value="black">Black</option>
-            <option value="league">Dark Grey</option>
-            <option value="sky">Pale Blue</option>
-            <option value="solarized">Beige</option>
-            <option value="moon">Dark Slate Blue</option>
-            <option value="night">High Contrast 1</option>
-            <option value="blood">High Contrast 2</option>
-            <option value="serif">Serif</option>
-            <option value="simple">Simple</option>
-            <option value="openuniversity">Open University</option>
-            <option value="odimadrid">ODI Madrid</option>
-            <option value="oeg">OEG</option>
-        </select>;
+        const themeOptions = [
+            {
+                value: 'default',
+                text: 'White - Default',
+            },
+            {
+                value: 'beige',
+                text: 'Cream',
+            },
+            {
+                value: 'black',
+                text: 'Black',
+            },
+            {
+                value: 'league',
+                text: 'Dark Grey',
+            },
+            {
+                value: 'sky',
+                text: 'Pale Blue',
+            },
+            {
+                value: 'solarized',
+                text: 'Beige',
+            },
+            {
+                value: 'moon',
+                text: 'Dark Slate Blue',
+            },
+            {
+                value: 'night',
+                text: 'High Contrast 1',
+            },
+            {
+                value: 'blood',
+                text: 'High Contrast 2',
+            },
+            {
+                value: 'serif',
+                text: 'Serif',
+            },
+            {
+                value: 'simple',
+                text: 'Simple',
+            },
+            {
+                value: 'openuniversity',
+                text: 'Open University',
+            },
+            {
+                value: 'odimadrid',
+                text: 'ODI Madrid',
+            },
+            {
+                value: 'OEG',
+                text: 'OEG',
+            },
+        ];
 
         const form_messages = defineMessages({
             hint_title: {
@@ -521,75 +603,119 @@ class AddDeck extends React.Component {
             button_create: {
                 id: 'AddDeck.form.button_create',
                 defaultMessage: 'Create deck',
-            }
+            },
+            label_title: {
+                id: 'AddDeck.form.label_title',
+                defaultMessage: 'Title',
+            },
+            label_language: {
+                id: 'AddDeck.form.label_language',
+                defaultMessage: 'Language',
+            },
+            label_theme: {
+                id: 'AddDeck.form.label_themes',
+                defaultMessage: 'Choose deck theme',
+            },
+            label_description: {
+                id: 'AddDeck.form.label_description',
+                defaultMessage: 'Description',
+            },
+            label_education_label: {
+                id: 'DeckProperty.Education.Choose',
+                defaultMessage: 'Choose Education Level',
+            },
+            label_topics: {
+                id: 'DeckProperty.Tag.Topic.Choose',
+                defaultMessage: 'Choose Subject',
+            },
+            label_tags: {
+                id: 'DeckProperty.Tag.Tags.Choose',
+                defaultMessage: 'Choose Tags',
+            },
         });
 
         //check number of slides in order to update progressbar
-        if (this.props.ImportStore.deckId !== null &&
-            this.props.ImportStore.uploadProgress < 100 &&
-            this.props.ImportStore.error === null) {
+        if (this.props.ImportStore.deckId !== null && this.props.ImportStore.uploadProgress < 100 && this.props.ImportStore.error === null) {
             setTimeout(() => {
                 this.context.executeAction(checkNoOfSlides, { id: this.props.ImportStore.deckId });
             }, 100);
         }
 
         return (
-            <div className="ui vertically padded grid container">
+            <main className="ui vertically padded grid container">
                 <h1 className="ui header" style={{marginTop: '1em'}}>
                     <FormattedMessage
                         id='AddDeck.form.heading'
                         defaultMessage='Add a deck to SlideWiki' />
                 </h1>
-                
-                <div className="sixteen wide column">
+
+                <div className='sixteen wide column'>
                     <form className={formClasses}>
-                        <div className={fieldClass_title} ref="div_title">
-                            <label htmlFor="title">
-                                <FormattedMessage
-                                    id='AddDeck.form.label_title'
-                                    defaultMessage='Title' />
-                            </label>
-                            <input type="text" id="title" aria-required="true" ref="input_title" aria-invalid={this.state.formValidationErrors.title ? true : false} />
-                            {this.state.formValidationErrors.title ? 
-                                <span htmlFor="title" aria-labelledby="title" className="input-error">{this.state.formValidationErrors.title}</span> 
-                            : ''}
-                        </div>
-                        <div className="two fields">
-                            <SWAutoComplete
-                                ref="div_languages"
-                                required={true}
-                                error={this.state.formValidationErrors.language ? true : false}
-                                label={<FormattedMessage
-                                    id='AddDeck.form.label_language'
-                                    defaultMessage='Language' />
+                        <Form.Field
+                            id='form-input-title'
+                            name='inputTitle'
+                            control={Input}
+                            label={this.context.intl.formatMessage(form_messages.label_title)}
+                            required
+                            value={this.state.inputTitle}
+                            onChange={this.handleInputChange}
+                            error={
+                                this.state.formValidationErrors.title
+                                    ? {
+                                          content: this.state.formValidationErrors.title,
+                                      }
+                                    : undefined
+                            }
+                        />
+                        <Form.Group widths='equal'>
+                            <Form.Field
+                                id='language'
+                                control={Dropdown}
+                                label={this.context.intl.formatMessage(form_messages.label_language)}
+                                selection
+                                required
+                                search
+                                value={this.state.language}
+                                onChange={this.handleDropdownChange}
+                                error={
+                                    this.state.formValidationErrors.language
+                                        ? {
+                                              content: this.state.formValidationErrors.language,
+                                          }
+                                        : undefined
                                 }
-                                name='language'
-                                defaultValue={this.state.language}
                                 options={translationLanguages.map((s) => ({
                                     value: s,
-                                    name: getLanguageDisplayName(s),
+                                    text: getLanguageDisplayName(s),
                                 }))}
-                                onChange={this.handleInputChange}
-                                errorMessage={this.state.formValidationErrors.language}
                             />
-                            <div className="field" ref="div_themes" >
-                                <label htmlFor="themes">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_themes'
-                                        defaultMessage='Choose deck theme' />
-                                </label>
-                                {themeOptions}
-                            </div>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="deck-description" id="deck-description-label" >
-                                <FormattedMessage
-                                    id='AddDeck.form.label_description'
-                                    defaultMessage='Description' />
-                            </label>
-                            <textarea rows="4" aria-labelledby="deck-description-label" ref="textarea_description" />
-                        </div>
-                        <div className="ui message" id="metadata">
+                            <Form.Field
+                                id='theme'
+                                control={Dropdown}
+                                label={this.context.intl.formatMessage(form_messages.label_theme)}
+                                selection
+                                required
+                                value={this.state.theme}
+                                onChange={this.handleDropdownChange}
+                                error={
+                                    this.state.formValidationErrors.theme
+                                        ? {
+                                              content: this.state.formValidationErrors.theme,
+                                          }
+                                        : undefined
+                                }
+                                options={themeOptions}
+                            />
+                        </Form.Group>
+                        <Form.Field
+                            id='description'
+                            control={TextArea}
+                            name='description'
+                            label={this.context.intl.formatMessage(form_messages.label_description)}
+                            value={this.state.description}
+                            onChange={this.handleInputChange}
+                        />
+                        <div className='ui message' id='metadata'>
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.metadata'
@@ -598,115 +724,153 @@ class AddDeck extends React.Component {
                                             <FormattedMessage id="add.help" defaultMessage="Help decks"/>
                                         </a>
                                     }}
-                                    defaultMessage='Please select from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.' />
+                                    defaultMessage='Please select from the following lists to specify the education level and subject area of your deck. You can find out more about these options in our {link_help}.'
+                                />
                             </p>
                         </div>
-                        <div className="two fields">
-                            <div className="sr-only" id="describe_level"><FormattedMessage id='AddDeck.sr.education' defaultMessage='Select education level of deck content'/></div>
-                            <div className="sr-only" id="describe_topic"><FormattedMessage id='AddDeck.sr.subject' defaultMessage='Select subject of deck content from autocomplete. Multiple subjects can be selected'/></div>
-                            <div className="sr-only" id="describe_tags"><FormattedMessage id='AddDeck.sr.tags' defaultMessage='Add tags or keywords for your deck. Multiple tags can be provided.'/></div>
-                            <SWAutoComplete
-                                ref="dropdown_level"
-                                label={<FormattedMessage
-                                    id='DeckProperty.Education.Choose'
-                                    defaultMessage='Choose Education Level' />
-                                }
-                                name='educationLevel'
+                        <Form.Group widths='equal'>
+                            <Form.Field
+                                id='educationLevel'
+                                control={Dropdown}
+                                label={this.context.intl.formatMessage(form_messages.label_education_label)}
+                                selection
+                                search
+                                clearable
                                 value={this.state.educationLevel}
+                                onChange={this.handleDropdownChange}
                                 options={Object.entries(educationLevels).map(([value, text]) => ({
-                                    value: value,
-                                    name: text,
+                                    value,
+                                    text,
                                 }))}
-                                onChange={this.handleInputChange}
                             />
-                            <div className="field">
-                                <label htmlFor="topics_input_field" id="topics_label"><FormattedMessage id='DeckProperty.Tag.Topic.Choose' defaultMessage='Choose Subject' /></label>
-                                <TagInput id="topics_input_field" initialTags={this.props.ImportStore.topics} ref={(i) => (this.topicInput = i)} tagFilter={{ tagType: 'topic' }} aria-labelledby="topics_label" aria-describedby="describe_topic" />
-                            </div>
-                        </div>
 
-                        <div className="field">
-                            <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage id='DeckProperty.Tag.Choose' defaultMessage='Choose Tags' /></label>
-                            <TagInput id="tags_input_field" initialTags={this.props.ImportStore.tags} ref={(i) => (this.tagInput = i)} allowAdditions={true} aria-labelledby="tags_label" aria-describedby="describe_tags" />
-                        </div>
+                            <TagInput
+                                id='topics'
+                                initialTags={this.props.ImportStore.topics}
+                                tagFilter={{ tagType: 'topic' }}
+                                value={this.state.topics}
+                                onChange={this.handleDropdownChange}
+                                label={this.context.intl.formatMessage(form_messages.label_topics)}
+                            />
+                        </Form.Group>
 
-                        <div className="ui message" id="uploadDesc">
+                        <TagInput
+                            id='tags'
+                            initialTags={this.props.ImportStore.tags}
+                            tagFilter={{}}
+                            value={this.state.tags}
+                            onChange={this.handleDropdownChange}
+                            label={this.context.intl.formatMessage(form_messages.label_tags)}
+                            allowAdditions={true}
+                        />
+
+                        <div className='ui message' id='uploadDesc'>
                             <p>
                                 <FormattedMessage
                                     id='AddDeck.form.format_message'
-                                    defaultMessage='You can upload existing slides to your new deck in the following file formats: PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files) and RevealJS slideshows (*.zip files).' />
+                                    defaultMessage='You can upload existing slides to your new deck in the following file formats: PowerPoint pptx, OpenOffice ODP, SlideWiki HTML downloads (*.zip files) and RevealJS slideshows (*.zip files).'
+                                />
                             </p>
                         </div>
-                        <div className="ui field">
-                            <div className="two column row">
-                                <span className="column">
-                                    <ImportModal savetags={this.saveTags.bind(this)}/>
+                        <div className='ui field'>
+                            <div className='two column row'>
+                                <span className='column'>
+                                    <ImportModal />
                                 </span>
-                                <span ref="div_filename">
+                                <span ref='div_filename'>
                                     {filename ? this.context.intl.formatMessage(form_messages.selected_message, { filename: filename }) : ''}
                                 </span>
                             </div>
                         </div>
-                        <div className={fieldClass_conditions} >
-                            <div className="ui checkbox" ref="div_conditions" >
-                                <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" aria-invalid={this.state.formValidationErrors.conditions ? true : false} />
-                                <label htmlFor="terms">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_terms1'
-                                        defaultMessage='I agree to the SlideWiki ' />{' '}
-                                    <a className="item" href="/terms" target="_blank">
-                                        <FormattedMessage
-                                            id='AddDeck.form.label_terms2'
-                                            defaultMessage='terms and conditions' />
+                        <Form.Field
+                            id='form-input-conditions'
+                            name='inputConditions'
+                            control={Checkbox}
+                            label={
+                                <label htmlFor='form-input-conditions'>
+                                    <FormattedMessage id='AddDeck.form.label_terms1' defaultMessage='I agree to the SlideWiki ' />{' '}
+                                    <a className='item' href='/terms' target='_blank'>
+                                        <FormattedMessage id='AddDeck.form.label_terms2' defaultMessage='terms and conditions' />
                                     </a>{' '}
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
-                                        defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
+                                        defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.'
+                                    />
                                 </label>
-                            </div>
-                            {this.state.formValidationErrors.conditions ? 
-                                <span htmlFor="title" aria-labelledby="terms" className="input-error">{this.state.formValidationErrors.conditions}</span> 
-                            : ''}
+                            }
+                            required
+                            checked={this.state.inputConditions}
+                            onChange={this.handleCheckboxChange}
+                            error={
+                                this.state.formValidationErrors.conditions
+                                    ? {
+                                          content: this.state.formValidationErrors.conditions,
+                                          pointing: 'left',
+                                      }
+                                    : undefined
+                            }
+                        />
+                        <Form.Field
+                            id='form-input-imageslicense'
+                            name='inputImageslicense'
+                            control={Checkbox}
+                            label={
+                                'I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.'
+                            }
+                            required
+                            checked={this.state.inputImageslicense}
+                            onChange={this.handleCheckboxChange}
+                            error={
+                                this.state.formValidationErrors.imagesLicence
+                                    ? {
+                                          content: this.state.formValidationErrors.imagesLicence,
+                                          pointing: 'left',
+                                      }
+                                    : undefined
+                            }
+                        />
+
+                        <div
+                            className='ui indicating progress'
+                            ref='div_progress'
+                            id='progressbar_addDeck_upload'
+                            role='progressbar'
+                            aria-valuenow='0'
+                            aria-valuemin='0'
+                            aria-valuemax='100'
+                            tabIndex='0'
+                            style={{ display: 'none' }}
+                        >
+                            <div className='bar' />
+                            <div className='label' ref='div_progress_text' id='progresslabel_addDeck_upload' aria-live='polite' />
                         </div>
-                        <div className={fieldClass_imageslicense} >
-                            <div className="ui checkbox" ref="div_imageslicense" >
-                                <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" aria-invalid={this.state.formValidationErrors.imagesLicence ? true : false} />
-                                <label htmlFor="termsimages">
-                                    <FormattedMessage
-                                        id='AddDeck.form.label_termsimages'
-                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
-                                </label>
-                            </div>
-                            {this.state.formValidationErrors.imagesLicence ? 
-                                <span htmlFor="title" aria-labelledby="termsimages" className="input-error">{this.state.formValidationErrors.imagesLicence}</span> 
-                            : ''}
-                        </div>
-                        <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" style={{display:'none'}}>
-                            <div className="bar"/>
-                            <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"/>
-                        </div>
-                        <div className="ui buttons">
-                            <div className={btnClasses_submit} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
+                        <div className='ui buttons'>
+                            <div
+                                className={btnClasses_submit}
+                                role='button'
+                                tabIndex='0'
+                                onClick={this.handleAddDeck.bind(this)}
+                                onKeyPress={this.handleKeyPressAddDeck.bind(this)}
+                            >
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
                     </form>
                 </div>
-            </div>
+            </main>
         );
     }
 }
 
-
 AddDeck.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
 };
 AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore, ImportStore], (context, props) => {
     return {
         AddDeckStore: context.getStore(AddDeckStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ImportStore: context.getStore(ImportStore).getState()
+        ImportStore: context.getStore(ImportStore).getState(),
     };
 });
 export default AddDeck;

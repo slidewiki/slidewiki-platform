@@ -1,28 +1,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
-import { Container, Divider,Header,Segment,Form,Label,Dropdown,Input,TextArea} from 'semantic-ui-react';
+import { Container, Divider,Header,Segment,Form,Dropdown,Input,TextArea} from 'semantic-ui-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {publicRecaptchaKey} from '../../configs/general';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 import {defineMessages} from 'react-intl';
 import sendContactForm from '../../actions/home/sendContactForm';
-import {getLanguageDisplayName, translationLanguages} from '../../common';
-import SWAutoComplete from '../common/SWAutoComplete';
 
 class ContactUs extends React.Component {
-
-
-
     constructor(props){
         super(props);
         this.state ={
-            type : null,
+            type : '',
             firstName:this.props.UserProfileStore.user.fname,
             lastName:this.props.UserProfileStore.user.lname,
             email: this.props.UserProfileStore.user.email,
+            summary: '',
+            description: '',
             formValidationErrors: {},
         };
 
@@ -84,6 +80,18 @@ class ContactUs extends React.Component {
             form_type_placeholder:{
                 id: 'contactUs.form_type_placeholder',
                 defaultMessage:'Select type of the report'
+            },
+            form_field_validation_empty:{
+                id: 'contactUs.form_field_validation_empty',
+                defaultMessage:'Please do not leave this field empty'
+            },
+            form_field_validation_email:{
+                id: 'contactUs.form_field_validation_email',
+                defaultMessage:'Please enter a valid email address'
+            },
+            form_field_validation_captcha:{
+                id: 'contactUs.form_field_validation_captcha',
+                defaultMessage:'Please verify that you are not a robot'
             },
             form_firstName_label:{
                 id: 'contactUs.form_firstName_label',
@@ -193,6 +201,12 @@ class ContactUs extends React.Component {
         });
     }
 
+    handleDropdownChange = (e, dropdown) => {
+        this.setState({
+            [dropdown.id]: dropdown.value
+        });
+    }
+
     onRecaptchaChange(response) {
         this.setState({
             'grecaptcharesponse': response
@@ -204,7 +218,7 @@ class ContactUs extends React.Component {
     but the problem is the same, so we need to change by hand the value.
     Now, only not logged users can edit name, surname and email. If we want to
     allow all users to edit, we need to remove the if condition in each change method*/
-    onFirstNameChange(event,data){
+    onFirstNameChange = (event,data) => {
         if(this.props.UserProfileStore.username.length === 0){
           //Not logged user, he can edit
             this.setState({
@@ -212,7 +226,8 @@ class ContactUs extends React.Component {
             });
         }
     }
-    onLastNameChange(event,data){
+
+    onLastNameChange = (event,data) => {
         if(this.props.UserProfileStore.username.length === 0){
           //Not logged user, he can edit
             this.setState({
@@ -222,79 +237,55 @@ class ContactUs extends React.Component {
     }
 
     checkEmail(){
-        let noEmailError = true;
         let regExp = /\S+@\S+\.\S+/;
         if (this.state.email === '' || !regExp.test(this.state.email)){
-            noEmailError = false;
-            swal({
-                title: this.context.intl.formatMessage(this.messages.swal_title),
-                text: this.context.intl.formatMessage(this.messages.checkEmail_text),
-                type: 'error',
-                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'ui olive button',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                buttonsStyling: false
-            }).then((accepted) => {
-
-                this.emailContact.focus();
-            });
+            return false;
         }
-        return noEmailError;
+        return true;
 
     }
-    checkSummary(){
-        let noSummaryError = true;
 
-        if (this.summaryContact.inputRef.value === ''){
-            noSummaryError = false;
-            swal({
-                title: this.context.intl.formatMessage(this.messages.swal_title),
-                text: this.context.intl.formatMessage(this.messages.checkSummary_text),
-                type: 'error',
-                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'ui olive button',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                buttonsStyling: false
-            }).then((accepted) => {
-
-                this.summaryContact.focus();
-            });
-        }
-        return noSummaryError;
-    }
     checkCaptcha(){
-    // REturns true if everything is ok
+        // Returns true if everything is ok
         let noCaptchaError = true;
         if(this.state.grecaptcharesponse === undefined){
             noCaptchaError = false;
-            swal({
-                title:this.context.intl.formatMessage(this.messages.swal_title),
-                html: this.context.intl.formatMessage(this.messages.checkCaptcha_text),
-                type: 'error',
-                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'ui olive button',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                buttonsStyling: false
-            }).then((accepted) => {
-                //recaptcha-checkbox-checkmark
-                ReactDOM.findDOMNode(this.recaptcha).focus();
-                //$('#recaptchaGoogleContact').focus();
-            });
+
         }
         return noCaptchaError;
     }
     checkForm(){
-    //Checks if requiered fields are ok.
-    // Returns true if all are ok
+        // Checks if required fields are ok.
+        // Returns true if all are ok
+        let errors = {};
 
-        if(this.checkEmail())
-            if(this.checkSummary())
-                if(this.checkCaptcha())
-                    return true;
-        return false;
+        if (!this.state.type) {
+            errors.type = this.context.intl.formatMessage(this.messages.form_field_validation_empty);
+        }
+        if (this.state.firstName === '') {
+            errors.firstName = this.context.intl.formatMessage(this.messages.form_field_validation_empty);
+        }
+        if (this.state.lastName === '') {
+            errors.lastName = this.context.intl.formatMessage(this.messages.form_field_validation_empty);
+        }
+        if (!this.checkEmail()) {
+            errors.email = this.context.intl.formatMessage(this.messages.form_field_validation_email);
+        }
+        if (this.state.summary === '') {
+            errors.summary = this.context.intl.formatMessage(this.messages.form_field_validation_empty);
+        }
+        if (this.state.description === '') {
+            errors.description = this.context.intl.formatMessage(this.messages.form_field_validation_empty);
+        }
+        if (!this.checkCaptcha()) {
+            errors.captcha = this.context.intl.formatMessage(this.messages.form_field_validation_captcha);
+        }
+
+        this.setState({
+            'formValidationErrors': errors
+        });
+
+        return Object.keys(errors).length === 0;
     }
 
     getSwalMessages(){
@@ -315,105 +306,135 @@ class ContactUs extends React.Component {
         if(this.checkForm()){
           //all data is ok. Send info
             let payload = {
-                subject : this.summaryContact.inputRef.value,
+                subject : this.state.summary,
                 text : `First Name: ${this.state.firstName}\n`+
                     `Last Name: ${this.state.lastName}\n`+
                     `email: ${this.state.email}\n`+
                     `Feedback type: ${this.state.type} - ${this.getReportTypes().find((i) => i.enum === this.state.type).defaultMessage}\n`+
-                    `Summary: ${this.summaryContact.inputRef.value}\n`+
-                    `Description: ${this.descriptionContact.ref.value}`,
+                    `Summary: ${this.state.summary}\n`+
+                    `Description: ${this.state.description}`,
                 swal_messages : this.getSwalMessages()
             };
-
+            
             this.context.executeAction(sendContactForm,payload);
         }
     }
 
     render() {
-
-        const recaptchaStyle = {display: 'inline-block'};
-
         return (
             <Container text>
                 <Divider hidden />
+                <main>
+                    <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
+                    <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
-                <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
-                <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
-
-                  <Divider hidden />
-                  <Segment attached="bottom" textAlign="left" >
+                    <Divider hidden />
+                    <Segment attached="bottom" textAlign="left" >
                     <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
-                    <Form onSubmit={this.onSubmitHandler.bind(this)}>
-                      <Form.Field key='1'>
-                          <SWAutoComplete
-                              required
-                              label={this.context.intl.formatMessage(this.messages.form_type_label)}
-                              id='type'
-                              options={this.getReportTypes().map((type) => ({
-                                  value: type.enum,
-                                  name: this.context.intl.formatMessage(type),
-                              }))}
-                              onChange={this.handleInputChange}
-                          />
-                      </Form.Field>
-
-                      <Form.Field key='2'>
-                       <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
-                       <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
-                         placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
-                         value={this.state.firstName}
-                         onChange ={this.onFirstNameChange.bind(this)}
-                       />
-                      </Form.Field>
-
-                      <Form.Field key='3'>
-                         <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
-                         <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
-                         placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
-                         value={this.state.lastName}
-                         onChange ={this.onLastNameChange.bind(this)}/>
-                      </Form.Field>
-
+                    <Form onSubmit={this.onSubmitHandler.bind(this)} noValidate>
                         <Form.Field
-                            id='email'
-                            control={Form.Input}
-                            label={this.context.intl.formatMessage(this.messages.form_email_label)}
+                            id='type'
+                            control={Dropdown}
+                            label={this.context.intl.formatMessage(this.messages.form_type_label)}
                             required
-                            aria-required={true}
-                            value={this.state.email}
-                            onChange={this.handleInputChange}
-                            type='email'
-                            error={Boolean(this.state.formValidationErrors.email)}
+                            selection
+                            value={this.state.type}
+                            options={this.getReportTypes().map((type) => ({
+                                value: type.enum,
+                                text: this.context.intl.formatMessage(type),
+                            }))}
+                            onChange={this.handleDropdownChange}
+                            error={this.state.formValidationErrors.type ? {
+                                content: this.state.formValidationErrors.type,
+                            } : undefined}
                         />
 
-                      <Form.Field key='5'>
-                        <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>
-                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
-                        placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
-                        aria-required="true"  />
-                      </Form.Field>
+                        <Form.Field
+                            id="form-input-firstName"
+                            name="inputFirstName"
+                            control={Input}
+                            label={this.context.intl.formatMessage(this.messages.form_firstName_label)}
+                            required
+                            value={this.state.firstName}
+                            onChange={this.onFirstNameChange}
+                            error={this.state.formValidationErrors.firstName ? {
+                                content: this.state.formValidationErrors.firstName,
+                            } : undefined}
+                        />
 
-                      <Form.Field key='6'>
-                        <label  htmlFor="descriptionContact"> {this.context.intl.formatMessage(this.messages.form_description_label)} </label>
-                         <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
-                          autoHeight
-                          placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
-                      </Form.Field>
+                        <Form.Field
+                            id="form-input-lastName"
+                            name="inputLastName"
+                            control={Input}
+                            label={this.context.intl.formatMessage(this.messages.form_lastName_label)}
+                            required
+                            value={this.state.lastName}
+                            onChange={this.onLastNameChange}
+                            error={this.state.formValidationErrors.lastName ? {
+                                content: this.state.formValidationErrors.lastName,
+                            } : undefined}
+                        />
 
-                      <Form.Field key='7'>
-                        <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
-                        <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
-                         style={recaptchaStyle} sitekey={publicRecaptchaKey}
-                         onChange={this.onRecaptchaChange.bind(this)}
-                         aria-required="true" tabIndex="0"/>
-                      </Form.Field>
+                        <Form.Field
+                            type='email'
+                            id='email'
+                            control={Input}
+                            label={this.context.intl.formatMessage(this.messages.form_email_label)}
+                            required
+                            value={this.state.email}
+                            onChange={this.handleInputChange}
+                            error={this.state.formValidationErrors.email ? {
+                                content: this.state.formValidationErrors.email,
+                            } : undefined}
+                        />
 
-                      <Form.Button color='blue' key='8'>
-                        {this.context.intl.formatMessage(this.messages.form_button)}
-                      </Form.Button>
+                        <Form.Field
+                            id='summary'
+                            control={Input}
+                            label={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
+                            required
+                            value={this.state.summary}
+                            onChange={this.handleInputChange}
+                            error={this.state.formValidationErrors.summary ? {
+                                content: this.state.formValidationErrors.summary,
+                            } : undefined}
+                        />
+
+                        <Form.Field
+                            id='description'
+                            control={TextArea}
+                            label={this.context.intl.formatMessage(this.messages.form_description_label)}
+                            required
+                            value={this.state.description}
+                            onChange={this.handleInputChange}
+                            error={this.state.formValidationErrors.description ? {
+                                content: this.state.formValidationErrors.description,
+                            } : undefined}
+                        />
+
+                        <Form.Field>
+                            <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
+                            <ReCAPTCHA 
+                                id="recaptchaGoogleContact" 
+                                ref= {(recap) => {this.recaptcha = recap;}}
+                                sitekey={publicRecaptchaKey}
+                                onChange={this.onRecaptchaChange.bind(this)}
+                                aria-required="true" 
+                                tabIndex="0"
+                            />
+                            {this.state.formValidationErrors.captcha && 
+                                <div className="ui pointing above prompt label" role="alert" aria-atomic="true">
+                                    {this.state.formValidationErrors.captcha}
+                                </div>}
+                        </Form.Field>
+
+                        <Form.Button color='blue' >
+                            {this.context.intl.formatMessage(this.messages.form_button)}
+                        </Form.Button>
                    </Form>
+                   
                    </Segment>
-
+                </main>
             </Container>
 
         );
