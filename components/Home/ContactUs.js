@@ -267,12 +267,11 @@ class ContactUs extends React.Component {
     checkCaptcha(){
     // REturns true if everything is ok
         let noCaptchaError = true;
-        let captchaText = this.context.intl.formatMessage(this.messages.checkCaptcha_text)
         if(this.state.grecaptcharesponse === undefined){
             noCaptchaError = false;
             swal({
                 title:this.context.intl.formatMessage(this.messages.swal_title),
-                html: "<span style='color:rgba(0,0,0,0.7);'>" + captchaText + "</span>",
+                html: this.context.intl.formatMessage(this.messages.checkCaptcha_text),
                 type: 'error',
                 confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
                 confirmButtonClass: 'ui olive button',
