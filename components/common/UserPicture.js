@@ -42,7 +42,7 @@ class UserPicture extends React.Component {
             userPictureAlt : {
                 id: 'userPicture.alt',
                 defaultMessage:'User profile image'
-        }})
+        }});
 
         let width = this.props.width;
         if (this.props.picture === '' || !this.props.picture) {

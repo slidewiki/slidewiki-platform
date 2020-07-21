@@ -79,7 +79,8 @@ class TagInput extends React.Component {
         }
 
         options = uniq(options, 'tagName');
-
+        console.log('options', options);
+        console.log('value', this.props.value);
         return (
             <Form.Field
                 allowAdditions={this.props.allowAdditions}
