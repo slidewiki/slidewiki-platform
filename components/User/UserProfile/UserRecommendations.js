@@ -23,7 +23,7 @@ class UserRecommendations extends React.Component {
 
     render() {
         return (
-            <div className="ui segments">
+            <main className="ui segments">
                 {(this.props.UserRecommendationsStore.loading) ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='user.userRecommendations.loading' defaultMessage='Loading' /></div></div> : ''}
                 <div className="ui secondary clearing segment">
                     <h1 className="ui left floated header" id="main"><FormattedMessage id='user.userRecommendations.recommendedDecks' defaultMessage="Recommended Decks" /></h1>
@@ -45,7 +45,7 @@ class UserRecommendations extends React.Component {
                 <div className="ui segment">
                     <RecommendedDecks decks={this.props.UserRecommendationsStore.recommendations} sort={this.sortBy} />
                 </div>
-            </div>
+            </main>
         );
     }
 }

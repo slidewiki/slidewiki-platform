@@ -642,9 +642,11 @@ class AddDeck extends React.Component {
         }
 
         return (
-            <div className='ui vertically padded grid container'>
-                <h1 className='ui header' style={{ marginTop: '1em' }}>
-                    <FormattedMessage id='AddDeck.form.heading' defaultMessage='Add a deck to SlideWiki' />
+            <main className="ui vertically padded grid container">
+                <h1 className="ui header" style={{marginTop: '1em'}}>
+                    <FormattedMessage
+                        id='AddDeck.form.heading'
+                        defaultMessage='Add a deck to SlideWiki' />
                 </h1>
 
                 <div className='sixteen wide column'>
@@ -857,7 +859,7 @@ class AddDeck extends React.Component {
                         </div>
                     </form>
                 </div>
-            </div>
+            </main>
         );
     }
 }

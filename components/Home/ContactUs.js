@@ -324,12 +324,12 @@ class ContactUs extends React.Component {
         return (
             <Container text>
                 <Divider hidden />
+                <main>
+                    <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
+                    <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
-                <Header as="h1" id="main">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
-                <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
-
-                  <Divider hidden />
-                  <Segment attached="bottom" textAlign="left" >
+                    <Divider hidden />
+                    <Segment attached="bottom" textAlign="left" >
                     <Header as='h2'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)} noValidate>
                         <Form.Field
@@ -412,7 +412,7 @@ class ContactUs extends React.Component {
                             } : undefined}
                         />
 
-                      <Form.Field>
+                        <Form.Field>
                             <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
                             <ReCAPTCHA 
                                 id="recaptchaGoogleContact" 
@@ -426,14 +426,15 @@ class ContactUs extends React.Component {
                                 <div className="ui pointing above prompt label" role="alert" aria-atomic="true">
                                     {this.state.formValidationErrors.captcha}
                                 </div>}
-                      </Form.Field>
+                        </Form.Field>
 
-                      <Form.Button color='blue' >
-                        {this.context.intl.formatMessage(this.messages.form_button)}
-                      </Form.Button>
+                        <Form.Button color='blue' >
+                            {this.context.intl.formatMessage(this.messages.form_button)}
+                        </Form.Button>
                    </Form>
+                   
                    </Segment>
-
+                </main>
             </Container>
 
         );
