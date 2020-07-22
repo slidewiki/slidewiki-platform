@@ -44,7 +44,7 @@ class DeckList extends React.Component {
                                     <div className="item">
                                         <h4 className="ui header"><NavLink href={['/deck', deck._id, deck.slug,].join('/')}>{deck.title}</NavLink></h4>
                                         <div className="meta"><FormattedMessage id='decklist.meta.creator' defaultMessage='Creator' />: <NavLink href={'/user/' + deck.username}>{deck.username}</NavLink></div>
-                                        <div className="meta"><FormattedMessage id='decklist.meta.date' defaultMessage='Last Modified' />: {deckDate}</div>
+                                        {/*<div className="meta"><FormattedMessage id='decklist.meta.date' defaultMessage='Last Modified' />: {deckDate}</div>*/}
                                     </div>
                                 </div>
                                 <div className="column right aligned">
