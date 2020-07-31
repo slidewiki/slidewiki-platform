@@ -8,6 +8,7 @@ import {publicRecaptchaKey} from '../../configs/general';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 import {defineMessages} from 'react-intl';
 import sendContactForm from '../../actions/home/sendContactForm';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class ContactUs extends React.Component {
     constructor(props){
@@ -152,6 +153,10 @@ class ContactUs extends React.Component {
             send_swal_error_button:{
                 id: 'contactUs.send_swal_error_button',
                 defaultMessage:'Close'
+            },
+            title: {
+                id: 'contactUs.title',
+                defaultMessage: 'Contact Us'
             }
         });
     }
@@ -159,6 +164,10 @@ class ContactUs extends React.Component {
       //Load user info, if user is conected.
         if(this.props.UserProfileStore.username.length > 0)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username, id:this.props.UserProfileStore.userid}});
+            
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage(this.messages.title)
+        });
     }
     componentWillReceiveProps(nextProps){
         this.setState({
@@ -443,7 +452,8 @@ class ContactUs extends React.Component {
 
 ContactUs.contextTypes = {
     executeAction: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 ContactUs = connectToStores(ContactUs,[UserProfileStore],(context,props) => {

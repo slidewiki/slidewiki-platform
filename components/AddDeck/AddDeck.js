@@ -15,6 +15,7 @@ import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import addActivity from '../../actions/activityfeed/addActivity';
 import publishDeck from '../../actions/addDeck/publishDeck';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 import ImportModal from '../Import/ImportModal';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 import { Form, Input, Checkbox, Dropdown, TextArea } from 'semantic-ui-react';
@@ -43,6 +44,14 @@ class AddDeck extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.defaultTagNames = []; // used for saving defaultName properties for tags
+    }
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'AddDeck.title',
+                defaultMessage: 'Add Deck'
+            })
+        });
     }
     componentDidUpdate() {
         if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
