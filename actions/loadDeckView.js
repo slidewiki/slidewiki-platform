@@ -42,11 +42,11 @@ export default function loadDeckView(context, payload, done) {
         console.log('context', context.intl);
         let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
 
-        context.dispatch('UPDATE_PAGE_TITLE', {
+        /*context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: cleanTitle,
         //    frozen: true,
         //    allowUnfreeze: true,
-        });
+        });*/
         done();
     });
 }
