@@ -116,7 +116,8 @@ class UserStats extends React.Component {
         });
 
         return (
-          <div>
+          <main>
+              <Header as='h1' className='sr-only'>{this.context.intl.formatMessage(this.messages.userStatsTitle)}</Header>
               <Grid relaxed>
                   {this.props.userStats.statsByTime && this.props.userStats.statsByTime.length > 0 &&
                   <Grid.Row columns={1}>
@@ -193,7 +194,7 @@ class UserStats extends React.Component {
                       </Grid.Column>
                   </Grid.Row>}
               </Grid>
-          </div>
+          </main>
         );
     }
 }

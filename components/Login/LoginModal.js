@@ -18,6 +18,7 @@ import openSSOModal from '../../actions/user/openSSOModal';
 import FocusTrap from 'focus-trap-react';
 import LoginModalStore from '../../stores/LoginModalStore';
 import updateTrap from '../../actions/loginModal/updateTrap';
+import {Message, Form, Input} from 'semantic-ui-react';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -39,7 +40,11 @@ class LoginModal extends React.Component {
         this.provider = '';
         this.state = {
             activeTrap: this.props.LoginModalStore.activeTrap?this.props.LoginModalStore.activeTrap:false,
-            isLoading: false
+            isLoading: false,
+            email: '',
+            password: '',
+            emailError: '',
+            generalError: '',
         };
 
         this.errorMessages = defineMessages({
@@ -63,7 +68,6 @@ class LoginModal extends React.Component {
 
         if (nextProps.errorMessage !== '' && this.props.errorMessage === '' && this.state.isLoading) {
             // console.log('body intended', this.props.errorMessage.toString());
-            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
             this.setState({ isLoading: false });
         }
     }
@@ -88,12 +92,6 @@ class LoginModal extends React.Component {
 
     handleLoginButton() {
         this.openModal();
-
-
-        setTimeout(() => {
-            ReactDOM.findDOMNode(this.refs.email1).focus();
-        }, 0);
-
     }
 
     signin(e) {
@@ -103,21 +101,27 @@ class LoginModal extends React.Component {
         // This is necessary because screenreaders will only read the form error messages when there is a change in the message.
         // For instance, without this, the error message will be read by the screenreader on the first failed login attempt, and will not be read on subsequent attempts.
         // Removing then re-adding the error message after failure ensures the screenreader always reads it.
-        $('.ui.form.signin > div.ui.error').empty();
 
-        const email = this.refs.email1.value;
+        this.setState({
+            emailError: '',
+            generalError: ''
+        });
+
+        const email = this.state.email;
         let regExp = /\S+@\S+\.\S+/;
         if (email === '' || !regExp.test(email)) {//Check if email is valid
-            $('.ui.form.signin').form('add errors', [this.context.intl.formatMessage({
-                id: 'LoginModal.error.noValidEmailAddress',
-                defaultMessage: 'Please use a valid email address',
-            }) ]);
+            this.setState({
+                emailError: this.context.intl.formatMessage({
+                    id: 'LoginModal.error.noValidEmailAddress',
+                    defaultMessage: 'Please use a valid email address',
+                })
+            });
         } else {
             this.setState({ isLoading: true });
 
             this.context.executeAction(userSignIn, {
-                email: this.refs.email1.value,
-                password: common.hashPassword(this.refs.password1.value),
+                email: this.state.email,
+                password: common.hashPassword(this.state.password),
                 errorMessages: {
                     error403: this.context.intl.formatMessage(this.errorMessages.error403),
                     error404: this.context.intl.formatMessage(this.errorMessages.error404),
@@ -127,6 +131,7 @@ class LoginModal extends React.Component {
         }
         return false;
     }
+    
 
     handleRegisterFirst(dismiss) {
         localStorage.setItem(MODI, 'login_failed_register_now');
@@ -138,9 +143,13 @@ class LoginModal extends React.Component {
         return true;
     }
 
-    componentDidUpdate() {
-        if (this.props.errorMessage.length > 2)
-            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
+    componentDidUpdate(prevProps) {
+        if (prevProps.errorMessage !== this.props.errorMessage && this.props.errorMessage.length > 2) {
+            this.setState({
+                generalError: this.props.errorMessage
+            });
+        }
+        
         // console.log('componentDidUpdate:', this.props.errorMessage, ',', this.props.socialLoginError, ',', this.props.userid, ',', this.props.username, ',', this.state.isLoading);
         if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
             localStorage.setItem(MODI, 'login_failed');
@@ -321,6 +330,12 @@ class LoginModal extends React.Component {
         return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
+    handleInputChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
+
     render() {
 
         let inputField_classes = classNames({
@@ -364,43 +379,47 @@ class LoginModal extends React.Component {
             defaultValue="Use your user email address and password to sign in. Or select GooglePlus or GitHub if you have used these services to active your account on SlideWiki"
             tabIndex ='-1'/>
 
-            <div className={inputField_classes}>
-              <div className="sr-only">
-                <label htmlFor="email1">
-                    <FormattedMessage
-                    id='LoginModal.label.email'
-                    defaultMessage='E-Mail'
-                    />
-                </label>
-              </div>
-              <input type="text" id="email1" name="email1" ref="email1"  autoFocus tabIndex="0" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} required/><i className="mail icon"/>
-            </div>
-          </div>
-          <br/>
-          <div className="ui center aligned column">
-            <div className={inputField_classes}>
-              <div className="sr-only">
-                <label htmlFor="password1">
-                  <FormattedMessage
-                    id='LoginModal.label.password'
-                    defaultMessage='Password'
-                  />
-                </label>
-              </div>
-              <input type="password" id="password1" name="password1" ref="password1" tabIndex="0" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} required/><i className="lock icon"/>
-            </div>
+            {this.state.generalError && <Message
+                error
+                content={this.state.generalError}
+                role="alert"
+            />}
+
+            <Form.Field
+                id="form-input-email"
+                name="email"
+                control={Input}
+                label={'Username'}
+                required
+                value={this.state.email}
+                onChange={this.handleInputChange}
+                error={this.state.emailError ? {
+                    content: this.state.emailError,
+                } : undefined}
+            />
+
+            <Form.Field
+                id="form-input-password"
+                name="password"
+                label={'Password'}
+                required
+                value={this.state.password}
+                onChange={this.handleInputChange}
+                control={'input'}
+                type={'password'}
+            />
           </div>
         </div>;
 
         return(
           <div>
-            <div className="ui login modal" id='signinModal' role="dialog" aria-labelledby="siginModal_header" aria-describedby="signinModalDescription" style={modalStyle}>
+            <div className="ui login modal tiny" id='signinModal' role="dialog" aria-labelledby="siginModal_header" aria-describedby="signinModalDescription" style={modalStyle}>
             <FocusTrap
                     id="focus-trap-signinModal"
                     focusTrapOptions={{
                         onDeactivate: this.unmountTrap,
                         clickOutsideDeactivates: true,
-                        initialFocus: '#email1'
+                        initialFocus: '#form-input-email'
                     }}
                     active={this.state.activeTrap}
                     className = "header">
@@ -412,21 +431,11 @@ class LoginModal extends React.Component {
               </div>
               <div className="content">
                 <div className="ui container">
-                    <div className="ui blue padded center aligned segment">
-                      <form className="ui form signin">
+                    <div className="ui padded center aligned segment">
+                      <Form className="ui form signin" error={this.state.generalError ? true : undefined}>
                         <div className="ui one column centered grid">
-                          <MediaQuery minDeviceWidth={769} values={{deviceWidth: 1600}}>
-                            <div className="ui five wide column">
-                              {inputs}
-                            </div>
-                          </MediaQuery>
-                          <MediaQuery maxDeviceWidth={768}>
-                            <div className="ui twelve wide centered column">
-                              {inputs}
-                            </div>
-                          </MediaQuery>
+                            {inputs}
                         </div>
-
                         <br/>
                         <div className="ui center aligned">
                             <button type="submit" className="ui blue large labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
@@ -436,9 +445,7 @@ class LoginModal extends React.Component {
                               />
                             </button>
                         </div>
-                        <br/>
-                        <div className="ui error message" role="region" aria-live="polite"/>
-                      </form>
+                      </Form>
                       <br/>
                       <div className="container">
 

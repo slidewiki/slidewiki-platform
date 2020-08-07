@@ -177,12 +177,12 @@ export default {
 
     //ISO6391 language codes from https://pkgstore.datahub.io/core/language-codes/language-codes_csv/data/b65af208b52970a4683fa8fde9af8e9f/language-codes_csv.csv
     translationLanguages: [
-        'de',
-        'el',
         'en',
+        'de',
         'es',
         'fr',
         'it',
+        'el',
         'sr',
         'lt',
         'nl',

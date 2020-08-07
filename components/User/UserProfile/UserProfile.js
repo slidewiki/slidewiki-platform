@@ -164,7 +164,7 @@ class UserProfile extends React.Component {
 
     displayUserSettings() {
         return (
-          <div>
+          <main>
               <div className="ui segments">
                   <div className="ui secondary segment" >
                     <Header as="h2" size="medium">
@@ -193,7 +193,7 @@ class UserProfile extends React.Component {
                   </div>
 
               </div>
-          </div>);
+          </main>);
     }
 
     displayAccounts() {

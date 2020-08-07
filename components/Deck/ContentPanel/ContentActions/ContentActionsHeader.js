@@ -477,28 +477,49 @@ class ContentActionsHeader extends React.Component {
                         ]}
                         {
                             this.props.ContentStore.mode === 'edit' && this.props.ContentStore.selector.stype === 'slide' ? [
-                                <button className="ui icon button" onClick={() => this.switchEditor(selector, 'markdownEdit')}
+                                <button 
+                                    className="ui icon button" 
+                                    onClick={() => this.switchEditor(selector, 'markdownEdit')}
                                     key="switchToMarkdown"
                                     style={{fontWeight: 'bold'}}
-                                    type="button" aria-label="Switch to the Markdown slide editor" data-tooltip="Switch to the Markdown slide editor">
+                                    type="button" 
+                                    aria-label="Switch to the Markdown slide editor" 
+                                    data-tooltip="Switch to the Markdown slide editor"
+                                >
                                     <i className="sync icon"></i> Switch to Markdown
-                                    </button>,
-                                <button className="ui icon button" onClick={this.zoomOut}
+                                </button>,
+                                <button 
+                                    className="ui icon button" 
+                                    onClick={this.zoomOut}
                                     key="zoomOut"
-                                    type="button" aria-label="Zoom out" data-tooltip="Zoom out">
+                                    type="button" 
+                                    aria-label="Zoom out" 
+                                    data-tooltip="Zoom out"
+                                >
                                     <i className="large zoom out icon"></i>
                                 </button>,
-                                <button className="ui button" onClick={this.resetZoom}
+                                <button 
+                                    className="ui button" 
+                                    onClick={this.resetZoom}
                                     key="zoomReset"
-                                    type="button" aria-label="Reset zoom" data-tooltip="Reset zoom">
+                                    type="button" 
+                                    aria-label="Reset zoom" 
+                                    data-tooltip="Reset zoom"
+                                    style={{letterSpacing: 0}} /* add letter spacing 0 to fix accessibility issue with custom letter spacing in edge */
+                                >
                                     <i className="large stacked icons">
                                         <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
                                         <i className="search icon"></i>
                                     </i>
                                 </button>,
-                                <button className="ui icon button" onClick={this.zoomIn}
+                                <button 
+                                    className="ui icon button" 
+                                    onClick={this.zoomIn}
                                     key="zoomIn"
-                                    type="button" aria-label="Zoom in" data-tooltip="Zoom in">
+                                    type="button" 
+                                    aria-label="Zoom in" 
+                                    data-tooltip="Zoom in"
+                                >
                                     <i className="large zoom in icon"></i>
                                 </button>
                             ] : null
