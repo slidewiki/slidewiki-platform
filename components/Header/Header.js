@@ -98,7 +98,7 @@ class Header extends React.Component {
         return (
             <header tabIndex="-1" id="tabindex-start" style={{outline:'none'}}>
                 <MediaQuery minWidth={1050} values={{width: 1600}}>
-                    <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
+                    <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px', margin: 0}}>
                         <div className="ui fluid container">
                             <AUskipLink ariaLabel="skip links navigation" tabIndex="0" links={[
                                 {
@@ -135,7 +135,7 @@ class Header extends React.Component {
                                   </NavLink>
                                 </div>
                                 {notification_locale}
-                                <div className="item">{loginButton}<LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/></div>
+                                <div className="item">{loginButton}</div>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@ class Header extends React.Component {
                         },
                     ]}
                     />
-                    <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem'}} ref="header">
+                    <div className="ui inverted blue menu" style={{borderRadius: '0px', marginBottom: '0.1rem', marginTop: 0}} ref="header">
                         <button className="ui icon button item" aria-label="user management menu" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/>
                           &nbsp;&nbsp;<img src="/assets/images/slideWiki-logo-linear.png" alt=" " style={{width: '9rem', paddingTop: '0.5rem'}}/>
                         </button>
@@ -169,7 +169,6 @@ class Header extends React.Component {
                             <LocaleSwitcher mode="sidebarLocaleChangeButton"/>
                         </a>
                         {mobileLoginButton}
-                        <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                         <div className="item search">
                             <SearchBox className="item"/>
                         </div>
@@ -178,6 +177,8 @@ class Header extends React.Component {
                         <LocaleSwitcher mode="sidebarLocalesMenu"/>
                     </div>
                 </MediaQuery>
+                <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
+
             </header>
         );
     }
