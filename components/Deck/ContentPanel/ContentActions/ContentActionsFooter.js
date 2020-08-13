@@ -213,7 +213,7 @@ class ContentActionsFooter extends React.Component {
           </a>
           <DownloadModal/>
           <ReportModal/>
-          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)} disabled={likeDisabled}>
+          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)} disabled={likeDisabled} data-speech-id="likeDeck">
               <i className={classNameLikeButton}></i>
           </button>
           <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)} disabled={followDisabled}>

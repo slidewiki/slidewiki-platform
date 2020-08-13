@@ -1,65 +1,101 @@
+import routes from '../../../configs/routes';
+
 export default {
     openSlideshow: {
-        type: 'action', 
+        type: 'action',
         event: 'click',
         targetId: 'openSlideshow',
-        listenTo: [
-            'open this as slideshow',
-            'open as slideshow',
-            'open deck as slideshow'
-        ],
-        answer: 'the slideshow is opened in a new tab'
+        listenTo: ['open this as slideshow', 'open as slideshow', 'open deck as slideshow'],
+        answer: 'the slideshow is opened in a new tab',
+        pages: [routes.deck.path],
+    },
+    lastSlide: {
+        type: 'action',
+        event: 'click',
+        targetId: 'lastSlide',
+        listenTo: ['last slide'],
+        answer: 'last slide',
+        pages: [routes.deck.path],
+    },
+    firstSlide: {
+        type: 'action',
+        event: 'click',
+        targetId: 'firstSlide',
+        listenTo: ['first slide'],
+        answer: 'first slide',
+        pages: [routes.deck.path],
+    },
+    previousSlide: {
+        type: 'action',
+        event: 'click',
+        targetId: 'previousSlide',
+        listenTo: ['previous slide'],
+        answer: 'previous slide',
+        pages: [routes.deck.path],
+    },
+    nextSlide: {
+        type: 'action',
+        event: 'click',
+        targetId: 'nextSlide',
+        listenTo: ['next slide'],
+        answer: 'next slide',
+        pages: [routes.deck.path],
+    },
+    likeDeck: {
+        type: 'action',
+        event: 'click',
+        targetId: 'likeDeck',
+        listenTo: ['like this deck', 'like deck'],
+        answer: 'you liked this deck',
+        pages: [routes.deck.path],
     },
     editDeckSettings: {
-        type: 'action', 
+        type: 'action',
         event: 'click',
         targetId: 'editDeckSettings',
-        listenTo: [
-            'edit this deck',
-            'edit deck settings',
-        ],
-        answer: 'you can now edit the deck settings'
+        listenTo: ['edit this deck', 'edit deck settings'],
+        answer: 'you can now edit the deck settings',
+        pages: ['*'],
     },
     addDeck: {
-        type: 'navigation', 
-        listenTo: [
-            'add a new deck',
-            'create a new deck',
-            'add deck',
-        ],
+        type: 'navigation',
+        listenTo: ['add a new deck', 'create a new deck', 'add deck'],
         navigateTo: '/addDeck',
-        answer: 'you can now create a new deck'
+        answer: 'you can now create a new deck',
+        pages: ['*'],
     },
     navigateTo: {
-        type: 'navigation', 
+        type: 'navigation',
         listenTo: [
-            'navigate to' //[page]
+            'navigate to', //[page]
         ],
         navigateTo: null,
         params: {
             page: [
                 {
-                    name: 'home', 
-                    path: '/' 
+                    name: 'home',
+                    path: '/',
                 },
                 {
-                    name: 'about us', 
-                    path: '/about' 
+                    name: 'about us',
+                    path: '/about',
                 },
                 {
-                    name: 'contact us', 
-                    path: '/contactus' 
-                }
-            ]
+                    name: 'contact us',
+                    path: '/contactus',
+                },
+            ],
         },
-        answer: 'navigating to requested page'
+        answer: 'navigating to requested page',
+        pages: ['*'],
     },
     searchFor: {
-        type: 'navigation', 
+        type: 'navigation',
         listenTo: [
-            'search for' //[page]
+            'search for', //[page]
         ],
         navigateTo: '/search?keywords=[param]&sort=score',
-        answer: 'searching for decks'
+        answer: 'searching for decks',
+        pages: ['*'],
     },
-}
+};

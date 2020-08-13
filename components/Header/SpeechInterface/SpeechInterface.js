@@ -5,8 +5,8 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import commands from './commands';
-import $ from 'jquery';
 import { match } from 'path-to-regexp';
+import { pickBy } from 'lodash';
 
 const Popover = styled.div`
     width: 350px;
@@ -78,7 +78,6 @@ class SpeechInterface extends React.Component {
         this.setState((prevState) => ({
             showPopover: !prevState.showPopover,
         }));
-        console.log(this.props);
 
         if (!isOpen) {
             //this.recognition.onresult = (event) => {
@@ -87,38 +86,54 @@ class SpeechInterface extends React.Component {
                     return;
                 }
                 const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();*/
-                const transcript = 'open deck as slideshow';
+                const transcript = 'previous slide';
                 this.setState({
                     transcript,
                 });
 
-                for (let commandName in commands) {
+                let commandExecuted = false;
+
+                // filter out commands that are not allowed on the current page
+                const commandsFiltered = pickBy(commands, (command) => {
+                    if (command.pages.includes('*')) {
+                        return true;
+                    }
+
+                    for (const page of command.pages) {
+                        const matchViewPaper = match(page);
+                        if (matchViewPaper(window.location.pathname)) {
+                            return true;
+                        }
+                    }
+                });
+
+                for (let commandName in commandsFiltered) {
                     const command = commands[commandName];
                     const { listenTo, type, targetId, event, answer, params, navigateTo } = command;
-                    console.log('TEST!!!!!!!!!!');
+
                     for (const _listenTo of listenTo) {
+                        console.log('transcript', transcript);
                         if (transcript.indexOf(_listenTo) === 0) {
                             // param could be used with something like: allowParams, if false, it should be empty
                             const param =
                                 transcript[_listenTo.length] !== undefined ? transcript.substring(_listenTo.length, transcript.length).trim() : null;
-                            console.log('execute ', command.type, ' with param ', param);
-                            console.log('window.location.href', window.location.pathname);
-                            const matchViewPaper = match('/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?');
-                            console.log('matchViewPaper', matchViewPaper(window.location.pathname));
-                            if (type === 'action') {
-                                const targetElement = $(`[data-speech-id=${targetId}]`);
 
-                                if (targetElement.length) {
-                                    targetElement.trigger(event);
+                            if (type === 'action') {
+                                const targetElement = document.querySelector(`[data-speech-id=${targetId}]`);
+                                commandExecuted = true;
+
+                                if (targetElement) {
+                                    targetElement.click();
                                 } else {
                                     this.speechSynthesis(
                                         'Action could not be performed. Maybe you need to be authenticated or you don\'t have the right permissions'
                                     );
                                     return;
                                 }
-                                console.log('trigger', $(`[data-speech-id=${targetId}]`));
                             } else if (type === 'navigation') {
                                 console.log(navigateTo);
+                                commandExecuted = true;
+
                                 if (!navigateTo) {
                                     for (const page of params.page) {
                                         console.log(page);
@@ -132,13 +147,19 @@ class SpeechInterface extends React.Component {
                                 }
                             }
 
-                            //}
-
                             if (answer) {
                                 this.speechSynthesis(answer);
                             }
                         }
                     }
+                }
+
+                if (!commandExecuted) {
+                    this.speechSynthesis('I did not understand what you want. Please try again');
+                } else {
+                    this.setState({
+                        showPopover: false
+                    });
                 }
             }, 1000);
 
