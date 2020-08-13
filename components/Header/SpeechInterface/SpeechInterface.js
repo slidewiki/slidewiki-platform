@@ -4,6 +4,9 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
+import commands from './commands';
+import $ from 'jquery';
+import { match } from 'path-to-regexp';
 
 const Popover = styled.div`
     width: 350px;
@@ -75,33 +78,79 @@ class SpeechInterface extends React.Component {
         this.setState((prevState) => ({
             showPopover: !prevState.showPopover,
         }));
+        console.log(this.props);
 
         if (!isOpen) {
-            this.recognition.onresult = (event) => {
-                if (typeof event.results === 'undefined') {
+            //this.recognition.onresult = (event) => {
+            setTimeout(() => {
+                /*if (typeof event.results === 'undefined') {
                     return;
                 }
-                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();*/
+                const transcript = 'open deck as slideshow';
                 this.setState({
                     transcript,
                 });
-                console.log('transcript', transcript);
-                /*for (let command in commands) {
-                    if (transcript.indexOf(command) === 0) {
-                        if (transcript[command.length] === undefined) {
-                            commands[command]();
-                        } else {
-                            const param = transcript.substring(command.length, transcript.length).trim();
-                            commands[command](param);
+
+                for (let commandName in commands) {
+                    const command = commands[commandName];
+                    const { listenTo, type, targetId, event, answer, params, navigateTo } = command;
+                    console.log('TEST!!!!!!!!!!');
+                    for (const _listenTo of listenTo) {
+                        if (transcript.indexOf(_listenTo) === 0) {
+                            // param could be used with something like: allowParams, if false, it should be empty
+                            const param =
+                                transcript[_listenTo.length] !== undefined ? transcript.substring(_listenTo.length, transcript.length).trim() : null;
+                            console.log('execute ', command.type, ' with param ', param);
+                            console.log('window.location.href', window.location.pathname);
+                            const matchViewPaper = match('/deck/:id(\\d+|\\d+-\\d+):slug(/[^/]+)?');
+                            console.log('matchViewPaper', matchViewPaper(window.location.pathname));
+                            if (type === 'action') {
+                                const targetElement = $(`[data-speech-id=${targetId}]`);
+
+                                if (targetElement.length) {
+                                    targetElement.trigger(event);
+                                } else {
+                                    this.speechSynthesis(
+                                        'Action could not be performed. Maybe you need to be authenticated or you don\'t have the right permissions'
+                                    );
+                                    return;
+                                }
+                                console.log('trigger', $(`[data-speech-id=${targetId}]`));
+                            } else if (type === 'navigation') {
+                                console.log(navigateTo);
+                                if (!navigateTo) {
+                                    for (const page of params.page) {
+                                        console.log(page);
+                                        if (page.name === param) {
+                                            window.location.href = page.path;
+                                        }
+                                    }
+                                } else {
+                                    const href = navigateTo.replace('[param]', param);
+                                    window.location.href = href;
+                                }
+                            }
+
+                            //}
+
+                            if (answer) {
+                                this.speechSynthesis(answer);
+                            }
                         }
                     }
-                }*/
-            };
+                }
+            }, 1000);
 
             this.recognition.start();
         } else {
             this.recognition.abort();
         }
+    };
+
+    speechSynthesis = (answer) => {
+        const answerSpeech = new SpeechSynthesisUtterance(answer);
+        window.speechSynthesis.speak(answerSpeech);
     };
 
     render() {

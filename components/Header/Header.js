@@ -129,7 +129,7 @@ class Header extends React.Component {
                             <div className="ui right inverted blue menu">
                                 <SpeechInterface />
                                 <div className="item">
-                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button add-deck" role="button">
+                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button add-deck" role="button"  data-speech-id="addDeck">
                                       <i className="right plus icon"></i>
                                       <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
                                   </NavLink>

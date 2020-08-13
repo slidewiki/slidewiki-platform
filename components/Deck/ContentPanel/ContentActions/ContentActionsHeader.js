@@ -358,6 +358,7 @@ class ContentActionsHeader extends React.Component {
                         type="button"
                         aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
                         tabIndex={contentDetails.mode === 'edit' ? -1 : 0}
+                        data-speech-id="editDeckSettings"
                     >
                         <i className="icons">
                             <i className="large blue edit icon"></i>
