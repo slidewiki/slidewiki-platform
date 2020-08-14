@@ -55,7 +55,7 @@ export default {
         targetId: 'editDeckSettings',
         listenTo: ['edit this deck', 'edit deck settings'],
         answer: 'you can now edit the deck settings',
-        pages: ['*'],
+        pages: [routes.deck.path],
     },
     addDeck: {
         type: 'navigation',
@@ -88,6 +88,7 @@ export default {
         },
         answer: 'navigating to requested page',
         pages: ['*'],
+        example: 'Navigate to [home/about us/etc.]'
     },
     searchFor: {
         type: 'navigation',
@@ -97,5 +98,6 @@ export default {
         navigateTo: '/search?keywords=[param]&sort=score',
         answer: 'searching for decks',
         pages: ['*'],
+        example: 'Search for RDF'
     },
 };

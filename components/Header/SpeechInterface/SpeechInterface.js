@@ -6,7 +6,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import commands from './commands';
 import { match } from 'path-to-regexp';
-import { pickBy } from 'lodash';
+import { pickBy, upperFirst, shuffle } from 'lodash';
 
 const Popover = styled.div`
     width: 350px;
@@ -51,6 +51,8 @@ class SpeechInterface extends React.Component {
     state = {
         showPopover: false,
         transcript: null,
+        whatCanIAsk: [],
+        limit: 3,
     };
 
     constructor(props) {
@@ -80,32 +82,47 @@ class SpeechInterface extends React.Component {
         }));
 
         if (!isOpen) {
-            //this.recognition.onresult = (event) => {
-            setTimeout(() => {
-                /*if (typeof event.results === 'undefined') {
+            // filter out commands that are not allowed on the current page
+            const commandsFiltered = pickBy(commands, (command) => {
+                if (command.pages.includes('*')) {
+                    return true;
+                }
+
+                for (const page of command.pages) {
+                    const matchViewPaper = match(page);
+                    if (matchViewPaper(window.location.pathname)) {
+                        return true;
+                    }
+                }
+            });
+
+            let whatCanIAsk = [];
+
+            for (let commandName in commandsFiltered) {
+                const command = commands[commandName];
+                const exampleCommand = command.example ?? command.listenTo[0];
+                whatCanIAsk.push(exampleCommand);
+            }
+
+            whatCanIAsk = shuffle(whatCanIAsk);
+
+            this.setState({
+                whatCanIAsk,
+                limit: 3 //reset limit
+            });
+
+            this.recognition.onresult = (event) => {
+
+                if (typeof event.results === 'undefined') {
                     return;
                 }
-                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();*/
-                const transcript = 'previous slide';
+                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+
                 this.setState({
                     transcript,
                 });
 
                 let commandExecuted = false;
-
-                // filter out commands that are not allowed on the current page
-                const commandsFiltered = pickBy(commands, (command) => {
-                    if (command.pages.includes('*')) {
-                        return true;
-                    }
-
-                    for (const page of command.pages) {
-                        const matchViewPaper = match(page);
-                        if (matchViewPaper(window.location.pathname)) {
-                            return true;
-                        }
-                    }
-                });
 
                 for (let commandName in commandsFiltered) {
                     const command = commands[commandName];
@@ -126,7 +143,7 @@ class SpeechInterface extends React.Component {
                                     targetElement.click();
                                 } else {
                                     this.speechSynthesis(
-                                        'Action could not be performed. Maybe you need to be authenticated or you don\'t have the right permissions'
+                                        "Action could not be performed. Maybe you need to be authenticated or you don't have the right permissions"
                                     );
                                     return;
                                 }
@@ -158,10 +175,10 @@ class SpeechInterface extends React.Component {
                     this.speechSynthesis('I did not understand what you want. Please try again');
                 } else {
                     this.setState({
-                        showPopover: false
+                        showPopover: false,
                     });
                 }
-            }, 1000);
+            };
 
             this.recognition.start();
         } else {
@@ -172,6 +189,12 @@ class SpeechInterface extends React.Component {
     speechSynthesis = (answer) => {
         const answerSpeech = new SpeechSynthesisUtterance(answer);
         window.speechSynthesis.speak(answerSpeech);
+    };
+
+    handleMore = () => {
+        this.setState((prevState) => ({
+            limit: prevState.limit + 5,
+        }));
     };
 
     render() {
@@ -188,12 +211,15 @@ class SpeechInterface extends React.Component {
                     <WhatCanISay>
                         <Label>What can I ask?</Label>
                         <SuggestionsList>
-                            <li>Go to page [home/add deck etc.]</li>
-                            <li>Search for decks related to …</li>
-                            <li>Open sign in dialog</li>
+                            {this.state.whatCanIAsk.map((command, index) => {
+                                if (index > this.state.limit) {
+                                    return null;
+                                }
+                                return <li key={index}>{upperFirst(command)}</li>;
+                            })}
                         </SuggestionsList>
-
-                        <Button>More...</Button>
+                        {this.state.limit < this.state.whatCanIAsk.length &&
+                        <Button onClick={this.handleMore}>More...</Button>}
                     </WhatCanISay>
                 </Popover>
             </div>
