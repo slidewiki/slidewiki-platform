@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Ref } from 'semantic-ui-react';
 import styled from 'styled-components';
 import commands from './commands';
 import { match } from 'path-to-regexp';
@@ -58,6 +58,17 @@ class SpeechInterface extends React.Component {
     constructor(props) {
         super(props);
         this.recognition = null;
+
+        this.boxRef = React.createRef();
+        this.buttonRef = React.createRef();
+    }
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
     componentDidUpdate() {
@@ -72,7 +83,18 @@ class SpeechInterface extends React.Component {
         }
     }
 
-    listenToVoice = () => {};
+    handleClickOutside = (event) => {
+        if (this.boxRef && !this.boxRef.current.contains(event.target) && this.buttonRef && !this.buttonRef.current.contains(event.target)) {
+            this.closePopover();
+        }
+    };
+
+    closePopover = () => {
+        this.setState({
+            showPopover: false,
+        });
+        this.recognition.abort();
+    };
 
     togglePopover = () => {
         const isOpen = this.state.showPopover;
@@ -108,11 +130,10 @@ class SpeechInterface extends React.Component {
 
             this.setState({
                 whatCanIAsk,
-                limit: 3 //reset limit
+                limit: 3, //reset limit
             });
 
             this.recognition.onresult = (event) => {
-
                 if (typeof event.results === 'undefined') {
                     return;
                 }
@@ -201,12 +222,14 @@ class SpeechInterface extends React.Component {
         return (
             <div style={{ position: 'relative' }}>
                 <div className='item'>
-                    <Button icon style={{ background: '#5997CC', color: '#fff' }} onClick={this.togglePopover}>
-                        <Icon name='microphone' />
-                    </Button>
+                    <Ref innerRef={this.buttonRef}>
+                        <Button icon style={{ background: '#5997CC', color: '#fff' }} onClick={this.togglePopover}>
+                            <Icon name='microphone' />
+                        </Button>
+                    </Ref>
                 </div>
 
-                <Popover style={{ display: this.state.showPopover ? 'block' : 'none' }}>
+                <Popover style={{ display: this.state.showPopover ? 'block' : 'none' }} ref={this.boxRef}>
                     <SpeechArea>{this.state.transcript ? this.state.transcript : "I'm listening..."}</SpeechArea>
                     <WhatCanISay>
                         <Label>What can I ask?</Label>
@@ -218,8 +241,7 @@ class SpeechInterface extends React.Component {
                                 return <li key={index}>{upperFirst(command)}</li>;
                             })}
                         </SuggestionsList>
-                        {this.state.limit < this.state.whatCanIAsk.length &&
-                        <Button onClick={this.handleMore}>More...</Button>}
+                        {this.state.limit < this.state.whatCanIAsk.length && <Button onClick={this.handleMore}>More...</Button>}
                     </WhatCanISay>
                 </Popover>
             </div>
