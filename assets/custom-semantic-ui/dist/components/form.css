@@ -108,7 +108,7 @@
   padding: 0.54375em 0.875em;
   font-size: 1em;
   background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: 1px solid #757575;
   color: rgba(0, 0, 0, 0.87);
   border-radius: 0.25rem;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease, -webkit-box-shadow 0.1s ease;
@@ -124,7 +124,7 @@
   tap-highlight-color: rgba(255, 255, 255, 0);
   padding: 0.6875em 0.875em;
   background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: 1px solid #757575;
   outline: none;
   color: rgba(0, 0, 0, 0.87);
   border-radius: 0.25rem;
@@ -163,7 +163,7 @@
   height: auto;
   width: 100%;
   background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: 1px solid #757575;
   border-radius: 0.25rem;
   -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
           box-shadow: 0em 0em 0em 0em transparent inset;
@@ -371,19 +371,19 @@
 .ui.form input[type="file"]:focus,
 .ui.form input[type="url"]:focus {
   color: rgba(0, 0, 0, 0.95);
-  border-color: #85B7D9;
+  border-color: #306CA1;
   border-radius: 0.25rem;
   background: #FFFFFF;
-  -webkit-box-shadow: 0px 0em 0em 3px #5E9ACF;
-          box-shadow: 0px 0em 0em 3px #5E9ACF;
+  -webkit-box-shadow: 0px 0em 0em 2px #306CA1;
+          box-shadow: 0px 0em 0em 2px #306CA1;
 }
 .ui.form textarea:focus {
   color: rgba(0, 0, 0, 0.95);
-  border-color: #85B7D9;
+  border-color: #306CA1;
   border-radius: 0.25rem;
   background: #FFFFFF;
-  -webkit-box-shadow: 0px 0em 0em 3px #5E9ACF;
-          box-shadow: 0px 0em 0em 3px #5E9ACF;
+  -webkit-box-shadow: 0px 0em 0em 2px #306CA1;
+          box-shadow: 0px 0em 0em 2px #306CA1;
   -webkit-appearance: none;
 }
 

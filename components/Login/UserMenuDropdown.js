@@ -32,7 +32,7 @@ const MenuItemStyled = styled(AriaMenuButton.MenuItem)`
         background: #f4f4f4!important;
     }
     &:focus {
-        box-shadow: 0 0 0 4px rgba(0, 123, 255, .5);
+        box-shadow: 0 0 0 2px #306CA1;
         border-radius: 4px;
         outline: 0;
     }
