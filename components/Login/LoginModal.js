@@ -195,7 +195,9 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.setState({ isLoading: false });
+            if (this.state.loading) {
+                this.setState({ isLoading: false });
+            }
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
