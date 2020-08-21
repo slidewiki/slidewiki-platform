@@ -211,7 +211,7 @@ class AttachSubdeckModal extends React.Component{
                                                     type="button"
                                                     aria-label={this.context.intl.formatMessage(this.messages.attachText)}
                                                     aria-hidden={this.state.modalOpen}
-                                                    basic icon onClick={this.handleOpen}
+                                                    basic onClick={this.handleOpen}
                                                     tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
             <Icon.Group size={this.props.buttonStyle.iconSize}>
                 <Icon className="yellow" name="folder" />

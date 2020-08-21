@@ -132,8 +132,8 @@ class Facets extends React.Component {
             });
 
             return <Menu.Item disabled={this.props.loading} key={`${facetField}_${index}`} name={ name } active={ isActive } onClick={this.handleFacetClick.bind(this)} onKeyPress={this.handleKeyPress.bind(this, name)} tabIndex="0">
-                <Label color={ labelColor }>{ item.rowCount }</Label>
                 { item.text }
+                <Label color={ labelColor }>{ item.rowCount }</Label>
             </Menu.Item>;
         });
 

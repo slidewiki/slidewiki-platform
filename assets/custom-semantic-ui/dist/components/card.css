@@ -536,14 +536,14 @@ a.ui.card:hover,
 .ui.yellow.cards > .card,
 .ui.cards > .yellow.card,
 .ui.yellow.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #FFD900, 0px 1px 3px 0px #D4D4D5;
-          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #FFD900, 0px 1px 3px 0px #D4D4D5;
+  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #B88A00, 0px 1px 3px 0px #D4D4D5;
+          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #B88A00, 0px 1px 3px 0px #D4D4D5;
 }
 .ui.yellow.cards > .card:hover,
 .ui.cards > .yellow.card:hover,
 .ui.yellow.card:hover {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #e6c300, 0px 1px 3px 0px #767676;
-          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #e6c300, 0px 1px 3px 0px #767676;
+  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #9f7700, 0px 1px 3px 0px #767676;
+          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #9f7700, 0px 1px 3px 0px #767676;
 }
 
 /* Olive */
