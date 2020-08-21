@@ -80,7 +80,7 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.9.0",
-    "@gov.au/skip-link": "^2.0.10",
+    "@gov.au/skip-link": "^2.0.16",
     "async": "^2.1.5",
     "babel-loader": "^8.0.0",
     "babel-plugin-add-module-exports": "0.2.1",

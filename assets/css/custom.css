@@ -291,7 +291,7 @@ div#embedModal .fields>label {
   }
   .au-body .au-skip-link__link:hover,.au-skip-link__link:hover{
     text-decoration:none;
-    color:#fff
+    color:#000
   }
 /* Questions Display */
 .questionsList{
