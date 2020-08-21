@@ -999,8 +999,8 @@ class SlideEditLeftPanel extends React.Component {
           <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
               <NavigationPanel mode='edit' />
                 <div className="ui buttons attached fluid">
-                    <button className="ui button" style={!this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, false)}>Add</button>
-                    <button className="ui button" style={this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, true)}>Edit</button>
+                    <button className="ui button secondary-focus" style={!this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, false)}>Add</button>
+                    <button className="ui button secondary-focus" style={this.state.editText ? tabActive : {}} onClick={this.handleTabClick.bind(this, true)}>Edit</button>
                 </div>
               <div className="ui grey inverted segment bottom attached active tab">
                 <div id="CKeditorMenu" style={editorStyle}></div>
