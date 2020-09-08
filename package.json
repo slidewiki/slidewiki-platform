@@ -179,7 +179,7 @@
     "request": "^2.80.0",
     "request-promise": "^4.1.1",
     "reveal": "0.0.4",
-    "semantic-ui-react": "git://github.com/slidewiki/Semantic-UI-React.git",
+    "semantic-ui-react": "git://github.com/slidewiki/Semantic-UI-React.git#33f35acb639c38df758b05b21e08197e1666e1c6",
     "serialize-javascript": "^3.0.0",
     "serve-favicon": "^2.4.1",
     "showdown": "^1.8.6",
