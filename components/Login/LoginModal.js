@@ -478,7 +478,7 @@ class LoginModal extends React.Component {
                 </div>
               </div>
               <div className="actions">
-                <button type="cancel" className="ui cancel button">
+                <button className="ui cancel button">
                   <i className="remove icon"/>
                   <FormattedMessage
                     id='LoginModal.button.close'
