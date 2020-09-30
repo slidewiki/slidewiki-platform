@@ -64,7 +64,7 @@ class DeactivateAccount extends React.Component {
                     />
                   </strong>
                 </p>
-                <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) } role="button" tabIndex="0">
+                <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) } tabIndex="0">
                   <i className="icon ban"/>
                   <FormattedMessage
                     id='DeactivateAccount.button1'
