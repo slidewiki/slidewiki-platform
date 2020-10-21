@@ -2849,7 +2849,7 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present" ref='present' id='present'  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}>
+                                    <div style={contentStyle} contentEditable='true' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}>
                                     </div>
                                 </HotKeys>
                             </section>
@@ -2861,7 +2861,7 @@ class SlideContentEditor extends React.Component {
                             <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
                                     style={compSpeakerStyle}>
                                 <strong><FormattedMessage id='deck.edit.speakerNote' defaultMessage='Speaker notes'/>:</strong><br />
-                                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
+                                <div style={speakernotesStyle} contentEditable='true'
                                         ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
                                         dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
                                 </div>
