@@ -329,3 +329,8 @@ div#embedModal .fields>label {
   margin-top:3px;
   display:block;
 }
+
+/* Make sure the editor button focus has sufficient contrast */ 
+.editor-buttons i:focus{
+  outline:2px solid #000;
+}
