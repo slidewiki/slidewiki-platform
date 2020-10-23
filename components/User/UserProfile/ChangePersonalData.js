@@ -118,6 +118,7 @@ class ChangePersonalData extends React.Component {
                 <Form.Field
                     id='fname'
                     control={Form.Input}
+                    fluid
                     label={this.context.intl.formatMessage({
                         id:'ChangePersonalData.fistname',
                         defaultMessage:'First name'})}
@@ -134,6 +135,7 @@ class ChangePersonalData extends React.Component {
                 />
                 <Form.Field
                     id='lname'
+                    fluid
                     control={Form.Input}
                     label={this.context.intl.formatMessage({
                         id:'ChangePersonalData.lastname',
@@ -171,6 +173,7 @@ class ChangePersonalData extends React.Component {
                         id:'ChangePersonalData.email',
                         defaultMessage:'E-Mail'})}
                     required
+                    fluid
                     value={this.state.email}
                     width={8}
                     onChange={this.handleInputChange}
@@ -190,6 +193,7 @@ class ChangePersonalData extends React.Component {
                         id:'ChangePersonalData.uilanguage',
                         defaultMessage:'User Interface Language'})
                     }
+                    fluid
                     selection
                     required
                     width={8}
