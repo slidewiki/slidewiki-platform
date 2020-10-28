@@ -424,3 +424,11 @@
     .content-right .signin-blk span{padding: 0 0 10px;font-size: 17px;}
     .banner-container > img {width: 800px;margin-left: -400px; margin-bottom: -120px}
 }
+
+/* resize captcha on small screens */
+@media only screen and (max-width: 410px) {
+    .g-recaptcha {
+        transform:scale(0.73);
+        transform-origin:0 0;
+    }
+}
