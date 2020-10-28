@@ -389,7 +389,7 @@ textarea:focus{
 }
 .signin-outer {
     width: 100%;
-    margin: -115px 0 0;
+    margin: 50px 0 0;
 }
 
 .signin-blk {
@@ -608,10 +608,7 @@ textarea:focus{
     justify-content: center;
 }
 .feature-block {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
+    margin-top: -100px;
 }
 .feature-block .column{
     display: -webkit-box!important;
