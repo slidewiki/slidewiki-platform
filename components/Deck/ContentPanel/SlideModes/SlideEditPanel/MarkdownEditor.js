@@ -17,7 +17,7 @@ import registerChange from '../../../../../actions/slide/registerChange';
 import ReactDOMServer from 'react-dom/server';
 import uploadMediaFiles from '../../../../../actions/media/uploadMediaFiles';
 import MediaStore from '../../../../../stores/MediaStore';
-
+import { defineMessages } from 'react-intl'
 
 let converter = new showdown.Converter();
 converter.setOption('tables', true);
@@ -50,6 +50,11 @@ class MarkdownEditor extends React.Component {
             title: this.props.title,
             loading: false,
         };
+        this.messages = defineMessages({
+            markdown_area:{
+                id:'markdownArea.text_area',
+                defaultMessage:'Markdown Editor'
+            }})
     }
     handleChange(event) {
         let value = this.state.markdownContent;
@@ -341,7 +346,8 @@ class MarkdownEditor extends React.Component {
 
                         <textarea 
                             style={{fontFamily: 'Courier New', fontWeight:'bold', height:'100%', maxHeight: 'initial'}}
-                            ref="markdownTextarea" 
+                            ref="markdownTextarea"
+                            aria-label={this.context.intl.formatMessage(this.messages.markdown_area)} 
                             onChange={this.handleChange.bind(this)} 
                             value={this.props.title === this.state.title ? this.state.markdownContent: ((!this.props.markdown.trim() || this.props.markdown.trim() === '') && this.props.content ? t_converter.turndown(this.props.content) : this.props.markdown)}
                             onDrop={this.handleOnDrop} 
@@ -361,7 +367,8 @@ class MarkdownEditor extends React.Component {
 }
 
 MarkdownEditor.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 MarkdownEditor = connectToStores(MarkdownEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {

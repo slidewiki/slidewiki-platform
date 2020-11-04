@@ -512,13 +512,13 @@ class SearchPanel extends React.Component {
 
         return (
             <div className="ui container">
-                <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
+                <h1 className="ui header" id="search_text_label" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
                 <form className="ui form success">
                     <div className="field" role="search">
                         <Grid>
                             <Grid.Row>
                                 <Grid.Column>
-                                    <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
+                                    <KeywordsInputWithFilter ariaLabelledby="search_text_label" ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
