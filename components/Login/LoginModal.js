@@ -449,10 +449,10 @@ class LoginModal extends React.Component {
                 <br/>
                 <div className="container">
 
-                <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagoogle)}>
+                <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagoogle)}>
                     <i className="large google plus icon"/>
                 </button>
-                <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagithub)}>
+                <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagithub)}>
                     <i className="large github icon"/>
                 </button>
                 </div>
@@ -474,7 +474,7 @@ class LoginModal extends React.Component {
                 </div>
               </div>
               <div className="actions" style={{ marginTop: 20 }}>
-                <button type="cancel" className="ui cancel button">
+                <button className="ui cancel button">
                   <i className="remove icon"/>
                   <FormattedMessage
                     id='LoginModal.button.close'

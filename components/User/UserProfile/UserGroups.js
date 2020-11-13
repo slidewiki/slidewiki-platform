@@ -162,7 +162,7 @@ class UserGroups extends React.Component {
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
                   <h2 className="ui left floated header medium" id="main">{this.context.intl.formatMessage(this.messages.groups)}</h2>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
+                  <button className="ui right floated labeled icon button" tabIndex="0" onClick={this.handleClickNewGroup.bind(this)}>
                       <i className="icon plus"/>
                       <p>{this.context.intl.formatMessage(this.messages.createGroup)}</p>
                   </button>

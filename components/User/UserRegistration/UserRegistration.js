@@ -757,7 +757,7 @@ class UserRegistration extends React.Component {
                 </div>
                 <div >
                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true" className="g-recaptcha" />
+                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} className="g-recaptcha" />
                 </div>
 
                 <br/>

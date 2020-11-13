@@ -223,7 +223,7 @@ class GroupCollections extends React.Component {
                 <div className="ui secondary clearing segment">
                     <h1 className="ui left floated header" id="main">{this.context.intl.formatMessage(this.messages.groupCollectionsTitle)}</h1>
                     {((this.props.isAdmin || this.props.isCreator) && !this.state.isMobile) &&
-                        <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
+                        <button className="ui right floated button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
                           <p><FormattedMessage {...this.messages.collectionCreate} /></p>
                         </button>
                     }

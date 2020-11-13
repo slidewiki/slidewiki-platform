@@ -293,7 +293,7 @@ class ReportModal extends React.Component {
         let captchaField =
             <div >
                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                <ReCAPTCHA className="g-recaptcha" style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                <ReCAPTCHA className="g-recaptcha" style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)}/>
             </div>;
 
         let trigger;

@@ -64,7 +64,7 @@ class DeactivateAccount extends React.Component {
                     />
                   </strong>
                 </p>
-                <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) } role="button" tabIndex="0">
+                <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) } tabIndex="0">
                   <i className="icon ban"/>
                   <FormattedMessage
                     id='DeactivateAccount.button1'
@@ -86,13 +86,13 @@ class DeactivateAccount extends React.Component {
                   </Modal.Content>
                   <Modal.Actions>
                       <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={showModal}>
-                        <Button primary role="button" tabIndex="0" onClick={ this.hideModal.bind(this) }>
+                        <Button primary tabIndex="0" onClick={ this.hideModal.bind(this) }>
                             <FormattedMessage
                               id='DeactivateAccount.modalCancel'
                               defaultMessage=' Cancel'
                             />
                         </Button>
-                        <Button icon labelPosition='right' onClick={ this.handleAccountDeactivate.bind(this) } role="button" tabIndex="0">
+                        <Button icon labelPosition='right' onClick={ this.handleAccountDeactivate.bind(this) } tabIndex="0">
                             <Icon name='sign out' />
                             <FormattedMessage
                               id='DeactivateAccount.modalSubmit'
