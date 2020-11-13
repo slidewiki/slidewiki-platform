@@ -330,8 +330,8 @@ class AttachQuestionsModal extends React.Component{
             //does something need to go here?
         }
 
-        let attachQuestionsBtn = <a  className="item" id="handleAddQuestionsModal" role="button" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddQuestionsClick')} tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
-        <i className="help icon"/>
+        let attachQuestionsBtn = <a  className="item" id="handleAddQuestionsModal" role="button" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddQuestionsClick')}>
+        <i className="help icon" tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}/>
         <FormattedMessage id='editpanel.handleAddQuestionsClick' defaultMessage='Add questions' />
         </a>;
 

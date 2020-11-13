@@ -420,6 +420,7 @@ class ContactUs extends React.Component {
                                 sitekey={publicRecaptchaKey}
                                 onChange={this.onRecaptchaChange.bind(this)} 
                                 tabIndex="0"
+                                className="g-recaptcha"
                             />
                             {this.state.formValidationErrors.captcha && 
                                 <div className="ui pointing above prompt label" role="alert" aria-atomic="true">

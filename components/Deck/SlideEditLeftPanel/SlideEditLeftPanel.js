@@ -1005,7 +1005,7 @@ class SlideEditLeftPanel extends React.Component {
               <div className="ui grey inverted segment bottom attached active tab">
                 <div id="CKeditorMenu" style={editorStyle}></div>
                 <div className="ui center aligned grid" style={this.state.editText ? {display: 'none'} : {}}>
-                    <div className="ui vertical labeled icon grey inverted large menu">
+                    <div className="ui vertical labeled icon grey inverted large menu editor-buttons">
                           {panelcontent}
                           </div>
                       </div>

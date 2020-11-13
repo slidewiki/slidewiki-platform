@@ -729,35 +729,35 @@ class UserRegistration extends React.Component {
 
                 <div className="ui inline required field">
                     <label style={signUpLabelStyle} htmlFor="FirstName_label">{this.context.intl.formatMessage(this.messages.form_firstName)}</label>
-                    <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" autoFocus aria-required="true"/></div>
+                    <div className="ui input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" autoFocus aria-required="true"/></div>
                 </div>
                 <div className="ui inline required field">
                     <label style={signUpLabelStyle} htmlFor="LastName_label">{this.context.intl.formatMessage(this.messages.form_lastName)}</label>
-                    <div className="ui icon input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" /></div>
+                    <div className="ui input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" /></div>
                 </div>
                 <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
                     <label style={signUpLabelStyle} htmlFor="username_label">{this.context.intl.formatMessage(this.messages.form_userName)}</label>
-                    <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username_label" name="username" ref="username" aria-required="true"/></div>
+                    <div className="ui input"><input type="text" id="username_label" name="username" ref="username" aria-required="true"/></div>
                 </div>
                 <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
                     <label style={signUpLabelStyle} htmlFor="email_label">{this.context.intl.formatMessage(this.messages.form_email)}</label>
-                    <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email_label" name="email" ref="email" aria-required="true"/></div>
+                    <div className="ui input"><input type="text" id="email_label" name="email" ref="email" aria-required="true"/></div>
                 </div>
                 <div className="ui inline required field">
                     <label style={signUpLabelStyle} htmlFor="reenteremail">{this.context.intl.formatMessage(this.messages.form_reenterEmail)}</label>
-                    <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" aria-required="true"/></div>
+                    <div className="ui input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" aria-required="true"/></div>
                 </div>
                 <div className="ui inline required field">
                     <label style={signUpLabelStyle} htmlFor="password_label">{this.context.intl.formatMessage(this.messages.form_password)}</label>
-                    <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" aria-required="true"/></div>
+                    <div className="ui input"><input type="password" id="password_label" name="password" ref="password" aria-required="true"/></div>
                 </div>
                 <div className="ui inline field">
                     <label style={signUpLabelStyle} htmlFor="reenterpassword_label">{this.context.intl.formatMessage(this.messages.form_reenterPassword)}</label>
-                    <div className="ui icon input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" aria-required="true"/></div>
+                    <div className="ui input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" aria-required="true"/></div>
                 </div>
                 <div >
                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)}/>
+                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} className="g-recaptcha" />
                 </div>
 
                 <br/>

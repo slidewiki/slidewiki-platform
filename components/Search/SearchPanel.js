@@ -206,6 +206,7 @@ class SearchPanel extends React.Component {
             tag: null,
             educationLevel: null,
             topics: null,
+            tag: null,
             facet_exclude: [],
         };
 
@@ -224,11 +225,11 @@ class SearchPanel extends React.Component {
             advancedFilters.facet_exclude.push('user');
             this.userDropdown.clear();
         }
-        let tags = this.tagDropdown.getSelected();
-        if(tags){
-            advancedFilters.tag = tags.split(',');
+
+        let tags = this.state.tag;
+        if (tags) {
+            advancedFilters.tag = tags;
             advancedFilters.facet_exclude.push('tag');
-            this.tagDropdown.clear();
         }
 
         let educationLevel = this.educationLevelsDropdown.state.value;
@@ -240,11 +241,6 @@ class SearchPanel extends React.Component {
 
         let topics = this.state.topics;
         if (!_.isEmpty(topics)) {
-            topics = topics.map((tag) => {
-                const isExistingTag = tag.startsWith('existing:');
-                const label = isExistingTag ? tag.replace(/^(existing\:)/, '') : tag;
-                return label;
-            });
             advancedFilters.topics = topics;
             advancedFilters.facet_exclude.push('topics');
         }
@@ -474,6 +470,7 @@ class SearchPanel extends React.Component {
             </div>
             <TagInput
                 id='topics'
+                onlyExistingTags={true}
                 tagFilter={{ tagType: 'topic' }}
                 value={Array.isArray(this.state.topics) ? this.state.topics : []}
                 onChange={this.handleDropdownChange}
@@ -495,7 +492,14 @@ class SearchPanel extends React.Component {
 
             <div className="field">
                 <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
-                <TagsInput ref={ (e) => { this.tagDropdown = e; }} ariaLabelledby="tags_label" placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
+                <TagInput 
+                    id='tag'
+                    onlyExistingTags={true}
+                    ariaLabelledby="tags_label" 
+                    placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} 
+                    onChange={this.handleDropdownChange}
+                    value={Array.isArray(this.state.tag) ? this.state.tag : []}
+                />
             </div>
         </div></div>;
 
