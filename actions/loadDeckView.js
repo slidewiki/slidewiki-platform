@@ -30,7 +30,7 @@ export default function loadDeckView(context, payload, done) {
             });
         }
 
-        let pageTitle = res.slidesData.title;
+        /*let pageTitle = res.slidesData.title;
         
         if (payload.page && payload.page === 'decklandingpage') {
             pageTitle = shortTitle + ' | Presentation information | ' + pageTitle;
@@ -39,7 +39,7 @@ export default function loadDeckView(context, payload, done) {
         } else {
             pageTitle = shortTitle + ' | ' + pageTitle;
         }
-        console.log('context', context.intl);
+
         let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
 
         /*context.dispatch('UPDATE_PAGE_TITLE', {
@@ -47,6 +47,7 @@ export default function loadDeckView(context, payload, done) {
         //    frozen: true,
         //    allowUnfreeze: true,
         });*/
+        
         done();
     });
 }

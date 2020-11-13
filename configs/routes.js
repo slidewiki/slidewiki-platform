@@ -50,9 +50,6 @@ export default {
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
             async.series([
-                /*(callback) => {context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Homepage'});
-                    callback();
-                },*/
                 (callback) => {
                     context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
                 },
@@ -75,12 +72,6 @@ export default {
         handler: require('../components/Home/Recent'),
         action: (context, payload, done) => {
             async.series([
-                /*(callback) => {
-                    context.dispatch('UPDATE_PAGE_TITLE', {
-                        pageTitle: shortTitle + ' | Recent Decks'
-                    });
-                    callback();
-                },*/
                 (callback) => {
                     context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
                 }
@@ -100,12 +91,6 @@ export default {
         handler: require('../components/Home/Featured'),
         action: (context, payload, done) => {
             async.series([
-                /*(callback) => {
-                    context.dispatch('UPDATE_PAGE_TITLE', {
-                        pageTitle: shortTitle + ' | Featured Decks'
-                    });
-                    callback();
-                },*/
                 (callback) => {
                     context.executeAction(loadFeatured, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
                 }
@@ -134,9 +119,6 @@ export default {
         title: 'SlideWiki -- About',
         handler: require('../components/Home/About'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | About'
-            });*/
             done();
         }
     },
@@ -147,9 +129,6 @@ export default {
         title: 'SlideWiki -- Accessibility',
         handler: require('../components/Home/Accessibility'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Accessibility'
-            });*/
             done();
         }
     },
@@ -160,9 +139,6 @@ export default {
         title: 'SlideWiki -- Contact Us',
         handler: require('../components/Home/ContactUs'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Contact Us'
-            });*/
             done();
         }
     },
@@ -182,9 +158,6 @@ export default {
         title: 'SlideWiki -- Content licenses',
         handler: require('../components/Home/License'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Content Licenses'
-            });*/
             done();
         }
     },
@@ -195,9 +168,6 @@ export default {
         title: 'SlideWiki -- Discover More',
         handler: require('../components/Home/Features'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Discover More'
-            });*/
             done();
         }
     },
@@ -208,9 +178,6 @@ export default {
         title: 'SlideWiki -- Imprint',
         handler: require('../components/Home/Imprint'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Imprint'
-            });*/
             done();
         }
     },
@@ -221,9 +188,6 @@ export default {
         title: 'SlideWiki -- Terms',
         handler: require('../components/Home/Terms'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Terms'
-            });*/
             done();
         }
     },
@@ -234,9 +198,6 @@ export default {
         title: 'SlideWiki -- Welcome',
         handler: require('../components/Home/Welcome'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Welcome'
-            });*/
             done();
         }
     },
@@ -247,9 +208,6 @@ export default {
         title: 'SlideWiki -- Data Protection Policy',
         handler: require('../components/Home/DataProtection'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Data Protection Policy'
-            });*/
             done();
         }
     },
@@ -260,9 +218,6 @@ export default {
         title: 'SlideWiki -- User notifications',
         handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | User notifications'
-            });*/
             done();
         }
     },
@@ -273,7 +228,6 @@ export default {
         title: 'SlideWiki -- Sign up',
         handler: require('../components/User/UserRegistration/UserRegistration'),
         action: (context, payload, done) => {
-            //context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Sign up'});
             done();
         }
     },
@@ -284,9 +238,6 @@ export default {
         title: 'SlideWiki -- Reset your password',
         handler: require('../components/Login/ResetPassword'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Reset password'
-            });*/
             context.executeAction(loadResetPassword, payload, done);
         }
     },
@@ -823,9 +774,6 @@ export default {
         title: 'SlideWiki -- Add Deck',
         handler: require('../components/AddDeck/AddDeck'),
         action: (context, payload, done) => {
-            /*context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Add Deck'
-            });*/
             context.executeAction(loadAddDeck, payload, done);
         }
     },

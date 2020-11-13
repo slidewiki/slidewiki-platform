@@ -233,7 +233,7 @@ class DeckLandingPage extends React.Component {
     setTitle = () => {
         this.context.executeAction(setDocumentTitle, { 
             title: this.context.intl.formatMessage({
-                id: 'accessibility.title',
+                id: 'DeckLandingPage.title',
                 defaultMessage: 'Presentation information'
             }) + ' | ' + this.props.DeckViewStore.deckData.title
         });

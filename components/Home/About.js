@@ -8,7 +8,7 @@ class About extends React.Component {
     componentDidMount() {
         this.context.executeAction(setDocumentTitle, { 
             title: this.context.intl.formatMessage({
-                id: 'featured.title',
+                id: 'About.title',
                 defaultMessage: 'About'
             })
         });

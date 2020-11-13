@@ -3,9 +3,10 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import SlideContentEditor from './SlideContentEditor';
 import MarkdownEditor from './MarkdownEditor';
-import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
+import setDocumentTitle from '../../../../../actions/setDocumentTitle';
 
 class SlideEditPanel extends React.Component {
     constructor(props) {
@@ -30,11 +31,24 @@ class SlideEditPanel extends React.Component {
         }
     }
     componentDidMount(){
+        this.setTitle();
+    }
+    setTitle() {
+        const label = this.context.intl.formatMessage({
+            id: 'SlideEditPanel.title',
+            defaultMessage: 'edit'
+        });
+        const deckTitle = this.props.DeckTreeStore.deckTree.get('title');
+        const slideTitle = this.props.SlideEditStore.title;
 
+        this.context.executeAction(setDocumentTitle, { 
+            title: `${deckTitle} | ${slideTitle} | ${label}`
+        });
     }
     componentDidUpdate(){
         if (this.currentID !== this.props.selector.sid)
         {
+            this.setTitle();
             //console.log('slide id changed - destroy/unmount SlideContentEditor component');
             this.editorcontent = ''; //destroy/unmount SlideContentEditor component
             this.currentID = this.props.selector.sid;
@@ -79,13 +93,15 @@ class SlideEditPanel extends React.Component {
 }
 
 SlideEditPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
-SlideEditPanel = connectToStores(SlideEditPanel, [SlideEditStore, UserProfileStore], (context, props) => {
+SlideEditPanel = connectToStores(SlideEditPanel, [SlideEditStore, UserProfileStore, DeckTreeStore], (context, props) => {
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default SlideEditPanel;

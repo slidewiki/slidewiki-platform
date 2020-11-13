@@ -26,10 +26,7 @@ export default function loadActivities(context, payload, done) {
             context.dispatch('LOAD_ACTIVITIES_SUCCESS', res);
             context.dispatch('UPDATE_ACTIVITY_TYPE_SUCCESS', {activityType: 'all'});
         }
-        // let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;
-        // context.dispatch('UPDATE_PAGE_TITLE', {
-        //     pageTitle: pageTitle
-        // });
+
         if (payload.params.stype !== 'deck')
             return done();
         context.service.read('presentation.live', {id: payload.params.sid}, {timeout: 20 * 1000}, (err, res) => {

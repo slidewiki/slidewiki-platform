@@ -8,7 +8,7 @@ class Accessibility extends React.Component {
     componentDidMount() {
         this.context.executeAction(setDocumentTitle, { 
             title: this.context.intl.formatMessage({
-                id: 'accessibility.title',
+                id: 'Accessibility.title',
                 defaultMessage: 'Accessibility'
             })
         });

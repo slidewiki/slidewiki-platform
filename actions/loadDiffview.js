@@ -37,10 +37,6 @@ export default function loadDiffview(context, payload, done) {
         } else {
             context.dispatch('LOAD_CONTENT_DIFFVIEW_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Diff View';
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
         done();
     });
 }

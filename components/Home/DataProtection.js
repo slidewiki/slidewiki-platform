@@ -7,7 +7,7 @@ class DataProtection extends React.Component {
     componentDidMount() {
         this.context.executeAction(setDocumentTitle, { 
             title: this.context.intl.formatMessage({
-                id: 'welcome.title',
+                id: 'DataProtection.title',
                 defaultMessage: 'Data Protection Policy'
             })
         });

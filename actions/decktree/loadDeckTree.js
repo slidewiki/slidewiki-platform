@@ -42,9 +42,6 @@ export default function loadDeckTree(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
-                //context.dispatch('UPDATE_PAGE_TITLE', {
-                //    pageTitle: pageTitle
-                //});
 
                 done();
             }
@@ -52,9 +49,6 @@ export default function loadDeckTree(context, payload, done) {
     } else {
         //when we only select the node in tree, there is no need to call the external service
         context.dispatch('SELECT_TREE_NODE_SUCCESS', payload.params);
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
         done();
     }
 }
