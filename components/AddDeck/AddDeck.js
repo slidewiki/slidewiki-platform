@@ -630,15 +630,15 @@ class AddDeck extends React.Component {
                 defaultMessage: 'Description',
             },
             label_education_label: {
-                id: 'DeckProperty.Education.Choose',
+                id: 'AddDeck.Education.Choose',
                 defaultMessage: 'Choose Education Level',
             },
             label_topics: {
-                id: 'DeckProperty.Tag.Topic.Choose',
+                id: 'AddDeck.Tag.Topic.Choose',
                 defaultMessage: 'Choose Subject',
             },
             label_tags: {
-                id: 'DeckProperty.Tag.Tags.Choose',
+                id: 'AddDeck.Tag.Tags.Choose',
                 defaultMessage: 'Choose Tags',
             },
         });
