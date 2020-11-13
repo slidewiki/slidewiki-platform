@@ -84,7 +84,7 @@ class KeywordsInputWithFilter extends React.Component {
         let value = (this.props.value === '*:*') ? '' : this.props.value;
         return (
             <div id='keywords_search_div' className="ui search action fluid input">
-                <input name='keywords' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref={(el) => { this.keywordsInput = el;}}></input>
+                <input aria-labelledby={this.props.ariaLabelledby} name='keywords' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref={(el) => { this.keywordsInput = el;}}></input>
                 <div className="results"></div>
                 <select id="kindDropdown" name="field" className="ui compact selection dropdown" onChange={this.props.onChange} value={this.props.fieldValue} style={{width: '10%'}}>
                     <option value=" ">{this.context.intl.formatMessage(this.messages.allContentOption)}</option>
