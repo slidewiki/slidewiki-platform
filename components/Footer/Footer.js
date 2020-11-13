@@ -94,7 +94,7 @@ class Footer extends React.Component {
         let currentYear = new Date().getFullYear();
 
         return (
-            <footer className='footer-container' role="contentinfo">
+            <footer className='footer-container'>
                 <div className='ui container'>
                     <div className='ui two column stackable grid'>
                         <div className='row' style={rowClasses}>

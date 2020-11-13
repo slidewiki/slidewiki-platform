@@ -231,7 +231,7 @@ class SearchResultsPanel extends React.Component {
                     <Mobile>
                         <Grid>
                             <main>
-                                <Grid.Row style={{paddingBottom: 0 + 'px'}}>
+                                <Grid.Row style={{paddingBottom: 30 + 'px'}}>
                                     <Grid.Column width={16}>
                                         { 
                                             (this.props.numFound === 0)

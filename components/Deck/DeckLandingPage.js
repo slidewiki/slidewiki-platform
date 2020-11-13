@@ -421,7 +421,7 @@ class DeckLandingPage extends React.Component {
                                 <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
                                     <div className="ui icon buttons huge attached">
                                         <NavLink href={deckStatsUrl} tabIndex={-1} >
-                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip={this.context.intl.formatMessage(messages.tooltipStats)} role="button">
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip={this.context.intl.formatMessage(messages.tooltipStats)}>
                                                 <Icon name="line graph" />
                                             </Button>
                                         </NavLink>
@@ -430,12 +430,12 @@ class DeckLandingPage extends React.Component {
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip={this.context.intl.formatMessage(messages.tooltipOpen)} role="button">
+                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip={this.context.intl.formatMessage(messages.tooltipOpen)}>
                                                     <Icon name="open folder" />
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)} role="button" >
+                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)}>
                                                     <Icon name="play circle" />
                                                 </Button>
                                             </a>

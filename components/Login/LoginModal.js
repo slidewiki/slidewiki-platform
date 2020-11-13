@@ -195,7 +195,9 @@ class LoginModal extends React.Component {
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
-            this.setState({ isLoading: false });
+            if (this.state.loading) {
+                this.setState({ isLoading: false });
+            }
             $('.ui.login.modal').modal('hide');
 
             //redirect if on a specific page
@@ -430,53 +432,49 @@ class LoginModal extends React.Component {
                   </h2>
               </div>
               <div className="content">
-                <div className="ui container">
-                    <div className="ui padded center aligned segment">
-                      <Form className="ui form signin" error={this.state.generalError ? true : undefined}>
-                        <div className="ui one column centered grid">
-                            {inputs}
-                        </div>
-                        <br/>
-                        <div className="ui center aligned">
-                            <button type="submit" className="ui blue large labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
-                              <FormattedMessage
-                                id='LoginModal.button.signIn'
-                                defaultMessage='Sign In'
-                              />
-                            </button>
-                        </div>
-                      </Form>
-                      <br/>
-                      <div className="container">
+                <Form className="ui form signin" error={this.state.generalError ? true : undefined}>
+                <div className="ui one column centered grid">
+                    {inputs}
+                </div>
+                <br/>
+                <div className="ui container center aligned">
+                    <button type="submit" className="ui blue large labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
+                        <FormattedMessage
+                        id='LoginModal.button.signIn'
+                        defaultMessage='Sign In'
+                        />
+                    </button>
+                </div>
+                </Form>
+                <br/>
+                <div className="container">
 
-                        <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagoogle)}>
-                          <i className="large google plus icon"/>
-                        </button>
-                        <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagithub)}>
-                          <i className="large github icon"/>
-                        </button>
-                      </div>
-                      <br/>
-                      <div className="ui floated right">
-                          <a className="ui teal inverted  button" role="button" tabIndex="0" href="#" onClick={this.handleNoAccessClick}>
-                            <FormattedMessage
-                              id='LoginModal.text.iCannotAccessMyAccount'
-                              defaultMessage='I can not access my account'
-                            />
-                          </a>
-                          <br/><br/>
-                          <a className="ui teal inverted button" role="button" tabIndex="0" href="#" onClick={this.handleSignupClick}>
-                            <FormattedMessage
-                              id='LoginModal.text.dontHaveAnAccount'
-                              defaultMessage='Don&apos;t have an account? Sign up here.'
-                            />
-                          </a>
-                      </div>
-                    </div>
+                <button className="ui big circular red icon button" onClick={this.socialLogin.bind(this, 'google')} tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagoogle)}>
+                    <i className="large google plus icon"/>
+                </button>
+                <button className="ui big circular black icon button" onClick={this.socialLogin.bind(this, 'github')} tabIndex="0" aria-label={this.context.intl.formatMessage(messages.ariagithub)}>
+                    <i className="large github icon"/>
+                </button>
+                </div>
+                <br/>
+                <div className="ui floated right">
+                    <a className="ui teal inverted  button" role="button" tabIndex="0" href="#" onClick={this.handleNoAccessClick}>
+                    <FormattedMessage
+                        id='LoginModal.text.iCannotAccessMyAccount'
+                        defaultMessage='I can not access my account'
+                    />
+                    </a>
+                    <br/><br/>
+                    <a className="ui teal inverted button" role="button" tabIndex="0" href="#" onClick={this.handleSignupClick}>
+                    <FormattedMessage
+                        id='LoginModal.text.dontHaveAnAccount'
+                        defaultMessage='Don&apos;t have an account? Sign up here.'
+                    />
+                    </a>
                 </div>
               </div>
-              <div className="actions">
-                <button type="cancel" className="ui cancel button">
+              <div className="actions" style={{ marginTop: 20 }}>
+                <button className="ui cancel button">
                   <i className="remove icon"/>
                   <FormattedMessage
                     id='LoginModal.button.close'

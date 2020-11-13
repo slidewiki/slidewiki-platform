@@ -75,7 +75,7 @@ class SingleItemAccordion extends React.Component {
         return (
             <Accordion onChange={this.handleAccordionChange} accordion={false}>
                 <AccordionItem>
-                    <AccordionItemTitle tabIndex={tabIndex}>
+                    <AccordionItemTitle tabIndex={tabIndex} style={{ display: 'inline-block' }}>
                         { this.props.buttonAs === 'text' ? this.buttonAsText() : this.buttonAsButton()}
                     </AccordionItemTitle>
                     <AccordionItemBody hideBodyClassName='display-none'>

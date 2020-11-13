@@ -53,7 +53,7 @@ class DefaultHTMLLayout extends React.Component {
                 }
                 {/*<link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />*/}
                 {/* we add this config option for mathjax so we can better control when the typesetting will occur */}
-                <script type="text/x-mathjax-config" dangerouslySetInnerHTML={{__html:'MathJax.Hub.Config({skipStartupTypeset: true});'}} defer></script>
+                <script type="text/x-mathjax-config" dangerouslySetInnerHTML={{__html:'MathJax.Hub.Config({skipStartupTypeset: true});'}}></script>
                 <script src="/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
             </head>
             <body>

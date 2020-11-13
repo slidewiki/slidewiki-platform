@@ -129,7 +129,7 @@ class GroupDetailsModal extends React.Component {
       									</div>
                       </Segment>
                       <Modal.Actions>
-  											<Button onClick={ this.handleClose } role="button" tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.close)}>
+  											<Button onClick={ this.handleClose } tabIndex="0" aria-label={this.context.intl.formatMessage(this.messages.close)}>
   													{this.context.intl.formatMessage(this.messages.close)}
   											</Button>
       								</Modal.Actions>

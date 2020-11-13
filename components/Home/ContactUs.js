@@ -427,9 +427,9 @@ class ContactUs extends React.Component {
                                 id="recaptchaGoogleContact" 
                                 ref= {(recap) => {this.recaptcha = recap;}}
                                 sitekey={publicRecaptchaKey}
-                                onChange={this.onRecaptchaChange.bind(this)}
-                                aria-required="true" 
+                                onChange={this.onRecaptchaChange.bind(this)} 
                                 tabIndex="0"
+                                className="g-recaptcha"
                             />
                             {this.state.formValidationErrors.captcha && 
                                 <div className="ui pointing above prompt label" role="alert" aria-atomic="true">

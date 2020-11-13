@@ -141,7 +141,7 @@ class SelectDeckModal extends React.Component{
         }
 
         let selectDeckBtn =
-            <button className="ui right floated labeled icon button" role="button" tabIndex="0"
+            <button className="ui right floated labeled icon button" tabIndex="0"
                 aria-label="New prediction job" aria-hidden={this.state.modalOpen}
                 onClick={this.handleOpen} >
                 <i className="icon chart bar"/>

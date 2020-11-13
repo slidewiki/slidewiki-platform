@@ -264,7 +264,7 @@ class ResetPassword extends React.Component {
                 </div>
                 <div >
                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                    <ReCAPTCHA className="g-recaptcha" style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)}/>
                 </div>
                 <div className="ui error message" role="region" aria-live="polite"/>
 

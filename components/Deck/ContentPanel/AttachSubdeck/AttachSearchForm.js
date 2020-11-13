@@ -103,7 +103,7 @@ class AttachSearchForm extends React.Component{
                                <Dropdown selection  placeholder='Select Language' name='language'  id='language'  options={languageOptions} defaultValue='' role="listbox"  onChange={this.onDropdownChange.bind(this)}/>
                               </Form.Field>
                             </Form.Group>
-                            <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"
+                            <Button  color="blue" icon tabIndex="0" type="submit" aria-label="Search for Decks"
                                 data-tooltip="Search for Decks" onClick={this.handleRedirect.bind(this)}>
                               <Icon name="search"/>
                                 Search

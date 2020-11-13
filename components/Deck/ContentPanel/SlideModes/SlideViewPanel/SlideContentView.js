@@ -150,7 +150,7 @@ class SlideContentView extends React.Component {
                 <div className={['reveal', style.reveal].join(' ')}>
                     <div className={['slides', style.slides].join(' ')}>
                         <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent'
+                            <div style={contentStyle} ref='inlineContent' id='inlineContent'
                                  dangerouslySetInnerHTML={{__html: slideHTMLContent}}>
                             </div>
 
@@ -166,7 +166,7 @@ class SlideContentView extends React.Component {
                 <div className="ui horizontal segments">
                       <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left" style={compSpeakerStyle}>
                           <strong><FormattedMessage id='deck.view.speakerNote' defaultMessage='Speaker notes'/>:</strong>
-                          <div style={SpeakerStyle} name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
+                          <div style={SpeakerStyle} ref='inlineSpeakerNotes' id='inlineSpeakerNotes'  dangerouslySetInnerHTML={{__html: this.props.speakernotes}} tabIndex="0">
                           </div>
                       </div>
                 </div>

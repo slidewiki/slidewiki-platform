@@ -96,8 +96,8 @@ class SearchResultsItem extends React.Component {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={3}>
-                                <NavLink href={result.link}>
-                                    <Image bordered src={`${Microservices.file.uri}/thumbnail/slide/${result.firstSlide}${(result.theme) ? '/' + result.theme : ''}`} alt={this.context.intl.formatMessage(this.messages.thumbnailAlt, { title: result.title })} size="small" aria-hidden="true" />
+                                <NavLink href={result.link} aria-hidden="true" tabIndex="-1">
+                                    <Image bordered src={`${Microservices.file.uri}/thumbnail/slide/${result.firstSlide}${(result.theme) ? '/' + result.theme : ''}`} alt={this.context.intl.formatMessage(this.messages.thumbnailAlt, { title: result.title })} size="small" />
                                 </NavLink>
                             </Grid.Column>
                             <Grid.Column width={8}>

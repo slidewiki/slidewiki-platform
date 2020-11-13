@@ -68,20 +68,38 @@ class InfoPanelInfoView extends React.Component {
                 {
                     showZoomControls &&
                         <div className="ui top attached basic buttons menu" role="menu">
-                            <button className="ui icon button" role="menuitem" onClick={this.zoomOut}
-                                    aria-label="Zoom out" data-tooltip="Zoom out">
-                                <i className="large zoom out icon"></i>
+                            <button 
+                                className="ui icon button" 
+                                role="menuitem" 
+                                onClick={this.zoomOut} 
+                                style={{width:'33%'}}
+                                aria-label="Zoom out" 
+                                data-tooltip="Zoom out"
+                            >
+                                <i className="large search minus icon"></i>
                             </button>
-                            <button className="ui icon button" role="menuitem" onClick={this.resetZoom}
-                                    aria-label="Reset zoom" data-tooltip="Reset zoom">
+                            <button 
+                                className="ui icon button" 
+                                role="menuitem" 
+                                onClick={this.resetZoom} 
+                                style={{width:'33%', letterSpacing: 0}} /* add letter spacing 0 to fix accessibility issue with custom letter spacing in edge */
+                                aria-label="Reset zoom" 
+                                data-tooltip="Reset zoom"
+                            >
                                 <i className="large stacked icons">
                                     <i className="mini compress icon" style={{ paddingTop: '40%' }}></i>
                                     <i className="search icon"></i>
                                 </i>
                             </button>
-                            <button className="ui icon button" role="menuitem" onClick={this.zoomIn}
-                                    aria-label="Zoom in" data-tooltip="Zoom in">
-                                <i className="large zoom in icon"></i>
+                            <button 
+                                className="ui icon button" 
+                                role="menuitem" 
+                                onClick={this.zoomIn} 
+                                style={{width:'33%'}}
+                                aria-label="Zoom in" 
+                                data-tooltip="Zoom in"
+                            >
+                                <i className="large search plus icon"></i>
                             </button>
                         </div>
                 }

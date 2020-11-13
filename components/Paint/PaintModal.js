@@ -956,7 +956,7 @@ class PaintModal extends React.Component {
                         <Divider/>
                     </Modal.Content>
                     <Modal.Actions>
-                        <button type="cancel" onClick={this.handleClose} className="ui cancel button">
+                        <button onClick={this.handleClose} className="ui cancel button">
                             <i className="remove icon"/>
                             {this.context.intl.formatMessage(this.messages.cancel)}
                         </button>

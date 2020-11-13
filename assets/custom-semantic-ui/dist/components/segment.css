@@ -538,10 +538,10 @@
 
 /* Yellow */
 .ui.yellow.segment:not(.inverted) {
-  border-top: 2px solid #FFD900 !important;
+  border-top: 2px solid #B88A00 !important;
 }
 .ui.inverted.yellow.segment {
-  background-color: #FFD900 !important;
+  background-color: #B88A00 !important;
   color: #FFFFFF !important;
 }
 
