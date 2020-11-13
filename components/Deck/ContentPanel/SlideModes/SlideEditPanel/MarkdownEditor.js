@@ -17,7 +17,7 @@ import registerChange from '../../../../../actions/slide/registerChange';
 import ReactDOMServer from 'react-dom/server';
 import uploadMediaFiles from '../../../../../actions/media/uploadMediaFiles';
 import MediaStore from '../../../../../stores/MediaStore';
-import { defineMessages } from 'react-intl'
+import { defineMessages } from 'react-intl';
 
 let converter = new showdown.Converter();
 converter.setOption('tables', true);
@@ -54,7 +54,7 @@ class MarkdownEditor extends React.Component {
             markdown_area:{
                 id:'markdownArea.text_area',
                 defaultMessage:'Markdown Editor'
-            }})
+            }});
     }
     handleChange(event) {
         let value = this.state.markdownContent;
