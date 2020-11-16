@@ -4,9 +4,10 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { Button, Icon, Ref } from 'semantic-ui-react';
 import styled from 'styled-components';
-import commands from './commands';
 import { match } from 'path-to-regexp';
 import { pickBy, upperFirst, shuffle } from 'lodash';
+import routes from '../../../configs/routes';
+import { defineMessages } from 'react-intl';
 
 const Popover = styled.div`
     width: 350px;
@@ -37,16 +38,27 @@ const WhatCanISay = styled.div`
     padding: 30px 15px;
 `;
 
-const Label = styled.div`
+const Label = styled.h1`
     font-size: 20px;
 `;
 
 const SuggestionsList = styled.ul`
     li {
         padding-bottom: 5px;
+        line-height: 1.5;
     }
 `;
 
+const ButtonMicrophone = styled(Button)`
+    background: #5997cc !important;
+    color: #fff !important;
+
+    &.ui.button:focus {
+        box-shadow: 0 0 0 2px #000 !important;
+    }
+`;
+
+// TOOD: refactor into multiple files (preferably with hooks)
 class SpeechInterface extends React.Component {
     state = {
         showPopover: false,
@@ -61,14 +73,140 @@ class SpeechInterface extends React.Component {
 
         this.boxRef = React.createRef();
         this.buttonRef = React.createRef();
+
+        this.messages = defineMessages({
+            openSlideshowListenTo1: {
+                id: 'SpeechInterface.command.openSlideshowListenTo1',
+                defaultMessage: 'open this as slideshow',
+            },
+            openSlideshowListenTo2: {
+                id: 'SpeechInterface.command.openSlideshowListenTo2',
+                defaultMessage: 'open as slideshow',
+            },
+            openSlideshowListenTo3: {
+                id: 'SpeechInterface.command.openSlideshowListenTo3',
+                defaultMessage: 'open deck as slideshow',
+            },
+            openSlideshowAnswer: {
+                id: 'SpeechInterface.command.openSlideshowAnswer',
+                defaultMessage: 'the slideshow is opened in a new tab',
+            },
+            lastSlide: {
+                id: 'SpeechInterface.command.lastSlide',
+                defaultMessage: 'last slide',
+            },
+            firstSlide: {
+                id: 'SpeechInterface.command.firstSlide',
+                defaultMessage: 'first slide',
+            },
+            previousSlide: {
+                id: 'SpeechInterface.command.previousSlide',
+                defaultMessage: 'previous slide',
+            },
+            nextSlide: {
+                id: 'SpeechInterface.command.nextSlide',
+                defaultMessage: 'next slide',
+            },
+            likeDeckListenTo1: {
+                id: 'SpeechInterface.command.likeDeckListenTo1',
+                defaultMessage: 'like deck',
+            },
+            likeDeckListenTo2: {
+                id: 'SpeechInterface.command.likeDeckListenTo2',
+                defaultMessage: 'like this deck',
+            },
+            likeDeckAnswer: {
+                id: 'SpeechInterface.command.likeDeckAnswer',
+                defaultMessage: 'you liked this deck',
+            },
+            editDeckListenTo1: {
+                id: 'SpeechInterface.command.editDeckListenTo1',
+                defaultMessage: 'edit this deck',
+            },
+            editDeckListenTo2: {
+                id: 'SpeechInterface.command.editDeckListenTo2',
+                defaultMessage: 'edit deck settings',
+            },
+            editDeckAnswer: {
+                id: 'SpeechInterface.command.editDeckAnswer',
+                defaultMessage: 'you can now edit the deck settings',
+            },
+            addDeckListenTo1: {
+                id: 'SpeechInterface.command.addDeckListenTo1',
+                defaultMessage: 'add a new deck',
+            },
+            addDeckListenTo2: {
+                id: 'SpeechInterface.command.addDeckListenTo2',
+                defaultMessage: 'create a new deck',
+            },
+            addDeckListenTo3: {
+                id: 'SpeechInterface.command.addDeckListenTo3',
+                defaultMessage: 'add deck',
+            },
+            addDeckAnswer: {
+                id: 'SpeechInterface.command.addDeckAnswer',
+                defaultMessage: 'you can now create a new deck',
+            },
+            navigateToListenTo: {
+                id: 'SpeechInterface.command.navigateToListenTo',
+                defaultMessage: 'navigate to',
+            },
+            navigateToAnswer: {
+                id: 'SpeechInterface.command.navigateToAnswer',
+                defaultMessage: 'navigating to requested page',
+            },
+            navigateToExample: {
+                id: 'SpeechInterface.command.navigateToExample',
+                defaultMessage: 'Navigate to [home/about us/etc.]',
+            },
+            searchListenTo: {
+                id: 'SpeechInterface.command.searchListenTo',
+                defaultMessage: 'search for',
+            },
+            searchAnswer: {
+                id: 'SpeechInterface.command.searchAnswer',
+                defaultMessage: 'searching for decks',
+            },
+            searchExample: {
+                id: 'SpeechInterface.command.searchExample',
+                defaultMessage: 'Search for RDF',
+            },
+            actionCannotBePerformed: {
+                id: 'SpeechInterface.actionCannotBePerformed',
+                defaultMessage: 'Action could not be performed. Maybe you need to be authenticated or you don\'t have the right permissions',
+            },
+            notFound: {
+                id: 'SpeechInterface.notFound',
+                defaultMessage: 'I did not understand what you want. Please try again',
+            },
+            listening: {
+                id: 'SpeechInterface.listening',
+                defaultMessage: 'I\'m listening...',
+            },
+            ariaSpeechInterface: {
+                id: 'SpeechInterface.ariaSpeechInterface',
+                defaultMessage: 'Open speech commands interface',
+            },
+            whatCanIAsk: {
+                id: 'SpeechInterface.whatCanIAsk',
+                defaultMessage: 'What can I ask?',
+            },
+            more: {
+                id: 'SpeechInterface.more',
+                defaultMessage: 'More',
+            },
+        });
     }
 
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
+        document.addEventListener('keydown', this.handleEscape, false);
+        this.commands = this.getSpeechCommands();
     }
 
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
+        document.removeEventListener('keydown', this.handleEscape, false);
     }
 
     componentDidUpdate() {
@@ -76,15 +214,177 @@ class SpeechInterface extends React.Component {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (SpeechRecognition) {
                 this.recognition = new SpeechRecognition();
-                this.recognition.lang = 'en-US';
+                this.recognition.lang = this.getRecognitionLanguage();
                 this.recognition.continuous = true;
                 this.recognition.interimResults = false;
             }
         }
     }
+    getRecognitionLanguage = () => {
+        const { locale } = this.context.intl;
+        if (locale === 'en') {
+            return 'en-US';
+        }
+        if (locale === 'de') {
+            return 'de-DE';
+        }
+        if (locale === 'fr') {
+            return 'fr-FR';
+        }
+        if (locale === 'it') {
+            return 'it-IT';
+        }
+        if (locale === 'es') {
+            return 'es-ES';
+        }
+        if (locale === 'nl') {
+            return 'nl-NL';
+        }
+        if (locale === 'pt') {
+            return 'pt-PT';
+        }
+        if (locale === 'el') {
+            return 'el-GR';
+        }
+        if (locale === 'sr') {
+            return 'sr-SP';
+        }
+    };
+
+    getSpeechCommands = () => {
+        console.log('this.messages.openSlideshowListenTo1', this.messages.openSlideshowListenTo1);
+        return {
+            openSlideshow: {
+                type: 'action',
+                event: 'click',
+                targetId: 'openSlideshow',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.openSlideshowListenTo1),
+                    this.context.intl.formatMessage(this.messages.openSlideshowListenTo2),
+                    this.context.intl.formatMessage(this.messages.openSlideshowListenTo3),
+                ],
+                answer: this.context.intl.formatMessage(this.messages.openSlideshowAnswer),
+                pages: [routes.deck.path],
+            },
+            lastSlide: {
+                type: 'action',
+                event: 'click',
+                targetId: 'lastSlide',
+                listenTo: [this.context.intl.formatMessage(this.messages.lastSlide)],
+                answer: this.context.intl.formatMessage(this.messages.lastSlide),
+                pages: [routes.deck.path],
+            },
+            firstSlide: {
+                type: 'action',
+                event: 'click',
+                targetId: 'firstSlide',
+                listenTo: [this.context.intl.formatMessage(this.messages.firstSlide)],
+                answer: this.context.intl.formatMessage(this.messages.firstSlide),
+                pages: [routes.deck.path],
+            },
+            previousSlide: {
+                type: 'action',
+                event: 'click',
+                targetId: 'previousSlide',
+                listenTo: [this.context.intl.formatMessage(this.messages.previousSlide)],
+                answer: this.context.intl.formatMessage(this.messages.previousSlide),
+                pages: [routes.deck.path],
+            },
+            nextSlide: {
+                type: 'action',
+                event: 'click',
+                targetId: 'nextSlide',
+                listenTo: [this.context.intl.formatMessage(this.messages.nextSlide)],
+                answer: this.context.intl.formatMessage(this.messages.nextSlide),
+                pages: [routes.deck.path],
+            },
+            likeDeck: {
+                type: 'action',
+                event: 'click',
+                targetId: 'likeDeck',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.likeDeckListenTo1),
+                    this.context.intl.formatMessage(this.messages.likeDeckListenTo2),
+                ],
+                answer: this.context.intl.formatMessage(this.messages.likeDeckAnswer),
+                pages: [routes.deck.path],
+            },
+            editDeckSettings: {
+                type: 'action',
+                event: 'click',
+                targetId: 'editDeckSettings',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.editDeckListenTo1),
+                    this.context.intl.formatMessage(this.messages.editDeckListenTo2),
+                ],
+                answer: this.context.intl.formatMessage(this.messages.editDeckAnswer),
+                pages: [routes.deck.path],
+            },
+            addDeck: {
+                type: 'navigation',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.addDeckListenTo1),
+                    this.context.intl.formatMessage(this.messages.addDeckListenTo2),
+                    this.context.intl.formatMessage(this.messages.addDeckListenTo3),
+                ],
+                navigateTo: '/addDeck',
+                answer: this.context.intl.formatMessage(this.messages.addDeckAnswer),
+                pages: ['*'],
+            },
+            navigateTo: {
+                type: 'navigation',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.navigateToListenTo), //[page]
+                ],
+                navigateTo: null,
+                params: {
+                    // TODO: add more pages
+                    page: [
+                        {
+                            name: 'home',
+                            path: '/',
+                        },
+                        {
+                            name: 'about us',
+                            path: '/about',
+                        },
+                        {
+                            name: 'contact us',
+                            path: '/contactus',
+                        },
+                    ],
+                },
+                answer: this.context.intl.formatMessage(this.messages.navigateToAnswer),
+                pages: ['*'],
+                example: this.context.intl.formatMessage(this.messages.navigateToExample),
+            },
+            searchFor: {
+                type: 'navigation',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.searchListenTo), //[page]
+                ],
+                navigateTo: '/search?keywords=[param]&sort=score',
+                answer: this.context.intl.formatMessage(this.messages.searchAnswer),
+                pages: ['*'],
+                example: this.context.intl.formatMessage(this.messages.searchExample),
+            },
+        };
+    };
+
+    handleEscape = (event) => {
+        if (!event.keyCode === 27) {
+            return;
+        }
+        this.closePopover();
+    };
 
     handleClickOutside = (event) => {
-        if (this.boxRef && !this.boxRef.current.contains(event.target) && this.buttonRef && !this.buttonRef.current.contains(event.target)) {
+        if (
+            this.boxRef &&
+            !this.boxRef.current.contains(event.target) &&
+            this.buttonRef &&
+            !this.buttonRef.current.ref.current.contains(event.target)
+        ) {
             this.closePopover();
         }
     };
@@ -105,7 +405,7 @@ class SpeechInterface extends React.Component {
 
         if (!isOpen) {
             // filter out commands that are not allowed on the current page
-            const commandsFiltered = pickBy(commands, (command) => {
+            const commandsFiltered = pickBy(this.commands, (command) => {
                 if (command.pages.includes('*')) {
                     return true;
                 }
@@ -121,7 +421,7 @@ class SpeechInterface extends React.Component {
             let whatCanIAsk = [];
 
             for (let commandName in commandsFiltered) {
-                const command = commands[commandName];
+                const command = this.commands[commandName];
                 const exampleCommand = command.example ?? command.listenTo[0];
                 whatCanIAsk.push(exampleCommand);
             }
@@ -146,11 +446,10 @@ class SpeechInterface extends React.Component {
                 let commandExecuted = false;
 
                 for (let commandName in commandsFiltered) {
-                    const command = commands[commandName];
+                    const command = this.commands[commandName];
                     const { listenTo, type, targetId, event, answer, params, navigateTo } = command;
 
                     for (const _listenTo of listenTo) {
-                        console.log('transcript', transcript);
                         if (transcript.indexOf(_listenTo) === 0) {
                             // param could be used with something like: allowParams, if false, it should be empty
                             const param =
@@ -163,18 +462,14 @@ class SpeechInterface extends React.Component {
                                 if (targetElement) {
                                     targetElement.click();
                                 } else {
-                                    this.speechSynthesis(
-                                        "Action could not be performed. Maybe you need to be authenticated or you don't have the right permissions"
-                                    );
+                                    this.speechSynthesis(this.context.intl.formatMessage(this.messages.actionCannotBePerformed));
                                     return;
                                 }
                             } else if (type === 'navigation') {
-                                console.log(navigateTo);
                                 commandExecuted = true;
 
                                 if (!navigateTo) {
                                     for (const page of params.page) {
-                                        console.log(page);
                                         if (page.name === param) {
                                             window.location.href = page.path;
                                         }
@@ -193,7 +488,7 @@ class SpeechInterface extends React.Component {
                 }
 
                 if (!commandExecuted) {
-                    this.speechSynthesis('I did not understand what you want. Please try again');
+                    this.speechSynthesis(this.context.intl.formatMessage(this.messages.notFound));
                 } else {
                     this.setState({
                         showPopover: false,
@@ -220,19 +515,23 @@ class SpeechInterface extends React.Component {
 
     render() {
         return (
-            <div style={{ position: 'relative' }}>
-                <div className='item'>
-                    <Ref innerRef={this.buttonRef}>
-                        <Button icon style={{ background: '#5997CC', color: '#fff' }} onClick={this.togglePopover}>
-                            <Icon name='microphone' />
-                        </Button>
-                    </Ref>
-                </div>
+            <div className='item' style={{ position: 'relative' }}>
+                <Ref innerRef={this.buttonRef}>
+                    <ButtonMicrophone
+                        icon
+                        onClick={this.togglePopover}
+                        aria-label={this.context.intl.formatMessage(this.messages.ariaSpeechInterface)}
+                    >
+                        <Icon name='microphone' />
+                    </ButtonMicrophone>
+                </Ref>
 
                 <Popover style={{ display: this.state.showPopover ? 'block' : 'none' }} ref={this.boxRef}>
-                    <SpeechArea>{this.state.transcript ? this.state.transcript : "I'm listening..."}</SpeechArea>
+                    <SpeechArea>
+                        {this.state.transcript ? this.state.transcript : this.context.intl.formatMessage(this.messages.listening)}
+                    </SpeechArea>
                     <WhatCanISay>
-                        <Label>What can I ask?</Label>
+                        <Label>{this.context.intl.formatMessage(this.messages.whatCanIAsk)}</Label>
                         <SuggestionsList>
                             {this.state.whatCanIAsk.map((command, index) => {
                                 if (index > this.state.limit) {
@@ -241,7 +540,9 @@ class SpeechInterface extends React.Component {
                                 return <li key={index}>{upperFirst(command)}</li>;
                             })}
                         </SuggestionsList>
-                        {this.state.limit < this.state.whatCanIAsk.length && <Button onClick={this.handleMore}>More...</Button>}
+                        {this.state.limit < this.state.whatCanIAsk.length && (
+                            <Button onClick={this.handleMore}>{this.context.intl.formatMessage(this.messages.more)}</Button>
+                        )}
                     </WhatCanISay>
                 </Popover>
             </div>
@@ -252,6 +553,7 @@ class SpeechInterface extends React.Component {
 SpeechInterface.contextTypes = {
     executeAction: PropTypes.func.isRequired,
     getUser: PropTypes.func,
+    intl: PropTypes.object.isRequired,
 };
 
 SpeechInterface = connectToStores(SpeechInterface, [UserProfileStore], (context, props) => {
