@@ -29,7 +29,7 @@ class DeckPropertiesEditor extends React.Component {
 
         this.messages = defineMessages({
             label_theme: {
-                id: 'AddDeck.form.label_themes',
+                id: 'DeckProperty.form.label_themes',
                 defaultMessage: 'Deck theme',
             },
             label_education_label: {

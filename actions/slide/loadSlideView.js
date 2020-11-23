@@ -29,17 +29,7 @@ export default function loadSlideView(context, payload, done) {
                 thumbnailTheme: context.getStore(DeckTreeStore).theme
             });
         }
-        let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
-        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.title;
 
-        // remove HTML tags and quotation marks from the title
-        let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
-
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: cleanTitle,
-        //    frozen: true,
-        //    allowUnfreeze: true,
-        });
         done();
     });
 }

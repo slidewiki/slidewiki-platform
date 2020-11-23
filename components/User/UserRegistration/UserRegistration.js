@@ -19,6 +19,7 @@ import common from '../../../common';
 import openSSOModal from '../../../actions/user/openSSOModal';
 import {defineMessages} from 'react-intl';
 import updateTrap from '../../../actions/loginModal/updateTrap';
+import setDocumentTitle from '../../../actions/setDocumentTitle';
 let MediaQuery = require ('react-responsive');
 
 const MODI = 'sociallogin_modi';
@@ -270,7 +271,10 @@ class UserRegistration extends React.Component {
                 id:'UserRegistration.SSO.aria',
                 defaultMessage:'Sign up with another SlideWiki instance'
             },
-            
+            title:{
+                id:'UserRegistration.title',
+                defaultMessage:'Sign up'
+            },
         });
     }
 
@@ -377,6 +381,10 @@ class UserRegistration extends React.Component {
         });
 
         $(ReactDOM.findDOMNode(this.refs.UserRegistration_form)).form(validationRules);
+
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage(this.messages.title)
+        });
     }
 
     componentWillReceiveProps(nextProps) {

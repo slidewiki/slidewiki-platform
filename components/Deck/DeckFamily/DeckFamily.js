@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import DeckFamilyStore from '../../../stores/DeckFamilyStore';
 import DecksGrid from '../../User/UserProfile/DecksGrid';
 import loadMoreDeckFamily from '../../../actions/deckfamily/loadMoreDeckFamily';
+import setDocumentTitle from '../../../actions/setDocumentTitle';
 
 class DeckFamily extends React.Component {
     constructor(props){
@@ -14,6 +15,14 @@ class DeckFamily extends React.Component {
     }
     componentDidMount() {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
+        const label = this.context.intl.formatMessage({
+            id: 'DeckFamily.title',
+            defaultMessage: 'Tag'
+        });
+        const title = this.props.DeckFamilyStore.defaultName || this.props.DeckFamilyStore.tag;
+        this.context.executeAction(setDocumentTitle, { 
+            title: `${label} | ${title}`
+        });
     }
 
     componentDidUpdate() {}
@@ -79,7 +88,8 @@ class DeckFamily extends React.Component {
 }
 
 DeckFamily.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 DeckFamily = connectToStores(DeckFamily, [DeckFamilyStore], (context, props) => {
     return {

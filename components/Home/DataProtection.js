@@ -1,7 +1,18 @@
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import PropTypes from 'prop-types';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class DataProtection extends React.Component {
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'DataProtection.title',
+                defaultMessage: 'Data Protection Policy'
+            })
+        });
+    }
+
     render() {
         return (
             <div className="ui container grid" ref="about">
@@ -111,5 +122,11 @@ class DataProtection extends React.Component {
         );
     }
 }
+
+DataProtection.contextTypes = {
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
+};
+
 
 export default DataProtection;

@@ -27,20 +27,6 @@ export default function loadSlideEdit(context, payload, done) {
             //TODO: do not allow editing title when on the edit slide mode
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
-
-
-        let deckTitle = context.getStore(DeckTreeStore).getState().deckTree.get('title');
-        let pageTitle = shortTitle + ' | ' + deckTitle + ' | ' + res.slide.title + ' | ' + 'edit';
-
-        // remove HTML tags and quotation marks from the title
-        let cleanTitle = pageTitle.replace(/<\/?[^>]+(>|$)/g, '').replace(/&#39;/g, '\'').replace(/&#34;/g, '\"');
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: cleanTitle,
-        });
-        // I have absolutely no idea why, but without this fake dispatch,
-        // going from view to edit mode messes with the UI
-        //context.dispatch('');
-        //Klaas edit; this introduces an error
         done();
     });
 }
