@@ -2,9 +2,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import StaticPage from './StaticPage';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 
 class Imprint extends React.Component {
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'imprint.title',
+                defaultMessage: 'Imprint'
+            })
+        });
+    }
+
     render() {
         //<FormattedMessage id="accessibility.2.header" defaultMessage="Technologies used in the SlideWiki Platform"/>
 
@@ -61,7 +71,8 @@ class Imprint extends React.Component {
 }
 
 Imprint.contextTypes = {
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 export default Imprint;

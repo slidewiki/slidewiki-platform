@@ -2,6 +2,7 @@ import React from 'react';
 import StaticPage from './StaticPage';
 import PropTypes from 'prop-types';
 import {defineMessages} from 'react-intl';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class terms extends React.Component {
     constructor(props) {
@@ -98,7 +99,17 @@ class terms extends React.Component {
             paragraph3: {
                 id: 'terms.paragraph3',
                 defaultMessage: 'Aliquam vitae velit iaculis, vestibulum felis eu, lacinia risus. Donec mollis enim nec accumsan tristique. Morbi dapibus condimentum erat quis placerat. Integer velit augue, sodales quis scelerisque nec, facilisis nec velit. Maecenas rhoncus sagittis lectus, vel feugiat nulla aliquet quis. Quisque condimentum sapien nec eros tristique, vitae pulvinar sem tempus. Nulla ut odio id elit accumsan interdum. Maecenas sagittis sed sem a malesuada. Vivamus venenatis ex sed ex pretium, et pellentesque purus vehicula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egesta'
+            },
+            title: {
+                id: 'terms.title',
+                defaultMessage: 'Terms'
             }
+        });
+    }
+
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage(this.messages.title)
         });
     }
 
@@ -141,7 +152,8 @@ class terms extends React.Component {
 }
 
 terms.contextTypes = {
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 export default terms;

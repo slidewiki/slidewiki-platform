@@ -21,6 +21,7 @@ import { educationLevels } from '../../lib/isced';
 import {Dropdown, Divider, Button, Grid} from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 import SingleItemAccordion from '../common/SingleItemAccordion';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -157,6 +158,10 @@ class SearchPanel extends React.Component {
             selectSubject: {
                 id: 'SearchPanel.select.subject',
                 defaultMessage: 'Select Subject'
+            },
+            title: {
+                id: 'SearchPanel.title',
+                defaultMessage: 'Search'
             }
         });
     }
@@ -165,6 +170,10 @@ class SearchPanel extends React.Component {
     }
     componentDidMount(){
         this.initDropdown();
+        const title = this.context.intl.formatMessage(this.messages.title);
+        this.context.executeAction(setDocumentTitle, { 
+            title
+        });
     }
     componentDidUpdate(){
         this.initDropdown();
@@ -206,6 +215,7 @@ class SearchPanel extends React.Component {
             tag: null,
             educationLevel: null,
             topics: null,
+            tag: null,
             facet_exclude: [],
         };
 
@@ -224,11 +234,11 @@ class SearchPanel extends React.Component {
             advancedFilters.facet_exclude.push('user');
             this.userDropdown.clear();
         }
-        let tags = this.tagDropdown.getSelected();
-        if(tags){
-            advancedFilters.tag = tags.split(',');
+
+        let tags = this.state.tag;
+        if (tags) {
+            advancedFilters.tag = tags;
             advancedFilters.facet_exclude.push('tag');
-            this.tagDropdown.clear();
         }
 
         let educationLevel = this.educationLevelsDropdown.state.value;
@@ -240,11 +250,6 @@ class SearchPanel extends React.Component {
 
         let topics = this.state.topics;
         if (!_.isEmpty(topics)) {
-            topics = topics.map((tag) => {
-                const isExistingTag = tag.startsWith('existing:');
-                const label = isExistingTag ? tag.replace(/^(existing\:)/, '') : tag;
-                return label;
-            });
             advancedFilters.topics = topics;
             advancedFilters.facet_exclude.push('topics');
         }
@@ -474,6 +479,7 @@ class SearchPanel extends React.Component {
             </div>
             <TagInput
                 id='topics'
+                onlyExistingTags={true}
                 tagFilter={{ tagType: 'topic' }}
                 value={Array.isArray(this.state.topics) ? this.state.topics : []}
                 onChange={this.handleDropdownChange}
@@ -495,7 +501,14 @@ class SearchPanel extends React.Component {
 
             <div className="field">
                 <label htmlFor="tags_input_field" id="tags_label"><FormattedMessage {...this.messages.tagsFilterTitle} /></label>
-                <TagsInput ref={ (e) => { this.tagDropdown = e; }} ariaLabelledby="tags_label" placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} />
+                <TagInput 
+                    id='tag'
+                    onlyExistingTags={true}
+                    ariaLabelledby="tags_label" 
+                    placeholder={this.context.intl.formatMessage(this.messages.tagsFilterPlaceholder)} 
+                    onChange={this.handleDropdownChange}
+                    value={Array.isArray(this.state.tag) ? this.state.tag : []}
+                />
             </div>
         </div></div>;
 
@@ -508,13 +521,13 @@ class SearchPanel extends React.Component {
 
         return (
             <div className="ui container">
-                <h1 className="ui header" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
+                <h1 className="ui header" id="search_text_label" style={{marginTop: '1em'}}><FormattedMessage {...this.messages.header} /></h1>
                 <form className="ui form success">
                     <div className="field" role="search">
                         <Grid>
                             <Grid.Row>
                                 <Grid.Column>
-                                    <KeywordsInputWithFilter ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
+                                    <KeywordsInputWithFilter ariaLabelledby="search_text_label" ref={ (el) => { this.keywordsInput = el; }} value={this.state.keywords || ''} onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} placeholder={this.context.intl.formatMessage(this.messages.keywordsInputPlaceholder)} handleRedirect={this.handleRedirect.bind(this)} buttonText={this.context.intl.formatMessage(this.messages.submitButton)} fieldValue={this.state.field || ' '}/>
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>

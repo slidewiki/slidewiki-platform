@@ -49,7 +49,7 @@ class DeckStatsPage extends React.Component {
         let summaryElement = (
             <div>
                 <NavLink href={viewDeckUrl} tabIndex={-1} >
-                    <Button aria-label="Return to Deck Info" data-tooltip="Return to Deck Info" role="button">
+                    <Button aria-label="Return to Deck Info" data-tooltip="Return to Deck Info">
                         <Icon name="arrow alternate circle left" /><FormattedMessage id='deck.stats.returnButton' defaultMessage='Return to Deck Info'/>
                     </Button>
                 </NavLink>

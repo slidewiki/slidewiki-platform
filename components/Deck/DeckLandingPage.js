@@ -29,6 +29,7 @@ import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
 import slugify from 'slugify';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class DeckLandingPage extends React.Component {
 
@@ -219,6 +220,25 @@ class DeckLandingPage extends React.Component {
         );
     }
 
+    componentDidMount() {
+        this.setTitle();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.DeckViewStore.deckData.title !== prevProps.DeckViewStore.deckData.title) {
+            this.setTitle();
+        }
+    }
+
+    setTitle = () => {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'DeckLandingPage.title',
+                defaultMessage: 'Presentation information'
+            }) + ' | ' + this.props.DeckViewStore.deckData.title
+        });
+    }
+
     render() {
         let deckData = this.props.DeckViewStore.deckData;
         if (lodash.isEmpty(deckData)) return this.getPlaceholder();
@@ -401,7 +421,7 @@ class DeckLandingPage extends React.Component {
                                 <div className="ui bottom attached menu" style={{'background': '#e0e1e2'}} id="navigation">
                                     <div className="ui icon buttons huge attached">
                                         <NavLink href={deckStatsUrl} tabIndex={-1} >
-                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip={this.context.intl.formatMessage(messages.tooltipStats)} role="button">
+                                            <Button icon size="huge" aria-label="Deck Stats" data-tooltip={this.context.intl.formatMessage(messages.tooltipStats)}>
                                                 <Icon name="line graph" />
                                             </Button>
                                         </NavLink>
@@ -410,12 +430,12 @@ class DeckLandingPage extends React.Component {
                                     <div className="right inverted menu">
                                         <div className="ui icon buttons huge attached">
                                             <NavLink href={openDeckUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip={this.context.intl.formatMessage(messages.tooltipOpen)} role="button">
+                                                <Button icon size="huge" aria-label="Open Deck" data-tooltip={this.context.intl.formatMessage(messages.tooltipOpen)}>
                                                     <Icon name="open folder" />
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-speech-id="openSlideshow" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)} role="button" >
+                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-speech-id="openSlideshow" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)}>
                                                     <Icon name="play circle" />
                                                 </Button>
                                             </a>
@@ -475,7 +495,8 @@ class DeckLandingPage extends React.Component {
 }
 
 DeckLandingPage.contextTypes = {
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 DeckLandingPage = connectToStores(DeckLandingPage, [

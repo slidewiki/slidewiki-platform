@@ -143,6 +143,7 @@ class DeckLanguageMenu extends React.Component {
                 disabled={languageOptions.length < 2 && !canEdit}
                 defaultValue={selectedLanguage} 
                 options={languageOptions} 
+                selectOnNavigation={false}
                 onChange={this.changeCurrentLanguage.bind(this)} 
                 className={`${this.props.lastAttached ? 'bottom' : ''} attached medium basic button`}
                 />

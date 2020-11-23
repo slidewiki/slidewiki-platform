@@ -94,15 +94,15 @@ class Footer extends React.Component {
         let currentYear = new Date().getFullYear();
 
         return (
-            <footer className='footer-container' role="contentinfo">
+            <footer className='footer-container'>
                 <div className='ui container'>
                     <div className='ui two column stackable grid'>
                         <div className='row' style={rowClasses}>
                             <div className='seven wide column'>
                                 <div className='footer-left' >
-                                    <h2 className="sr-only">{this.context.intl.formatMessage(messages.srHeader)}</h2>
+                                    <h1 className="sr-only">{this.context.intl.formatMessage(messages.srHeader)}</h1>
                                     <div className='footer-menu'>
-                                        <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.header)}</h3>
+                                        <h2 className="ui medium inverted header">{this.context.intl.formatMessage(messages.header)}</h2>
                                         <ul>
                                             <li><a href='/about'>{this.context.intl.formatMessage(messages.aboutus)}</a></li>
                                             <li><a href='/contactus'>{this.context.intl.formatMessage(messages.contact)}</a></li>
@@ -112,7 +112,7 @@ class Footer extends React.Component {
                                         </ul>
                                     </div>
                                     <div className='footer-menu'>
-                                        <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.termsHeader)}</h3>
+                                        <h2 className="ui medium inverted header">{this.context.intl.formatMessage(messages.termsHeader)}</h2>
                                         <ul>
                                             <li><NavLink routeName='terms' href='/terms'>{this.context.intl.formatMessage(messages.terms)}</NavLink></li>
                                             <li><NavLink routeName='license' href='/license'>{this.context.intl.formatMessage(messages.license)}</NavLink></li>
@@ -125,7 +125,7 @@ class Footer extends React.Component {
                             <div className='nine wide column'>
                                 <div className='footer-menu'>
                                     <div className='footer-right'>
-                                    <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.funding)}</h3>
+                                    <h2 className="ui medium inverted header">{this.context.intl.formatMessage(messages.funding)}</h2>
                                     <p>{this.context.intl.formatMessage(messages.fundingtext)}</p>
                                     <p>
                                         {this.context.intl.formatMessage(messages.copyrightText)}{' '}

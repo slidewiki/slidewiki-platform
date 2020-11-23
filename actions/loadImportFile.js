@@ -12,10 +12,7 @@ export default function loadImportFile(context, payload, done) {
             //console.log(res);
             context.dispatch('LOAD_IMPORT_FILE_SUCCESS', res);
         }
-        //let pageTitle = shortTitle + ' | Import presentation | ' + payload.params.stype + ' | ' + payload.params.sid;
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-            //pageTitle: pageTitle
-        //});
+
         done();
     });
 }
