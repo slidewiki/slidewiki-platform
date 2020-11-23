@@ -141,7 +141,7 @@ class Translations extends React.Component {
     render() {
         let toRender = '';
         if(this.props.isInitiator === false && this.state.translationsAvailable)
-            toRender = <Button content='Choose other language' labelPosition='right' icon='language' color='blue' role="button" aria-label="Choose other language" onClick={this.openChooseLanguageModal.bind(this)} style={{textAlign: 'left'}}/>;
+            toRender = <Button content='Choose other language' labelPosition='right' icon='language' color='blue' aria-label="Choose other language" onClick={this.openChooseLanguageModal.bind(this)} style={{textAlign: 'left'}}/>;
 
         return (
           <div>

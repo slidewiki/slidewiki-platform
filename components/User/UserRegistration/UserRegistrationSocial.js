@@ -344,7 +344,7 @@ class UserRegistrationSocial extends React.Component {
                           <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                       </div>
                       <div className="ui error message" role="region" aria-live="polite"/>
-                      <button type="submit" className="ui blue labeled submit icon button" role="button" tabIndex="0" >
+                      <button type="submit" className="ui blue labeled submit icon button" tabIndex="0" >
                           <i className="icon add user"/>
                           <FormattedMessage
                             id='UserRegistrationSocial.signup'
@@ -361,7 +361,7 @@ class UserRegistrationSocial extends React.Component {
                   </a>
               </div>
               <div className="actions">
-                  <button type="button" className="ui cancel button" onClick={this.handleCancelClick.bind(this)} role="button" tabIndex="0">
+                  <button type="button" className="ui cancel button" onClick={this.handleCancelClick.bind(this)} tabIndex="0">
                     <FormattedMessage
                       id='UserRegistrationSocial.cancel'
                       defaultMessage='Cancel'

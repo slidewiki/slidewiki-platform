@@ -24,9 +24,11 @@ class TagInput extends React.Component {
 
             // prepend 'existing:' to the tag names
             for (let option in options) {
+                const tagName = !this.props.onlyExistingTags ? 'existing:' + options[option].tagName : options[option].tagName;
+
                 options[option] = {
                     ...options[option],
-                    tagName: 'existing:' + options[option].tagName,
+                    tagName,
                 };
             }
 
@@ -79,8 +81,6 @@ class TagInput extends React.Component {
         }
 
         options = uniq(options, 'tagName');
-        console.log('options', options);
-        console.log('value', this.props.value);
         return (
             <Form.Field
                 allowAdditions={this.props.allowAdditions}

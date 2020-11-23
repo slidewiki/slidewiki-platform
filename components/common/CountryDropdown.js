@@ -1777,6 +1777,7 @@ class CountryDropdown extends React.Component {
                     value: country.key,
                     text: this.context.intl.formatMessage(this.messages[country.name])
                 }))}
+                fluid
             />
         );
     }
