@@ -21,6 +21,7 @@ import { educationLevels } from '../../lib/isced';
 import {Dropdown, Divider, Button, Grid} from 'semantic-ui-react';
 import TagInput from '../Deck/ContentModulesPanel/TagsPanel/TagInput';
 import SingleItemAccordion from '../common/SingleItemAccordion';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -157,6 +158,10 @@ class SearchPanel extends React.Component {
             selectSubject: {
                 id: 'SearchPanel.select.subject',
                 defaultMessage: 'Select Subject'
+            },
+            title: {
+                id: 'SearchPanel.title',
+                defaultMessage: 'Search'
             }
         });
     }
@@ -165,6 +170,10 @@ class SearchPanel extends React.Component {
     }
     componentDidMount(){
         this.initDropdown();
+        const title = this.context.intl.formatMessage(this.messages.title);
+        this.context.executeAction(setDocumentTitle, { 
+            title
+        });
     }
     componentDidUpdate(){
         this.initDropdown();

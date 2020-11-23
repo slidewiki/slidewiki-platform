@@ -14,10 +14,22 @@ import GroupCollections from '../DeckCollection/GroupCollections';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import {navigateAction} from 'fluxible-router';
 import { NavLink } from 'fluxible-router';
+import setDocumentTitle from '../../actions/setDocumentTitle'; 
 
 class UserGroupPage extends React.Component {
     constructor(props){
         super(props);
+    }
+
+    componentDidMount() {
+        const label = this.context.intl.formatMessage({
+            id: 'UserGroupPage.title',
+            defaultMessage: 'Details of user group'
+        });
+        const title = this.props.UserGroupsStore.currentUsergroup.name;
+        this.context.executeAction(setDocumentTitle, { 
+            title: `${label} | ${title}`
+        });
     }
 
     showDecks(){

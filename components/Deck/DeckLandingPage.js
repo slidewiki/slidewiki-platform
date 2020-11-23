@@ -29,6 +29,7 @@ import { getEducationLevel } from '../../lib/isced';
 import lodash from 'lodash';
 import slugify from 'slugify';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class DeckLandingPage extends React.Component {
 
@@ -217,6 +218,25 @@ class DeckLandingPage extends React.Component {
                 </Grid>
             </Container>
         );
+    }
+
+    componentDidMount() {
+        this.setTitle();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.DeckViewStore.deckData.title !== prevProps.DeckViewStore.deckData.title) {
+            this.setTitle();
+        }
+    }
+
+    setTitle = () => {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'DeckLandingPage.title',
+                defaultMessage: 'Presentation information'
+            }) + ' | ' + this.props.DeckViewStore.deckData.title
+        });
     }
 
     render() {
@@ -475,7 +495,8 @@ class DeckLandingPage extends React.Component {
 }
 
 DeckLandingPage.contextTypes = {
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 DeckLandingPage = connectToStores(DeckLandingPage, [

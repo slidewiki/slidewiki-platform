@@ -25,10 +25,6 @@ export default function loadContentUsage(context, payload, done) {
             context.dispatch('LOAD_CONTENT_USAGE_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'usage'});
         }
-        let pageTitle = shortTitle + ' | Content Usage | ' + payload.params.stype + ' | ' + payload.params.sid;
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
         done();
     });
 }

@@ -13,11 +13,6 @@ export default function addSlide(context, payload, done) {
         } else {
             context.dispatch('ADD_SLIDE_EDIT_SUCCESS', res);
         }
-        //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
-        let pageTitle = shortTitle + ' | Slide Edit | ';
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
         done();
     }
 

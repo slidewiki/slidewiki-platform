@@ -44,11 +44,6 @@ export default function loadDeckFamily(context, payload, done) {
                 });
                 done();
             }
-
-            let pageTitle = shortTitle + ' | Tag | ' + defaultName;
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: pageTitle
-            });
         });
     });   
 }

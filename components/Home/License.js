@@ -1,8 +1,19 @@
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import StaticPage from './StaticPage';
+import PropTypes from 'prop-types';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class license extends React.Component {
+      componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'licence.title',
+                defaultMessage: 'Content Licenses'
+            })
+        });
+    }
+
     render() {
         return (
             <StaticPage>
@@ -90,5 +101,10 @@ class license extends React.Component {
         );
     }
 }
+
+license.contextTypes = {
+  intl: PropTypes.object.isRequired,
+  executeAction: PropTypes.func.isRequired
+};
 
 export default license;

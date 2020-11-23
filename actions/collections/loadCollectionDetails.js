@@ -23,11 +23,6 @@ export default function loadCollectionDetails(context, payload, done) {
         } else {
             res.sortBy = (payload.query.sort) ? payload.query.sort : 'order';
             context.dispatch('LOAD_COLLECTION_DETAILS_SUCCESS', res);
-
-            let pageTitle = shortTitle + ' | Playlist | ' + res.title;
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: pageTitle
-            });
         }
 
         done();

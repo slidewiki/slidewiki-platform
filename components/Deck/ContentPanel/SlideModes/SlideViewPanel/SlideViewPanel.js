@@ -4,12 +4,17 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideContentView from './SlideContentView';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
+import setDocumentTitle from '../../../../../actions/setDocumentTitle';
 
 class SlideViewPanel extends React.Component {
     constructor(props) {
         super(props);
         this.currentID;
         this.slideContentView = '';
+    }
+    componentDidMount(){
+        this.setTitle();
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.SlideViewStore.content !== nextProps.SlideViewStore.content) {
@@ -28,13 +33,21 @@ class SlideViewPanel extends React.Component {
     componentDidUpdate(){
         const selector = this.props.selector || this.props.DeckTreeStore.selector;
         if (selector && this.currentID !== selector.sid) {
+            this.setTitle();
             this.slideContentView = '';
             this.currentID = selector.sid;
         }
     }
     componentWillUnmount() {
     }
+    setTitle() {
+        const deckTitle = this.props.DeckTreeStore.deckTree.get('title');
+        const slideTitle = this.props.SlideEditStore.title;
 
+        this.context.executeAction(setDocumentTitle, { 
+            title: `${deckTitle} | ${slideTitle}`
+        });
+    }
     render() {
         const selector = this.props.selector || this.props.DeckTreeStore.selector;
         let deckTheme = selector && selector.theme;
@@ -83,10 +96,11 @@ SlideViewPanel.contextTypes = {
     executeAction: PropTypes.func.isRequired
 };
 
-SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, DeckTreeStore], (context, props) => {
+SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, DeckTreeStore, SlideEditStore], (context, props) => {
     return {
         SlideViewStore: context.getStore(SlideViewStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
     };
 });
 

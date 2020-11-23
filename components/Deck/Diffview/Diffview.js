@@ -7,6 +7,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DiffViewStore from '../../../stores/DiffViewStore';
 
 import diff_fns from './diff_funcs';
+import setDocumentTitle from '../../../actions/setDocumentTitle';
 
 class DiffView extends Component {
     constructor(props) {
@@ -30,6 +31,12 @@ class DiffView extends Component {
     }
 
     componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'DiffView.title',
+                defaultMessage: 'Diff view'
+            })
+        });
         this.diff();
         this.setState({ isLoaded: true });
         window.addEventListener('resize', (evt) => {
@@ -165,6 +172,11 @@ class DiffView extends Component {
     }
 
 }
+
+DiffView.contextTypes = {
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
+};
 
 DiffView.defaultProps = {
     diffcontent: '',

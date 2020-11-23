@@ -6,10 +6,6 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import { isEmpty, isArray } from 'lodash';
 
 export default function loadSearchResults(context, payload, done) {
-    context.dispatch('UPDATE_PAGE_TITLE', {
-        pageTitle: shortTitle + ' | Search'
-    });
-
     payload.query.sort = payload.query.sort || 'score';
 
     // convert facet filters to arrays

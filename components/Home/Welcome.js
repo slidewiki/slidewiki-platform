@@ -1,7 +1,18 @@
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import PropTypes from 'prop-types';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class welcome extends React.Component {
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'welcome.title',
+                defaultMessage: 'Welcome'
+            })
+        });
+    }
+
     render() {
         const compMessageStyle = {
             background: '#1E78BB'
@@ -140,5 +151,10 @@ class welcome extends React.Component {
         );
     }
 }
+
+welcome.contextTypes = {
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
+};
 
 export default welcome;
