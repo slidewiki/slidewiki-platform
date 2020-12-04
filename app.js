@@ -53,6 +53,7 @@ import UserPerformancePredictionsStore from './stores/UserPerformancePredictions
 import UserRecommendationsStore from './stores/UserRecommendationsStore';
 import UserFollowingsStore from './stores/UserFollowingsStore';
 import LoginModalStore from './stores/LoginModalStore';
+import QuestionAnsweringStore from './stores/QuestionAnsweringStore';
 import UserStatsStore from './stores/UserStatsStore';
 import UserGroupsStore from './stores/UserGroupsStore';
 import GroupStatsStore from './stores/GroupStatsStore';
@@ -118,6 +119,7 @@ const app = new Fluxible({
         UserGroupsStore,
         GroupStatsStore,
         DeckStatsStore,
+        QuestionAnsweringStore
     ]
 });
 

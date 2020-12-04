@@ -29,6 +29,7 @@ import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import chooseActionGroups from '../actions/usergroups/chooseActionGroups';
 import loadFeatured from '../actions/loadFeatured';
+import loadQuestionAnswers from '../actions/loadQuestionAnswers';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
@@ -301,6 +302,16 @@ export default {
         handler: require('../components/Search/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
+        }
+    },
+    questionAnswering: {
+        path: '/question-answering',
+        method: 'get',
+        page: 'questionAnswering',
+        title: 'SlideWiki -- Question Answering',
+        handler: require('../components/QuestionAnswering/QuestionAnswering'),
+        action: (context, payload, done) => {
+            context.executeAction(loadQuestionAnswers, payload, done);
         }
     },
     sso: {

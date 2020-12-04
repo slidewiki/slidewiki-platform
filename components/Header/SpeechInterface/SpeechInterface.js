@@ -195,6 +195,18 @@ class SpeechInterface extends React.Component {
                 id: 'SpeechInterface.more',
                 defaultMessage: 'More',
             },
+            questionAnswerListenTo: {
+                id: 'SpeechInterface.command.questionAnswerListenTo',
+                defaultMessage: 'question',
+            },
+            questionAnswerAnswer: {
+                id: 'SpeechInterface.command.questionAnswerAnswer',
+                defaultMessage: 'finding answers to your question',
+            },
+            questionAnswerExample: {
+                id: 'SpeechInterface.command.questionAnswerExample',
+                defaultMessage: 'Question: what is accessibility?',
+            },
         });
     }
 
@@ -252,7 +264,6 @@ class SpeechInterface extends React.Component {
     };
 
     getSpeechCommands = () => {
-        console.log('this.messages.openSlideshowListenTo1', this.messages.openSlideshowListenTo1);
         return {
             openSlideshow: {
                 type: 'action',
@@ -367,6 +378,16 @@ class SpeechInterface extends React.Component {
                 answer: this.context.intl.formatMessage(this.messages.searchAnswer),
                 pages: ['*'],
                 example: this.context.intl.formatMessage(this.messages.searchExample),
+            },
+            questionAnswering: {
+                type: 'navigation',
+                listenTo: [
+                    this.context.intl.formatMessage(this.messages.questionAnswerListenTo),
+                ],
+                navigateTo: '/question-answering?question=[param]',
+                answer: this.context.intl.formatMessage(this.messages.questionAnswerAnswer),
+                pages: ['*'],
+                example: this.context.intl.formatMessage(this.messages.questionAnswerExample),
             },
         };
     };
