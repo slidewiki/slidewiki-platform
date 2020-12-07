@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { Button, Icon, Ref } from 'semantic-ui-react';
+import { Button, Icon, Ref, Message } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { match } from 'path-to-regexp';
 import { pickBy, upperFirst, shuffle } from 'lodash';
@@ -207,6 +207,10 @@ class SpeechInterface extends React.Component {
                 id: 'SpeechInterface.command.questionAnswerExample',
                 defaultMessage: 'Question: what is accessibility?',
             },
+            browserWarning: {
+                id: 'SpeechInterface.command.browserWarning',
+                defaultMessage: 'The speech interface currently only works in the Google Chrome browser',
+            },
         });
     }
 
@@ -223,6 +227,9 @@ class SpeechInterface extends React.Component {
 
     componentDidUpdate() {
         if (typeof window !== 'undefined') {
+            if (!this.isChromeBrowser()) {
+                return;
+            }
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (SpeechRecognition) {
                 this.recognition = new SpeechRecognition();
@@ -232,6 +239,9 @@ class SpeechInterface extends React.Component {
             }
         }
     }
+    isChromeBrowser = () => {
+        return typeof window !== 'undefined' && window.navigator ? window.navigator.userAgent.indexOf('Chrome') !== -1 : null;
+    };
     getRecognitionLanguage = () => {
         const { locale } = this.context.intl;
         if (locale === 'en') {
@@ -381,9 +391,7 @@ class SpeechInterface extends React.Component {
             },
             questionAnswering: {
                 type: 'navigation',
-                listenTo: [
-                    this.context.intl.formatMessage(this.messages.questionAnswerListenTo),
-                ],
+                listenTo: [this.context.intl.formatMessage(this.messages.questionAnswerListenTo)],
                 navigateTo: '/question-answering?question=[param]',
                 answer: this.context.intl.formatMessage(this.messages.questionAnswerAnswer),
                 pages: ['*'],
@@ -402,6 +410,7 @@ class SpeechInterface extends React.Component {
     handleClickOutside = (event) => {
         if (
             this.boxRef &&
+            this.boxRef.current &&
             !this.boxRef.current.contains(event.target) &&
             this.buttonRef &&
             !this.buttonRef.current.ref.current.contains(event.target)
@@ -414,7 +423,9 @@ class SpeechInterface extends React.Component {
         this.setState({
             showPopover: false,
         });
-        this.recognition.abort();
+        if (this.recognition) {
+            this.recognition.abort();
+        }
     };
 
     togglePopover = () => {
@@ -454,72 +465,78 @@ class SpeechInterface extends React.Component {
                 limit: 3, //reset limit
             });
 
-            this.recognition.onresult = (event) => {
-                if (typeof event.results === 'undefined') {
-                    return;
-                }
-                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+            if (this.recognition) {
+                this.recognition.onresult = (event) => {
+                    if (typeof event.results === 'undefined') {
+                        return;
+                    }
+                    const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
 
-                this.setState({
-                    transcript,
-                });
+                    this.setState({
+                        transcript,
+                    });
 
-                let commandExecuted = false;
+                    let commandExecuted = false;
 
-                for (let commandName in commandsFiltered) {
-                    const command = this.commands[commandName];
-                    const { listenTo, type, targetId, event, answer, params, navigateTo } = command;
+                    for (let commandName in commandsFiltered) {
+                        const command = this.commands[commandName];
+                        const { listenTo, type, targetId, event, answer, params, navigateTo } = command;
 
-                    for (const _listenTo of listenTo) {
-                        if (transcript.indexOf(_listenTo) === 0) {
-                            // param could be used with something like: allowParams, if false, it should be empty
-                            const param =
-                                transcript[_listenTo.length] !== undefined ? transcript.substring(_listenTo.length, transcript.length).trim() : null;
+                        for (const _listenTo of listenTo) {
+                            if (transcript.indexOf(_listenTo) === 0) {
+                                // param could be used with something like: allowParams, if false, it should be empty
+                                const param =
+                                    transcript[_listenTo.length] !== undefined
+                                        ? transcript.substring(_listenTo.length, transcript.length).trim()
+                                        : null;
 
-                            if (type === 'action') {
-                                const targetElement = document.querySelector(`[data-speech-id=${targetId}]`);
-                                commandExecuted = true;
+                                if (type === 'action') {
+                                    const targetElement = document.querySelector(`[data-speech-id=${targetId}]`);
+                                    commandExecuted = true;
 
-                                if (targetElement) {
-                                    targetElement.click();
-                                } else {
-                                    this.speechSynthesis(this.context.intl.formatMessage(this.messages.actionCannotBePerformed));
-                                    return;
-                                }
-                            } else if (type === 'navigation') {
-                                commandExecuted = true;
-
-                                if (!navigateTo) {
-                                    for (const page of params.page) {
-                                        if (page.name === param) {
-                                            window.location.href = page.path;
-                                        }
+                                    if (targetElement) {
+                                        targetElement.click();
+                                    } else {
+                                        this.speechSynthesis(this.context.intl.formatMessage(this.messages.actionCannotBePerformed));
+                                        return;
                                     }
-                                } else {
-                                    const href = navigateTo.replace('[param]', param);
-                                    window.location.href = href;
-                                }
-                            }
+                                } else if (type === 'navigation') {
+                                    commandExecuted = true;
 
-                            if (answer) {
-                                this.speechSynthesis(answer);
+                                    if (!navigateTo) {
+                                        for (const page of params.page) {
+                                            if (page.name === param) {
+                                                window.location.href = page.path;
+                                            }
+                                        }
+                                    } else {
+                                        const href = navigateTo.replace('[param]', param);
+                                        window.location.href = href;
+                                    }
+                                }
+
+                                if (answer) {
+                                    this.speechSynthesis(answer);
+                                }
                             }
                         }
                     }
-                }
 
-                if (!commandExecuted) {
-                    this.speechSynthesis(this.context.intl.formatMessage(this.messages.notFound));
-                } else {
-                    this.setState({
-                        showPopover: false,
-                    });
-                }
-            };
+                    if (!commandExecuted) {
+                        this.speechSynthesis(this.context.intl.formatMessage(this.messages.notFound));
+                    } else {
+                        this.setState({
+                            showPopover: false,
+                        });
+                    }
+                };
 
-            this.recognition.start();
+                this.recognition.start();
+            }
         } else {
-            this.recognition.abort();
+            if (this.recognition) {
+                this.recognition.abort();
+            }
         }
     };
 
@@ -547,25 +564,32 @@ class SpeechInterface extends React.Component {
                     </ButtonMicrophone>
                 </Ref>
 
-                <Popover style={{ display: this.state.showPopover ? 'block' : 'none' }} ref={this.boxRef}>
-                    <SpeechArea>
-                        {this.state.transcript ? this.state.transcript : this.context.intl.formatMessage(this.messages.listening)}
-                    </SpeechArea>
-                    <WhatCanISay>
-                        <Label>{this.context.intl.formatMessage(this.messages.whatCanIAsk)}</Label>
-                        <SuggestionsList>
-                            {this.state.whatCanIAsk.map((command, index) => {
-                                if (index > this.state.limit) {
-                                    return null;
-                                }
-                                return <li key={index}>{upperFirst(command)}</li>;
-                            })}
-                        </SuggestionsList>
-                        {this.state.limit < this.state.whatCanIAsk.length && (
-                            <Button onClick={this.handleMore}>{this.context.intl.formatMessage(this.messages.more)}</Button>
+                {this.state.showPopover && (
+                    <Popover ref={this.boxRef}>
+                        {this.isChromeBrowser() === false && (
+                            <Message error style={{ margin: 10 }} role='alert'>
+                                {this.context.intl.formatMessage(this.messages.browserWarning)}
+                            </Message>
                         )}
-                    </WhatCanISay>
-                </Popover>
+                        <SpeechArea>
+                            {this.state.transcript ? this.state.transcript : this.context.intl.formatMessage(this.messages.listening)}
+                        </SpeechArea>
+                        <WhatCanISay>
+                            <Label>{this.context.intl.formatMessage(this.messages.whatCanIAsk)}</Label>
+                            <SuggestionsList>
+                                {this.state.whatCanIAsk.map((command, index) => {
+                                    if (index > this.state.limit) {
+                                        return null;
+                                    }
+                                    return <li key={index}>{upperFirst(command)}</li>;
+                                })}
+                            </SuggestionsList>
+                            {this.state.limit < this.state.whatCanIAsk.length - 1 && (
+                                <Button onClick={this.handleMore}>{this.context.intl.formatMessage(this.messages.more)}</Button>
+                            )}
+                        </WhatCanISay>
+                    </Popover>
+                )}
             </div>
         );
     }
