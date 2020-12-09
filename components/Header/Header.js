@@ -12,6 +12,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import updateTrap from '../../actions/loginModal/updateTrap';
+import SpeechInterface from './SpeechInterface/SpeechInterface';
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
@@ -126,8 +127,9 @@ class Header extends React.Component {
                                 <SearchBox className="item"/>
                             </div>
                             <div className="ui right inverted blue menu">
+                                <SpeechInterface />
                                 <div className="item">
-                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button add-deck" role="button">
+                                  <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button add-deck" role="button"  data-speech-id="addDeck">
                                       <i className="right plus icon"></i>
                                       <FormattedMessage id='header.addDeck' defaultMessage='Add deck'/>
                                   </NavLink>

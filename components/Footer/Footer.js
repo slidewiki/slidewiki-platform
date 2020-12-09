@@ -48,6 +48,10 @@ class Footer extends React.Component {
                 id: 'footer.guides',
                 defaultMessage: 'Guides and Help'
             },
+            questionAnswering: {
+                id: 'footer.questionAnswering',
+                defaultMessage: 'Question answering'
+            },
             accessibility: {
                 id: 'footer.accessibility',
                 defaultMessage: 'Accessibility'
@@ -107,6 +111,7 @@ class Footer extends React.Component {
                                             <li><a href='/about'>{this.context.intl.formatMessage(messages.aboutus)}</a></li>
                                             <li><a href='/contactus'>{this.context.intl.formatMessage(messages.contact)}</a></li>
                                             <li><a href='https://slidewiki.org/playlist/26?sort=order' target="_blank">{this.context.intl.formatMessage(messages.guides)}</a></li>
+                                            <li><NavLink href='/question-answering'>{this.context.intl.formatMessage(messages.questionAnswering)}</NavLink></li>
                                             <li><a href='/accessibility'>{this.context.intl.formatMessage(messages.accessibility)}</a></li>
                                             <li><a href='https://github.com/slidewiki' target="_blank">Github</a></li>
                                         </ul>

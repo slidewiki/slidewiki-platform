@@ -435,7 +435,7 @@ class DeckLandingPage extends React.Component {
                                                 </Button>
                                             </NavLink>
                                             <a target="_blank" href={presentationUrl} tabIndex={-1} >
-                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)}>
+                                                <Button icon size="huge" aria-label="Open slideshow in new tab" data-speech-id="openSlideshow" data-tooltip={this.context.intl.formatMessage(messages.tooltipSlideshow)}>
                                                     <Icon name="play circle" />
                                                 </Button>
                                             </a>
