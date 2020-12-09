@@ -13,10 +13,6 @@ export default {
                 const answers = JSON.parse(res);
                 callback(null, { answers });
             })
-            .catch((err) => {
-                console.log(err);
-
-                callback(null, { answers: [] });
-            });
+            .catch((err) => callback(err));
     },
 };

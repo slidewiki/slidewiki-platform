@@ -1,7 +1,7 @@
 import { connectToStores } from 'fluxible-addons-react';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, List } from 'semantic-ui-react';
+import { Button, List, Message } from 'semantic-ui-react';
 import QuestionAnsweringStore from '../../stores/QuestionAnsweringStore';
 import { navigateAction } from 'fluxible-router';
 import setDocumentTitle from '../../actions/setDocumentTitle';
@@ -44,6 +44,10 @@ class QuestionAnswering extends React.Component {
                 id: 'QuestionAnswering.answers',
                 defaultMessage: 'Answers',
             },
+            error: {
+                id: 'QuestionAnswering.error',
+                defaultMessage: 'An error has occurred, please try it again (later)',
+            },
         });
     }
 
@@ -69,7 +73,7 @@ class QuestionAnswering extends React.Component {
     };
 
     render() {
-        const { isLoading, answers } = this.props.QuestionAnsweringStore;
+        const { isLoading, answers, hasErrorOccurred } = this.props.QuestionAnsweringStore;
         return (
             <>
                 <div className='ui container' style={{ minHeight: 300, position: 'relative' }}>
@@ -95,6 +99,7 @@ class QuestionAnswering extends React.Component {
                         </div>
                     </form>
                     {isLoading && <div className='ui active text loader'>{this.context.intl.formatMessage(this.messages.loading)}</div>}
+                    {hasErrorOccurred && <Message color='red'>{this.context.intl.formatMessage(this.messages.error)}</Message>}
                     {answers.length > 0 && (
                         <>
                             <h2>{this.context.intl.formatMessage(this.messages.answers)}</h2>
