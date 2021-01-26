@@ -59,7 +59,7 @@ class About extends React.Component {
                                     <FormattedMessage id="about.github" defaultMessage="GitHub"/>
                                 </a>
                             }}
-                            defaultMessage={'SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code (and in most cases the code of the third party libraries we use) to install your own version of SlideWiki for your organisation or on your website.'}/>
+                            defaultMessage={'SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code to install your own version of SlideWiki for your organisation or on your website.'}/>
                     </p>
 
                     <p>

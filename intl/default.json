@@ -1012,7 +1012,7 @@
   "SpeechInterface.command.questionAnswerAnswer": "finding answers to your question",
   "SpeechInterface.command.questionAnswerExample": "Question: what is accessibility?",
   "SpeechInterface.command.browserWarning": "The speech interface currently only works in the Google Chrome browser",
-  "about.p5": "SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code (and in most cases the code of the third party libraries we use) to install your own version of SlideWiki for your organisation or on your website.",
+  "about.p5": "SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code to install your own version of SlideWiki for your organisation or on your website.",
   "about.p6": "SlideWiki is an open-source platform, and all its content can be reused under {link_2}.",
   "about.p4": "SlideWiki development, large-scale trials and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. For more details, see {link_1}",
   "about.header": "About SlideWiki",
