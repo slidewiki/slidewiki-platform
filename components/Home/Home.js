@@ -9,6 +9,7 @@ import SearchBox from '../Search/AutocompleteComponents/HeaderSearchBox';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import {Button} from 'semantic-ui-react';
 import updateTrap from '../../actions/loginModal/updateTrap';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 import UserProfileStore from '../../stores/UserProfileStore';
 
 class Home extends React.Component {
@@ -136,8 +137,16 @@ class Home extends React.Component {
             featuredDeck: {
                 id: 'home.featuredDeck',
                 defaultMessage: 'Featured Deck'
+            },
+            title: {
+                id: 'home.title',
+                defaultMessage: 'Homepage'
             }
         });
+    }
+
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { title: this.context.intl.formatMessage(this.messages.title) });
     }
 
     openFeatured(e){
@@ -273,9 +282,11 @@ class Home extends React.Component {
                     <div className='signin-outer'>
                         <div className='wrapper'>
                             <div className='signin-blk'>
-                                <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
-                                    {signInOrMyDecksElement}
-                                </span>
+                                <p>
+                                    <span>{this.context.intl.formatMessage(this.messages.getStarted)}{' '}
+                                        {signInOrMyDecksElement}
+                                    </span>
+                                </p>
                                 <p>{this.context.intl.formatMessage(this.messages.getStartedDescription)}</p>
                             </div>
                         </div>

@@ -30,9 +30,9 @@ CKEDITOR.editorConfig = function( config ) {
     config.fontSize_sizes = '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;40/40px;44/44px;48/48px;52/52px;56/56px;60/60px;64/64px;68/68px;72/72px;76/76px;82/82px;90/90px;99/99px'; //100/100px;120/120px;140/140px
 
     // Set the most common block elements.
-    config.format_tags = 'p;h3;h4;h5;pre';
+    config.format_tags = 'p;h1;h2;h3;h4;h5;pre';
     config.fillEmptyBlocks = true; //emptyblocks need to have space to prevent difference slide edit and slide view mode
-    config.enterMode = CKEDITOR.ENTER_DIV;
+    config.enterMode = CKEDITOR.ENTER_P;
     config.resize_enabled = false;
     config.disableObjectResizing = true;
     

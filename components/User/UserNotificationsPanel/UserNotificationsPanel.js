@@ -14,6 +14,7 @@ import loadFollowings from '../../../actions/following/loadFollowings';
 import selectAllActivityTypes from '../../../actions/user/notifications/selectAllActivityTypes';
 import FollowingsModal from './FollowingsModal';
 import {Button} from 'semantic-ui-react';
+import setDocumentTitle from '../../../actions/setDocumentTitle';
 
 let MediaQuery = require ('react-responsive');
 
@@ -44,6 +45,13 @@ class UserNotificationsPanel extends React.Component {
 
     componentDidMount() {
         $('.ui.accordion').accordion();
+
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'userNotifications.title',
+                defaultMessage: 'User notifications'
+            })
+        });
     }
 
     handleChangeToggle(type, id) {
@@ -213,6 +221,7 @@ class UserNotificationsPanel extends React.Component {
 }
 
 UserNotificationsPanel.contextTypes = {
+    intl: PropTypes.object.isRequired,
     executeAction: PropTypes.func.isRequired
 };
 UserNotificationsPanel = connectToStores(UserNotificationsPanel, [UserNotificationsStore, UserProfileStore, UserFollowingsStore], (context, props) => {

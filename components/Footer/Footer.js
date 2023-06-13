@@ -48,6 +48,10 @@ class Footer extends React.Component {
                 id: 'footer.guides',
                 defaultMessage: 'Guides and Help'
             },
+            questionAnswering: {
+                id: 'footer.questionAnswering',
+                defaultMessage: 'Question answering'
+            },
             accessibility: {
                 id: 'footer.accessibility',
                 defaultMessage: 'Accessibility'
@@ -94,25 +98,26 @@ class Footer extends React.Component {
         let currentYear = new Date().getFullYear();
 
         return (
-            <footer className='footer-container' role="contentinfo">
+            <footer className='footer-container'>
                 <div className='ui container'>
                     <div className='ui two column stackable grid'>
                         <div className='row' style={rowClasses}>
                             <div className='seven wide column'>
                                 <div className='footer-left' >
-                                    <h2 className="sr-only">{this.context.intl.formatMessage(messages.srHeader)}</h2>
+                                    <h1 className="sr-only">{this.context.intl.formatMessage(messages.srHeader)}</h1>
                                     <div className='footer-menu'>
-                                        <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.header)}</h3>
+                                        <h2 className="ui medium inverted header">{this.context.intl.formatMessage(messages.header)}</h2>
                                         <ul>
                                             <li><a href='/about'>{this.context.intl.formatMessage(messages.aboutus)}</a></li>
                                             <li><a href='/contactus'>{this.context.intl.formatMessage(messages.contact)}</a></li>
                                             <li><a href='https://slidewiki.org/playlist/26?sort=order' target="_blank">{this.context.intl.formatMessage(messages.guides)}</a></li>
+                                            <li><NavLink href='/question-answering'>{this.context.intl.formatMessage(messages.questionAnswering)}</NavLink></li>
                                             <li><a href='/accessibility'>{this.context.intl.formatMessage(messages.accessibility)}</a></li>
                                             <li><a href='https://github.com/slidewiki' target="_blank">Github</a></li>
                                         </ul>
                                     </div>
                                     <div className='footer-menu'>
-                                        <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.termsHeader)}</h3>
+                                        <h2 className="ui medium inverted header">{this.context.intl.formatMessage(messages.termsHeader)}</h2>
                                         <ul>
                                             <li><NavLink routeName='terms' href='/terms'>{this.context.intl.formatMessage(messages.terms)}</NavLink></li>
                                             <li><NavLink routeName='license' href='/license'>{this.context.intl.formatMessage(messages.license)}</NavLink></li>
@@ -125,7 +130,7 @@ class Footer extends React.Component {
                             <div className='nine wide column'>
                                 <div className='footer-menu'>
                                     <div className='footer-right'>
-                                    <h3 className="ui medium inverted header">{this.context.intl.formatMessage(messages.funding)}</h3>
+                                    <h2 className="ui medium inverted header">{this.context.intl.formatMessage(messages.funding)}</h2>
                                     <p>{this.context.intl.formatMessage(messages.fundingtext)}</p>
                                     <p>
                                         {this.context.intl.formatMessage(messages.copyrightText)}{' '}

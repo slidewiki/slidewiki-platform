@@ -9,11 +9,9 @@ import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
-
+import setDocumentTitle from '../../../../../actions/setDocumentTitle';
 import { Dropdown, Menu } from 'semantic-ui-react';
-
 import {navigateAction} from 'fluxible-router';
-
 import ContentLikeStore from '../../../../../stores/ContentLikeStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import ContentStore from '../../../../../stores/ContentStore';
@@ -21,7 +19,6 @@ import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 import Util from '../../../../common/Util';
 import MobileDetect from 'mobile-detect/mobile-detect';
 import {FormattedMessage, defineMessages} from 'react-intl';
-
 import {getEducationLevel} from '../../../../../lib/isced.js';
 
 class DeckViewPanel extends React.Component {
@@ -42,6 +39,25 @@ class DeckViewPanel extends React.Component {
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
         this.setState({isMobile: (mobile.phone() !== null) ? true : false});
+        this.setTitle();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.DeckViewStore.deckData.title !== prevProps.DeckViewStore.deckData.title) {
+            this.setTitle();
+        }
+    }
+
+    setTitle = () => {
+        let title = this.props.DeckViewStore.deckData.title;
+        title = title ? ` | ${title}`  : '';
+        const prefix = this.context.intl.formatMessage({
+            id: 'DeckViewPanel.title',
+            defaultMessage: 'Presentation overview'
+        });
+        this.context.executeAction(setDocumentTitle, { 
+            title: prefix + title
+        });
     }
 
     render() {
@@ -270,7 +286,8 @@ class DeckViewPanel extends React.Component {
 }
 
 DeckViewPanel.contextTypes = {
-    executeAction: PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
 };
 
 DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {

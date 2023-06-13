@@ -2,8 +2,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 class features extends React.Component {
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'features.title',
+                defaultMessage: 'Discover More'
+            })
+        });
+    }
+
+
     render() {
         return (
             <div className="ui container" ref="features">
@@ -186,7 +197,8 @@ class features extends React.Component {
 }
 
 features.contextTypes = {
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
 };
 
 export default features;

@@ -12,6 +12,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import ReCAPTCHA from 'react-google-recaptcha';
 import common from '../../common';
 import updateTrap from '../../actions/loginModal/updateTrap';
+import setDocumentTitle from '../../actions/setDocumentTitle';
 
 let MediaQuery = require ('react-responsive');
 
@@ -38,6 +39,10 @@ class ResetPassword extends React.Component {
                 id: 'resetPassword.captchaprompt',
                 defaultMessage: 'Please verify that you\'re a human',
             },
+            title: {
+                id: 'resetPassword.title',
+                defaultMessage: 'Reset password',
+            }
         });
         //Form validation
         const validationRules = {
@@ -80,6 +85,9 @@ class ResetPassword extends React.Component {
 
         $('.ui.form').form(validationRules);
 
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage(messages.title)
+        });
     }
 
     componentDidUpdate() {
@@ -256,7 +264,7 @@ class ResetPassword extends React.Component {
                 </div>
                 <div >
                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                    <ReCAPTCHA className="g-recaptcha" style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)}/>
                 </div>
                 <div className="ui error message" role="region" aria-live="polite"/>
 

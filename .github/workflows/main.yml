@@ -1,0 +1,28 @@
+name: CI master to experimental
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+    name: Build and deploy to test system
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - uses: actions/setup-node@v1
+      - name: NPM Install
+        run: npm install
+      - name: NPM Lint & Test
+        run: |
+          npm run lint
+          npm run test
+      - name: Build Docker image
+        run: docker build -t slidewiki/platform:latest-dev .
+      - name: Push Docker image
+        run: |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker push slidewiki/platform:latest-dev

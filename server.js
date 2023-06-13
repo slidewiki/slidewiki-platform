@@ -65,7 +65,6 @@ server.use('/glidejs', express.static(path.join(__dirname, '/node_modules/glidej
 server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckeditor')));
 server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
 server.use('/ckeditor-plugins/lineheight', express.static(path.join(__dirname, 'node_modules/ckeditor-lineheight-plugin')));
-server.use('/reveal.js-menu', express.static(path.join(__dirname, 'node_modules/reveal.js-menu')));
 server.use('/mathjax', express.static(path.join(__dirname, 'node_modules/mathjax')));
 server.use('/jquery-ui-dist', express.static(path.join(__dirname, 'node_modules/jquery-ui-dist')));
 server.use('/jquery-contextmenu', express.static(path.join(__dirname, 'node_modules/jquery-contextmenu')));
@@ -97,6 +96,7 @@ fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
+fetchrPlugin.registerService(require('./services/questionAnswering'));
 fetchrPlugin.registerService(require('./services/usergroup'));
 fetchrPlugin.registerService(require('./services/userlti'));
 fetchrPlugin.registerService(require('./services/lticonsumer'));

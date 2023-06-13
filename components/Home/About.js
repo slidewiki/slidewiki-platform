@@ -1,8 +1,19 @@
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import StaticPage from './StaticPage';
+import setDocumentTitle from '../../actions/setDocumentTitle';
+import PropTypes from 'prop-types';
 
 class About extends React.Component {
+    componentDidMount() {
+        this.context.executeAction(setDocumentTitle, { 
+            title: this.context.intl.formatMessage({
+                id: 'About.title',
+                defaultMessage: 'About'
+            })
+        });
+    }
+
     render() {
         return (
             <StaticPage>
@@ -48,7 +59,7 @@ class About extends React.Component {
                                     <FormattedMessage id="about.github" defaultMessage="GitHub"/>
                                 </a>
                             }}
-                            defaultMessage={'SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code (and in most cases the code of the third party libraries we use) to install your own version of SlideWiki for your organisation or on your website.'}/>
+                            defaultMessage={'SlideWiki is an open-source development project available on {link_3}. You are free to use or adapt our source code to install your own version of SlideWiki for your organisation or on your website.'}/>
                     </p>
 
                     <p>
@@ -73,5 +84,10 @@ class About extends React.Component {
         );
     }
 }
+
+About.contextTypes = {
+    intl: PropTypes.object.isRequired,
+    executeAction: PropTypes.func.isRequired
+};
 
 export default About;

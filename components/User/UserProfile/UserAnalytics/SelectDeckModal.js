@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
@@ -140,7 +141,7 @@ class SelectDeckModal extends React.Component{
         }
 
         let selectDeckBtn =
-            <button className="ui right floated labeled icon button" role="button" tabIndex="0"
+            <button className="ui right floated labeled icon button" tabIndex="0"
                 aria-label="New prediction job" aria-hidden={this.state.modalOpen}
                 onClick={this.handleOpen} >
                 <i className="icon chart bar"/>
@@ -200,7 +201,7 @@ class SelectDeckModal extends React.Component{
 }
 
 SelectDeckModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 SelectDeckModal = connectToStores(SelectDeckModal,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import slugify from 'slugify';
 import {Microservices} from '../../../configs/microservices';
@@ -63,13 +64,13 @@ class SimilarContentItem extends React.Component {
                 <div className="bottom attached menu ui basic buttons">
                         <a href={'/deck/' + this.props.data.deckId+deck_slug_url}
                           data-tooltip={this.context.intl.formatMessage(this.messages.open_deck)}
-                          type="button" role="button" className="ui icon button"
+                          type="button" className="ui icon button"
                           aria-label={this.context.intl.formatMessage(this.messages.open_deck)}>
                             <i className="yellow open folder large icon" aria-hidden="true" ></i>
                         </a>
                         <a href={'/presentation/' +this.props.data.deckId + deck_slug_url+'/'+this.props.data.deckId }
                             target="_blank" className="ui icon button" type="button"
-                            role="button" aria-label={this.context.intl.formatMessage(this.messages.open_slideshow)}
+                            aria-label={this.context.intl.formatMessage(this.messages.open_slideshow)}
                             data-tooltip={this.context.intl.formatMessage(this.messages.open_slideshow)}>
                             <i className="grey circle play large icon" aria-hidden="true" ></i>
                         </a>
@@ -81,6 +82,6 @@ class SimilarContentItem extends React.Component {
     }
 }
 SimilarContentItem.contextTypes = {
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
 };
 export default SimilarContentItem;

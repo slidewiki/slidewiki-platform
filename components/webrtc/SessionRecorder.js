@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { isEmpty } from '../../common';
 import { Button, Icon } from 'semantic-ui-react';
@@ -221,7 +222,7 @@ class SessionRecorder extends React.Component {
     render() {
         return (
           <div>
-          {this.state.recordSession ? <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px'}} icon={<Icon name="record" color={(!this.state.recordingStopped) ? 'red' : 'grey'}/>} disabled={!this.state.recordingStopped ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" role="button" data-tooltip={!this.state.recordingStopped ? 'Click to pause recording and open dialog.': 'Recording stopped'} data-position="bottom center"/> : ''}
+          {this.state.recordSession ? <Button style={{position: 'fixed', padding: '5px', margin: 0, right: '50%', top: '0', borderRadius: '0 0 5px 5px'}} icon={<Icon name="record" color={(!this.state.recordingStopped) ? 'red' : 'grey'}/>} disabled={!this.state.recordingStopped ? false : true} onClick={this.saveRecording.bind(this)} aria-haspopup="true" data-tooltip={!this.state.recordingStopped ? 'Click to pause recording and open dialog.': 'Recording stopped'} data-position="bottom center"/> : ''}
           </div>
 
         );
@@ -229,8 +230,8 @@ class SessionRecorder extends React.Component {
 }
 
 SessionRecorder.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    executeAction: PropTypes.func.isRequired,
+    getUser: PropTypes.func
 };
 
 export default SessionRecorder;

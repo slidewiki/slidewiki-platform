@@ -20,14 +20,16 @@ import Integrations from './Integrations';
 import {defineMessages, FormattedMessage} from 'react-intl';
 import {categories} from '../../../actions/user/userprofile/chooseAction';
 import UserStats from './UserStats';
+import { Header } from 'semantic-ui-react';
+import setDocumentTitle from '../../../actions/setDocumentTitle';
 
 let MediaQuery = require ('react-responsive');
 
 class UserProfile extends React.Component {
-    componentDidMount() {}
+    constructor(props) {
+        super(props);
 
-    componentDidUpdate() {
-        const messages = defineMessages({
+        this.messages = defineMessages({
             swalTitle1: {
                 id: 'UserProfile.swalTitle1',
                 defaultMessage: 'Changes have been applied',
@@ -47,13 +49,67 @@ class UserProfile extends React.Component {
             swalButton3: {
                 id: 'UserProfile.swalButton3',
                 defaultMessage: 'Ok',
+            },
+            titleProfile: {
+                id: 'UserProfile.titleProfile',
+                defaultMessage: 'Profile',
+            },
+            titleAccount: {
+                id: 'UserProfile.titleAccount',
+                defaultMessage: 'Account',
+            },
+            titleIntegrations: {
+                id: 'UserProfile.titleIntegrations',
+                defaultMessage: 'Authorized Accounts & Services'
+            },
+            titleGroups: {
+                id: 'UserProfile.titleGroups',
+                defaultMessage: 'My Groups'
+            },
+            titleStats: {
+                id: 'UserProfile.titleStats',
+                defaultMessage: 'User Stats'
+            },
+            titlePerformancePrediction: {
+                id: 'UserProfile.titlePerformancePrediction',
+                defaultMessage: 'Performance Prediction'
+            },
+            titleMyDecks: {
+                id: 'UserProfile.titleMyDecks',
+                defaultMessage: 'My decks'
+            },
+            titleSharedDecks: {
+                id: 'UserProfile.titleSharedDecks',
+                defaultMessage: 'Shared decks'
+            },
+            titleRecommendedDecks: {
+                id: 'UserProfile.titleRecommendedDecks',
+                defaultMessage: 'Recommended decks'
+            },
+            titlePlaylists: {
+                id: 'UserProfile.titlePlaylists',
+                defaultMessage: 'Playlists'
             }
         });
+    }
+
+    componentDidMount() {
+        this.setTitle();
+    }
+
+    componentDidUpdate(prevProps) {
+
+        const { category, categoryItem } = this.props.UserProfileStore;
+        const { category: prevCategory, categoryItem: prevCategoryItem } = prevProps.UserProfileStore;
+        if (category !== prevCategory || categoryItem !== prevCategoryItem) {
+            this.setTitle();
+        }
+        
         if (this.props.UserProfileStore.dimmer.success === true)
             swal({
                 type: 'success',
                 text: '',
-                title: this.context.intl.formatMessage(messages.swalTitle1),
+                title: this.context.intl.formatMessage(this.messages.swalTitle1),
                 timer: 2600,
                 showCloseButton: false,
                 showCancelButton: false,
@@ -70,26 +126,66 @@ class UserProfile extends React.Component {
             swal({
                 type: 'success',
                 text: '',
-                title: this.context.intl.formatMessage(messages.swalTitle2),
+                title: this.context.intl.formatMessage(this.messages.swalTitle2),
                 timer: 4000,
                 showCloseButton: false,
                 showCancelButton: false,
                 allowEscapeKey: false,
                 showConfirmButton: false
-            })
+            }) 
             .then(() => {}).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.failure === true)
             swal({
-                title: this.context.intl.formatMessage(messages.swalTitle3),
-                text: this.context.intl.formatMessage(messages.swalText3),
+                title: this.context.intl.formatMessage(this.messages.swalTitle3),
+                text: this.context.intl.formatMessage(this.messages.swalText3),
                 type: 'error',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
-                confirmButtonText: this.context.intl.formatMessage(messages.swalButton3),
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swalButton3),
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             })
             .then(() => {}).catch(swal.noop);
+    }
+
+    setTitle() {
+        const { category, categoryItem } = this.props.UserProfileStore;
+        let title = '';
+
+        if (category === categories.categories[0]) {
+            if (categoryItem === categories.settings[0]) {
+                title = this.context.intl.formatMessage(this.messages.titleProfile);
+            } else if (categoryItem === categories.settings[1]) {
+                title = this.context.intl.formatMessage(this.messages.titleAccount);
+            } else if (categoryItem === categories.settings[2]) {
+                title = this.context.intl.formatMessage(this.messages.titleIntegrations);
+            }
+        } else if (category === categories.categories[1]) {
+            if (categoryItem === categories.groups[0]) {
+                title = this.context.intl.formatMessage(this.messages.titleGroups);
+            }
+        } else if(category === categories.categories[2]) {
+            title = this.context.intl.formatMessage(this.messages.titlePlaylists);
+        } else if (category === undefined || category === categories.categories[3]) {
+            if (categoryItem === categories.decks[0]) {
+                title = this.context.intl.formatMessage(this.messages.titleSharedDecks);
+            } else {
+                title = this.context.intl.formatMessage(this.messages.titleMyDecks);
+            }
+        } else if (category === categories.categories[4]) {
+            title = this.context.intl.formatMessage(this.messages.titleRecommendedDecks);
+        } else if (category === 'stats') {
+            title = this.context.intl.formatMessage(this.messages.titleStats);
+        } else if (category === categories.categories[7]) {
+            if (categoryItem === categories.analytics[0]) {
+                title = this.context.intl.formatMessage(this.messages.titlePerformancePrediction);
+            }
+        } else {
+            title = this.context.intl.formatMessage(this.messages.titleProfile);
+        }
+        this.context.executeAction(setDocumentTitle, { 
+            title: `${title}`
+        });
     }
 
     chooseView() {
@@ -163,16 +259,15 @@ class UserProfile extends React.Component {
 
     displayUserSettings() {
         return (
-          <div>
+          <main>
               <div className="ui segments">
-                  <h1 className="sr-only" id="main" role="main">Profile Settings</h1>
                   <div className="ui secondary segment" >
-                      <h2>
+                    <Header as="h2" size="medium">
                         <FormattedMessage
                           id='UserProfile.exchangePicture'
                           defaultMessage='Exchange picture'
                         />
-                      </h2>
+                      </Header>
                   </div>
                   <div className="ui segment">
                       <ChangePicture user={ this.props.UserProfileStore.user }/>
@@ -181,31 +276,31 @@ class UserProfile extends React.Component {
               </div>
               <div className="ui segments">
                   <div className="ui secondary segment">
-                      <h2>
+                    <Header as="h2" size="medium">
                         <FormattedMessage
                           id='UserProfile.alterData'
                           defaultMessage='Alter my personal data'
                         />
-                      </h2>
+                      </Header>
                   </div>
                   <div className="ui segment">
                       <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
                   </div>
 
               </div>
-          </div>);
+          </main>);
     }
 
     displayAccounts() {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
-                    <h2>
+                    <Header as="h2" size="medium">
                       <FormattedMessage
                         id='UserProfile.changePassword'
                         defaultMessage='Change password'
                       />
-                    </h2>
+                    </Header>
                   </div>
 
                   <div className="ui segment">
@@ -218,12 +313,12 @@ class UserProfile extends React.Component {
             {changePassword}
             <div className="ui segments">
               <div className="ui red inverted segment">
-                <h2>
+                <Header as="h2" size="medium">
                   <FormattedMessage
                     id='UserProfile.deactivateAccount'
                     defaultMessage='Deactivate Account'
                   />
-                </h2>
+                </Header>
               </div>
 
               <div className="ui segment">

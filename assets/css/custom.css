@@ -291,7 +291,7 @@ div#embedModal .fields>label {
   }
   .au-body .au-skip-link__link:hover,.au-skip-link__link:hover{
     text-decoration:none;
-    color:#fff
+    color:#000
   }
 /* Questions Display */
 .questionsList{
@@ -328,4 +328,9 @@ div#embedModal .fields>label {
   color:#991c1c;
   margin-top:3px;
   display:block;
+}
+
+/* Make sure the editor button focus has sufficient contrast */ 
+.editor-buttons i:focus{
+  outline:2px solid #000;
 }

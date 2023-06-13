@@ -57,12 +57,6 @@ export default function saveSlide(context, payload, done) {
                 }
                 context.executeAction(addActivity, {activity: activity});
             }
-
-            //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
-            //let pageTitle = shortTitle + ' | Slide Edit | ';
-            //context.dispatch('UPDATE_PAGE_TITLE', {
-            //    pageTitle: pageTitle
-            //});
             done();
         });
     }

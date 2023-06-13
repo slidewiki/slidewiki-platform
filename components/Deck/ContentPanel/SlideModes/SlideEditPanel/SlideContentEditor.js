@@ -377,9 +377,9 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" style="position: relative; width: ${width}px; height: ${height}px;">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid h-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
                     '   <h3>Title</h3></div>'+
-                    '   <div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
+                    '   <div _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
                     '   <ul>'+
                     '   	<li class="h-left">Text bullet 1</span>'+
                     '   	<li class="h-left">Text bullet 2</span></li>'+
@@ -393,10 +393,10 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
-                                        '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; ">'+
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
+                                        '<div _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; ">'+
                                         '<p>Row 1 - Column 1</p></div>'+
-                                        '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>';
+                                        '<div _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>';
                 pptx2htmlCloseDiv = '</div>';
                 this.rewriteTemplate(template, keepExistingContent, pptx2htmlStartDiv, pptx2htmlcontent, pptx2htmlCloseDiv);
                 break;
@@ -404,11 +404,11 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; ">'+
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
+                    '<div _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; ">'+
                     '<p>Row 1 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
                     '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">'+
                     '<p>Row 1 - Column&nbsp;2</p>'+
@@ -420,11 +420,11 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; ">'+
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
+                '<div _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                 '<p>Row 2 - Column&nbsp;1</p>'+
                 '</div>'+
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                '<div _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>'+
                 '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; ">'+
                 '<div class="h-mid">&nbsp;</div>'+
                 '<div class="h-mid"><p>Row 1</p></div></div>'+
@@ -438,11 +438,11 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: 720px; position: relative;  transform-origin: left top 0px;">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; ">'+
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
+                '<div _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                 '<p>Row 2 - Column 1</p>'+
                 '</div>'+
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                '<div _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>'+
                 '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; ">'+
                 '<div class="h-mid">&nbsp;</div>'+
                 '<div class="h-mid">Row 1 - Column 1</div>'+
@@ -454,11 +454,11 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" style="width: ${width}px; height: ${height}px; position: relative;  transform-origin: left top 0px;">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; ">'+
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
+                '<div _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                 '<p>Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
                 '</div>'+
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                '<div _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
                 '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; ">'+
                 '<div class="h-mid">'+
                 '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
@@ -494,27 +494,27 @@ class SlideContentEditor extends React.Component {
                 width = 960;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" id="56826" style="position: relative; width: ${width}; height: ${height}px; transform: scale(0.859406, 0.859406); transform-origin: left top 0px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">`;
-                pptx2htmlcontent = '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" id="79445" style="position: absolute; top: 144.275px; left: 1.43937px; width: 950.596px; height: 78.9953px; z-index: 23488; cursor: auto;" tabindex="0">' +
+                pptx2htmlcontent = '<div _type="title" class="block content v-mid h-mid" id="79445" style="position: absolute; top: 144.275px; left: 1.43937px; width: 950.596px; height: 78.9953px; z-index: 23488; cursor: auto;">' +
                 '<h3 id="4651"><span id="93000" style="color:#1e78bb;"><span id="80895"><span id="13770" style="font-family:Tahoma,Geneva,sans-serif;">SlideWiki</span></span></span></h3>' +
                 '</div>' +
                 '' +
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" id="70846" style="position: absolute; top: 313.978px; left: 4.17467px; width: 944.8px; height: 314.665px; z-index: 23520; cursor: auto;" tabindex="0">' +
+                '<div _type="body" class="block content v-up" id="70846" style="position: absolute; top: 313.978px; left: 4.17467px; width: 944.8px; height: 314.665px; z-index: 23520; cursor: auto;">' +
                 '<p id="52813" style="text-align: center;"><span id="984">Content</span></p>' +
                 '</div>' +
                 '' +
-                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" id="49382" style="position: absolute; top: 225.751px; left: 5.0175px; width: 945.964px; height: 59.8476px; z-index: 23520; cursor: auto;" tabindex="0">' +
+                '<div _type="body" class="block content v-up" id="49382" style="position: absolute; top: 225.751px; left: 5.0175px; width: 945.964px; height: 59.8476px; z-index: 23520; cursor: auto;">' +
                 '<p id="72233" style="text-align: center;"><span id="23985" style="color:#1e78bb;">Subtitle</span></p>' +
                 '</div>'+
                 '' +
-                '<div id="19340" style="position: absolute; top: 2.96545px; left: 2.9309px; width: 322.038px; height: 127.848px; z-index: 23530; cursor: auto;" tabindex="0">' +
+                '<div id="19340" style="position: absolute; top: 2.96545px; left: 2.9309px; width: 322.038px; height: 127.848px; z-index: 23530; cursor: auto;">' +
                 '<div class="h-left" id="51275"><img alt="" height="100" id="20263" src="https://fileservice.stable.slidewiki.org/2346/08d55130-688b-11e7-b72f-6963e22f1150.png" width="316" /></div>' +
                 '</div>' +
                 '' +
-                '<div id="84757" style="position: absolute; top: 1.15979px; left: 806.461px; width: 150.15px; height: 120.182px; z-index: 23540; cursor: auto;" tabindex="0">' +
+                '<div id="84757" style="position: absolute; top: 1.15979px; left: 806.461px; width: 150.15px; height: 120.182px; z-index: 23540; cursor: auto;">' +
                 '<div class="h-left" id="47372"><img alt="" height="100" id="29851" src="https://fileservice.stable.slidewiki.org/2346/41eb9330-688b-11e7-b72f-6963e22f1150.png" width="136" /></div>' +
                 '</div>' +
                 '' +
-                '<div id="38573" style="position: absolute; top: 655.409px; left: 11.9155px; width: 936.411px; height: 52.2163px; z-index: 23550; cursor: auto;" tabindex="0">' +
+                '<div id="38573" style="position: absolute; top: 655.409px; left: 11.9155px; width: 936.411px; height: 52.2163px; z-index: 23550; cursor: auto;">' +
                 '<h4 class="h-left" id="45263" style="text-align: center;"><span id="34455" style="color:#ffffff;"><span class="text-block" id="27908"><span id="54919" style="background-color:#1e78bb;">Footer</span></span></span></h4>' +
                 '</div>';
                 pptx2htmlCloseDiv = '</div>';
@@ -525,28 +525,28 @@ class SlideContentEditor extends React.Component {
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" id="65156" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div id="42107">&nbsp;</div>'+
-                '<div _id="20482" _idx="undefined" _name="Τίτλος 1" _type="title" class="block content v-up ui-resizable context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;" tabindex="0"><span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Στυλ κύριου τίτλου</span></span></span></span></span></div>'+
-                '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 874.4px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div _type="title" class="block content v-up ui-resizable context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;"><span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Στυλ κύριου τίτλου</span></span></span></span></span></div>'+
+                '<div _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 874.4px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;">'+
                 '<div class="O0" id="52252" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:left"><span id="52705" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="63239" style="line-height:94%"><span id="50131" style="unicode-bidi:embed"><span id="13440" style="vertical-align:baseline"><span id="24254"><span id="39451" style="font-size:15.0pt"><span id="1683">■</span></span><span id="68631" style="font-size:15.0pt"><span id="84651"><span id="32068" style="color:#44546a"><span id="27527">Επεξεργασία στυλ υποδείγματος κειμένου</span></span></span></span></span></span></span></span></span></div>'+
                 '<div class="O1" id="97828" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:.75in; text-align:left"><span id="3427" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="37790" style="line-height:94%"><span id="46388" style="unicode-bidi:embed"><span id="28392" style="vertical-align:baseline"><span id="80346"><span id="58669" style="font-size:15.0pt"><span id="43350">–</span></span><span id="19009" style="font-size:15.0pt"><span id="1917"><span id="55809" style="color:#44546a"><span id="97967"><span id="93492" style="font-style:italic">Δεύτερου επιπέδου</span></span></span></span></span></span></span></span></span></span></div>'+
                 '<div class="O2" id="47360" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:1.13in; text-align:left"><span id="43904" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="35348" style="line-height:94%"><span id="25844" style="unicode-bidi:embed"><span id="88898" style="vertical-align:baseline"><span id="34086"><span id="85847" style="font-size:13.0pt"><span id="5433">■</span></span><span id="88667" style="font-size:13.0pt"><span id="22977"><span id="91060" style="color:#44546a"><span id="63567">Τρίτου επιπέδου</span></span></span></span></span></span></span></span></span></div>'+
                 '<div class="O3" id="95692" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:1.5in; text-align:left"><span id="59126" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="19780" style="line-height:94%"><span id="63156" style="unicode-bidi:embed"><span id="94918" style="vertical-align:baseline"><span id="51569"><span id="47155" style="font-size:13.0pt"><span id="17715">–</span></span><span id="5499" style="font-size:13.0pt"><span id="94774"><span id="2878" style="color:#44546a"><span id="14908"><span id="54673" style="font-style:italic">Τέταρτου επιπέδου</span></span></span></span></span></span></span></span></span></span></div>'+
                 '<div class="O4" id="39182" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:1.88in; text-align:left"><span id="94468" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="74893" style="line-height:94%"><span id="23192" style="unicode-bidi:embed"><span id="73743" style="vertical-align:baseline"><span id="29433"><span id="98602" style="font-size:12.0pt"><span id="15240">■</span></span><span id="67631" style="font-size:12.0pt"><span id="8611"><span id="53659" style="color:#44546a"><span id="28991">Πέμπτου επιπέδου</span></span></span></span></span></span></span></span></span></div>'+
                 '</div>'+
-                '<div _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;" tabindex="0"><svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
-                '<div class="context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;"><svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
+                '<div class="context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;">'+
                 '<div class="h-left" id="79727"><img alt="" data-widget="image" id="99176" src="https://fileservice.stable.slidewiki.org/2346/88588ad0-a481-11e7-a346-5db6696affe9.png" style="width: 23.25px; height: 715.158px;" width="26" height="722"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="69723" style="position: absolute; top: 585.05px; left: 168.866px; width: 1172.12px; height: 124.833px; z-index: 29872; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="69723" style="position: absolute; top: 585.05px; left: 168.866px; width: 1172.12px; height: 124.833px; z-index: 29872; cursor: auto;">'+
                 '<div class="h-left" id="11016"><img alt="" data-widget="image" id="77810" src="https://fileservice.stable.slidewiki.org/2346/43b00690-a483-11e7-a346-5db6696affe9.png" style="width: 1164.12px; height: 114.719px;" width="1161" height="134"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="18921" style="position: absolute; top: 635.895px; left: 174.382px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="18921" style="position: absolute; top: 635.895px; left: 174.382px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="36912">&nbsp;</div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="93035"><img alt="" id="27106" src="https://fileservice.stable.slidewiki.org/picture/bea4076061475077ca3f733008a60fae8b16e1d43d575884c701ce50327b423c.jpg" style="width: 241px; height: 126px;" width="241" height="126"></div>'+
                 '</div>'+
-                '<div class="ui-resizable context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="ui-resizable context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="34717"><img alt="" id="9225" src="https://fileservice.stable.slidewiki.org/2346/24fbd5f0-a481-11e7-a346-5db6696affe9.png" style="width: 166.514px; height: 59.8675px;" width="191" height="78"></div>'+
                 '</div>';
                 pptx2htmlCloseDiv = '</div>';
@@ -557,27 +557,27 @@ class SlideContentEditor extends React.Component {
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" id="65156" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div id="42107">&nbsp;</div>'+
-                '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 780.914px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 780.914px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
                 '<div class="O0" id="52252" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:left">'+
                 '<div id="61964" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:justify"><span id="92002" style="language:nl"><span id="32406" style="line-height:94%"><span id="30401" style="text-justify:inter-ideograph"><span id="37831" style="unicode-bidi:embed"><span id="32845" style="vertical-align:baseline"><span id="36756" style="punctuation-wrap:hanging"><span id="19931" style="font-size:20.0pt"><span id="8447" style="font-family:&quot;Franklin Gothic Book&quot;">■</span></span><span id="33158" style="font-size:20.0pt"><span id="22940" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="28349" style="color:#44546a"><span id="28833" style="language:en-US"><span id="26176" style="font-weight:bold">Bold Text (A)</span></span></span></span></span><span id="35225" style="font-size:20.0pt"><span id="15107" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="55716" style="color:#44546a"><span id="95236" style="language:en-US">: Normal Text 1</span></span></span></span> </span></span></span></span></span></span></div>'+
                 '<div id="12702" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:justify"><span id="3373" style="language:nl"><span id="60220" style="line-height:94%"><span id="17319" style="text-justify:inter-ideograph"><span id="69555" style="unicode-bidi:embed"><span id="65166" style="vertical-align:baseline"><span id="53339" style="punctuation-wrap:hanging"><span id="69614" style="font-size:20.0pt"><span id="99563" style="font-family:&quot;Franklin Gothic Book&quot;">■</span></span><span id="91266" style="font-size:20.0pt"><span id="15725" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="54575" style="color:#44546a"><span id="51611" style="language:en-US"><span id="49242" style="font-weight:bold">Bold Text (B)</span></span></span></span></span><span id="66190" style="font-size:20.0pt"><span id="94200" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="88177" style="color:#44546a"><span id="47184" style="language:en-US">: Lorem ipsum dolor sit </span></span></span></span><span id="50438" style="font-size:20.0pt"><span id="44226" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="48715" style="color:#44546a"><span id="17560" style="language:en-US">amet</span></span></span></span><span id="66870" style="font-size:20.0pt"><span id="42576" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="30399" style="color:#44546a"><span id="92581" style="language:en-US">, </span></span></span></span><span id="78342" style="font-size:20.0pt"><span id="50497" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="97546" style="color:#44546a"><span id="8525" style="language:en-US">consectetur</span></span></span></span> <span id="70697" style="font-size:20.0pt"><span id="17650" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="67446" style="color:#44546a"><span id="27444" style="language:en-US">adipiscing</span></span></span></span> <span id="45543" style="font-size:20.0pt"><span id="87683" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="98836" style="color:#44546a"><span id="45195" style="language:en-US">elit</span></span></span></span><span id="11770" style="font-size:20.0pt"><span id="80300" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="95102" style="color:#44546a"><span id="65730" style="language:en-US">, </span></span></span></span><span id="89161" style="font-size:20.0pt"><span id="72649" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="48374" style="color:#44546a"><span id="41831" style="language:en-US">sed</span></span></span></span><span id="70471" style="font-size:20.0pt"><span id="72674" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="75527" style="color:#44546a"><span id="10594" style="language:en-US"> do </span></span></span></span><span id="22477" style="font-size:20.0pt"><span id="41860" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="15058" style="color:#44546a"><span id="55217" style="language:en-US">eiusmod</span></span></span></span> <span id="25539" style="font-size:20.0pt"><span id="62315" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="67083" style="color:#44546a"><span id="26331" style="language:en-US">tempor</span></span></span></span> <span id="85623" style="font-size:20.0pt"><span id="44318" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="59355" style="color:#44546a"><span id="52690" style="language:en-US">incididunt</span></span></span></span> <span id="80730" style="font-size:20.0pt"><span id="11025" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="17979" style="color:#44546a"><span id="70012" style="language:en-US">ut</span></span></span></span> <span id="85909" style="font-size:20.0pt"><span id="8542" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="39626" style="color:#44546a"><span id="50669" style="language:en-US">labore</span></span></span></span><span id="3835" style="font-size:20.0pt"><span id="55467" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="77352" style="color:#44546a"><span id="92606" style="language:en-US"> et </span></span></span></span><span id="8225" style="font-size:20.0pt"><span id="40112" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="97016" style="color:#44546a"><span id="33027" style="language:en-US">dolore</span></span></span></span><span id="98523" style="font-size:20.0pt"><span id="97881" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="19447" style="color:#44546a"><span id="46837" style="language:en-US"> magna </span></span></span></span><span id="48541" style="font-size:20.0pt"><span id="87982" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="71554" style="color:#44546a"><span id="15324" style="language:en-US">aliqua</span></span></span></span><span id="28308" style="font-size:20.0pt"><span id="3931" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="6876" style="color:#44546a"><span id="73068" style="language:en-US">;</span></span></span></span></span></span></span></span></span></span></div>'+
                 '<div id="72688" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:justify"><span id="19467" style="language:nl"><span id="94513" style="line-height:94%"><span id="8249" style="text-justify:inter-ideograph"><span id="87225" style="unicode-bidi:embed"><span id="7607" style="vertical-align:baseline"><span id="13939" style="punctuation-wrap:hanging"><span id="58364" style="font-size:20.0pt"><span id="4805" style="font-family:&quot;Franklin Gothic Book&quot;">■</span></span><span id="90516" style="font-size:20.0pt"><span id="37822" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="95505" style="color:#44546a"><span id="78006" style="language:en-US"><span id="71046" style="font-weight:bold">Lorem Ipsum</span></span></span></span></span><span id="30205" style="font-size:20.0pt"><span id="13555" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="29805" style="color:#44546a"><span id="58193" style="language:en-US">: </span></span></span></span><span id="87088" style="font-size:20.0pt"><span id="64314" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="40896" style="color:#44546a"><span id="87682" style="language:en-GB">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span></span></span></span> </span></span></span></span></span></span></div>'+
                 '</div>'+
                 '</div>'+
-                '<div _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;" tabindex="0"><svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
-                '<div class="context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;" tabindex="0"><svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
+                '<div class="context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;">'+
                 '<div class="h-left" id="79727"><img alt="" data-widget="image" id="99176" src="https://fileservice.stable.slidewiki.org/2346/88588ad0-a481-11e7-a346-5db6696affe9.png" style="width: 23.25px; height: 715.158px;" width="26" height="722"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="69723" style="position: absolute; top: 563.049px; left: 168.353px; width: 1172.12px; height: 122.721px; z-index: 29872; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="69723" style="position: absolute; top: 563.049px; left: 168.353px; width: 1172.12px; height: 122.721px; z-index: 29872; cursor: auto;">'+
                 '<div class="h-left" id="11016"><img alt="" src="https://fileservice.stable.slidewiki.org/2346/43b00690-a483-11e7-a346-5db6696affe9.png" id="84865" width="1161" height="134"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="18921" style="position: absolute; top: 635.895px; left: 174.382px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="18921" style="position: absolute; top: 635.895px; left: 174.382px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="36912">&nbsp;</div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="93035"><img alt="" id="27106" src="https://fileservice.stable.slidewiki.org/picture/bea4076061475077ca3f733008a60fae8b16e1d43d575884c701ce50327b423c.jpg" style="width: 241px; height: 126px;" width="241" height="126"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="34717"><img alt="" id="9225" src="https://fileservice.stable.slidewiki.org/2346/24fbd5f0-a481-11e7-a346-5db6696affe9.png" style="width: 166.514px; height: 59.8675px;" width="191" height="78"></div>'+
                 '</div>';
                 pptx2htmlCloseDiv = '</div>';
@@ -588,28 +588,28 @@ class SlideContentEditor extends React.Component {
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" id="65156" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.630665, 0.630665); transform-origin: left top 0px;">`;
                 pptx2htmlcontent = '<div id="42107">&nbsp;</div>'+
-                '<div _id="20482" _idx="undefined" _name="Τίτλος 1" _type="title" class="block content v-up context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;" tabindex="0"><span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Questionnaire structure</span></span></span></span></span></div>'+
-                '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 780.914px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div _type="title" class="block content v-up context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;"><span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Questionnaire structure</span></span></span></span></span></div>'+
+                '<div _type="body" class="block content v-up context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 780.914px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;">'+
                 '<div class="O0" id="52252" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:left">'+
                 '<div id="61964" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:justify"><span id="92002" style="language:nl"><span id="32406" style="line-height:94%"><span id="30401" style="text-justify:inter-ideograph"><span id="37831" style="unicode-bidi:embed"><span id="32845" style="vertical-align:baseline"><span id="36756" style="punctuation-wrap:hanging"><span id="19931" style="font-size:20.0pt"><span id="8447" style="font-family:&quot;Franklin Gothic Book&quot;">■</span></span><span id="33158" style="font-size:20.0pt"><span id="22940" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="28349" style="color:#44546a"><span id="28833" style="language:en-US"><span id="26176" style="font-weight:bold">Bold Text (A)</span></span></span></span></span><span id="35225" style="font-size:20.0pt"><span id="15107" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="55716" style="color:#44546a"><span id="95236" style="language:en-US">: Normal Text 1</span></span></span></span> </span></span></span></span></span></span></div>'+
                 '<div id="12702" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:justify"><span id="3373" style="language:nl"><span id="60220" style="line-height:94%"><span id="17319" style="text-justify:inter-ideograph"><span id="69555" style="unicode-bidi:embed"><span id="65166" style="vertical-align:baseline"><span id="53339" style="punctuation-wrap:hanging"><span id="69614" style="font-size:20.0pt"><span id="99563" style="font-family:&quot;Franklin Gothic Book&quot;">■</span></span><span id="91266" style="font-size:20.0pt"><span id="15725" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="54575" style="color:#44546a"><span id="51611" style="language:en-US"><span id="49242" style="font-weight:bold">Bold Text (B)</span></span></span></span></span><span id="66190" style="font-size:20.0pt"><span id="94200" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="88177" style="color:#44546a"><span id="47184" style="language:en-US">: Lorem ipsum dolor sit </span></span></span></span><span id="50438" style="font-size:20.0pt"><span id="44226" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="48715" style="color:#44546a"><span id="17560" style="language:en-US">amet</span></span></span></span><span id="66870" style="font-size:20.0pt"><span id="42576" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="30399" style="color:#44546a"><span id="92581" style="language:en-US">, </span></span></span></span><span id="78342" style="font-size:20.0pt"><span id="50497" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="97546" style="color:#44546a"><span id="8525" style="language:en-US">consectetur</span></span></span></span> <span id="70697" style="font-size:20.0pt"><span id="17650" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="67446" style="color:#44546a"><span id="27444" style="language:en-US">adipiscing</span></span></span></span> <span id="45543" style="font-size:20.0pt"><span id="87683" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="98836" style="color:#44546a"><span id="45195" style="language:en-US">elit</span></span></span></span><span id="11770" style="font-size:20.0pt"><span id="80300" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="95102" style="color:#44546a"><span id="65730" style="language:en-US">, </span></span></span></span><span id="89161" style="font-size:20.0pt"><span id="72649" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="48374" style="color:#44546a"><span id="41831" style="language:en-US">sed</span></span></span></span><span id="70471" style="font-size:20.0pt"><span id="72674" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="75527" style="color:#44546a"><span id="10594" style="language:en-US"> do </span></span></span></span><span id="22477" style="font-size:20.0pt"><span id="41860" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="15058" style="color:#44546a"><span id="55217" style="language:en-US">eiusmod</span></span></span></span> <span id="25539" style="font-size:20.0pt"><span id="62315" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="67083" style="color:#44546a"><span id="26331" style="language:en-US">tempor</span></span></span></span> <span id="85623" style="font-size:20.0pt"><span id="44318" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="59355" style="color:#44546a"><span id="52690" style="language:en-US">incididunt</span></span></span></span> <span id="80730" style="font-size:20.0pt"><span id="11025" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="17979" style="color:#44546a"><span id="70012" style="language:en-US">ut</span></span></span></span> <span id="85909" style="font-size:20.0pt"><span id="8542" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="39626" style="color:#44546a"><span id="50669" style="language:en-US">labore</span></span></span></span><span id="3835" style="font-size:20.0pt"><span id="55467" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="77352" style="color:#44546a"><span id="92606" style="language:en-US"> et </span></span></span></span><span id="8225" style="font-size:20.0pt"><span id="40112" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="97016" style="color:#44546a"><span id="33027" style="language:en-US">dolore</span></span></span></span><span id="98523" style="font-size:20.0pt"><span id="97881" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="19447" style="color:#44546a"><span id="46837" style="language:en-US"> magna </span></span></span></span><span id="48541" style="font-size:20.0pt"><span id="87982" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="71554" style="color:#44546a"><span id="15324" style="language:en-US">aliqua</span></span></span></span><span id="28308" style="font-size:20.0pt"><span id="3931" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="6876" style="color:#44546a"><span id="73068" style="language:en-US">;</span></span></span></span></span></span></span></span></span></span></div>'+
                 '<div id="72688" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:justify"><span id="19467" style="language:nl"><span id="94513" style="line-height:94%"><span id="8249" style="text-justify:inter-ideograph"><span id="87225" style="unicode-bidi:embed"><span id="7607" style="vertical-align:baseline"><span id="13939" style="punctuation-wrap:hanging"><span id="58364" style="font-size:20.0pt"><span id="4805" style="font-family:&quot;Franklin Gothic Book&quot;">■</span></span><span id="90516" style="font-size:20.0pt"><span id="37822" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="95505" style="color:#44546a"><span id="78006" style="language:en-US"><span id="71046" style="font-weight:bold">Lorem Ipsum</span></span></span></span></span><span id="30205" style="font-size:20.0pt"><span id="13555" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="29805" style="color:#44546a"><span id="58193" style="language:en-US">: </span></span></span></span><span id="87088" style="font-size:20.0pt"><span id="64314" style="font-family:&quot;Franklin Gothic Book&quot;"><span id="40896" style="color:#44546a"><span id="87682" style="language:en-GB">is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span></span></span></span> </span></span></span></span></span></span></div>'+
                 '</div>'+
                 '</div>'+
-                '<div _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;" tabindex="0"><svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
-                '<div class="context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;"><svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
+                '<div class="context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;">'+
                 '<div class="h-left" id="79727"><img alt="" data-widget="image" id="99176" src="https://fileservice.stable.slidewiki.org/2346/88588ad0-a481-11e7-a346-5db6696affe9.png" style="width: 23.25px; height: 715.158px;" width="26" height="722"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="69723" style="position: absolute; top: 614.595px; left: 154.33px; width: 1172.12px; height: 122.721px; z-index: 29872; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="69723" style="position: absolute; top: 614.595px; left: 154.33px; width: 1172.12px; height: 122.721px; z-index: 29872; cursor: auto;">'+
                 '<div class="h-left" id="11016"><img alt="" src="https://fileservice.stable.slidewiki.org/2346/1a75d390-a483-11e7-a346-5db6696affe9.png" id="40924" width="1427" height="79"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="18921" style="position: absolute; top: 469.457px; left: 141.164px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="18921" style="position: absolute; top: 469.457px; left: 141.164px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="36912">&nbsp;</div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="93035"><img alt="" id="27106" src="https://fileservice.stable.slidewiki.org/picture/bea4076061475077ca3f733008a60fae8b16e1d43d575884c701ce50327b423c.jpg" style="width: 241px; height: 126px;" width="241" height="126"></div>'+
                 '</div>'+
-                '<div class="context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;">'+
                 '<div class="h-left" id="34717"><img alt="" id="9225" src="https://fileservice.stable.slidewiki.org/2346/24fbd5f0-a481-11e7-a346-5db6696affe9.png" style="width: 166.514px; height: 59.8675px;" width="191" height="78"></div>'+
                 '</div>';
                 pptx2htmlCloseDiv = '</div>';
@@ -620,42 +620,42 @@ class SlideContentEditor extends React.Component {
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" id="96004" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgb(218, 102, 25);">`;
                 pptx2htmlcontent = '<div id="51108"></div>'+
-                '<div _id="2" _idx="undefined" _name="Title 1" _type="ctrTitle" class="block content v-down context-menu-disabled" id="7861" style="position: absolute; top: 117.833px; left: 120px; width: 720px; height: 250.667px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5302; cursor: auto;" tabindex="0">'+
+                '<div _type="ctrTitle" class="block content v-down context-menu-disabled" id="7861" style="position: absolute; top: 117.833px; left: 120px; width: 720px; height: 250.667px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5302; cursor: auto;">'+
                 '<div class="h-mid" id="75057">'+
                 '<h3 id="73463"><span class="text-block" id="27668" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></h3>'+
                 '</div>'+
                 '</div>'+
-                '<div _id="3" _idx="1" _name="Subtitle 2" _type="subTitle" class="block content v-up context-menu-disabled" id="32501" style="position: absolute; top: 378.167px; left: 120px; width: 720px; height: 173.833px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5323; cursor: auto;" tabindex="0">'+
+                '<div _type="subTitle" class="block content v-up context-menu-disabled" id="32501" style="position: absolute; top: 378.167px; left: 120px; width: 720px; height: 173.833px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5323; cursor: auto;">'+
                 '<div class="h-mid" id="72872">'+
                 '<h4 id="68355"><span class="text-block" id="47397" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></h4>'+
                 '</div>'+
                 '</div>'+
-                '<div _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="drawing-container context-menu-disabled" id="56075" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;" tabindex="0">'+
+                '<div _type="undefined" class="drawing-container context-menu-disabled" id="56075" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;">'+
                 '<svg _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="drawing context-menu-disabled" id="81480" style="position: absolute; top: 0px; left: 0px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;"><rect fill="none" height="78.64062992125984" id="76952" stroke="none" stroke-dasharray="0" stroke-width="1" width="514.0092388451444" x="0" y="0"></rect></svg></div>'+
-                '<div _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="block content v-up context-menu-disabled" id="78548" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;" tabindex="0">'+
+                '<div _type="undefined" class="block content v-up context-menu-disabled" id="78548" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;">'+
                 '<div class="h-left" id="80193"><span class="text-block" id="60204" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">Formatvorlage&nbsp;des Untertitelmasters durch Klicken bearbeiten</span></div>'+
                 '</div>'+
-                '<div _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="drawing-container context-menu-disabled" id="89302" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;" tabindex="0">'+
+                '<div _type="undefined" class="drawing-container context-menu-disabled" id="89302" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;">'+
                 '<svg _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="drawing context-menu-disabled" id="11168" style="position: absolute; top: 0px; left: 0px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;"><rect fill="none" height="162.89553805774278" id="65850" stroke="none" stroke-dasharray="0" stroke-width="1" width="514.0092388451444" x="0" y="0"></rect></svg></div>'+
-                '<div _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="block content v-down ui-draggable ui-resizable context-menu-disabled" id="37934" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;" tabindex="0">'+
+                '<div _type="undefined" class="block content v-down ui-draggable ui-resizable context-menu-disabled" id="37934" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;">'+
                 '<div class="h-left" id="53020"><span style="font-size:36px;" id="73276"><span class="text-block" id="12823" style="color: rgb(255, 0, 0); font-family: inherit; font-weight: bold; font-style: inherit; text-decoration: initial;">Titelmasterformat&nbsp;durch Klicken bearbeiten</span></span></div>'+
                 '</div>'+
-                '<div class="block content ui-draggable ui-resizable context-menu-disabled" id="38934" style="position: absolute; top: 0px; left: 0px; width: 1007.14px; height: 713.371px; z-index: -11; cursor: auto;" tabindex="0">'+
+                '<div class="block content ui-draggable ui-resizable context-menu-disabled" id="38934" style="position: absolute; top: 0px; left: 0px; width: 1007.14px; height: 713.371px; z-index: -11; cursor: auto;">'+
                 '<img alt="" id="39529" src="https://fileservice.experimental.slidewiki.org/picture/81be1e5f68acd42b07b9cd2be11896be1b638cab38059152e7d0a29e4d0ed5e5.jpg" style="width: 1007.14px; height: 713.371px;">'+
                 '</div>'+
-                '<div class="block content context-menu-disabled" id="23908" style="position: absolute; top: 116.333px; left: 427px; width: 189px; height: 125.167px; z-index: 5489; cursor: auto;" tabindex="0">'+
+                '<div class="block content context-menu-disabled" id="23908" style="position: absolute; top: 116.333px; left: 427px; width: 189px; height: 125.167px; z-index: 5489; cursor: auto;">'+
                 '<img alt="" id="28695" src="https://fileservice.experimental.slidewiki.org/picture/5bbbb8a925773d2dadbd143c1827987ddcb7974b421eed4311a7e3f7ed1e0ad9.png" style="width: 100%; height: 100%;"></div>'+
-                '<div class="block content context-menu-disabled" id="30251" style="position: absolute; top: 159.667px; left: 102px; width: 227.667px; height: 50.6667px; z-index: 5532; cursor: auto;" tabindex="0">'+
+                '<div class="block content context-menu-disabled" id="30251" style="position: absolute; top: 159.667px; left: 102px; width: 227.667px; height: 50.6667px; z-index: 5532; cursor: auto;">'+
                 '<img alt="" id="37806" src="https://fileservice.experimental.slidewiki.org/picture/68c7b9ab7feda6bc9f08202be815e4e4388e4ae6e0a15e45751a2d374f2f422b.png" style="width: 100%; height: 100%;"></div>'+
-                '<div class="block content context-menu-disabled" id="62817" style="position: absolute; top: 590.5px; left: 821.726px; width: 123.453px; height: 98.9206px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div class="block content context-menu-disabled" id="62817" style="position: absolute; top: 590.5px; left: 821.726px; width: 123.453px; height: 98.9206px; z-index: 2147483647; cursor: auto;">'+
                 '<img id="50826" src="https://fileservice.experimental.slidewiki.org/picture/007c01bd034065e1fd66f518dfac4c3d08cc0efd9b186fb914e43c442e05479e.png" style="width: 123.45px; height: 98.9206px;"></div>'+
-                '<div class="block group ui-draggable ui-resizable context-menu-disabled" id="97475" style="position: absolute; z-index: 5446; top: 27.1862px; left: 60.5469px; cursor: auto;" tabindex="0">'+
-                '<div _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing-container context-menu-disabled" id="62863" style="position: absolute; top: 54.0956px; left: 11.2865px; z-index: 5412; cursor: auto;" tabindex="0"><svg _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing context-menu-disabled" id="38242" style="position: absolute; top: 0px; left: 0px; width: 725.75px; height: 619.922px; z-index: 5412; cursor: auto;"><rect fill="rgb(255,255,255)" height="619.9218897637795" id="83399" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
-                '<div _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="block content v-mid context-menu-disabled" id="43475" style="position: absolute; top: 54.0956px; left: 11.2865px; width: 575.75px; height: 619.922px; z-index: 5412; cursor: auto;" tabindex="0">'+
+                '<div class="block group ui-draggable ui-resizable context-menu-disabled" id="97475" style="position: absolute; z-index: 5446; top: 27.1862px; left: 60.5469px; cursor: auto;">'+
+                '<div _type="undefined" class="drawing-container context-menu-disabled" id="62863" style="position: absolute; top: 54.0956px; left: 11.2865px; z-index: 5412; cursor: auto;"><svg _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing context-menu-disabled" id="38242" style="position: absolute; top: 0px; left: 0px; width: 725.75px; height: 619.922px; z-index: 5412; cursor: auto;"><rect fill="rgb(255,255,255)" height="619.9218897637795" id="83399" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
+                '<div _type="undefined" class="block content v-mid context-menu-disabled" id="43475" style="position: absolute; top: 54.0956px; left: 11.2865px; width: 575.75px; height: 619.922px; z-index: 5412; cursor: auto;">'+
                 '<div class="h-mid" id="88591"><span class="text-block" id="58474" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
                 '</div>'+
-                '<div _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing-container context-menu-disabled" id="9173" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;" tabindex="0"><svg _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing context-menu-disabled" id="44611" style="position: absolute; top: 0px; left: 0px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;"><rect fill="rgb(68,84,106)" height="12.09784776902887" id="16902" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
-                '<div _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="block content v-mid context-menu-disabled" id="61992" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;" tabindex="0">'+
+                '<div _type="undefined" class="drawing-container context-menu-disabled" id="9173" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;"><svg _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing context-menu-disabled" id="44611" style="position: absolute; top: 0px; left: 0px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;"><rect fill="rgb(68,84,106)" height="12.09784776902887" id="16902" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
+                '<div _type="undefined" class="block content v-mid context-menu-disabled" id="61992" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;">'+
                 '<div class="h-mid" id="52795"><span class="text-block" id="12515" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
                 '</div>'+
                 '</div>';
@@ -666,20 +666,20 @@ class SlideContentEditor extends React.Component {
                 width = 1280;
                 height = 720;
                 pptx2htmlStartDiv = `<div class="pptx2html" id="42690" style="position: relative; width: ${width}px; height: ${height}px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">`;
-                pptx2htmlcontent = '<div id="32657" style="position: absolute; top: 512px; left: 71px; width: 587px; height: 44px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                pptx2htmlcontent = '<div id="32657" style="position: absolute; top: 512px; left: 71px; width: 587px; height: 44px; z-index: 2147483647; cursor: auto;">'+
                     '<div class="h-mid" id="85086">'+
                     '<p id="33865" style="margin-top:0pt; margin-bottom:0pt; margin-left:0in; text-align:left"><font id="13787" face="Georgia" color="#000000"><span id="12663" style="font-size: 26px;">Vardenis Pavardenis</span></font></p>'+
                     '</div>'+
                     '</div>'+
-                    '<div id="24138" style="position: absolute; top: 341px; left: 74px; width: 1125px; height: 74.7398px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                    '<div id="24138" style="position: absolute; top: 341px; left: 74px; width: 1125px; height: 74.7398px; z-index: 2147383647; cursor: auto;">'+
                     '<div class="h-mid" id="35713">'+
                     '<p id="42359"><span style="font-size:48px;" id="68655"><span class="text-block" id="93031"><span id="89782"><span id="30011" style="font-family:Georgia,serif;">Pavadinimas</span></span></span></span></p>'+
                     '</div>'+
                     '</div>'+
-                    '<div id="76884" style="position: absolute; top: 12px; left: 492px; z-index: 2147383647; cursor: auto; width: 306.302px; height: 276.129px;" tabindex="0">'+
+                    '<div id="76884" style="position: absolute; top: 12px; left: 492px; z-index: 2147383647; cursor: auto; width: 306.302px; height: 276.129px;">'+
                     '<img alt="VDU logo" id="66624" src="https://fileservice.slidewiki.org/picture/7a57f4fb49ec1b94113f09c4dd617a0175fdab23340ea85d7819cd9c8d792998.png" style="width: 306.302px; height: 276.129px;">'+
                     '</div>'+
-                    '<div id="89144" style="position: absolute; top: 628px; left: 74px; width: 400px; height: 72px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                    '<div id="89144" style="position: absolute; top: 628px; left: 74px; width: 400px; height: 72px; z-index: 2147483647; cursor: auto;">'+
                     '<div class="h-mid" id="84724">'+
                     '<p id="78600" style="text-align: left;"><span class="text-block" id="37616"><span id="61900" style="font-size:16px;"><span id="75966" style="font-family:Georgia,serif;">Vytauto Didžiojo universitetas</span></span></span></p>'+
                     '</div>'+
@@ -895,14 +895,14 @@ class SlideContentEditor extends React.Component {
             //this.removeEditMode();
             $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
             $('.pptx2html [style*="absolute"]').find('.widget').remove();
-                        
+
             let annotations = [];
             if (CKEDITOR.instances.inlineContent != null) {
                 // get the annotations before CKEditor is destroyed
                 CKEDITOR.instances.inlineContent.plugins.semanticannotations.getAnnotationsToStore(CKEDITOR.instances.inlineContent);
                 annotations = CKEDITOR.instances.inlineContent.plugins.semanticannotations.annotationsToStore;
                 annotations = this.convertAnnotationsToDatabaseStructure(annotations);
-                
+
                 CKEDITOR.instances.inlineContent.destroy();
             }
             if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
@@ -1088,7 +1088,7 @@ class SlideContentEditor extends React.Component {
                 //let currentContent = CKEDITOR.instances.inlineContent.getData();
                 //let newContent =
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">' +
-                '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; ">' +
+                '<p></p><p></p><p></p><p></p><p></p><div _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; ">' +
                 '<div class="h-left">' + this.refs.inlineContent.innerHTML + '</div>' +
                 '</div>' +
                 '</div>';
@@ -1610,7 +1610,8 @@ class SlideContentEditor extends React.Component {
         //give each input element a tab index
         //$('.pptx2html [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         //$('.pptx2html [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
-        $('.pptx2html [style*="absolute"]').not('.drawing').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+        // this is not desirable behaviour, the elements are not interactive and should therefore not be focusable
+        //$('.pptx2html [style*="absolute"]').not('.drawing').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} }); 
         //give each input box element a context menu (hide/overlap CKeditor context menu)
         this.contextMenuAll();
 
@@ -2042,11 +2043,11 @@ class SlideContentEditor extends React.Component {
                                 let div = $('<div />');
                                 div.attr('id', uniqueID);
                                 div.attr('style', 'position: absolute; top: 300px; left: 250px;  z-index: '+(this.getHighestZIndex() + 10)+'; max-width:50%');
-                                
+
                                 let image = $('<img />');
                                 image.attr('src', nextProps.MediaStore.file.url + '?' + time.toString());
                                 image.attr('alt', nextProps.MediaStore.file.text);
-                            
+
                                 div.html(image);
 
                                 $('.pptx2html').append(div);
@@ -2068,7 +2069,7 @@ class SlideContentEditor extends React.Component {
                 else  //if slide is in non-canvas mode
                 {
                     let uniqueID = this.getuniqueID();
-                    
+
                     let image = $('<img />');
                     image.attr('id', uniqueID);
                     image.attr('src', nextProps.MediaStore.file.url);
@@ -2076,7 +2077,7 @@ class SlideContentEditor extends React.Component {
                     image.attr('width', '100%');
                     image.attr('height', '100%');
                     $('#inlineContent').append(image);
-                    
+
                     //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
                     //this.uniqueIDAllElements();
                     this.refreshCKeditor();
@@ -2185,7 +2186,7 @@ class SlideContentEditor extends React.Component {
         if (nextProps.SlideEditStore.annotateClick === 'true' && nextProps.SlideEditStore.annotateClick !== this.props.SlideEditStore.annotateClick)
         {
             CKEDITOR.instances.inlineContent.execCommand('automaticAnnotation');
-            
+
         }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
         {
@@ -2848,7 +2849,7 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present" ref='present' id='present'  style={sectionElementStyle}>
                                 <HotKeys keyMap={keyMap} handlers={handlers}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}  tabIndex="0">
+                                    <div style={contentStyle} contentEditable='true' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}>
                                     </div>
                                 </HotKeys>
                             </section>
@@ -2859,8 +2860,8 @@ class SlideContentEditor extends React.Component {
                     <div className="ui horizontal segments">
                             <div ref="slideContentViewSpeakerNotes" className="ui segment vertical attached left"
                                     style={compSpeakerStyle}>
-                                <b><FormattedMessage id='deck.edit.speakerNote' defaultMessage='Speaker notes'/>:</b><br />
-                                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes'
+                                <strong><FormattedMessage id='deck.edit.speakerNote' defaultMessage='Speaker notes'/>:</strong><br />
+                                <div style={speakernotesStyle} contentEditable='true'
                                         ref='inlineSpeakerNotes' id='inlineSpeakerNotes'
                                         dangerouslySetInnerHTML={{__html:this.props.speakernotes}}  tabIndex="0">
                                 </div>

@@ -15,6 +15,7 @@ import deleteFollowing from '../../../actions/following/deleteFollowing';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import AddDecksModal from '../Modals/AddDecksModal/AddDecksModal';
 import nl2br from 'react-nl2br';
+import setDocumentTitle from '../../../actions/setDocumentTitle';
 
 class CollectionPanel extends React.Component {
     constructor(props){
@@ -28,6 +29,14 @@ class CollectionPanel extends React.Component {
     }
     componentDidMount() {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
+        const label = this.context.intl.formatMessage({
+            id: 'CollectionPanel.title',
+            defaultMessage: 'Playlist'
+        });
+        const title = this.props.DeckCollectionStore.collectionDetails.title;
+        this.context.executeAction(setDocumentTitle, { 
+            title: `${label} | ${title}`
+        });
     }
 
     componentDidUpdate() {

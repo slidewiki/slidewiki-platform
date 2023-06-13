@@ -57,7 +57,7 @@ class ExamAnswersItem extends React.Component {
     }
 }
 ExamAnswersItem.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired,
+    executeAction: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired
 };
 export default ExamAnswersItem;

@@ -178,7 +178,7 @@ class NewCollectionModal extends React.Component {
                         <Segment basic textAlign="center">
                             <div>
                                 <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.buttonCreate} /></Button>
-                                <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
+                                <Button secondary as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
                             </div>
                         </Segment>
                     </Modal.Actions>

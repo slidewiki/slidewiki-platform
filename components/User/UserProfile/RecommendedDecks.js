@@ -27,11 +27,11 @@ class RecommendedDecks extends React.Component {
                     break;
             }
 
-            return (<div className="ui three doubling cards">
+            return (<div className="ui three stackable cards">
                 {[...Array(size).keys()].map( (i) => <DeckCard userid={this.props.UserProfileStore.user.id} key={i} cardContent={content[i]} newTab={this.props.newTab}/>)}
                     </div>);
         } else {
-            return <h3>No recommendations available</h3>;
+            return <h2>No recommendations available</h2>;
         }
     }
 }

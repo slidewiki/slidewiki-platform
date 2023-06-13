@@ -58,7 +58,7 @@ class ContentActionsFooter extends React.Component {
             },
             slideshowText:{
                 id: 'ContentActionsFooter.slideshowText',
-                defaultMessage:'Open slideshow in new tab'
+                defaultMessage:'Open Slideshow'
             },
             likeText:{
                 id: 'ContentActionsFooter.likeText',
@@ -75,6 +75,11 @@ class ContentActionsFooter extends React.Component {
         let userAgent = window.navigator.userAgent;
         let mobile = new MobileDetect(userAgent);
         this.setState({isMobile: (mobile.phone() !== null) ? true : false});
+        document.addEventListener('keydown', this.handleKeyDown);        
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     handleExpandClick(){
@@ -166,6 +171,12 @@ class ContentActionsFooter extends React.Component {
         }
     }
 
+    handleKeyDown = (e) => {
+        if (e.altKey && e.keyCode === 83) { //s    
+            window.open(makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang), '_blank');
+        }
+    }
+
     render() {
         let likeButton = 'ui button';
         let followButton = 'ui button';
@@ -202,14 +213,14 @@ class ContentActionsFooter extends React.Component {
           </a>
           <DownloadModal/>
           <ReportModal/>
-          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
-                embedPresentationHref={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)}/>
-          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)} disabled={likeDisabled}>
+          <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)} disabled={likeDisabled} data-speech-id="likeDeck">
               <i className={classNameLikeButton}></i>
           </button>
           <button className={followButton} type="button" aria-label={tooltipFollowButton} data-tooltip={tooltipFollowButton} onClick={this.handleFollowClick.bind(this)} disabled={followDisabled}>
               {iconFollowButton}
           </button>
+          <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector}
+                embedPresentationHref={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)}/>
           </div>;
 
         let listStyle = {
@@ -263,7 +274,7 @@ class ContentActionsFooter extends React.Component {
                     <div className="right menu" >
                         <div className="ui icon buttons large right floated">
                             <a id="PresentationNewWindow" href={makeNodeURL(this.props.ContentStore.selector, 'presentation', undefined, this.props.deckSlug, this.props.TranslationStore.currentLang)} target="_blank" tabIndex="-1">
-                                <button className="ui button" type="button" aria-label={this.context.intl.formatMessage(this.messages.slideshowText)} data-tooltip={this.context.intl.formatMessage(this.messages.slideshowText)}>
+                                <button className="ui button" type="button" aria-label={this.context.intl.formatMessage(this.messages.slideshowText)} data-speech-id="openSlideshow" data-tooltip={this.context.intl.formatMessage(this.messages.slideshowText)}>
                                     <i className="circle play large icon"></i>
                                 </button>
                             </a>

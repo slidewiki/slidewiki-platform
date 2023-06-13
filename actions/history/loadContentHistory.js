@@ -40,10 +40,6 @@ export default function loadContentHistory(context, payload, done) {
         } else {
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'history'});
         }
-        let pageTitle = shortTitle + ' | Content History | ' + payload.params.stype + ' | ' + payload.params.sid;
-        //context.dispatch('UPDATE_PAGE_TITLE', {
-        //    pageTitle: pageTitle
-        //});
         done();
     });
 }

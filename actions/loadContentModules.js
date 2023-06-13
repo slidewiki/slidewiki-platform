@@ -55,10 +55,6 @@ export default function loadContentModules(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {selector: payload.params, moduleType: 'datasource'});
-        // let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;
-        // context.dispatch('UPDATE_PAGE_TITLE', {
-        //     pageTitle: pageTitle
-        // });
         done();
     });
 }

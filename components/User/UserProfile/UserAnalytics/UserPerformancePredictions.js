@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import UserPerformancePredictionItem from './UserPerformancePredictionItem';
 import { connectToStores } from 'fluxible-addons-react';
 import UserPerformancePredictionsStore from '../../../../stores/UserPerformancePredictionsStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import SelectDeckModal from './SelectDeckModal';
+import { Header } from 'semantic-ui-react';
 
 class UserPerformancePredictions extends React.Component {
 
@@ -40,7 +42,7 @@ class UserPerformancePredictions extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h3 className="ui left floated header" >Performance predictions</h3>
+                  <h2 className="ui left floated header medium" >Performance predictions</h2>
                   <SelectDeckModal />
               </div>
 
@@ -57,7 +59,7 @@ class UserPerformancePredictions extends React.Component {
 }
 
 UserPerformancePredictions.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: PropTypes.func.isRequired
 };
 
 UserPerformancePredictions = connectToStores(UserPerformancePredictions, [UserPerformancePredictionsStore, UserProfileStore], (context, props) => {

@@ -3,152 +3,110 @@ import React from 'react';
 import classNames from 'classnames';
 import suggestTags from '../../../../actions/search/suggestTags';
 import { defineMessages } from 'react-intl';
+import { Form, Dropdown } from 'semantic-ui-react';
+import { uniq } from 'lodash';
 
 class TagInput extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = this.getStateFromProps(props);
-        this.messages = this.getIntlMessages();
-    }
-    getIntlMessages(){
-        return defineMessages({
-        });
-    }
-    componentWillReceiveProps(newProps){
 
-        if(this.props !== newProps){
-            this.setState(this.getStateFromProps(newProps));
-
-            // initialize pre-selected tags
-            let values = this.state.initialTags.map( (tag) => `tagName:${tag.tagName}`);
-
-            $(this.rootElement).dropdown('set exactly', values);
-        }
-    }
-    getStateFromProps(props){
-        return {
-            initialTags: props.initialTags,
-            recommendedTags: props.recommendedTags || [],
+        this.state = {
+            options: [],
+            optionsCache: [],
         };
     }
-    initDropdown(){
-        $(this.rootElement).dropdown({
-            fields: {
-                name: 'defaultName',
-                value: 'tagName'
-            },
-            allowAdditions: this.props.allowAdditions,
-            hideAdditions: false,
-            apiSettings:{
-                responseAsync: (settings, callback) => {
-                    let queryString = settings.urlData.query;
-                    let query = Object.assign({ q: queryString }, this.props.tagFilter);
-                    context.executeAction(suggestTags, { query } ).then( (response) => {
+  
+    handleTagsSearchChange = (e, dropdown) => {
+        const { searchQuery } = dropdown;
+        let query = Object.assign({ q: searchQuery }, this.props.tagFilter);
+        context.executeAction(suggestTags, { query }).then((response) => {
+            let options = response.results;
 
-                        // this is needed to mark tags that have tagNames
-                        // in multi-select it is not possible to get objects selected, only string(!?)
-                        response.results = response.results.map((t) => {
-                            return {
-                                defaultName: t.defaultName,
-                                tagName: `tagName:${t.tagName}`
-                            };
-                        });
+            // prepend 'existing:' to the tag names
+            for (let option in options) {
+                const tagName = !this.props.onlyExistingTags ? 'existing:' + options[option].tagName : options[option].tagName;
 
-                        callback(response);
-                    });
-                }
-            },
-            onNoResults: () => {
-                // replace the text: 'no results found' is no search terms is entered yet
-                if ($(this.rootElement).find('input').val() === '') {
-                    $(this.rootElement).find('.menu .message').text('Start typing to find results');
-                }
+                options[option] = {
+                    ...options[option],
+                    tagName,
+                };
             }
-        });
-    }
-    componentDidMount(){
-        this.initDropdown();
-    }
-    componentDidUpdate(){
-        this.initDropdown();
-    }
-    getSelected(){
-        // selected tags are return as string (!), so we split to ','
-        let tags = $(this.rootElement).dropdown('get value');
 
-        if(tags.trim() === ''){
-            return [];
+            this.setState((prevState) => ({
+                options: options,
+            }));
+        });
+    };
+
+    onChange = (e, dropdown) => {
+        // optionsCache needs an array of selected options to ensure values are correctly displayed
+        let optionsCache = [];
+        for (const option of this.state.options) {
+            if (dropdown.value.includes('existing:' + option.tagName) || dropdown.value.includes(option.tagName)) {
+                optionsCache.push(option);
+            }
         }
 
-        return tags.split(',').map( (t) => {
+        this.setState({
+            optionsCache,
+        });
 
-            // comes from dropdown or it is a recommended tag
-            if(t.startsWith('tagName:')){
-                let tag = {
-                    tagName: t.replace(/^tagName:/, '')
-                };
+        this.props.onChange(e, dropdown);
+    };
 
-                // we check if this tagName comes from recommended tags
-                let recommendedTag = this.state.recommendedTags.find( (t) => {
-                    return t.name === tag.tagName;
-                });
+    handleAddItem = (e, dropdown) => {
+        this.setState((prevState) => ({
+            optionsCache: [
+                ...prevState.optionsCache,
+                {
+                    tagName: dropdown.value,
+                    defaultName: dropdown.value,
+                },
+            ],
+        }));
+        return false;
+    };
 
-                // if it is from recommended tags and has a link, 
-                // we also add the link
-                if(recommendedTag && recommendedTag.link){
-                    tag.uri = recommendedTag.link;
-                }
+    render() {
+        let options = this.state.options;
 
-                return tag;
-            // is new and was inserted by the user
-            } else {
-                return { defaultName: t };
+        for (const option of this.state.optionsCache) {
+            if (this.props.value.includes('existing:' + option.tagName) || this.props.value.includes(option.tagName)) {
+                options.push(option);
             }
-        });
-    }
-    addRecommendedTag(value){
-        // add the recommended tag as an option to the dropdown
-        let newOption = `<div class="item" key="tagName:${value}" data-value="tagName:${value}">${value}</div>`;
-        $(this.menuElement).append(newOption);
+        }
 
-        // after this addition the dropdown needs to be initialized again
-        this.initDropdown();
+        if (this.props.initialOptions && this.props.initialOptions.length) {
+            options.push(...this.props.initialOptions);
+        }
 
-        // select the recommended tag
-        $(this.rootElement).dropdown('set selected', `tagName:${value}`);
-    }
-    clear() {
-        $(this.rootElement).dropdown('clear');
-    }
-    render(){
-        let classes = classNames({
-            'ui': true,
-            'fluid': true,
-            'multiple': true,
-            'search': true,
-            'selection': true,
-            'dropdown': true
-        });
-
-        // selection options are concatenated pre-selected tags and recommended tags 
-        let initialOptions = this.props.initialTags.map( (t) => {
-            return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName || t.tagName}</div>;
-        });
-
+        options = uniq(options, 'tagName');
         return (
-            <div ref={(i) => (this.rootElement = i)} className={classes}>
-              <i className="dropdown icon"></i>
-              <div className="default text">{this.props.placeholder}</div>
-              <div ref={(i) => (this.menuElement = i)} className="menu">
-                {initialOptions}
-              </div>
-            </div>
+            <Form.Field
+                allowAdditions={this.props.allowAdditions}
+                id={this.props.id}
+                control={Dropdown}
+                label={this.props.label}
+                selection
+                search
+                multiple
+                value={this.props.value}
+                onChange={this.onChange}
+                options={options.map((option) => ({
+                    value: option.tagName,
+                    text: option.defaultName,
+                }))}
+                onSearchChange={this.handleTagsSearchChange}
+                onAddItem={this.handleAddItem}
+                placeholder={this.props.placeholder}
+            />
         );
     }
 }
 
 TagInput.contextTypes = {
-    executeAction: PropTypes.func.isRequired, 
-    intl: PropTypes.object.isRequired
+    executeAction: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
 };
+
 export default TagInput;

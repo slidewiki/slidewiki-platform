@@ -6,6 +6,7 @@ const mainPort = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 const devPort = process.env.PORT ? parseInt(process.env.PORT) + 1 : 3001;
 
 let webpackConfig = {
+    mode: 'development',
     resolve: {
         extensions: ['.js', '.jsx'],
         alias: {
@@ -15,8 +16,9 @@ let webpackConfig = {
     entry: {
         main: [
             //todo: solve the issue with same-origin policy when loading fonts
+            //'react-hot-loader/patch',
             'webpack-dev-server/client?http://' + host + ':' + mainPort,
-            'webpack/hot/only-dev-server',
+            'webpack/hot/only-dev-server', // no reload on syntax errors
             './client.js'
         ]
     },
@@ -27,22 +29,22 @@ let webpackConfig = {
     },
     module: {
         rules: [
-            {
+            /*{
                 test: /\.json$/,            // Load JSON-files into code base.
                 exclude: /node_modules/,
                 use: [
-                    {
-                        loader: 'json-loader',
-                    }
+                    //{
+                    //    loader: 'json-loader',
+                    //}
                 ]
-            },
+            },*/
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: [
-                    {
-                        loader: 'react-hot-loader'
-                    },
+                    //{
+                        //loader: 'react-hot-loader'
+                    //},
                     {
                         loader: 'babel-loader'
 
@@ -70,6 +72,7 @@ let webpackConfig = {
         setImmediate: false
     },
     plugins: [
+        new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({

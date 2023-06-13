@@ -1010,7 +1010,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={13}>
                 <iframe id="slidewikiPresentation" src={this.iframesrc}
                 height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}} allowFullScreen></iframe>
-                <Button style={{position: 'absolute', padding: '8px', margin: 0, right: '5px', top: '5px'} } icon="expand" onClick={this.enlargeIframe.bind(this)} role="button" aria-label="Enlarge the presentation" tabIndex="0" />
+                <Button style={{position: 'absolute', padding: '8px', margin: 0, right: '5px', top: '5px'} } icon="expand" onClick={this.enlargeIframe.bind(this)} aria-label="Enlarge the presentation" tabIndex="0" />
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
                 <Chat ref="chat" isInitiator={this.isInitiator}
@@ -1023,7 +1023,7 @@ class presentationBroadcast extends React.Component {
               </Grid.Column>
               {(this.isInitiator) ? (
                   <div>
-                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} role="button" aria-label="Show QR-Code">QR-Code</Button>
+                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)} aria-label="Show QR-Code">QR-Code</Button>
                   <SessionRecorder ref="sessionRecorder" deckID={this.deckID.split('-')[0]} revision={this.deckID.split('-')[1]}/>
                   </div>
               ) : ('')}
@@ -1059,11 +1059,11 @@ class presentationBroadcast extends React.Component {
                   {(this.isInitiator) ? ('') : (
                     <div>
                     <Translation ref='translation' isInitiator={this.isInitiator} triggerReloadIframe={this.changeSlide.bind(this, this.lastRemoteSlide, true)}/>
-                    <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} role="button" aria-label="Resume to presenter progress"/>
+                    <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)} aria-label="Resume to presenter progress"/>
                     </div>
                   )}
                   {(this.state.showReopenModalButton) ? (
-                    <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} role="button" aria-label="Open Modal again"/>
+                    <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)} aria-label="Open Modal again"/>
                   ) : ''}
                 </Button.Group>
               </Grid.Column>

@@ -29,7 +29,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
 
     // Set the most common block elements.
-    config.format_tags = 'p;h3;h4;h5;pre';
+    config.format_tags = 'p;h1;h2;h3;h4;h5;pre';
 
     config.toolbar = [
             //{ name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },

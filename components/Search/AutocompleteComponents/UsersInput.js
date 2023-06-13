@@ -15,7 +15,7 @@ class UsersInput extends React.Component {
                 name: 'displayName',
                 value: 'userId',
             },
-            minCharacters: 1,
+            //minCharacters: 1,
             allowAdditions: false,
             apiSettings:{
                 responseAsync: function(settings, callback) {
@@ -24,10 +24,10 @@ class UsersInput extends React.Component {
                     context.executeAction(suggestUsers, {
                         query: encodeURIComponent(query),
                     }).then( (response) => {
-                        
+
                         response.results = response.results.map( (user) => {
                             return {
-                                displayName: user.name, 
+                                displayName: user.name,
                                 userId: JSON.parse(decodeURIComponent(user.value)).userid,
                             };
                         });
@@ -61,7 +61,7 @@ class UsersInput extends React.Component {
 
         });
         return (
-            <div className={classes} id='users_input_div'>
+            <div aria-labelledby={this.props.ariaLabelledby} className={classes} id='users_input_div'>
               <input type="hidden" name="users_input" ref='users_input' id='users_input'></input>
               <div className="menu" ref="dropdown_menu"></div>
               <div className="default text" id='users_input_field'>{this.props.placeholder}</div>

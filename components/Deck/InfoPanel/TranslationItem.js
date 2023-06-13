@@ -30,7 +30,7 @@ class TranslationItem extends React.Component {
 
         let node = (this.props.clickable === true) ?
 
-          <Button role="button" data-tooltip={text}
+          <Button data-tooltip={text}
             onClick={this.directToTranslation.bind(this, href)}
             aria-label={text} aria-required
             tabIndex="0" attached basic >
