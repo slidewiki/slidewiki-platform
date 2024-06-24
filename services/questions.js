@@ -70,19 +70,12 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
-
+        
         let choices = [];
-        if (args.question.answer1 !== '') {
-            choices.push({'choice': args.question.answer1, 'is_correct': args.question.correct1});
-        }
-        if (args.question.answer2 !== '') {
-            choices.push({'choice': args.question.answer2, 'is_correct': args.question.correct2});
-        }
-        if (args.question.answer3 !== '') {
-            choices.push({'choice': args.question.answer3, 'is_correct': args.question.correct3});
-        }
-        if (args.question.answer4 !== '') {
-            choices.push({'choice': args.question.answer4, 'is_correct': args.question.correct4});
+        for(let i = 0; i < args.question.answers.length; i++) {
+            if (args.question.answers[i] !== '') {
+                choices.push({'choice': args.question.answers[i], 'is_correct': args.question.corrects[i]});
+            }
         }
 
         if (resource === 'questions.add') {
@@ -125,21 +118,11 @@ export default {
         if (resource === 'questions.update') {
             let choices = [];
             let answers = [];//There is a problem with different names used on the platform and service
-            if (args.question.answer1 !== '') {
-                choices.push({'choice': args.question.answer1, 'is_correct': args.question.correct1});
-                answers.push({'answer': args.question.answer1, 'correct': args.question.correct1});
-            }
-            if (args.question.answer2 !== '') {
-                choices.push({'choice': args.question.answer2, 'is_correct': args.question.correct2});
-                answers.push({'answer': args.question.answer2, 'correct': args.question.correct2});
-            }
-            if (args.question.answer3 !== '') {
-                choices.push({'choice': args.question.answer3, 'is_correct': args.question.correct3});
-                answers.push({'answer': args.question.answer3, 'correct': args.question.correct3});
-            }
-            if (args.question.answer4 !== '') {
-                choices.push({'choice': args.question.answer4, 'is_correct': args.question.correct4});
-                answers.push({'answer': args.question.answer4, 'correct': args.question.correct4});
+            for(let i = 0; i < args.question.answers.length; i++) {
+                if (args.question.answers[i] !== '') {
+                    choices.push({'choice': args.question.answers[i], 'is_correct': args.question.corrects[i]});
+                    answers.push({'answer': args.question.answers[i], 'correct': args.question.corrects[i]});
+                }
             }
 
             rp.put({
